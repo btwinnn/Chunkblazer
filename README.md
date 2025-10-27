@@ -1,0 +1,2 @@
+# Chunkblazer
+Nuzlocke Chunk Plugin
