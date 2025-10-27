@@ -2,20 +2,20 @@
 
 {
     "nuzlocke_chunks": [
-        {
-            "region_id": "",
+        { // Copy from this starting Curly Bracket for NEW region_ids
+            "region_id": "", // The 64x64 chunk on the OSRS map
             
-            "tasks": [
-                { 
-                    "name": "", 
-                    "taskID": "",
+            "tasks": [ // Yellow Bracket = FULL TASK ARRAY
+                { // Copy from this pink Curly Bracket -- Single Task Object inside the tasks array 
+                    "name": "", // Each Comma is a new attribute and an attribute is Keys and Values
+                    "taskID": "1", // taskID = Key and "1" = Value
                     "skill": "", 
                     "level": 0, 
                     "type": "", 
                     "base_points": 1, 
                     "assignment_weight": 0 
-                },
-                { 
+                }, // Copy starting from this comma for SINGLE TASKS
+                { // Single Task Object inside the tasks array
                     "name": "", 
                     "taskID": "",
                     "skill": "", 
@@ -37,7 +37,9 @@
                 // Add more optional quests here
             ],
             "is_completed": false
-        }
+        } // Copy from this Ending Curly Bracket for NEW region_ids
+
+
         // Add more chunks (regions) here
     ]
 }

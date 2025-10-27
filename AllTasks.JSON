@@ -1,0 +1,109 @@
+{
+    "nuzlocke_chunks": [
+        {
+            "region_id": "12580",
+            "tasks": [
+                {
+                    "name": "Obtain any staff from Kraken", 
+                    "taskID": "301",
+                    "skill": "Combat", 
+                    "level": 355, 
+                    "type": "Combat",
+                    "base_points": 6, 
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Battlestaff, Mystic water staff, Trident of the seas"
+                        }
+                    ]
+                },
+                {
+                    "name": "Task text here", 
+                    "taskID": "ID Number here",
+                    "skill": "Type of Skill", 
+                    "level": 355, 
+                    "type": "Type of Task",
+                    "base_points": 1, 
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Item 1, Item 2, Item 3"
+                        }
+                    ]
+                },
+                {
+                    "name": "Task text here", 
+                    "taskID": "ID Number here",
+                    "skill": "Type of Skill", 
+                    "level": 355, 
+                    "type": "Type of Task",
+                    "base_points": 1, 
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Item 1, Item 2, Item 3"
+                        }
+                    ]
+                },
+                {
+                    "name": "Task text here", 
+                    "taskID": "ID Number here",
+                    "skill": "Type of Skill", 
+                    "level": 355, 
+                    "type": "Type of Task",
+                    "base_points": 1, 
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Item 1, Item 2, Item 3"
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": "12581",
+            "tasks": [
+                {
+                    "name": "Obtain any staff from Kraken", 
+                    "taskID": "301",
+                    "skill": "Combat", 
+                    "level": 355, 
+                    "type": "Combat",
+                    "base_points": 6, 
+                    "assignment_weight": 5,
+                    "assignment_range": [1, 5],
+                    "items": [
+                        {
+                            "item": "Battlestaff, Mystic water staff, Trident of the seas"
+                        }
+                    ]
+                },
+                {
+                    "name": "Task text here", 
+                    "taskID": "ID Number here",
+                    "skill": "Type of Skill", 
+                    "level": 355, 
+                    "type": "Type of Task",
+                    "base_points": 1, 
+                    "assignment_weight": 5,
+                    "assignment_range": [1, 5],
+                    "items": [
+                        {
+                            "item": "Item 1, Item 2, Item 3"
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "",
+                    "points_multiplier": 1.0, 
+                    "is_completed": false
+                }
+            ],
+            "is_completed": false
+        }
+    ]
+}
