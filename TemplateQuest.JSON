@@ -1,0 +1,40 @@
+{
+    "nuzlocke_chunks": [
+        {
+            "region_id": "",
+            
+            "tasks": [
+                { 
+                    "name": "", 
+                    "taskID": "",
+                    "skill": "", 
+                    "level": 0, 
+                    "type": "", 
+                    "base_points": 1, 
+                    "assignment_weight": 0 
+                },
+                { 
+                    "name": "", 
+                    "taskID": "",
+                    "skill": "", 
+                    "level": 0, 
+                    "type": "",
+                    "base_points": 1,
+                    "assignment_weight": 0 
+                }
+
+               
+            ],
+            
+            "optional_quests_unlocked": [
+                {
+                    "name": "",
+                    "points_multiplier": 1.0, 
+                    "is_completed": false
+                }
+                
+            ],
+            "is_completed": false
+        }
+    ]
+}
