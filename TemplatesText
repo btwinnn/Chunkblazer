@@ -4,7 +4,7 @@
     "nuzlocke_chunks": [
         { // Copy from this starting Curly Bracket for NEW region_ids
             "region_id": "", // The 64x64 chunk on the OSRS map
-            "Friendly_Name":"", // Human Readable Name for the region_id
+            "friendly_name":"", // Human Readable Name for the region_id
             
             "tasks": [ // Yellow Bracket = FULL TASK ARRAY
                 { // Copy from this pink Curly Bracket -- Single Task Object inside the tasks array 

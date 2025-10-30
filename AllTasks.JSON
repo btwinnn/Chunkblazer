@@ -2,7 +2,7 @@
     "nuzlocke_chunks": [
         {
             "region_id": "12580",
-            "Friendly_Name": "Lumbridge",
+            "friendly_name": "Lumbridge",
             "tasks": [
                 {
                     "name": "Obtain any staff from Kraken", 
