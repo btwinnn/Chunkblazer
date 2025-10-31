@@ -5,15 +5,20 @@
             "Friendly_Name": "Lumbridge",
             "tasks": [
                 {
-                    "name": "Kill a Goblin", 
+                    "name": "Kill a Goblin",
                     "taskID": "0001",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Combat", 
-                    "level": 2, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Combat",
+                    "level": 2,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -22,15 +27,20 @@
                     ]
                 },
                 {
-                    "name": "Spin a Ball of Wool", 
+                    "name": "Spin a Ball of Wool",
                     "taskID": "0002",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Crafting", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Crafting",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -39,15 +49,20 @@
                     ]
                 },
                 {
-                    "name": "Equip a Bronze Sqaure Shield", 
+                    "name": "Equip a Bronze Sqaure Shield",
                     "taskID": "0003",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Defence", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Defence",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -56,15 +71,20 @@
                     ]
                 },
                 {
-                    "name": "Chop a Yew Tree", 
+                    "name": "Chop a Yew Tree",
                     "taskID": "0004",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Woodcutting", 
-                    "level": 60, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Woodcutting",
+                    "level": 60,
                     "type": "Skilling",
-                    "base_points": 3, 
+                    "base_points": 3,
                     "assignment_weight": 1,
                     "items": [
                         {
@@ -73,15 +93,20 @@
                     ]
                 },
                 {
-                    "name": "Burn a Yew Log", 
+                    "name": "Burn a Yew Log",
                     "taskID": "0005",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Woodcutting", 
-                    "level": 60, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Woodcutting",
+                    "level": 60,
                     "type": "Skilling",
-                    "base_points": 3, 
+                    "base_points": 3,
                     "assignment_weight": 1,
                     "items": [
                         {
@@ -90,15 +115,20 @@
                     ]
                 },
                 {
-                    "name": "Pickpocket 500 GP", 
+                    "name": "Pickpocket 500 GP",
                     "taskID": "0006",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Thieving", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Thieving",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -107,15 +137,20 @@
                     ]
                 },
                 {
-                    "name": "Equip a Mithril Battleaxe", 
+                    "name": "Equip a Mithril Battleaxe",
                     "taskID": "0007",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Attack", 
-                    "level": 20, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Attack",
+                    "level": 20,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -124,33 +159,42 @@
                     ]
                 },
                 {
-                    "name": "Cast Earth Strike", 
+                    "name": "Cast Earth Strike",
                     "taskID": "0008",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Magic", 
-                    "level": 9, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Magic",
+                    "level": 9,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Burn an Oak Log", 
+                    "name": "Burn an Oak Log",
                     "taskID": "0009",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Woodcutting", 
-                    "level": 15, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Woodcutting",
+                    "level": 15,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -159,15 +203,20 @@
                     ]
                 },
                 {
-                    "name": "Equip a Wizard Hat", 
+                    "name": "Equip a Wizard Hat",
                     "taskID": "0010",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Defence", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Defence",
+                    "level": 1,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 5,
                     "items": [
                         {
@@ -176,15 +225,20 @@
                     ]
                 },
                 {
-                    "name": "Fletch a Oak Shortbow(u)", 
+                    "name": "Fletch a Oak Shortbow(u)",
                     "taskID": "0011",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Fletching", 
-                    "level": 20, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Fletching",
+                    "level": 20,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -193,15 +247,20 @@
                     ]
                 },
                 {
-                    "name": "Kill Some Spiders", 
+                    "name": "Kill Some Spiders",
                     "taskID": "0012",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12581, 12579, 12612, 12548],
-                    "skill": "Combat", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+                    "skill": "Combat",
+                    "level": 1,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -213,32 +272,32 @@
             "optional_quests_unlocked": [
                 {
                     "name": "Cook's Assistant",
-                    "points_multiplier": 1.5, 
+                    "points_multiplier": 1.5,
                     "is_completed": false
                 },
                 {
                     "name": "Recipe for Disaster",
-                    "points_multiplier": 2.5, 
+                    "points_multiplier": 2.5,
                     "is_completed": false
                 },
                 {
                     "name": "Restless Ghost",
-                    "points_multiplier": 1.5, 
+                    "points_multiplier": 1.5,
                     "is_completed": false
                 },
                 {
                     "name": "The Lost Tribe",
-                    "points_multiplier": 2.0, 
+                    "points_multiplier": 2.0,
                     "is_completed": false
                 },
                 {
                     "name": "Rune Mysteries",
-                    "points_multiplier": 1.5, 
+                    "points_multiplier": 1.5,
                     "is_completed": false
                 },
                 {
                     "name": "X Marks the Spot",
-                    "points_multiplier": 1.5, 
+                    "points_multiplier": 1.5,
                     "is_completed": false
                 }
             ],
@@ -249,15 +308,20 @@
             "Friendly_Name": "Lumbridge North Farm",
             "tasks": [
                 {
-                    "name": "Milk a Cow", 
+                    "name": "Milk a Cow",
                     "taskID": "0013",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -266,17 +330,25 @@
                     ]
                 },
                 {
-                    "name": "Collect Feathers", 
+                    "name": "Collect Feathers",
                     "taskID": "00014",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "Combat", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "Combat",
+                    "level": 1,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
-                    "assignment_range": [50, 1000],
+                    "assignment_range": [
+                        50,
+                        1000
+                    ],
                     "items": [
                         {
                             "item": null
@@ -284,15 +356,20 @@
                     ]
                 },
                 {
-                    "name": "Chop a Willow Tree", 
+                    "name": "Chop a Willow Tree",
                     "taskID": "0015",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "Woodcutting", 
-                    "level": 30, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "Woodcutting",
+                    "level": 30,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 3,
                     "items": [
                         {
@@ -301,15 +378,20 @@
                     ]
                 },
                 {
-                    "name": "Burn a Willow Log", 
+                    "name": "Burn a Willow Log",
                     "taskID": "0016",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "Woodcutting", 
-                    "level": 30, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "Woodcutting",
+                    "level": 30,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 3,
                     "items": [
                         {
@@ -318,17 +400,25 @@
                     ]
                 },
                 {
-                    "name": "Collect Cowhide", 
+                    "name": "Collect Cowhide",
                     "taskID": "0017",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "Combat", 
-                    "level": 2, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "Combat",
+                    "level": 2,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [5, 100],
+                    "assignment_range": [
+                        5,
+                        100
+                    ],
                     "items": [
                         {
                             "item": null
@@ -336,17 +426,25 @@
                     ]
                 },
                 {
-                    "name": "Collect Raw Beef", 
+                    "name": "Collect Raw Beef",
                     "taskID": "0018",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "Combat", 
-                    "level": 2, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "Combat",
+                    "level": 2,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [5, 100],
+                    "assignment_range": [
+                        5,
+                        100
+                    ],
                     "items": [
                         {
                             "item": null
@@ -354,15 +452,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a Cow in 3 Hits", 
+                    "name": "Kill a Cow in 3 Hits",
                     "taskID": "0019",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "Combat", 
-                    "level": 2, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "Combat",
+                    "level": 2,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -371,33 +474,42 @@
                     ]
                 },
                 {
-                    "name": "Equip a Bronze Med Helm", 
+                    "name": "Equip a Bronze Med Helm",
                     "taskID": "0020",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "Defence", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "Defence",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 5,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Kill a Chicken in 1 Hit", 
+                    "name": "Kill a Chicken in 1 Hit",
                     "taskID": "0021",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "Combat", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "Combat",
+                    "level": 1,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -406,15 +518,20 @@
                     ]
                 },
                 {
-                    "name": "Pickpocket a Farmer", 
+                    "name": "Pickpocket a Farmer",
                     "taskID": "0022",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "Thieving", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "Thieving",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 9,
                     "items": [
                         {
@@ -423,15 +540,20 @@
                     ]
                 },
                 {
-                    "name": "Fletch a Willow Shortbow(u)", 
+                    "name": "Fletch a Willow Shortbow(u)",
                     "taskID": "0023",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "Fletching", 
-                    "level": 20, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "Fletching",
+                    "level": 20,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 2,
                     "items": [
                         {
@@ -440,15 +562,20 @@
                     ]
                 },
                 {
-                    "name": "Fletch a Willow Longbow(u)", 
+                    "name": "Fletch a Willow Longbow(u)",
                     "taskID": "0024",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 12595, 13107, 12852],
-                    "skill": "Fletching", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12850,
+                        12595,
+                        13107,
+                        12852
+                    ],
+                    "skill": "Fletching",
+                    "level": null,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 1,
                     "items": [
                         {
@@ -464,17 +591,25 @@
             "Friendly_Name": "Lumbridge East Swamp",
             "tasks": [
                 {
-                    "name": "Mine some Copper", 
+                    "name": "Mine some Copper",
                     "taskID": "0025",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Mining", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Mining",
+                    "level": null,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
-                    "assignment_range": [5, 100],
+                    "assignment_range": [
+                        5,
+                        100
+                    ],
                     "items": [
                         {
                             "item": null
@@ -482,17 +617,25 @@
                     ]
                 },
                 {
-                    "name": "Mine some Tin", 
+                    "name": "Mine some Tin",
                     "taskID": "00026",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Mining", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Mining",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
-                    "assignment_range": [5, 100],
+                    "assignment_range": [
+                        5,
+                        100
+                    ],
                     "items": [
                         {
                             "item": null
@@ -500,17 +643,25 @@
                     ]
                 },
                 {
-                    "name": "Smelt some Bronze Bars", 
+                    "name": "Smelt some Bronze Bars",
                     "taskID": "0027",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Smithing", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Smithing",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 6,
-                    "assignment_range": [5, 50],
+                    "assignment_range": [
+                        5,
+                        50
+                    ],
                     "items": [
                         {
                             "item": null
@@ -518,17 +669,25 @@
                     ]
                 },
                 {
-                    "name": "Catch some Shrimp", 
+                    "name": "Catch some Shrimp",
                     "taskID": "0028",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Fishing", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Fishing",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
-                    "assignment_range": [5, 100],
+                    "assignment_range": [
+                        5,
+                        100
+                    ],
                     "items": [
                         {
                             "item": null
@@ -536,15 +695,20 @@
                     ]
                 },
                 {
-                    "name": "Catch an Anchovy", 
+                    "name": "Catch an Anchovy",
                     "taskID": "0029",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Fishing", 
-                    "level": 20, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Fishing",
+                    "level": 20,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -553,17 +717,25 @@
                     ]
                 },
                 {
-                    "name": "Cook some Shrimp", 
+                    "name": "Cook some Shrimp",
                     "taskID": "0030",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Cooking", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Cooking",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [5, 25],
+                    "assignment_range": [
+                        5,
+                        25
+                    ],
                     "items": [
                         {
                             "item": null
@@ -571,15 +743,20 @@
                     ]
                 },
                 {
-                    "name": "Cook an Anchovy", 
+                    "name": "Cook an Anchovy",
                     "taskID": "0031",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Cooking", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Cooking",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 5,
                     "items": [
                         {
@@ -588,33 +765,42 @@
                     ]
                 },
                 {
-                    "name": "Kill a Frog in 3 hits", 
+                    "name": "Kill a Frog in 3 hits",
                     "taskID": "0032",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Combat", 
-                    "level": 5, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Combat",
+                    "level": 5,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Enter Death's Domain", 
+                    "name": "Enter Death's Domain",
                     "taskID": "0033",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "null", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "null",
+                    "level": 1,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -623,17 +809,25 @@
                     ]
                 },
                 {
-                    "name": "Bury some Bones", 
+                    "name": "Bury some Bones",
                     "taskID": "0034",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Prayer", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Prayer",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 9,
-                    "assignment_range": [5, 50],
+                    "assignment_range": [
+                        5,
+                        50
+                    ],
                     "items": [
                         {
                             "item": null
@@ -641,17 +835,25 @@
                     ]
                 },
                 {
-                    "name": "Cook some Raw Rat Meat", 
+                    "name": "Cook some Raw Rat Meat",
                     "taskID": "0035",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Cooking", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Cooking",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
-                    "assignment_range": [5, 25],
+                    "assignment_range": [
+                        5,
+                        25
+                    ],
                     "items": [
                         {
                             "item": null
@@ -659,46 +861,56 @@
                     ]
                 },
                 {
-                    "name": "Chop a Dead Tree", 
+                    "name": "Chop a Dead Tree",
                     "taskID": "0036",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Woodcutting", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Woodcutting",
+                    "level": null,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
-                
-
                         {
                             "item": null
                         }
-                    
-                     ],
+                    ]
+                }
+            ],
             "optional_quests_unlocked": [
                 {
                     "name": "Misthalen Mystery",
-                    "points_multiplier": 1.5, 
+                    "points_multiplier": 1.5,
                     "is_completed": false
                 }
-            ]
+            ],
+            "is_completed": false
         },
-                {
+        {
             "region_id": "12594",
             "Friendly_Name": "H.A.M. Hideout",
             "tasks": [
                 {
-                    "name": "Rake the Tree Patch", 
+                    "name": "Rake the Tree Patch",
                     "taskID": "0037",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Farming", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Farming",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -707,15 +919,20 @@
                     ]
                 },
                 {
-                    "name": "Plant a Tree", 
+                    "name": "Plant a Tree",
                     "taskID": "00038",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Farming", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Farming",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 3,
                     "items": [
                         {
@@ -724,15 +941,20 @@
                     ]
                 },
                 {
-                    "name": "Equip a Brass Necklace", 
+                    "name": "Equip a Brass Necklace",
                     "taskID": "0039",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Combat", 
-                    "level": 2, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Combat",
+                    "level": 2,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 5,
                     "items": [
                         {
@@ -741,15 +963,20 @@
                     ]
                 },
                 {
-                    "name": "Polish some Buttons", 
+                    "name": "Polish some Buttons",
                     "taskID": "0040",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Crafting", 
-                    "level": 3, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Crafting",
+                    "level": 3,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -758,15 +985,20 @@
                     ]
                 },
                 {
-                    "name": "Steal a H.A.M. Clothing Set", 
+                    "name": "Steal a H.A.M. Clothing Set",
                     "taskID": "0041",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Thieving", 
-                    "level": 15, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Thieving",
+                    "level": 15,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -775,15 +1007,20 @@
                     ]
                 },
                 {
-                    "name": "Obtain a Rusty Sword", 
+                    "name": "Obtain a Rusty Sword",
                     "taskID": "0042",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Thieving", 
-                    "level": 15, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Thieving",
+                    "level": 15,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -792,15 +1029,20 @@
                     ]
                 },
                 {
-                    "name": "Obtain a Uncut Opal", 
+                    "name": "Obtain a Uncut Opal",
                     "taskID": "0043",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Thieving", 
-                    "level": 15, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Thieving",
+                    "level": 15,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -809,33 +1051,42 @@
                     ]
                 },
                 {
-                    "name": "Obtain a Uncut Jade", 
+                    "name": "Obtain a Uncut Jade",
                     "taskID": "0044",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Thieving", 
-                    "level": 15, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Thieving",
+                    "level": 15,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Enter the H.A.M. Hideout", 
+                    "name": "Enter the H.A.M. Hideout",
                     "taskID": "0045",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Thieving", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Thieving",
+                    "level": 1,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -844,15 +1095,20 @@
                     ]
                 },
                 {
-                    "name": "Complete an Achievement Diary Step", 
+                    "name": "Complete an Achievement Diary Step",
                     "taskID": "0046",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Null",
+                    "level": null,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -861,15 +1117,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a H.A.M. Guard", 
+                    "name": "Kill a H.A.M. Guard",
                     "taskID": "0047",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Combat", 
-                    "level": 12, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Combat",
+                    "level": 12,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -878,29 +1139,34 @@
                     ]
                 },
                 {
-                    "name": "Wield a Steel Dagger", 
+                    "name": "Wield a Steel Dagger",
                     "taskID": "0048",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 12593, 12848],
-                    "skill": "Attack", 
-                    "level": 5, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "Attack",
+                    "level": 5,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
                             "item": null
                         }
-                    
-                     ],
+                    ]
+                }
+            ],
             "optional_quests_unlocked": [
                 {
                     "name": "Lost City",
-                    "points_multiplier": 2.0, 
+                    "points_multiplier": 2.0,
                     "is_completed": false
                 }
-               
             ],
             "is_completed": false
         },
@@ -909,15 +1175,20 @@
             "Friendly_Name": "Al Kharid Toll Gate",
             "tasks": [
                 {
-                    "name": "Cut a Sapphire", 
+                    "name": "Cut a Sapphire",
                     "taskID": "0049",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "Crafting", 
-                    "level": 20, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "Crafting",
+                    "level": 20,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 6,
                     "items": [
                         {
@@ -926,15 +1197,20 @@
                     ]
                 },
                 {
-                    "name": "Cut an Emerald", 
+                    "name": "Cut an Emerald",
                     "taskID": "00050",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "Crafting", 
-                    "level": 27, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "Crafting",
+                    "level": 27,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 3,
                     "items": [
                         {
@@ -943,16 +1219,24 @@
                     ]
                 },
                 {
-                    "name": "Buy some Silk", 
+                    "name": "Buy some Silk",
                     "taskID": "0051",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
-                    "assignment_range": [25, 200],
+                    "base_points": 1,
+                    "assignment_range": [
+                        25,
+                        200
+                    ],
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -961,15 +1245,20 @@
                     ]
                 },
                 {
-                    "name": "Runecraft a Fire Rune", 
+                    "name": "Runecraft a Fire Rune",
                     "taskID": "0052",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "Runecrafting", 
-                    "level": 14, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "Runecrafting",
+                    "level": 14,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 6,
                     "items": [
                         {
@@ -978,15 +1267,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a man in 2 Hits", 
+                    "name": "Kill a man in 2 Hits",
                     "taskID": "0053",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "Combat", 
-                    "level": 2, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "Combat",
+                    "level": 2,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -995,15 +1289,20 @@
                     ]
                 },
                 {
-                    "name": "Obtain a Grimy Ranarr", 
+                    "name": "Obtain a Grimy Ranarr",
                     "taskID": "0054",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "Combat", 
-                    "level": 2, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "Combat",
+                    "level": 2,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 5,
                     "items": [
                         {
@@ -1012,15 +1311,20 @@
                     ]
                 },
                 {
-                    "name": "Use the Glider to Travel", 
+                    "name": "Use the Glider to Travel",
                     "taskID": "0055",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 4,
                     "items": [
                         {
@@ -1029,33 +1333,42 @@
                     ]
                 },
                 {
-                    "name": "Enter your PIN at Mubariz", 
+                    "name": "Enter your PIN at Mubariz",
                     "taskID": "0056",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Pickpocket a Man 10 times without Failing", 
+                    "name": "Pickpocket a Man 10 times without Failing",
                     "taskID": "0057",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "Thieving", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "Thieving",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -1064,15 +1377,20 @@
                     ]
                 },
                 {
-                    "name": "Rake the Cactus Patch", 
+                    "name": "Rake the Cactus Patch",
                     "taskID": "0058",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "Farming", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "Farming",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -1081,15 +1399,20 @@
                     ]
                 },
                 {
-                    "name": "Plant a Cactus", 
+                    "name": "Plant a Cactus",
                     "taskID": "0059",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "Farming", 
-                    "level": 55, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "Farming",
+                    "level": 55,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 2,
                     "items": [
                         {
@@ -1098,34 +1421,39 @@
                     ]
                 },
                 {
-                    "name": "Obtain a Beginner Clue Scroll", 
+                    "name": "Obtain a Beginner Clue Scroll",
                     "taskID": "0060",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "null", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "null",
+                    "level": 1,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
                             "item": null
                         }
-                    
-                     ],
+                    ]
+                }
+            ],
             "optional_quests_unlocked": [
                 {
                     "name": "The Feud",
-                    "points_multiplier": 2.0, 
+                    "points_multiplier": 2.0,
                     "is_completed": false
                 },
                 {
                     "name": "Temple of the Eye",
-                    "points_multiplier": 2.0, 
+                    "points_multiplier": 2.0,
                     "is_completed": false
                 }
-               
             ],
             "is_completed": false
         },
@@ -1134,15 +1462,20 @@
             "Friendly_Name": "Al Kharid",
             "tasks": [
                 {
-                    "name": "Equip some Adamant Armor", 
+                    "name": "Equip some Adamant Armor",
                     "taskID": "0061",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [13106, 13361, 12849, 13104],
-                    "skill": "Defence", 
-                    "level": 30, 
+                    "neighbor_ids": [
+                        13106,
+                        13361,
+                        12849,
+                        13104
+                    ],
+                    "skill": "Defence",
+                    "level": 30,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -1151,15 +1484,20 @@
                     ]
                 },
                 {
-                    "name": "Pickpocket an Al Kharid Warrior", 
+                    "name": "Pickpocket an Al Kharid Warrior",
                     "taskID": "00062",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [13106, 13361, 12849, 13104],
-                    "skill": "Thieving", 
-                    "level": 25, 
+                    "neighbor_ids": [
+                        13106,
+                        13361,
+                        12849,
+                        13104
+                    ],
+                    "skill": "Thieving",
+                    "level": 25,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -1168,15 +1506,20 @@
                     ]
                 },
                 {
-                    "name": "Buy all the Moulds from Dommik", 
+                    "name": "Buy all the Moulds from Dommik",
                     "taskID": "0063",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [13106, 13361, 12849, 13104],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        13106,
+                        13361,
+                        12849,
+                        13104
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -1185,15 +1528,20 @@
                     ]
                 },
                 {
-                    "name": "Equip a Mithril Scimitar", 
+                    "name": "Equip a Mithril Scimitar",
                     "taskID": "0064",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [13106, 13361, 12849, 13104],
-                    "skill": "Attack", 
-                    "level": 20, 
+                    "neighbor_ids": [
+                        13106,
+                        13361,
+                        12849,
+                        13104
+                    ],
+                    "skill": "Attack",
+                    "level": 20,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -1202,15 +1550,20 @@
                     ]
                 },
                 {
-                    "name": "Smelt an Iron Bar", 
+                    "name": "Smelt an Iron Bar",
                     "taskID": "0065",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [13106, 13361, 12849, 13104],
-                    "skill": "Smithing", 
-                    "level": 15, 
+                    "neighbor_ids": [
+                        13106,
+                        13361,
+                        12849,
+                        13104
+                    ],
+                    "skill": "Smithing",
+                    "level": 15,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -1219,17 +1572,25 @@
                     ]
                 },
                 {
-                    "name": "Kill some Al Kharid Warriors", 
+                    "name": "Kill some Al Kharid Warriors",
                     "taskID": "0066",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [13106, 13361, 12849, 13104],
-                    "skill": "Combat", 
-                    "level": 9, 
+                    "neighbor_ids": [
+                        13106,
+                        13361,
+                        12849,
+                        13104
+                    ],
+                    "skill": "Combat",
+                    "level": 9,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [5, 50],
+                    "assignment_range": [
+                        5,
+                        50
+                    ],
                     "items": [
                         {
                             "item": null
@@ -1237,15 +1598,20 @@
                     ]
                 },
                 {
-                    "name": "Complete a Lap of the Al Kharid Rooftop Agility Course", 
+                    "name": "Complete a Lap of the Al Kharid Rooftop Agility Course",
                     "taskID": "0067",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [13106, 13361, 12849, 13104],
-                    "skill": "Agility", 
-                    "level": 20, 
+                    "neighbor_ids": [
+                        13106,
+                        13361,
+                        12849,
+                        13104
+                    ],
+                    "skill": "Agility",
+                    "level": 20,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -1254,33 +1620,42 @@
                     ]
                 },
                 {
-                    "name": "Eat a Cabbage", 
+                    "name": "Eat a Cabbage",
                     "taskID": "0068",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [13106, 13361, 12849, 13104],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        13106,
+                        13361,
+                        12849,
+                        13104
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Enter the Sorceress's Garden", 
+                    "name": "Enter the Sorceress's Garden",
                     "taskID": "0069",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 5,
                     "items": [
                         {
@@ -1289,15 +1664,20 @@
                     ]
                 },
                 {
-                    "name": "Tan some Leather", 
+                    "name": "Tan some Leather",
                     "taskID": "0070",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "Crafting", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "Crafting",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -1306,15 +1686,20 @@
                     ]
                 },
                 {
-                    "name": "Buy a Kebab", 
+                    "name": "Buy a Kebab",
                     "taskID": "0071",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -1323,34 +1708,39 @@
                     ]
                 },
                 {
-                    "name": "Fill a Jug at the Al Kharid Palace Fountain", 
+                    "name": "Fill a Jug at the Al Kharid Palace Fountain",
                     "taskID": "0072",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12850, 13105, 13107, 13362],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
                             "item": null
                         }
-                    
-                     ],
+                    ]
+                }
+            ],
             "optional_quests_unlocked": [
                 {
                     "name": "Prince Ali Rescue",
-                    "points_multiplier": 1.5, 
+                    "points_multiplier": 1.5,
                     "is_completed": false
                 },
                 {
                     "name": "Shadow of the Storm",
-                    "points_multiplier": 2.0, 
+                    "points_multiplier": 2.0,
                     "is_completed": false
                 }
-               
             ],
             "is_completed": false
         },
@@ -1359,15 +1749,20 @@
             "Friendly_Name": "Lumbridge West Swamp",
             "tasks": [
                 {
-                    "name": "Mine some Coal", 
+                    "name": "Mine some Coal",
                     "taskID": "0073",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Defence", 
-                    "level": 30, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Defence",
+                    "level": 30,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -1376,15 +1771,20 @@
                     ]
                 },
                 {
-                    "name": "Buy a Candle", 
+                    "name": "Buy a Candle",
                     "taskID": "00074",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -1393,15 +1793,20 @@
                     ]
                 },
                 {
-                    "name": "Take Damage from a Wall Beast", 
+                    "name": "Take Damage from a Wall Beast",
                     "taskID": "0075",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Combat", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Combat",
+                    "level": null,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -1410,15 +1815,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a Big Frog in Lumbridge Cave", 
+                    "name": "Kill a Big Frog in Lumbridge Cave",
                     "taskID": "0076",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Combat", 
-                    "level": 24, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Combat",
+                    "level": 24,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -1427,15 +1837,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a Cave Bug", 
+                    "name": "Kill a Cave Bug",
                     "taskID": "0077",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Slayer", 
-                    "level": 7, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Slayer",
+                    "level": 7,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -1444,16 +1859,21 @@
                     ]
                 },
                 {
-                    "name": "Kill a Cave Crawler", 
+                    "name": "Kill a Cave Crawler",
                     "taskID": "0078",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Slayer", 
-                    "level": 10, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Slayer",
+                    "level": 10,
                     "type": "Combat",
-                    "base_points": 1, 
-                    "assignment_weight": 5,                 
+                    "base_points": 1,
+                    "assignment_weight": 5,
                     "items": [
                         {
                             "item": null
@@ -1461,15 +1881,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a Cave Slime", 
+                    "name": "Kill a Cave Slime",
                     "taskID": "0079",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Slayer", 
-                    "level": 17, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Slayer",
+                    "level": 17,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 4,
                     "items": [
                         {
@@ -1478,33 +1903,42 @@
                     ]
                 },
                 {
-                    "name": "Catch some Frog Spawn", 
+                    "name": "Catch some Frog Spawn",
                     "taskID": "0080",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Fishing", 
-                    "level": 33, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Fishing",
+                    "level": 33,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Catch a Slimy Eel", 
+                    "name": "Catch a Slimy Eel",
                     "taskID": "0081",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Fishing", 
-                    "level": 28, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Fishing",
+                    "level": 28,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -1513,15 +1947,20 @@
                     ]
                 },
                 {
-                    "name": "Build a Medium STASH Unit", 
+                    "name": "Build a Medium STASH Unit",
                     "taskID": "0082",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Construction", 
-                    "level": 42, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Construction",
+                    "level": 42,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 4,
                     "items": [
                         {
@@ -1530,15 +1969,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a Cave Goblin", 
+                    "name": "Kill a Cave Goblin",
                     "taskID": "0083",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Combat", 
-                    "level": 3, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Combat",
+                    "level": 3,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -1547,23 +1991,28 @@
                     ]
                 },
                 {
-                    "name": "Kill a Wall Beast", 
+                    "name": "Kill a Wall Beast",
                     "taskID": "0084",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12849, 12594, 12592, 12337],
-                    "skill": "Slayer", 
-                    "level": 35, 
+                    "neighbor_ids": [
+                        12849,
+                        12594,
+                        12592,
+                        12337
+                    ],
+                    "skill": "Slayer",
+                    "level": 35,
                     "type": "Combat",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 3,
                     "items": [
                         {
                             "item": null
                         }
-                    
-                     ],
-           
+                    ]
+                }
+            ],
             "is_completed": false
         },
         {
@@ -1571,15 +2020,20 @@
             "Friendly_Name": "Lumbridge Mill",
             "tasks": [
                 {
-                    "name": "Obtain a Pot of Flour", 
+                    "name": "Obtain a Pot of Flour",
                     "taskID": "0085",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -1588,15 +2042,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a Duck", 
+                    "name": "Kill a Duck",
                     "taskID": "00086",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "Combat", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "Combat",
+                    "level": 1,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -1605,17 +2064,25 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Onions", 
+                    "name": "Obtain some Onions",
                     "taskID": "0087",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1,                 
+                    "base_points": 1,
                     "assignment_weight": 10,
-                    "assignment_range": [1, 15],
+                    "assignment_range": [
+                        1,
+                        15
+                    ],
                     "items": [
                         {
                             "item": null
@@ -1623,15 +2090,20 @@
                     ]
                 },
                 {
-                    "name": "Obtain an Egg", 
+                    "name": "Obtain an Egg",
                     "taskID": "0088",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -1640,15 +2112,20 @@
                     ]
                 },
                 {
-                    "name": "Talk to the Sheep", 
+                    "name": "Talk to the Sheep",
                     "taskID": "0089",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 6,
                     "items": [
                         {
@@ -1657,15 +2134,20 @@
                     ]
                 },
                 {
-                    "name": "Find a Needle in a Hay Bale", 
+                    "name": "Find a Needle in a Hay Bale",
                     "taskID": "0090",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -1674,15 +2156,20 @@
                     ]
                 },
                 {
-                    "name": "Take Damage from a Hay Bale", 
+                    "name": "Take Damage from a Hay Bale",
                     "taskID": "0091",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 6,
                     "items": [
                         {
@@ -1691,33 +2178,42 @@
                     ]
                 },
                 {
-                    "name": "Churn a Pot of Cream", 
+                    "name": "Churn a Pot of Cream",
                     "taskID": "0092",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "Cooking", 
-                    "level": 21, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "Cooking",
+                    "level": 21,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Churn a Pot of Cream into Cheese", 
+                    "name": "Churn a Pot of Cream into Cheese",
                     "taskID": "0093",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "Cooking", 
-                    "level": 48, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "Cooking",
+                    "level": 48,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 4,
                     "items": [
                         {
@@ -1726,15 +2222,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a Farmer in 5 Hits", 
+                    "name": "Kill a Farmer in 5 Hits",
                     "taskID": "0094",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "Combat", 
-                    "level": 7, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "Combat",
+                    "level": 7,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -1743,15 +2244,20 @@
                     ]
                 },
                 {
-                    "name": "Obtain a Bead from an Imp", 
+                    "name": "Obtain a Bead from an Imp",
                     "taskID": "0095",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "Combat", 
-                    "level": 2, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "Combat",
+                    "level": 2,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -1760,29 +2266,38 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Potatoes", 
+                    "name": "Obtain some Potatoes",
                     "taskID": "0096",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12594, 12851, 12596],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12594,
+                        12851,
+                        12596
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [1, 15],
+                    "assignment_range": [
+                        1,
+                        15
+                    ],
                     "items": [
                         {
                             "item": null
                         }
-                    
-                     ],
+                    ]
+                }
+            ],
             "optional_quests_unlocked": [
                 {
                     "name": "Sheep Shearer",
-                    "points_multiplier": 1.5, 
+                    "points_multiplier": 1.5,
                     "is_completed": false
-                }  
+                }
             ],
             "is_completed": false
         },
@@ -1791,15 +2306,20 @@
             "Friendly_Name": "Al Kharid Mine",
             "tasks": [
                 {
-                    "name": "Use the Rocks Agility Shortcut", 
+                    "name": "Use the Rocks Agility Shortcut",
                     "taskID": "0097",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "Agility", 
-                    "level": 38, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "Agility",
+                    "level": 38,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 3,
                     "items": [
                         {
@@ -1808,15 +2328,20 @@
                     ]
                 },
                 {
-                    "name": "Mine some Gold", 
+                    "name": "Mine some Gold",
                     "taskID": "00098",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "Mining", 
-                    "level": 40, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "Mining",
+                    "level": 40,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 4,
                     "items": [
                         {
@@ -1825,17 +2350,25 @@
                     ]
                 },
                 {
-                    "name": "Kill some Scorpions", 
+                    "name": "Kill some Scorpions",
                     "taskID": "0099",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "Combat", 
-                    "level": 14, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "Combat",
+                    "level": 14,
                     "type": "Combat",
-                    "base_points": 1,                 
+                    "base_points": 1,
                     "assignment_weight": 9,
-                    "assignment_range": [1, 25],
+                    "assignment_range": [
+                        1,
+                        25
+                    ],
                     "items": [
                         {
                             "item": null
@@ -1843,15 +2376,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a Scorpion in 7 Hits", 
+                    "name": "Kill a Scorpion in 7 Hits",
                     "taskID": "0100",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "Combat", 
-                    "level": 14, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "Combat",
+                    "level": 14,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 9,
                     "items": [
                         {
@@ -1860,17 +2398,25 @@
                     ]
                 },
                 {
-                    "name": "Mine some Silver", 
+                    "name": "Mine some Silver",
                     "taskID": "0101",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "Mining", 
-                    "level": 20, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "Mining",
+                    "level": 20,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 9,
-                    "assignment_range": [1, 25],
+                    "assignment_range": [
+                        1,
+                        25
+                    ],
                     "items": [
                         {
                             "item": null
@@ -1878,15 +2424,20 @@
                     ]
                 },
                 {
-                    "name": "Smelt a Silver Ore", 
+                    "name": "Smelt a Silver Ore",
                     "taskID": "0102",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "Smithing", 
-                    "level": 20, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "Smithing",
+                    "level": 20,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -1895,15 +2446,20 @@
                     ]
                 },
                 {
-                    "name": "Craft a Tiara", 
+                    "name": "Craft a Tiara",
                     "taskID": "0103",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "Crafting", 
-                    "level": 23, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "Crafting",
+                    "level": 23,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 6,
                     "items": [
                         {
@@ -1912,33 +2468,42 @@
                     ]
                 },
                 {
-                    "name": "Create a Fire Tiara", 
+                    "name": "Create a Fire Tiara",
                     "taskID": "0104",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "Runecrafting", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "Runecrafting",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 5,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Obtain some Goldsmith Gauntlets", 
+                    "name": "Obtain some Goldsmith Gauntlets",
                     "taskID": "0105",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 3, 
+                    "base_points": 3,
                     "assignment_weight": 3,
                     "items": [
                         {
@@ -1947,15 +2512,20 @@
                     ]
                 },
                 {
-                    "name": "Obtain an Ensouled Scorpion Head", 
+                    "name": "Obtain an Ensouled Scorpion Head",
                     "taskID": "0106",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "Combat", 
-                    "level": 14, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "Combat",
+                    "level": 14,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -1964,15 +2534,20 @@
                     ]
                 },
                 {
-                    "name": "Obtain a Bead from an Imp", 
+                    "name": "Obtain a Bead from an Imp",
                     "taskID": "0107",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "Combat", 
-                    "level": 2, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "Combat",
+                    "level": 2,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -1981,21 +2556,27 @@
                     ]
                 },
                 {
-                    "name": "Spread some Fiendish Ashes", 
+                    "name": "Spread some Fiendish Ashes",
                     "taskID": "0108",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12851, 13106, 13108, 13363],
-                    "skill": "Prayer", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12851,
+                        13106,
+                        13108,
+                        13363
+                    ],
+                    "skill": "Prayer",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
                             "item": null
-                        }  
-                                         
+                        }
+                    ]
+                }
             ],
             "is_completed": false
         },
@@ -2004,15 +2585,20 @@
             "Friendly_Name": "Champions' Guild",
             "tasks": [
                 {
-                    "name": "Grow some Cadava Berries", 
+                    "name": "Grow some Cadava Berries",
                     "taskID": "0109",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "Farming", 
-                    "level": 22, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "Farming",
+                    "level": 22,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 4,
                     "items": [
                         {
@@ -2021,15 +2607,20 @@
                     ]
                 },
                 {
-                    "name": "Make some Wet Clay", 
+                    "name": "Make some Wet Clay",
                     "taskID": "0110",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "Mining", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "Mining",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -2038,15 +2629,20 @@
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild", 
+                    "name": "Enter the Champions' Guild",
                     "taskID": "0111",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "Null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "Null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1,                 
+                    "base_points": 1,
                     "assignment_weight": 9,
                     "items": [
                         {
@@ -2055,15 +2651,20 @@
                     ]
                 },
                 {
-                    "name": "Use the Agility Stepping Stones", 
+                    "name": "Use the Agility Stepping Stones",
                     "taskID": "0112",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "Agility", 
-                    "level": 31, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "Agility",
+                    "level": 31,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -2072,15 +2673,20 @@
                     ]
                 },
                 {
-                    "name": "Equip some Rune Armor", 
+                    "name": "Equip some Rune Armor",
                     "taskID": "0113",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "Defence", 
-                    "level": 40, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "Defence",
+                    "level": 40,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -2089,15 +2695,20 @@
                     ]
                 },
                 {
-                    "name": "Equip a Rune Weapon", 
+                    "name": "Equip a Rune Weapon",
                     "taskID": "0114",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "Attack", 
-                    "level": 40, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "Attack",
+                    "level": 40,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -2106,15 +2717,20 @@
                     ]
                 },
                 {
-                    "name": "Enter the Sourhog Cave", 
+                    "name": "Enter the Sourhog Cave",
                     "taskID": "0115",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -2123,33 +2739,42 @@
                     ]
                 },
                 {
-                    "name": "Kill a Sourhog", 
+                    "name": "Kill a Sourhog",
                     "taskID": "0116",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "Slayer", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "Slayer",
+                    "level": 1,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Dye a Cape Yellow", 
+                    "name": "Dye a Cape Yellow",
                     "taskID": "0117",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -2158,15 +2783,20 @@
                     ]
                 },
                 {
-                    "name": "Equip some Green D'Hide", 
+                    "name": "Equip some Green D'Hide",
                     "taskID": "0118",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "Ranged", 
-                    "level": 40, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "Ranged",
+                    "level": 40,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -2175,15 +2805,20 @@
                     ]
                 },
                 {
-                    "name": "Obtain a Bead from an Imp", 
+                    "name": "Obtain a Bead from an Imp",
                     "taskID": "0119",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "Combat", 
-                    "level": 2, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "Combat",
+                    "level": 2,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -2192,27 +2827,34 @@
                     ]
                 },
                 {
-                    "name": "Kill a Mugger in 2 Hits", 
+                    "name": "Kill a Mugger in 2 Hits",
                     "taskID": "0120",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12595, 12340, 12852, 12597],
-                    "skill": "Combat", 
-                    "level": 6, 
+                    "neighbor_ids": [
+                        12595,
+                        12340,
+                        12852,
+                        12597
+                    ],
+                    "skill": "Combat",
+                    "level": 6,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
                             "item": null
-                        }                                        
+                        }
+                    ]
+                }
             ],
             "optional_quests_unlocked": [
                 {
                     "name": "Dragon Slayer I",
-                    "points_multiplier": 2.5, 
+                    "points_multiplier": 2.5,
                     "is_completed": false
-                }  
+                }
             ],
             "is_completed": false
         },
@@ -2221,15 +2863,20 @@
             "Friendly_Name": "Draynor Manor",
             "tasks": [
                 {
-                    "name": "Grow some Nightshade", 
+                    "name": "Grow some Nightshade",
                     "taskID": "0121",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "Farming", 
-                    "level": 63, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "Farming",
+                    "level": 63,
                     "type": "Skilling",
-                    "base_points": 3, 
+                    "base_points": 3,
                     "assignment_weight": 3,
                     "items": [
                         {
@@ -2238,15 +2885,20 @@
                     ]
                 },
                 {
-                    "name": "Chop an Undead Tree", 
+                    "name": "Chop an Undead Tree",
                     "taskID": "0122",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "Woodcutting", 
-                    "level": 35, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "Woodcutting",
+                    "level": 35,
                     "type": "Skilling",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -2255,15 +2907,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a Ghost", 
+                    "name": "Kill a Ghost",
                     "taskID": "0123",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "Combat", 
-                    "level": 19, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "Combat",
+                    "level": 19,
                     "type": "Combat",
-                    "base_points": 1,                 
+                    "base_points": 1,
                     "assignment_weight": 9,
                     "items": [
                         {
@@ -2272,15 +2929,20 @@
                     ]
                 },
                 {
-                    "name": "Cast Draynor Manor Teleport", 
+                    "name": "Cast Draynor Manor Teleport",
                     "taskID": "0124",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "Magic", 
-                    "level": 17, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "Magic",
+                    "level": 17,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 6,
                     "items": [
                         {
@@ -2289,15 +2951,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a Killerwatt", 
+                    "name": "Kill a Killerwatt",
                     "taskID": "0125",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "Slayer", 
-                    "level": 37, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "Slayer",
+                    "level": 37,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 4,
                     "items": [
                         {
@@ -2306,17 +2973,25 @@
                     ]
                 },
                 {
-                    "name": "Kill some Rats", 
+                    "name": "Kill some Rats",
                     "taskID": "0126",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "Combat", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "Combat",
+                    "level": 1,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 9,
-                    "assignment_range": [1, 20],
+                    "assignment_range": [
+                        1,
+                        20
+                    ],
                     "items": [
                         {
                             "item": null
@@ -2324,15 +2999,20 @@
                     ]
                 },
                 {
-                    "name": "Kill a Skeleton", 
+                    "name": "Kill a Skeleton",
                     "taskID": "0127",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "Combat", 
-                    "level": 22, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "Combat",
+                    "level": 22,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -2341,33 +3021,42 @@
                     ]
                 },
                 {
-                    "name": "Defeat Count Draynor", 
+                    "name": "Defeat Count Draynor",
                     "taskID": "0128",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "Combat", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "Combat",
+                    "level": null,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Dig up a Skull", 
+                    "name": "Dig up a Skull",
                     "taskID": "0129",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -2376,15 +3065,20 @@
                     ]
                 },
                 {
-                    "name": "Store 10 Plant Cures in the Tool Leprechaun", 
+                    "name": "Store 10 Plant Cures in the Tool Leprechaun",
                     "taskID": "0130",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -2393,15 +3087,20 @@
                     ]
                 },
                 {
-                    "name": "Obtain a Magic Whistle", 
+                    "name": "Obtain a Magic Whistle",
                     "taskID": "0131",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 5,
                     "items": [
                         {
@@ -2410,32 +3109,39 @@
                     ]
                 },
                 {
-                    "name": "Talk to Bob", 
+                    "name": "Talk to Bob",
                     "taskID": "0132",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12339, 12084, 12341, 12596],
-                    "skill": "null", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12339,
+                        12084,
+                        12341,
+                        12596
+                    ],
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 2, 
+                    "base_points": 2,
                     "assignment_weight": 6,
                     "items": [
                         {
                             "item": null
-                        }  
-                         ],
+                        }
+                    ]
+                }
+            ],
             "optional_quests_unlocked": [
                 {
                     "name": "Ernest the Chicken",
-                    "points_multiplier": 1.5, 
+                    "points_multiplier": 1.5,
                     "is_completed": false
-                }, 
+                },
                 {
                     "name": "Animal Magnetism",
-                    "points_multiplier": 2.0, 
+                    "points_multiplier": 2.0,
                     "is_completed": false
-                }                  
+                }
             ],
             "is_completed": false
         },
@@ -2448,11 +3154,16 @@
                     "taskID": "0133",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Combat", 
-                    "level": 5, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Combat",
+                    "level": 5,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -2465,11 +3176,16 @@
                     "taskID": "134",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Combat", 
-                    "level": 5, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Combat",
+                    "level": 5,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -2482,11 +3198,16 @@
                     "taskID": "0135",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Agility", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Agility",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1,                 
+                    "base_points": 1,
                     "assignment_weight": 9,
                     "items": [
                         {
@@ -2495,15 +3216,20 @@
                     ]
                 },
                 {
-                    "name": "Get a Slayer Task from Spria", 
+                    "name": "Get a Slayer Task from Spria",
                     "taskID": "0136",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Slayer", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Slayer",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -2512,17 +3238,25 @@
                     ]
                 },
                 {
-                    "name": "Kill some Zombies", 
+                    "name": "Kill some Zombies",
                     "taskID": "0137",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Combat", 
-                    "level": 13, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Combat",
+                    "level": 13,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [1, 20],
+                    "assignment_range": [
+                        1,
+                        20
+                    ],
                     "items": [
                         {
                             "item": null
@@ -2530,17 +3264,25 @@
                     ]
                 },
                 {
-                    "name": "Smith some Iron Arrowtips", 
+                    "name": "Smith some Iron Arrowtips",
                     "taskID": "0138",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Smithing", 
-                    "level": 20, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Smithing",
+                    "level": 20,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
-                    "assignment_range": [25, 100],
+                    "assignment_range": [
+                        25,
+                        100
+                    ],
                     "items": [
                         {
                             "item": null
@@ -2548,17 +3290,25 @@
                     ]
                 },
                 {
-                    "name": "Fletch some Iron Arrows", 
+                    "name": "Fletch some Iron Arrows",
                     "taskID": "0139",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Fletching", 
-                    "level": 15, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Fletching",
+                    "level": 15,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [25, 100],
+                    "assignment_range": [
+                        25,
+                        100
+                    ],
                     "items": [
                         {
                             "item": null
@@ -2566,33 +3316,42 @@
                     ]
                 },
                 {
-                    "name": "Smith an Iron Dagger", 
+                    "name": "Smith an Iron Dagger",
                     "taskID": "0140",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Smithing", 
-                    "level": 15, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Smithing",
+                    "level": 15,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Fletch a Oak Longbow(u)", 
+                    "name": "Fletch a Oak Longbow(u)",
                     "taskID": "0141",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Fletching", 
-                    "level": 25, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Fletching",
+                    "level": 25,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -2601,15 +3360,20 @@
                     ]
                 },
                 {
-                    "name": "Obtain an Enchanted Gem", 
+                    "name": "Obtain an Enchanted Gem",
                     "taskID": "0142",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Slayer", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Slayer",
+                    "level": 1,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -2618,15 +3382,20 @@
                     ]
                 },
                 {
-                    "name": "Unlock Reptile Freezer", 
+                    "name": "Unlock Reptile Freezer",
                     "taskID": "0143",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Slayer", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Slayer",
+                    "level": 1,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 6,
                     "items": [
                         {
@@ -2635,27 +3404,34 @@
                     ]
                 },
                 {
-                    "name": "Equip Reinforced Goggles", 
+                    "name": "Equip Reinforced Goggles",
                     "taskID": "0144",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Slayer", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Slayer",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 6,
                     "items": [
                         {
                             "item": null
-                        }  
-                         ],
+                        }
+                    ]
+                }
+            ],
             "optional_quests_unlocked": [
                 {
                     "name": "Vampyre Slayer",
-                    "points_multiplier": 1.5, 
+                    "points_multiplier": 1.5,
                     "is_completed": false
-                }               
+                }
             ],
             "is_completed": false
         },
@@ -2668,11 +3444,16 @@
                     "taskID": "0133",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Combat", 
-                    "level": 5, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Combat",
+                    "level": 5,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -2685,11 +3466,16 @@
                     "taskID": "134",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Combat", 
-                    "level": 5, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Combat",
+                    "level": 5,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
@@ -2702,11 +3488,16 @@
                     "taskID": "0135",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Agility", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Agility",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1,                 
+                    "base_points": 1,
                     "assignment_weight": 9,
                     "items": [
                         {
@@ -2715,15 +3506,20 @@
                     ]
                 },
                 {
-                    "name": "Get a Slayer Task from Spria", 
+                    "name": "Get a Slayer Task from Spria",
                     "taskID": "0136",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Slayer", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Slayer",
+                    "level": 1,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -2732,17 +3528,25 @@
                     ]
                 },
                 {
-                    "name": "Kill some Zombies", 
+                    "name": "Kill some Zombies",
                     "taskID": "0137",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Combat", 
-                    "level": 13, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Combat",
+                    "level": 13,
                     "type": "Combat",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [1, 20],
+                    "assignment_range": [
+                        1,
+                        20
+                    ],
                     "items": [
                         {
                             "item": null
@@ -2750,17 +3554,25 @@
                     ]
                 },
                 {
-                    "name": "Smith some Iron Arrowtips", 
+                    "name": "Smith some Iron Arrowtips",
                     "taskID": "0138",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Smithing", 
-                    "level": 20, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Smithing",
+                    "level": 20,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
-                    "assignment_range": [25, 100],
+                    "assignment_range": [
+                        25,
+                        100
+                    ],
                     "items": [
                         {
                             "item": null
@@ -2768,17 +3580,25 @@
                     ]
                 },
                 {
-                    "name": "Fletch some Iron Arrows", 
+                    "name": "Fletch some Iron Arrows",
                     "taskID": "0139",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Fletching", 
-                    "level": 15, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Fletching",
+                    "level": 15,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [25, 100],
+                    "assignment_range": [
+                        25,
+                        100
+                    ],
                     "items": [
                         {
                             "item": null
@@ -2786,33 +3606,42 @@
                     ]
                 },
                 {
-                    "name": "Smith an Iron Dagger", 
+                    "name": "Smith an Iron Dagger",
                     "taskID": "0140",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Smithing", 
-                    "level": 15, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Smithing",
+                    "level": 15,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
                             "item": null
                         }
-                        
                     ]
                 },
                 {
-                    "name": "Fletch a Oak Longbow(u)", 
+                    "name": "Fletch a Oak Longbow(u)",
                     "taskID": "0141",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Fletching", 
-                    "level": 25, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Fletching",
+                    "level": 25,
                     "type": "Skilling",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 7,
                     "items": [
                         {
@@ -2821,15 +3650,20 @@
                     ]
                 },
                 {
-                    "name": "Obtain an Enchanted Gem", 
+                    "name": "Obtain an Enchanted Gem",
                     "taskID": "0142",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Slayer", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Slayer",
+                    "level": 1,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "items": [
                         {
@@ -2838,15 +3672,20 @@
                     ]
                 },
                 {
-                    "name": "Unlock Reptile Freezer", 
+                    "name": "Unlock Reptile Freezer",
                     "taskID": "0143",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Slayer", 
-                    "level": 1, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Slayer",
+                    "level": 1,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 6,
                     "items": [
                         {
@@ -2855,27 +3694,34 @@
                     ]
                 },
                 {
-                    "name": "Equip Reinforced Goggles", 
+                    "name": "Equip Reinforced Goggles",
                     "taskID": "0144",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [12083, 12338, 12595, 12340],
-                    "skill": "Slayer", 
-                    "level": null, 
+                    "neighbor_ids": [
+                        12083,
+                        12338,
+                        12595,
+                        12340
+                    ],
+                    "skill": "Slayer",
+                    "level": null,
                     "type": "Unlock",
-                    "base_points": 1, 
+                    "base_points": 1,
                     "assignment_weight": 6,
                     "items": [
                         {
                             "item": null
-                        }  
-                         ],
+                        }
+                    ]
+                }
+            ],
             "optional_quests_unlocked": [
                 {
                     "name": "Vampyre Slayer",
-                    "points_multiplier": 1.5, 
+                    "points_multiplier": 1.5,
                     "is_completed": false
-                }               
+                }
             ],
             "is_completed": false
         }
