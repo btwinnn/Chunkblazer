@@ -1,0 +1,114 @@
+Tasks types that we can have that are straightforward to iterate in code.
+We KNOW these will work and will be easier to implement.
+
+Important things to understand:
+- Client side vs Server side:
+    - Client sided configurations for OUR plugin becomes every difficult to track.
+    - Circumventing some of this by letting the players check the boxes themselves.
+    - Softlock button to click
+    - Client sided checks, do not take up any API resources
+    
+- What does server side mean:
+    - Runelite API check (XP, Items, Inventory, NPC Interaction)
+    - Where you are on the map (Region_ID wise) Player_Location
+
+- Player character related Tasks:
+    - Skills
+    - CAs
+    - Quests
+    - Diaries
+    - Etc.
+
+- NPC interaction
+    - Buying something
+    - Killing an NPC (Attach monster ID in JSON)
+    - Getting a drop from an NPC (attach monster + Item ID in JSON)
+
+- Item interaction
+    - Obtain
+    - Craft
+    - Cut down 
+
+List of things that would be DIFFICULT to implement:
+
+- Stuff will only be on client screen
+    - Fairy rings
+    - Chat dialogue
+    - Vardorvis AIM TRAINER
+
+What does any of this mean???
+- We want to do as many "Server" sided checks as we can because we know they are 100% TRUE
+- We want to attach anything that we define as a task to the JSON
+    - Let's say you want to defeat a random number of Dark Wizards from 1-5 and you also need to get a wizard hat drop from them
+        - Define:
+        - NPC, Monster_ID, Item, Item_ID
+
+JSON:
+"Task": "Kill 5 dark wizards and get a wizard hat",
+"NPC_ID: "1",
+"Save_State": "Check the number of wizards we've killed",
+{
+    "Item": "Wizard hat",
+    "Item_ID": "123"
+}
+"Assignment_range": [1,5]
+
+
+// Import allows us to have a data structure - we can manipulate the data however we want
+import AllTasks.JSON
+
+Code iteration:
+
+get.TaskActive.check 
+    If -- Task is not completed, assign player task
+    Then check if Assignment_range = True
+    If True then = assign RNG number inside of array []
+    Return 
+
+Now I have the "Kill 5 dark wizards tasks"
+
+get.OnNPCDespawned.check = Did you Despawn a dark wizard?? 
+If True = -1 counter for task
+Now counter: display counter
+
+This situation: 4
+
+AllTasks.SaveState = Check for points, counter, etc.
+Saves and Return
+
+Now you have a save state. And it's always doing this
+
+get.NpcItem.check
+Check for "Wizard Hat" / Item_ID = "123"
+If true onNpcDespawned 
+Then check if player inventory has = Item_ID = "123"
+Return = "Complete Task"
+
+Task example: "Buy emerald from Gem stall in Al kharid"
+
+"Did we talk to the Al Kharid NPC?"
+"Did an emerald show up in our inventory next game tick?"
+
+This circumvents a task problem that we had which is "Open Al Kharid gate"
+because we don't have the ability to link X, Y consistently to ALL of our tasks.
+
+Main blocker:
+We will eventually have a non-finite amount of tasks. The number can grow very large from 2-10 at the beginning and then up to 1000
+in the mid-to-late game.
+
+When we do checks especially for ALL tasks. Ideally the checks do all CLIENT sided things in cache. Ex: The map checks are always available
+The player XP, items, NPC interactions, Quests done, CAs, inventory, etc are all available.
+
+Things that are hard to permeate through ALL tasks: Specific checks where it's 1 task that needs it, but it's a separate "system"
+Ex. We create a system for "MegaChunk" unlocks
+It will have to check every task and every region constantly for "Did I unlock these chunks, what are my neighbor IDs, what can I actually
+unlock?" Then do a check if a "Megachunk" was actually unlocked, then finally assign the bonus points.
+
+This would be an entirely new system, and although it's technically a "bonus" task in itself. It essentially is one big task that has its 
+own system. Creates a bigger problem in code to solve.
+
+Did player check if I want puzzle tasks?
+Yes -> Do this
+No -> Do nothing
+
+"Clue task": True
