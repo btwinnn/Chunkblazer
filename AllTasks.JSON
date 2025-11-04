@@ -3,7 +3,7 @@
         {
             "region_id": "12850",
             "friendly_name": "Lumbridge",
-            "unlock_cost": [2,3],
+            "unlock_cost": 1,
             "neighbor_ids": [12581, 12579, 12612, 12548],
 
             "tasks": [
@@ -38,38 +38,23 @@
                     ]
                 },
                 {
-                    "name": "Equip a Bronze Sqaure Shield",
-                    "taskID": "0003",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12581,
-                        12579,
-                        12612,
-                        12548
-                    ],
+                    "name": "Equip a Bronze Sq Shield",
+                    "taskID": "Equip_Bronze_Sq_Shield",
+                    "base_points": 1,
                     "skill": "Defence",
                     "level": 1,
                     "type": "Equip",
-                    "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
                         {
-                            "item": null
+                            "item": "Bronze Sq Shield",
+                            "item_id": "1171"
                         }
                     ]
                 },
                 {
                     "name": "Chop a Yew Tree",
-                    "taskID": "0004",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12581,
-                        12579,
-                        12612,
-                        12548
-                    ],
+                    "taskID": "Chop_Yew_Tree",
                     "skill": "Woodcutting",
                     "level": 60,
                     "type": "Skilling",
@@ -77,53 +62,30 @@
                     "assignment_weight": 1,
                     "items": [
                         {
-                            "item": null
+                            "item": "Yew Log",
+                            "item_id": "1515"
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Yew Log",
-                    "taskID": "0005",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12581,
-                        12579,
-                        12612,
-                        12548
-                    ],
-                    "skill": "Woodcutting",
-                    "level": 60,
-                    "type": "Skilling",
-                    "base_points": 3,
+                    "name": "Obtain a Beginner Clue Scroll",
+                    "taskID": "Obtain_Beginner_Clue_Scroll",
+                    "type": "Obtain",
+                    "base_points": 2,
                     "assignment_weight": 1,
                     "items": [
                         {
-                            "item": null
+                            "item": "Beginner Clue Scroll",
+                            "item_id": "2677"
                         }
                     ]
                 },
                 {
-                    "name": "Pickpocket 500 GP",
-                    "taskID": "0006",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12581,
-                        12579,
-                        12612,
-                        12548
-                    ],
-                    "skill": "Thieving",
-                    "level": 1,
-                    "type": "Skilling",
+                    "name": "Enter Al Kharid Gate",
+                    "taskID": "Enter_Al_Kharid_Gate",
+                    "type": "Coordinate",
                     "base_points": 1,
-                    "assignment_weight": 10,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "assignment_weight": 10
                 },
                 {
                     "name": "Equip a Mithril Battleaxe",
