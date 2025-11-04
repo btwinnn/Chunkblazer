@@ -52,7 +52,15 @@ JSON:
     "Item_ID": "123"
 }
 "Assignment_range": [1,5]
+"world_location": "player(x,y)"
 
+get.world_location()
+
+The Runelite API is all readily available info that doesn't have client sided blockers.
+
+A blocker would be like making MegaChunks
+
+The Runelite API can be accessed at all times and we can call on their functions or methods without impunity.
 
 // Import allows us to have a data structure - we can manipulate the data however we want
 import AllTasks.JSON
@@ -112,3 +120,8 @@ Yes -> Do this
 No -> Do nothing
 
 "Clue task": True
+
+JSON = Cache memory
+JSON = references our data struct without making ANY CALLS externally
+
+It just means that it's super fast and reliable.
