@@ -1,44 +1,57 @@
 {
-    "nuzlocke_chunks_lumbridge": [
+    "nuzlocke_chunks": [
         {
             "region_id": "12850",
-            "friendly_name": "Lumbridge",
-            "unlock_cost": 1,
-            "neighbor_ids": [12581, 12579, 12612, 12548],
-
+            "Friendly_Name": "Lumbridge",
             "tasks": [
                 {
-                    "name": "Defeat a Goblin",
-                    "taskID": "Defeat_Goblin",
-                    "base_points": 1,
-                    "assignment_weight": 10,
+                    "name": "Kill a Goblin",
+                    "taskID": "0001",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
                     "skill": "Combat",
+                    "level": 2,
                     "type": "Combat",
                     "npc_id": [3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
+                    "item_id": null,
+                    "base_points": 1,
+                    "assignment_weight": 10,
                     "items": [
-                        { 
-                            "item": "Bronze Axe",
-                            "item_id": "1351"
+                        {
+                            "item": null 
                         }
                     ]
                 },
                 {
                     "name": "Spin a Ball of Wool",
-                    "taskID": "Spin_Wool",
-                    "base_points": 1,
-                    "assignment_weight": 10,
+                    "taskID": "0002",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
                     "skill": "Crafting",
                     "level": 1,
                     "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 10,
                     "items": [
                         {
-                            "item": "Ball of Wool",
-                            "item_id": "1759"
+                            "item": null
                         }
                     ]
                 },
                 {
-                    "name": "Equip a Bronze Square Shield",
+                    "name": "Equip a Bronze Sqaure Shield",
                     "taskID": "0003",
                     "is_unlocked": false,
                     "unlock_cost": 1,
@@ -50,7 +63,7 @@
                     ],
                     "skill": "Defence",
                     "level": 1,
-                    "type": "Equip",
+                    "type": "Skilling",
                     "base_points": 1,
                     "assignment_weight": 10,
                     "items": [
@@ -359,7 +372,7 @@
                     "level": 30,
                     "type": "Skilling",
                     "base_points": 2,
-                    "assignment_weight": 3,
+                    "assignment_weight": 5,
                     "items": [
                         {
                             "item": null
@@ -381,7 +394,7 @@
                     "level": 30,
                     "type": "Skilling",
                     "base_points": 2,
-                    "assignment_weight": 3,
+                    "assignment_weight": 5,
                     "items": [
                         {
                             "item": null
@@ -441,7 +454,7 @@
                     ]
                 },
                 {
-                    "name": "Kill a Cow in 3 Hits",
+                    "name": "Kill a Cow",
                     "taskID": "0019",
                     "is_unlocked": false,
                     "unlock_cost": 1,
@@ -485,7 +498,7 @@
                     ]
                 },
                 {
-                    "name": "Kill a Chicken in 1 Hit",
+                    "name": "Kill a Chicken",
                     "taskID": "0021",
                     "is_unlocked": false,
                     "unlock_cost": 1,
@@ -754,7 +767,7 @@
                     ]
                 },
                 {
-                    "name": "Kill a Frog in 3 hits",
+                    "name": "Kill a Frog",
                     "taskID": "0032",
                     "is_unlocked": false,
                     "unlock_cost": 1,
@@ -787,7 +800,7 @@
                         12848
                     ],
                     "skill": "null",
-                    "level": 1,
+                    "level": null,
                     "type": "Unlock",
                     "base_points": 1,
                     "assignment_weight": 10,
@@ -940,8 +953,8 @@
                         12593,
                         12848
                     ],
-                    "skill": "Combat",
-                    "level": 2,
+                    "skill": "null",
+                    "level": null,
                     "type": "Unlock",
                     "base_points": 1,
                     "assignment_weight": 5,
@@ -974,7 +987,7 @@
                     ]
                 },
                 {
-                    "name": "Steal a H.A.M. Clothing Set",
+                    "name": "Steal a H.A.M. Emblem",
                     "taskID": "0041",
                     "is_unlocked": false,
                     "unlock_cost": 1,
@@ -1256,7 +1269,7 @@
                     ]
                 },
                 {
-                    "name": "Kill a man in 2 Hits",
+                    "name": "Kill a Man",
                     "taskID": "0053",
                     "is_unlocked": false,
                     "unlock_cost": 1,
@@ -1344,7 +1357,7 @@
                     ]
                 },
                 {
-                    "name": "Pickpocket a Man 10 times without Failing",
+                    "name": "Pickpocket a Man many times",
                     "taskID": "0057",
                     "is_unlocked": false,
                     "unlock_cost": 1,
@@ -1359,6 +1372,10 @@
                     "type": "Skilling",
                     "base_points": 1,
                     "assignment_weight": 10,
+                    "assignment_range": [
+                        5,
+                        28
+                    ],
                     "items": [
                         {
                             "item": null
@@ -1804,7 +1821,7 @@
                     ]
                 },
                 {
-                    "name": "Kill a Big Frog in Lumbridge Cave",
+                    "name": "Kill a Big Frog",
                     "taskID": "0076",
                     "is_unlocked": false,
                     "unlock_cost": 1,
@@ -1892,7 +1909,7 @@
                     ]
                 },
                 {
-                    "name": "Catch some Frog Spawn",
+                    "name": "Catch a Frog Spawn",
                     "taskID": "0080",
                     "is_unlocked": false,
                     "unlock_cost": 1,
@@ -2211,7 +2228,7 @@
                     ]
                 },
                 {
-                    "name": "Kill a Farmer in 5 Hits",
+                    "name": "Kill a Farmer",
                     "taskID": "0094",
                     "is_unlocked": false,
                     "unlock_cost": 1,
@@ -3427,277 +3444,267 @@
         {
             "region_id": "12338",
             "Friendly_Name": "Draynor South",
+            "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+            "unlock_cost": 1,        
             "tasks": [
                 {
-                    "name": "Obtain a Black Cape",
-                    "taskID": "0133",
+                    "name": "Buy some Rope from Ned",
+                    "taskID": "0145",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Combat",
-                    "level": 5,
-                    "type": "Unlock",
-                    "base_points": 1,
-                    "assignment_weight": 10,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
-                },
-                {
-                    "name": "Kill a Highwayman in 3 Hits",
-                    "taskID": "134",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Combat",
-                    "level": 5,
-                    "type": "Combat",
-                    "base_points": 1,
-                    "assignment_weight": 10,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
-                },
-                {
-                    "name": "Complete a Lap of the Draynor Village Rooftop Course",
-                    "taskID": "0135",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Agility",
-                    "level": 1,
-                    "type": "Skilling",
-                    "base_points": 1,
-                    "assignment_weight": 9,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
-                },
-                {
-                    "name": "Get a Slayer Task from Spria",
-                    "taskID": "0136",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
-                    "level": 1,
-                    "type": "Skilling",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
-                },
-                {
-                    "name": "Kill some Zombies",
-                    "taskID": "0137",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Combat",
-                    "level": 13,
-                    "type": "Combat",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "assignment_range": [
-                        1,
-                        20
-                    ],
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
-                },
-                {
-                    "name": "Smith some Iron Arrowtips",
-                    "taskID": "0138",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Smithing",
-                    "level": 20,
-                    "type": "Skilling",
-                    "base_points": 1,
-                    "assignment_weight": 7,
-                    "assignment_range": [
-                        25,
-                        100
-                    ],
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
-                },
-                {
-                    "name": "Fletch some Iron Arrows",
-                    "taskID": "0139",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Fletching",
-                    "level": 15,
-                    "type": "Skilling",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "assignment_range": [
-                        25,
-                        100
-                    ],
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
-                },
-                {
-                    "name": "Smith an Iron Dagger",
-                    "taskID": "0140",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Smithing",
-                    "level": 15,
-                    "type": "Skilling",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
-                },
-                {
-                    "name": "Fletch a Oak Longbow(u)",
-                    "taskID": "0141",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Fletching",
-                    "level": 25,
-                    "type": "Skilling",
-                    "base_points": 1,
-                    "assignment_weight": 7,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Enchanted Gem",
-                    "taskID": "0142",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
-                    "level": 1,
-                    "type": "Unlock",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
-                },
-                {
-                    "name": "Unlock Reptile Freezer",
-                    "taskID": "0143",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
-                    "level": 1,
-                    "type": "Unlock",
-                    "base_points": 1,
-                    "assignment_weight": 6,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip Reinforced Goggles",
-                    "taskID": "0144",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
+                    
+                    "skill": "null",
                     "level": null,
                     "type": "Unlock",
                     "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Sell stew to a Guard",
+                    "taskID": "0146",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket a Master Farmer",
+                    "taskID": "0147",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+                    "skill": "Thieving",
+                    "level": 38,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete a task for the Wise Old Man",
+                    "taskID": "0148",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Teleport to Draynor Village using a Glory Amulet",
+                    "taskID": "0149",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete the Lumbridge and Draynor Easy Diary",
+                    "taskID": "0150",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete the Lumbridge and Draynor Medium Diary",
+                    "taskID": "0151",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete the Lumbridge and Draynor Hard Diary",
+                    "taskID": "0152",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Skilling",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete the Lumbridge and Draynor Elite Diary",
+                    "taskID": "0153",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Skilling",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Have Aggie make you some Dye",
+                    "taskID": "0154",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Fairy Ring Teleport to CLP",
+                    "taskID": "0155",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 3,
                     "assignment_weight": 6,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal from a Seed Stall",
+                    "taskID": "0156",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12082,
+                        12339,
+                        12594,
+                        12337
+                    ],
+                    "skill": "Thieving",
+                    "level": 27,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 10,
                     "items": [
                         {
                             "item": null
@@ -3707,10 +3714,1021 @@
             ],
             "optional_quests_unlocked": [
                 {
-                    "name": "Vampyre Slayer",
+                    "name": "Fairy Tale I",
+                    "points_multiplier": 2.0,
+                    "is_completed": false
+                },
+                {
+                    "name": "Fairy Tale II",
+                    "points_multiplier": 2.5,
+                    "is_completed": false
+                },
+                {
+                    "name": "A Porcine of Interest",
                     "points_multiplier": 1.5,
                     "is_completed": false
                 }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": "12337",
+            "Friendly_Name": "Wizards' Tower",
+            "tasks": [
+                {
+                    "name": "Use a Necklace of Passge teleport to the Wizards' Tower",
+                    "taskID": "0157",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 9,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Fairy Ring Teleport to DIS",
+                    "taskID": "FAIRY_RING_WIZARD_TOWER",
+                    "unlock_cost": 1,
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 3,
+                    "assignment_weight": 6,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Teleport to the Rune Essence Mine",
+                    "taskID": "0159",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 9,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Blue Wizard Robe from a Wizard",
+                    "taskID": "0160",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Combat",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Staff from a Wizard",
+                    "taskID": "0161",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Combat",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft some Chaos Runes in Guardians of the Rift",
+                    "taskID": "0162",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Runecrafting",
+                    "level": 35,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip the Raiments of the Eye Set",
+                    "taskID": "0163",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Runecrafting",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 5,
+                    "assignment_weight": 7,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Dye a piece of the Raiments of the Eye Set",
+                    "taskID": "0164",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Runecrafting",
+                    "level": null,
+                    "type": "Skilling",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Abyssal Protector Pet",
+                    "taskID": "0165",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Runecrafting",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Create a Colossal Pouch",
+                    "taskID": "0166",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Crafting",
+                    "level": 56,
+                    "type": "Unlock",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Leviathan",
+                    "taskID": "0167",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Combat",
+                    "level": 593,
+                    "type": "Combat",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Awakened Leviathan",
+                    "taskID": "0168",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Combat",
+                    "level": 1157,
+                    "type": "Combat",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Lil'viathan Pet",
+                    "taskID": "0169",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Combat",
+                    "level": 798,
+                    "type": "Combat",
+                    "base_points": 5,
+                    "assignment_weight": 4,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete a Combat Achievement for The Leviathan",
+                    "taskID": "0170",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Combat",
+                    "level": 798,
+                    "type": "Combat",
+                    "base_points": 5,
+                    "assignment_weight": 4,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Teleport to Gaurdians of the Rift using the Amulet of the Eye",
+                    "taskID": "0171",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Willow Logs in the Abyssal Lantern",
+                    "taskID": "0172",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Firemaking",
+                    "level": 30,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Yew Logs in the Abyssal Lantern",
+                    "taskID": "0173",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Firemaking",
+                    "level": 60,
+                    "type": "Skilling",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Magic Logs in the Abyssal Lantern",
+                    "taskID": "0174",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Firemaking",
+                    "level": 75,
+                    "type": "Skilling",
+                    "base_points": 3,
+                    "assignment_weight": 4,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Redwood Logs in the Abyssal Lantern",
+                    "taskID": "0175",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Firemaking",
+                    "level": 90,
+                    "type": "Skilling",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete a game of Guardians of the Rift",
+                    "taskID": "0176",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12081,
+                        12336,
+                        12593,
+                        12338
+                    ],
+                    "skill": "Runecrafting",
+                    "level": null,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Imp Catcher",
+                    "points_multiplier": 1.5,
+                    "is_completed": false
+                }               
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": "12848",
+            "Friendly_Name": "Kalphite Lair",
+            "tasks": [
+                {
+                    "name": "Fairy Ring Teleport to BIQ",
+                    "taskID": "0177",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 3,
+                    "assignment_weight": 6,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Stepping Stone Shortcut",
+                    "taskID": "0178",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "Agility",
+                    "level": 66,
+                    "type": "Skilling",
+                    "base_points": 3,
+                    "assignment_weight": 6,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Kill an Ugthanki",
+                    "taskID": "0179",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "Combat",
+                    "level": 42,
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 9,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete a Kalphite Slayer Task",
+                    "taskID": "0180",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "Slayer",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Kalphite Queen",
+                    "taskID": "0181",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "Combat",
+                    "level": 333,
+                    "type": "Combat",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Kalphite Princess Pet",
+                    "taskID": "0182",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "Combat",
+                    "level": 333,
+                    "type": "Unlock",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete a Combat Achievement for the Kalphite Queen",
+                    "taskID": "0183",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "Combat",
+                    "level": 333,
+                    "type": "Combat",
+                    "base_points": 5,
+                    "assignment_weight": 6,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete a Clue Step with the Weird Old Man",
+                    "taskID": "0184",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Enter the Tunnel to Dorgesh-Kaan",
+                    "taskID": "0185",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 7,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Potato Cactus",
+                    "taskID": "0186",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "assignment_range": [
+                        5,
+                        25
+                    ],
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Create a Magic Potion",
+                    "taskID": "0187",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "Herblore",
+                    "level": 76,
+                    "type": "Skilling",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Kalphite Queen's Head",
+                    "taskID": "0188",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12846,
+                        12847,
+                        12592,
+                        13104
+                    ],
+                    "skill": "Combat",
+                    "level": 333,
+                    "type": "Combat",
+                    "base_points": 5,
+                    "assignment_weight": 7,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]                           
+                }               
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": "13104",
+            "Friendly_Name": "Shantay Pass",
+            "tasks": [
+                {
+                    "name": "Get Shantay to send you to the Port Sarim Jail",
+                    "taskID": "0189",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Build a Medium STASH Unit",
+                    "taskID": "0190",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "Construction",
+                    "level": 42,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 7,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Kill a Shantay Guard",
+                    "taskID": "0191",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "Combat",
+                    "level": 22,
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 9,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Go through the Shantay Pass",
+                    "taskID": "0192",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip 3 pieces of Desert Garb",
+                    "taskID": "0193",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Travel using the Rug Merchant",
+                    "taskID": "0194",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 6,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete the Desert Easy Diary",
+                    "taskID": "0195",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete the Desert Medium Diary",
+                    "taskID": "0184",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete the Desert Hard Diary",
+                    "taskID": "0196",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete the Desert Elite Diary",
+                    "taskID": "0197",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 5,
+                    "assignment_weight": 2,                
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Refill a Waterskin with a Kharidian Cactus",
+                    "taskID": "0198",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "Woodcutting",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 7,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Kill a Kalphite Gaurdian in the Kalphite Cave",
+                    "taskID": "0199",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        13105,
+                        13103,
+                        12848,
+                        13360
+                    ],
+                    "skill": "Combat",
+                    "level": 141,
+                    "type": "Combat",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]                           
+                }               
+            ],
+            
+            "optional_quests_unlocked": [
+                {
+                    "name": "The Tourist Trap",
+                    "points_multiplier": 2.0, 
+                    "is_completed": false
+                }               
             ],
             "is_completed": false
         }

@@ -1,13 +1,13 @@
 {
     "json-comments": {
         "tips": "Please install the JsonComments plugin to enable commenting functionality for JSON files, see: https://github.com/zhangfisher/json_comments_extension",
-        "Chunkblazer/AllTasks.JSON": {
+        "AllTasks.JSON": {
             "nuzlocke_chunks_lumbridge[0].tasks": "Combat Task Type example",
             "nuzlocke_chunks_lumbridge[0].tasks[1].name": "Skilling Task Type example",
             "nuzlocke_chunks_lumbridge[0].tasks[0].skill": "mashallah, no need to have \"Level\": key because we don't have to define the npc level",
             "nuzlocke_chunks_lumbridge[0].tasks[1].level": "we need to have level here because we'll iterate the skill type \"Skilling\" in code",
             "nuzlocke_chunks_lumbridge[0].tasks[0].items": "items are optional for \"Combat\" Type, this is to check if a player got the drop from a despawnNpc -- you can exclude them completely",
             "nuzlocke_chunks_lumbridge[0].region_id": "Top Level -- This will be in every region_id, so you can copy paste this for every region/chunk you make"
-        }
+        }      
     }
 }
