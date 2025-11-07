@@ -38,9 +38,22 @@
                     ]
                 },
                 {
+<<<<<<< HEAD
                     "name": "Equip a Bronze Sq Shield",
                     "taskID": "Equip_Bronze_Sq_Shield",
                     "base_points": 1,
+=======
+                    "name": "Equip a Bronze Square Shield",
+                    "taskID": "0003",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12581,
+                        12579,
+                        12612,
+                        12548
+                    ],
+>>>>>>> 4dd2db52f4c752752df39ed8b6fb8a18af7bdd0f
                     "skill": "Defence",
                     "level": 1,
                     "type": "Equip",

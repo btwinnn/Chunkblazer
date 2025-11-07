@@ -1,0 +1,15 @@
+Event = things happening inside the game
+Event example: Your inventory changes
+
+Event listeners: Are "subscribing" to these events.
+And it'll know when the event has done something.
+So in this case, when we use onItemContainerChanged
+we know that the inventory has changed
+
+onItemContainerChanged is a "dumb" event it knows nothing.
+It ONLY tells you when the inventory has changed.
+
+When we have subscribed to this event and LISTEN to it. 
+**IT ONLY TELLS ME THAT THE INVENTORY CHANGED IT DOESN'T TELL ME WHAT CHANGED**
+
+That's why we have to define actions, so we can tell the API what has changed: i.e "consume" or "create"
