@@ -10,6 +10,11 @@
     * "Example : We will iterate the task Combat task type - this means every single type named Combat has the same code logic and API calls assigned to it."
     * "Task = 'Defeat a goblin' -- You can re-use 'Defeat a goblin' Combat Task type for 'Defeat a rat', 'Defeat a cow', etc."
     * "You CAN NOT use the Combat task type for a specific task like 'Defeat a goblin with only a sword' because the API calls and code logic will be different."
+
+    ! Modules = "A Module is going to be the API Call that needs to be made to COMPLETE the task. This could be onActorDeath, ItemContainerChanged, StatChanged, etc."
+    "All of these can live inside a module. What's important about this is the modules can complete the tasks using CONTEXT. And Context is defined by our keys and values"
+    "Example: 'Task Defeat a Goblin with only a Battleaxe' -- We would use the completion_type: 'NPC_KILL' -- The module for 'NPC_KILL' looks for the correct NPC"
+    "It then looks for the correct weapon used to kill the NPC. This is CONTEXT. The module is using the context of the task to determine if it's complete or not."
     
     * "friendly_name": "The name that us humans will understand, and also the name that players can QUERY (search). Remember these friendly names will also affect SEARCH"
     * "Category" : "" -- this is mostly for our search and filters function. It also helps us keep track for scaling purposes."
@@ -39,17 +44,22 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "category": "Combat",
-                    "type": "Combat",  // ! The most important part of our entire JSON structure
-                    "npc": "Goblin",
-                    "npc_id": [3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203]
-
+                    "completion_type": "NPC_KILL",  // ! The most important part of our entire JSON structure
+                    "target_npc": {
+                        "npc": "Goblin",
+                        "npc_id": [3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
+                        "quantity": 1
+                    }
     /* 
     ! API Calls:
-    MonsterDespawned - To check if the goblin is alive or dead             
+    onActorDeath - To check if the goblin is alive or dead             
     
     ! Code Logic:
-    MonsterDespawned = get.MonsterDespawned(npc_id)
-    And when the MonsterDespawned = True, then the task is complete
+    ! Module: NPC_KILL
+    Module looks for 
+    onActorDeath = get.onActorDeath(npc_id)
+    And when onActorDeath = True then the task is complete
+    
     */
                 },
                 {
@@ -59,12 +69,12 @@
                     "assignment_weight": 8,
                     "category": "Crafting",
                     "level": 1,
-                    "type": "Skilling_Create_Item",
+                    "completion_type": "ITEM",
                     "required_items": [
                         {
                             "item": "Ball of Wool",
                             "item_id": 1759,
-                            "action": "create" // We need a short understandable action for when we define and call it in code
+                            "action": "obtain" // We need a short understandable action for when we define and call it in code
                         },
                         {
                             "item": "Wool",
@@ -75,6 +85,8 @@
                     ]
                 },
     /*
+
+
     ! API Calls:
     StatChanged - To check if the player's crafting skill is being interacted with + XP Drop
     StatChanged - Can see interaction with crafting skill and also track XP Drop amount
@@ -93,8 +105,8 @@
                     "hint": "Pink Clothes",
                     "category": "Defence",
                     "level": 1,
-                    "type": "Equip",
-                    "items": [
+                    "completion_type": "EQUIP",
+                    "required_items": [
                         {
                             "item": "Skirt(Lilac)",
                             "item_id": 5050,
@@ -120,18 +132,18 @@
                     "taskID": "chop_yew_tree",
                     "category": "Woodcutting",
                     "level": 60,
-                    "type": "Skilling",
+                    "completion_type": "ITEM",
                     "base_points": 3,
                     "assignment_weight": 3,
-                    "items": [
+                    "required_items": [
                         {
                             "item": "Yew Logs",
                             "item_id": 1515,
                             "quantity": 1,
                             "action": "obtain" // We're going to define this every time for design consistency and clarity
-                        }
+                        }    
                     ]
-                }
+                },
                  /*
     ! API Calls:
     ItemContainerChanged.equipment - To check if the player has equipped both the Skirt(Lilac) and Shirt(Lilac)
@@ -140,6 +152,23 @@
     ItemContainerChanged.equipment = get.ItemContainerChanged("equipment", [5050, 5034])
     And when ItemContainerChanged.equipment = True then the task is complete
     */
+                {
+                    "name": "Defeat a Cow 7 Seconds",
+                    "taskID": "defeat_cow_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_KILL",
+                    "base_points": 1,
+                    "assignment_weight":8,
+  
+                    "target_npc": {
+                    "npc_id": [2790, 2791, 2793],
+                    "quantity": 1
+                    },
+                    
+                    "constraints": {
+                        "time_limit_ticks": 12
+                    }
+                }
             ]
         }
     ]
