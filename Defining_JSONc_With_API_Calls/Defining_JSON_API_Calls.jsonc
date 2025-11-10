@@ -5,23 +5,32 @@
     "type": "System" - Task Type that the API calls and code logic are relevant to
     * Keys and Values = "region_id": [12850, 12950] - region_id is a key and [12850, 12950] are the values
 
-    * Iterate = "When I say iterate, I mean that we are going to be looping this code repeatedly for every current task assigned to the player."
+    ! Iterate = "When I say iterate, I mean that we are going to be looping this code repeatedly for every current task assigned to the player."
     * "Example : We will iterate the task Combat task type - this means every single type named Combat has the same code logic and API calls assigned to it."
     * "Task = 'Defeat a goblin' -- You can re-use 'Defeat a goblin' Combat Task type for 'Defeat a rat', 'Defeat a cow', etc."
     * "You CAN NOT use the Combat task type for a specific task like 'Defeat a goblin with only a sword' because the API calls and code logic will be different."
     
     * "friendly_name": "The name that us humans will understand, and also the name that players can QUERY (search). Remember these friendly names will also affect SEARCH"
     * "skill": "Category -- this is mostly for our search and filters function. It also helps us keep track for scaling purposes."
-    * "  
-    
+    * things that exist in [] are arrays
+    * "" = strings
+    * Integers = 1, 2, 3
+    * Booleans = True / False or 1 / 0
+    * Float = 1.5, 2.75, 3.14
+
+    ! Format Layout: We will define each Task Type and have a short blip of info for what API calls and code logic are relevant to it.
     */
+
+    // Our overall name for the JSON structure
     "nuzlocke_chunks_lumbridge": [
         {
+            // This information permeates through all of our chunks / regions
             "region_id": [12850, 12950], 
             "friendly_name": "Lumbridge",
-            "unlock_cost": 1,
+            "unlock_cost": 1, // after starter area we might get rid of cost in favor of an exponential point value scaling system
             "neighbor_ids": [12581, 12579, 12612, 12548],
-
+            
+            // All tasks inside of your defined region_id / chunk from above
             "tasks": [
                 {
                     "name": "Defeat a Goblin",
@@ -29,11 +38,54 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "skill": "Combat",
-                    "type": "Combat",
+                    "type": "Combat",  // ! The most important part of our entire JSON structure
                     "npc": "Goblin",
                     "npc_id": [3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203]
-                }
 
+    /* 
+    ! API Calls:
+    MonsterDespawned - To check if the goblin is alive or dead             
+    
+    ! Code Logic:
+    MonsterDespawned = get.MonsterDespawned(npc_id)
+    And when the MonsterDespawned = True, then the task is complete
+    */
+                },
+                {
+                    "name": "Spin a Ball of Wool",
+                    "taskID": "Spin_Wool",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "skill": "Crafting",
+                    "level": 1,
+                    "type": "Skilling_Create_Item",
+                    "required_items": [
+                        {
+                            "item": "Ball of Wool",
+                            "item_id": 1759,
+                            "action": "create", // We need a short understandable action for when we define and call it in code
+
+                            "item": "Wool",
+                            "item_id": 1737,
+                            "quantity": 1,
+                            "action": "consume" // We need a short understandable action for when we define and call it in code
+                        
+                        }
+                    ]
+                },
+    /*
+    ! API Calls:
+    StatChanged - To check if the player's crafting skill is being interacted with + XP Drop
+    StatChanged - Can see interaction with crafting skill and also track XP Drop amount
+
+    ItemContainerChanged - To check if the player has created the Ball of Wool in their inventory
+
+    ! Code Logic:
+    StatChanged = get.StatChanged("Crafting")
+    And when StatChanged = True then check ItemContainerChanged for item_id 1759
+    get.ItemContainerChanged("inventory", 1759)
+    
+    */
             ]
         }
     ]
