@@ -1,0 +1,40 @@
+{
+
+    /* THIS WILL BE A JSON DEDICATED TO EXPLAINING OUR DATA STRUCTURES AND WHAT API CALLS ARE RELEVANT TO EACH KEYS AND VALUES
+    ! Keyword Legend:
+    "type": "System" - Task Type that the API calls and code logic are relevant to
+    * Keys and Values = "region_id": [12850, 12950] - region_id is a key and [12850, 12950] are the values
+
+    * Iterate = "When I say iterate, I mean that we are going to be looping this code repeatedly for every current task assigned to the player."
+    * "Example : We will iterate the task Combat task type - this means every single type named Combat has the same code logic and API calls assigned to it."
+    * "Task = 'Defeat a goblin' -- You can re-use 'Defeat a goblin' Combat Task type for 'Defeat a rat', 'Defeat a cow', etc."
+    * "You CAN NOT use the Combat task type for a specific task like 'Defeat a goblin with only a sword' because the API calls and code logic will be different."
+    
+    * "friendly_name": "The name that us humans will understand, and also the name that players can QUERY (search). Remember these friendly names will also affect SEARCH"
+    * "skill": "Category -- this is mostly for our search and filters function. It also helps us keep track for scaling purposes."
+    * "  
+    
+    */
+    "nuzlocke_chunks_lumbridge": [
+        {
+            "region_id": [12850, 12950], 
+            "friendly_name": "Lumbridge",
+            "unlock_cost": 1,
+            "neighbor_ids": [12581, 12579, 12612, 12548],
+
+            "tasks": [
+                {
+                    "name": "Defeat a Goblin",
+                    "taskID": "Defeat_Goblin",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "npc": "Goblin",
+                    "npc_id": [3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203]
+                }
+
+            ]
+        }
+    ]
+}
