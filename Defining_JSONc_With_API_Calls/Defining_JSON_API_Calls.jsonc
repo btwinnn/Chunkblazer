@@ -1,6 +1,7 @@
 {
 
-    /* THIS WILL BE A JSON DEDICATED TO EXPLAINING OUR DATA STRUCTURES AND WHAT API CALLS ARE RELEVANT TO EACH KEYS AND VALUES
+    /* 
+    THIS WILL BE A JSON DEDICATED TO EXPLAINING OUR DATA STRUCTURES AND WHAT API CALLS ARE RELEVANT TO EACH KEYS AND VALUES
     ! Keyword Legend:
     "type": "System" - Task Type that the API calls and code logic are relevant to
     * Keys and Values = "region_id": [12850, 12950] - region_id is a key and [12850, 12950] are the values
@@ -11,7 +12,7 @@
     * "You CAN NOT use the Combat task type for a specific task like 'Defeat a goblin with only a sword' because the API calls and code logic will be different."
     
     * "friendly_name": "The name that us humans will understand, and also the name that players can QUERY (search). Remember these friendly names will also affect SEARCH"
-    * "skill": "Category -- this is mostly for our search and filters function. It also helps us keep track for scaling purposes."
+    * "Category" : "" -- this is mostly for our search and filters function. It also helps us keep track for scaling purposes."
     * things that exist in [] are arrays
     * "" = strings
     * Integers = 1, 2, 3
@@ -37,7 +38,7 @@
                     "taskID": "Defeat_Goblin",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "skill": "Combat",
+                    "category": "Combat",
                     "type": "Combat",  // ! The most important part of our entire JSON structure
                     "npc": "Goblin",
                     "npc_id": [3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203]
@@ -56,20 +57,20 @@
                     "taskID": "Spin_Wool",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "skill": "Crafting",
+                    "category": "Crafting",
                     "level": 1,
                     "type": "Skilling_Create_Item",
                     "required_items": [
                         {
                             "item": "Ball of Wool",
                             "item_id": 1759,
-                            "action": "create", // We need a short understandable action for when we define and call it in code
-
+                            "action": "create" // We need a short understandable action for when we define and call it in code
+                        },
+                        {
                             "item": "Wool",
                             "item_id": 1737,
                             "quantity": 1,
                             "action": "consume" // We need a short understandable action for when we define and call it in code
-                        
                         }
                     ]
                 },
@@ -84,7 +85,60 @@
     StatChanged = get.StatChanged("Crafting")
     And when StatChanged = True then check ItemContainerChanged for item_id 1759
     get.ItemContainerChanged("inventory", 1759)
-    
+    */
+                {
+                    "name": "I feel Pretty",
+                    "taskID": "feel_pretty",
+                    "base_points": 1,
+                    "hint": "Pink Clothes",
+                    "category": "Defence",
+                    "level": 1,
+                    "type": "Equip",
+                    "items": [
+                        {
+                            "item": "Skirt(Lilac)",
+                            "item_id": 5050,
+                            "action": "Equip" // We're going to define this every time for design consistency and clarity                      
+                        },
+                        {
+                            "item": "Shirt(Lilac)",
+                            "item_id": 5034,
+                            "action": "Equip" // We're going to define this every time for design consistency and clarity                     
+                        }
+                    ]
+                },
+    /*
+    ! API Calls:
+    ItemContainerChanged.equipment - To check if the player has equipped both the Skirt(Lilac) and Shirt(Lilac)
+
+    ! Code Logic:
+    ItemContainerChanged.equipment = get.ItemContainerChanged("equipment", [5050, 5034])
+    And when ItemContainerChanged.equipment = True then the task is complete
+    */
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "type": "Skilling",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_id": 1515,
+                            "quantity": 1,
+                            "action": "obtain" // We're going to define this every time for design consistency and clarity
+                        }
+                    ]
+                }
+                 /*
+    ! API Calls:
+    ItemContainerChanged.equipment - To check if the player has equipped both the Skirt(Lilac) and Shirt(Lilac)
+
+    ! Code Logic:
+    ItemContainerChanged.equipment = get.ItemContainerChanged("equipment", [5050, 5034])
+    And when ItemContainerChanged.equipment = True then the task is complete
     */
             ]
         }
