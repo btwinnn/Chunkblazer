@@ -1,0 +1,1818 @@
+{
+    "nuzlocke_chunks_lumbridge": [
+        {
+            "region_id": [12850, 12950],
+            "friendly_name": "Lumbridge",
+            "unlock_cost": 1,
+            "neighbor_ids": [12581, 12579, 12612, 12548],
+
+            "tasks": [
+                {
+                    "name": "Defeat a Goblin",
+                    "taskID": "Defeat_Goblin",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "npc": "Goblin",
+                    "npc_id": [3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203]
+                },
+                {
+                    "name": "Spin a Ball of Wool",
+                    "taskID": "Spin_Wool",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "skill": "Crafting",
+                    "level": 1,
+                    "type": "Skilling",
+                    "items": [
+                        {
+                            "item": "Ball of Wool",
+                            "item_id": 1759,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Bronze Square Shield",
+                    "taskID": "Equip_bronze_sq",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "skill": "Defence",
+                    "level": 1,
+                    "type": "Equip",                   
+                    "items": [
+                        {
+                            "item": "Bronze Sq Shield",
+                            "item_id": 1173
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "skill": "Woodcutting",
+                    "level": 60,
+                    "type": "Skilling",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_id": 1515,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Yew Log",
+                    "taskID": "burn_yew_log",
+                    "skill": "Firemaking",
+                    "level": 60,
+                    "type": "Create",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_id": 1515,
+                            "assignment_range": [1],
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket a Man or Woman",
+                    "taskID": "pickpocket_man",
+                    "skill": "Thieving",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": ["Man, Woman"],
+                    "npc_id": [3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
+                    "assignment_range": [1, 28]                           
+                },
+                {
+                    "name": "Equip a Mithril Battleaxe",
+                    "taskID": "equip_mithril_battleaxe",
+                    "skill": "Attack",
+                    "level": 20,
+                    "type": "Equip",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Mithril Battleaxe",
+                            "item_id": 1369
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn an Oak Log",
+                    "taskID": "burn_oak_log",
+                    "skill": "Firemaking",
+                    "level": 15,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Oak Logs",
+                            "item_id": 1521,
+                            "assignment_range": [1],
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Wizard Hat",
+                    "taskID": "equip_wizard_hat",
+                    "skill": "Defence",
+                    "level": 1,
+                    "type": "Equip",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Wizard Hat",
+                            "item_id": 1017
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Oak Shortbow(u)",
+                    "taskID": "fletch_oak_shortbow(u)",
+                    "skill": "Fletching",
+                    "level": 20,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,                   
+                    "items": [
+                        {
+                            "item": "Oak shortbow (u)",
+                            "item_id": 54,
+                            "action": "create",
+                            "assignment_range": [1]                          
+                        },
+                        { 
+                            "item": "Oak Logs",
+                            "item_id": 1521,
+                            "action": "consume"                           
+                        }
+                    ]
+                },
+                {
+                    "name": "Kill Some Spiders",
+                    "taskID": "kill_some_spiders",
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc_id": [3017, 3019],
+                    "assignment_range": [1, 25]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Cook's Assistant",
+                    "points": 1
+                },
+                {
+                    "name": "Recipe for Disaster",
+                    "points": 3
+                },
+                {
+                    "name": "Restless Ghost",
+                    "points": 1
+                },
+                {
+                    "name": "The Lost Tribe",
+                    "points": 2
+                },
+                {
+                    "name": "Rune Mysteries",
+                    "points": 1
+                },
+                {
+                    "name": "X Marks the Spot",
+                    "points": 1
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12851],
+            "neighbor_ids": [12850, 12852, 12595, 13107],
+            "Friendly_Name": "Lumbridge North Farm",
+            "tasks": [
+                {
+                    "name": "Obtain a Bucket of Milk",
+                    "taskID": "Obtain_milk",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Bucket of Milk",
+                            "item_id": 1927
+                        }
+                    ]
+                },
+                {
+                    "name": "Collect Feathers",
+                    "taskID": "Collect_feathers",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "assignment_range": [
+                        50,
+                        1000
+                    ],
+                    "items": [
+                        {
+                            "item": "Feathers",
+                            "item_id": 314
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Willow Tree",
+                    "taskID": "Chop_willow_tree",
+                    "skill": "Woodcutting",
+                    "level": 30,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Willow Logs",
+                            "item_id": 1519,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Willow Log",
+                    "taskID": "burn_willow_log",
+                    "skill": "Firemaking",
+                    "level": 30,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Willow Logs",
+                            "item_id": 1519,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Collect some Cowhide",
+                    "taskID": "obtain_cowhide",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "assignment_range": [
+                        5,
+                        100
+                    ],
+                    "items": [
+                        {
+                            "item": "Cowhide",
+                            "item_id": 1739
+                        }
+                    ]
+                },
+                {
+                    "name": "Collect some Raw Beef",
+                    "taskID": "obtain_raw_beef",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "assignment_range": [
+                        5,
+                        100
+                    ],
+                    "items": [
+                        {
+                            "item": "Raw Beef",
+                            "item_id": 2132
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Cow 7 Seconds",
+                    "taskID": "defeat_cow_fast",
+                    "skill": "Combat",
+                    "type": "Speedrun",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc_id": [2790, 2791, 2793],
+                    "target_kills": 1,
+                    "time_in_ticks": 12
+
+                },
+                {
+                    "name": "Equip a Bronze Med Helm",
+                    "taskID": "equip_bronze_med_helm",
+                    "skill": "Defence",
+                    "level": 1,
+                    "type": "Equip",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Bronze Med Helm",
+                            "item_id": 1139
+                        }
+                    ]
+                },
+                {
+                    "name": "Kill a Chicken in 1 Hit",
+                    "taskID": "deafeat_chicken_fast",
+                    "skill": "Combat",
+                    "type": "Speedrun",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc_id": [1173, 1174, 10495, 10496, 9488, 10494, 10497],
+                    "target_kills": 1,
+                    "time_in_ticks": 1
+                },
+                {
+                    "name": "Pickpocket a Farmer",
+                    "taskID": "pickpocket_farmer",
+                    "skill": "Thieving",
+                    "level": 10,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": "Farmer",
+                    "npc_id": [11919, 3243, 3244, 11920, 11921, 11918, 3114],
+                    "assignment_range": [1, 100]
+                },
+                {
+                    "name": "Fletch a Willow Shortbow(u)",
+                    "taskID": "fletch_willow_shortbow(u)",
+                    "skill": "Fletching",
+                    "level": 35,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "items": [
+                        {
+                            "item": "Willow Shortbow(u)",
+                            "item_id": 60,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Willow Logs",
+                            "item_id": 1519,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Willow Longbow(u)",
+                    "taskID": "fletch_willow_longbow(u)",
+                    "skill": "Fletching",
+                    "level": 40,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "items": [
+                        {
+                            "item": "Willow Longbow(u)",
+                            "item_id": 58,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Willow Logs",
+                            "item_id": 1519,
+                            "action": "consume"
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12849],
+            "neighbor_ids": [12850, 12848, 12593, 13105],
+            "Friendly_Name": "Lumbridge East Swamp",
+            "tasks": [
+                {
+                    "name": "Mine some Copper",
+                    "taskID": "mine_copper",
+                    "skill": "Mining",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "assignment_range": [
+                        5,
+                        100
+                    ],
+                    "items": [
+                        {
+                            "item": "Copper Ore",
+                            "item_id": 436,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Tin",
+                    "taskID": "mine_tin",
+                    "skill": "Mining",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "assignment_range": [
+                        5,
+                        100
+                    ],
+                    "items": [
+                        {
+                            "item": "Tin Ore",
+                            "item_id": 438,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt some Bronze Bars",
+                    "taskID": "smith_bronze_bars",
+                    "skill": "Smithing",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+
+                    "items": [
+                        {
+                            "item": "Bronze Bar",
+                            "item_id": 2349,
+                            "action": "create",
+                           "assignment_range": [5, 50]
+                        },
+                        {
+                            "item": "Tin Ore",
+                            "item_id": 438,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Copper Ore",
+                            "item_id": 436,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch some Raw Shrimp",
+                    "taskID": "catch_some_raw_shrimp",
+                    "skill": "Fishing",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "assignment_range": [
+                        5,
+                        100
+                    ],
+                    "items": [
+                        {
+                            "item": "Raw Shrimp",
+                            "item_id": 317,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch Raw Anchovies",
+                    "taskID": "catch_anchovies",
+                    "is_unlocked": false,
+                    "skill": "Fishing",
+                    "level": 15,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Raw Anchovies",
+                            "item_id": 321,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook some Shrimp",
+                    "taskID": "cook_shrimp",
+                    "is_unlocked": false, 
+                    "skill": "Cooking",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "assignment_range": [
+                        5,
+                        25
+                    ],
+                    "items": [
+                        {
+                            "item": "Shrimp",
+                            "item_id": 315,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Raw Shrimp",
+                            "item_id": 317,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook Anchovies",
+                    "taskID": "cook_anchovies",
+                    "is_unlocked": false,
+                    "skill": "Cooking",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Anchoives",
+                            "item_id": 319,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Raw Anchoives",
+                            "item_id": 321,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Frog in 7 Seconds",
+                    "taskID": "defeat_frog_fast",
+                    "skill": "Combat",
+                    "level": 5,
+                    "type": "Speedrun",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc_id": [8702],
+                    "target_kills": 1,
+                    "time_in_ticks": 12
+
+                },
+                {
+                    "name": "Enter Death's Domain",
+                    "taskID": "0033",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        12593,
+                        12848
+                    ],
+                    "skill": "null",
+                    "level": 1,
+                    "type": "Unlock",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Bury some Bones",
+                    "taskID": "bury_bones",
+                    "skill": "Prayer",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "assignment_range": [
+                        5,
+                        50
+                    ],
+                    "items": [
+                        {
+                            "item": "Bones",
+                            "item_id": 526,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook some Raw Rat Meat",
+                    "taskID": "Cook_raw_rat_meat",
+                    "skill": "Cooking",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "assignment_range": [
+                        5,
+                        25
+                    ],
+                    "items": [
+                        {
+                            "item": "Cooked Meat",
+                            "item_id": 2142,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Raw Rat Meat",
+                            "item_id": 2134,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Dead Tree",
+                    "taskID": "chop_dead_tree",
+                    "skill": "Woodcutting",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Logs",
+                            "item_id": 1511,
+                            "action": "create"
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Misthalen Mystery",
+                    "points": 1
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12594, 12694],
+            "neighbor_ids": [12850, 13105, 12593, 12848],                     
+            "Friendly_Name": "H.A.M. Hideout",
+            "tasks": [
+                {
+                    "name": "Rake the Tree Patch",
+                    "taskID": "rake_tree_patch",
+                    "skill": "Farming",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Weeds",
+                            "item_id": 6055,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Oak Sapling",
+                    "taskID": "plant_oak_sapling",
+                    "skill": "Farming",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Empty Plant Pot",
+                            "item_id": 5350,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Oak Sapling",
+                            "item_id": 5370,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Brass Necklace",
+                    "taskID": "equip_brass_necklace",
+                    "skill": "Defence",
+                    "level": 1,
+                    "type": "Equip",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Brass Necklace",
+                            "item_id": 1009
+                        }
+                    ]
+                },
+                {
+                    "name": "Polish some Buttons",
+                    "taskID": "polish_buttons",
+                    "skill": "Crafting",
+                    "level": 3,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Polished Buttons",
+                            "item_id": 10496,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Buttons",
+                            "item_id": 688,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a H.A.M. Logo",
+                    "taskID": "steal_HAM_logo",
+                    "skill": "Thieving",
+                    "level": 15,
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Ham Logo",
+                            "item_id": 4306
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Rusty Sword",
+                    "taskID": "steal_rusty_sword",
+                    "skill": "Thieving",
+                    "level": 15,
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Rusty Sword",
+                            "item_id": 686
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Uncut Opal",
+                    "taskID": "obtain_uncut_opal",
+                    "skill": "Thieving",
+                    "level": 15,
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Uncut Opal",
+                            "item_id": 1625
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Uncut Jade",
+                    "taskID": "obtain_uncut_jade",
+                    "skill": "Thieving",
+                    "level": 15,
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Uncut Jade",
+                            "item_id": 1627
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket a H.A.M. Member",
+                    "taskID": "pickpocket_HAM",
+                    "skill": "Thieving",
+                    "level": 15,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": ["HAM Male, HAM Female"],
+                    "npc_id": [2541, 2540],
+                    "assignment_range": [1, 100]
+                },
+                {
+                    "name": "Kill a H.A.M. Guard",
+                    "taskID": "kill_ham_guard",
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": "H.A.M. Guard",
+                    "npc_id": [2536, 2537, 2538],
+                    "assignment_range": [1, 25]
+                },
+                {
+                    "name": "Equip a Steel Dagger",
+                    "taskID": "equip_steel_dagger",
+                    "skill": "Attack",
+                    "level": 5,
+                    "type": "Equip",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Steel Dagger",
+                            "item_id": [1223, 5672, 5690, 808]
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Lost City",
+                    "points": 2
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [13106, 10315],
+            "neighbor_ids": [12850, 13105, 13107, 13362],
+            "Friendly_Name": "Al Kharid Toll Gate",
+            "tasks": [
+                {
+                    "name": "Cut a Sapphire",
+                    "taskID": "cut_sapphire",
+                    "skill": "Crafting",
+                    "level": 20,
+                    "type": "Create",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Sapphire",
+                            "item_id": 1607,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Uncut Sapphire",
+                            "item_id": 1623,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Cut an Emerald",
+                    "taskID": "cut_emerald",
+                    "skill": "Crafting",
+                    "level": 27,
+                    "type": "Create",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Emerald",
+                            "item_id": 1605,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Uncut Emerald",
+                            "item_id": 1621,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Silk",
+                    "taskID": "obtain_silk",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_range": [25, 100],
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Silk",
+                            "item_id": 950
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Fire Rune",
+                    "taskID": "runecraft_fire_rune",
+                    "is_unlocked": false,
+                    "skill": "Runecrafting",
+                    "level": 14,
+                    "type": "Create",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Fire_Rune",
+                            "item_id": 554,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Pure Essence",
+                            "item_id": 7936,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Rune Essence",
+                            "item_id": 1436,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Daeyalt Essence",
+                            "item_id": 24704,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Lava Rune",
+                    "taskID": "runecraft_lava_rune",
+                    "is_unlocked": false,
+                    "skill": "Runecrafting",
+                    "level": 23,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "items": [
+                        {
+                            "item": "Lava Rune",
+                            "item_id": 4699,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Fire Rune",
+                            "item_id": 554,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Earth Rune",
+                            "item_id": 557,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Earth Talisman",
+                            "item_id": 1440,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Fire Talisman",
+                            "item_id": 1442,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Pure Essence",
+                            "item_id": 7936,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Rune Essence",
+                            "item_id": 1436,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Daeyalt Essence",
+                            "item_id": 24704,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Create a Fire Tiara",
+                    "taskID": "runecraft_fire_tiara",
+                    "skill": "Runecrafting",
+                    "level": 1,
+                    "type": "Create",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Fire Tiara",
+                            "item_id": 5537,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Fire Talisman",
+                            "item_id": 1442,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Tiara",
+                            "item_id": 5525,
+                            "action": "consume"
+                        }
+                        
+                    ]
+                },
+                {
+                    "name": "Kill a man in 5 Seconds",
+                    "taskID": "deafeat_man_fast",
+                    "skill": "Combat",
+                    "level": 2,
+                    "type": "Speedrun",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": ["Man, Woman"],
+                    "npc_id": [3261, 3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992]
+                },
+                {
+                    "name": "Obtain a Grimy Ranarr Weed",
+                    "taskID": "obtain_grimy_ranarr",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Grimy Ranarr Weed",
+                            "item_id": 207
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Glider to Travel",
+                    "taskID": "0055",
+                    "is_unlocked": false,
+                    "unlock_cost": 1,
+                    "neighbor_ids": [
+                        12850,
+                        13105,
+                        13107,
+                        13362
+                    ],
+                    "skill": "null",
+                    "level": null,
+                    "type": "Unlock",
+                    "base_points": 2,
+                    "assignment_weight": 4,
+                    "items": [
+                        {
+                            "item": null
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket a Man 10 times in 12 Seconds",
+                    "taskID": "pickpocket_man_fast",
+                    "skill": "Thieving",
+                    "level": 1,
+                    "type": "Speedrun",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": ["Man, Woman"],
+                    "npc_id": [3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
+                    "time_in_ticks": 20
+                },
+                {
+                    "name": "Rake the Cactus Patch",
+                    "taskID": "rake_cactus_patch",
+                    "skill": "Farming",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Weeds",
+                            "item_id": 6055,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Cactus",
+                    "taskID": "plant_cactus_seed",
+                    "skill": "Farming",
+                    "level": 55,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "items": [
+                        {
+                            "item": "Cactus Seed",
+                            "item_id": 5280,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Beginner Clue Scroll",
+                    "taskID": "obtain_beginner_clue_scroll",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Beginner Clue Scroll",
+                            "item_id": 23182
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "The Feud",
+                    "points": 2
+                },
+                {
+                    "name": "Temple of the Eye",
+                    "points": 2
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [13105, 11605],
+            "Friendly_Name": "Al Kharid",
+            "tasks": [
+                {
+                    "name": "Equip some Adamant Platelegs",
+                    "taskID": "equip_adamant_platelegs",
+                    "skill": "Defence",
+                    "level": 30,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Adamant Platelegs",
+                            "item_id": 1073
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket an Al Kharid Warrior",
+                    "taskID": "pickpocket_al_kharid_warrior",
+                    "skill": "Thieving",
+                    "level": 25,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": "Al Kharid Warrior",
+                    "npc_id": 3292,
+                    "assignment_range": [25, 50]
+                },
+                {
+                    "name": "Obtain an Amulet Mould",
+                    "taskID": "obtain_an_amulet_mould",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Amulet Mould",
+                            "item_id": 1595
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mithril Scimitar",
+                    "taskID": "equip_mithril_scimitar",
+                    "skill": "Attack",
+                    "level": 20,
+                    "type": "Equip",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Mithril Scimitar",
+                            "item_id": 1329
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt an Iron Bar",
+                    "taskID": "smith_iron_bar",
+                    "skill": "Smithing",
+                    "level": 15,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Iron Bar",
+                            "item_id": 2351,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Iron Ore",
+                            "item_id": 440,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some Al Kharid Warriors",
+                    "taskID": "deafeat_al_kharid_warrior",
+                    "skill": "Combat",
+                    "level": 9,
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc":"Al Kharid Warrior",
+                    "npc_id": 3292,
+                    "assignment_range": [5, 25]
+                },
+                {
+                    "name": "Complete a Lap of the Al Kharid Rooftop Agility Course",
+                    "taskID": "complete_ak_kharid_rooftop",
+                    "skill": "Agility",
+                    "level": 20,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8
+                },           
+                {
+                    "name": "Obtain Winter Sq'irk Fruit",
+                    "taskID": "obtain_winter_sq'irk_fruit",
+                    "skill": "Obtain",
+                    "level": 1,
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Winter Sq'irk Fruit",
+                            "item_id": 10847
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt a Silver Bar",
+                    "taskID": "smith_silver_bar",
+                    "skill": "Smithing",
+                    "level": 20,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Silver Bar",
+                            "item_id": 2355,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Silver Ore",
+                            "item_id": 442,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Tiara",
+                    "taskID": "craft_tiara",
+                    "skill": "Crafting",
+                    "level": 23,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Tiara",
+                            "item_id": 5525,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Silver Bar",
+                            "item_id": 2355,
+                            "action": "consume"
+                        }
+                    ]
+                }                            
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Prince Ali Rescue",
+                    "points": 1
+                },
+                {
+                    "name": "Shadow of the Storm",
+                    "points": 2
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12593, 12693, 12949],
+            "Friendly_Name": "Lumbridge West Swamp",
+            "neighbor_ids": [12849, 12594, 12592, 12337],
+            "tasks": [
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "skill": "Mining",
+                    "level": 30,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Coal",
+                            "item_id": 453,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Candle",
+                    "taskID": "obtain_candle",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Candle",
+                            "item_id": [36, 33]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Wall Beast",
+                    "taskID": "defeat_wall_beast",
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "npc": "Wall Beast",
+                    "npc_id": [476, 475],
+                    "assignment_range": [1]
+                },
+                {
+                    "name": "Defeat a Big Frog",
+                    "taskID": "defeat_big_frog",
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": "Big Frog",
+                    "npc_id": [8701, 478],
+                    "assignment_range": [1]
+                },
+                {
+                    "name": "Defeat a Cave Bug",
+                    "taskID": "defeat_cave_bug",
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": "Cave Bug",
+                    "npc_id": [8701, 478],
+                    "assignment_range": [1]
+
+                },
+                {
+                    "name": "Defeat a Cave Crawler",
+                    "taskID": "defeat_cave_crawler",
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "npc": "Cave Crawler",
+                    "npc_id": [406, 407, 408, 409],
+                    "assignment_range": [1]
+                },
+                {
+                    "name": "Defeat a Cave Slime",
+                    "taskID": "defeat_cave_slime",
+                    "is_unlocked": false,
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": "Cave Slime",
+                    "npc_id": [480],
+                    "assignment_range": [1]
+                },
+                {
+                    "name": "Catch some Frog Spawn",
+                    "taskID": "catch_frog_spawn",
+                    "skill": "Fishing",
+                    "level": 33,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Frog Spawn",
+                            "item_id:": 5004,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Slimy Eel",
+                    "taskID": "catch_slimy_eel",
+                    "skill": "Fishing",
+                    "level": 28,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Raw Slimy Eel",
+                            "item_id": 3379,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Build a Medium STASH Unit",
+                    "taskID": "build_medium_stash_lumbridge_cave",
+                    "skill": "Construction",
+                    "level": 42,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Oak Plank",
+                            "item_id": 8778,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Bronze Nails",
+                            "item_id": 4819,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Iron Nails",
+                            "item_id": 4820,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Steel Nails",
+                            "item_id": 1539,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Black Nails",
+                            "item_id": 4821,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Mithril Nails",
+                            "item_id": 4822,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Adamantite Nails",
+                            "item_id": 4823,
+                            "action": "consume"
+                        },
+                        {
+                            "item": "Rune Nails",
+                            "item_id": 4824,
+                            "action": "consume"
+                        }
+                ]
+                },
+                {
+                    "name": "Defeat a Cave Goblin",
+                    "taskID": "defeat_cave_goblin",
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": "Cave Goblin",
+                    "npc_id": [6437, 6435, 6436, 6434],
+                    "assignment_range": [1]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": 12595,
+            "Friendly_Name": "Lumbridge Mill",
+            "neighbor_ids": [12339, 12594, 12851, 12596],
+            "tasks": [
+                {
+                    "name": "Obtain a Pot of Flour",
+                    "taskID": "obtain_pot_of_flour",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Pot of Flour",
+                            "item_id": 1933
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Duck",
+                    "taskID": "defeat_duck",
+                    "is_unlocked": false,
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": "Duck",
+                    "npc_id": [1839,1838],
+                    "assignment_range": [1]
+                },
+                {
+                    "name": "Obtain an Onion",
+                    "taskID": "obtain_onion",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "assignment_range": [1],                  
+                    "items": [
+                        {
+                            "item": "Onion",
+                            "item_id": 1957
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Egg",
+                    "taskID": "obtain_egg",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Egg",
+                            "item_id": 1944
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Needle",
+                    "taskID": "obtain_needle",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Needle",
+                            "item_id": 1733
+                        }
+                    ]
+                },
+                {
+                    "name": "Churn a Pot of Cream",
+                    "taskID": "churn_cream",
+                    "skill": "Cooking",
+                    "level": 21,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Pot of Cream",
+                            "item_id": 2130,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Bucket of Milk",
+                            "item_id": 1927,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Churn a Pot of Cream into Cheese",
+                    "taskID": "churn_cream_into_cheese",
+                    "skill": "Cooking",
+                    "level": 48,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "items": [
+                        {
+                            "item": "Cheese",
+                            "item_id": 1985,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Pot of Cream",
+                            "item_id": 2130,
+                            "action": "consume"
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Farmer in 12 Seconds",
+                    "taskID": "defeat_farmer_fast",
+                    "skill": "Combat",
+                    "type": "Speedrun",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc_id": [11921, 11918, 3114],
+                    "target_kills": 1,
+                    "time_in_ticks": 20
+                },
+                {
+                    "name": "Obtain a Red Bead",
+                    "taskID": "obtain_red_bead",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Red Bead",
+                            "item_id": 1470
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Potato",
+                    "taskID": "obtain_potato",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Potato",
+                            "item_id": 1942
+                        }
+                    ]
+                },
+                {
+                    "name": "Bake a Potato",
+                    "taskID": "Cook_potato",
+                    "skill": "Cooking",
+                    "level": 7,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Baked Potato",
+                            "item_id": 6701,
+                            "action": "create"
+                        },
+                        {
+                            "item": "Potato",
+                            "item_id": 1942,
+                            "action": "consume"
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Sheep Shearer",
+                    "points": 1
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": 13107,
+            "Friendly_Name": "Al Kharid Mine",
+            "neighbor_ids": [12851, 13106, 13108, 13363],
+            "tasks": [
+                {
+                    "name": "Use the Rocks Agility Shortcut",
+                    "taskID": "Al_Kharid_mine_rocks_shortcut",
+                    "skill": "Agility",
+                    "level": 38,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 3
+                },
+                {
+                    "name": "Mine some Gold",
+                    "taskID": "mine_gold",
+                    "skill": "Mining",
+                    "level": 40,
+                    "type": "Skilling",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "items": [
+                        {
+                            "item": "Gold Ore",
+                            "item_id": 444,
+                            "action": "create"
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some Scorpions",
+                    "taskID": "defeat_scorpions",
+                    "skill": "Combat",
+                    "type": "Combat",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc": "Scorpion",
+                    "npc_id": [3024, 13001, 2480],
+                    "assignment_range": [1, 25]
+                },
+                {
+                    "name": "Kill a Scorpion in 17 Seconds",
+                    "taskID": "defeat_scorpion_fast",
+                    "skill": "Combat",
+                    "type": "Speedrun",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "npc_id": [3024, 13001, 2480],
+                    "target_kills": 1,
+                    "time_in_ticks": 28
+                },
+                {
+                    "name": "Mine some Silver",
+                    "taskID": "mine_silver",
+                    "skill": "Mining",
+                    "level": 20,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Silver Ore",
+                            "item_id": 442,
+                             "action": "create"
+                        }
+                    ]
+                },            
+                {
+                    "name": "Obtain some Goldsmith Gauntlets",
+                    "taskID": "obtain_goldsmith_gauntlets",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "items": [
+                        {
+                            "item": "Goldsmith Gauntlets",
+                            "item_id": 776
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ensouled Scorpion Head",
+                    "taskID": "obtain_ensouled_scorpion_head",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Ensouled Scorpion Head",
+                            "item_id": [13459, 13460]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Black Bead",
+                    "taskID": "obtain_black_bead",
+                    "skill": "Obtain",
+                    "type": "Obtain",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "items": [
+                        {
+                            "item": "Black Bead",
+                            "item_id": 1474
+                        }
+                    ]
+                },
+                {
+                    "name": "Spread some Fiendish Ashes",
+                    "taskID": "spread_fiend_ashes",
+                    "skill": "Prayer",
+                    "level": 1,
+                    "type": "Skilling",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "items": [
+                        {
+                            "item": "Fiendish Ashes",
+                            "item_id": 25766
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }
+    ]
+}

@@ -12,8 +12,9 @@
           "base_points": 1,
           "assignment_weight": 8,
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "target_npc": {
+            "npc": ["Goblin"],
             "npc_ids": [3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
             "quantity": 1
           }
@@ -31,7 +32,7 @@
               "item": "Ball of Wool",
               "item_ids": [1759],
               "action": "obtain",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -63,7 +64,7 @@
               "item": "Yew Logs",
               "item_ids": [1515],
               "action": "obtain",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -79,8 +80,7 @@
             {
               "item": "Yew Logs",
               "item_ids": [1515],
-              "quantity": 1,
-              "action": "consume"
+              "quantity": [1]            
             }
           ]
         },
@@ -94,7 +94,7 @@
           "assignment_weight": 8,
           "target_npc": {
             "npc_ids": [3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
-            "quantity_range": [1, 28]
+            "quantity": [1, 28]
           }
         },
         {
@@ -124,8 +124,7 @@
             {
               "item": "Oak Logs",
               "item_ids": [1521],
-              "quantity": 1,
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -157,12 +156,7 @@
               "item": "Oak shortbow (u)",
               "item_ids": [54],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Oak Logs",
-              "item_ids": [1521],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -170,10 +164,11 @@
           "name": "Kill Some Spiders",
           "taskID": "kill_some_spiders",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Spider, Big Spider"],
             "npc_ids": [3017, 3019],
             "quantity_range": [1, 25]
           }
@@ -223,7 +218,7 @@
             {
               "item": "Bucket of Milk",
               "item_ids": [1927],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -238,7 +233,7 @@
             {
               "item": "Feathers",
               "item_ids": [314],
-              "quantity_range": [50, 1000]
+              "quantity": [50, 1000]
             }
           ]
         },
@@ -255,7 +250,7 @@
               "item": "Willow Logs",
               "item_ids": [1519],
               "action": "obtain",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -271,8 +266,7 @@
             {
               "item": "Willow Logs",
               "item_ids": [1519],
-              "action": "consume",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -287,7 +281,7 @@
             {
               "item": "Cowhide",
               "item_ids": [1739],
-              "quantity_range": [5, 100]
+              "quantity": [5, 100]
             }
           ]
         },
@@ -302,7 +296,7 @@
             {
               "item": "Raw Beef",
               "item_ids": [2132],
-              "quantity_range": [5, 100]
+              "quantity": [5, 100]
             }
           ]
         },
@@ -310,10 +304,11 @@
           "name": "Defeat a Cow 7 Seconds",
           "taskID": "defeat_cow_fast",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Cow"],
             "npc_ids": [2790, 2791, 2793],
             "quantity": 1
           },
@@ -340,10 +335,11 @@
           "name": "Kill a Chicken in 1 Hit",
           "taskID": "deafeat_chicken_fast",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Chicken"],
             "npc_ids": [1173, 1174, 10495, 10496, 9488, 10494, 10497],
             "quantity": 1
           },
@@ -361,7 +357,7 @@
           "assignment_weight": 8,
           "target_npc": {
             "npc_ids": [11921, 11918, 3114],
-            "quantity_range": [1, 100]
+            "quantity": [1, 100]
           }
         },
         {
@@ -377,12 +373,7 @@
               "item": "Willow Shortbow(u)",
               "item_ids": [60],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Willow Logs",
-              "item_ids": [1519],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -399,12 +390,7 @@
               "item": "Willow Longbow(u)",
               "item_ids": [58],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Willow Logs",
-              "item_ids": [1519],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         }
@@ -429,7 +415,7 @@
               "item": "Copper Ore",
               "item_ids": [436],
               "action": "obtain",
-              "quantity_range": [5, 100]
+              "quantity": [5, 100]
             }
           ]
         },
@@ -446,7 +432,7 @@
               "item": "Tin Ore",
               "item_ids": [438],
               "action": "obtain",
-              "quantity_range": [5, 100]
+              "quantity": [5, 100]
             }
           ]
         },
@@ -464,16 +450,6 @@
               "item_ids": [2349],
               "action": "obtain",
               "quantity_range": [5, 50]
-            },
-            {
-              "item": "Tin Ore",
-              "item_ids": [438],
-              "action": "consume"
-            },
-            {
-              "item": "Copper Ore",
-              "item_ids": [436],
-              "action": "consume"
             }
           ]
         },
@@ -508,7 +484,7 @@
               "item": "Raw Anchovies",
               "item_ids": [321],
               "action": "obtain",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -527,11 +503,6 @@
               "item_ids": [315],
               "action": "obtain",
               "quantity_range": [5, 25]
-            },
-            {
-              "item": "Raw Shrimp",
-              "item_ids": [317],
-              "action": "consume"
             }
           ]
         },
@@ -546,15 +517,10 @@
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Anchoives",
+              "item": "Anchovies",
               "item_ids": [319],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Raw Anchoives",
-              "item_ids": [321],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -563,10 +529,11 @@
           "taskID": "defeat_frog_fast",
           "category": "Combat",
           "level": 5,
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Frog"],
             "npc_ids": [8702],
             "quantity": 1
           },
@@ -576,7 +543,7 @@
         },
         {
           "name": "Enter Death's Domain",
-          "taskID": "0033",
+          "taskID": "enter_death_domain",
           "is_unlocked": false,
           "unlock_cost": 1,
           "neighbor_ids": [12850, 13105, 12593, 12848],
@@ -598,7 +565,6 @@
             {
               "item": "Bones",
               "item_ids": [526],
-              "action": "consume",
               "quantity_range": [5, 50]
             }
           ]
@@ -617,11 +583,6 @@
               "item_ids": [2142],
               "action": "obtain",
               "quantity_range": [5, 25]
-            },
-            {
-              "item": "Raw Rat Meat",
-              "item_ids": [2134],
-              "action": "consume"
             }
           ]
         },
@@ -677,25 +638,26 @@
           "name": "Plant an Oak Sapling",
           "taskID": "plant_oak_sapling",
           "category": "Farming",
-          "level": 1,
+          "level": 15,
           "completion_type": "FARMING",
           "base_points": 1,
           "assignment_weight": 5,
           "required_items": [
             {
-              "item": "Empty Plant Pot",
-              "item_ids": [5350],
-              "action": "obtain",
-              "quantity": 1
-            },
-            {
               "item": "Oak Sapling",
               "item_ids": [5370],
-              "action": "consume",
-              "quantity": 1
+              "quantity": [1]
+            } 
+          ],
+          
+          "required_object": [      
+            {
+              "object_id": [8388, 8389, 8390, 8391],
+              "object_name": "Tree Patch",
+              "interaction_type": "use_item_on"
             }
           ]
-        },
+        },     
         {
           "name": "Equip a Brass Necklace",
           "taskID": "equip_brass_necklace",
@@ -724,12 +686,7 @@
               "item": "Polished Buttons",
               "item_ids": [10496],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Buttons",
-              "item_ids": [688],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -745,7 +702,7 @@
             {
               "item": "Ham Logo",
               "item_ids": [4306],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -761,7 +718,7 @@
             {
               "item": "Rusty Sword",
               "item_ids": [686],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -777,7 +734,7 @@
             {
               "item": "Uncut Opal",
               "item_ids": [1625],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -793,7 +750,7 @@
             {
               "item": "Uncut Jade",
               "item_ids": [1627],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -806,6 +763,7 @@
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": "HAM Member",
             "npc_ids": [2541, 2540],
             "quantity_range": [1, 100]
           }
@@ -814,10 +772,11 @@
           "name": "Kill a H.A.M. Guard",
           "taskID": "kill_ham_guard",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["HAM Guard"],
             "npc_ids": [2536, 2537, 2538],
             "quantity_range": [1, 25]
           }
@@ -864,12 +823,7 @@
               "item": "Sapphire",
               "item_ids": [1607],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Uncut Sapphire",
-              "item_ids": [1623],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -886,12 +840,7 @@
               "item": "Emerald",
               "item_ids": [1605],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Uncut Emerald",
-              "item_ids": [1621],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -921,25 +870,10 @@
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Fire_Rune",
+              "item": "Fire Rune",
               "item_ids": [554],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Pure Essence",
-              "item_ids": [7936],
-              "action": "consume"
-            },
-            {
-              "item": "Rune Essence",
-              "item_ids": [1436],
-              "action": "consume"
-            },
-            {
-              "item": "Daeyalt Essence",
-              "item_ids": [24704],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -957,42 +891,7 @@
               "item": "Lava Rune",
               "item_ids": [4699],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Fire Rune",
-              "item_ids": [554],
-              "action": "consume"
-            },
-            {
-              "item": "Earth Rune",
-              "item_ids": [557],
-              "action": "consume"
-            },
-            {
-              "item": "Earth Talisman",
-              "item_ids": [1440],
-              "action": "consume"
-            },
-            {
-              "item": "Fire Talisman",
-              "item_ids": [1442],
-              "action": "consume"
-            },
-            {
-              "item": "Pure Essence",
-              "item_ids": [7936],
-              "action": "consume"
-            },
-            {
-              "item": "Rune Essence",
-              "item_ids": [1436],
-              "action": "consume"
-            },
-            {
-              "item": "Daeyalt Essence",
-              "item_ids": [24704],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -1009,17 +908,7 @@
               "item": "Fire Tiara",
               "item_ids": [5537],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Fire Talisman",
-              "item_ids": [1442],
-              "action": "consume"
-            },
-            {
-              "item": "Tiara",
-              "item_ids": [5525],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -1028,10 +917,11 @@
           "taskID": "deafeat_man_fast",
           "category": "Combat",
           "level": 2,
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Man, Woman"],
             "npc_ids": [3261, 3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
             "quantity": 1
           },
@@ -1050,7 +940,7 @@
             {
               "item": "Grimy Ranarr Weed",
               "item_ids": [207],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1095,7 +985,7 @@
               "item": "Weeds",
               "item_ids": [6055],
               "action": "obtain",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1111,8 +1001,7 @@
             {
               "item": "Cactus Seed",
               "item_ids": [5280],
-              "action": "consume",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1172,6 +1061,7 @@
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": "Al Kharid Warrior",
             "npc_ids": [3292],
             "quantity_range": [25, 50]
           }
@@ -1187,7 +1077,7 @@
             {
               "item": "Amulet Mould",
               "item_ids": [1595],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1219,12 +1109,7 @@
               "item": "Iron Bar",
               "item_ids": [2351],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Iron Ore",
-              "item_ids": [440],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -1233,10 +1118,11 @@
           "taskID": "deafeat_al_kharid_warrior",
           "category": "Combat",
           "level": 9,
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Al Kharid Warrior"],
             "npc_ids": [3292],
             "quantity_range": [5, 25]
           }
@@ -1262,7 +1148,7 @@
             {
               "item": "Winter Sq'irk Fruit",
               "item_ids": [10847],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1279,12 +1165,7 @@
               "item": "Silver Bar",
               "item_ids": [2355],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Silver Ore",
-              "item_ids": [442],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -1301,12 +1182,7 @@
               "item": "Tiara",
               "item_ids": [5525],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Silver Bar",
-              "item_ids": [2355],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         }
@@ -1341,7 +1217,7 @@
               "item": "Coal",
               "item_ids": [453],
               "action": "obtain",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1356,7 +1232,7 @@
             {
               "item": "Candle",
               "item_ids": [36, 33],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1364,48 +1240,52 @@
           "name": "Defeat a Wall Beast",
           "taskID": "defeat_wall_beast",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 5,
           "target_npc": {
+            "npc": ["Wall Beast"],
             "npc_ids": [476, 475],
-            "quantity": 1
+            "quantity": [1]
           }
         },
         {
           "name": "Defeat a Big Frog",
           "taskID": "defeat_big_frog",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Big Frog"],
             "npc_ids": [8701, 478],
-            "quantity": 1
+            "quantity": [1]
           }
         },
         {
           "name": "Defeat a Cave Bug",
           "taskID": "defeat_cave_bug",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Cave Bug"],
             "npc_ids": [8701, 478],
-            "quantity": 1
+            "quantity": [1]
           }
         },
         {
           "name": "Defeat a Cave Crawler",
           "taskID": "defeat_cave_crawler",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 5,
           "target_npc": {
+            "npc": ["Cave Crawler"],
             "npc_ids": [406, 407, 408, 409],
-            "quantity": 1
+            "quantity": [1]
           }
         },
         {
@@ -1413,12 +1293,13 @@
           "taskID": "defeat_cave_slime",
           "is_unlocked": false,
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Cave Slime"],
             "npc_ids": [480],
-            "quantity": 1
+            "quantity": [1]
           }
         },
         {
@@ -1434,7 +1315,7 @@
               "item": "Frog Spawn",
               "item_ids": [5004],
               "action": "obtain",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1451,7 +1332,7 @@
               "item": "Raw Slimy Eel",
               "item_ids": [3379],
               "action": "obtain",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1466,13 +1347,19 @@
           "required_items": [
             {
               "item": "Oak Plank",
-              "item_ids": [8778],
-              "action": "consume"
+              "item_ids": [8778]
             },
             {
               "item": "Nails",
-              "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824],
-              "action": "consume"
+              "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+            }
+          ],
+
+          "required_object": [
+            {
+            "object": "Medium STASH Unit (rocks)",
+            "object_id": [29000],
+            "interaction_type": "use_item_on"
             }
           ]
         },
@@ -1480,12 +1367,13 @@
           "name": "Defeat a Cave Goblin",
           "taskID": "defeat_cave_goblin",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Cave Goblin"],
             "npc_ids": [6437, 6435, 6436, 6434],
-            "quantity": 1
+            "quantity": [1]
           }
         }
       ],
@@ -1507,7 +1395,7 @@
             {
               "item": "Pot of Flour",
               "item_ids": [1933],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1516,12 +1404,13 @@
           "taskID": "defeat_duck",
           "is_unlocked": false,
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Duck"],
             "npc_ids": [1839, 1838],
-            "quantity": 1
+            "quantity": [1]
           }
         },
         {
@@ -1535,7 +1424,7 @@
             {
               "item": "Onion",
               "item_ids": [1957],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1550,7 +1439,7 @@
             {
               "item": "Egg",
               "item_ids": [1944],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1565,7 +1454,7 @@
             {
               "item": "Needle",
               "item_ids": [1733],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1582,12 +1471,7 @@
               "item": "Pot of Cream",
               "item_ids": [2130],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Bucket of Milk",
-              "item_ids": [1927],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -1604,12 +1488,7 @@
               "item": "Cheese",
               "item_ids": [1985],
               "action": "obtain",
-              "quantity": 1
-            },
-            {
-              "item": "Pot of Cream",
-              "item_ids": [2130],
-              "action": "consume"
+              "quantity": [1]
             }
           ]
         },
@@ -1617,10 +1496,11 @@
           "name": "Defeat a Farmer in 12 Seconds",
           "taskID": "defeat_farmer_fast",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Farmer"],
             "npc_ids": [11921, 11918, 3114],
             "quantity": 1
           },
@@ -1639,7 +1519,7 @@
             {
               "item": "Red Bead",
               "item_ids": [1470],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1654,7 +1534,7 @@
             {
               "item": "Potato",
               "item_ids": [1942],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1672,11 +1552,6 @@
               "item_ids": [6701],
               "action": "obtain",
               "quantity": 1
-            },
-            {
-              "item": "Potato",
-              "item_ids": [1942],
-              "action": "consume"
             }
           ]
         }
@@ -1716,7 +1591,7 @@
               "item": "Gold Ore",
               "item_ids": [444],
               "action": "obtain",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1724,10 +1599,11 @@
           "name": "Defeat some Scorpions",
           "taskID": "defeat_scorpions",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Scorpion"],
             "npc_ids": [3024, 13001, 2480],
             "quantity_range": [1, 25]
           }
@@ -1736,12 +1612,13 @@
           "name": "Kill a Scorpion in 17 Seconds",
           "taskID": "defeat_scorpion_fast",
           "category": "Combat",
-          "completion_type": "COMBAT",
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
+            "npc": ["Scorpion"],
             "npc_ids": [3024, 13001, 2480],
-            "quantity": 1
+            "quantity": [1]
           },
           "constraints": {
             "time_in_ticks": 28
@@ -1760,7 +1637,7 @@
               "item": "Silver Ore",
               "item_ids": [442],
               "action": "obtain",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1775,7 +1652,7 @@
             {
               "item": "Goldsmith Gauntlets",
               "item_ids": [776],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1790,7 +1667,7 @@
             {
               "item": "Ensouled Scorpion Head",
               "item_ids": [13459, 13460],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1805,7 +1682,7 @@
             {
               "item": "Black Bead",
               "item_ids": [1474],
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         },
@@ -1821,8 +1698,7 @@
             {
               "item": "Fiendish Ashes",
               "item_ids": [25766],
-              "action": "consume",
-              "quantity": 1
+              "quantity": [1]
             }
           ]
         }
