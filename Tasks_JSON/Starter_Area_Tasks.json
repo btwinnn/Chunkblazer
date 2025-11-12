@@ -652,7 +652,7 @@
           
           "required_object": [      
             {
-              "object_id": [8388, 8389, 8390, 8391],
+              "object_id": [8388, 8390, 8391],
               "object_name": "Tree Patch",
               "interaction_type": "use_item_on"
             }
@@ -855,7 +855,7 @@
             {
               "item": "Silk",
               "item_ids": [950],
-              "quantity_range": [25, 100]
+              "quantity": [25, 100]
             }
           ]
         },
@@ -946,15 +946,11 @@
         },
         {
           "name": "Use the Glider to Travel",
-          "taskID": "0055",
-          "is_unlocked": false,
-          "unlock_cost": 1,
-          "neighbor_ids": [12850, 13105, 13107, 13362],
+          "taskID": "glider_al_kharid",
           "category": "Travel",
-          "level": null,
           "completion_type": "TRAVEL",
           "base_points": 2,
-          "assignment_weight": 4
+          "assignment_weight": 5
         },
         {
           "name": "Pickpocket a Man 10 times in 12 Seconds",
