@@ -153,14 +153,13 @@
                     "name": "Kill a Mugger in 5 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
-                    "level": 6,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Mugger"],
                         "npc_ids": [513, 1461, 6996],
-                        "quantity": 1
+                        "quantity": [1]
                     },
                     "constraints": {
                         "time_in_ticks": [8]
@@ -170,22 +169,19 @@
             "optional_quests_unlocked": [
                 {
                     "name": "Dragon Slayer I",
-                    "points_multiplier": 2.5,
-                    "is_completed": false
+                    "points": 3
                 }
             ],
             "is_completed": false
         },
         {
-            "region_id": [12340],
+            "region_id": [12340, 12440],
             "Friendly_Name": "Draynor Manor",
             "neighbor_ids": [12339, 12084, 12341, 12596],
             "tasks": [
                 {
-                    "name": "Grow some Nightshade",
-                    "taskID": "grow_nightshade",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Plant some Belladonna Seeds",
+                    "taskID": "plant_belladonna",
                     "category": "Farming",
                     "level": 63,
                     "completion_type": "FARMING",
@@ -194,94 +190,55 @@
                     "required_items": [
                         {
                             "item": ["Belladonna seed"],
-                            "item_ids": [5100],
+                            "item_ids": [5281],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Chop an Undead Tree",
-                    "taskID": "chop_undead_tree",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Woodcutting",
-                    "level": 35,
-                    "completion_type": "WOODCUTTING",
-                    "base_points": 2,
-                    "assignment_weight": 7,
-                    "required_items": [
-                        {
-                            "item": ["Achey Tree Logs"],
-                            "item_ids": [2862],
-                            "action": "obtain",
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Kill a Ghost",
-                    "taskID": "kill_ghost",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Defeat a Level 19 Ghost",
+                    "taskID": "defeat_a_ghost",
                     "category": "Combat",
-                    "level": 19,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 9,
+                    "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Ghost"],
-                        "npc_ids": [457, 458, 459, 460, 461, 462],
-                        "quantity": 1
+                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
+                        "quantity": [1]
                     }
                 },
                 {
-                    "name": "Cast Draynor Manor Teleport",
-                    "taskID": "cast_draynor_manor_teleport",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Magic",
-                    "level": 17,
-                    "completion_type": "SPELL_CAST",
-                    "base_points": 1,
-                    "assignment_weight": 6
-                },
-                {
-                    "name": "Kill a Killerwatt",
-                    "taskID": "kill_killerwatt",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Defeat a Killerwatt",
+                    "taskID": "defeat_killerwatt",
                     "category": "Slayer",
                     "level": 37,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 4,
+                    "assignment_weight": 5,
                     "target_npc": {
                         "npc": ["Killerwatt"],
-                        "npc_ids": [3398],
-                        "quantity": 1
+                        "npc_ids": [469],
+                        "quantity": [1]
                     }
                 },
                 {
-                    "name": "Kill some Rats",
-                    "taskID": "kill_rats_draynor",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Defeat some Level 1 Rats",
+                    "taskID": "defeat_rats",
                     "category": "Combat",
                     "level": 1,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 9,
+                    "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Rat"],
-                        "npc_ids": [10851, 10852, 10853, 47, 4323],
+                        "npc_ids": [2854, 2855, 2492, 2513],
                         "quantity_range": [1, 20]
                     }
                 },
                 {
-                    "name": "Kill a Skeleton",
-                    "taskID": "kill_skeleton_draynor",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Defeat the Draynor Manor Skeleton",
+                    "taskID": "defeat_draynor_manor_skeleton",
                     "category": "Combat",
                     "level": 22,
                     "completion_type": "NPC_Kill",
@@ -289,36 +246,30 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Skeleton"],
-                        "npc_ids": [90, 91, 92, 93, 4118],
-                        "quantity": 1
+                        "npc_ids": [3565],
+                        "quantity": [1]
                     }
                 },
                 {
                     "name": "Defeat Count Draynor",
                     "taskID": "defeat_count_draynor",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
                     "category": "Combat",
-                    "level": null,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Count Draynor"],
-                        "npc_ids": [757],
-                        "quantity": 1
+                        "npc_ids": [3481, 3482],
+                        "quantity": [1]
                     }
                 },
                 {
-                    "name": "Dig up a Skull",
-                    "taskID": "dig_up_skull",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Obtain a Skull",
+                    "taskID": "obtain_skull",
                     "category": "Obtain",
-                    "level": null,
                     "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 7,
+                    "base_points": 1,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
                             "item": ["Skull"],
@@ -328,88 +279,85 @@
                     ]
                 },
                 {
-                    "name": "Store 10 Plant Cures in the Tool Leprechaun",
-                    "taskID": "store_plant_cures_leprechaun",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Farming",
-                    "level": null,
-                    "completion_type": "GENERIC",
+                    "name": "Obtain a Plant Cure",
+                    "taskID": "obtain_a_plant_cure",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Plant Cure"],
+                            "item_ids": [6036],
+                            "quantity": [1]
+                        }
+                    ]
                 },
                 {
                     "name": "Obtain a Magic Whistle",
                     "taskID": "obtain_magic_whistle",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
                     "category": "Obtain",
-                    "level": null,
                     "completion_type": "OBTAIN",
                     "base_points": 2,
                     "assignment_weight": 5,
                     "required_items": [
                         {
                             "item": ["Magic whistle"],
-                            "item_ids": [288],
+                            "item_ids": [16],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Talk to Bob",
-                    "taskID": "talk_to_bob",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Talk to Bob the Cat",
+                    "taskID": "talk_to_bob_the_cat",
                     "category": "Dialogue",
-                    "level": null,
-                    "completion_type": "DIALOGUE",
+                    "completion_type": "NPC_DIALOGUE",
                     "base_points": 2,
-                    "assignment_weight": 6
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Bob the Cat"],
+                        "npc_ids": [2635, 2636, 4231, 8034, 8055, 8111, 8112, 8113, 8114, 8115, 8159],
+                        "quantity": [1]
+                    }
+
                 }
             ],
             "optional_quests_unlocked": [
                 {
                     "name": "Ernest the Chicken",
-                    "points_multiplier": 1.5,
-                    "is_completed": false
+                    "points": 1
                 },
                 {
                     "name": "Animal Magnetism",
-                    "points_multiplier": 2.0,
-                    "is_completed": false
+                    "point": 2
                 }
             ],
             "is_completed": false
         },
         {
-            "region_id": [12339],
+            "region_id": [12339, 12439, 12438],
             "Friendly_Name": "Draynor North",
             "neighbor_ids": [12083, 12338, 12595, 12340],
             "tasks": [
                 {
                     "name": "Obtain a Black Cape",
                     "taskID": "obtain_black_cape",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
                     "category": "Obtain",
-                    "level": 5,
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 10,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
                             "item": ["Black Cape"],
-                            "item_ids": [1031],
+                            "item_ids": [1019],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Kill a Highwayman in 3 Hits",
-                    "taskID": "kill_highwayman_3_hits",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Defeat a Highwayman in 7 Seconds",
+                    "taskID": "defeat_highwayman_fast",
                     "category": "Combat",
                     "level": 5,
                     "completion_type": "NPC_Kill",
@@ -417,75 +365,74 @@
                     "assignment_weight": 10,
                     "target_npc": {
                         "npc": ["Highwayman"],
-                        "npc_ids": [3122, 3123, 3124],
-                        "quantity": 1
+                        "npc_ids": [519, 518],
+                        "quantity": [1]
                     },
                     "constraints": {
-                        "hits": [3]
+                        "time_in_ticks": 12
                     }
                 },
                 {
-                    "name": "Complete a Lap of the Draynor Village Rooftop Course",
-                    "taskID": "complete_draynor_rooftop_lap",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Complete some Laps of the Draynor Village Rooftop Course",
+                    "taskID": "complete_draynor_roof",
                     "category": "Agility",
-                    "level": 10,
+                    "level": 1,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 9
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Draynor Rooftop Crate"],
+                        "object_id": [11632, 11358], 
+                        "quantity": [1, 20]
+                    }
                 },
                 {
-                    "name": "Get a Slayer Task from Spria",
-                    "taskID": "get_slayer_task_spria",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Get some Slayer Experience from a Level 2 Goblin",
+                    "taskID": "slayer_exp_goblin",
                     "category": "Slayer",
                     "level": 1,
                     "completion_type": "SLAYER",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Goblin"],
+                        "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
+                        "quantity_range": [1, 20]
+                    }
                 },
                 {
-                    "name": "Kill some Zombies",
-                    "taskID": "kill_zombies_draynor",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Defeat a Level 24 Zombie",
+                    "taskID": "defeat_level_24_zombie",
                     "category": "Combat",
-                    "level": 13,
+                    "level": 24,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Zombie"],
-                        "npc_ids": [3133, 3134, 3135, 3136],
-                        "quantity_range": [1, 20]
+                        "npc_ids": [49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
+                        "quantity_range": [1]
                     }
                 },
                 {
-                    "name": "Smith some Iron Arrowtips",
+                    "name": "Smith Iron Arrowtips",
                     "taskID": "smith_iron_arrowtips",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
                     "category": "Smithing",
                     "level": 20,
                     "completion_type": "SMITHING",
                     "base_points": 1,
-                    "assignment_weight": 7,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
                             "item": ["Iron Arrowtips"],
-                            "item_ids": [39],
-                            "action": "obtain",
-                            "quantity_range": [25, 100]
+                            "item_ids": [40],
+                            "quantity_range": [1]
                         }
                     ]
                 },
                 {
                     "name": "Fletch some Iron Arrows",
                     "taskID": "fletch_iron_arrows",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
                     "category": "Fletching",
                     "level": 15,
                     "completion_type": "FLETCHING",
@@ -495,7 +442,6 @@
                         {
                             "item": ["Iron Arrow"],
                             "item_ids": [884],
-                            "action": "obtain",
                             "quantity_range": [25, 100]
                         }
                     ]
@@ -503,8 +449,6 @@
                 {
                     "name": "Smith an Iron Dagger",
                     "taskID": "smith_iron_dagger",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
                     "category": "Smithing",
                     "level": 15,
                     "completion_type": "SMITHING",
@@ -514,26 +458,22 @@
                         {
                             "item": ["Iron Dagger"],
                             "item_ids": [1203],
-                            "action": "obtain",
                             "quantity": [1]
                         }
                     ]
                 },
                 {
                     "name": "Fletch a Oak Longbow(u)",
-                    "taskID": "fletch_oak_longbow_u",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "taskID": "fletch_oak_longbow(u)",
                     "category": "Fletching",
                     "level": 25,
                     "completion_type": "FLETCHING",
                     "base_points": 1,
-                    "assignment_weight": 7,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
                             "item": ["Oak Longbow (u)"],
                             "item_ids": [56],
-                            "action": "obtain",
                             "quantity": [1]
                         }
                     ]
@@ -541,10 +481,7 @@
                 {
                     "name": "Obtain an Enchanted Gem",
                     "taskID": "obtain_enchanted_gem",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Slayer",
-                    "level": 1,
+                    "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
@@ -559,29 +496,28 @@
                 {
                     "name": "Unlock Reptile Freezer",
                     "taskID": "unlock_reptile_freezer",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "GENERIC",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
                     "base_points": 1,
-                    "assignment_weight": 6
+                    "assignment_weight": 5,                   
+                    "constraints": {                       
+                        "varbit_id": 2061,        
+                        "required_value": 1,      
+                        "description": "Unlock status of Reptile Freezer"
+                    }
                 },
                 {
                     "name": "Equip Reinforced Goggles",
                     "taskID": "equip_reinforced_goggles",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
                     "category": "Slayer",
-                    "level": null,
+                    "level": 1,
                     "completion_type": "EQUIP",
                     "base_points": 1,
-                    "assignment_weight": 6,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
                             "item": ["Reinforced Goggles"],
-                            "item_ids": [28892],
-                            "quantity": [1]
+                            "item_ids": [24942]
                         }
                     ]
                 }
@@ -589,8 +525,7 @@
             "optional_quests_unlocked": [
                 {
                     "name": "Vampyre Slayer",
-                    "points_multiplier": 1.5,
-                    "is_completed": false
+                    "points": 1
                 }
             ],
             "is_completed": false
@@ -598,162 +533,138 @@
         {
             "region_id": [12338],
             "Friendly_Name": "Draynor South",
-            "neighbor_ids": [12083, 12338, 12595, 12340],
+            "neighbor_ids": [12082, 12339, 12594, 12340],
             "tasks": [
                 {
-                    "name": "Obtain a Black Cape",
-                    "taskID": "obtain_black_cape",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
+                    "name": "Obtain Red Dye",
+                    "taskID": "obtain_red_dye",
                     "category": "Obtain",
-                    "level": 5,
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 10,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Black Cape"],
-                            "item_ids": [1031],
+                            "item": ["Red Dye"],
+                            "item_ids": [1763],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Kill a Highwayman in 3 Hits",
-                    "taskID": "kill_highwayman_3_hits",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Combat",
-                    "level": 5,
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 10,
-                    "target_npc": {
-                        "npc": ["Highwayman"],
-                        "npc_ids": [3122, 3123, 3124],
-                        "quantity": 1
-                    },
-                    "constraints": {
-                        "hits": [3]
-                    }
-                },
-                {
-                    "name": "Complete a Lap of the Draynor Village Rooftop Course",
-                    "taskID": "complete_draynor_rooftop_lap",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Agility",
-                    "level": 10,
-                    "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 9
-                },
-                {
-                    "name": "Get a Slayer Task from Spria",
-                    "taskID": "get_slayer_task_spria",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
-                {
-                    "name": "Kill some Zombies",
-                    "taskID": "kill_zombies_draynor",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Combat",
-                    "level": 13,
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Zombie"],
-                        "npc_ids": [3133, 3134, 3135, 3136],
-                        "quantity_range": [1, 20]
-                    }
-                },
-                {
-                    "name": "Smith some Iron Arrowtips",
-                    "taskID": "smith_iron_arrowtips",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Smithing",
-                    "level": 20,
-                    "completion_type": "SMITHING",
-                    "base_points": 1,
-                    "assignment_weight": 7,
-                    "required_items": [
-                        {
-                            "item": ["Iron Arrowtips"],
-                            "item_ids": [39],
-                            "action": "obtain",
-                            "quantity_range": [25, 100]
-                        }
-                    ]
-                },
-                {
-                    "name": "Fletch some Iron Arrows",
-                    "taskID": "fletch_iron_arrows",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Fletching",
-                    "level": 15,
-                    "completion_type": "FLETCHING",
+                    "name": "Obtain Yellow Dye",
+                    "taskID": "obtain_yellow_dye",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Iron Arrow"],
-                            "item_ids": [884],
-                            "action": "obtain",
-                            "quantity_range": [25, 100]
-                        }
-                    ]
-                },
-                {
-                    "name": "Smith an Iron Dagger",
-                    "taskID": "smith_iron_dagger",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Smithing",
-                    "level": 15,
-                    "completion_type": "SMITHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Iron Dagger"],
-                            "item_ids": [1203],
-                            "action": "obtain",
+                            "item": ["Yellow Dye"],
+                            "item_ids": [1765],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Fletch a Oak Longbow(u)",
-                    "taskID": "fletch_oak_longbow_u",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Fletching",
-                    "level": 25,
-                    "completion_type": "FLETCHING",
+                    "name": "Obtain Blue Dye",
+                    "taskID": "obtain_blue_dye",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 7,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Oak Longbow (u)"],
-                            "item_ids": [56],
-                            "action": "obtain",
+                            "item": ["Blue Dye"],
+                            "item_ids": [1767],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Jail Guard",
+                    "taskID": "defeat_jail_guard",
+                    "category": "Combat",
+                    "level": 26,
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jail Guard"],
+                        "npc_ids": [4276, 4277, 4278, 4279],
+                        "quantity_range": [1, 10]
+                    }
+                },
+                {
+                    "name": "Obtain a Forestry Kit",
+                    "taskID": "obtain_forestry_kit",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Forestry Kit"],
+                            "item_ids": [28136]
+                        }
+                    ]
+                },
+                {
+                    "name": "Travel to Fairy Ring Code CLP",
+                    "taskID": "fairy_ring_CLP",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 1,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Obtain a Secateurs Blade",
+                    "taskID": "obtain_secateurs_blade",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Secateurs Blade"],
+                            "item_ids": [28159],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal from a Seed Stall",
+                    "taskID": "steal_seed_stall",
+                    "category": "Thieving",
+                    "level": 27,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Seed Stall"],
+                            "object_id": [7053],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Log Basket",
+                    "taskID": "obtain_log_basket",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Log Basket"],
+                            "item_ids": [28140],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
                     "name": "Obtain an Enchanted Gem",
-                    "taskID": "obtain_enchanted_gem",
+                    "taskID": "0142",
                     "is_unlocked": false,
                     "unlock_cost": 1,
                     "category": "Slayer",
@@ -771,7 +682,7 @@
                 },
                 {
                     "name": "Unlock Reptile Freezer",
-                    "taskID": "unlock_reptile_freezer",
+                    "taskID": "0143",
                     "is_unlocked": false,
                     "unlock_cost": 1,
                     "category": "Slayer",
@@ -782,7 +693,7 @@
                 },
                 {
                     "name": "Equip Reinforced Goggles",
-                    "taskID": "equip_reinforced_goggles",
+                    "taskID": "0144",
                     "is_unlocked": false,
                     "unlock_cost": 1,
                     "category": "Slayer",
