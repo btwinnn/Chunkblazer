@@ -3,9 +3,17 @@ const path = require('path');
 const readline = require('readline');
 
 // --- CONFIGURATION: Add your files here ---
+<<<<<<< HEAD
 const fileList = [
     'Starter_Area_Tasks.json',
     'Misthalin_Tasks.json' 
+=======
+// We use 'Tasks_JSON/' because the script is now in the root of Chunkblazer
+const fileList = [
+    'Tasks_JSON/Starter_Area_Tasks.json',
+    'Tasks_JSON/Misthalin_Tasks.json',
+    'Tasks_JSON/Novice_Mystery_Tasks.json' 
+>>>>>>> c77e3046d420c0d385a35192bf29ca7e63a68365
 ];
 
 // 1. Load and Combine Data from ALL files
@@ -46,12 +54,19 @@ function searchTasks(chunks, filters) {
     // Normalize search terms
     const searchCategory = filters.category ? filters.category.toLowerCase() : "";
     const searchType = filters.completion_type ? filters.completion_type.toLowerCase() : "";
+<<<<<<< HEAD
     const searchKeyword = filters.has ? filters.has.toLowerCase() : "";
+=======
+    
+    // Split the "Has" input into individual words
+    const searchKeywords = filters.has ? filters.has.toLowerCase().split(" ") : [];
+>>>>>>> c77e3046d420c0d385a35192bf29ca7e63a68365
 
     chunks.forEach((chunk) => {
         if (chunk.tasks) {
             const matchingTasks = chunk.tasks.filter((task) => {
                 
+<<<<<<< HEAD
                 // 1. Category Check
                 const taskCat = task.category ? task.category.toLowerCase() : "";
                 const categoryMatch = !searchCategory || taskCat.includes(searchCategory);
@@ -70,16 +85,38 @@ function searchTasks(chunks, filters) {
                     taskCat.includes(searchKeyword) || 
                     taskType.includes(searchKeyword)
                 );
+=======
+                // Category & Type Check
+                const taskCat = task.category ? task.category.toLowerCase() : "";
+                const categoryMatch = !searchCategory || taskCat.includes(searchCategory);
+
+                const taskType = task.completion_type ? task.completion_type.toLowerCase() : "";
+                const typeMatch = !searchType || taskType.includes(searchType);
+
+                // Keyword Check (Multi-word support)
+                const fullTaskText = (
+                    (task.name || "") + " " + 
+                    (task.taskID || "") + " " + 
+                    (taskCat || "") + " " + 
+                    (taskType || "")
+                ).toLowerCase();
+
+                const hasMatch = searchKeywords.length === 0 || searchKeywords.every(word => fullTaskText.includes(word));
+>>>>>>> c77e3046d420c0d385a35192bf29ca7e63a68365
 
                 return categoryMatch && typeMatch && hasMatch;
             });
 
             matchingTasks.forEach((task) => {
                 results.push({
+<<<<<<< HEAD
                     // We put the Region Name first so you know where it is
                     found_in_region: chunk.friendly_name || chunk.Friendly_Name, 
                     
                     // THE FIX: This "..." grabs the ENTIRE task object (constraints, target_npc, etc.)
+=======
+                    found_in_region: chunk.friendly_name || chunk.Friendly_Name, 
+>>>>>>> c77e3046d420c0d385a35192bf29ca7e63a68365
                     ...task 
                 });
             });
@@ -96,9 +133,20 @@ const rl = readline.createInterface({
 
 console.log("\n--- OSRS Task Search (Full Details) ---");
 
+<<<<<<< HEAD
 rl.question('Category? (e.g. "Combat") [Enter to skip]: ', (catInput) => {
     rl.question('Type? (e.g. "Kill") [Enter to skip]: ', (typeInput) => {
         rl.question('Keyword? (e.g. "Goblin") [Enter to skip]: ', (hasInput) => {
+=======
+// PROMPT 1: KEYWORD (Now First!)
+rl.question('Keyword? (e.g. "Goblin", "Mugger seconds") [Enter to skip]: ', (hasInput) => {
+    
+    // PROMPT 2: CATEGORY
+    rl.question('Category? (e.g. "Combat") [Enter to skip]: ', (catInput) => {
+        
+        // PROMPT 3: TYPE
+        rl.question('Type? (e.g. "NPC_Kill") [Enter to skip]: ', (typeInput) => {
+>>>>>>> c77e3046d420c0d385a35192bf29ca7e63a68365
         
             const myFilters = {
                 category: catInput.trim(),
@@ -114,7 +162,10 @@ rl.question('Category? (e.g. "Combat") [Enter to skip]: ', (catInput) => {
 
             if (matches.length > 0) {
                 console.log(`Found ${matches.length} matches:`);
+<<<<<<< HEAD
                 // This prints the full object structure nicely
+=======
+>>>>>>> c77e3046d420c0d385a35192bf29ca7e63a68365
                 console.log(JSON.stringify(matches, null, 2)); 
             } else {
                 console.log("No matches found.");
