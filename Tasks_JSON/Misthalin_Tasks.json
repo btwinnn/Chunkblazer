@@ -32,7 +32,7 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity_range": [1, 50]
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -233,7 +233,7 @@
                     "target_npc": {
                         "npc": ["Rat"],
                         "npc_ids": [2854, 2855, 2492, 2513],
-                        "quantity_range": [1, 20]
+                        "quantity": [1, 20]
                     }
                 },
                 {
@@ -397,7 +397,7 @@
                     "target_npc": {
                         "npc": ["Goblin"],
                         "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
-                        "quantity_range": [1, 20]
+                        "quantity": [1, 20]
                     }
                 },
                 {
@@ -411,7 +411,7 @@
                     "target_npc": {
                         "npc": ["Zombie"],
                         "npc_ids": [49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
-                        "quantity_range": [1]
+                        "quantity": [1]
                     }
                 },
                 {
@@ -426,7 +426,7 @@
                         {
                             "item": ["Iron Arrowtips"],
                             "item_ids": [40],
-                            "quantity_range": [1]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -442,7 +442,7 @@
                         {
                             "item": ["Iron Arrow"],
                             "item_ids": [884],
-                            "quantity_range": [25, 100]
+                            "quantity": [25, 100]
                         }
                     ]
                 },
@@ -591,7 +591,7 @@
                     "target_npc": {
                         "npc": ["Jail Guard"],
                         "npc_ids": [4276, 4277, 4278, 4279],
-                        "quantity_range": [1, 10]
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -663,48 +663,47 @@
                     ]
                 },
                 {
-                    "name": "Obtain an Enchanted Gem",
-                    "taskID": "0142",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "OBTAIN",
+                    "name": "Defeat a Level 7 Dark Wizard",
+                    "taskID": "defeat_level_7_dark_wizard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Enchanted Gem"],
-                            "item_ids": [4155],
-                            "quantity": [1]
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Dark Wizard"],
+                        "npc_ids": [512, 5086, 5087],
+                        "quantity": [1, 10]
+                    }
                 },
                 {
-                    "name": "Unlock Reptile Freezer",
-                    "taskID": "0143",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "GENERIC",
+                    "name": "Defeat a Level 7 Dark Wizard in 10 Seconds",
+                    "taskID": "defeat_level_7_dark_wizard_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 6
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Dark Wizard"],
+                        "npc_ids": [512, 5086, 5087],
+                        "quantity": [1, 10]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [16]
+                    }
                 },
                 {
-                    "name": "Equip Reinforced Goggles",
-                    "taskID": "0144",
-                    "is_unlocked": false,
-                    "unlock_cost": 1,
-                    "category": "Slayer",
-                    "level": null,
-                    "completion_type": "EQUIP",
+                    "name": "Steal from Fortunato's Market Stall",
+                    "taskID": "steal_market_stall_draynor",
+                    "category": "Thieving",
+                    "level": 22,
+                    "completion_type": "THIEVING",
                     "base_points": 1,
-                    "assignment_weight": 6,
-                    "required_items": [
+                    "assignment_weight": 8,
+                    "required_object": [
                         {
-                            "item": ["Reinforced Goggles"],
-                            "item_ids": [28892],
+                            "object": ["Market Stall"],
+                            "object_id": [14011],
                             "quantity": [1]
                         }
                     ]
@@ -712,12 +711,17 @@
             ],
             "optional_quests_unlocked": [
                 {
-                    "name": "Vampyre Slayer",
-                    "points_multiplier": 1.5,
-                    "is_completed": false
+                    "name": "Fairytale I - Growing Pains",
+                    "point": 2
+                },
+                {
+                    "name": "Fairytale II - Cure a Queen",
+                    "point": 3
                 }
             ],
             "is_completed": false
         }
+        
+
     ]
 }

@@ -170,7 +170,7 @@
           "target_npc": {
             "npc": ["Spider, Big Spider"],
             "npc_ids": [3017, 3019],
-            "quantity_range": [1, 25]
+            "quantity": [1, 25]
           }
         }
       ],
@@ -449,7 +449,7 @@
               "item": "Bronze Bar",
               "item_ids": [2349],
               "action": "obtain",
-              "quantity_range": [5, 50]
+              "quantity": [5, 50]
             }
           ]
         },
@@ -466,7 +466,7 @@
               "item": "Raw Shrimp",
               "item_ids": [317],
               "action": "obtain",
-              "quantity_range": [5, 100]
+              "quantity": [5, 100]
             }
           ]
         },
@@ -502,7 +502,7 @@
               "item": "Shrimp",
               "item_ids": [315],
               "action": "obtain",
-              "quantity_range": [5, 25]
+              "quantity": [5, 25]
             }
           ]
         },
@@ -564,7 +564,7 @@
             {
               "item": "Bones",
               "item_ids": [526],
-              "quantity_range": [5, 50]
+              "quantity": [5, 50]
             }
           ]
         },
@@ -581,7 +581,7 @@
               "item": "Cooked Meat",
               "item_ids": [2142],
               "action": "obtain",
-              "quantity_range": [5, 25]
+              "quantity": [5, 25]
             }
           ]
         },
@@ -764,7 +764,7 @@
           "target_npc": {
             "npc": "HAM Member",
             "npc_ids": [2541, 2540],
-            "quantity_range": [1, 100]
+            "quantity": [1, 100]
           }
         },
         {
@@ -777,7 +777,7 @@
           "target_npc": {
             "npc": ["HAM Guard"],
             "npc_ids": [2536, 2537, 2538],
-            "quantity_range": [1, 25]
+            "quantity": [1, 25]
           }
         },
         {
@@ -1041,7 +1041,7 @@
           "target_npc": {
             "npc": "Al Kharid Warrior",
             "npc_ids": [3292],
-            "quantity_range": [25, 50]
+            "quantity": [25, 50]
           }
         },
         {
@@ -1102,7 +1102,7 @@
           "target_npc": {
             "npc": ["Al Kharid Warrior"],
             "npc_ids": [3292],
-            "quantity_range": [5, 25]
+            "quantity": [5, 25]
           }
         },
         {
@@ -1583,7 +1583,7 @@
           "target_npc": {
             "npc": ["Scorpion"],
             "npc_ids": [3024, 13001, 2480],
-            "quantity_range": [1, 25]
+            "quantity": [1, 25]
           }
         },
         {
