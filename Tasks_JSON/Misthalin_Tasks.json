@@ -3,9 +3,8 @@
         {
             "region_id": [12596],
             "Friendly_Name": "Champions' Guild",
-            "nightbor_ids": [12595, 12340, 12852, 12597],
-            
-            "tasks":[
+            "neighbor_ids": [12595, 12340, 12852, 12597],
+            "tasks": [
                 {
                     "name": "Plant some Cadava Berries",
                     "taskID": "plant_cadava_berries",
@@ -14,33 +13,34 @@
                     "completion_type": "FARMING",
                     "base_points": 1,
                     "assignment_weight": 5,
-                    "required_items": 
-                    {
-                        "item": "Cadavaberry Seeds",
-                        "item_ids": [5102],
-                        "quantity": [1]
-                    }
+                    "required_items": [
+                        {
+                            "item": ["Cadavaberry Seeds"],
+                            "item_ids": [5102],
+                            "quantity": [1]
+                        }
+                    ]
                 },
                 {
                     "name": "Obtain Soft Clay",
                     "taskID": "obtain_soft_clay",
-                    "category": "obtain",
+                    "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": "Wet Clay",
-                            "item_id": 1761,
-                            "quantity": [1, 50]
+                            "item": ["Soft Clay"],
+                            "item_ids": [1761],
+                            "quantity_range": [1, 50]
                         }
                     ]
                 },
                 {
                     "name": "Enter the Champions' Guild",
                     "taskID": "enter_champions_guild",
-                    "category": "travel",
-                    "completion_type": "TRAVEL",
+                    "category": "Travel",
+                    "completion_type": "LOCATION",
                     "base_points": 1,
                     "assignment_weight": 10
                 },
@@ -59,12 +59,12 @@
                     "base_points": 1,
                     "assignment_weight": 5,
                     "category": "Defence",
-                    "level": 1,
+                    "level": 40,
                     "completion_type": "EQUIP",
                     "required_items": [
                         {
-                        "item": "Rune Platelegs",
-                        "item_ids": [1079]
+                            "item": ["Rune Platelegs"],
+                            "item_ids": [1079]
                         }
                     ]
                 },
@@ -73,21 +73,21 @@
                     "taskID": "equip_rune_mace",
                     "base_points": 1,
                     "assignment_weight": 5,
-                    "category": "attack",
-                    "level": 1,
+                    "category": "Attack",
+                    "level": 40,
                     "completion_type": "EQUIP",
                     "required_items": [
                         {
-                        "item": "Rune Mace",
-                        "item_ids": [1432]
+                            "item": ["Rune Mace"],
+                            "item_ids": [1432]
                         }
                     ]
                 },
                 {
                     "name": "Enter the Sourhog Cave",
                     "taskID": "enter_sourhog_cave",
-                    "category": "travel",
-                    "completion_type": "TRAVEL",
+                    "category": "Travel",
+                    "completion_type": "LOCATION",
                     "base_points": 1,
                     "assignment_weight": 8
                 },
@@ -100,23 +100,22 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": "Sour Hog",
-                        "npc_id": [10435],
-                        "quantity": [1]
+                        "npc": ["Sourhog"],
+                        "npc_ids": [10435],
+                        "quantity": 1
                     }
-
                 },
                 {
                     "name": "Obtain a Cape Yellow",
                     "taskID": "obtain_yellow_cape",
-                    "category": "obtain",
+                    "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": "Yellow Cape",
-                            "item_id": 1023,
+                            "item": ["Yellow Cape"],
+                            "item_ids": [1023],
                             "quantity": [1]
                         }
                     ]
@@ -129,24 +128,24 @@
                     "completion_type": "EQUIP",
                     "base_points": 1,
                     "assignment_weight": 5,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": "Green D'Hide Chaps",
-                            "item_id": 1099
+                            "item": ["Green D'Hide Chaps"],
+                            "item_ids": [1099]
                         }
                     ]
                 },
                 {
                     "name": "Obtain a White Bead from an Imp",
                     "taskID": "obtain_white_bead",
-                    "category": "obtain",
+                    "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": "White Bead",
-                            "item_id": 1476
+                            "item": ["White Bead"],
+                            "item_ids": [1476]
                         }
                     ]
                 },
@@ -159,13 +158,12 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": "Mugger",
+                        "npc": ["Mugger"],
                         "npc_ids": [513, 1461, 6996],
                         "quantity": 1
                     },
-
                     "constraints": {
-                        "time_in_ticks": 8
+                        "time_in_ticks": [8]
                     }
                 }
             ],
@@ -179,28 +177,25 @@
             "is_completed": false
         },
         {
-            "region_id": "12340",
+            "region_id": [12340],
             "Friendly_Name": "Draynor Manor",
+            "neighbor_ids": [12339, 12084, 12341, 12596],
             "tasks": [
                 {
                     "name": "Grow some Nightshade",
                     "taskID": "0121",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "Farming",
+                    "category": "Farming",
                     "level": 63,
-                    "type": "Skilling",
+                    "completion_type": "FARMING",
                     "base_points": 3,
                     "assignment_weight": 3,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Belladonna seed"],
+                            "item_ids": [5100],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -209,20 +204,17 @@
                     "taskID": "0122",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "Woodcutting",
+                    "category": "Woodcutting",
                     "level": 35,
-                    "type": "Skilling",
+                    "completion_type": "WOODCUTTING",
                     "base_points": 2,
                     "assignment_weight": 7,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Achey Tree Logs"],
+                            "item_ids": [2862],
+                            "action": "obtain",
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -231,156 +223,107 @@
                     "taskID": "0123",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "Combat",
+                    "category": "Combat",
                     "level": 19,
-                    "type": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 9,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Ghost"],
+                        "npc_ids": [457, 458, 459, 460, 461, 462],
+                        "quantity": 1
+                    }
                 },
                 {
                     "name": "Cast Draynor Manor Teleport",
                     "taskID": "0124",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "Magic",
+                    "category": "Magic",
                     "level": 17,
-                    "type": "Skilling",
+                    "completion_type": "SPELL_CAST",
                     "base_points": 1,
-                    "assignment_weight": 6,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "assignment_weight": 6
                 },
                 {
                     "name": "Kill a Killerwatt",
                     "taskID": "0125",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "Slayer",
+                    "category": "Slayer",
                     "level": 37,
-                    "type": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 4,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Killerwatt"],
+                        "npc_ids": [3398],
+                        "quantity": 1
+                    }
                 },
                 {
                     "name": "Kill some Rats",
                     "taskID": "0126",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "Combat",
+                    "category": "Combat",
                     "level": 1,
-                    "type": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 9,
-                    "assignment_range": [
-                        1,
-                        20
-                    ],
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Rat"],
+                        "npc_ids": [10851, 10852, 10853, 47, 4323],
+                        "quantity_range": [1, 20]
+                    }
                 },
                 {
                     "name": "Kill a Skeleton",
                     "taskID": "0127",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "Combat",
+                    "category": "Combat",
                     "level": 22,
-                    "type": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Skeleton"],
+                        "npc_ids": [90, 91, 92, 93, 4118],
+                        "quantity": 1
+                    }
                 },
                 {
                     "name": "Defeat Count Draynor",
                     "taskID": "0128",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "Combat",
+                    "category": "Combat",
                     "level": null,
-                    "type": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Count Draynor"],
+                        "npc_ids": [757],
+                        "quantity": 1
+                    }
                 },
                 {
                     "name": "Dig up a Skull",
                     "taskID": "0129",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "null",
+                    "category": "Obtain",
                     "level": null,
-                    "type": "Unlock",
+                    "completion_type": "OBTAIN",
                     "base_points": 2,
                     "assignment_weight": 7,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Skull"],
+                            "item_ids": [964],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -389,42 +332,27 @@
                     "taskID": "0130",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "null",
+                    "category": "Farming",
                     "level": null,
-                    "type": "Unlock",
+                    "completion_type": "GENERIC",
                     "base_points": 1,
-                    "assignment_weight": 8,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "assignment_weight": 8
                 },
                 {
                     "name": "Obtain a Magic Whistle",
                     "taskID": "0131",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "null",
+                    "category": "Obtain",
                     "level": null,
-                    "type": "Unlock",
+                    "completion_type": "OBTAIN",
                     "base_points": 2,
                     "assignment_weight": 5,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Magic whistle"],
+                            "item_ids": [288],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -433,22 +361,11 @@
                     "taskID": "0132",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12339,
-                        12084,
-                        12341,
-                        12596
-                    ],
-                    "skill": "null",
+                    "category": "Dialogue",
                     "level": null,
-                    "type": "Unlock",
+                    "completion_type": "DIALOGUE",
                     "base_points": 2,
-                    "assignment_weight": 6,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "assignment_weight": 6
                 }
             ],
             "optional_quests_unlocked": [
@@ -466,28 +383,25 @@
             "is_completed": false
         },
         {
-            "region_id": "12339",
+            "region_id": [12339],
             "Friendly_Name": "Draynor North",
+            "neighbor_ids": [12083, 12338, 12595, 12340],
             "tasks": [
                 {
                     "name": "Obtain a Black Cape",
                     "taskID": "0133",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Combat",
+                    "category": "Obtain",
                     "level": 5,
-                    "type": "Unlock",
+                    "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 10,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Black Cape"],
+                            "item_ids": [1031],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -496,116 +410,74 @@
                     "taskID": "134",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Combat",
+                    "category": "Combat",
                     "level": 5,
-                    "type": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 10,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Highwayman"],
+                        "npc_ids": [3122, 3123, 3124],
+                        "quantity": 1
+                    },
+                    "constraints": {
+                        "hits": [3]
+                    }
                 },
                 {
                     "name": "Complete a Lap of the Draynor Village Rooftop Course",
                     "taskID": "0135",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Agility",
-                    "level": 1,
-                    "type": "Skilling",
+                    "category": "Agility",
+                    "level": 10,
+                    "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 9,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "assignment_weight": 9
                 },
                 {
                     "name": "Get a Slayer Task from Spria",
                     "taskID": "0136",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
+                    "category": "Slayer",
                     "level": 1,
-                    "type": "Skilling",
+                    "completion_type": "SLAYER",
                     "base_points": 1,
-                    "assignment_weight": 8,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "assignment_weight": 8
                 },
                 {
                     "name": "Kill some Zombies",
                     "taskID": "0137",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Combat",
+                    "category": "Combat",
                     "level": 13,
-                    "type": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [
-                        1,
-                        20
-                    ],
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Zombie"],
+                        "npc_ids": [3133, 3134, 3135, 3136],
+                        "quantity_range": [1, 20]
+                    }
                 },
                 {
                     "name": "Smith some Iron Arrowtips",
                     "taskID": "0138",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Smithing",
+                    "category": "Smithing",
                     "level": 20,
-                    "type": "Skilling",
+                    "completion_type": "SMITHING",
                     "base_points": 1,
                     "assignment_weight": 7,
-                    "assignment_range": [
-                        25,
-                        100
-                    ],
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Iron Arrowtips"],
+                            "item_ids": [39],
+                            "action": "obtain",
+                            "quantity_range": [25, 100]
                         }
                     ]
                 },
@@ -614,24 +486,17 @@
                     "taskID": "0139",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Fletching",
+                    "category": "Fletching",
                     "level": 15,
-                    "type": "Skilling",
+                    "completion_type": "FLETCHING",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [
-                        25,
-                        100
-                    ],
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Iron Arrow"],
+                            "item_ids": [884],
+                            "action": "obtain",
+                            "quantity_range": [25, 100]
                         }
                     ]
                 },
@@ -640,20 +505,17 @@
                     "taskID": "0140",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Smithing",
+                    "category": "Smithing",
                     "level": 15,
-                    "type": "Skilling",
+                    "completion_type": "SMITHING",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Iron Dagger"],
+                            "item_ids": [1203],
+                            "action": "obtain",
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -662,20 +524,17 @@
                     "taskID": "0141",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Fletching",
+                    "category": "Fletching",
                     "level": 25,
-                    "type": "Skilling",
+                    "completion_type": "FLETCHING",
                     "base_points": 1,
                     "assignment_weight": 7,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Oak Longbow (u)"],
+                            "item_ids": [56],
+                            "action": "obtain",
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -684,20 +543,16 @@
                     "taskID": "0142",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
+                    "category": "Slayer",
                     "level": 1,
-                    "type": "Unlock",
+                    "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Enchanted Gem"],
+                            "item_ids": [4155],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -706,42 +561,27 @@
                     "taskID": "0143",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
+                    "category": "Slayer",
                     "level": 1,
-                    "type": "Unlock",
+                    "completion_type": "GENERIC",
                     "base_points": 1,
-                    "assignment_weight": 6,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "assignment_weight": 6
                 },
                 {
                     "name": "Equip Reinforced Goggles",
                     "taskID": "0144",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
+                    "category": "Slayer",
                     "level": null,
-                    "type": "Unlock",
+                    "completion_type": "EQUIP",
                     "base_points": 1,
                     "assignment_weight": 6,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Reinforced Goggles"],
+                            "item_ids": [28892],
+                            "quantity": [1]
                         }
                     ]
                 }
@@ -756,28 +596,25 @@
             "is_completed": false
         },
         {
-            "region_id": "12338",
+            "region_id": [12338],
             "Friendly_Name": "Draynor South",
+            "neighbor_ids": [12083, 12338, 12595, 12340],
             "tasks": [
                 {
                     "name": "Obtain a Black Cape",
                     "taskID": "0133",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Combat",
+                    "category": "Obtain",
                     "level": 5,
-                    "type": "Unlock",
+                    "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 10,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Black Cape"],
+                            "item_ids": [1031],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -786,116 +623,74 @@
                     "taskID": "134",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Combat",
+                    "category": "Combat",
                     "level": 5,
-                    "type": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 10,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Highwayman"],
+                        "npc_ids": [3122, 3123, 3124],
+                        "quantity": 1
+                    },
+                    "constraints": {
+                        "hits": [3]
+                    }
                 },
                 {
                     "name": "Complete a Lap of the Draynor Village Rooftop Course",
                     "taskID": "0135",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Agility",
-                    "level": 1,
-                    "type": "Skilling",
+                    "category": "Agility",
+                    "level": 10,
+                    "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 9,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "assignment_weight": 9
                 },
                 {
                     "name": "Get a Slayer Task from Spria",
                     "taskID": "0136",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
+                    "category": "Slayer",
                     "level": 1,
-                    "type": "Skilling",
+                    "completion_type": "SLAYER",
                     "base_points": 1,
-                    "assignment_weight": 8,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "assignment_weight": 8
                 },
                 {
                     "name": "Kill some Zombies",
                     "taskID": "0137",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Combat",
+                    "category": "Combat",
                     "level": 13,
-                    "type": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [
-                        1,
-                        20
-                    ],
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Zombie"],
+                        "npc_ids": [3133, 3134, 3135, 3136],
+                        "quantity_range": [1, 20]
+                    }
                 },
                 {
                     "name": "Smith some Iron Arrowtips",
                     "taskID": "0138",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Smithing",
+                    "category": "Smithing",
                     "level": 20,
-                    "type": "Skilling",
+                    "completion_type": "SMITHING",
                     "base_points": 1,
                     "assignment_weight": 7,
-                    "assignment_range": [
-                        25,
-                        100
-                    ],
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Iron Arrowtips"],
+                            "item_ids": [39],
+                            "action": "obtain",
+                            "quantity_range": [25, 100]
                         }
                     ]
                 },
@@ -904,24 +699,17 @@
                     "taskID": "0139",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Fletching",
+                    "category": "Fletching",
                     "level": 15,
-                    "type": "Skilling",
+                    "completion_type": "FLETCHING",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "assignment_range": [
-                        25,
-                        100
-                    ],
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Iron Arrow"],
+                            "item_ids": [884],
+                            "action": "obtain",
+                            "quantity_range": [25, 100]
                         }
                     ]
                 },
@@ -930,20 +718,17 @@
                     "taskID": "0140",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Smithing",
+                    "category": "Smithing",
                     "level": 15,
-                    "type": "Skilling",
+                    "completion_type": "SMITHING",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Iron Dagger"],
+                            "item_ids": [1203],
+                            "action": "obtain",
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -952,20 +737,17 @@
                     "taskID": "0141",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Fletching",
+                    "category": "Fletching",
                     "level": 25,
-                    "type": "Skilling",
+                    "completion_type": "FLETCHING",
                     "base_points": 1,
                     "assignment_weight": 7,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Oak Longbow (u)"],
+                            "item_ids": [56],
+                            "action": "obtain",
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -974,20 +756,16 @@
                     "taskID": "0142",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
+                    "category": "Slayer",
                     "level": 1,
-                    "type": "Unlock",
+                    "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Enchanted Gem"],
+                            "item_ids": [4155],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -996,42 +774,27 @@
                     "taskID": "0143",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
+                    "category": "Slayer",
                     "level": 1,
-                    "type": "Unlock",
+                    "completion_type": "GENERIC",
                     "base_points": 1,
-                    "assignment_weight": 6,
-                    "items": [
-                        {
-                            "item": null
-                        }
-                    ]
+                    "assignment_weight": 6
                 },
                 {
                     "name": "Equip Reinforced Goggles",
                     "taskID": "0144",
                     "is_unlocked": false,
                     "unlock_cost": 1,
-                    "neighbor_ids": [
-                        12083,
-                        12338,
-                        12595,
-                        12340
-                    ],
-                    "skill": "Slayer",
+                    "category": "Slayer",
                     "level": null,
-                    "type": "Unlock",
+                    "completion_type": "EQUIP",
                     "base_points": 1,
                     "assignment_weight": 6,
-                    "items": [
+                    "required_items": [
                         {
-                            "item": null
+                            "item": ["Reinforced Goggles"],
+                            "item_ids": [28892],
+                            "quantity": [1]
                         }
                     ]
                 }
