@@ -76,8 +76,28 @@
                             "action": "use_item_on"                            
                         },
                     "target_interactions": 1
+                },
+                {
+                "name": "Pretty in Pink",
+                "taskID": "feel_pretty",
+                "base_points": 1,
+                "hint": "Agmundi Quality Clothes",
+                "skill": "Defence",
+                "level": 1,
+                "type": "Equip",
+                "items": [
+                    {
+                        "item": "Skirt(Lilac)",
+                        "item_id": 5050
+                    },
+                    {
+                        "item": "Shirt(Lilac)",
+                        "item_id": 5034
+                    }
+                    ],
+                 "is_completed": false
                 }
             ]
-        }
+        }   
     ]
 }

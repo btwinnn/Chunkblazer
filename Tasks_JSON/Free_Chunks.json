@@ -1,0 +1,36 @@
+{
+    "Free_chunkks": [
+        {
+            "region_id": [12336],
+            "Friendly_Name": "Tutorial Island",
+            "neighbor_ids": [12337,12335,12080,12592],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [12592],
+            "Friendly_Name": "Tutorial Island East",
+            "neighbor_ids": [12593, 12848, 12335, 12336],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [12335],
+            "Friendly_Name": "Tutorial Island The Node",
+            "neighbor_ids": [12336, 12591, 12334, 12079],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [12079],
+            "Friendly_Name": "Tutorial Island SouthWest",
+            "neighbor_ids": [12080, 12335, 12078, 11823],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [12080],
+            "Friendly_Name": "Tutorial Island West",
+            "neighbor_ids": [12336, 12335, 11824, 12081],
+            "unlock_cost": 0
+        }
+        
+
+    ]
+}

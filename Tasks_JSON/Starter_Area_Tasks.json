@@ -63,7 +63,6 @@
             {
               "item": "Yew Logs",
               "item_ids": [1515],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -403,7 +402,7 @@
       "Friendly_Name": "Lumbridge East Swamp",
       "tasks": [
         {
-          "name": "Mine some Copper",
+          "name": "Mine some Copper Ore",
           "taskID": "mine_copper",
           "category": "Mining",
           "level": 1,
@@ -420,7 +419,7 @@
           ]
         },
         {
-          "name": "Mine some Tin",
+          "name": "Mine some Tin Ore",
           "taskID": "mine_tin",
           "category": "Mining",
           "level": 1,
@@ -1195,7 +1194,7 @@
               "item": "Coal",
               "item_ids": [453],
               "action": "obtain",
-              "quantity": [1]
+              "quantity": [1, 25]
             }
           ]
         },
@@ -1315,8 +1314,8 @@
           ]
         },
         {
-          "name": "Build a Medium STASH Unit",
-          "taskID": "build_medium_stash_lumbridge_cave",
+          "name": "Build a Medium STASH Unit in Lumbridge Cave",
+          "taskID": "build_rock_medium_stash_lumbridge_cave",
           "category": "Construction",
           "level": 42,
           "completion_type": "CONSTRUCTION",
@@ -1557,7 +1556,7 @@
           "assignment_weight": 3
         },
         {
-          "name": "Mine some Gold",
+          "name": "Mine some Gold Ore",
           "taskID": "mine_gold",
           "category": "Mining",
           "level": 40,
@@ -1569,7 +1568,7 @@
               "item": "Gold Ore",
               "item_ids": [444],
               "action": "obtain",
-              "quantity": [1]
+              "quantity": [1, 25]
             }
           ]
         },
@@ -1603,7 +1602,7 @@
           }
         },
         {
-          "name": "Mine some Silver",
+          "name": "Mine some Silver Ore",
           "taskID": "mine_silver",
           "category": "Mining",
           "level": 20,
