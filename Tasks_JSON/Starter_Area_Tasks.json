@@ -248,7 +248,6 @@
             {
               "item": "Willow Logs",
               "item_ids": [1519],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -1567,7 +1566,6 @@
             {
               "item": "Gold Ore",
               "item_ids": [444],
-              "action": "obtain",
               "quantity": [1, 25]
             }
           ]

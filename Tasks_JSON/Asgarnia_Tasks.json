@@ -1,735 +1,554 @@
 {
-    "Asgarnia_Tasks": [
+    "Asgarnia_Tasks": [     
         {
-            "region_id": [12082],
-            "friendly_name": "Port Sarim",
-            "neighbor_ids": [12083, 12338, 12081, 11826],
-            "travel_connections": [
+            "region_id": [12083],
+            "Friendly_Name": "South Falador Farm",
+            "neighbor_ids": [12082, 12339, 12084, 11827],
+            "tasks": [
                 {
-                    "destination_id": 11061,
-                    "travel_name": "Sail to Catherby"
-                },
-                {
-                    "destination_id": 11316,
-                    "travel_name": "Sail to Entrana"
-                }
-            ],
-    "tasks":[
-                {
-                    "name": "Plant some Cadava Berries",
-                    "taskID": "plant_cadava_berries",
+                    "name": "Plant some Potatoes",
+                    "taskID": "plant_potatoes",
                     "category": "Farming",
-                    "level": 22,
+                    "level": 1,
                     "completion_type": "FARMING",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Cadavaberry Seeds"],
-                            "item_ids": [5102],
+                            "item": ["Potato Seed"],
+                            "item_ids": [5318],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain Soft Clay",
-                    "taskID": "obtain_soft_clay",
+                    "name": "Plant some Onions",
+                    "taskID": "plant_onions",
+                    "category": "Farming",
+                    "level": 5,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Onion Seed"],
+                            "item_ids": [5319],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Cabbages",
+                    "taskID": "plant_cabbages",
+                    "category": "Farming",
+                    "level": 7,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cabbage Seed"],
+                            "item_ids": [5324],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Tomato",
+                    "taskID": "plant_tomato",
+                    "category": "Farming",
+                    "level": 12,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Tomato Seed"],
+                            "item_ids": [5322],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Guam Seed",
+                    "taskID": "plant_guam",
+                    "category": "Farming",
+                    "level": 9,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Guam Seed"],
+                            "item_ids": [5291],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Marrentill Seed",
+                    "taskID": "plant_marrentill",
+                    "category": "Farming",
+                    "level": 14,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Marrentill Seed"],
+                            "item_ids": [5292],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Tarromin Seed",
+                    "taskID": "plant_tarromin",
+                    "category": "Farming",
+                    "level": 19,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Tarromin Seed"],
+                            "item_ids": [5293],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Marigold Seed",
+                    "taskID": "plant_marigold",
+                    "category": "Farming",
+                    "level": 2,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Marigold Seed"],
+                            "item_ids": [5096],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Rosemary Seed",
+                    "taskID": "plant_rosemary",
+                    "category": "Farming",
+                    "level": 11,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rosemary Seed"],
+                            "item_ids": [5097],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Explorer's Ring 1",
+                    "taskID": "obtain_explorer's_ring_1",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Soft Clay"],
-                            "item_ids": [1761],
+                            "item": ["Explorer's Ring 1"],
+                            "item_ids": [13125],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "The Corsair Curse",
+                    "points": 2
+                }                
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [11827],
+            "Friendly_Name": "Air Altar",
+            "neighbor_ids": [11826, 12083, 11828, 11571],
+            "tasks": [
+                {
+                    "name": "Runecraft an Air Rune",
+                    "taskID": "runecraft_air_rune",
+                    "is_unlocked": false,
+                    "category": "Runecrafting",
+                    "level": 1,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                            "item": "Air Rune",
+                            "item_ids": [556],
+                            "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Runecraft a Smoke Rune",
+                    "taskID": "runecraft_smoke_rune",
+                    "is_unlocked": false,
+                    "category": "Runecrafting",
+                    "level": 15,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Smoke Rune",
+                            "item_ids": [4697],
+                            "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Create an Air Tiara",
+                    "taskID": "runecraft_air_tiara",
+                    "category": "Runecrafting",
+                    "level": 1,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Air Tiara",
+                            "item_ids": [5527],
+                            "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Use the Level 26 Agility Underwall Tunnel",
+                    "taskID": "agility_level_26_underwall_tunnel",
+                    "category": "Agility",
+                    "level": 26,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 8
+                },
+                {
+                    "name": "Equip an Adamant Chainbody",
+                    "taskID": "equip_adamant_chainbody",
+                    "category": "Defence",
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Chainbody"],
+                            "item_ids": [1111]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mithril Chainbody",
+                    "taskID": "equip_mithril_chainbody",
+                    "category": "Defence",
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Mithril Chainbody"],
+                            "item_ids": [1109]
+                        }
+                    ]
+                },
+                {
+                    "name": "Spin a Crossbow String",
+                    "taskID": "spin_crossbow_string",
+                    "category": "Crafting",
+                    "level": 10,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Crossbow String"],
+                            "item_ids": [9438],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Yew Log",
+                    "taskID": "burn_yew_log",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch an Oak Shield",
+                    "taskID": "fletch_oak_shield",
+                    "category": "Fletching",
+                    "level": 27,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Oak Shield"],
+                            "item_ids": [22251],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],                      
+            "is_completed": false
+        },
+        {
+            "region_id": [11826],
+            "Friendly_Name": "Rimmington",
+            "neighbor_ids": [11825, 12082, 11570, 11827],
+            "tasks": [
+                {
+                "name": "Build an Easy STASH Unit in the Rimmington Mine",
+                "taskID": "build_easy_stash_unit_rimmington",
+                "category": "Construction",
+                "level": 27,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Teak Plank",
+                        "item_ids": [8780]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Easy STASH Unit (inconspicuous rocks)",
+                        "object_id": [28969],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
                             "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
-                },
-                {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
-                    "category": "Agility",
-                    "level": 31,
-                    "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
-                {
-                    "name": "Equip Rune Platelegs",
-                    "taskID": "equip_rune_platelegs",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "category": "Defence",
+                    "name": "Mine some Gold Ore",
+                    "taskID": "mine_gold",
+                    "category": "Mining",
                     "level": 40,
-                    "completion_type": "EQUIP",
-                    "required_items": [
-                        {
-                            "item": ["Rune Platelegs"],
-                            "item_ids": [1079]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip a Rune Mace",
-                    "taskID": "equip_rune_mace",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "category": "Attack",
-                    "level": 40,
-                    "completion_type": "EQUIP",
-                    "required_items": [
-                        {
-                            "item": ["Rune Mace"],
-                            "item_ids": [1432]
-                        }
-                    ]
-                },
-                {
-                    "name": "Enter the Sourhog Cave",
-                    "taskID": "enter_sourhog_cave",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
-                {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Sourhog"],
-                        "npc_ids": [10435],
-                        "quantity": 1
-                    }
-                },
-                {
-                    "name": "Obtain a Cape Yellow",
-                    "taskID": "obtain_yellow_cape",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Yellow Cape"],
-                            "item_ids": [1023],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip Green D'Hide Chaps",
-                    "taskID": "equip_green_d'hide_chaps",
-                    "category": "Ranged",
-                    "level": 40,
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
+                    "completion_type": "MINING",
+                    "base_points": 2,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Green D'Hide Chaps"],
-                            "item_ids": [1099]
+                            "item": "Gold Ore",
+                            "item_ids": [444],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain a White Bead from an Imp",
-                    "taskID": "obtain_white_bead",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["White Bead"],
-                            "item_ids": [1476]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Mugger in 5 Seconds",
-                    "taskID": "defeat_mugger_fast",
+                    "name": "Defeat a Mogre",
+                    "taskID": "defeat_mogre",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Mugger"],
-                        "npc_ids": [513, 1461, 6996],
+                        "npc": ["Mogre"],
+                        "npc_ids": [2592],
                         "quantity": [1]
-                    },
-                    "constraints": {
-                        "time_in_ticks": [8]
                     }
-                }
-            ],
-            "optional_quests_unlocked": [
+                },
                 {
-                    "name": "Dragon Slayer I",
-                    "points": 3
-                }
-            ],
-            "is_completed": false
-        },
-        {
-            "region_id": [12340, 12440],
-            "Friendly_Name": "Draynor Manor",
-            "neighbor_ids": [12339, 12084, 12341, 12596],
-            "tasks": [
+                    "name": "Obtain some Adamant Arrows",
+                    "taskID": "obtain_adamant_arrows",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Arrow"],
+                            "item_ids": [890],
+                            "quantity": [1, 800]
+                        }
+                    ]
+                },
                 {
-                    "name": "Plant some Belladonna Seeds",
-                    "taskID": "plant_belladonna",
-                    "category": "Farming",
-                    "level": 63,
-                    "completion_type": "FARMING",
-                    "base_points": 3,
+                "name": "Build an Oak Larder",
+                "taskID": "build_oak_larder",
+                "category": "Construction",
+                "level": 33,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 10,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Oak Larder",
+                        "object_id": [13566],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Crafting Table 3",
+                "taskID": "build_crafting_table_3",
+                "category": "Construction",
+                "level": 34,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Molten Glass",
+                        "item_ids": [1775]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Crafting Table 3",
+                        "object_id": [6798],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build an Oak Altar",
+                "taskID": "build_oak_altar",
+                "category": "Construction",
+                "level": 45,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 5,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Oak Altar",
+                        "object_id": [40872, 13181, 13179, 13180],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build an Oak Kitchen Table",
+                "taskID": "build_oak_kitchen_ table",
+                "category": "Construction",
+                "level": 32,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Oak Kitchen Table",
+                        "object_id": [13578],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Willow Tree",
+                    "taskID": "Chop_willow_tree",
+                    "category": "Woodcutting",
+                    "level": 30,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bronze Scimitar",
+                    "taskID": "obtain_bronze_scimitar",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
                     "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Belladonna seed"],
-                            "item_ids": [5281],
-                            "quantity": [1]
+                            "item": ["Bronze Scimitar"],
+                            "item_ids": [1321]
                         }
                     ]
-                },
-                {
-                    "name": "Defeat a Level 19 Ghost",
-                    "taskID": "defeat_a_ghost",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Ghost"],
-                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat a Killerwatt",
-                    "taskID": "defeat_killerwatt",
-                    "category": "Slayer",
-                    "level": 37,
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "target_npc": {
-                        "npc": ["Killerwatt"],
-                        "npc_ids": [469],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat some Level 1 Rats",
-                    "taskID": "defeat_rats",
-                    "category": "Combat",
-                    "level": 1,
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Rat"],
-                        "npc_ids": [2854, 2855, 2492, 2513],
-                        "quantity": [1, 20]
-                    }
-                },
-                {
-                    "name": "Defeat the Draynor Manor Skeleton",
-                    "taskID": "defeat_draynor_manor_skeleton",
-                    "category": "Combat",
-                    "level": 22,
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Skeleton"],
-                        "npc_ids": [3565],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat Count Draynor",
-                    "taskID": "defeat_count_draynor",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Count Draynor"],
-                        "npc_ids": [3481, 3482],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Obtain a Skull",
-                    "taskID": "obtain_skull",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Skull"],
-                            "item_ids": [964],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Plant Cure",
-                    "taskID": "obtain_a_plant_cure",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Plant Cure"],
-                            "item_ids": [6036],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Magic Whistle",
-                    "taskID": "obtain_magic_whistle",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Magic whistle"],
-                            "item_ids": [16],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Talk to Bob the Cat",
-                    "taskID": "talk_to_bob_the_cat",
-                    "category": "Dialogue",
-                    "completion_type": "NPC_DIALOGUE",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "target_npc": {
-                        "npc": ["Bob the Cat"],
-                        "npc_ids": [2635, 2636, 4231, 8034, 8055, 8111, 8112, 8113, 8114, 8115, 8159],
-                        "quantity": [1]
-                    }
-
-                }
+                }               
             ],
             "optional_quests_unlocked": [
                 {
-                    "name": "Ernest the Chicken",
-                    "points": 1
-                },
-                {
-                    "name": "Animal Magnetism",
-                    "point": 2
-                }
-            ],
-            "is_completed": false
-        },
-        {
-            "region_id": [12339, 12439, 12438],
-            "Friendly_Name": "Draynor North",
-            "neighbor_ids": [12083, 12338, 12595, 12340],
-            "tasks": [
-                {
-                    "name": "Obtain a Black Cape",
-                    "taskID": "obtain_black_cape",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Black Cape"],
-                            "item_ids": [1019],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Highwayman in 7 Seconds",
-                    "taskID": "defeat_highwayman_fast",
-                    "category": "Combat",
-                    "level": 5,
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 10,
-                    "target_npc": {
-                        "npc": ["Highwayman"],
-                        "npc_ids": [519, 518],
-                        "quantity": [1]
-                    },
-                    "constraints": {
-                        "time_in_ticks": 12
-                    }
-                },
-                {
-                    "name": "Complete some Laps of the Draynor Village Rooftop Course",
-                    "taskID": "complete_draynor_roof",
-                    "category": "Agility",
-                    "level": 1,
-                    "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": {
-                        "object": ["Draynor Rooftop Crate"],
-                        "object_id": [11632, 11358], 
-                        "quantity": [1, 20]
-                    }
-                },
-                {
-                    "name": "Defeat a Gobiln on Task",
-                    "taskID": "defeat_goblin_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Goblin"],
-                        "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
-                        "quantity": [1, 20]
-                    }
-                },
-                {
-                    "name": "Defeat a Level 24 Zombie",
-                    "taskID": "defeat_level_24_zombie",
-                    "category": "Combat",
-                    "level": 24,
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Zombie"],
-                        "npc_ids": [49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Smith Iron Arrowtips",
-                    "taskID": "smith_iron_arrowtips",
-                    "category": "Smithing",
-                    "level": 20,
-                    "completion_type": "SMITHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Iron Arrowtips"],
-                            "item_ids": [40],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Fletch some Iron Arrows",
-                    "taskID": "fletch_iron_arrows",
-                    "category": "Fletching",
-                    "level": 15,
-                    "completion_type": "FLETCHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Iron Arrow"],
-                            "item_ids": [884],
-                            "quantity": [25, 100]
-                        }
-                    ]
-                },
-                {
-                    "name": "Smith an Iron Dagger",
-                    "taskID": "smith_iron_dagger",
-                    "category": "Smithing",
-                    "level": 15,
-                    "completion_type": "SMITHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Iron Dagger"],
-                            "item_ids": [1203],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Fletch an Oak Longbow(u)",
-                    "taskID": "fletch_oak_longbow(u)",
-                    "category": "Fletching",
-                    "level": 25,
-                    "completion_type": "FLETCHING",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Oak Longbow (u)"],
-                            "item_ids": [56],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Enchanted Gem",
-                    "taskID": "obtain_enchanted_gem",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Enchanted Gem"],
-                            "item_ids": [4155],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Unlock Reptile Freezer",
-                    "taskID": "unlock_reptile_freezer",
-                    "category": "Unlock",
-                    "completion_type": "VARBIT_CHECK",
-                    "base_points": 1,
-                    "assignment_weight": 5,                   
-                    "constraints": {                       
-                        "varbit_id": 2061,        
-                        "required_value": 1,      
-                        "description": "Unlock status of Reptile Freezer"
-                    }
-                },
-                {
-                    "name": "Equip Reinforced Goggles",
-                    "taskID": "equip_reinforced_goggles",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Reinforced Goggles"],
-                            "item_ids": [24942]
-                        }
-                    ]
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Vampyre Slayer",
-                    "points": 1
-                }
-            ],
-            "is_completed": false
-        },
-        {
-            "region_id": [12338],
-            "Friendly_Name": "Draynor South",
-            "neighbor_ids": [12082, 12339, 12594, 12340],
-            "tasks": [
-                {
-                    "name": "Obtain Red Dye",
-                    "taskID": "obtain_red_dye",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Red Dye"],
-                            "item_ids": [1763],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain Yellow Dye",
-                    "taskID": "obtain_yellow_dye",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Yellow Dye"],
-                            "item_ids": [1765],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain Blue Dye",
-                    "taskID": "obtain_blue_dye",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Blue Dye"],
-                            "item_ids": [1767],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Jail Guard",
-                    "taskID": "defeat_jail_guard",
-                    "category": "Combat",
-                    "level": 26,
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Jail Guard"],
-                        "npc_ids": [4276, 4277, 4278, 4279],
-                        "quantity": [1, 10]
-                    }
-                },
-                {
-                    "name": "Obtain a Forestry Kit",
-                    "taskID": "obtain_forestry_kit",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Forestry Kit"],
-                            "item_ids": [28136]
-                        }
-                    ]
-                },
-                {
-                    "name": "Travel to Fairy Ring Code CLP",
-                    "taskID": "fairy_ring_CLP",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
-                {
-                    "name": "Obtain a Secateurs Blade",
-                    "taskID": "obtain_secateurs_blade",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Secateurs Blade"],
-                            "item_ids": [28159],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Steal from a Seed Stall",
-                    "taskID": "steal_seed_stall",
-                    "category": "Thieving",
-                    "level": 27,
-                    "completion_type": "THIEVING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": [
-                        {
-                            "object": ["Seed Stall"],
-                            "object_id": [7053],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Log Basket",
-                    "taskID": "obtain_log_basket",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Log Basket"],
-                            "item_ids": [28140],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Level 7 Dark Wizard",
-                    "taskID": "defeat_level_7_dark_wizard",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Dark Wizard"],
-                        "npc_ids": [512, 5086, 5087],
-                        "quantity": [1, 10]
-                    }
-                },
-                {
-                    "name": "Defeat a Level 7 Dark Wizard in 10 Seconds",
-                    "taskID": "defeat_level_7_dark_wizard_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Dark Wizard"],
-                        "npc_ids": [512, 5086, 5087],
-                        "quantity": [1, 10]
-                    },
-                    
-                    "constraints": {
-                        "time_in_ticks": [16]
-                    }
-                },
-                {
-                    "name": "Steal from Fortunato's Market Stall",
-                    "taskID": "steal_market_stall_draynor",
-                    "category": "Thieving",
-                    "level": 22,
-                    "completion_type": "THIEVING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": [
-                        {
-                            "object": ["Market Stall"],
-                            "object_id": [14011],
-                            "quantity": [1]
-                        }
-                    ]
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Fairytale I - Growing Pains",
-                    "points": 2
-                },
-                {
-                    "name": "Fairytale II - Cure a Queen",
-                    "points": 3
-                },
-                {
-                    "name": "A Porcine of Interest",
+                    "name": "Witch's Potion",
                     "points": 1
                 }
             ],
@@ -1033,36 +852,33 @@
                     }
                 },
                 {
-                    "name": "Obtain a Yellow Bead",
-                    "taskID": "obtain_yellow_bead",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
+                    "name": "Equip an Adamant Chainbody",
+                    "taskID": "equip_adamant_chainbody",
+                    "category": "Defence",
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Yellow Bead"],
-                            "item_ids": [1472]
+                            "item": ["Adamant Chainbody"],
+                            "item_ids": [1111]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Level 20 Dark Wizard 1 Hit",
-                    "taskID": "defeat_level_20_dark_wizard_1_hit",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "target_npc": {
-                        "npc": ["Wizard"],
-                        "npc_ids": [510, 5088, 5089],
-                        "quantity": [1]
-                    },
-                    
-                    "constraints": {
-                        "time_in_ticks": [1]
-                    }
-                }         
+                    "name": "Equip a Mithril Chainbody",
+                    "taskID": "equip_mithril_chainbody",
+                    "category": "Defence",
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mithril Chainbody"],
+                            "item_ids": [1109]
+                        }
+                    ]
+                }        
             ],
             "is_completed": false
         },
