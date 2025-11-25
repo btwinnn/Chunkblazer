@@ -578,64 +578,66 @@
                 "category": "Unlock",
                 "completion_type": "VARBIT_CHECK",
                 "base_points": 4,
-                "assignment_weight": 10,                   
-                "constraints": [
-                    {                       
-                    "varbit_id": 591,        
-                    "required_value": 1,      
-                    "description": "One by one"
-                    },
-                    {                       
-                    "varbit_id": 597,        
-                    "required_value": 1,      
-                    "description": "Let them fight"
-                    },
-                    {                       
-                    "varbit_id": 594,        
-                    "required_value": 1,      
-                    "description": "Elemental Company"
-                    },
-                    {                       
-                    "varbit_id": 590,        
-                    "required_value": 1,      
-                    "description": "Royal Titan Adept"
-                    },
-                    {                       
-                    "varbit_id": 598,        
-                    "required_value": 1,      
-                    "description": "It takes too long"
-                    },
-                    {                       
-                    "varbit_id": 589,        
-                    "required_value": 1,      
-                    "description": "Royal Titan Champion"
-                    },
-                    {                       
-                    "varbit_id": 593,        
-                    "required_value": 1,      
-                    "description": "Titan Killer"
-                    },
-                    {                       
-                    "varbit_id": 595,        
-                    "required_value": 1,      
-                    "description": "I need room"
-                    },
-                    {                       
-                    "varbit_id": 592,        
-                    "required_value": 1,      
-                    "description": "Royal Titan Speed-Runner"
-                    },
-                    {                       
-                    "varbit_id": 588,        
-                    "required_value": 1,      
-                    "description": "Perfect Royal Titans"
-                    },
-                    {                       
-                    "varbit_id": 596,        
-                    "required_value": 1,      
-                    "description": "No time to pray"
-                    }
-                ]
+                "assignment_weight": 10,
+                "varbit_boolean": 1, 
+                "boss": "Royal Titans",                 
+                "constraints": [                   
+                        {                       
+                        "varbit_id": 591,                                   
+                        "description": "One by one", 
+                        "tier": "Easy"
+                        },
+                        {                       
+                        "varbit_id": 597,              
+                        "description": "Let them fight",
+                        "tier": "Easy"
+                        },
+                        {                       
+                        "varbit_id": 594,             
+                        "description": "Elemental Company",
+                        "tier": "Easy"
+                        },
+                        {                       
+                        "varbit_id": 590,              
+                        "description": "Royal Titan Adept",
+                        "tier": "Medium"
+                        },
+                        {                       
+                        "varbit_id": 598,             
+                        "description": "It takes too long",
+                        "tier": "Medium"
+                        },
+                        {                       
+                        "varbit_id": 589,            
+                        "description": "Royal Titan Champion",
+                        "tier": "Medium"
+                        },
+                        {                       
+                        "varbit_id": 593,             
+                        "description": "Titan Killer",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 595,           
+                        "description": "I need room",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 592,             
+                        "description": "Royal Titan Speed-Runner",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 588,             
+                        "description": "Perfect Royal Titans",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 596,             
+                        "description": "No time to pray",
+                        "tier": "Elite"
+                        }
+                    ]
                 },
                 {
                     "name": "Defeat the Awakened Leviathan",
@@ -1765,7 +1767,7 @@
                 "assignment_weight": 8,                   
                 "constraints": {                       
                     "varbit_id": 699,        
-                    "required_value": 1,      
+                    "varbit_boolean": 1,      
                     "description": "Complete the Varrock Museum Quiz"
                     }
                 },
@@ -1778,7 +1780,7 @@
                 "assignment_weight": 8,
                 "constraints": {                       
                     "varp_id": 1438,        
-                    "required_value": 100,      
+                    "varp_value": 100,      
                     "description": "Obtain 100 Varrock Museum Kudos"
                     }
                 },

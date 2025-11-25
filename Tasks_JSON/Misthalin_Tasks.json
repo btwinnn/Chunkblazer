@@ -502,7 +502,7 @@
                     "assignment_weight": 5,                   
                     "constraints": {                       
                         "varbit_id": 2061,        
-                        "required_value": 1,      
+                        "varbit_boolean": 1,      
                         "description": "Unlock status of Reptile Freezer"
                     }
                 },
@@ -1682,7 +1682,7 @@
                 "assignment_weight": 8,                   
                 "constraints": {                       
                     "varbit_id": 699,        
-                    "required_value": 1,      
+                    "varbit_boolean": 1,      
                     "description": "Complete the Varrock Museum Quiz"
                     }
                 },
@@ -1695,7 +1695,7 @@
                 "assignment_weight": 8,
                 "constraints": {                       
                     "varp_id": 1438,        
-                    "required_value": 100,      
+                    "varp_value": 100,      
                     "description": "Obtain 100 Varrock Museum Kudos"
                     }
                 },
@@ -2177,6 +2177,7 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 2,
                     "assignment_weight": 10,
+                    "boss": "Obor",
                     "target_npc": {
                         "npc": ["Obor"],
                         "npc_ids": [7416],
@@ -2190,6 +2191,7 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 3,
                     "assignment_weight": 8,
+                    "boss": "Obor",
                     "target_npc": {
                         "npc": ["Obor"],
                         "npc_ids": [7416],
@@ -2207,6 +2209,7 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 3,
                     "assignment_weight": 8,
+                    "boss": "Obor",
                     "target_npc": {
                         "npc": ["Obor"],
                         "npc_ids": [7416],
@@ -2224,6 +2227,7 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 3,
                     "assignment_weight": 8,
+                    "boss": "Obor",
                     "target_npc": {
                         "npc": ["Obor"],
                         "npc_ids": [7416],
@@ -2265,6 +2269,7 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 4,
                     "assignment_weight": 8,
+                    "boss": "Obor",
                     "target_npc": {
                         "npc": ["Obor"],
                         "npc_ids": [7416],
@@ -2359,6 +2364,7 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 3,
                     "assignment_weight": 10,
+                    "boss": "Scurrius",
                     "target_npc": {
                         "npc": ["Scurrius"],
                         "npc_ids": [7222],
@@ -2372,6 +2378,7 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 4,
                     "assignment_weight": 5,
+                    "boss": "Scurrius",
                     "target_npc": {
                         "npc": ["Scurrius"],
                         "npc_ids": [7222],
@@ -2389,6 +2396,7 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 4,
                     "assignment_weight": 5,
+                    "boss": "Scurrius",
                     "target_npc": {
                         "npc": ["Scurrius"],
                         "npc_ids": [7222],
@@ -2406,6 +2414,7 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 2,
                     "assignment_weight": 10,
+                    "boss": "Bryophyta",
                     "target_npc": {
                         "npc": ["Bryophyta"],
                         "npc_ids": [8195],
@@ -2419,6 +2428,7 @@
                     "completion_type": "OBTAIN",
                     "base_points": 3,
                     "assignment_weight": 8,
+                    "boss": "Scurrius",
                     "required_items": [
                             {
                                 "item": ["Scurrius' Spine"],
@@ -2434,6 +2444,7 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 3,
                     "assignment_weight": 5,
+                    "boss": "Bryophyta",
                     "target_npc": {
                         "npc": ["Bryophyta"],
                         "npc_ids": [8195],
@@ -2451,8 +2462,9 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 4,
                     "assignment_weight": 5,
+                    "boss": "Bryophyta",
                     "target_npc": {
-                        "npc": ["Obor"],
+                        "npc": ["Bryophyta"],
                         "npc_ids": [8195],
                         "quantity": [1]
                     }, 
@@ -2469,6 +2481,7 @@
                     "completion_type": "OBTAIN",
                     "base_points": 2,
                     "assignment_weight": 8,
+                    "boss": "Bryophyta",
                     "required_items": [
                             {
                                 "item": ["Bryophyta's Essence"],
