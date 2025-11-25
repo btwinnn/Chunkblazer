@@ -639,185 +639,149 @@
                         }
                     ]
                 },
-                {
-                    "name": "Defeat the Awakened Leviathan",
-                    "taskID": "defeat_awakened_leviathan",
+                {                           
+                    "name": "Defeat the Royal Titans",
+                    "taskID": "defeat_royal_titans",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "boss": "royal Titans",
+                    "target_npc": {
+                        "npc": ["Royal Titans"],
+                        "npc_ids": [12596, 14148, 14149, 14147],
+                        "quantity": [1, 50]
+                    }
+                },
+                {                           
+                    "name": "Defeat Royal Titans with only a Weapon Equipped",
+                    "taskID": "defeat_royal_titans_weapon_only",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
-                    "assignment_weight": 1,
+                    "assignment_weight": 8,
+                    "boss": "Royal Titans",
                     "target_npc": {
-                        "npc": ["Awakened Leviathan"],
-                        "npc_ids": [12214],
+                        "npc": ["Royal Titans"],
+                        "npc_ids": [12596, 14148, 14149, 14147],
                         "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
                     }
                 },
                 {
-                    "name": "Craft some Chaos Runes",
-                    "taskID": "craft_chaos_runes",
-                    "category": "Runecrafting",
-                    "level": 35,
-                    "completion_type": "RUNECRAFTING",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Chaos Rune",
-                        "item_ids": [562],
-                        "action": "obtain",
-                        "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Blue Wizard Robe",
-                    "taskID": "obtain_blue_wizard_robe",
+                    "name": "Obtain a Twinflame Staff",
+                    "taskID": "obtain_twinflame_staff",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "base_points": 4,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": ["Blue Wizard Robe"],
-                            "item_ids": [577]
+                            "item": ["Twinflame Staff"],
+                            "item_ids": [30634]
                         }
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code DIS",
-                    "taskID": "fairy_ring_CLP",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
-                {
-                    "name": "Equip a Splitbark Set",
-                    "taskID": "equip_splitbark_set",
-                    "category": "Defence",
-                    "completion_type": "EQUIP",
-                    "base_points": 3,
+                    "name": "Obtain the Ice Element Staff Crown",
+                    "taskID": "obtain_ice_element_staff_crown",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Splitbark Helm"],
-                            "item_ids": [3385]
-                        },
-                        {
-                            "item": ["Splitbark Body"],
-                            "item_ids": [3387]
-                        },
-                        {
-                            "item": ["Splitbark Legs"],
-                            "item_ids": [3389]
-                        },
-                        {
-                            "item": ["Splitbark Gauntlets"],
-                            "item_ids": [3391]
-                        },
-                        {
-                            "item": ["Splitbark Boots"],
-                            "item_ids": [3393]
+                            "item": ["Ice Element Staff Crown"],
+                            "item_ids": [30628]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Level 9 Wizard in 6 Seconds",
-                    "taskID": "defeat_level_9_wizard_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
+                    "name": "Obtain the Fire Element Staff Crown",
+                    "taskID": "obtain_fire_element_staff_crown",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Fire Element Staff Crown"],
+                            "item_ids": [30631]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Deadeye Prayer Scroll",
+                    "taskID": "obtain_deadeye_prayer_scroll",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Deadeye Prayer Scroll"],
+                            "item_ids": [30626]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Mystic Vigour Prayer Scroll",
+                    "taskID": "obtain_mystic_vigour_prayer_scroll",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Mystic Vigour Prayer Scroll"],
+                            "item_ids": [30627]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Ice Warrior on Task",
+                    "taskID": "defeat_ice_warrior_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "target_npc": {
-                        "npc": ["Wizard"],
-                        "npc_ids": [3257],
+                        "npc": ["Ice Warrior"],
+                        "npc_ids": [2842, 2851, 2841, 13802],
                         "quantity": [1]
-                    },
-                    
-                    "constraints": {
-                        "time_in_ticks": [10]
                     }
                 },
                 {
-                    "name": "Obtain a Colossal Pouch",
-                    "taskID": "obtain_colossal_pouch",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": ["Colossal Pouch"],
-                            "item_ids": [26784],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain Rune Essence",
-                    "taskID": "obtain_rune_essence",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
+                    "name": "Defeat a Level 53 Ice Giant on Task",
+                    "taskID": "defeat_level_53_ice_giant_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
                     "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Rune Essence"],
-                            "item_ids": [1436],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Abyssal Lantern",
-                    "taskID": "obtain_abyssal_lantern",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Abyssal Lantern Unlit"],
-                            "item_ids": [26822],
-                            "quantity": [1]
-                        }
-                    ]
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Ice Giant"],
+                        "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797],
+                        "quantity": [1]
+                    }
                 },               
                 {
-                    "name": "Equip the Raiments of the Eye Set",
-                    "taskID": "equip_raiments_of_eye_set",
-                    "category": "Runecrafting",
-                    "level": 1,
+                    "name": "Equip a Dragonfire Shield",
+                    "taskID": "equip_dragonfire_shield",
+                    "category": "Defence",
                     "completion_type": "EQUIP",
-                    "base_points": 5,
-                    "assignment_weight": 10,
+                    "base_points": 3,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
-                            "item": ["Hat of the Eye"],
-                            "item_ids": [26850, 26858, 26864, 26870]
-                        },
-                        {
-                            "item": ["Robe Bottoms of the Eye"],
-                            "item_ids": [26854, 26862, 26868, 26874
-                        ]
-                        },
-                        {
-                            "item": ["Robe top of the Eye"],
-                            "item_ids": [26852, 26860, 26866, 26872]
-                        },
-                        {
-                            "item": ["Boots of the Eye"],
-                            "item_ids": [26856]
+                            "item": ["Dragonfire Shield"],
+                            "item_ids": [11283, 11284]
                         }
                     ]
                 }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Imp Catcher",
-                    "points": 1
-                }
-            ],
+            ],          
             "is_completed": false
         },
         {
