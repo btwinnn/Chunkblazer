@@ -732,7 +732,7 @@
             "tasks": [
                 {
                     "name": "Defeat a Level 82 Lesser Demon",
-                    "taskID": "deafeat_level_82_lesser_demon",
+                    "taskID": "defeat_level_82_lesser_demon",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

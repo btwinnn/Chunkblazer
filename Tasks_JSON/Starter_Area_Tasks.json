@@ -331,7 +331,7 @@
         },
         {
           "name": "Kill a Chicken in 1 Hit",
-          "taskID": "deafeat_chicken_fast",
+          "taskID": "defeat_chicken_fast",
           "category": "Combat",
           "completion_type": "NPC_Kill",
           "base_points": 1,
@@ -911,7 +911,7 @@
         },
         {
           "name": "Kill a man in 5 Seconds",
-          "taskID": "deafeat_man_fast",
+          "taskID": "defeat_man_fast",
           "category": "Combat",
           "level": 2,
           "completion_type": "NPC_Kill",
@@ -1091,7 +1091,7 @@
         },
         {
           "name": "Defeat some Al Kharid Warriors",
-          "taskID": "deafeat_al_kharid_warrior",
+          "taskID": "defeat_al_kharid_warrior",
           "category": "Combat",
           "level": 9,
           "completion_type": "NPC_Kill",

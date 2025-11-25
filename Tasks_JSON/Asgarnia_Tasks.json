@@ -561,7 +561,7 @@
             "tasks": [
                 {
                     "name": "Defeat some Skeletal Wyverns",
-                    "taskID": "deafeat_skeletal_wyvern",
+                    "taskID": "defeat_skeletal_wyvern",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 3,
@@ -785,118 +785,190 @@
             "is_completed": false
         },
         {
-            "region_id": [12852],
-            "Friendly_Name": "Dark Wizards' Stone Table",
-            "neighbor_ids": [12853, 13108, 12851, 12596],
+            "region_id": [11571],
+            "Friendly_Name": "Crafting Guild",
+            "neighbor_ids": [11570, 11827, 11315, 11572],
             "tasks": [
                 {
-                    "name": "Defeat a Level 20 Dark Wizard",
-                    "taskID": "defeat_level_20_dark_wizard",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "name": "Mix a Prayer Potion",
+                    "taskID": "mix_prayer_potion",
+                    "category": "Herblore",
+                    "level": 38,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                     "required_items": [
+                        {
+                            "item": ["Prayer Potion(3)", "Prayer Potion(4)"],
+                            "item_ids": [139, 2434]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Black Dragon Leather",
+                    "taskID": "obtain_black_dragon_leather",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
                     "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Dark Wizard Level 20"],
-                        "npc_ids": [510, 5088, 5089],
-                        "quantity": [1]
-                    }
+                    "required_items": [
+                        {
+                            "item": ["Black Dragon Leather"],
+                            "item_ids": [2509]
+                        }
+                    ]
                 },
                 {
-                    "name": "Defeat a Level 20 Dark Wizard in 19 Seconds",
-                    "taskID": "defeat_level_20_dark_wizard_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Dark Wizard Level 20"],
-                        "npc_ids": [510, 5088, 5089],
-                        "quantity": [1]
-                    },
-                    
-                    "constraints": {
-                        "time_in_ticks": [32]
-                    }
-                },
-                {
-                    "name": "Use the Agility Fence Jump Shortcut",
-                    "taskID": "agility_fence_jump",
-                    "category": "Agility",
-                    "level": 13,
-                    "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
-                {
-                    "name": "Obtain a Fire Talisman",
-                    "taskID": "obtain_fire_talisman",
+                    "name": "Obtain Green Dragon Leather",
+                    "taskID": "obtain_green_dragon_leather",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Fire Talisman"],
-                            "item_ids": [1442]
+                            "item": ["Green Dragon Leather"],
+                            "item_ids": [1745]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain a Black Robe",
-                    "taskID": "obtain_black_robe",
+                    "name": "Obtain Blue Dragon Leather",
+                    "taskID": "obtain_blue_dragon_leather",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Black Robe"],
-                            "item_ids": [581]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a some Dark Wizards",
-                    "taskID": "defeat_some_dark_wizards",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Dark Wizard"],
-                        "npc_ids": [512, 5086, 5087, 2058, 2059, 510, 5088, 5089, 2057, 2056],
-                        "quantity": [1, 50]
-                    }
-                },
-                {
-                    "name": "Equip an Adamant Chainbody",
-                    "taskID": "equip_adamant_chainbody",
-                    "category": "Defence",
-                    "completion_type": "EQUIP",
                     "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Adamant Chainbody"],
-                            "item_ids": [1111]
+                            "item": ["Blue Dragon Leather"],
+                            "item_ids": [2505]
                         }
                     ]
                 },
                 {
-                    "name": "Equip a Mithril Chainbody",
-                    "taskID": "equip_mithril_chainbody",
-                    "category": "Defence",
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
+                    "name": "Obtain Red Dragon Leather",
+                    "taskID": "obtain_red_dragon_leather",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Mithril Chainbody"],
-                            "item_ids": [1109]
+                            "item": ["Red Dragon Leather"],
+                            "item_ids": [2507]
                         }
                     ]
-                }        
+                },
+                {
+                    "name": "Mix a Strength Potion",
+                    "taskID": "mix_strength_potion",
+                    "category": "Herblore",
+                    "level": 12,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                     "required_items": [
+                        {
+                            "item": ["Strength Potion(3)", "Strength Potion(4)"],
+                            "item_ids": [115, 113]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some Hobgoblins",
+                    "taskID": "defeat_hobgoblins",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hobgoblin"],
+                        "npc_ids": [3354, 132, 3049, 2241, 3050, 3286, 3289, 3287, 3288],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Hobgoblin in 15 Seconds",
+                    "taskID": "defeat_hobgoblin_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hobgoblin"],
+                        "npc_ids": [3354, 132, 3049, 2241, 3050, 3286, 3289, 3287, 3288],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [25]
+                    }
+                },
+                {
+                    "name": "Craft a Black D'hide Body",
+                    "taskID": "craft_black_d'hide'_body",
+                    "category": "Crafting",
+                    "level": 84,
+                    "completion_type": "CRAFTING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Black D'hide Body"],
+                            "item_ids": [2503],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Red D'hide Body",
+                    "taskID": "craft_red_d'hide'_body",
+                    "category": "Crafting",
+                    "level": 77,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Red D'hide Body"],
+                            "item_ids": [2501],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Blue D'hide Body",
+                    "taskID": "craft_blue_d'hide'_body",
+                    "category": "Crafting",
+                    "level": 71,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Blue D'hide Body"],
+                            "item_ids": [2499],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Green D'hide Body",
+                    "taskID": "craft_green_d'hide'_body",
+                    "category": "Crafting",
+                    "level": 63,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Green D'hide Body"],
+                            "item_ids": [1135],
+                            "quantity": [1]
+                        }
+                    ]
+                }    
             ],
             "is_completed": false
         },
