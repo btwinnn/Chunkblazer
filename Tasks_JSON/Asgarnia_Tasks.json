@@ -555,35 +555,87 @@
             "is_completed": false
         },
         {
-            "region_id": [12337, 12437, 14483, 14484, 8036, 8292,8291],
-            "Friendly_Name": "Wizards' Tower",
-            "neighbor_ids": [12081, 12338, 12593, 12336],
+            "region_id": [11824],
+            "Friendly_Name": "Mudskipper Point",
+            "neighbor_ids": [11823, 12080, 11568, 11825],
             "tasks": [
                 {
-                    "name": "Defeat a Level 82 Lesser Demon",
-                    "taskID": "deafeat_level_82_lesser_demon",
+                    "name": "Defeat some Skeletal Wyverns",
+                    "taskID": "deafeat_skeletal_wyvern",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "base_points": 3,
+                    "assignment_weight": 10,
                     "target_npc": {
-                        "npc": ["Lesser Demon"],
-                        "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
-                        "quantity": [1]
+                        "npc": ["Skeletal Wyvern"],
+                        "npc_ids": [468, 465, 466, 467],
+                        "quantity": [1, 25]
                     }
                 },
                 {
-                    "name": "Defeat The Leviathan",
-                    "taskID": "defeat_leviathan",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 3,
-                    "target_npc": {
-                        "npc": ["Leviathan"],
-                        "npc_ids": [12215, 12219],
-                        "quantity": [1]
+                "name": "Complete the Royal Titans Combat Achievements",
+                "taskID": "complete_royal_titan_CAs",
+                "category": "Unlock",
+                "completion_type": "VARBIT_CHECK",
+                "base_points": 4,
+                "assignment_weight": 10,                   
+                "constraints": [
+                    {                       
+                    "varbit_id": 591,        
+                    "required_value": 1,      
+                    "description": "One by one"
+                    },
+                    {                       
+                    "varbit_id": 597,        
+                    "required_value": 1,      
+                    "description": "Let them fight"
+                    },
+                    {                       
+                    "varbit_id": 594,        
+                    "required_value": 1,      
+                    "description": "Elemental Company"
+                    },
+                    {                       
+                    "varbit_id": 590,        
+                    "required_value": 1,      
+                    "description": "Royal Titan Adept"
+                    },
+                    {                       
+                    "varbit_id": 598,        
+                    "required_value": 1,      
+                    "description": "It takes too long"
+                    },
+                    {                       
+                    "varbit_id": 589,        
+                    "required_value": 1,      
+                    "description": "Royal Titan Champion"
+                    },
+                    {                       
+                    "varbit_id": 593,        
+                    "required_value": 1,      
+                    "description": "Titan Killer"
+                    },
+                    {                       
+                    "varbit_id": 595,        
+                    "required_value": 1,      
+                    "description": "I need room"
+                    },
+                    {                       
+                    "varbit_id": 592,        
+                    "required_value": 1,      
+                    "description": "Royal Titan Speed-Runner"
+                    },
+                    {                       
+                    "varbit_id": 588,        
+                    "required_value": 1,      
+                    "description": "Perfect Royal Titans"
+                    },
+                    {                       
+                    "varbit_id": 596,        
+                    "required_value": 1,      
+                    "description": "No time to pray"
                     }
+                ]
                 },
                 {
                     "name": "Defeat the Awakened Leviathan",
