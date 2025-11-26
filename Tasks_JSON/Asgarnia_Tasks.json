@@ -368,6 +368,7 @@
                     "name": "Mine some Iron Ore",
                     "taskID": "mine_iron_ore",
                     "category": "Mining",
+                    "level": 15,
                     "completion_type": "MINING",
                     "base_points": 1,
                     "assignment_weight": 8,
@@ -1406,207 +1407,252 @@
                     "is_completed": false
         },
         {
-            "region_id": [13365],
-            "Friendly_Name": "Digsite",
-            "neighbor_ids": [13364, 13621, 13109, 13366],
+            "region_id": [12084],
+            "Friendly_Name": "East Falador",
+            "neighbor_ids": [12083, 12340, 12085, 11828],
             "tasks": [
                 {
-                "name": "Travel to Fossil Island",
-                "taskID": "travel_fossil_island",
-                "category": "Travel",
-                "completion_type": "TRAVEL",
-                "base_points": 1,
-                "assignment_weight": 10
-                },
-                {
-                    "name": "Obtain Charcoal",
-                    "taskID": "obtain_charcoal",
+                    "name": "Obtain Mining Gloves",
+                    "taskID": "obtain_mining_gloves",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "base_points": 3,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Charcoal"],
-                            "item_ids": [973],
+                            "item": ["Mining Gloves"],
+                            "item_ids": [21343],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain a Digsite Pendant",
-                    "taskID": "obtain_digsite_pendant",
+                    "name": "Obtain Superior Mining Gloves",
+                    "taskID": "obtain_superior_mining_gloves",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 2,
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Superior Mining Gloves"],
+                            "item_ids": [21345],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Expert Mining Gloves",
+                    "taskID": "obtain_expert_mining_gloves",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Expert Mining Gloves"],
+                            "item_ids": [21392],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Amethyst",
+                    "taskID": "mine_amethyst",
+                    "category": "Mining",
+                    "level": 92,
+                    "completion_type": "MINING",
+                    "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": ["Digsite Pendant"],
-                            "item_ids": [11190, 11191, 11192, 11193, 11194],
-                            "quantity": [1]
+                            "item": ["Amethyst"],
+                            "item_ids": [21347],
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain a Digsite Vase",
-                    "taskID": "obtain_digsite_vase",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Vase(Digsite)"],
-                            "item_ids": [3734],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Dig some Soil",
-                    "taskID": "dig_soil",
+                    "name": "Mine some Runite Ore",
+                    "taskID": "mine_rune_ore",
                     "category": "Mining",
-                    "level": 1,
+                    "level": 85,
                     "completion_type": "MINING",
-                    "base_points": 1,
-                    "assignment_weight": 8
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Runite Ore"],
+                            "item_ids": [451],
+                            "quantity": [1, 25]
+                        }
+                    ]
                 },
                 {
-                    "name": "Obtain an Old Tooth",
-                    "taskID": "obtain_old_tooth",
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Stardust",
+                    "taskID": "obtain_stardust",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Old Tooth"],
-                            "item_ids": [695],
+                            "item": ["Stardust"],
+                            "item_ids": [25527],
+                            "quantity": [250, 5000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Celestial Ring(uncharged)",
+                    "taskID": "obtain_celestial_ring_(uncharged)",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Celestial Ring(uncharged)"],
+                            "item_ids": [25539],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Equip a Black Med Helm",
-                    "taskID": "equip_black_med_helm",
-                    "category": "Defence",
-                    "level": 10,
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Black Med Helm"],
-                            "item_ids": [1151]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Ancient Talisman",
-                    "taskID": "obtain_ancient_talisman",
+                    "name": "Buy a Gem Bag from Dusuri",
+                    "taskID": "obtain_gem_bag_stardust",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Ancient Talisman"],
-                            "item_ids": [681]
+                            "item": ["Bag full of Gems#stardust"],
+                            "item_ids": [25537],
+                            "quantity": [1]
                         }
                     ]
-                },
-                {
-                    "name": "Defeat a Level 22 Skeleton in 12 Seconds",
-                    "taskID": "defeat_level_22_skeleton_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Skeleton Level 22"],
-                        "npc_ids": [70, 71, 72, 73],
-                        "quantity": [1]
-                    },
-                    
-                    "constraints": {
-                        "time_in_ticks": [20]
-                    }
                 }, 
                 {
-                    "name": "Defeat some Level 22 Skeletons",
-                    "taskID": "defeat_level_22_skeletons",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
+                    "name": "Buy some Star Fragments",
+                    "taskID": "obtain_star_fragment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Skeleton Level 22"],
-                        "npc_ids": [70, 71, 72, 73],
-                        "quantity": [1, 25]
-                    }
-                },
-                {
-                    "name": "Defeat a Level 22 Skeleton with nothing Equipped",
-                    "taskID": "defeat_level_22_skeleton_naked",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Skeleton Level 22"],
-                        "npc_ids": [70, 71, 72, 73],
-                        "quantity": [1]
-                    },
-
-                    "constraints": {
-                        "must_be_empty_slots": [
-                        "HEAD", "CAPE", "AMULET", "BODY", "SHIELD", "LEGS", 
-                        "GLOVES", "BOOTS", "RING", "AMMO", "WEAPON"
-                        ]
-                    }
-                    
-                },
-                {
-                "name": "Build an Easy STASH Unit in the Exam Centre",
-                "taskID": "build_easy_stash_exam_centre",
-                "category": "Construction",
-                "level": 27,
-                "completion_type": "CONSTRUCTION",
-                "base_points": 1,
-                "assignment_weight": 8,
-                "required_items": [
+                    "required_items": [
                         {
-                        "item": "Plank",
-                        "item_ids": [960]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
-                        {
-                        "object": "Easy STASH Unit (inconspicuous bush)",
-                        "object_id": [28980],
-                        "interaction_type": "use_item_on"
+                            "item": ["Star Fragment"],
+                            "item_ids": [25547],
+                            "quantity": [1, 4]
                         }
                     ]
                 },
-                {                    
-                    "name": "Pickpocket a Digsite Worker",
-                    "taskID": "pickpocket_digsite_worker",
-                    "category": "Thieving",
-                    "level": 25,
-                    "completion_type": "THIEVING",
+                {
+                    "name": "Buy a Soft Clay Pack from Dusuri",
+                    "taskID": "obtain_soft_clay_pack_stardust",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "target_npc": {
-                    "npc": "Digsite Worker",
-                    "npc_ids": [3628, 3630, 3631]                    
+                    "required_items": [
+                        {
+                            "item": ["Soft Clay Pack#stardust"],
+                            "item_ids": [25533],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete some Laps of the Falador Rooftop Course",
+                    "taskID": "complete_falador_roof",
+                    "category": "Agility",
+                    "level": 50,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Falador Rooftop Edge"],
+                        "object_id": [14925], 
+                        "quantity": [1, 20]
                     }
-                }
+                },
+                {
+                    "name": "Obtain Amy's Saw",
+                    "taskID": "obtain_amy's_saw",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Amy's Saw"],
+                            "item_ids": [24880],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Hosidius Blueprints",
+                    "taskID": "obtain_hosidius_blueprints",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Amy's Saw"],
+                            "item_ids": [24880],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Carpenter Set",
+                    "taskID": "obtain_carpenter_set",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Carpenter's Shirt"],
+                            "item_ids": [24874],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Carpenter's Boots"],
+                            "item_ids": [24878],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Carpenter's Helmet"],
+                            "item_ids": [24872],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Carpenter's Trousers"],
+                            "item_ids": [24876],
+                            "quantity": [1]
+                        }
+                    ]
+                }              
             ],                                                  
             "is_completed": false
         },
@@ -1940,8 +1986,9 @@
                     "name": "Mine some Pure Essence",
                     "taskID": "mine_pure_essence",
                     "category": "Mining",
+                    "level": 30,
                     "completion_type": "MINING",
-                    "base_points": 30,
+                    "base_points": 3,
                     "assignment_weight": 8,
                     "required_items": [
                         {
@@ -2887,6 +2934,7 @@
                     "name": "Mine some Limestone",
                     "taskID": "mine_limestone",
                     "category": "Mining",
+                    "level": 10,
                     "completion_type": "MINING",
                     "base_points": 1,
                     "assignment_weight": 8,

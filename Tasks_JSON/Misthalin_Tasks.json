@@ -1065,6 +1065,7 @@
                     "name": "Mine some Iron Ore",
                     "taskID": "mine_iron_ore",
                     "category": "Mining",
+                    "level": 15,
                     "completion_type": "MINING",
                     "base_points": 1,
                     "assignment_weight": 8,
@@ -1806,8 +1807,9 @@
                     "name": "Mine some Pure Essence",
                     "taskID": "mine_pure_essence",
                     "category": "Mining",
+                    "level": 30,
                     "completion_type": "MINING",
-                    "base_points": 30,
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
                         {
@@ -2766,6 +2768,7 @@
                     "name": "Mine some Limestone",
                     "taskID": "mine_limestone",
                     "category": "Mining",
+                    "level": 10,
                     "completion_type": "MINING",
                     "base_points": 1,
                     "assignment_weight": 8,
