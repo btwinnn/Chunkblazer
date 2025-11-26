@@ -1022,7 +1022,7 @@
                     "target_npc": {
                         "npc": ["Black Knight"],
                         "npc_ids": [11953, 517, 4331, 11952, 516],
-                        "quantity": [1, 1300]
+                        "quantity": [1, 1200]
                     }
                 },               
                 {
@@ -1177,228 +1177,229 @@
         },
         {
             "region_id": [13364],
-            "Friendly_Name": "Exam Centre",
-            "neighbor_ids": [13108, 13363, 13620, 13365],
+            "Friendly_Name": "West Falador",
+            "neighbor_ids": [11829, 12084, 11827, 11572],
             "tasks": [
                 {
-                "name": "Build a Hard STASH Unit in the Exam Centre",
-                "taskID": "build_hard_stash_exam_centre",
-                "category": "Construction",
-                "level": 55,
-                "completion_type": "CONSTRUCTION",
-                "base_points": 2,
+                "name": "Build a Fire of Eternal Light in the Mole Lair",
+                "taskID": "build_fire_eternal_light_mole_lair",
+                "category": "Firemaking",
+                "level": 66,
+                "completion_type": "FIREMAKING",
+                "base_points": 3,
                 "assignment_weight": 8,
                 "required_items": [
                         {
-                        "item": "Teak Plank",
-                        "item_ids": [8780]
+                            "item": "Mahogany Plank",
+                            "item_ids": [8782],
+                            "quantity": [2]            
                         },
                         {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
+                            "item": "Steel Bar",
+                            "item_ids": [2353],
+                            "quantity": [2]            
+                        },
                         {
-                        "object": "Hard STASH Unit (crate)",
-                        "object_id": [29018],
-                        "interaction_type": "use_item_on"
+                            "item": "Efh Salt",
+                            "item_ids": [22595],
+                            "quantity": [100]            
+                        },
+                        {
+                            "item": "Te Salt",
+                            "item_ids": [22593],
+                            "quantity": [300]            
+                        },
+                        {
+                            "item": "Urt Salt",
+                            "item_ids": [22597],
+                            "quantity": [50]            
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat the Gaint Mole",
+                    "taskID": "defeat_giant_mole",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "boss": "Giant Mole",
+                    "target_npc": {
+                        "npc": ["Giant Mole"],
+                        "npc_ids": [5779],
+                        "quantity": [1]
+                    }
+                },
+                {                           
+                    "name": "Defeat the Giant Mole with only a Weapon Equipped",
+                    "taskID": "defeat_giant_mole_weapon_only",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "boss": "Giant Mole",
+                    "target_npc": {
+                        "npc": ["Giant Mole"],
+                        "npc_ids": [5779],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                    }
+                },
+                {
+                "name": "Complete the Giant Mole Combat Achievements",
+                "taskID": "complete_giant_mole_CAs",
+                "category": "Unlock",
+                "completion_type": "VARBIT_CHECK",
+                "base_points": 4,
+                "assignment_weight": 10,
+                "varbit_boolean": 1, 
+                "boss": "Cerberus",                 
+                "constraints": [                   
+                        {                       
+                        "varbit_id": 177,              
+                        "description": "Giant Mole Novice",
+                        "tier": "Easy"
+                        },
+                        {                       
+                        "varbit_id": 182,              
+                        "description": "Avoiding those Little Arms",
+                        "tier": "Medium"
+                        },
+                        {                       
+                        "varbit_id": 178,             
+                        "description": "Giant Mole Champion",
+                        "tier": "Medium"
+                        },
+                        {                       
+                        "varbit_id": 179,              
+                        "description": "Why are you Running?",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 181,             
+                        "description": "Whack-a-Mole",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 180,            
+                        "description": "Hard Hitter",
+                        "tier": "Elite"
+                        }                      
+                    ]
+                },
+                {
+                    "name": "Plant a Willow Sapling",
+                    "taskID": "plant_willow_sapling",
+                    "category": "Farming",
+                    "level": 30,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items":
+                        {
+                            "item": "Willow Sapling",
+                            "item_ids": [5371],
+                            "quantity": [1]
+                        } 
+                }, 
+                {
+                    "name": "Obtain some Mole Claws",
+                    "taskID": "obtain_mole_claw",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Mole Claw"],
+                            "item_ids": [7416],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Fletch a Longbow(u)",
-                    "taskID": "fletch_longbow(u)",
-                    "category": "Fletching",
+                    "name": "Obtain some Mole Skins",
+                    "taskID": "obtain_mole_skins",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Mole Skin"],
+                            "item_ids": [7418],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a White 2H Sword",
+                    "taskID": "equip_white_2h",
+                    "category": "Attack",
                     "level": 10,
-                    "completion_type": "FLETCHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Longbow(u)"],
-                            "item_ids": [48],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Fletch a Shortbow(u)",
-                    "taskID": "fletch_shortbow(u)",
-                    "category": "Fletching",
-                    "level": 5,
-                    "completion_type": "FLETCHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["shortbow(u)"],
-                            "item_ids": [50],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Craft an Unfired Bowl",
-                    "taskID": "craft_unfired_bowl",
-                    "category": "Crafting",
-                    "level": 8,
-                    "completion_type": "CRAFTING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Unfired Bowl"],
-                            "item_ids": [1791],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Craft an Unfired Cup",
-                    "taskID": "craft_unfired_cup",
-                    "category": "Crafting",
-                    "level": 3,
-                    "completion_type": "CRAFTING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Unfired Cup"],
-                            "item_ids": [28193],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Craft an Unfired Pie Dish",
-                    "taskID": "craft_unfired_pie_dish",
-                    "category": "Crafting",
-                    "level": 7,
-                    "completion_type": "CRAFTING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Unfired Pie Dish"],
-                            "item_ids": [1789],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Craft an Unfired Plant Pot",
-                    "taskID": "craft_unfired_plant_pot",
-                    "category": "Crafting",
-                    "level": 19,
-                    "completion_type": "CRAFTING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Unfired Plant Pot"],
-                            "item_ids": [5352],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Craft an Unfired Pot",
-                    "taskID": "craft_unfired_pot",
-                    "category": "Crafting",
-                    "level": 1,
-                    "completion_type": "CRAFTING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Unfired Pot"],
-                            "item_ids": [1787],
-                            "quantity": [1]
+                            "item": ["White 2H Sword"],
+                            "item_ids": [6609]
                         }
                     ]
                 }, 
                 {
-                    "name": "Craft an Pot Lid",
-                    "taskID": "craft_unfired_pot_lid",
-                    "category": "Crafting",
-                    "level": 25,
-                    "completion_type": "CRAFTING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "name": "Equip a White Platebody",
+                    "taskID": "equip_white_platebody",
+                    "category": "Defence",
+                    "level": 10,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Pot Lid"],
-                            "item_ids": [4438],
-                            "quantity": [1]
+                            "item": ["White Platebody"],
+                            "item_ids": [6617]
                         }
                     ]
                 },
                 {
-                    "name": "Fletch an Oak Shield",
-                    "taskID": "fletch_oak_shield",
-                    "category": "Fletching",
-                    "level": 27,
-                    "completion_type": "FLETCHING",
+                    "name": "Equip a White Med Helm",
+                    "taskID": "equip_white_med_helm",
+                    "category": "Defence",
+                    "level": 10,
+                    "completion_type": "EQUIP",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Oak Shield"],
-                            "item_ids": [22251],
-                            "quantity": [1]
+                            "item": ["White Med Helm"],
+                            "item_ids": [6621]
                         }
                     ]
-                },
-                {
-                "name": "Build an Easy STASH Unit in the Exam Centre",
-                "taskID": "build_easy_stash_exam_centre",
-                "category": "Construction",
-                "level": 27,
-                "completion_type": "CONSTRUCTION",
-                "base_points": 1,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Plank",
-                        "item_ids": [960]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
-                        {
-                        "object": "Easy STASH Unit (inconspicuous bush)",
-                        "object_id": [28980],
-                        "interaction_type": "use_item_on"
-                        }
-                    ]
-                },
-                {                    
-                    "name": "Pickpocket a Digsite Worker",
-                    "taskID": "pickpocket_digsite_worker",
-                    "category": "Thieving",
-                    "level": 25,
-                    "completion_type": "THIEVING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                    "npc": "Digsite Worker",
-                    "npc_ids": [3628, 3630, 3631]                    
-                    }
-                }                   
+                }                                 
                     ],
                     "optional_quests_unlocked": [
                         {
-                            "name": "The Dig Site",
+                            "name": "Black Knights' Fortress",
                             "points": 2
                         },
                         {
-                            "name": "Elemental Workshop II",
+                            "name": "Recruitment Drive",
+                            "points": 1
+                        },
+                        {
+                            "name": "The Knight's Sword",
+                            "points": 2
+                        },
+                        {
+                            "name": "The Slug Menace",
+                            "points": 2
+                        },
+                        {
+                            "name": "Wanted!",
                             "points": 2
                         }
                     ],                 

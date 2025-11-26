@@ -637,21 +637,12 @@
           "completion_type": "FARMING",
           "base_points": 1,
           "assignment_weight": 5,
-          "required_items": [
+          "required_items":
             {
               "item": "Oak Sapling",
               "item_ids": [5370],
               "quantity": [1]
             } 
-          ],
-          
-          "required_object": [      
-            {
-              "object_id": [8388, 8390, 8391],
-              "object_name": "Tree Patch",
-              "interaction_type": "use_item_on"
-            }
-          ]
         },     
         {
           "name": "Equip a Brass Necklace",
