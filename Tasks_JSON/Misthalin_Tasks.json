@@ -2168,7 +2168,7 @@
         {
             "region_id": [12342],
             "Friendly_Name": "Edgeville",
-            "neighbor_ids": [12598, 12341, 12086, 12343, 8748, 12605],
+            "neighbor_ids": [12598, 12341, 12086, 12343],
             "tasks": [
                 {                           
                     "name": "Defeat Obor",
@@ -2199,7 +2199,7 @@
                     }, 
                     
                     "constraints": {
-                        "time_in_ticks": [36]
+                        "time_in_ticks": [100]
                         }
                 },
                 {                           
@@ -2248,7 +2248,7 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Obtain the Giant Key",
+                    "name": "Obtain a Giant Key",
                     "taskID": "obtain_giant_key",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -2277,7 +2277,7 @@
                     }, 
                     
                     "constraints": {
-                        "time_in_ticks": [36],
+                        "time_in_ticks": [100],
                          "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
                         }
                 },
@@ -2295,12 +2295,12 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 2,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
                             "item": ["Hill Giant Club"],
                             "item_ids": [20756],
-                            "quantity": [1, 5]
+                            "quantity": [1]
                         }
                     ]
                 }                                        

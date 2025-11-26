@@ -973,194 +973,206 @@
             "is_completed": false
         },
         {
-            "region_id": [13108],
-            "Friendly_Name": "Varrock East Mine",
-            "neighbor_ids": [13364, 13107, 12852, 13109],
+            "region_id": [11572], 
+            "Friendly_Name": "Taverly Dungeon Entrance",
+            "neighbor_ids": [11571, 11828, 11573, 11316],
             "tasks": [
                 {
-                    "name": "Mine some Iron Ore",
-                    "taskID": "mine_iron_ore",
-                    "category": "Mining",
-                    "completion_type": "MINING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Iron Ore"],
-                            "item_ids": [440],
-                            "quantity": [1, 50]
-                        }
-                    ]
+                    "name": "Use the Level 70 Agility Pipe Shortcut",
+                    "taskID": "agility_level_70_pipe_squeeze",
+                    "category": "Agility",
+                    "level": 70,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5
                 },
                 {
-                    "name": "Defeat a White Unicorn",
-                    "taskID": "defeat_white_unicorn",
+                    "name": "Defeat some Blue Dragons",
+                    "taskID": "defeat_blue_dragons",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Unicorn"],
-                        "npc_ids": [2837, 14043],
-                        "quantity": [1]
+                        "npc": ["Blue Dragon"],
+                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
+                        "quantity": [1, 50]
                     }
                 },
                 {
-                    "name": "Mix an Anti-Poison Potion",
-                    "taskID": "mix_anti-poison",
-                    "category": "Herblore",
-                    "level": 5,
-                    "completion_type": "HERBLORE",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                     "required_items": [
-                        {
-                            "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Ensouled Unicorn Head",
-                    "taskID": "obtain_ensouled_unicorn_head",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Ensouled Unicorn Head"],
-                            "item_ids": [13465, 13466]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat some Black Bears",
-                    "taskID": "defeat_some_black_bears",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Black Bear"],
-                        "npc_ids": [2839],
-                        "quantity": [1, 25]
-                    }
-                },
-                {
-                    "name": "Defeat a Black Bear on Task",
-                    "taskID": "defeat_black_bear_on_task",
+                    "name": "Defeat a Blue Dragon on Task",
+                    "taskID": "defeat_blue_dragon_on_task",
                     "category": "Slayer",
                     "completion_type": "SLAYER",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "base_points": 2,
+                    "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Black Bear"],
-                        "npc_ids": [2839],
+                        "npc": ["Blue Dragon"],
+                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Obtain an Ensouled Bear Head",
-                    "taskID": "obtain_ensouled_bear_head",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Ensouled Bear Head"],
-                            "item_ids": [13462, 13463]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Unicorn in 13 Seconds",
-                    "taskID": "defeat_white_unicorn_fast",
+                    "name": "Defeat some Black Knights",
+                    "taskID": "defeat_some_black_knights",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "target_npc": {
-                        "npc": ["White Unicorn"],
-                        "npc_ids": [2837, 14043],
-                        "quantity": [1]
-                    },
-                    
-                    "constraints": {
-                        "time_in_ticks": [20]
+                        "npc": ["Black Knight"],
+                        "npc_ids": [11953, 517, 4331, 11952, 516],
+                        "quantity": [1, 1300]
                     }
-                }, 
+                },               
                 {
-                    "name": "Defeat a Level 6 Giant Rat with nothing Equipped",
-                    "taskID": "defeat_level_6_giant_rat_naked",
+                    "name": "Catch a Lava Eel",
+                    "taskID": "catch_lava_eel",
+                    "category": "Fishing",
+                    "level": 53,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Raw Lava Eel",
+                        "item_ids": [2148],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat Cerberus",
+                    "taskID": "defeat_cerberus",
+                    "category": "Slayer",
+                    "level": 91,
+                    "completion_type": "SLAYER",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "boss": "Cerberus",
+                    "target_npc": {
+                        "npc": ["Cerberus"],
+                        "npc_ids": [5862, 5863, 5866],
+                        "quantity": [1]
+                    }
+                },
+                {                           
+                    "name": "Defeat Cerberus in 80 Seconds",
+                    "taskID": "defeat_cerberus_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "boss":"Cerberus",
                     "target_npc": {
-                        "npc": ["Giant Rat"],
-                        "npc_ids": [2862, 2863, 2864],
+                        "npc": ["Cerberus"],
+                        "npc_ids": [5862, 5863, 5866],
                         "quantity": [1]
-                    },
-
-                    "constraints": {
-                        "must_be_empty_slots": [
-                        "HEAD", "CAPE", "AMULET", "BODY", "SHIELD", "LEGS", 
-                        "GLOVES", "BOOTS", "RING", "AMMO", "WEAPON"
-                        ]
-                    }
+                    }, 
                     
+                    "constraints": {
+                        "time_in_ticks": [134]
+                        }
                 },
                 {
-                    "name": "Obtain some Unicorn Horns",
-                    "taskID": "obtain_unicorn_horns",
+                    "name": "Obtain a Primordial Crystal",
+                    "taskID": "obtain_primordial_crystal",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "base_points": 5,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": ["Unicorn Horn"],
-                            "item_ids": [237],
-                            "quantity": [1,25]
+                            "item": ["Primordial Crystal"],
+                            "item_ids": [13231]
                         }
                     ]
                 },
                 {
-                    "name": "Talk to Guidor",
-                    "taskID": "talk_to_guidor",
-                    "category": "Dialogue",
-                    "completion_type": "NPC_DIALOGUE",
-                    "base_points": 1,
-                    "assignment_weight": 8,                  
-                    "target_npc": {
-                        "npc": ["Guidor"],
-                        "npc_ids": [1110]
-                    }
-                },
-                {
-                    "name": "Obtain Cadava Berries",
-                    "taskID": "obtain_cadava_berries",
+                    "name": "Obtain a Pegasian Crystal",
+                    "taskID": "obtain_pegasian_crystal",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Pegasian Crystal"],
+                            "item_ids": [13229]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Eternal Crystal",
+                    "taskID": "obtain_eternal_crystal",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Eternal Crystal"],
+                            "item_ids": [13227]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Smouldering Stone",
+                    "taskID": "obtain_smouldering_stone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Cadava Berries"],
-                            "item_ids": [753],
-                            "quantity": [1]
+                            "item": ["Smouldering Stone"],
+                            "item_ids": [13233]
                         }
                     ]
-                }
-                 ],
-            "optional_quests_unlocked": [
+                },
                 {
-                    "name": "What Lies Below",
-                    "points": 2
+                "name": "Complete the Cerberus Combat Achievements",
+                "taskID": "complete_cerberus_CAs",
+                "category": "Unlock",
+                "completion_type": "VARBIT_CHECK",
+                "base_points": 5,
+                "assignment_weight": 10,
+                "varbit_boolean": 1, 
+                "boss": "Cerberus",                 
+                "constraints": [                   
+                        {                       
+                        "varbit_id": 55,              
+                        "description": "Unrequired Antifire",
+                        "tier": "Elite"
+                        },
+                        {                       
+                        "varbit_id": 51,              
+                        "description": "Cerberus Veteran",
+                        "tier": "Elite"
+                        },
+                        {                       
+                        "varbit_id": 54,             
+                        "description": "Ghost Buster",
+                        "tier": "Elite"
+                        },
+                        {                       
+                        "varbit_id": 56,              
+                        "description": "Anti-Bite Mechanics",
+                        "tier": "Elite"
+                        },
+                        {                       
+                        "varbit_id": 52,             
+                        "description": "Cerberus Master",
+                        "tier": "Master"
+                        },
+                        {                       
+                        "varbit_id": 53,            
+                        "description": "Arooo No More",
+                        "tier": "Master"
+                        }                      
+                    ]
                 }
-            ],                 
+            ],                           
             "is_completed": false
         },
         {

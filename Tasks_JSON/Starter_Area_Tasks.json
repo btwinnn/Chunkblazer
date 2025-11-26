@@ -463,7 +463,6 @@
             {
               "item": "Raw Shrimp",
               "item_ids": [317],
-              "action": "obtain",
               "quantity": [5, 100]
             }
           ]
@@ -499,7 +498,6 @@
             {
               "item": "Shrimp",
               "item_ids": [315],
-              "action": "obtain",
               "quantity": [5, 25]
             }
           ]
