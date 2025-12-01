@@ -749,7 +749,8 @@
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
-                    "assignment_weight": 3,
+                    "assignment_weight": 10,
+                    "boss": "The Leviathan",
                     "target_npc": {
                         "npc": ["Leviathan"],
                         "npc_ids": [12215, 12219],
@@ -763,6 +764,7 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
                     "assignment_weight": 1,
+                    "boss": "The Leviathan",
                     "target_npc": {
                         "npc": ["Awakened Leviathan"],
                         "npc_ids": [12214],
@@ -787,16 +789,17 @@
                     ]
                 },
                 {
-                    "name": "Obtain a Blue Wizard Robe",
-                    "taskID": "obtain_blue_wizard_robe",
+                    "name": "Obtain a Venator Vestige",
+                    "taskID": "obtain_venator_vestige",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "boss": "The Leviathan",
                     "required_items": [
                         {
-                            "item": ["Blue Wizard Robe"],
-                            "item_ids": [577]
+                            "item": ["Venator Vestige"],
+                            "item_ids": [28283]
                         }
                     ]
                 },
@@ -856,16 +859,17 @@
                     }
                 },
                 {
-                    "name": "Obtain a Colossal Pouch",
-                    "taskID": "obtain_colossal_pouch",
+                    "name": "Obtain a Leviathan's Lure",
+                    "taskID": "obtain_leviathan's_lure",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 10,
+                    "boss": "The Leviathan",
                     "required_items": [
                         {
-                            "item": ["Colossal Pouch"],
-                            "item_ids": [26784],
+                            "item": ["Leviathan's Lure"],
+                            "item_ids": [28325],
                             "quantity": [1]
                         }
                     ]
