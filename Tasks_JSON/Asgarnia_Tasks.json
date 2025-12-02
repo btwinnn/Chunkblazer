@@ -2158,193 +2158,187 @@
                     "is_completed": false
         },
         {
-            "region_id": [12341],
-            "Friendly_Name": "Barbarian Village",
-            "neighbor_ids": [12597, 12340, 12085, 12342],
+            "region_id": [11572],
+            "Friendly_Name": "Dark Wizard's Tower",
+            "neighbor_ids": [11573, 11316, 11571, 11828],
             "tasks": [
-                {                           
-                    "name": "Catch some Raw Trout",
-                    "taskID": "catch_raw_trout",
-                    "category": "Fishing",
-                    "level": 20,
-                    "completion_type": "FISHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Raw Trout",
-                        "item_ids": [335],
-                        "quantity": [1, 100]
-                        }
-                    ]       
-                },
-                {                           
-                    "name": "Cook some Trout",
-                    "taskID": "cook_raw_trout",
-                    "category": "Cooking",
-                    "level": 15,
-                    "completion_type": "COOKING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Trout",
-                        "item_ids": [333],
-                        "quantity": [1, 100]
-                        }
-                    ]       
-                },
                 {
-                    "name": "Obtain Stronghold of Security Boots",
-                    "taskID": "obtain_stronghold_security_boots",
+                    "name": "Obtain a Water Talisman",
+                    "taskID": "Obtain_water_talisman",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
-                            {
-                                "item": ["Fancy Boots", "Fighting Boots", "Fancier Boots"],
-                                "item_ids": [9005, 9006, 28672],
-                                "quantity": [1]
-                            }
-                        ]
+                        {
+                        "item": "Water Talisman",
+                        "item_ids": [1444],
+                        "quantity": [1]
+                        }
+                    ]
                 },
                 {
-                    "name": "Defeat some Level 10 Barbarians",
-                    "taskID": "defeat_level_10_barbarians",
+                    "name": "Obtain a Fire Talisman",
+                    "taskID": "obtain_fire_talisman",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Fire Talisman"],
+                            "item_ids": [1442]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Earth Runes",
+                    "taskID": "Obtain_earth_runes",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Earth Rune",
+                        "item_ids": [557],
+                        "quantity": [500, 5000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Fire Runes",
+                    "taskID": "Obtain_Fire_runes",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Fire Rune",
+                        "item_ids": [554],
+                        "quantity": [500, 5000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Air Runes",
+                    "taskID": "Obtain_air_runes",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Air Rune",
+                        "item_ids": [556],
+                        "quantity": [500, 5000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Water Runes",
+                    "taskID": "Obtain_water_runes",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Water Rune",
+                        "item_ids": [555],
+                        "quantity": [500, 5000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a some Dark Wizards",
+                    "taskID": "defeat_some_dark_wizards",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Barbarian Level 10"],
-                        "npc_ids": [3065, 3066, 3067, 3071, 3056, 3070, 3061, 3060, 3059, 3064],
-                        "quantity": [1, 25]
+                        "npc": ["Dark Wizard"],
+                        "npc_ids": [512, 5086, 5087, 2058, 2059, 510, 5088, 5089, 2057, 2056],
+                        "quantity": [1, 50]
                     }
                 },
                 {
-                    "name": "Defeat Gunthor the Brave with your Bare Fists",
-                    "taskID": "defeat_gunthor_brave_no_weapon",
+                    "name": "Defeat a Level 20 Dark Wizard 1 Hit",
+                    "taskID": "defeat_level_20_dark_wizard_1_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Gunthor the Brave"],
-                        "npc_ids": [299],
+                        "npc": ["Wizard"],
+                        "npc_ids": [510, 5088, 5089],
                         "quantity": [1]
                     },
-
-                    "constraints": {
-                        "must_be_empty_slots": ["WEAPON"]
-                    }
-                },
-                {
-                    "name": "Mine some Coal",
-                    "taskID": "mine_coal",
-                    "category": "Mining",
-                    "level": 30,
-                    "completion_type": "MINING",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                        "item": "Coal",
-                        "item_ids": [453],
-                        "quantity": [1, 50]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Minotaur on Task",
-                    "taskID": "defeat_minotaur_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Minotaur"],
-                        "npc_ids": [2481, 2483],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Equip an Adamant Full Helm",
-                    "taskID": "equip_adamant_full_helm",
-                    "category": "Defence",
-                    "level": 30,
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": "Adamant Full Helm",
-                            "item_ids": [1161]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Level 5 Goblin in 1 Hit",
-                    "taskID": "defeat_level_5_goblin_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "target_npc": {
-                        "npc": ["Goblin Level 5"],
-                        "npc_ids": [3045, 3073, 3074, 3075, 3076],
-                        "quantity": [1]
-                        },
                     
                     "constraints": {
                         "time_in_ticks": [1]
-                        }
-                },
+                    }
+                }, 
                 {
-                    "name": "Defeat an Ankou",
-                    "taskID": "defeat_ankou",
+                    "name": "Defeat a Level 20 Dark Wizard",
+                    "taskID": "defeat_level_20_dark_wizard",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Ankou"],
-                        "npc_ids": [2514, 2517, 2515, 2518, 2516, 2519, 6608, 7257, 7864],
+                        "npc": ["Dark Wizard Level 20"],
+                        "npc_ids": [510, 5088, 5089],
                         "quantity": [1]
                     }
-                }                            
+                }                           
             ],                 
                 "is_completed": false
         },
         {
-            "region_id": [12342],
-            "Friendly_Name": "Edgeville",
-            "neighbor_ids": [12598, 12341, 12086, 12343, 8748, 12605],
+            "region_id": [12086],
+            "Friendly_Name": "Edgeville Monestary",
+            "neighbor_ids": [12087, 12342, 12085, 11830],
             "tasks": [
-                {                           
-                    "name": "Defeat Obor",
-                    "taskID": "defeat_obor",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 2,
-                    "assignment_weight": 10,
-                    "target_npc": {
-                        "npc": ["Obor"],
-                        "npc_ids": [7416],
-                        "quantity": [1, 10]
-                    }
+                {
+                "name": "Build an Elite STASH Unit in the Edgeville Monastery",
+                "taskID": "build_elite_stash_edgeville_monestary",
+                "category": "Construction",
+                "level": 55,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Mahogany Plank",
+                        "item_ids": [8782]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Elite STASH Unit (crate)",
+                        "object_id": [29029],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
                 },
                 {                           
-                    "name": "Defeat Obor in 60 Seconds",
-                    "taskID": "defeat_obor",
+                    "name": "Defeat a Monk",
+                    "taskID": "defeat_monk",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Obor"],
-                        "npc_ids": [7416],
+                        "npc": ["Monk"],
+                        "npc_ids": [4246, 2579, 4068, 6956],
                         "quantity": [1]
                     }, 
                     
@@ -2352,112 +2346,102 @@
                         "time_in_ticks": [36]
                         }
                 },
-                {                           
-                    "name": "Defeat Obor in with your Bare Fists",
-                    "taskID": "defeat_obor",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 3,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Obor"],
-                        "npc_ids": [7416],
-                        "quantity": [1]
-                    }, 
-                    
-                    "constraints": {
-                        "must_be_empty_slots": ["WEAPON"]
-                    }
-                },
-                {                           
-                    "name": "Defeat Obor with only a Weapon Equipped",
-                    "taskID": "defeat_obor",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 3,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Obor"],
-                        "npc_ids": [7416],
-                        "quantity": [1]
-                    }, 
-                    
-                    "constraints": {
-                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
-                    }
-                },
                 {
-                    "name": "Use the Level 51 Agility Pipe Squeeze",
-                    "taskID": "agility_level_51_pipe_squeeze",
-                    "category": "Agility",
-                    "level": 51,
-                    "completion_type": "AGILITY",
+                    "name": "Talk to Brother Jered",
+                    "taskID": "talk_to_brother_jered",
+                    "category": "Dialogue",
                     "base_points": 2,
-                    "assignment_weight": 5
-                },
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Brother Jered"],
+                        "npc_ids": [2578],
+                        "quantity": [1]
+                    }
+                }, 
                 {
-                    "name": "Obtain the Giant Key",
-                    "taskID": "obtain_giant_key",
+                    "name": "Obtain a Monk's Robe Top",
+                    "taskID": "obtain_monk's_robe_top",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                             {
-                                "item": ["Giant Key"],
-                                "item_ids": [20754],
-                                "quantity": [1, 5]
+                                "item": ["Monk's Robe Top"],
+                                "item_ids": [544],
+                                "quantity": [1]
                             }
                         ]
-                },               
-                {                           
-                    "name": "Defeat Obor in 60 Seconds with only a Weapon Equipped",
-                    "taskID": "defeat_obor",
+                },
+                {
+                    "name": "Obtain a Monk's Robe Bottom",
+                    "taskID": "obtain_monk's_robe_bottom",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                                "item": ["Monk's Robe Bottom"],
+                                "item_ids": [542],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Defeat a Black Knight",
+                    "taskID": "defeat_black_knight",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 4,
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Obor"],
-                        "npc_ids": [7416],
+                        "npc": ["Black Knight"],
+                        "npc_ids": [11953, 517, 4331, 11952, 516],
+                        "quantity": [1]
+                    }
+                },               
+                {                           
+                    "name": "Defeat a Black Knight in 15 Seconds",
+                    "taskID": "defeat_black_knight_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Black Knight"],
+                        "npc_ids": [11953, 517, 4331, 11952, 516],
                         "quantity": [1]
                     }, 
                     
                     "constraints": {
-                        "time_in_ticks": [36],
-                         "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                        "time_in_ticks": [25]                       
                         }
                 },
-                {
-                    "name": "Travel to Fairy Ring Code DKR",
-                    "taskID": "fairy_ring_DKR",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
-                {
-                    "name": "Obtain the Hill Giant Club",
-                    "taskID": "obtain_hill_giant_club",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
+                {                           
+                    "name": "Defeat a Black Knight with only a Weapon Equipped",
+                    "taskID": "defeat_black_knight_weapon_only",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
                     "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Hill Giant Club"],
-                            "item_ids": [20756],
-                            "quantity": [1, 5]
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Black Knight"],
+                        "npc_ids": [11953, 517, 4331, 11952, 516],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                    }
                 }                                        
             ],                 
                 "is_completed": false
         },
         {
-            "region_id": [12598],
-            "Friendly_Name": "Grand Exchange",
-            "neighbor_ids": [12342, 12597, 12854, 12599],
+            "region_id": [11574],
+            "Friendly_Name": "Taverly",
+            "neighbor_ids": [11575, 11830, 11573, 11318],
             "tasks": [
                 {
                     "name": "Use a Minecraft to travel to Keldagrim",

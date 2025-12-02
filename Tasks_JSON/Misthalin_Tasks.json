@@ -1045,7 +1045,7 @@
                     "taskID": "defeat_level_20_dark_wizard_1_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
+                    "base_points": 1,
                     "assignment_weight": 5,
                     "target_npc": {
                         "npc": ["Wizard"],
