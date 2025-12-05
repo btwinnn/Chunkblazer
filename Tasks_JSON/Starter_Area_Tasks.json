@@ -311,7 +311,14 @@
             "quantity": 1
           },
           "constraints": {
-            "time_in_ticks": 12
+            "time_in_ticks": [12],
+            "prohibited_active_varbits": [
+                {
+                "varbit_id": 57,
+                "must_be_value": 0,
+                "fail_message": "Cannon use is prohibited for timed combat tasks."
+              }
+            ]
           }
         },
         {
@@ -342,7 +349,14 @@
             "quantity": 1
           },
           "constraints": {
-            "time_in_ticks": 1
+            "time_in_ticks": [1],
+            "prohibited_active_varbits": [
+                {
+                "varbit_id": 57,
+                "must_be_value": 0,
+                "fail_message": "Cannon use is prohibited for timed combat tasks."
+              }
+            ]
           }
         },
         {
@@ -534,7 +548,14 @@
             "quantity": 1
           },
           "constraints": {
-            "time_in_ticks": 12
+            "time_in_ticks": [12],
+            "prohibited_active_varbits": [
+                {
+                "varbit_id": 57,
+                "must_be_value": 0,
+                "fail_message": "Cannon use is prohibited for timed combat tasks."
+              }
+            ]
           }
         },
         {
@@ -912,7 +933,14 @@
             "quantity": 1
           },
           "constraints": {
-            "time_in_ticks": 8
+            "time_in_ticks": [8],
+            "prohibited_active_varbits": [
+                {
+                "varbit_id": 57,
+                "must_be_value": 0,
+                "fail_message": "Cannon use is prohibited for timed combat tasks."
+              }
+            ]
           }
         },
         {
@@ -931,7 +959,7 @@
           ]
         },
         {
-          "name": "Use the Glider to Travel",
+          "name": "Use the Glider to Travel to Al Kharid",
           "taskID": "glider_al_kharid",
           "category": "Travel",
           "completion_type": "TRAVEL",
@@ -1470,7 +1498,14 @@
             "quantity": 1
           },
           "constraints": {
-            "time_in_ticks": 20
+            "time_in_ticks": [20],
+            "prohibited_active_varbits": [
+                {
+                "varbit_id": 57,
+                "must_be_value": 0,
+                "fail_message": "Cannon use is prohibited for timed combat tasks."
+              }
+            ]
           }
         },
         {
@@ -1585,7 +1620,14 @@
             "quantity": [1]
           },
           "constraints": {
-            "time_in_ticks": 28
+            "time_in_ticks": [28],
+            "prohibited_active_varbits": [
+                {
+                "varbit_id": 57,
+                "must_be_value": 0,
+                "fail_message": "Cannon use is prohibited for timed combat tasks."
+              }
+            ]
           }
         },
         {
