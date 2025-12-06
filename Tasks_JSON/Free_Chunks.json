@@ -35,6 +35,30 @@
             "Friendly_Name": "Troll Arena",
             "neighbor_ids": [11577, 11832, 11575, 11320],
             "unlock_cost": 0
+        },
+        {
+            "region_id": [11066],
+            "Friendly_Name": "Trollweiss Mountain Bottom",
+            "neighbor_ids": [11067, 11322, 11065, 10810],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [11067],
+            "Friendly_Name": "Trollweiss Mountain Middle",
+            "neighbor_ids": [11068, 11323, 11066, 10811],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [11068],
+            "Friendly_Name": "Trollweiss Mountain Top",
+            "neighbor_ids": [11069, 11324, 11067, 10812],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [11323],
+            "Friendly_Name": "Ice Path",
+            "neighbor_ids": [11324, 11579, 11322, 11067],
+            "unlock_cost": 0
         }
         
 
