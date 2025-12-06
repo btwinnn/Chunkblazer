@@ -29,6 +29,12 @@
             "Friendly_Name": "Tutorial Island West",
             "neighbor_ids": [12336, 12335, 11824, 12081],
             "unlock_cost": 0
+        },
+        {
+            "region_id": [11576],
+            "Friendly_Name": "Troll Arena",
+            "neighbor_ids": [11577, 11832, 11575, 11320],
+            "unlock_cost": 0
         }
         
 
