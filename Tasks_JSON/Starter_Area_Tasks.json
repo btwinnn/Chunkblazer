@@ -31,7 +31,6 @@
             {
               "item": "Ball of Wool",
               "item_ids": [1759],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
