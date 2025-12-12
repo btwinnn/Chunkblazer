@@ -1186,105 +1186,132 @@
             "is_completed": false
         },
         {
-            "region_id": [11573], 
-            "Friendly_Name": "Taverly Dungeon Entrance",
-            "neighbor_ids": [11572, 11829, 11574, 11317],
+            "region_id": [10803], 
+            "Friendly_Name": "Witchaven",
+            "neighbor_ids": [10804, 11059, 10802, 10547],
             "tasks": [
                 {
-                    "name": "Use the Level 70 Agility Pipe Shortcut",
-                    "taskID": "agility_level_70_pipe_squeeze",
-                    "category": "Agility",
-                    "level": 70,
-                    "completion_type": "AGILITY",
-                    "base_points": 3,
-                    "assignment_weight": 5
+                    "name": "Mine some 'Perfect Gold Ore'",
+                    "taskID": "mine_perfect_gold_ore",
+                    "category": "Mining",
+                    "level": 40,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Perfect Gold Ore"],
+                            "item_ids": [446],
+                            "quantity": [1]
+                        }
+                    ]
                 },
                 {
-                    "name": "Defeat some Blue Dragons",
-                    "taskID": "defeat_blue_dragons",
+                    "name": "Defeat a Hellhound",
+                    "taskID": "defeat_hellhound",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 2,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Blue Dragon"],
-                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
-                        "quantity": [1, 50]
+                        "npc": ["Hellhound"],
+                        "npc_ids": [104, 105, 7256, 3133, 7877],
+                        "quantity": [1]
                     }
                 },
                 {
-                    "name": "Defeat a Blue Dragon on Task",
-                    "taskID": "defeat_blue_dragon_on_task",
+                    "name": "Defeat a Hellhound on Task",
+                    "taskID": "defeat_hellhound_on_task",
                     "category": "Slayer",
                     "completion_type": "SLAYER",
                     "base_points": 2,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Blue Dragon"],
-                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
+                        "npc": ["Hellhound"],
+                        "npc_ids": [104, 105, 7256, 3133, 7877],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Defeat some Black Knights",
-                    "taskID": "defeat_some_black_knights",
+                    "name": "Defeat an Ogre",
+                    "taskID": "defeat_ogre",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 3,
+                    "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Black Knight"],
-                        "npc_ids": [11953, 517, 4331, 11952, 516],
-                        "quantity": [1, 1200]
+                        "npc": ["Ogre"],
+                        "npc_ids": [136, 2095, 2096, 2233, 1153],
+                        "quantity": [1]
                     }
                 },               
                 {
-                    "name": "Catch a Lava Eel",
-                    "taskID": "catch_lava_eel",
-                    "category": "Fishing",
-                    "level": 53,
-                    "completion_type": "FISHING",
-                    "base_points": 2,
-                    "assignment_weight": 5,
+                    "name": "Obtain an Ensouled Ogre Head",
+                    "taskID": "obtain_ensouled_ogre_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
-                        "item": "Raw Lava Eel",
-                        "item_ids": [2148],
-                        "quantity": [1]
+                            "item": ["Ensouled Ogre Head"],
+                            "item_ids": [13477, 13478]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ensouled Hellhound Head",
+                    "taskID": "obtain_ensouled_hellhound_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ensouled Hellhound Head"],
+                            "item_ids": [26997, 26996]
                         }
                     ]
                 },
                 {                           
-                    "name": "Defeat Cerberus",
-                    "taskID": "defeat_cerberus",
-                    "category": "Slayer",
-                    "level": 91,
-                    "completion_type": "SLAYER",
-                    "base_points": 4,
-                    "assignment_weight": 10,
-                    "boss": "Cerberus",
-                    "target_npc": {
-                        "npc": ["Cerberus"],
-                        "npc_ids": [5862, 5863, 5866],
-                        "quantity": [1]
-                    }
-                },
-                {                           
-                    "name": "Defeat Cerberus in 80 Seconds",
-                    "taskID": "defeat_cerberus_fast",
+                    "name": "Defeat an Ogre in 24 Seconds",
+                    "taskID": "defeat_ogre_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 5,
+                    "base_points": 1,
                     "assignment_weight": 5,
-                    "boss":"Cerberus",
                     "target_npc": {
-                        "npc": ["Cerberus"],
-                        "npc_ids": [5862, 5863, 5866],
+                        "npc": ["Ogre"],
+                        "npc_ids": [136, 2095, 2096, 2233, 1153],
                         "quantity": [1]
                     }, 
                     
                     "constraints": {
-                        "time_in_ticks": [134],
+                        "time_in_ticks": [40],
+                            "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
+                },
+                {                           
+                    "name": "Defeat a Hellhound in 29 Seconds",
+                    "taskID": "defeat_hellhound_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Hellhound"],
+                        "npc_ids": [104, 105, 7256, 3133, 7877],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [48],
                             "prohibited_active_varbits": [
                                 {
                                     "varbit_id": 57,
@@ -1295,132 +1322,70 @@
                         }
                 },
                 {
-                    "name": "Obtain a Primordial Crystal",
-                    "taskID": "obtain_primordial_crystal",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": ["Primordial Crystal"],
-                            "item_ids": [13231]
-                        }
-                    ]
+                    "name": "Use the Level 30 Witchaven Dungeon Pipe Shortcut",
+                    "taskID": "level_30_witchaven_pipe",
+                    "category": "Agility",
+                    "level": 30,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Witchaven Dungeon Shortcut"],
+                        "object_id": [18416], 
+                        "quantity": [1]
+                    }
                 },
                 {
-                    "name": "Obtain a Pegasian Crystal",
-                    "taskID": "obtain_pegasian_crystal",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": ["Pegasian Crystal"],
-                            "item_ids": [13229]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Eternal Crystal",
-                    "taskID": "obtain_eternal_crystal",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": ["Eternal Crystal"],
-                            "item_ids": [13227]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Smouldering Stone",
-                    "taskID": "obtain_smouldering_stone",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
+                    "name": "Equip a Proselyte Sallet",
+                    "taskID": "equip_proselyte_sallet",
+                    "category": "Defence",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Smouldering Stone"],
-                            "item_ids": [13233]
+                            "item": ["Proselyte Sallet"],
+                            "item_ids": [9672]
                         }
                     ]
                 },
                 {
-                "name": "Complete the Cerberus Combat Achievements",
-                "taskID": "complete_cerberus_CAs",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 5,
-                "assignment_weight": 10,
-                "varbit_boolean": 1, 
-                "boss": "Cerberus",                 
-                "constraints": [                   
-                        {                       
-                        "varbit_id": 55,              
-                        "description": "Unrequired Antifire",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 51,              
-                        "description": "Cerberus Veteran",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 54,             
-                        "description": "Ghost Buster",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 56,              
-                        "description": "Anti-Bite Mechanics",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 52,             
-                        "description": "Cerberus Master",
-                        "tier": "Master"
-                        },
-                        {                       
-                        "varbit_id": 53,            
-                        "description": "Arooo No More",
-                        "tier": "Master"
-                        }                      
+                    "name": "Equip a Proselyte Hauberk",
+                    "taskID": "equip_proselyte_hauberk",
+                    "category": "Defence",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Proselyte Hauberk"],
+                            "item_ids": [9674]
+                        }
                     ]
                 },
                 {
-                    "name": "Obtain some Uncut Dragonstones",
-                    "taskID": "obtain_uncut_dragonstone",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 10,
+                    "name": "Equip Proselyte Tassets or Cuisse",
+                    "taskID": "equip_proselyte_tassets_or_cuisse",
+                    "category": "Defence",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
                     "required_items": [
-                            {
-                                "item": ["Uncut Dragonstone"],
-                                "item_ids": [1631],
-                                "quantity": [1, 5]
-                            }
-                        ]
-                }
+                        {
+                            "item": ["Proselyte Tassets/Cuisse"],
+                            "item_ids": [9678, 9676]
+                        }
+                    ]
+                }               
             ],
                     "optional_quests_unlocked": [
                         {
-                            "name": "Grim Tales",
-                            "points": 5
-                        },
-                        {
-                            "name": "While Guthix Sleeps",
-                            "points": 6
-                        },
-                        {
-                            "name": "Edgar's Ruse",
+                            "name": "Sea Slug",
                             "points": 2
-                        }                  
+                        }                                     
                     ],                           
             "is_completed": false
         },
