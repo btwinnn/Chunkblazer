@@ -1197,7 +1197,7 @@
                     "level": 40,
                     "completion_type": "MINING",
                     "base_points": 2,
-                    "assignment_weight": 8,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
                             "item": ["Perfect Gold Ore"],
@@ -1390,234 +1390,345 @@
             "is_completed": false
         },
         {
-            "region_id": [13364],
-            "Friendly_Name": "West Falador",
-            "neighbor_ids": [11829, 12084, 11827, 11572],
+            "region_id": [10548],
+            "Friendly_Name": "Ardougne Farming Patch",
+            "neighbor_ids": [10549, 10804, 10547, 10291],
             "tasks": [
                 {
-                "name": "Build a Fire of Eternal Light in the Mole Lair",
-                "taskID": "build_fire_eternal_light_mole_lair",
-                "category": "Firemaking",
-                "level": 66,
-                "completion_type": "FIREMAKING",
-                "base_points": 3,
-                "assignment_weight": 8,
-                "required_items": [
+                    "name": "Plant some Sweetcorn",
+                    "taskID": "plant_sweetcorn_seed",
+                    "category": "Farming",
+                    "level": 20,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
                         {
-                            "item": "Mahogany Plank",
-                            "item_ids": [8782],
-                            "quantity": [2]            
-                        },
-                        {
-                            "item": "Steel Bar",
-                            "item_ids": [2353],
-                            "quantity": [2]            
-                        },
-                        {
-                            "item": "Efh Salt",
-                            "item_ids": [22595],
-                            "quantity": [100]            
-                        },
-                        {
-                            "item": "Te Salt",
-                            "item_ids": [22593],
-                            "quantity": [300]            
-                        },
-                        {
-                            "item": "Urt Salt",
-                            "item_ids": [22597],
-                            "quantity": [50]            
+                            "item": ["Sweetcorn Seed"],
+                            "item_ids": [5320],
+                            "quantity": [1]
                         }
                     ]
                 },
-                {                           
-                    "name": "Defeat the Gaint Mole",
-                    "taskID": "defeat_giant_mole",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 3,
-                    "assignment_weight": 10,
-                    "boss": "Giant Mole",
-                    "target_npc": {
-                        "npc": ["Giant Mole"],
-                        "npc_ids": [5779],
-                        "quantity": [1]
-                    }
-                },
-                {                           
-                    "name": "Defeat the Giant Mole with only a Weapon Equipped",
-                    "taskID": "defeat_giant_mole_weapon_only",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 4,
-                    "assignment_weight": 8,
-                    "boss": "Giant Mole",
-                    "target_npc": {
-                        "npc": ["Giant Mole"],
-                        "npc_ids": [5779],
-                        "quantity": [1]
-                    },
-                    
-                    "constraints": {
-                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
-                    }
-                },
                 {
-                "name": "Complete the Giant Mole Combat Achievements",
-                "taskID": "complete_giant_mole_CAs",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 4,
-                "assignment_weight": 10,
-                "varbit_boolean": 1, 
-                "boss": "Cerberus",                 
-                "constraints": [                   
-                        {                       
-                        "varbit_id": 177,              
-                        "description": "Giant Mole Novice",
-                        "tier": "Easy"
-                        },
-                        {                       
-                        "varbit_id": 182,              
-                        "description": "Avoiding those Little Arms",
-                        "tier": "Medium"
-                        },
-                        {                       
-                        "varbit_id": 178,             
-                        "description": "Giant Mole Champion",
-                        "tier": "Medium"
-                        },
-                        {                       
-                        "varbit_id": 179,              
-                        "description": "Why are you Running?",
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 181,             
-                        "description": "Whack-a-Mole",
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 180,            
-                        "description": "Hard Hitter",
-                        "tier": "Elite"
-                        }                      
-                    ]
-                },
-                {
-                    "name": "Plant a Willow Sapling",
-                    "taskID": "plant_willow_sapling",
+                    "name": "Plant some Strawberries",
+                    "taskID": "plant_strawberry_seed",
                     "category": "Farming",
-                    "level": 30,
+                    "level": 31,
                     "completion_type": "FARMING",
                     "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items":
+                    "assignment_weight": 8,
+                    "required_items": [
                         {
-                            "item": "Willow Sapling",
-                            "item_ids": [5371],
+                            "item": ["Strawberry Seed"],
+                            "item_ids": [5323],
                             "quantity": [1]
-                        } 
-                }, 
-                {
-                    "name": "Obtain some Mole Claws",
-                    "taskID": "obtain_mole_claw",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Mole Claw"],
-                            "item_ids": [7416],
-                            "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain some Mole Skins",
-                    "taskID": "obtain_mole_skins",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Mole Skin"],
-                            "item_ids": [7418],
-                            "quantity": [1, 50]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip a White 2H Sword",
-                    "taskID": "equip_white_2h",
-                    "category": "Attack",
-                    "level": 10,
-                    "completion_type": "EQUIP",
-                    "base_points": 3,
-                    "assignment_weight": 3,
-                    "required_items": [
-                        {
-                            "item": ["White 2H Sword"],
-                            "item_ids": [6609]
-                        }
-                    ]
-                }, 
-                {
-                    "name": "Equip a White Platebody",
-                    "taskID": "equip_white_platebody",
-                    "category": "Defence",
-                    "level": 10,
-                    "completion_type": "EQUIP",
+                    "name": "Plant some Watermelons",
+                    "taskID": "plant_watermelon_seed",
+                    "category": "Farming",
+                    "level": 47,
+                    "completion_type": "FARMING",
                     "base_points": 2,
-                    "assignment_weight": 3,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["White Platebody"],
-                            "item_ids": [6617]
+                            "item": ["Watermelon Seed"],
+                            "item_ids": [5321],
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Equip a White Med Helm",
-                    "taskID": "equip_white_med_helm",
-                    "category": "Defence",
-                    "level": 10,
-                    "completion_type": "EQUIP",
+                    "name": "Plant some Tomato",
+                    "taskID": "plant_tomato",
+                    "category": "Farming",
+                    "level": 12,
+                    "completion_type": "FARMING",
                     "base_points": 1,
-                    "assignment_weight": 3,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["White Med Helm"],
-                            "item_ids": [6621]
+                            "item": ["Tomato Seed"],
+                            "item_ids": [5322],
+                            "quantity": [1]
                         }
                     ]
-                }                                 
-                    ],
-                    "optional_quests_unlocked": [
+                },
+                {
+                    "name": "Plant Snape Grass",
+                    "taskID": "plant_snape_grass",
+                    "category": "Farming",
+                    "level": 61,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
                         {
-                            "name": "Black Knights' Fortress",
-                            "points": 2
-                        },
-                        {
-                            "name": "Recruitment Drive",
-                            "points": 1
-                        },
-                        {
-                            "name": "The Knight's Sword",
-                            "points": 2
-                        },
-                        {
-                            "name": "The Slug Menace",
-                            "points": 2
-                        },
-                        {
-                            "name": "Wanted!",
-                            "points": 2
+                            "item": ["Snape Grass Seed"],
+                            "item_ids": [22879],
+                            "quantity": [1]
                         }
-                    ],                 
-                    "is_completed": false
+                    ]
+                },
+                {
+                    "name": "Plant a Harralander Seed",
+                    "taskID": "plant_harralander",
+                    "category": "Farming",
+                    "level": 26,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Harralander Seed"],
+                            "item_ids": [5294],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Ranarr Seed",
+                    "taskID": "plant_ranarr",
+                    "category": "Farming",
+                    "level": 32,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ranarr Seed"],
+                            "item_ids": [5295],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Toadflax Seed",
+                    "taskID": "plant_toadflax",
+                    "category": "Farming",
+                    "level": 38,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Toadflax Seed"],
+                            "item_ids": [5296],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Irit Seed",
+                    "taskID": "plant_irit",
+                    "category": "Farming",
+                    "level": 44,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Irit Seed"],
+                            "item_ids": [5297],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Avantoe Seed",
+                    "taskID": "plant_avantoe",
+                    "category": "Farming",
+                    "level": 50,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Avantoe Seed"],
+                            "item_ids": [5298],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Kwuarm Seed",
+                    "taskID": "plant_kwuarm",
+                    "category": "Farming",
+                    "level": 56,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Kwuarm Seed"],
+                            "item_ids": [5299],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Snapdragon Seed",
+                    "taskID": "plant_snapdragon",
+                    "category": "Farming",
+                    "level": 62,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Snapdragon Seed"],
+                            "item_ids": [5300],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Cadantine Seed",
+                    "taskID": "plant_cadantine",
+                    "category": "Farming",
+                    "level": 67,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cadantine Seed"],
+                            "item_ids": [5301],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Lantadyme Seed",
+                    "taskID": "plant_lantadyme",
+                    "category": "Farming",
+                    "level": 73,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Lantadyme Seed"],
+                            "item_ids": [5302],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Dwarf Weed Seed",
+                    "taskID": "plant_dwarf_weed",
+                    "category": "Farming",
+                    "level": 79,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Dwarf Weed Seed"],
+                            "item_ids": [5303],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Torstol Seed",
+                    "taskID": "plant_torstol",
+                    "category": "Farming",
+                    "level": 85,
+                    "completion_type": "FARMING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Torstol Seed"],
+                            "item_ids": [5304],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Nasturtiums",
+                    "taskID": "plant_marigold",
+                    "category": "Farming",
+                    "level": 24,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Nasturtium Seed"],
+                            "item_ids": [5098],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Woad Seed",
+                    "taskID": "plant_woad_seed",
+                    "category": "Farming",
+                    "level": 25,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Woad Seed"],
+                            "item_ids": [5099],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Limpwurt Seed",
+                    "taskID": "plant_limpwurt_seed",
+                    "category": "Farming",
+                    "level": 26,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Limpwurt Seed"],
+                            "item_ids": [5100],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a White Lily Seed",
+                    "taskID": "plant_white_lily_seed",
+                    "category": "Farming",
+                    "level": 58,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["White Lily Seed"],
+                            "item_ids": [22887],
+                            "quantity": [1]
+                        }
+                    ]
+                    
+                },
+                {                    
+                    "name": "Pickpocket a Master Farmer",
+                    "taskID": "pickpocket_master_farmer",
+                    "category": "Thieving",
+                    "level": 38,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                    "npc": "Master Farmer",
+                    "npc_ids": [5730, 14757, 5731, 11940, 11941, 13240, 13241, 13242, 13243, 13236, 13237, 13238, 13239, 14756, 14758, 14755]                    
+                    }
+                }
+            ]
         },
         {
             "region_id": [12084],
