@@ -2037,134 +2037,170 @@
         },
         {
             "region_id": [10551],
-            "Friendly_Name": "Ice Mountain Entrance",
-            "neighbor_ids": [11829, 12086, 11831, 11574],
+            "Friendly_Name": "Seer's Village Hops Patch",
+            "neighbor_ids": [10552, 10807, 10550, 10295],
             "tasks": [
                  {
-                    "name": "Defeat The Whisperer",
-                    "taskID": "defeat_whisperer",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Whisperer",
-                    "target_npc": {
-                        "npc": ["Leviathan"],
-                        "npc_ids": [12206, 12207],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat the Awakened Whisperer",
-                    "taskID": "defeat_awakened_whisperer",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 1,
-                    "boss": "The Whisperer",
-                    "target_npc": {
-                        "npc": ["Awakened Whisperer"],
-                        "npc_ids": [12204, 12205],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Obtain a Bellator Vestige",
-                    "taskID": "obtain_bellator_vestige",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Whisperer",
+                    "name": "Plant some Barley Seeds",
+                    "taskID": "plant_barley",
+                    "category": "Farming",
+                    "level": 3,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Bellator Vestige"],
-                            "item_ids": [28279]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Siren's Staff",
-                    "taskID": "obtain_siren's_staff",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Whisperer",
-                    "required_items": [
-                        {
-                            "item": ["Siren's Staff"],
-                            "item_ids": [28323],
+                            "item": ["Barley Seeds"],
+                            "item_ids": [5305],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Equip a Barronite Mace",
-                    "taskID": "equip_barronite_mace",
-                    "category": "Attack",
-                    "level": 40,
-                    "completion_type": "EQUIP",
-                    "base_points": 2,
+                    "name": "Plant some Hammerstone Seeds",
+                    "taskID": "plant_hammerstone",
+                    "category": "Farming",
+                    "level": 4,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Barronite Mace"],
-                            "item_ids": [25641]
+                            "item": ["Hammerstone Seeds"],
+                            "item_ids": [5307],
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Mine some Barronite Shards",
-                    "taskID": "mine_barronite_shards",
-                    "category": "Mining",
-                    "level": 14,
-                    "completion_type": "MINING",
+                    "name": "Plant some Asgarnian Seeds",
+                    "taskID": "plant_asgarnian",
+                    "category": "Farming",
+                    "level": 8,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Asgarnian Seed"],
+                            "item_ids": [5308],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Jute Seeds",
+                    "taskID": "plant_jute",
+                    "category": "Farming",
+                    "level": 13,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Jute Seed"],
+                            "item_ids": [5306],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Yanillian Seeds",
+                    "taskID": "plant_yanillian",
+                    "category": "Farming",
+                    "level": 16,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Yanillian Seed"],
+                            "item_ids": [5309],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Flax Seeds",
+                    "taskID": "plant_flax",
+                    "category": "Farming",
+                    "level": 18,
+                    "completion_type": "FARMING",
                     "base_points": 1,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                        "item": "Barronite Shards",
-                        "item_ids": [25676],
-                        "quantity": [1, 500]
+                            "item": ["Flax Seed"],
+                            "item_ids": [31541],
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain an Imcando Hammer",
-                    "taskID": "obtain_imcando_hammer",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
+                    "name": "Plant some Krandorian Seeds",
+                    "taskID": "plant_krandorian",
+                    "category": "Farming",
+                    "level": 21,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Krandorian Seed"],
+                            "item_ids": [5310],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Wildblood Seeds",
+                    "taskID": "plant_wildblood",
+                    "category": "Farming",
+                    "level": 28,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Wildblood Seed"],
+                            "item_ids": [5311],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Hemp Seeds",
+                    "taskID": "plant_hemp",
+                    "category": "Farming",
+                    "level": 37,
+                    "completion_type": "FARMING",
                     "base_points": 1,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Imcamdo Hammer"],
-                            "item_ids": [25644]
+                            "item": ["Hemp Seed"],
+                            "item_ids": [31543],
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat an Icefiend on Task",
-                    "taskID": "defeat_icefiend_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Icefiend"],
-                        "npc_ids": [4813, 3140],
-                        "quantity": [1]
-                    }
+                    "name": "Plant some Cotton Seeds",
+                    "taskID": "plant_cotton",
+                    "category": "Farming",
+                    "level": 71,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Cotton Seed"],
+                            "item_ids": [31545],
+                            "quantity": [1]
+                        }
+                    ]
                 }              
-                    ],
-                    "optional_quests_unlocked": [
-                        {
-                            "name": "Goblin Diplomacy",
-                            "points": 1
-                        }                
-                    ],                 
+            ],                                  
                     "is_completed": false
         },
         {
