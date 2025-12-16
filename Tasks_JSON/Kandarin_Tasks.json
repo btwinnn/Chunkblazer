@@ -2541,237 +2541,179 @@
                 "is_completed": false
         },
         {
-            "region_id": [11574],
-            "Friendly_Name": "Taverly",
-            "neighbor_ids": [11575, 11830, 11573, 11318],
+            "region_id": [10293],
+            "Friendly_Name": "Fishing Guild",
+            "neighbor_ids": [10295, 10549, 10292, 10037],
             "tasks": [
                 {
-                    "name": "Mix a Saradomin Brew",
-                    "taskID": "mix_saradomin_brew",
-                    "category": "Herblore",
-                    "level": 81,
-                    "completion_type": "HERBLORE",
-                    "base_points": 4,
-                    "assignment_weight": 10,
-                     "required_items": [
-                        {
-                            "item": ["Saradomin Brew(3)", "Saradomin Brew(4)"],
-                            "item_ids": [6687, 6685]
-                        }
-                    ]
-                },
-                {
-                    "name": "Mix a Super Combat Potion",
-                    "taskID": "mix_super_combat_potion",
-                    "category": "Herblore",
-                    "level": 90,
-                    "completion_type": "HERBLORE",
-                    "base_points": 5,
+                    "name": "Catch a Raw Swordfish",
+                    "taskID": "catch_raw_swordfish",
+                    "category": "Fishing",
+                    "level": 50,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
                     "assignment_weight": 8,
-                     "required_items": [
+                    "required_items": [
                         {
-                            "item": ["Super Combat Potion(3)", "Super Combat Potion(4)"],
-                            "item_ids": [12697, 12695]
+                        "item": "Raw Swordfish",
+                        "item_ids": [371],
+                        "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Super Attack Potion",
-                    "taskID": "mix_super_attack_potion",
-                    "category": "Herblore",
+                    "name": "Cook a Swordfish",
+                    "taskID": "cook_swordfish",
+                    "category": "Cooking",
                     "level": 45,
-                    "completion_type": "HERBLORE",
+                    "completion_type": "COOKING",
                     "base_points": 2,
                     "assignment_weight": 8,
-                     "required_items": [
+                    "required_items": [
                         {
-                            "item": ["Super Attack Potion(3)", "Super Attack Potion(4)"],
-                            "item_ids": [145, 2436]
+                            "item": "Swordfish",
+                            "item_ids": [373]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Super Strength Potion",
-                    "taskID": "mix_super_strength_potion",
-                    "category": "Herblore",
-                    "level": 55,
-                    "completion_type": "HERBLORE",
+                    "name": "Catch a Big Swordfish",
+                    "taskID": "catch_raw_swordfish",
+                    "category": "Fishing",
+                    "level": 50,
+                    "completion_type": "FISHING",
                     "base_points": 2,
-                    "assignment_weight": 8,
-                     "required_items": [
+                    "assignment_weight": 5,
+                    "required_items": [
                         {
-                            "item": ["Super Strength Potion(3)", "Super Strength Potion(4)"],
-                            "item_ids": [157, 2440]
+                        "item": "Raw Swordfish",
+                        "item_ids": [7991],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Shark",
+                    "taskID": "catch_raw_shark",
+                    "category": "Fishing",
+                    "level": 76,
+                    "completion_type": "FISHING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Raw Shark",
+                        "item_ids": [383],
+                        "quantity": [1]
                         }
                     ]
                 }, 
                 {
-                    "name": "Mix a Super Defence Potion",
-                    "taskID": "mix_super_defence_potion",
-                    "category": "Herblore",
-                    "level": 66,
-                    "completion_type": "HERBLORE",
-                    "base_points": 3,
-                    "assignment_weight": 8,
-                     "required_items": [
-                        {
-                            "item": ["Super Defence Potion(3)", "Super Defence Potion(4)"],
-                            "item_ids": [163, 2442]
-                        }
-                    ]
-                },
-                {
-                    "name": "Mix a Ranging Potion",
-                    "taskID": "mix_ranging_potion",
-                    "category": "Herblore",
-                    "level": 72,
-                    "completion_type": "HERBLORE",
-                    "base_points": 3,
-                    "assignment_weight": 8,
-                     "required_items": [
-                        {
-                            "item": ["Ranging Potion(3)", "Ranging Potion(4)"],
-                            "item_ids": [169, 2444]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip a Dragon Mace",
-                    "taskID": "equip_dragon_mace",
-                    "category": "Attack",
-                    "level": 60,
-                    "completion_type": "EQUIP",
-                    "base_points": 3,
+                    "name": "Cook a Shark",
+                    "taskID": "cook_shark",
+                    "category": "Cooking",
+                    "level": 80,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Dragon Mace"],
-                            "item_ids": [1377]
+                            "item": "Shark",
+                            "item_ids": [385]
                         }
                     ]
                 },
                 {
-                    "name": "Equip a Dragon Battleaxe",
-                    "taskID": "equip_dragon_battleaxe",
-                    "category": "Attack",
-                    "level": 60,
-                    "completion_type": "EQUIP",
+                    "name": "Catch a Big Shark",
+                    "taskID": "catch_big_shark",
+                    "category": "Fishing",
+                    "level": 76,
+                    "completion_type": "FISHING",
                     "base_points": 3,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Dragon Battleaxe"],
-                            "item_ids": [1434]
+                        "item": "Big Shark",
+                        "item_ids": [7993],
+                        "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Build a Tool Store 3",
-                    "taskID": "build_tool_store_3",
-                    "category": "Construction",
+                    "name": "Catch a Raw Tuna",
+                    "taskID": "catch_raw_tuna",
+                    "category": "Fishing",
                     "level": 35,
-                    "completion_type": "CONSTRUCTION",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                            {
-                            "item": "Oak Plank",
-                            "item_ids": [8778]
-                            }
-                        ],
-
-                    "required_object": [
-                            {
-                            "object": "Tool Store 3",
-                            "object_id": [6788],
-                            "interaction_type": "use_item_on"
-                            }
-                        ]
-                },
-                {
-                    "name": "Build an Oak Demon Lectern",
-                    "taskID": "build_oak_demon_lectern",
-                    "category": "Construction",
-                    "level": 47,
-                    "completion_type": "CONSTRUCTION",
+                    "completion_type": "FISHING",
                     "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
-                            {
-                            "item": "Oak Plank",
-                            "item_ids": [8778]
-                            }
-                        ],
-
-                    "required_object": [
-                            {
-                            "object": "Oak Demon Lectern",
-                            "object_id": [13644],
-                            "interaction_type": "use_item_on"
-                            }
-                        ]
+                        {
+                        "item": "Raw Tuna",
+                        "item_ids": [359],
+                        "quantity": [1]
+                        }
+                    ]
                 },
                 {
-                    "name": "Build an Oak Eagle Lectern",
-                    "taskID": "build_oak_eagle_lectern",
-                    "category": "Construction",
-                    "level": 47,
-                    "completion_type": "CONSTRUCTION",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                            {
-                            "item": "Oak Plank",
-                            "item_ids": [8778]
-                            }
-                        ],
-
-                    "required_object": [
-                            {
-                            "object": "Oak Eagle Lectern",
-                            "object_id": [13643],
-                            "interaction_type": "use_item_on"
-                            }
-                        ]
-                },
-                {
-                    "name": "Build a Teleport Focus",
-                    "taskID": "build_teleport_focus",
-                    "category": "Construction",
-                    "level": 50,
-                    "completion_type": "CONSTRUCTION",
+                    "name": "Cook a Tuna",
+                    "taskID": "cook_tuna",
+                    "category": "Cooking",
+                    "level": 30,
+                    "completion_type": "COOKING",
                     "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
-                            {
-                            "item": "Limestone Brick",
-                            "item_ids": [3420]
-                            }
-                        ],
+                        {
+                            "item": "Tuna",
+                            "item_ids": [361]
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Hard STASH Unit in the Fishing Guild",
+                "taskID": "build_hard_stash_fishing_guild",
+                "category": "Construction",
+                "level": 55,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Teak Plank",
+                        "item_ids": [8780]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
 
-                    "required_object": [
-                            {
-                            "object": "Teleport Focus",
-                            "object_id": [13640],
-                            "interaction_type": "use_item_on"
-                            }
-                        ]
-                }                                                     
-            ],
-                    "optional_quests_unlocked": [
+                "required_object": [
                         {
-                            "name": "Witch's House",
-                            "points": 2
-                        },
+                        "object": "Hard STASH Unit (crate)",
+                        "object_id": [29010],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Minnow",
+                    "taskID": "catch_minnow",
+                    "category": "Fishing",
+                    "level": 82,
+                    "completion_type": "FISHING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
                         {
-                            "name": "Druidic Ritual",
-                            "points": 1
-                        },
-                        {
-                            "name": "Hereos' Quest",
-                            "points": 3
-                        }                  
-                    ],                 
+                        "item": "Minnow",
+                        "item_ids": [21356],
+                        "quantity": [1]
+                        }
+                    ]
+                }                                                                   
+            ],                                  
                 "is_completed": false
         },
         {
