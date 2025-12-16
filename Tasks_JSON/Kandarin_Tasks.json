@@ -1939,9 +1939,9 @@
             "is_completed": false
         },
         {
-            "region_id": [12085],
-            "Friendly_Name": "Dwarven Mine",
-            "neighbor_ids": [12086, 12341, 12084, 11829],
+            "region_id": [10550],
+            "Friendly_Name": "McGrubor's Woods",
+            "neighbor_ids": [10551, 10806, 10549, 10249],
             "tasks": [
                 {
                     "name": "Mine some Paydirt",
@@ -2152,137 +2152,62 @@
             "neighbor_ids": [11830, 12085, 11828, 11573],
             "tasks": [
                 {
-                    "name": "Obtain an Earth Talisman",
-                    "taskID": "obtain_earth_talisman",
+                    "name": "Obtain an Ensouled Dog Head",
+                    "taskID": "obtain_ensouled_dog_head",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Earth Talisman"],
-                            "item_ids": [1440],
+                            "item": ["Ensouled Dog Head"],
+                            "item_ids": [13468, 13469],
                             "quantity": [1]
                         }
                     ]
-                },
+                },                
                 {
-                    "name": "Obtain a Grimy Guam Leaf",
-                    "taskID": "obtain_grimy_guam",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Grimy Guam Leaf"],
-                            "item_ids": [199],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Grimy Marrentill",
-                    "taskID": "obtain_grimy_marrentill",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Grimy Marrentill"],
-                            "item_ids": [201],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Grimy Tarromin",
-                    "taskID": "obtain_grimy_tarromin",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Grimy Tarromin"],
-                            "item_ids": [203],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Black Bear on Task",
-                    "taskID": "defeat_black_bear_on_task",
+                    "name": "Defeat a Guard Dog on Task",
+                    "taskID": "defeat_guard_dog_on_task",
                     "category": "Slayer",
                     "completion_type": "SLAYER",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Black Bear"],
-                        "npc_ids": [2839],
+                        "npc": ["Guard Dog"],
+                        "npc_ids": [7209, 114, 4228],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Defeat Rusty in 1 Hit",
-                    "taskID": "defeat_rusty_1_hit",
+                    "name": "Defeat a Guard Dog",
+                    "taskID": "defeat_guard_dog",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Rusty"],
-                        "npc_ids": [3281],
+                        "npc": ["Guard Dog"],
+                        "npc_ids": [7209, 114, 4228],
+                        "quantity": [1]
+                    }                   
+                 
+                },
+                {
+                    "name": "Defeat a Guard Dog in 15 Seconds",
+                    "taskID": "defeat_guard_dog",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Guard Dog"],
+                        "npc_ids": [7209, 114, 4228],
                         "quantity": [1]
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [1]
-                    }
-                },
-                {
-                    "name": "Obtain an Ensouled Bear Head",
-                    "taskID": "obtain_ensouled_bear_head",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Ensouled Bear Head"],
-                            "item_ids": [13462, 13463]
-                        }
-                    ]
-                },
-                {
-                    "name": "Pickpocket the Guard near Doric's Hut",
-                    "taskID": "pickpocket_doric_hut_guard",
-                    "category": "Thieving",
-                    "level": 40,
-                    "completion_type": "THIEVING",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Doric's Hut Guard"],
-                        "npc_ids": [3283],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat a Black Bear in 12 Seconds",
-                    "taskID": "defeat_black_bear_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Black Bear"],
-                        "npc_ids": [2839],
-                        "quantity": [1]
-                    },
-                    "constraints": {
-                        "time_in_ticks": [20],
+                        "time_in_ticks": [25],
                         "prohibited_active_varbits": [
                             {
                                     "varbit_id": 57,
@@ -2293,25 +2218,29 @@
                     }
                 },
                 {
-                    "name": "Defeat the Guard by Doric's Hut",
-                    "taskID": "defeat_guard_doric's_hut",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
+                    "name": "Obtain a Red Vine Worm",
+                    "taskID": "obtain_red_vine_worm",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Doric's Hut Guard"],
-                        "npc_ids": [3283],
-                        "quantity": [1]
-                    }
-                }              
-           ],
-                    "optional_quests_unlocked": [
+                    "required_items": [
                         {
-                            "name": "Below Ice Mountain",
-                            "points": 1
+                            "item": ["Red Vine Worm"],
+                            "item_ids": [25],
+                            "quantity": [1]
                         }
-                    ],                 
+                    ]
+                },
+                {
+                    "name": "Travel to Fairy Ring Code ALS",
+                    "taskID": "fairy_ring_ALS",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }                     
+            ],                 
                     "is_completed": false
         },
         {
