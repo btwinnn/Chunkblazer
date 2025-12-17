@@ -1100,7 +1100,6 @@
             {
               "item": "Iron Bar",
               "item_ids": [2351],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -1156,7 +1155,6 @@
             {
               "item": "Silver Bar",
               "item_ids": [2355],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
