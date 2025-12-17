@@ -1206,7 +1206,6 @@
             {
               "item": "Coal",
               "item_ids": [453],
-              "action": "obtain",
               "quantity": [1, 25]
             }
           ]
