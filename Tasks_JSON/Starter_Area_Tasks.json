@@ -561,6 +561,8 @@
           "name": "Talk to Death",
           "taskID": "talk_to_death",
           "category": "Dialogue",
+          "base_points": 1,
+          "assignment_weight": 8,
           "completion_type": "NPC_DIALOGUE",
           "target_npc": {
             "npc": ["Death"],

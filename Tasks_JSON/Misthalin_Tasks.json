@@ -2404,6 +2404,7 @@
                     "taskID": "talk_to_perdu",
                     "category": "Dialogue",
                     "base_points": 1,
+                    "assignment_weight": 8,
                     "completion_type": "NPC_DIALOGUE",
                     "target_npc": {
                         "npc": ["Perdu"],
@@ -2572,6 +2573,7 @@
                     "category": "Dialogue",
                     "completion_type": "NPC_DIALOGUE",
                     "base_points": 1,
+                    "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Estate Agent"],
                         "npc_ids": [3097, 13343],
