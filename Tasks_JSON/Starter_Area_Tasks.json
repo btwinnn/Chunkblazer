@@ -383,7 +383,6 @@
             {
               "item": "Willow Shortbow(u)",
               "item_ids": [60],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -400,7 +399,6 @@
             {
               "item": "Willow Longbow(u)",
               "item_ids": [58],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
