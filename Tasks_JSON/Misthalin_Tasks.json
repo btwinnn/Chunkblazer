@@ -2760,7 +2760,6 @@
                         {
                         "item": "Chaos Rune",
                         "item_ids": [562],
-                        "action": "obtain",
                         "quantity": [1]
                         }
                     ]

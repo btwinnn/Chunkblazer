@@ -4063,6 +4063,207 @@
                     "base_points": 2,
                     "assignment_weight": 5
                 }
+            ],
+                "optional_quests_unlocked": [
+                    {
+                        "name": "Watchtower",
+                        "points": 2
+                    },
+                    {
+                        "name": "Hand in the Sand",
+                        "points": 2
+                    }                                       
+            ],                                      
+            "is_completed": false
+        },
+        {
+            "region_id": [10032],
+            "Friendly_Name": "Gu'Tanoth",
+            "neighbor_ids": [10033, 10288, 10031, 9776],
+            "tasks": [
+                {
+                    "name": "Steal an Ogre Rock Cake",
+                    "taskID": "steal_ogre_rock_cake",
+                    "category": "Thieving",
+                    "level": 15,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Counter"],
+                            "object_id": [2793],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Ogre Chieftain",
+                    "taskID": "defeat_ogre_chieftain",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ogre Chieftain"],
+                        "npc_ids": [4362],
+                        "quantity": [1]
+                    }
+                },
+                {                           
+                    "name": "Defeat an Ogre Chieftain in 20 Seconds",
+                    "taskID": "defeat_ogre_chieftain_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ogre Chieftain"],
+                        "npc_ids": [4362],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [33],
+                            "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
+                },
+                {
+                    "name": "Defeat some Blue Dragons",
+                    "taskID": "defeat_blue_dragons",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Blue Dragon"],
+                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
+                        "quantity": [1, 50]
+                    }
+                },
+                {
+                    "name": "Defeat a Blue Dragon on Task",
+                    "taskID": "defeat_blue_dragon_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Blue Dragon"],
+                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Equip a Rune Full Helm",
+                    "taskID": "equip_rune_rune_full_helm",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rune Full Helm"],
+                            "item_ids": [1163]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Curved Bone",
+                    "taskID": "obtain_Long Bone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Curved Bone"],
+                            "item_ids": [10977],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some Greater Demons",
+                    "taskID": "defeat_greater_demons",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Greater Demon"],
+                        "npc_ids": [12387, 7245, 7244, 7871, 7872, 7873, 7246, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032],
+                        "quantity": [1, 50]
+                    }
+                },
+                {                           
+                    "name": "Defeat a Blue Dragon in 36 Seconds",
+                    "taskID": "defeat_blue_dragon_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Blue Dragon"],
+                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [60],
+                            "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
+                },
+                {
+                    "name": "Use the Level 71 Agility Gu'Tanoth Wall Climb",
+                    "taskID": "agility_level_71_gu'tanoth_wall_climb",
+                    "category": "Agility",
+                    "level": 71,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Defeat an Ogre City Guard",
+                    "taskID": "defeat_ogre_city_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ogre City Guard"],
+                        "npc_ids": [4373],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain Cave Nightshade",
+                    "taskID": "obtain_cave_nightshade",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cave Nightshade"],
+                            "item_ids": [2398],
+                            "quantity": [1]
+                        }
+                    ]
+                }
             ],                          
             "is_completed": false
         }           
