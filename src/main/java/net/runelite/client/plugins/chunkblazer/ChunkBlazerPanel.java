@@ -1,4 +1,4 @@
-package com.seashantyboy.chunkblazer;
+package net.runelite.client.plugins.chunkblazer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

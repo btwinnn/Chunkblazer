@@ -1,4 +1,4 @@
-package com.seashantyboy.chunkblazer;
+package net.runelite.client.plugins.chunkblazer;
 
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;

@@ -1,4 +1,4 @@
-package com.seashantyboy.chunkblazer;
+package net.runelite.client.plugins.chunkblazer;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
