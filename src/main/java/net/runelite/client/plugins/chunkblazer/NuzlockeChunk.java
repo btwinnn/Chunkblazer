@@ -1,5 +1,6 @@
 package net.runelite.client.plugins.chunkblazer;
 
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 public class NuzlockeChunk
 {
     @SerializedName("region_id")
+    @JsonAdapter(IntOrArrayDeserializer.class)
     private List<Integer> regionIds;
 
     @SerializedName("friendly_name")

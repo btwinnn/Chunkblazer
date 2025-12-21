@@ -32,7 +32,7 @@ import net.runelite.client.ui.PluginPanel;
 @Slf4j
 public class ChunkBlazerPanel extends PluginPanel
 {
-    private final ChunkBlazerPlugin plugin;
+    private ChunkBlazerPlugin plugin;
 
     // UI Components
     private JPanel modeSelectionPanel;
@@ -48,10 +48,13 @@ public class ChunkBlazerPanel extends PluginPanel
     private JRadioButton casualRadio;
     private JRadioButton nuzlockeRadio;
 
-    @Inject
-    public ChunkBlazerPanel(ChunkBlazerPlugin plugin)
+    public ChunkBlazerPanel()
     {
         super(false);
+    }
+
+    public void init(ChunkBlazerPlugin plugin)
+    {
         this.plugin = plugin;
 
         setLayout(new BorderLayout());

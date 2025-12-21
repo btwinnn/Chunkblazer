@@ -94,19 +94,16 @@ public class ChunkBlazerPlugin extends Plugin
         loadChunkData();
 
         // Create and register the sidebar panel
-        panel = injector.getInstance(ChunkBlazerPanel.class);
+        panel = new ChunkBlazerPanel();
+        panel.init(this);
 
-        BufferedImage icon = ImageUtil.loadImageResource(getClass(), "chunkblazer_icon.png");
-        if (icon == null)
+        // Create a simple orange icon (16x16)
+        BufferedImage icon = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        for (int x = 0; x < 16; x++)
         {
-            // Fallback to a simple colored icon if file not found
-            icon = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-            for (int x = 0; x < 16; x++)
+            for (int y = 0; y < 16; y++)
             {
-                for (int y = 0; y < 16; y++)
-                {
-                    icon.setRGB(x, y, 0xFFFF9800); // Orange color
-                }
+                icon.setRGB(x, y, 0xFFFF9800); // Orange color
             }
         }
 
