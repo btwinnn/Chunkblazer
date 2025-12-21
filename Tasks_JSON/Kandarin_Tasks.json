@@ -3967,7 +3967,7 @@
                     "name": "Defeat an Ogre on Task",
                     "taskID": "defeat_ogre",
                     "category": "Slayer",
-                    "completion_type": "NPC_Kill",
+                    "completion_type": "SLAYER",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
@@ -4618,7 +4618,7 @@
                     "name": "Defeat an Ogre on Task",
                     "taskID": "defeat_ogre",
                     "category": "Slayer",
-                    "completion_type": "NPC_Kill",
+                    "completion_type": "SLAYER",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
@@ -4743,7 +4743,7 @@
                     "name": "Defeat an Ogre on Task",
                     "taskID": "defeat_ogre",
                     "category": "Slayer",
-                    "completion_type": "NPC_Kill",
+                    "completion_type": "SLAYER",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
@@ -4775,6 +4775,266 @@
                                 }
                             ]
                         }
+                }                                             
+            ],                          
+            "is_completed": false
+        },
+        {
+            "region_id": [10542],
+            "Friendly_Name": "Rantz's Cave",
+            "neighbor_ids": [10543, 10798, 10541,10286],
+            "tasks": [
+                {
+                    "name": "Obtain an Ogre Bowman Hat",
+                    "taskID": "obtain_ogre_bowman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre bowman)"],
+                            "item_ids": [2978]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bowman Hat",
+                    "taskID": "obtain_bowman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 9,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (bowman)"],
+                            "item_ids": [2979]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ogre Yeoman Hat",
+                    "taskID": "obtain_ogre_yeoman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre yeoman)"],
+                            "item_ids": [2980]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Yeoman Hat",
+                    "taskID": "obtain_yeoman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 7,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (yeoman)"],
+                            "item_ids": [2981]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ogre Marksman Hat",
+                    "taskID": "obtain_ogre_marksman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 6,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre marksman)"],
+                            "item_ids": [2982]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Obtain a Marksman Hat",
+                    "taskID": "obtain_marksman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (marksman)"],
+                            "item_ids": [2983]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ogre Woodsman Hat",
+                    "taskID": "obtain_ogre_woodsman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 4,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre woodsman)"],
+                            "item_ids": [2984]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Woodsman Hat",
+                    "taskID": "obtain_woodsman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (woodsman)"],
+                            "item_ids": [2985]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ogre Forester Hat",
+                    "taskID": "obtain_ogre_forester_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 2,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre forester)"],
+                            "item_ids": [2986]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Forester Hat",
+                    "taskID": "obtain_forester_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (forester)"],
+                            "item_ids": [2987]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ogre Bowmaster Hat",
+                    "taskID": "obtain_ogre_bowmaster_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre master)"],
+                            "item_ids": [2988]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bowmaster Hat",
+                    "taskID": "obtain_bowmaster_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (bowmaster)"],
+                            "item_ids": [2989]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ogre Expert Hat",
+                    "taskID": "obtain_ogre_expert_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre expert)"],
+                            "item_ids": [2990]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Expert Hat",
+                    "taskID": "obtain_expert_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (expert)"],
+                            "item_ids": [2991]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ogre Dragon Archer Hat",
+                    "taskID": "obtain_ogre_dragon_archer_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre dragon archer)"],
+                            "item_ids": [2992]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Dragon Archer Hat",
+                    "taskID": "obtain_dragon_archer_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (dragon archer)"],
+                            "item_ids": [2993]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Expert Ogre Dragon Archer Hat",
+                    "taskID": "obtain_expert_ogre_dragon_archer_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (expert ogre dragon archer)"],
+                            "item_ids": [2994]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Expert Dragon Archer Hat",
+                    "taskID": "obtain_expert_dragon_archer_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (expert dragon archer)"],
+                            "item_ids": [2995]
+                        }
+                    ]
                 }                                             
             ],                          
             "is_completed": false

@@ -216,11 +216,11 @@
                     }
                 },
                 {
-                    "name": "Defeat a Killerwatt",
-                    "taskID": "defeat_killerwatt",
+                    "name": "Defeat a Killerwatt on Task",
+                    "taskID": "defeat_killerwatt_on_task",
                     "category": "Slayer",
                     "level": 37,
-                    "completion_type": "NPC_Kill",
+                    "completion_type": "SLAYER",
                     "base_points": 1,
                     "assignment_weight": 5,
                     "target_npc": {
