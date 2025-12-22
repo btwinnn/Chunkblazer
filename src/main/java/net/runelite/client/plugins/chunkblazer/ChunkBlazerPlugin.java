@@ -36,7 +36,8 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
-import net.runelite.client.util.ImageUtil;
+import net.runelite.client.plugins.chunkblazer.modules.TaskModuleManager;
+import net.runelite.client.plugins.chunkblazer.verification.VarPlayerVerificationService;
 
 @Slf4j
 @PluginDescriptor(
@@ -68,9 +69,21 @@ public class ChunkBlazerPlugin extends Plugin
     @Inject
     private Gson gson;
 
+    @Inject
+    private ChunkBlazerWorldMapOverlay worldMapOverlay;
+
+    @Inject
+    private TaskModuleManager taskModuleManager;
+
+    @Inject
+    private VarPlayerVerificationService varPlayerService;
+
     // --- Plugin State ---
     @Getter
-    private NuzlockeTask activeTask;
+    private NuzlockeTask activeTask; // Legacy single task for backward compatibility
+
+    @Getter
+    private List<NuzlockeTask> activeTasks = new ArrayList<>(); // All active tasks for current region
 
     private List<NuzlockeChunk> allChunks = new ArrayList<>();
     private Map<Integer, NuzlockeChunk> chunksByRegionId = new HashMap<>();
@@ -90,8 +103,42 @@ public class ChunkBlazerPlugin extends Plugin
     {
         log.info("ChunkBlazer starting up...");
 
+        // Start verification service (registers for VarPlayer events)
+        varPlayerService.startUp();
+
         // Load task data from JSON
         loadChunkData();
+
+        // Initialize task module manager
+        taskModuleManager.initialize();
+        taskModuleManager.setCompletionHandler(new TaskModuleManager.TaskCompletionHandler()
+        {
+            @Override
+            public void onTaskCompleted(NuzlockeTask task, int progress)
+            {
+                // Task completed locally - request server verification
+                log.info("Task completed locally: {} (progress: {})", task.getName(), progress);
+                completeTask(task);
+            }
+
+            @Override
+            public void onServerVerified(NuzlockeTask task, int pointsAwarded)
+            {
+                // Server verified completion
+                log.info("Server verified: {} (+{} points)", task.getName(), pointsAwarded);
+                // Points already awarded in completeTask, but this confirms server agreement
+                panel.updateStats();
+                panel.updateTaskDisplay();
+            }
+
+            @Override
+            public void onProgressUpdated(NuzlockeTask task, int newProgress)
+            {
+                // Progress updated - refresh UI
+                panel.updateTaskDisplay();
+            }
+        });
+        taskModuleManager.startUp();
 
         // Create and register the sidebar panel
         panel = new ChunkBlazerPanel();
@@ -116,6 +163,9 @@ public class ChunkBlazerPlugin extends Plugin
 
         clientToolbar.addNavigation(navButton);
 
+        // Register world map overlay
+        overlayManager.add(worldMapOverlay);
+
         // Load or assign a task if player is logged in
         if (client.getGameState() == GameState.LOGGED_IN)
         {
@@ -131,6 +181,9 @@ public class ChunkBlazerPlugin extends Plugin
     {
         log.info("ChunkBlazer shutting down...");
         clientToolbar.removeNavigation(navButton);
+        overlayManager.remove(worldMapOverlay);
+        taskModuleManager.shutDown();
+        varPlayerService.shutDown();
         activeTask = null;
     }
 
@@ -176,9 +229,99 @@ public class ChunkBlazerPlugin extends Plugin
         if (currentRegionId != lastRegionId)
         {
             lastRegionId = currentRegionId;
+
+            // Auto-unlock region if enabled and player has enough points
+            if (config.autoUnlockRegions())
+            {
+                tryAutoUnlockCurrentRegion(currentRegionId);
+            }
+
             panel.updateRegionDisplay();
             panel.updateTaskList();
         }
+    }
+
+    /**
+     * Attempt to auto-unlock the current region if it's a neighbor of an unlocked region.
+     * Similar to Region Locker plugin behavior.
+     */
+    private void tryAutoUnlockCurrentRegion(int regionId)
+    {
+        // Skip if already unlocked
+        if (isRegionUnlocked(regionId))
+        {
+            return;
+        }
+
+        // Check if this region is a defined chunk (has tasks)
+        NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+        if (chunk == null)
+        {
+            // Not a defined region, skip
+            return;
+        }
+
+        // Check if it's a neighbor of any unlocked region
+        Set<Integer> neighbors = getNeighborRegionIds();
+        if (!neighbors.contains(regionId))
+        {
+            log.debug("Region {} is not a neighbor of any unlocked region", regionId);
+            return;
+        }
+
+        // Check if free unlock mode is enabled
+        if (config.autoUnlockFree())
+        {
+            // Free unlock - don't spend points
+            log.info("Auto-unlocking region {} ({}) for FREE (exploration mode)",
+                regionId, chunk.getName());
+            unlockRegionFree(regionId);
+        }
+        else
+        {
+            // Check if player has enough points
+            int cost = getRegionUnlockCost(regionId);
+            int currentPoints = getTotalPoints();
+
+            if (currentPoints < cost)
+            {
+                log.debug("Not enough points to auto-unlock region {}. Need {} but have {}",
+                    regionId, cost, currentPoints);
+                return;
+            }
+
+            // Auto-unlock the region (spends points)
+            log.info("Auto-unlocking region {} ({}) for {} points",
+                regionId, chunk.getName(), cost);
+            unlockRegion(regionId);
+        }
+
+        // Reload tasks for the newly unlocked region
+        loadActiveTasks();
+        panel.updatePanel();
+    }
+
+    /**
+     * Unlock a region without spending points (for free/exploration mode).
+     */
+    public void unlockRegionFree(int regionId)
+    {
+        // Add to unlocked list without deducting points
+        String unlocked = config.unlockedChunks();
+        if (unlocked == null || unlocked.isEmpty())
+        {
+            unlocked = String.valueOf(regionId);
+        }
+        else if (!getUnlockedRegionIds().contains(String.valueOf(regionId)))
+        {
+            unlocked = unlocked + "," + regionId;
+        }
+        configManager.setConfiguration("chunkblazer", "unlockedChunks", unlocked);
+
+        log.info("Unlocked region {} for FREE", regionId);
+
+        // Update panel
+        panel.updateStats();
     }
 
     // --- Data Loading ---
@@ -331,35 +474,136 @@ public class ChunkBlazerPlugin extends Plugin
 
     // --- Task Methods ---
 
+    /**
+     * Get the tasks available for the current region (only the 4-5 rolled tasks).
+     */
     public List<NuzlockeTask> getCurrentRegionTasks()
     {
         int regionId = getCurrentRegionId();
-        NuzlockeChunk chunk = chunksByRegionId.get(regionId);
-        if (chunk != null && chunk.getTasks() != null)
+        if (regionId < 0)
         {
-            return chunk.getTasks();
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
+
+        // Get rolled tasks for this region
+        Set<String> rolledTaskIds = getRolledTasksForRegion(regionId);
+
+        // If no tasks rolled yet for this region, roll them now
+        if (rolledTaskIds.isEmpty() && isRegionUnlocked(regionId))
+        {
+            rolledTaskIds = rollTasksForRegion(regionId);
+        }
+
+        NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+        if (chunk == null || chunk.getTasks() == null)
+        {
+            return new ArrayList<>();
+        }
+
+        // Return only the tasks that were rolled for this region
+        List<NuzlockeTask> rolledTasks = new ArrayList<>();
+        for (NuzlockeTask task : chunk.getTasks())
+        {
+            if (rolledTaskIds.contains(task.getTaskId()))
+            {
+                rolledTasks.add(task);
+            }
+        }
+
+        return rolledTasks;
+    }
+
+    /**
+     * Check if a task has been assigned (and thus cannot be assigned again).
+     */
+    public boolean isTaskAssigned(String taskId)
+    {
+        return getAssignedTaskIds().contains(taskId);
     }
 
     private void loadOrAssignTask()
     {
-        String savedTaskId = config.currentTaskId();
-        if (savedTaskId != null && !savedTaskId.isEmpty())
+        // Load all active tasks for the current region
+        loadActiveTasks();
+    }
+
+    /**
+     * Load and activate all rolled tasks for unlocked regions.
+     * All 5 rolled tasks per region are active simultaneously.
+     */
+    private void loadActiveTasks()
+    {
+        activeTasks.clear();
+        Set<String> completedTaskIds = getCompletedTaskIds();
+
+        for (String regionIdStr : getUnlockedRegionIds())
         {
-            // Try to restore saved task
-            activeTask = findTaskById(savedTaskId);
-            if (activeTask != null)
+            try
             {
-                activeTask.setCurrentProgress(config.currentTaskProgress());
-                activeTask.setTargetQuantity(config.currentTaskQuantity());
-                log.info("Restored task: {}", activeTask.getName());
-                return;
+                int regionId = Integer.parseInt(regionIdStr);
+                Set<String> rolledTaskIds = getRolledTasksForRegion(regionId);
+
+                if (rolledTaskIds.isEmpty())
+                {
+                    rolledTaskIds = rollTasksForRegion(regionId);
+                }
+
+                NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+                if (chunk != null && chunk.getTasks() != null)
+                {
+                    for (NuzlockeTask task : chunk.getTasks())
+                    {
+                        if (rolledTaskIds.contains(task.getTaskId()) &&
+                            !completedTaskIds.contains(task.getTaskId()) &&
+                            !task.isLocked())
+                        {
+                            // Initialize task
+                            initializeTask(task);
+                            activeTasks.add(task);
+                        }
+                    }
+                }
+            }
+            catch (NumberFormatException e)
+            {
+                log.warn("Invalid region ID: {}", regionIdStr);
             }
         }
 
-        // Assign a new task
-        assignNewTask();
+        // Register all active tasks with modules for tracking
+        for (NuzlockeTask task : activeTasks)
+        {
+            taskModuleManager.registerActiveTask(task);
+        }
+
+        // Set first task as "active" for backward compatibility
+        activeTask = activeTasks.isEmpty() ? null : activeTasks.get(0);
+
+        log.info("Loaded {} active tasks across all unlocked regions", activeTasks.size());
+        saveActiveTasks();
+    }
+
+    /**
+     * Initialize a task with proper quantity and progress.
+     */
+    private void initializeTask(NuzlockeTask task)
+    {
+        // Load saved progress if exists
+        int savedProgress = loadTaskProgress(task.getTaskId());
+
+        int targetQty = 1;
+        if (task.getTargetNpc() != null)
+        {
+            targetQty = task.getTargetNpc().getRequiredQuantity();
+        }
+        else if (task.getRequiredItems() != null && !task.getRequiredItems().isEmpty())
+        {
+            targetQty = task.getRequiredItems().get(0).getRequiredQuantity();
+        }
+
+        task.setTargetQuantity(targetQty);
+        task.setCurrentProgress(savedProgress);
+        task.setCompleted(false);
     }
 
     private NuzlockeTask findTaskById(String taskId)
@@ -383,20 +627,34 @@ public class ChunkBlazerPlugin extends Plugin
     public void assignNewTask()
     {
         Set<String> unlockedRegions = getUnlockedRegionIds();
+        Set<String> assignedTaskIds = getAssignedTaskIds();
         List<NuzlockeTask> eligibleTasks = new ArrayList<>();
 
-        // Gather all tasks from unlocked regions
+        // Gather eligible tasks from unlocked regions (only from rolled task pools)
         for (String regionIdStr : unlockedRegions)
         {
             try
             {
                 int regionId = Integer.parseInt(regionIdStr);
+
+                // Get or roll the tasks for this region
+                Set<String> rolledTaskIds = getRolledTasksForRegion(regionId);
+                if (rolledTaskIds.isEmpty())
+                {
+                    // First time seeing this region - roll 4-5 tasks
+                    rolledTaskIds = rollTasksForRegion(regionId);
+                }
+
+                // Only consider tasks that are in the rolled set AND not yet assigned
                 NuzlockeChunk chunk = chunksByRegionId.get(regionId);
                 if (chunk != null && chunk.getTasks() != null)
                 {
                     for (NuzlockeTask task : chunk.getTasks())
                     {
-                        if (!task.isLocked() && !isTaskCompleted(task.getTaskId()))
+                        String taskId = task.getTaskId();
+                        if (rolledTaskIds.contains(taskId) &&
+                            !assignedTaskIds.contains(taskId) &&
+                            !task.isLocked())
                         {
                             eligibleTasks.add(task);
                         }
@@ -411,9 +669,10 @@ public class ChunkBlazerPlugin extends Plugin
 
         if (eligibleTasks.isEmpty())
         {
-            log.info("No eligible tasks available");
+            log.info("No eligible tasks available (all rolled tasks have been assigned)");
             activeTask = null;
             saveCurrentTask();
+            panel.showNoTasksMessage();
             return;
         }
 
@@ -437,6 +696,9 @@ public class ChunkBlazerPlugin extends Plugin
 
         if (activeTask != null)
         {
+            // Mark this task as assigned (can never be assigned again)
+            markTaskAssigned(activeTask.getTaskId());
+
             // Calculate target quantity for this task instance
             int targetQty = 1;
             if (activeTask.getTargetNpc() != null)
@@ -452,18 +714,219 @@ public class ChunkBlazerPlugin extends Plugin
             activeTask.setCurrentProgress(0);
             activeTask.setCompleted(false);
 
-            log.info("Assigned new task: {} (target: {})", activeTask.getName(), targetQty);
+            // Route task to appropriate module for auto-tracking
+            taskModuleManager.assignTask(activeTask);
+
+            log.info("Assigned new task: {} (type: {}, target: {})",
+                activeTask.getName(), activeTask.getCompletionType(), targetQty);
             saveCurrentTask();
+        }
+        else
+        {
+            // No task assigned, clear module tracking
+            taskModuleManager.clearTask();
         }
 
         panel.updateTaskDisplay();
     }
 
+    // --- Rolled Tasks Management ---
+
+    private static final int MIN_TASKS_PER_REGION = 4;
+    private static final int MAX_TASKS_PER_REGION = 5;
+
+    /**
+     * Roll 4-5 random tasks for a region. This happens once per region.
+     */
+    private Set<String> rollTasksForRegion(int regionId)
+    {
+        NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+        if (chunk == null || chunk.getTasks() == null || chunk.getTasks().isEmpty())
+        {
+            return new HashSet<>();
+        }
+
+        List<NuzlockeTask> availableTasks = chunk.getTasks().stream()
+            .filter(t -> !t.isLocked())
+            .collect(Collectors.toList());
+
+        if (availableTasks.isEmpty())
+        {
+            return new HashSet<>();
+        }
+
+        // Determine how many tasks to roll (4-5, or all if fewer available)
+        int numToRoll = MIN_TASKS_PER_REGION + random.nextInt(MAX_TASKS_PER_REGION - MIN_TASKS_PER_REGION + 1);
+        numToRoll = Math.min(numToRoll, availableTasks.size());
+
+        // Shuffle and pick
+        List<NuzlockeTask> shuffled = new ArrayList<>(availableTasks);
+        java.util.Collections.shuffle(shuffled, random);
+
+        Set<String> rolledIds = new HashSet<>();
+        for (int i = 0; i < numToRoll; i++)
+        {
+            rolledIds.add(shuffled.get(i).getTaskId());
+        }
+
+        // Save to config
+        saveRolledTasksForRegion(regionId, rolledIds);
+
+        log.info("Rolled {} tasks for region {}: {}", numToRoll, regionId, rolledIds);
+        return rolledIds;
+    }
+
+    /**
+     * Get the rolled task IDs for a region from config.
+     */
+    public Set<String> getRolledTasksForRegion(int regionId)
+    {
+        String data = config.regionRolledTasks();
+        if (data == null || data.isEmpty())
+        {
+            return new HashSet<>();
+        }
+
+        // Format: "regionId:task1,task2,task3|regionId2:task4,task5"
+        for (String regionEntry : data.split("\\|"))
+        {
+            if (regionEntry.isEmpty()) continue;
+
+            String[] parts = regionEntry.split(":");
+            if (parts.length == 2)
+            {
+                try
+                {
+                    int entryRegionId = Integer.parseInt(parts[0]);
+                    if (entryRegionId == regionId)
+                    {
+                        Set<String> taskIds = new HashSet<>();
+                        for (String taskId : parts[1].split(","))
+                        {
+                            if (!taskId.isEmpty())
+                            {
+                                taskIds.add(taskId);
+                            }
+                        }
+                        return taskIds;
+                    }
+                }
+                catch (NumberFormatException e)
+                {
+                    log.warn("Invalid region ID in rolled tasks: {}", parts[0]);
+                }
+            }
+        }
+
+        return new HashSet<>();
+    }
+
+    private void saveRolledTasksForRegion(int regionId, Set<String> taskIds)
+    {
+        String data = config.regionRolledTasks();
+        Map<Integer, Set<String>> regionTasks = new HashMap<>();
+
+        // Parse existing data
+        if (data != null && !data.isEmpty())
+        {
+            for (String regionEntry : data.split("\\|"))
+            {
+                if (regionEntry.isEmpty()) continue;
+
+                String[] parts = regionEntry.split(":");
+                if (parts.length == 2)
+                {
+                    try
+                    {
+                        int entryRegionId = Integer.parseInt(parts[0]);
+                        Set<String> existingTasks = new HashSet<>();
+                        for (String taskId : parts[1].split(","))
+                        {
+                            if (!taskId.isEmpty())
+                            {
+                                existingTasks.add(taskId);
+                            }
+                        }
+                        regionTasks.put(entryRegionId, existingTasks);
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        // Skip invalid entries
+                    }
+                }
+            }
+        }
+
+        // Update with new data
+        regionTasks.put(regionId, taskIds);
+
+        // Serialize back
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Integer, Set<String>> entry : regionTasks.entrySet())
+        {
+            if (sb.length() > 0) sb.append("|");
+            sb.append(entry.getKey()).append(":").append(String.join(",", entry.getValue()));
+        }
+
+        configManager.setConfiguration("chunkblazer", "regionRolledTasks", sb.toString());
+    }
+
+    // --- Assigned Tasks Management ---
+
+    private Set<String> getAssignedTaskIds()
+    {
+        String assigned = config.assignedTasks();
+        if (assigned == null || assigned.isEmpty())
+        {
+            return new HashSet<>();
+        }
+        return Arrays.stream(assigned.split(","))
+            .map(String::trim)
+            .filter(s -> !s.isEmpty())
+            .collect(Collectors.toSet());
+    }
+
+    private void markTaskAssigned(String taskId)
+    {
+        String assigned = config.assignedTasks();
+        if (assigned == null || assigned.isEmpty())
+        {
+            assigned = taskId;
+        }
+        else if (!getAssignedTaskIds().contains(taskId))
+        {
+            assigned = assigned + "," + taskId;
+        }
+        configManager.setConfiguration("chunkblazer", "assignedTasks", assigned);
+        log.info("Marked task {} as assigned (cannot be reassigned)", taskId);
+    }
+
     public void rerollTask()
     {
-        log.info("Rerolling task...");
+        int currentRegion = getCurrentRegionId();
+        log.info("Rerolling tasks for region {}...", currentRegion);
+
+        // Clear rolled tasks for current region
+        if (currentRegion > 0)
+        {
+            clearRolledTasksForRegion(currentRegion);
+        }
+
+        // Clear task progress data
+        configManager.setConfiguration("chunkblazer", "taskProgressData", "");
+
+        // Clear module state
+        taskModuleManager.clearTask();
+
+        // Clear active tasks
+        activeTasks.clear();
         activeTask = null;
-        assignNewTask();
+
+        // Re-roll and load tasks
+        loadActiveTasks();
+        panel.updatePanel();
+
+        log.info("Tasks re-rolled for region {}", currentRegion);
     }
 
     public void devCompleteActiveTask()
@@ -478,19 +941,127 @@ public class ChunkBlazerPlugin extends Plugin
         completeTask(activeTask);
     }
 
-    private void completeTask(NuzlockeTask task)
+    public void devAddPoints(int points)
     {
-        // Mark as completed
-        markTaskCompleted(task.getTaskId());
+        int current = config.totalPoints();
+        configManager.setConfiguration("chunkblazer", "totalPoints", current + points);
+        log.info("DEV: Added {} points. Total: {}", points, current + points);
+    }
 
-        // Clear active task
+    public void devResetTasks()
+    {
+        // Clear rolled tasks for current region only
+        int currentRegion = getCurrentRegionId();
+        if (currentRegion > 0)
+        {
+            clearRolledTasksForRegion(currentRegion);
+        }
+
+        // Clear completed tasks
+        configManager.setConfiguration("chunkblazer", "completedTasks", "");
+        // Clear task progress data
+        configManager.setConfiguration("chunkblazer", "taskProgressData", "");
+        // Clear assigned tasks
+        configManager.setConfiguration("chunkblazer", "assignedTasks", "");
+
+        // Clear module state
+        taskModuleManager.clearTask();
+
+        // Clear active tasks
+        activeTasks.clear();
+        activeTask = null;
+
+        log.info("DEV: Reset all task progress for region {}", currentRegion);
+
+        // Re-roll and load tasks
+        loadActiveTasks();
+        panel.updatePanel();
+    }
+
+    /**
+     * Clear the rolled tasks for a specific region so they can be re-rolled.
+     */
+    private void clearRolledTasksForRegion(int regionId)
+    {
+        String data = config.regionRolledTasks();
+        if (data == null || data.isEmpty())
+        {
+            return;
+        }
+
+        StringBuilder newData = new StringBuilder();
+        for (String entry : data.split("\\|"))
+        {
+            if (entry.isEmpty()) continue;
+            String[] parts = entry.split(":");
+            if (parts.length >= 1)
+            {
+                try
+                {
+                    int entryRegionId = Integer.parseInt(parts[0]);
+                    if (entryRegionId != regionId)
+                    {
+                        if (newData.length() > 0) newData.append("|");
+                        newData.append(entry);
+                    }
+                }
+                catch (NumberFormatException e)
+                {
+                    // Keep malformed entries
+                    if (newData.length() > 0) newData.append("|");
+                    newData.append(entry);
+                }
+            }
+        }
+        configManager.setConfiguration("chunkblazer", "regionRolledTasks", newData.toString());
+        log.info("Cleared rolled tasks for region {}", regionId);
+    }
+
+    public void devResetAll()
+    {
+        // Reset tasks
+        configManager.setConfiguration("chunkblazer", "regionRolledTasks", "");
+        configManager.setConfiguration("chunkblazer", "assignedTasks", "");
+        configManager.setConfiguration("chunkblazer", "completedTasks", "");
         activeTask = null;
         saveCurrentTask();
 
-        // Assign new task
-        assignNewTask();
+        // Reset points
+        configManager.setConfiguration("chunkblazer", "totalPoints", 0);
 
-        log.info("Task completed: {}", task.getName());
+        // Reset unlocked chunks to default (starting area)
+        configManager.setConfiguration("chunkblazer", "unlockedChunks", "12850");
+
+        // Reset game mode lock
+        configManager.setConfiguration("chunkblazer", "accountModeHash", "");
+        configManager.setConfiguration("chunkblazer", "gameMode", GameMode.CASUAL);
+
+        log.info("DEV: Full reset complete");
+
+        // Assign a new task
+        assignNewTask();
+    }
+
+    private void completeTask(NuzlockeTask task)
+    {
+        // Add points for completing the task
+        addPoints(task.getBasePoints());
+
+        // Mark as completed
+        markTaskCompleted(task.getTaskId());
+
+        // Remove from active tasks
+        activeTasks.remove(task);
+        if (activeTask == task)
+        {
+            activeTask = activeTasks.isEmpty() ? null : activeTasks.get(0);
+        }
+
+        // Clear progress data for this task
+        saveActiveTasks();
+
+        log.info("Task completed: {} (+{} points)", task.getName(), task.getBasePoints());
+        panel.updateStats();
         panel.updateTaskDisplay();
     }
 
@@ -534,6 +1105,134 @@ public class ChunkBlazerPlugin extends Plugin
         configManager.setConfiguration("chunkblazer", "completedTasks", completed);
     }
 
+    private Set<String> getCompletedTaskIds()
+    {
+        String completed = config.completedTasks();
+        if (completed == null || completed.isEmpty())
+        {
+            return new HashSet<>();
+        }
+        return Arrays.stream(completed.split(","))
+            .map(String::trim)
+            .filter(s -> !s.isEmpty())
+            .collect(Collectors.toSet());
+    }
+
+    /**
+     * Get list of completed tasks with their details.
+     */
+    public List<NuzlockeTask> getCompletedTasks()
+    {
+        Set<String> completedIds = getCompletedTaskIds();
+        List<NuzlockeTask> completedTasks = new ArrayList<>();
+
+        for (String taskId : completedIds)
+        {
+            NuzlockeTask task = findTaskById(taskId);
+            if (task != null)
+            {
+                completedTasks.add(task);
+            }
+        }
+
+        return completedTasks;
+    }
+
+    // --- Task Progress Persistence ---
+
+    private int loadTaskProgress(String taskId)
+    {
+        String data = config.taskProgressData();
+        if (data == null || data.isEmpty())
+        {
+            return 0;
+        }
+        // Format: "taskId:progress,taskId2:progress2"
+        for (String entry : data.split(","))
+        {
+            String[] parts = entry.split(":");
+            if (parts.length == 2 && parts[0].equals(taskId))
+            {
+                try
+                {
+                    return Integer.parseInt(parts[1]);
+                }
+                catch (NumberFormatException e)
+                {
+                    return 0;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public void saveTaskProgress(String taskId, int progress)
+    {
+        String data = config.taskProgressData();
+        Map<String, Integer> progressMap = new HashMap<>();
+
+        if (data != null && !data.isEmpty())
+        {
+            for (String entry : data.split(","))
+            {
+                String[] parts = entry.split(":");
+                if (parts.length == 2)
+                {
+                    try
+                    {
+                        progressMap.put(parts[0], Integer.parseInt(parts[1]));
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        // Skip invalid entries
+                    }
+                }
+            }
+        }
+
+        progressMap.put(taskId, progress);
+
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Integer> entry : progressMap.entrySet())
+        {
+            if (sb.length() > 0) sb.append(",");
+            sb.append(entry.getKey()).append(":").append(entry.getValue());
+        }
+        configManager.setConfiguration("chunkblazer", "taskProgressData", sb.toString());
+    }
+
+    private void saveActiveTasks()
+    {
+        // Save progress for all active tasks
+        for (NuzlockeTask task : activeTasks)
+        {
+            saveTaskProgress(task.getTaskId(), task.getCurrentProgress());
+        }
+    }
+
+    // --- Stats Methods ---
+
+    public int getTotalPoints()
+    {
+        return config.totalPoints();
+    }
+
+    public int getCompletedTaskCount()
+    {
+        String completed = config.completedTasks();
+        if (completed == null || completed.isEmpty())
+        {
+            return 0;
+        }
+        return completed.split(",").length;
+    }
+
+    private void addPoints(int points)
+    {
+        int current = config.totalPoints();
+        configManager.setConfiguration("chunkblazer", "totalPoints", current + points);
+    }
+
     // --- Helper Methods ---
 
     private String getPlayerName()
@@ -544,5 +1243,93 @@ public class ChunkBlazerPlugin extends Plugin
             return player.getName();
         }
         return null;
+    }
+
+    // --- World Map Helper Methods ---
+
+    public Set<Integer> getNeighborRegionIds()
+    {
+        Set<Integer> neighbors = new HashSet<>();
+        Set<String> unlocked = getUnlockedRegionIds();
+
+        for (String regionIdStr : unlocked)
+        {
+            try
+            {
+                int regionId = Integer.parseInt(regionIdStr);
+                NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+                if (chunk != null && chunk.getNeighborIds() != null)
+                {
+                    for (Integer neighborId : chunk.getNeighborIds())
+                    {
+                        // Only add if not already unlocked
+                        if (!unlocked.contains(String.valueOf(neighborId)))
+                        {
+                            neighbors.add(neighborId);
+                        }
+                    }
+                }
+            }
+            catch (NumberFormatException e)
+            {
+                log.warn("Invalid region ID in unlocked list: {}", regionIdStr);
+            }
+        }
+
+        return neighbors;
+    }
+
+    public String getRegionName(int regionId)
+    {
+        NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+        if (chunk != null)
+        {
+            return chunk.getName();
+        }
+        return "Unknown Region";
+    }
+
+    public int getRegionUnlockCost(int regionId)
+    {
+        NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+        if (chunk != null)
+        {
+            return chunk.getUnlockCostValue();
+        }
+        return 1; // Default cost
+    }
+
+    public void unlockRegion(int regionId)
+    {
+        int cost = getRegionUnlockCost(regionId);
+        int currentPoints = getTotalPoints();
+
+        if (currentPoints < cost)
+        {
+            log.warn("Not enough points to unlock region {}. Need {} but have {}",
+                regionId, cost, currentPoints);
+            return;
+        }
+
+        // Deduct points
+        configManager.setConfiguration("chunkblazer", "totalPoints", currentPoints - cost);
+
+        // Add to unlocked list
+        String unlocked = config.unlockedChunks();
+        if (unlocked == null || unlocked.isEmpty())
+        {
+            unlocked = String.valueOf(regionId);
+        }
+        else
+        {
+            unlocked = unlocked + "," + regionId;
+        }
+        configManager.setConfiguration("chunkblazer", "unlockedChunks", unlocked);
+
+        log.info("Unlocked region {} for {} points. Remaining points: {}",
+            regionId, cost, currentPoints - cost);
+
+        // Update panel
+        panel.updateStats();
     }
 }
