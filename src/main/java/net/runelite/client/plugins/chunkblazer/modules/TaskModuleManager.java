@@ -161,23 +161,27 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
     {
         if (task == null)
         {
+            log.warn("registerActiveTask called with null task");
             return;
         }
 
         String completionType = task.getCompletionType();
-        if (completionType == null)
-        {
-            log.warn("Task {} has no completion type", task.getTaskId());
-            return;
-        }
+        String category = task.getCategory();
+        log.info("=== REGISTERING TASK: {} ===", task.getName());
+        log.info("  TaskID: {}", task.getTaskId());
+        log.info("  CompletionType: {}, Category: {}", completionType, category);
 
         // Find module that can handle this task
         AbstractTaskModule module = findModuleForTask(task);
         if (module == null)
         {
-            log.debug("No module found for completion type: {} (task: {})", completionType, task.getName());
+            log.warn(">>> NO MODULE found for task: {} (type: {}, category: {})",
+                task.getName(), completionType, category);
+            log.warn("    Available modules by type: {}", modulesByType.keySet());
             return;
         }
+
+        log.info(">>> Found module: {} for task: {}", module.getCompletionType(), task.getName());
 
         // Add to active tasks list
         if (!activeTasks.contains(task))
@@ -185,7 +189,11 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
             activeTasks.add(task);
             taskToModuleMap.put(task.getTaskId(), module);
             module.addActiveTask(task);
-            log.info("Registered active task: {} (type: {})", task.getName(), completionType);
+            log.info(">>> Task registered successfully. Total manager tasks: {}", activeTasks.size());
+        }
+        else
+        {
+            log.info(">>> Task already registered: {}", task.getName());
         }
     }
 

@@ -134,8 +134,13 @@ public class ChunkBlazerPlugin extends Plugin
             @Override
             public void onProgressUpdated(NuzlockeTask task, int newProgress)
             {
-                // Progress updated - refresh UI
-                panel.updateTaskDisplay();
+                // Save progress to config
+                saveTaskProgress(task.getTaskId(), newProgress);
+
+                // Progress updated - refresh UI on Swing thread
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    panel.updateTaskDisplay();
+                });
             }
         });
         taskModuleManager.startUp();
@@ -736,7 +741,9 @@ public class ChunkBlazerPlugin extends Plugin
     private static final int MAX_TASKS_PER_REGION = 5;
 
     /**
-     * Roll 4-5 random tasks for a region. This happens once per region.
+     * Roll 4-5 random tasks for a region using weighted selection.
+     * Tasks that have been assigned before (globally) are excluded.
+     * This happens once per region.
      */
     private Set<String> rollTasksForRegion(int regionId)
     {
@@ -746,12 +753,18 @@ public class ChunkBlazerPlugin extends Plugin
             return new HashSet<>();
         }
 
+        // Get globally assigned tasks to exclude
+        Set<String> globallyAssigned = getAssignedTaskIds();
+
+        // Filter available tasks: not locked and not already assigned globally
         List<NuzlockeTask> availableTasks = chunk.getTasks().stream()
             .filter(t -> !t.isLocked())
+            .filter(t -> !globallyAssigned.contains(t.getTaskId()))
             .collect(Collectors.toList());
 
         if (availableTasks.isEmpty())
         {
+            log.info("No available tasks for region {} (all locked or already assigned)", regionId);
             return new HashSet<>();
         }
 
@@ -759,21 +772,74 @@ public class ChunkBlazerPlugin extends Plugin
         int numToRoll = MIN_TASKS_PER_REGION + random.nextInt(MAX_TASKS_PER_REGION - MIN_TASKS_PER_REGION + 1);
         numToRoll = Math.min(numToRoll, availableTasks.size());
 
-        // Shuffle and pick
-        List<NuzlockeTask> shuffled = new ArrayList<>(availableTasks);
-        java.util.Collections.shuffle(shuffled, random);
-
+        // Use weighted random selection based on assignment_weight
         Set<String> rolledIds = new HashSet<>();
-        for (int i = 0; i < numToRoll; i++)
+        List<NuzlockeTask> remainingTasks = new ArrayList<>(availableTasks);
+
+        for (int i = 0; i < numToRoll && !remainingTasks.isEmpty(); i++)
         {
-            rolledIds.add(shuffled.get(i).getTaskId());
+            NuzlockeTask selected = selectWeightedRandom(remainingTasks);
+            if (selected != null)
+            {
+                rolledIds.add(selected.getTaskId());
+                remainingTasks.remove(selected);
+
+                // Mark as globally assigned (cannot be assigned again in any chunk)
+                markTaskAssigned(selected.getTaskId());
+            }
         }
 
         // Save to config
         saveRolledTasksForRegion(regionId, rolledIds);
 
-        log.info("Rolled {} tasks for region {}: {}", numToRoll, regionId, rolledIds);
+        log.info("Rolled {} tasks for region {} (weighted): {}", rolledIds.size(), regionId, rolledIds);
         return rolledIds;
+    }
+
+    /**
+     * Select a random task using weighted probability based on assignment_weight.
+     * Higher weight = higher chance of being selected.
+     */
+    private NuzlockeTask selectWeightedRandom(List<NuzlockeTask> tasks)
+    {
+        if (tasks.isEmpty())
+        {
+            return null;
+        }
+
+        // Calculate total weight
+        int totalWeight = 0;
+        for (NuzlockeTask task : tasks)
+        {
+            int weight = task.getAssignmentWeight();
+            // Default weight of 1 if not specified or 0
+            totalWeight += (weight > 0) ? weight : 1;
+        }
+
+        if (totalWeight <= 0)
+        {
+            // Fallback to simple random if all weights are 0
+            return tasks.get(random.nextInt(tasks.size()));
+        }
+
+        // Pick a random point in the total weight
+        int randomPoint = random.nextInt(totalWeight);
+
+        // Find which task that point falls into
+        int currentWeight = 0;
+        for (NuzlockeTask task : tasks)
+        {
+            int weight = task.getAssignmentWeight();
+            currentWeight += (weight > 0) ? weight : 1;
+
+            if (randomPoint < currentWeight)
+            {
+                return task;
+            }
+        }
+
+        // Fallback (shouldn't happen)
+        return tasks.get(tasks.size() - 1);
     }
 
     /**
@@ -1061,8 +1127,12 @@ public class ChunkBlazerPlugin extends Plugin
         saveActiveTasks();
 
         log.info("Task completed: {} (+{} points)", task.getName(), task.getBasePoints());
+
+        // Update all panel sections
         panel.updateStats();
         panel.updateTaskDisplay();
+        panel.updateCompletedTasks();
+        panel.updateTaskList();
     }
 
     private void saveCurrentTask()
@@ -1329,7 +1399,14 @@ public class ChunkBlazerPlugin extends Plugin
         log.info("Unlocked region {} for {} points. Remaining points: {}",
             regionId, cost, currentPoints - cost);
 
+        // Auto-roll tasks for the new region
+        Set<String> newTasks = rollTasksForRegion(regionId);
+        log.info("Auto-rolled {} tasks for newly unlocked region {}", newTasks.size(), regionId);
+
+        // Reload all active tasks (includes the new region's tasks)
+        loadActiveTasks();
+
         // Update panel
-        panel.updateStats();
+        panel.updatePanel();
     }
 }

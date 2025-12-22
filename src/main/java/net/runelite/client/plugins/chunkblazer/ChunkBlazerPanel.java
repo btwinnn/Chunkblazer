@@ -127,8 +127,44 @@ public class ChunkBlazerPanel extends PluginPanel
         // Task List Section
         taskListPanel = createTaskListSection();
         mainPanel.add(taskListPanel);
+        mainPanel.add(Box.createVerticalStrut(10));
+
+        // Social Links Section
+        mainPanel.add(createSocialLinksSection());
 
         return mainPanel;
+    }
+
+    private JPanel createSocialLinksSection()
+    {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 5));
+        panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        panel.setAlignmentX(LEFT_ALIGNMENT);
+
+        // Discord button with icon
+        JButton discordButton = new JButton("\uD83D\uDCAC Discord"); // Speech bubble emoji
+        discordButton.setForeground(new Color(88, 101, 242)); // Discord blurple
+        discordButton.setToolTipText("Join the Discord");
+        discordButton.addActionListener(e -> openLink("https://discord.gg/D8DYP45DV8"));
+        panel.add(discordButton);
+
+        return panel;
+    }
+
+    private void openLink(String url)
+    {
+        try
+        {
+            java.awt.Desktop.getDesktop().browse(new java.net.URI(url));
+        }
+        catch (Exception e)
+        {
+            log.error("Failed to open link: {}", url, e);
+            JOptionPane.showMessageDialog(this,
+                "Failed to open link:\n" + url + "\n\n" + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private JPanel createCompletedTasksSection()
@@ -485,6 +521,25 @@ public class ChunkBlazerPanel extends PluginPanel
         resetPanel.add(resetAllButton);
 
         controlsPanel.add(resetPanel);
+        controlsPanel.add(Box.createVerticalStrut(5));
+
+        // Debug button row
+        JPanel debugPanel = new JPanel(new GridLayout(1, 2, 5, 0));
+        debugPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        debugPanel.setAlignmentX(LEFT_ALIGNMENT);
+        debugPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+
+        JButton debugButton = new JButton("Debug Info");
+        debugButton.setForeground(new Color(100, 150, 255));
+        debugButton.addActionListener(e -> onShowDebugInfo());
+        debugPanel.add(debugButton);
+
+        JButton logButton = new JButton("Open Logs");
+        logButton.setForeground(new Color(100, 150, 255));
+        logButton.addActionListener(e -> openLogFile());
+        debugPanel.add(logButton);
+
+        controlsPanel.add(debugPanel);
 
         return controlsPanel;
     }
@@ -682,6 +737,151 @@ public class ChunkBlazerPanel extends PluginPanel
         updateTaskDisplay();
     }
 
+    private void openLogFile()
+    {
+        try
+        {
+            java.io.File logFile = new java.io.File(System.getProperty("user.home") + "/.runelite/logs/client.log");
+            if (!logFile.exists())
+            {
+                JOptionPane.showMessageDialog(this,
+                    "Log file not found at:\n" + logFile.getAbsolutePath(),
+                    "Log File Not Found",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Try Notepad++ first (common install locations)
+            String[] notepadPlusPlusPaths = {
+                "C:\\Program Files\\Notepad++\\notepad++.exe",
+                "C:\\Program Files (x86)\\Notepad++\\notepad++.exe"
+            };
+
+            for (String path : notepadPlusPlusPaths)
+            {
+                java.io.File npp = new java.io.File(path);
+                if (npp.exists())
+                {
+                    // Open with Notepad++ and jump to end of file
+                    Runtime.getRuntime().exec(new String[]{path, "-n999999", logFile.getAbsolutePath()});
+                    return;
+                }
+            }
+
+            // Fallback to default application
+            java.awt.Desktop.getDesktop().open(logFile);
+        }
+        catch (Exception e)
+        {
+            log.error("Failed to open log file", e);
+            JOptionPane.showMessageDialog(this,
+                "Failed to open log file:\n" + e.getMessage() + "\n\n" +
+                "Log file location:\n" + System.getProperty("user.home") + "/.runelite/logs/client.log",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void onShowDebugInfo()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== CHUNKBLAZER DEBUG INFO ===\n");
+        sb.append("Generated: ").append(new java.util.Date()).append("\n\n");
+
+        // Module status
+        sb.append("=== MODULE STATUS ===\n");
+        sb.append("Check logs at: C:\\Users\\bao\\.runelite\\logs\\client.log\n");
+        sb.append("Look for: '>>>' prefixed lines for combat tracking\n");
+        sb.append("Look for: 'NpcKillModule HEARTBEAT' every ~60 seconds\n\n");
+
+        // Current region
+        sb.append("Current Region: ").append(plugin.getCurrentRegionId()).append("\n\n");
+
+        // Active tasks with combat task highlighting
+        sb.append("=== ACTIVE TASKS (").append(plugin.getActiveTasks().size()).append(") ===\n\n");
+
+        List<NuzlockeTask> tasks = plugin.getActiveTasks();
+        int combatTasks = 0;
+
+        for (NuzlockeTask task : tasks)
+        {
+            String type = task.getCompletionType();
+            String category = task.getCategory();
+            boolean isCombat = "NPC_KILL".equalsIgnoreCase(type)
+                            || "COMBAT".equalsIgnoreCase(type)
+                            || "combat".equalsIgnoreCase(category);
+
+            if (isCombat) combatTasks++;
+
+            sb.append(isCombat ? "[COMBAT] " : "");
+            sb.append("Task: ").append(task.getName()).append("\n");
+            sb.append("  ID: ").append(task.getTaskId()).append("\n");
+            sb.append("  Category: ").append(category).append("\n");
+            sb.append("  CompletionType: ").append(type).append("\n");
+            sb.append("  Progress: ").append(task.getCurrentProgress()).append("/").append(task.getTargetQuantity()).append("\n");
+
+            TargetNpc targetNpc = task.getTargetNpc();
+            if (targetNpc != null)
+            {
+                sb.append("  Target NPC Name: ").append(targetNpc.getName()).append("\n");
+                sb.append("  Target NPC IDs: ").append(targetNpc.getNpcIds()).append("\n");
+                if (isCombat)
+                {
+                    sb.append("  >>> If kills aren't tracking, verify in-game NPC ID matches these IDs!\n");
+                }
+            }
+            else
+            {
+                sb.append("  Target NPC: NONE - this task won't track NPC kills!\n");
+            }
+            sb.append("\n");
+        }
+
+        sb.append("Total combat tasks: ").append(combatTasks).append("\n");
+        if (combatTasks == 0)
+        {
+            sb.append(">>> NO COMBAT TASKS! Kill tracking will not work without combat tasks.\n");
+        }
+        sb.append("\n");
+
+        // Completed tasks
+        sb.append("=== COMPLETED TASKS ===\n");
+        List<NuzlockeTask> completed = plugin.getCompletedTasks();
+        sb.append("Total completed: ").append(completed.size()).append("\n");
+        for (NuzlockeTask task : completed)
+        {
+            sb.append("  - ").append(task.getName()).append(" (").append(task.getBasePoints()).append(" pts)\n");
+        }
+
+        sb.append("\n=== TROUBLESHOOTING ===\n");
+        sb.append("If kills aren't being detected:\n");
+        sb.append("1. Check the log file for '>>> PLAYER ATTACKING' messages\n");
+        sb.append("2. Check for '>>> NPC died' messages when NPC dies\n");
+        sb.append("3. Verify the killed NPC's ID matches the Target NPC IDs above\n");
+        sb.append("4. Look for 'NpcKillModule HEARTBEAT' to confirm events are working\n");
+
+        // Create scrollable text area
+        javax.swing.JTextArea textArea = new javax.swing.JTextArea(sb.toString());
+        textArea.setEditable(false);
+        textArea.setFont(FontManager.getRunescapeSmallFont());
+        textArea.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        textArea.setForeground(Color.WHITE);
+        textArea.setCaretPosition(0);
+        textArea.setWrapStyleWord(true);
+        textArea.setLineWrap(true);
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(450, 500));
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        JOptionPane.showMessageDialog(
+            this,
+            scrollPane,
+            "ChunkBlazer Debug Info",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
     // --- Update Methods ---
 
     public void updatePanel()
@@ -789,20 +989,21 @@ public class ChunkBlazerPanel extends PluginPanel
         itemPanel.setBackground(new Color(40, 50, 40));
         itemPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(60, 80, 60)),
-            new EmptyBorder(6, 8, 6, 8)
+            new EmptyBorder(4, 4, 4, 4)
         ));
         itemPanel.setAlignmentX(LEFT_ALIGNMENT);
-        itemPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+        itemPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
 
-        // Task name
-        JLabel nameLabel = new JLabel(task.getName());
-        nameLabel.setFont(FontManager.getRunescapeFont().deriveFont(13f));
+        // Task name with HTML wrapping
+        String taskName = task.getName();
+        JLabel nameLabel = new JLabel("<html><body style='width: 180px'>" + taskName + "</body></html>");
+        nameLabel.setFont(FontManager.getRunescapeSmallFont());
         nameLabel.setForeground(new Color(150, 255, 150));
         nameLabel.setAlignmentX(LEFT_ALIGNMENT);
         itemPanel.add(nameLabel);
 
-        // Category and points row
-        JPanel infoRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        // Category and points row - more compact
+        JPanel infoRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
         infoRow.setBackground(new Color(40, 50, 40));
         infoRow.setAlignmentX(LEFT_ALIGNMENT);
 
@@ -811,14 +1012,14 @@ public class ChunkBlazerPanel extends PluginPanel
         catLabel.setForeground(Color.ORANGE);
         infoRow.add(catLabel);
 
-        JLabel ptsLabel = new JLabel(task.getBasePoints() + " pts");
+        JLabel ptsLabel = new JLabel(task.getBasePoints() + "pt");
         ptsLabel.setFont(FontManager.getRunescapeSmallFont());
         ptsLabel.setForeground(new Color(255, 215, 0));
         infoRow.add(ptsLabel);
 
         if (task.getLevelRequirement() > 1)
         {
-            JLabel lvlLabel = new JLabel("Lv" + task.getLevelRequirement());
+            JLabel lvlLabel = new JLabel("L" + task.getLevelRequirement());
             lvlLabel.setFont(FontManager.getRunescapeSmallFont());
             lvlLabel.setForeground(Color.CYAN);
             infoRow.add(lvlLabel);

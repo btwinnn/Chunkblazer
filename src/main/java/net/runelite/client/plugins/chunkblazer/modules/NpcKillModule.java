@@ -14,6 +14,7 @@ import net.runelite.api.ItemContainer;
 import net.runelite.api.NPC;
 import net.runelite.api.Player;
 import net.runelite.api.events.ActorDeath;
+import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.InteractingChanged;
 import net.runelite.client.eventbus.Subscribe;
@@ -39,12 +40,17 @@ public class NpcKillModule extends AbstractTaskModule
 
     // Track the NPC we're currently fighting
     private NPC currentTarget;
+    private int currentTargetIndex = -1; // Track by index to avoid reference issues
     private int damageDealtToTarget;
     private int lastKillingBlowAnimation;
 
     // For boss KC verification
     private int baselineKc = -1;
     private String currentBossName;
+
+    // Debug heartbeat
+    private int tickCounter = 0;
+    private static final int DEBUG_LOG_INTERVAL = 100; // Log every 100 ticks (~60 seconds)
 
     @Inject
     public NpcKillModule()
@@ -85,7 +91,8 @@ public class NpcKillModule extends AbstractTaskModule
     public void startUp()
     {
         eventBus.register(this);
-        log.info("NpcKillModule started");
+        log.info("=== NpcKillModule STARTED - Event bus registered ===");
+        log.info("NpcKillModule: eventBus={}, client={}", eventBus != null ? "OK" : "NULL", client != null ? "OK" : "NULL");
     }
 
     @Override
@@ -93,6 +100,7 @@ public class NpcKillModule extends AbstractTaskModule
     {
         eventBus.unregister(this);
         currentTarget = null;
+        currentTargetIndex = -1;
         damageDealtToTarget = 0;
         log.info("NpcKillModule stopped");
     }
@@ -102,6 +110,7 @@ public class NpcKillModule extends AbstractTaskModule
     {
         super.onTaskAssigned(task);
         currentTarget = null;
+        currentTargetIndex = -1;
         damageDealtToTarget = 0;
 
         // For boss tasks, get baseline KC from VarPlayer (instant server-side)
@@ -130,6 +139,7 @@ public class NpcKillModule extends AbstractTaskModule
     {
         super.onTaskCleared();
         currentTarget = null;
+        currentTargetIndex = -1;
         damageDealtToTarget = 0;
         baselineKc = -1;
         currentBossName = null;
@@ -145,25 +155,48 @@ public class NpcKillModule extends AbstractTaskModule
     }
 
     @Subscribe
+    public void onGameTick(GameTick event)
+    {
+        tickCounter++;
+
+        // Log heartbeat periodically to confirm event bus is working
+        if (tickCounter % DEBUG_LOG_INTERVAL == 0)
+        {
+            log.info(">>> NpcKillModule HEARTBEAT - tick {} - activeTasks: {}, currentTarget: {}",
+                tickCounter, activeTasks.size(), currentTarget != null ? currentTarget.getName() : "none");
+
+            // List all active combat tasks
+            for (NuzlockeTask task : activeTasks)
+            {
+                TargetNpc targetNpc = task.getTargetNpc();
+                String npcInfo = targetNpc != null ? "NPC IDs: " + targetNpc.getNpcIds() : "no target NPC";
+                log.info(">>>   Active combat task: {} ({}) - {}/{} - {}",
+                    task.getName(), task.getTaskId(),
+                    task.getCurrentProgress(), task.getTargetQuantity(), npcInfo);
+            }
+        }
+    }
+
+    @Subscribe
     public void onInteractingChanged(InteractingChanged event)
     {
-        if (activeTask == null)
-        {
-            return;
-        }
-
         Actor source = event.getSource();
         Actor target = event.getTarget();
 
-        // Check if player started attacking an NPC
+        // Log all player interactions for debugging
         if (source == client.getLocalPlayer() && target instanceof NPC)
         {
             NPC npc = (NPC) target;
-            if (isTargetNpc(npc))
+            log.info(">>> PLAYER ATTACKING NPC: {} (ID: {}, Index: {}) - activeTasks count: {}",
+                npc.getName(), npc.getId(), npc.getIndex(), activeTasks.size());
+
+            // Always track the current target if we have any active tasks
+            if (!activeTasks.isEmpty())
             {
                 currentTarget = npc;
+                currentTargetIndex = npc.getIndex(); // Track by index for reliable matching
                 damageDealtToTarget = 0;
-                log.debug("Started attacking target NPC: {} (ID: {})", npc.getName(), npc.getId());
+                log.info(">>> Tracking target: {} (ID: {}, Index: {})", npc.getName(), npc.getId(), npc.getIndex());
             }
         }
     }
@@ -171,7 +204,7 @@ public class NpcKillModule extends AbstractTaskModule
     @Subscribe
     public void onHitsplatApplied(HitsplatApplied event)
     {
-        if (activeTask == null || currentTarget == null)
+        if (currentTarget == null)
         {
             return;
         }
@@ -182,7 +215,9 @@ public class NpcKillModule extends AbstractTaskModule
             // Only count damage from the player
             if (event.getHitsplat().isMine())
             {
-                damageDealtToTarget += event.getHitsplat().getAmount();
+                int damage = event.getHitsplat().getAmount();
+                damageDealtToTarget += damage;
+                log.info(">>> DAMAGE DEALT to {}: {} (total: {})", currentTarget.getName(), damage, damageDealtToTarget);
 
                 // Track animation for verification
                 Player player = client.getLocalPlayer();
@@ -197,11 +232,6 @@ public class NpcKillModule extends AbstractTaskModule
     @Subscribe
     public void onActorDeath(ActorDeath event)
     {
-        if (activeTasks.isEmpty())
-        {
-            return;
-        }
-
         Actor actor = event.getActor();
         if (!(actor instanceof NPC))
         {
@@ -210,21 +240,57 @@ public class NpcKillModule extends AbstractTaskModule
 
         NPC npc = (NPC) actor;
 
-        // Verify player was involved (dealt damage or was in combat)
-        if (currentTarget != npc && damageDealtToTarget <= 0)
+        // Debug: Log every NPC death
+        log.info("DEBUG: NPC died - Name: {}, ID: {}, Index: {}, activeTasks: {}, currentTargetIndex: {}, damageDealt: {}",
+            npc.getName(), npc.getId(), npc.getIndex(), activeTasks.size(),
+            currentTargetIndex, damageDealtToTarget);
+
+        if (activeTasks.isEmpty())
         {
-            log.debug("NPC died but player wasn't involved: {}", npc.getName());
+            log.info("DEBUG: No active tasks to check");
             return;
         }
+
+        // STRICT CHECK: Only credit kills where we damaged THIS SPECIFIC NPC
+        // Must match by index (unique per NPC instance) AND have dealt damage
+        boolean wasOurKill = (currentTargetIndex == npc.getIndex()) && (damageDealtToTarget > 0);
+
+        // Also check by reference as backup (same object in memory)
+        if (!wasOurKill && currentTarget == npc && damageDealtToTarget > 0)
+        {
+            wasOurKill = true;
+        }
+
+        if (!wasOurKill)
+        {
+            log.info("DEBUG: Not our kill - targetIndex: {}, npcIndex: {}, damage: {}",
+                currentTargetIndex, npc.getIndex(), damageDealtToTarget);
+            return;
+        }
+
+        log.info(">>> CONFIRMED OUR KILL: {} (Index: {}, Damage dealt: {})",
+            npc.getName(), npc.getIndex(), damageDealtToTarget);
 
         // Check all active tasks for a match
         List<NuzlockeTask> matchingTasks = findMatchingTasks(npc);
 
+        // Debug: Log what we're checking against
+        for (NuzlockeTask task : activeTasks)
+        {
+            TargetNpc targetNpc = task.getTargetNpc();
+            if (targetNpc != null)
+            {
+                log.info("DEBUG: Checking task '{}' - expected NPC IDs: {}, killed NPC ID: {}, matches: {}",
+                    task.getName(), targetNpc.getNpcIds(), npc.getId(), targetNpc.matchesNpcId(npc.getId()));
+            }
+        }
+
         if (matchingTasks.isEmpty())
         {
-            log.debug("NPC {} doesn't match any active tasks", npc.getName());
+            log.info("DEBUG: NPC {} (ID: {}) doesn't match any active tasks", npc.getName(), npc.getId());
             // Reset tracking anyway
             currentTarget = null;
+            currentTargetIndex = -1;
             damageDealtToTarget = 0;
             return;
         }
@@ -254,6 +320,7 @@ public class NpcKillModule extends AbstractTaskModule
 
         // Reset tracking
         currentTarget = null;
+        currentTargetIndex = -1;
         damageDealtToTarget = 0;
     }
 
@@ -285,6 +352,12 @@ public class NpcKillModule extends AbstractTaskModule
         task.setCurrentProgress(newProgress);
 
         log.info("Task {} progress: {}/{}", task.getName(), newProgress, task.getTargetQuantity());
+
+        // Notify callback about progress update (to update UI and save)
+        if (completionCallback != null)
+        {
+            completionCallback.onProgressUpdated(task, newProgress);
+        }
 
         if (newProgress >= task.getTargetQuantity())
         {

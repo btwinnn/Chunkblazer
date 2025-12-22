@@ -80,8 +80,15 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
                 activeTask = task;
                 currentProgress = task.getCurrentProgress();
             }
-            log.info("{} module: Added active task - {} (progress: {}/{})",
-                getCompletionType(), task.getName(), task.getCurrentProgress(), task.getTargetQuantity());
+            log.info("=== {} module: ADDED active task ===", getCompletionType());
+            log.info("  Task: {} (ID: {})", task.getName(), task.getTaskId());
+            log.info("  Progress: {}/{}", task.getCurrentProgress(), task.getTargetQuantity());
+            log.info("  CompletionType: {}, Category: {}", task.getCompletionType(), task.getCategory());
+            log.info("  Total active tasks now: {}", activeTasks.size());
+        }
+        else
+        {
+            log.info("{} module: Task {} already in active list", getCompletionType(), task.getName());
         }
     }
 
