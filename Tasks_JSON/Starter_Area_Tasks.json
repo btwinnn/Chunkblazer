@@ -628,8 +628,8 @@
       "is_completed": false
     },
     {
-      "region_id": [12594, 12694],
-      "neighbor_ids": [12850, 13105, 12593, 12848],
+      "region_id": [12594],
+      "neighbor_ids": [12595, 12850, 12593, 12338],
       "Friendly_Name": "H.A.M. Hideout",
       "tasks": [
         {
