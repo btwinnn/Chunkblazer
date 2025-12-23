@@ -3239,7 +3239,7 @@
                 },
                 {
                     "name": "Obtain a Long Bone",
-                    "taskID": "obtain_Long Bone",
+                    "taskID": "obtain_long_bone",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -3254,7 +3254,7 @@
                 },
                 {
                     "name": "Obtain a Curved Bone",
-                    "taskID": "obtain_Long Bone",
+                    "taskID": "obtain_curved_bone",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
@@ -3572,7 +3572,7 @@
                 },
                 {
                     "name": "Obtain a Curved Bone",
-                    "taskID": "obtain_Long Bone",
+                    "taskID": "obtain_curved_bone",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
@@ -3681,7 +3681,7 @@
                 }, 
                 {
                     "name": "Obtain a Curved Bone",
-                    "taskID": "obtain_Long Bone",
+                    "taskID": "obtain_curved_bone",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
