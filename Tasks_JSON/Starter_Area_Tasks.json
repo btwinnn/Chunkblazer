@@ -481,7 +481,6 @@
         {
           "name": "Catch Raw Anchovies",
           "taskID": "catch_anchovies",
-          "is_unlocked": false,
           "category": "Fishing",
           "level": 15,
           "completion_type": "FISHING",
@@ -491,7 +490,6 @@
             {
               "item": "Raw Anchovies",
               "item_ids": [321],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -499,7 +497,6 @@
         {
           "name": "Cook some Shrimp",
           "taskID": "cook_shrimp",
-          "is_unlocked": false,
           "category": "Cooking",
           "level": 1,
           "completion_type": "COOKING",
@@ -516,7 +513,6 @@
         {
           "name": "Cook Anchovies",
           "taskID": "cook_anchovies",
-          "is_unlocked": false,
           "category": "Cooking",
           "level": 1,
           "completion_type": "COOKING",
@@ -526,7 +522,6 @@
             {
               "item": "Anchovies",
               "item_ids": [319],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
