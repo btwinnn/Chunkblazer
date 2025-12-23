@@ -33,4 +33,28 @@ public class RequiredItem
         }
         return 1;
     }
+
+    /**
+     * Check if the given item ID matches this required item.
+     */
+    public boolean matchesItemId(int itemId)
+    {
+        return itemIds != null && itemIds.contains(itemId);
+    }
+
+    /**
+     * Get the first item ID (for display purposes).
+     */
+    public int getFirstItemId()
+    {
+        return itemIds != null && !itemIds.isEmpty() ? itemIds.get(0) : -1;
+    }
+
+    /**
+     * Get all item IDs.
+     */
+    public List<Integer> getItemIds()
+    {
+        return itemIds;
+    }
 }
