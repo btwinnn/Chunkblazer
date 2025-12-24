@@ -5788,71 +5788,65 @@
             "is_completed": false
         },
         {
-            "region_id": [9772],
-            "Friendly_Name": "Myths' Guild",
-            "neighbor_ids": [9773,10028, 9771, 9516],
+            "region_id": [9775],
+            "Friendly_Name": "Jiggig",
+            "neighbor_ids": [9776, 10031, 9774, 9519],
             "tasks": [
                 {
-                    "name": "Runecraft a Wrath Rune",
-                    "taskID": "runecraft_wrath_rune",                   
-                    "category": "Runecrafting",
-                    "level": 95,
-                    "completion_type": "RUNECRAFTING",
-                    "base_points": 5,
-                    "assignment_weight": 8,
-                    "required_items": [
+                    "name": "Mix a Relicym's Balm",
+                    "taskID": "mix_relicym's_balm",
+                    "category": "Herblore",
+                    "level": 8,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                     "required_items": [
                         {
-                        "item": "Wrath Rune",
-                        "item_ids": [21880],
-                        "quantity": [1]
+                            "item": ["Relicym's balm(3)", "Relicym's balm(4)"],
+                            "item_ids": [4844, 4842]
                         }
                     ]
                 },
                 {
-                    "name": "Equip a Mythical Cape",
-                    "taskID": "equip_mythical_cape",
-                    "category": "Defence",
-                    "level": 1,
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
+                    "name": "Mix a Sanfew Serum",
+                    "taskID": "mix_sanfew_serum",
+                    "category": "Herblore",
+                    "level": 65,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
                     "assignment_weight": 10,
-                    "required_items": [
+                     "required_items": [
                         {
-                            "item": ["Mythical Cape"],
-                            "item_ids": [22114]
+                            "item": ["Sanfew serum(3)", "Sanfew serum(4)"],
+                            "item_ids": [10927, 10925]
                         }
                     ]
                 },             
                 {
-                    "name": "Equip an Amulet of Glory(4)",
-                    "taskID": "equip_amulet_of_glory(4)",
-                    "category": "Defence",
-                    "level": 1,
-                    "completion_type": "EQUIP",
-                    "base_points": 4,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": ["Amulet of Glory(4)"],
-                            "item_ids": [1712]
-                        }
-                    ]
+                    "name": "Defeat a Skogre",
+                    "taskID": "defeat_skogre",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Skogre"],
+                        "npc_ids": [872, 878, 879],
+                        "quantity": [1]
+                    }
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
-                    "category": "Woodcutting",
-                    "level": 75,
-                    "completion_type": "WOODCUTTING",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": "Magic Logs",
-                            "item_ids": [1513],
-                            "quantity": [1]
-                        }
-                    ]
+                    "name": "Defeat a Zogre",
+                    "taskID": "defeat_zogre",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Zogre"],
+                        "npc_ids": [866, 867, 868, 869, 870, 871, 873, 874, 875, 876, 877],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Mix an Anti-firebreath Potion",
