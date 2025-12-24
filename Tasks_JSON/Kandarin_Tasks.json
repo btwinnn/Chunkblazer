@@ -5787,5 +5787,202 @@
             ],                          
             "is_completed": false
         },
+        {
+            "region_id": [9772],
+            "Friendly_Name": "Myths' Guild",
+            "neighbor_ids": [9773,10028, 9771, 9516],
+            "tasks": [
+                {
+                    "name": "Runecraft a Wrath Rune",
+                    "taskID": "runecraft_wrath_rune",                   
+                    "category": "Runecrafting",
+                    "level": 95,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Wrath Rune",
+                        "item_ids": [21880],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mythical Cape",
+                    "taskID": "equip_mythical_cape",
+                    "category": "Defence",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Mythical Cape"],
+                            "item_ids": [22114]
+                        }
+                    ]
+                },             
+                {
+                    "name": "Equip an Amulet of Glory(4)",
+                    "taskID": "equip_amulet_of_glory(4)",
+                    "category": "Defence",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Amulet of Glory(4)"],
+                            "item_ids": [1712]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Magic Tree",
+                    "taskID": "chop_magic_tree",
+                    "category": "Woodcutting",
+                    "level": 75,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix an Anti-firebreath Potion",
+                    "taskID": "mix_anti-firebreath_potion",
+                    "category": "Herblore",
+                    "level": 69,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                     "required_items": [
+                        {
+                            "item": ["Antifire Potion(3)", "Antifire Potion(4)"],
+                            "item_ids": [2454, 2452]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix a Super Antifire Potion",
+                    "taskID": "mix_super_antifire_potion",
+                    "category": "Herblore",
+                    "level": 92,
+                    "completion_type": "HERBLORE",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                     "required_items": [
+                        {
+                            "item": ["Super Antifire Potion(3)", "Super Antifire Potion(4)"],
+                            "item_ids": [21981, 21978]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Square Shield",
+                    "taskID": "equip_dragon_square",
+                    "category": "Defence",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Sq Shield"],
+                            "item_ids": [1187]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Runite Ore",
+                    "taskID": "mine_runite_ore",
+                    "category": "Mining",
+                    "level": 85,
+                    "completion_type": "MINING",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Runite Ore"],
+                            "item_ids": [451],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Adult Black Dragon",
+                    "taskID": "defeat_adult_black_dragon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Black Dragon"],
+                        "npc_ids": [252, 253, 254, 255, 256, 257, 258, 259, 8084, 8085, 7861, 7862, 7863, 7275, 8092, 8093, 239],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Adult Black Dragon on Task",
+                    "taskID": "defeat_adult_black_dragon_on_task",
+                    "category": "Combat",
+                    "completion_type": "SLAYER",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Black Dragon"],
+                        "npc_ids": [252, 253, 254, 255, 256, 257, 258, 259, 8084, 8085, 7861, 7862, 7863, 7275, 8092, 8093, 239],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Adult Black Dragon in 24 Seconds",
+                    "taskID": "defeat_adult_black_dragon_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Black Dragon"],
+                        "npc_ids": [252, 253, 254, 255, 256, 257, 258, 259, 8084, 8085, 7861, 7862, 7863, 7275, 8092, 8093, 239],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [40],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                }
+            ],                          
+            "is_completed": false
+        },
     ]
 }

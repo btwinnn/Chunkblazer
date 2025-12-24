@@ -153,7 +153,6 @@
             {
               "item": "Oak shortbow (u)",
               "item_ids": [54],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -368,7 +367,7 @@
           "assignment_weight": 8,
           "target_npc": {
             "npc_ids": [11921, 11918, 3114],
-            "quantity": [1, 100]
+            "quantity": [1, 25]
           }
         },
         {
@@ -423,7 +422,6 @@
             {
               "item": "Copper Ore",
               "item_ids": [436],
-              "action": "obtain",
               "quantity": [5, 100]
             }
           ]
@@ -440,7 +438,6 @@
             {
               "item": "Tin Ore",
               "item_ids": [438],
-              "action": "obtain",
               "quantity": [5, 100]
             }
           ]
@@ -457,7 +454,6 @@
             {
               "item": "Bronze Bar",
               "item_ids": [2349],
-              "action": "obtain",
               "quantity": [5, 50]
             }
           ]
@@ -591,7 +587,6 @@
             {
               "item": "Cooked Meat",
               "item_ids": [2142],
-              "action": "obtain",
               "quantity": [5, 25]
             }
           ]
@@ -608,7 +603,6 @@
             {
               "item": "Logs",
               "item_ids": [1511],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -628,8 +622,8 @@
       "Friendly_Name": "H.A.M. Hideout",
       "tasks": [
         {
-          "name": "Rake the Tree Patch",
-          "taskID": "rake_tree_patch",
+          "name": "Rake a Farming Patch",
+          "taskID": "rake_farming_patch",
           "category": "Farming",
           "level": 1,
           "completion_type": "FARMING",
@@ -639,7 +633,6 @@
             {
               "item": "Weeds",
               "item_ids": [6055],
-              "action": "obtain",
               "quantity": 1
             }
           ]
@@ -686,7 +679,6 @@
             {
               "item": "Polished Buttons",
               "item_ids": [10496],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -823,7 +815,6 @@
             {
               "item": "Sapphire",
               "item_ids": [1607],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -840,7 +831,6 @@
             {
               "item": "Emerald",
               "item_ids": [1605],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -873,7 +863,6 @@
             {
               "item": "Fire Rune",
               "item_ids": [554],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -891,7 +880,6 @@
             {
               "item": "Lava Rune",
               "item_ids": [4699],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -908,7 +896,6 @@
             {
               "item": "Fire Tiara",
               "item_ids": [5537],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -1298,7 +1285,6 @@
             {
               "item": "Frog Spawn",
               "item_ids": [5004],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -1315,7 +1301,6 @@
             {
               "item": "Raw Slimy Eel",
               "item_ids": [3379],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -1454,7 +1439,6 @@
             {
               "item": "Pot of Cream",
               "item_ids": [2130],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -1471,7 +1455,6 @@
             {
               "item": "Cheese",
               "item_ids": [1985],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
@@ -1541,7 +1524,6 @@
             {
               "item": "Baked Potato",
               "item_ids": [6701],
-              "action": "obtain",
               "quantity": 1
             }
           ]
@@ -1633,7 +1615,6 @@
             {
               "item": "Silver Ore",
               "item_ids": [442],
-              "action": "obtain",
               "quantity": [1]
             }
           ]
