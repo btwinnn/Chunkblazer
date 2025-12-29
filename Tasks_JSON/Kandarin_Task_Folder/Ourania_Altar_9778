@@ -64,7 +64,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Zamorak Warrior or Ranger or Mage", PICK UP HERE
+                    "name": "Defeat a Zamorak Warrior or Ranger or Mage", 
                     "taskID": "defeat_zamorak_warrior",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

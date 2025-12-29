@@ -241,7 +241,7 @@ public interface ChunkBlazerConfig extends Config
     @ConfigItem(
         keyName = "autoUnlockRegions",
         name = "Auto-Unlock Regions",
-        description = "Automatically unlock adjacent regions when you enter them (if you have enough points). Similar to Region Locker plugin.",
+        description = "Automatically unlock regions when you walk into them. Requires 'Free Auto-Unlock' OR enough points for adjacent regions.",
         section = regionSection,
         position = 0
     )
@@ -253,7 +253,7 @@ public interface ChunkBlazerConfig extends Config
     @ConfigItem(
         keyName = "autoUnlockFree",
         name = "Free Auto-Unlock",
-        description = "Auto-unlock regions without spending points (exploration mode)",
+        description = "Unlock ANY region you walk into without spending points (exploration mode). Enable this to freely explore the map.",
         section = regionSection,
         position = 1
     )
