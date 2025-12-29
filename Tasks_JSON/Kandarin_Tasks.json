@@ -3154,8 +3154,8 @@
                         "interaction_type": "use_item_on"
                         }
                     ]
-                },
-                {
+                }
+            ],               
                 "optional_quests_unlocked": [
                     {
                         "name": "Underground Pass",
