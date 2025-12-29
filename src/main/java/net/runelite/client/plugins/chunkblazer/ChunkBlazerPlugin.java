@@ -1487,9 +1487,10 @@ public class ChunkBlazerPlugin extends Plugin
         NuzlockeChunk chunk = chunksByRegionId.get(regionId);
         if (chunk != null)
         {
-            return chunk.getName();
+            // Return friendly format: "ChunkName (regionId)"
+            return chunk.getName() + " (" + regionId + ")";
         }
-        return "Unknown Region";
+        return "Unknown Region (" + regionId + ")";
     }
 
     public int getRegionUnlockCost(int regionId)
