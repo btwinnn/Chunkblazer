@@ -110,6 +110,9 @@ public class ChunkBlazerPlugin extends Plugin
         // Load task data from JSON
         loadChunkData();
 
+        // Ensure starter area regions are always unlocked
+        unlockStarterRegions();
+
         // Initialize task module manager
         taskModuleManager.initialize();
         taskModuleManager.setCompletionHandler(new TaskModuleManager.TaskCompletionHandler()
@@ -338,47 +341,149 @@ public class ChunkBlazerPlugin extends Plugin
         panel.updateStats();
     }
 
-    // --- Data Loading ---
-
-    private void loadChunkData()
+    /**
+     * Unlock all starter area regions (Lumbridge, Al Kharid, etc.)
+     * These are always available as the player's starting zones.
+     */
+    public void unlockStarterRegions()
     {
-        try
+        Set<String> currentlyUnlocked = getUnlockedRegionIds();
+        StringBuilder unlocked = new StringBuilder(config.unlockedChunks() != null ? config.unlockedChunks() : "");
+
+        int newlyUnlocked = 0;
+        for (int regionId : STARTER_REGION_IDS)
         {
-            InputStream is = getClass().getResourceAsStream("Starter_Area_Tasks.JSON");
-            if (is == null)
+            if (!currentlyUnlocked.contains(String.valueOf(regionId)))
             {
-                log.warn("Could not find Starter_Area_Tasks.JSON");
-                return;
-            }
-
-            Type listType = new TypeToken<Map<String, List<NuzlockeChunk>>>(){}.getType();
-            Map<String, List<NuzlockeChunk>> data = gson.fromJson(new InputStreamReader(is, StandardCharsets.UTF_8), listType);
-
-            if (data != null && data.containsKey("nuzlocke_chunks_lumbridge"))
-            {
-                allChunks = data.get("nuzlocke_chunks_lumbridge");
-
-                // Build lookup map
-                for (NuzlockeChunk chunk : allChunks)
+                if (unlocked.length() > 0)
                 {
-                    if (chunk.getRegionIds() != null)
-                    {
-                        for (Integer regionId : chunk.getRegionIds())
-                        {
-                            chunksByRegionId.put(regionId, chunk);
-                        }
-                    }
+                    unlocked.append(",");
                 }
-
-                log.info("Loaded {} chunks with {} region mappings", allChunks.size(), chunksByRegionId.size());
+                unlocked.append(regionId);
+                newlyUnlocked++;
             }
         }
-        catch (Exception e)
+
+        if (newlyUnlocked > 0)
         {
-            log.error("Failed to load chunk data", e);
+            configManager.setConfiguration("chunkblazer", "unlockedChunks", unlocked.toString());
+            log.info("Unlocked {} starter area regions", newlyUnlocked);
         }
     }
 
+
+    // --- Data Loading ---
+
+    // List of all task JSON files to load
+    private static final String[] TASK_JSON_FILES = {
+        "Starter_Area_Tasks.JSON",
+        "Misthalin_Tasks.json",
+        "Asgarnia_Tasks.json",
+        "Kandarin_Tasks.json"
+    };
+
+    // Starter area region IDs (always unlocked)
+    private static final int[] STARTER_REGION_IDS = {
+        12850, 12950,  // Lumbridge
+        12851,         // Lumbridge North Farm
+        12849,         // Lumbridge East Swamp
+        12594, 12694,  // H.A.M. Hideout
+        13106, 10315,  // Al Kharid Toll Gate
+        13105, 11605,  // Al Kharid
+        12593, 12693, 12949, // Lumbridge West Swamp
+        12595,         // Lumbridge Mill
+        13107          // Al Kharid Mine
+    };
+
+
+    private void loadChunkData()
+    {
+        allChunks.clear();
+        chunksByRegionId.clear();
+
+        Type mapType = new TypeToken<Map<String, List<NuzlockeChunk>>>(){}.getType();
+        int totalChunksLoaded = 0;
+        int totalRegionMappings = 0;
+
+        for (String jsonFile : TASK_JSON_FILES)
+        {
+            try
+            {
+                InputStream is = getClass().getResourceAsStream(jsonFile);
+                if (is == null)
+                {
+                    log.warn("Could not find task file: {}", jsonFile);
+                    continue;
+                }
+
+                Map<String, List<NuzlockeChunk>> data = gson.fromJson(
+                    new InputStreamReader(is, StandardCharsets.UTF_8), mapType);
+
+                if (data != null && !data.isEmpty())
+                {
+                    // Get the first (and typically only) key from the JSON
+                    String rootKey = data.keySet().iterator().next();
+                    List<NuzlockeChunk> chunks = data.get(rootKey);
+
+                    if (chunks != null && !chunks.isEmpty())
+                    {
+                        int chunkCount = chunks.size();
+                        int regionCount = 0;
+
+                        // Add chunks and build mappings
+                        for (NuzlockeChunk chunk : chunks)
+                        {
+                            allChunks.add(chunk);
+                            if (chunk.getRegionIds() != null)
+                            {
+                                for (Integer regionId : chunk.getRegionIds())
+                                {
+                                    chunksByRegionId.put(regionId, chunk);
+                                    regionCount++;
+                                }
+                            }
+                        }
+
+                        totalChunksLoaded += chunkCount;
+                        totalRegionMappings += regionCount;
+                        log.info("Loaded {} chunks with {} regions from {} (key: {})",
+                            chunkCount, regionCount, jsonFile, rootKey);
+                    }
+                    else
+                    {
+                        log.warn("No chunks found in {} for key {}", jsonFile, rootKey);
+                    }
+                }
+                else
+                {
+                    log.warn("Failed to parse {} - data is null or empty", jsonFile);
+                }
+
+                is.close();
+            }
+            catch (Exception e)
+            {
+                log.error("Failed to load chunk data from {}: {}", jsonFile, e.getMessage(), e);
+            }
+        }
+
+        log.info("=== CHUNKBLAZER LOAD COMPLETE ===");
+        log.info("Total: {} chunks, {} region mappings", totalChunksLoaded, totalRegionMappings);
+        log.info("Sample regions in map: {}", chunksByRegionId.keySet().stream().limit(10).collect(java.util.stream.Collectors.toList()));
+
+        // Debug: Check if specific region 9772 is loaded
+        if (chunksByRegionId.containsKey(9772))
+        {
+            NuzlockeChunk mythsGuild = chunksByRegionId.get(9772);
+            log.info("Region 9772 found: {} with {} tasks",
+                mythsGuild.getName(),
+                mythsGuild.getTasks() != null ? mythsGuild.getTasks().size() : 0);
+        }
+        else
+        {
+            log.warn("Region 9772 (Myths' Guild) NOT FOUND in chunksByRegionId!");
+        }
+    }
     // --- Game Mode Methods ---
 
     public GameMode getGameMode()
@@ -599,20 +704,35 @@ public class ChunkBlazerPlugin extends Plugin
 
     /**
      * Initialize a task with proper quantity and progress.
+     * Target quantity is saved and loaded to prevent re-rolling random ranges.
      */
     private void initializeTask(NuzlockeTask task)
     {
-        // Load saved progress if exists
-        int savedProgress = loadTaskProgress(task.getTaskId());
+        // Load saved progress and target quantity
+        int[] savedData = loadTaskProgressAndTarget(task.getTaskId());
+        int savedProgress = savedData[0];
+        int savedTargetQty = savedData[1];
 
-        int targetQty = 1;
-        if (task.getTargetNpc() != null)
+        int targetQty;
+        if (savedTargetQty > 0)
         {
-            targetQty = task.getTargetNpc().getRequiredQuantity();
+            // Use saved target quantity to prevent re-rolling
+            targetQty = savedTargetQty;
         }
-        else if (task.getRequiredItems() != null && !task.getRequiredItems().isEmpty())
+        else
         {
-            targetQty = task.getRequiredItems().get(0).getRequiredQuantity();
+            // First time - roll the target quantity
+            targetQty = 1;
+            if (task.getTargetNpc() != null)
+            {
+                targetQty = task.getTargetNpc().getRequiredQuantity();
+            }
+            else if (task.getRequiredItems() != null && !task.getRequiredItems().isEmpty())
+            {
+                targetQty = task.getRequiredItems().get(0).getRequiredQuantity();
+            }
+            // Save the rolled target quantity
+            saveTaskProgress(task.getTaskId(), savedProgress, targetQty);
         }
 
         task.setTargetQuantity(targetQty);
@@ -768,29 +888,38 @@ public class ChunkBlazerPlugin extends Plugin
 
     /**
      * Roll 4-5 random tasks for a region using weighted selection.
-     * Tasks that have been assigned before (globally) are excluded.
-     * This happens once per region.
+     * Tasks are only excluded if they're locked or already rolled for THIS specific region.
+     * The same task CAN be rolled for different regions.
      */
     private Set<String> rollTasksForRegion(int regionId)
     {
         NuzlockeChunk chunk = chunksByRegionId.get(regionId);
-        if (chunk == null || chunk.getTasks() == null || chunk.getTasks().isEmpty())
+        if (chunk == null)
         {
+            log.warn("rollTasksForRegion: No chunk found for region {}. Total chunks in map: {}",
+                regionId, chunksByRegionId.size());
             return new HashSet<>();
         }
+        if (chunk.getTasks() == null || chunk.getTasks().isEmpty())
+        {
+            log.warn("rollTasksForRegion: Chunk {} ({}) has no tasks", regionId, chunk.getName());
+            return new HashSet<>();
+        }
+        log.info("rollTasksForRegion: Found chunk {} ({}) with {} tasks",
+            regionId, chunk.getName(), chunk.getTasks().size());
 
-        // Get globally assigned tasks to exclude
-        Set<String> globallyAssigned = getAssignedTaskIds();
+        // Get tasks already rolled for THIS region (not globally)
+        Set<String> alreadyRolledForThisRegion = getRolledTasksForRegion(regionId);
 
-        // Filter available tasks: not locked and not already assigned globally
+        // Filter available tasks: not locked and not already rolled for this region
         List<NuzlockeTask> availableTasks = chunk.getTasks().stream()
             .filter(t -> !t.isLocked())
-            .filter(t -> !globallyAssigned.contains(t.getTaskId()))
+            .filter(t -> !alreadyRolledForThisRegion.contains(t.getTaskId()))
             .collect(Collectors.toList());
 
         if (availableTasks.isEmpty())
         {
-            log.info("No available tasks for region {} (all locked or already assigned)", regionId);
+            log.info("No available tasks for region {} (all locked or already rolled for this region)", regionId);
             return new HashSet<>();
         }
 
@@ -1341,49 +1470,116 @@ public class ChunkBlazerPlugin extends Plugin
         return regions;
     }
 
+    /**
+     * Get all unique region names that have active tasks.
+     */
+    public Set<String> getActiveTaskRegions()
+    {
+        Set<String> regions = new java.util.TreeSet<>();
+        for (NuzlockeTask task : activeTasks)
+        {
+            String regionName = getTaskRegionName(task);
+            if (regionName != null && !regionName.equals("Unknown Region"))
+            {
+                regions.add(regionName);
+            }
+        }
+        return regions;
+    }
+
+    /**
+     * Get the region name for a specific task.
+     */
+    public String getTaskRegionName(NuzlockeTask task)
+    {
+        if (task == null || task.getTaskId() == null)
+        {
+            return null;
+        }
+        int regionId = findRegionForTask(task.getTaskId());
+        if (regionId > 0)
+        {
+            return getRegionName(regionId);
+        }
+        return null;
+    }
+
     // --- Task Progress Persistence ---
 
+    /**
+     * Load task progress only (for backward compatibility).
+     */
     private int loadTaskProgress(String taskId)
+    {
+        int[] data = loadTaskProgressAndTarget(taskId);
+        return data[0];
+    }
+
+    /**
+     * Load task progress and target quantity.
+     * Format: "taskId:progress:targetQty,taskId2:progress2:targetQty2"
+     * Old format "taskId:progress" is also supported for backward compatibility.
+     * @return int[2] where [0] = progress, [1] = targetQty (0 if not saved)
+     */
+    private int[] loadTaskProgressAndTarget(String taskId)
     {
         String data = config.taskProgressData();
         if (data == null || data.isEmpty())
         {
-            return 0;
+            return new int[]{0, 0};
         }
-        // Format: "taskId:progress,taskId2:progress2"
         for (String entry : data.split(","))
         {
             String[] parts = entry.split(":");
-            if (parts.length == 2 && parts[0].equals(taskId))
+            if (parts.length >= 2 && parts[0].equals(taskId))
             {
                 try
                 {
-                    return Integer.parseInt(parts[1]);
+                    int progress = Integer.parseInt(parts[1]);
+                    int targetQty = parts.length >= 3 ? Integer.parseInt(parts[2]) : 0;
+                    return new int[]{progress, targetQty};
                 }
                 catch (NumberFormatException e)
                 {
-                    return 0;
+                    return new int[]{0, 0};
                 }
             }
         }
-        return 0;
+        return new int[]{0, 0};
     }
 
+    /**
+     * Save task progress only (gets current target from task).
+     */
     public void saveTaskProgress(String taskId, int progress)
     {
+        // Find the task to get its target quantity
+        NuzlockeTask task = findTaskById(taskId);
+        int targetQty = task != null ? task.getTargetQuantity() : 0;
+        saveTaskProgress(taskId, progress, targetQty);
+    }
+
+    /**
+     * Save task progress and target quantity.
+     * Format: "taskId:progress:targetQty,taskId2:progress2:targetQty2"
+     */
+    public void saveTaskProgress(String taskId, int progress, int targetQty)
+    {
         String data = config.taskProgressData();
-        Map<String, Integer> progressMap = new HashMap<>();
+        Map<String, int[]> progressMap = new HashMap<>();
 
         if (data != null && !data.isEmpty())
         {
             for (String entry : data.split(","))
             {
                 String[] parts = entry.split(":");
-                if (parts.length == 2)
+                if (parts.length >= 2)
                 {
                     try
                     {
-                        progressMap.put(parts[0], Integer.parseInt(parts[1]));
+                        int existingProgress = Integer.parseInt(parts[1]);
+                        int existingTarget = parts.length >= 3 ? Integer.parseInt(parts[2]) : 0;
+                        progressMap.put(parts[0], new int[]{existingProgress, existingTarget});
                     }
                     catch (NumberFormatException e)
                     {
@@ -1393,13 +1589,13 @@ public class ChunkBlazerPlugin extends Plugin
             }
         }
 
-        progressMap.put(taskId, progress);
+        progressMap.put(taskId, new int[]{progress, targetQty});
 
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, Integer> entry : progressMap.entrySet())
+        for (Map.Entry<String, int[]> entry : progressMap.entrySet())
         {
             if (sb.length() > 0) sb.append(",");
-            sb.append(entry.getKey()).append(":").append(entry.getValue());
+            sb.append(entry.getKey()).append(":").append(entry.getValue()[0]).append(":").append(entry.getValue()[1]);
         }
         configManager.setConfiguration("chunkblazer", "taskProgressData", sb.toString());
     }
