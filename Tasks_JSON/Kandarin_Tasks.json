@@ -2970,7 +2970,7 @@
         },
         {
             "region_id": [10291],
-            "Friendly_Name": "Ardounge Castle",
+            "Friendly_Name": "Ardougne Castle",
             "neighbor_ids": [10292, 10547, 10290, 10035],
             "tasks": [
                 {
@@ -3646,7 +3646,7 @@
             "Friendly_Name": "East Yanille",
             "neighbor_ids": [10289, 10544, 10287, 10032],
             "tasks": [
-{
+                {
                     "task_name": "Picklock the door to the basement of Yanille Agility Dungeon",
                     "taskID": "picklock_door_basement_yanille_agility_dungeon",
                     "completion_type": "VARP_CHECK",
@@ -4078,9 +4078,9 @@
             "is_completed": false
         },
         {
-            "region_id": [10032],
+            "region_id": [10031],
             "Friendly_Name": "Gu'Tanoth",
-            "neighbor_ids": [10033, 10288, 10031, 9776],
+            "neighbor_ids": [10032, 10287, 10030, 9775],
             "tasks": [
                 {
                     "name": "Steal an Ogre Rock Cake",
@@ -6712,7 +6712,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Zamorak Warrior or Ranger or Mage",
+                    "name": "Defeat a Zamorak Warrior or Ranger or Mage", PICK UP HERE
                     "taskID": "defeat_zamorak_warrior",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

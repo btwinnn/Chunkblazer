@@ -1,0 +1,129 @@
+{
+            "region_id": [10034],
+            "Friendly_Name": "Battlefield",
+            "neighbor_ids": [10035, 10290, 10033, 9778],
+            "tasks": [
+                {
+                    "name": "Defeat a Level 92 Tortoise in 20 Seconds",
+                    "taskID": "defeat_level_92_tortoise_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 92 Tortoise"],
+                        "npc_ids": [6076],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [33],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 92 Tortoise",
+                    "taskID": "defeat_level_92_tortoise",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 92 Tortoise"],
+                        "npc_ids": [6076],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Use the Spirit Tree to Teleport to the Battlefield",
+                    "taskID": "spirit_tree_teleport_to_battlefield",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 8
+                },              
+                {
+                    "name": "Defeat a Mounted Terrorbird Gnome",
+                    "taskID": "defeat_mounted_terrorbird_gnome_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Mounted Terrorbird Gnome"],
+                        "npc_ids": [2067, 2068, 5971, 5972, 5973],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat an Elite Khazard Guard",
+                    "taskID": "defeat_elite_khazard_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Elite Khazard Guard"],
+                        "npc_ids": [13531, 13532, 13533, 13534],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat some Khazard Troopers",
+                    "taskID": "defeat_khazard_troopers",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Khazard Trooper"],
+                        "npc_ids": [4969, 5964, 4970, 5965],
+                        "quantity": [1, 25]
+                    }                   
+                },
+                {
+                    "name": "Defeat a Khazard Trooper in 5 Seconds",
+                    "taskID": "defeat_khazard_trooper_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Khazard Trooper"],
+                        "npc_ids": [4969, 5964, 4970, 5965],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [9],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Defeat a Khazard Commander",
+                    "taskID": "defeat_khazard_commander",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Khazard Commander"],
+                        "npc_ids": [4972],
+                        "quantity": [1]
+                    }                   
+                }
+            ],                              
+            "is_completed": false
+        }

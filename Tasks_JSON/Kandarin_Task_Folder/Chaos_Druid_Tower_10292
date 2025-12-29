@@ -1,0 +1,239 @@
+{
+            "region_id": [10292],
+            "Friendly_Name": "Chaos Druid Tower",
+            "neighbor_ids": [10293, 10548, 10291, 10036],
+            "tasks": [
+                {
+                    "name": "Steal from the Chaos Druid Tower Chest",
+                    "taskID": "steal_chaos_druid_tower_chest",
+                    "category": "Thieving",
+                    "level": 59,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_object": [
+                        {
+                            "object": ["Chaos Druid Tower Chest"],
+                            "object_id": [11738],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {                    
+                    "name": "Pickpocket a Warrior",
+                    "taskID": "pickpocket_warrior",
+                    "category": "Thieving",
+                    "level": 25,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": "Level 24 Warrior",
+                        "npc_ids": [11926, 11929, 3260, 11927, 11928, 11925], 
+                        "quantity": [1]                  
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Ogre",
+                    "taskID": "defeat_ogre",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ogre"],
+                        "npc_ids": [136, 2095, 2096, 2233, 1153],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain an Ensouled Ogre Head",
+                    "taskID": "obtain_ensouled_ogre_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ensouled Ogre Head"],
+                            "item_ids": [13477, 13478]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat an Ogre in 24 Seconds",
+                    "taskID": "defeat_ogre_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ogre"],
+                        "npc_ids": [136, 2095, 2096, 2233, 1153],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [40],
+                            "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
+                },
+                {                           
+                    "name": "Defeat a Giant Bat in 10 Seconds",
+                    "taskID": "defeat_giant_bat_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [17],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]                       
+                        }
+                },
+                {                           
+                    "name": "Defeat a Giant Bat",
+                    "taskID": "defeat_giant_bat",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    }                  
+                },
+                {                           
+                    "name": "Defeat a Level 24 Warrior",
+                    "taskID": "defeat_level_24_warrior",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {                        
+                        "npc": "Level 24 Warrior",
+                        "npc_ids": [11926, 11929, 3260, 11927, 11928, 11925], 
+                        "quantity": [1]                  
+                    }                                    
+                },
+                {                           
+                    "name": "Defeat a Chaos Druid in 6 Seconds",
+                    "taskID": "defeat_chaos_druid_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Chaos Druid"],
+                        "npc_ids": [520],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [10],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]                       
+                        }
+                }, 
+                {
+                    "name": "Obtain a Grimy Ranarr Weed",
+                    "taskID": "obtain_grimy_ranarr",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Grimy Ranarr Weed",
+                        "item_ids": [207],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Irit Leaf",
+                    "taskID": "obtain_grimy_irit",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Grimy Irit Leaf",
+                        "item_ids": [209],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Avantoe",
+                    "taskID": "obtain_grimy_avantoe",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Grimy Avantoe",
+                        "item_ids": [211],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Kwuarm",
+                    "taskID": "obtain_grimy_kwuarm",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Grimy Kwuarm",
+                        "item_ids": [213],
+                        "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+                "optional_quests_unlocked": [
+                    {
+                        "name": "Biohazard",
+                        "points": 1
+                    },
+                    {
+                        "name": "Song of the Elves",
+                        "points": 5
+                    },
+                    {
+                        "name": "Plague City",
+                        "points": 1
+                    }                  
+                ],                 
+            "is_completed": false
+        }

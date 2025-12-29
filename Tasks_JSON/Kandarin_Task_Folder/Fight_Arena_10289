@@ -1,0 +1,82 @@
+{
+            "region_id": [10289],
+            "Friendly_Name": "Fight Arena",
+            "neighbor_ids": [10290, 10545, 10288, 10033],
+            "tasks": [
+                {
+                    "name": "Obtain a Khali Brew",
+                    "taskID": "obtain_khali_brew",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Khali Brew"],
+                            "item_ids": [77],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                "name": "Build an Elite STASH Unit at the Fight Arena",
+                "taskID": "build_elite_stash_fight_arena",
+                "category": "Construction",
+                "level": 55,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Mahogany Plank",
+                        "item_ids": [8782]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Elite STASH Unit (crate)",
+                        "object_id": [29039],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Khazard Guard",
+                    "taskID": "defeat_khazard_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Khazard Guard"],
+                        "npc_ids": [13531, 13532, 13533, 13534],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat Bouncer",
+                    "taskID": "defeat_bouncer",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bouncer"],
+                        "npc_ids": [1224],
+                        "quantity": [1]
+                    }
+                } 
+            ],
+                "optional_quests_unlocked": [
+                    {
+                        "name": "Fight Arena",
+                        "points": 2
+                    }                                       
+                ],                                                            
+            "is_completed": false
+        }

@@ -1,0 +1,186 @@
+{
+            "region_id": [10294],
+            "Friendly_Name": "Coal Trucks",
+            "neighbor_ids": [10295, 10550, 10293, 10038],
+            "tasks": [
+                {
+                    "name": "Smith a Steel Cannonball",
+                    "taskID": "smith_steel_cannonball",
+                    "category": "Smithing",
+                    "level": 35,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                                "item": ["Steel Cannonball"],
+                                "item_ids": [2],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Obtain the Dwarf Multi-Cannon Barrel",
+                    "taskID": "obtain_dwarf_multi-cannon_barrel",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cannon Barrels"],
+                            "item_ids": [10],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Dwarf Multi-Cannon Base",
+                    "taskID": "obtain_dwarf_multi-cannon_base",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cannon Base"],
+                            "item_ids": [6],
+                            "quantity": [1]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Obtain the Dwarf Multi-Cannon Furnace",
+                    "taskID": "obtain_dwarf_multi-cannon_furnace",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cannon Furnace"],
+                            "item_ids": [12],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Dwarf Multi-Cannon Stand",
+                    "taskID": "obtain_dwarf_multi-cannon_stand",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cannon Stand"],
+                            "item_ids": [8],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Poison Chalice",
+                    "taskID": "obtain_poison_chalice",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Poison Chalice"],
+                            "item_ids": [197],
+                            "quantity": [1]
+                        }
+                    ]
+                },               
+                {                           
+                    "name": "Defeat a Giant Bat in 10 Seconds",
+                    "taskID": "defeat_giant_bat_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [17],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]                       
+                        }
+                },
+                {                           
+                    "name": "Defeat a Giant Bat with only a Weapon Equipped",
+                    "taskID": "defeat_giant_bat_weapon_only",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                    }
+                },
+                {
+                    "name": "Obtain a lot of Coal",
+                    "taskID": "obtain_coal",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Coal"],
+                            "item_ids": [453],
+                            "quantity": [2500, 10000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 20 Coal Truck Log Balance",
+                    "taskID": "agility_level_20_coal_truck_log_balance",
+                    "category": "Agility",
+                    "level": 20,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 8
+                }
+            ],            
+                    "optional_quests_unlocked": [
+                        {
+                            "name": "Dwarf Cannon",
+                            "points": 1
+                        }                                     
+                    ],                
+                "is_completed": false
+        }

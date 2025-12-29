@@ -1,0 +1,244 @@
+{
+            "region_id": [11317],
+            "Friendly_Name": "Catherby Shore",
+            "neighbor_ids": [11318, 11573, 11316, 11061],
+            "tasks": [
+                {
+                    "name": "Catch a Raw Bass",
+                    "taskID": "catch_raw_bass",
+                    "category": "Fishing",
+                    "level": 46,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Bass",
+                        "item_ids": [363],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Swordfish",
+                    "taskID": "catch_raw_swordfish",
+                    "category": "Fishing",
+                    "level": 50,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Swordfish",
+                        "item_ids": [371],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Herring",
+                    "taskID": "catch_raw_herring",
+                    "category": "Fishing",
+                    "level": 10,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Raw Herring",
+                        "item_ids": [345],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Water Orb",
+                    "taskID": "obtain_water_orb",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Water Orb"],
+                            "item_ids": [571],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 32 Agility Crossbow Catherby Cliff Shortcut",
+                    "taskID": "agility_level_32_catherby_cliff",
+                    "category": "Agility",
+                    "level": 32,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Use the Level 36 Agility Water Obelisk Crossbow Shorcut",
+                    "taskID": "agility_level_36_water_obelisk_crossbow_shortcut",
+                    "category": "Agility",
+                    "level": 36,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Plant an Apple Tree Seed",
+                    "taskID": "plant_apple_tree_seed",
+                    "category": "Farming",
+                    "level": 27,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Apple Tree Seed"],
+                            "item_ids": [5283],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Banana Tree Seed",
+                    "taskID": "plant_banana_tree_seed",
+                    "category": "Farming",
+                    "level": 33,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Banana Tree Seed"],
+                            "item_ids": [5284],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Orange Tree Seed",
+                    "taskID": "plant_orange_tree_seed",
+                    "category": "Farming",
+                    "level": 39,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Orange Tree Seed"],
+                            "item_ids": [5285],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Curry Tree Seed",
+                    "taskID": "plant_curry_tree_seed",
+                    "category": "Farming",
+                    "level": 42,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Curry Tree Seed"],
+                            "item_ids": [5286],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Pineapple Seed",
+                    "taskID": "plant_pineapple_tree_seed",
+                    "category": "Farming",
+                    "level": 51,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Pineapple Seed"],
+                            "item_ids": [5287],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Magic Longbow",
+                    "taskID": "fletch_magic_longbow",
+                    "category": "Fletching",
+                    "level": 85,
+                    "completion_type": "FLETCHING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Magic Longbow"],
+                            "item_ids": [859],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Medium STASH Unit at Catherby Shore",
+                "taskID": "build_medium_stash_catherby_shore",
+                "category": "Construction",
+                "level": 42,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Medium STASH Unit (inconspicuous bush)",
+                        "object_id": [29003],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Magic Longbow",
+                    "taskID": "fletch_magic_longbow",
+                    "category": "Fletching",
+                    "level": 85,
+                    "completion_type": "FLETCHING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Magic Longbow"],
+                            "item_ids": [859],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Magic Shield",
+                    "taskID": "fletch_magic_shield",
+                    "category": "Fletching",
+                    "level": 87,
+                    "completion_type": "FLETCHING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Magic Shield"],
+                            "item_ids": [22263],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],          
+            "is_completed": false
+        }

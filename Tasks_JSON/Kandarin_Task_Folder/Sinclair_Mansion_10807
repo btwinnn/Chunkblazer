@@ -1,0 +1,151 @@
+{
+            "region_id": [10807],
+            "Friendly_Name": "Sinclair Mansion",
+            "neighbor_ids": [10808, 11063, 10806, 10551],
+            "tasks": [
+                {
+                    "name": "Obtain a Master Reward Casket",
+                    "taskID": "Obtain_master_reward_casket",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Reward Casket (master)",
+                        "item_ids": [19836],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Elite Reward Casket",
+                    "taskID": "obtain_elite_reward_casket",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Reward Casket (elite)"],
+                            "item_ids": [20543],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Hard Reward Casket",
+                    "taskID": "obtain_hard_reward_casket",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Reward Casket (hard)"],
+                            "item_ids": [20544],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Medium Reward Casket",
+                    "taskID": "obtain_hard_reward_casket",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Reward Casket (medium)"],
+                            "item_ids": [20545],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Easy Reward Casket",
+                    "taskID": "obtain_easy_reward_casket",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Reward Casket (easy)"],
+                            "item_ids": [20546],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ornament Kit from a Master Clue",
+                    "taskID": "obtain_ornament_kit_from_master_clue",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Any Master Clue Ornament Kit"],
+                            "item_ids": [22246, 20068, 20071, 20143, 22239, 22236, 20065, 20074, 23348, 20062, 20077],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Minor Master Scroll Case",
+                    "taskID": "obtain_minor_master_scroll_case",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Minor Master Scroll Case"],
+                            "item_ids": [30922],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Major Master Scroll Case",
+                    "taskID": "obtain_major_master_scroll_case",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Major Master Scroll Case"],
+                            "item_ids": [30924],
+                            "quantity": [1]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Obtain the Scroll Sack",
+                    "taskID": "obtain_scroll_sack",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Scroll Sack"],
+                            "item_ids": [22675],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Travel to Fairy Ring Code CJR",
+                    "taskID": "fairy_ring_CJR",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }                          
+            ],                 
+                "is_completed": false
+        }

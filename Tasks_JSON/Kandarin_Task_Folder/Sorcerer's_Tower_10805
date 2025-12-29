@@ -1,0 +1,187 @@
+{
+            "region_id": [10805],
+            "Friendly_Name": "Sorcerer's Tower",
+            "neighbor_ids": [10806, 11061, 10804, 10549],
+            "tasks": [
+                {
+                    "name": "Obtain a Mystic Air, Water, Earth, and Fire Staff",
+                    "taskID": "obtain_mystic_air_water_earth_fire_staff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Mystic Air Staff"],
+                            "item_ids": [1405]
+                        },
+                        {
+                            "item": ["Mystic Water Staff"],
+                            "item_ids": [1403]
+                        },
+                        {
+                            "item": ["Mystic Earth Staff"],
+                            "item_ids": [1407]
+                        },
+                        {
+                            "item": ["Mystic Fire Staff"],
+                            "item_ids": [1401]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Mystic Lava Staff",
+                    "taskID": "obtain_mystic_lava_staff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mystic Lava Staff"],
+                            "item_ids": [3054]
+                        }                     
+                    ]
+                },
+                {
+                    "name": "Obtain a Mystic Dust Staff",
+                    "taskID": "obtain_mystic_dust_staff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mystic Dust Staff"],
+                            "item_ids": [20739]
+                        }                     
+                    ]
+                },
+                {
+                    "name": "Obtain a Mystic Mist Staff",
+                    "taskID": "obtain_mystic_mist_staff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mystic Mist Staff"],
+                            "item_ids": [20733]
+                        }                     
+                    ]
+                },
+                {
+                    "name": "Obtain a Mystic Smoke Staff",
+                    "taskID": "obtain_mystic_smoke_staff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mystic Smoke Staff"],
+                            "item_ids": [12000]
+                        }                     
+                    ]
+                },
+                {
+                    "name": "Obtain a Mystic Steam Staff",
+                    "taskID": "obtain_mystic_steam_staff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mystic Steam Staff"],
+                            "item_ids": [11789]
+                        }                     
+                    ]
+                },
+                {
+                    "name": "Obtain a Mystic Mud Staff",
+                    "taskID": "obtain_mystic_mud_staff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mystic Mud Staff"],
+                            "item_ids": [6563]
+                        }                     
+                    ]
+                },               
+                {
+                    "name": "Chop a Magic Tree",
+                    "taskID": "chop_magic_tree",
+                    "category": "Woodcutting",
+                    "level": 75,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Magic Log",
+                    "taskID": "burn_magic_log",
+                    "category": "Firemaking",
+                    "level": 75,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Redwood Log",
+                    "taskID": "burn_redwood_log",
+                    "category": "Firemaking",
+                    "level": 90,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": "Redwood Logs",
+                            "item_ids": [19669],
+                            "quantity": [1]            
+                        }
+                    ]
+                },              
+                {
+                    "name": "Obtain some Flax",
+                    "taskID": "obtain_flax",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Flax"],
+                            "item_ids": [1779],
+                            "quantity": [250, 2500]
+                        }
+                    ]
+                }
+                    ],
+                        "optional_quests_unlocked": [
+                            {
+                                "name": "Scorpion Catcher",
+                                "points": 2
+                            }                         
+                    ],                     
+            "is_completed": false
+        }

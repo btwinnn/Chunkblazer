@@ -1,0 +1,118 @@
+{
+            "region_id": [9778],
+            "Friendly_Name": "Ourania Altar",
+            "neighbor_ids": [9779, 10034, 9777, 9522],
+            "tasks": [
+                {
+                    "name": "Catch a Red Salamander",
+                    "taskID": "catch_red_salamanders",
+                    "category": "Hunter",
+                    "level": 59,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Red Salamander",
+                            "item_ids": [10147]
+                            }                           
+                        ]             
+                },
+                {
+                    "name": "Obtain a Red Salamander Claw",
+                    "taskID": "obtain_red_salamander_claw",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Red Salamander Claw"],
+                            "item_ids": [29234],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Scimitar",
+                    "taskID": "equip_rune_scimitar",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rune Scimitar"],
+                            "item_ids": [1333]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Equip a Rune Dagger",
+                    "taskID": "equip_rune_dagger",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Dagger"],
+                            "item_ids": [1213]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Zamorak Warrior or Ranger or Mage", PICK UP HERE
+                    "taskID": "defeat_zamorak_warrior",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Zamorak Mage", "Zamorak Warrior", "Zamorak Ranger"],
+                        "npc_ids": [7423, 7422, 7419, 7418, 7420, 7421],
+                        "quantity": [1]
+                    }                               
+                },              
+                {
+                    "name": "Defeat a Khazard Trooper in 5 Seconds",
+                    "taskID": "defeat_khazard_trooper_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Khazard Trooper"],
+                        "npc_ids": [4969, 5964, 4970, 5965],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [9],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Defeat a Khazard Commander",
+                    "taskID": "defeat_khazard_commander",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Khazard Commander"],
+                        "npc_ids": [4972],
+                        "quantity": [1]
+                    }                   
+                }
+            ],                              
+            "is_completed": false
+        }

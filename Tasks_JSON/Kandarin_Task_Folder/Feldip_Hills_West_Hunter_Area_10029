@@ -1,0 +1,91 @@
+{               
+            "region_id": [10029],
+            "Friendly_Name": "Feldip Hills West Hunter Area",
+            "neighbor_ids": [10030, 10285, 10028, 9773],
+            "tasks": [
+                {
+                    "name": "Catch a Feldip Weasel",
+                    "taskID": "catch_feldip_weasel",
+                    "category": "Hunter",
+                    "level": 7,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Feldip Weasel Fur",
+                            "item_ids": [10119]
+                            },
+                            {
+                            "item": "Raw Beast Meat",
+                            "item_ids": [9986]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Catch a Tropical Wagtail",
+                    "taskID": "catch_tropical_wagtail",
+                    "category": "Hunter",
+                    "level": 19,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Stripy Feather",
+                            "item_ids": [10087]
+                            },
+                            {
+                            "item": "Raw Bird Meat",
+                            "item_ids": [9978]
+                            }
+                        ]             
+                },            
+                {
+                    "name": "Catch a Red Chinchompa",
+                    "taskID": "catch_red_chinchimpa",
+                    "category": "Hunter",
+                    "level": 63,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Red Chinchompa",
+                            "item_ids": [10034]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Obtain a Red Chinchompa Tuft",
+                    "taskID": "obtain_red_chinchompa_tuft",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Red Chinchompa Tuft"],
+                            "item_ids": [29235],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Feldip Hills Teleport Scroll",
+                    "taskID": "obtain_feldip_hills_teleport_scroll",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Feldip Hills Teleport"],
+                            "item_ids": [12404],
+                            "quantity": [1]
+                        }
+                    ]
+                }                                                                        
+            ],                          
+            "is_completed": false
+        }

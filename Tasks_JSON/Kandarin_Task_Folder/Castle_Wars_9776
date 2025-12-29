@@ -1,0 +1,148 @@
+{
+            "region_id": [9776],
+            "Friendly_Name": "Castle Wars",
+            "neighbor_ids": [9777, 10032, 9775, 9520],
+            "tasks": [
+                {
+                    "name": "Equip Decorative Armour (Red Platebody)",
+                    "taskID": "equip_decorative_armour_(red_platebody)",
+                    "category": "Defence",
+                    "level": 5,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Decorative armour (red platebody)"],
+                            "item_ids": [4069]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Decorative Sword (Red)",
+                    "taskID": "equip_decorative_sword_(red)",
+                    "category": "Attack",
+                    "level": 5,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Decorative sword (red)"],
+                            "item_ids": [4068]
+                        }
+                    ]
+                },             
+                {
+                    "name": "Equip Decorative Armour (White Platebody)",
+                    "taskID": "equip_decorative_armour_(white_platebody)",
+                    "category": "Defence",
+                    "level": 20,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Decorative armour (white platebody)"],
+                            "item_ids": [4069]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Decorative Sword (White)",
+                    "taskID": "equip_decorative_sword_(white)",
+                    "category": "Attack",
+                    "level": 20,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Decorative sword (white)"],
+                            "item_ids": [4503]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Decorative Sword (Gold)",
+                    "taskID": "equip_decorative_sword_(gold)",
+                    "category": "Attack",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Decorative sword (gold)"],
+                            "item_ids": [4508]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Decorative Armour (Gold Platebody)",
+                    "taskID": "equip_decorative_armour_(gold_platebody)",
+                    "category": "Defence",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Decorative armour (gold platebody)"],
+                            "item_ids": [4509]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Halo from Castle Wars",
+                    "taskID": "equip_halo",
+                    "category": "Defence",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Zamorak Halo", "Saradomin Halo", "Guthix Halo"],
+                            "item_ids": [12638, 12637, 12639]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Hot Air Balloon to Travel to Castle Wars",
+                    "taskID": "balloon_castle_wars",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                "name": "Build a Medium STASH Unit at Castle Wars",
+                "taskID": "build_medium_stash_castle_wars",
+                "category": "Construction",
+                "level": 42,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Medium STASH Unit (crate)",
+                        "object_id": [28991],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                }                                                                    
+            ],                          
+            "is_completed": false
+        }

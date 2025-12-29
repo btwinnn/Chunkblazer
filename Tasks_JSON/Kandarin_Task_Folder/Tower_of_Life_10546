@@ -1,0 +1,171 @@
+{
+            "region_id": [10546],
+            "Friendly_Name": "Tower of Life",
+            "neighbor_ids": [10547, 10802, 10545, 10290],
+            "tasks": [
+                {
+                    "name": "Defeat a Newtroost",
+                    "taskID": "defeat_newtroost",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Newtroost"],
+                        "npc_ids": [3605],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Unicow",
+                    "taskID": "defeat_unicow",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Unicow"],
+                        "npc_ids": [3601],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Spidine",
+                    "taskID": "defeat_spidine",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Spidine"],
+                        "npc_ids": [3602],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Swordchick",
+                    "taskID": "defeat_swordchick",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Swordchick"],
+                        "npc_ids": [3603],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Jubster",
+                    "taskID": "defeat_jubster",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jubster"],
+                        "npc_ids": [3604],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Frogeel",
+                    "taskID": "defeat_frogeel",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Frogeel"],
+                        "npc_ids": [3600],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Travel to Fairy Ring Code DJP",
+                    "taskID": "fairy_ring_DJP",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Obtain a Yellow Bead",
+                    "taskID": "obtain_yellow_bead",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Yellow Bead"],
+                            "item_ids": [1472]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a White Bead from an Imp",
+                    "taskID": "obtain_white_bead",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["White Bead"],
+                            "item_ids": [1476]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Black Bead",
+                    "taskID": "obtain_black_bead",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Black Bead",
+                        "item_ids": [1474],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Red Bead",
+                    "taskID": "obtain_red_bead",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Red Bead",
+                        "item_ids": [1470],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat Invrigar the Necromancer",
+                    "taskID": "defeat_invrigar_the_necromancer",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Invrigar the Necromancer"],
+                        "npc_ids": [511],
+                        "quantity": [1]
+                    }
+                }
+            ],
+                "optional_quests_unlocked": [
+                    {
+                        "name": "Tower of Life",
+                        "points": 1
+                    }                                       
+                ],                                                  
+            "is_completed": false
+        }

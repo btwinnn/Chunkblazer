@@ -1,0 +1,267 @@
+{
+            "region_id": [10806],
+            "Friendly_Name": "Seers' Village",
+            "neighbor_ids": [10807, 11062, 10805, 10550],
+            "tasks": [
+                {
+                    "name": "Complete some Laps of the Seers' Rooftop Course",
+                    "taskID": "complete_falador_roof",
+                    "category": "Agility",
+                    "level": 60,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_object": {
+                        "object": ["Seers' Rooftop Edge"],
+                        "object_id": [14931], 
+                        "quantity": [1, 20]
+                    }
+                },
+                {
+                    "name": "Chop a Willow Tree",
+                    "taskID": "Chop_willow_tree",
+                    "category": "Woodcutting",
+                    "level": 30,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Maple Tree",
+                    "taskID": "chop_maple_tree",
+                    "category": "Woodcutting",
+                    "level": 45,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Maple Logs",
+                            "item_ids": [1517],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Medium STASH Unit by the Courthouse",
+                "taskID": "build_medium_stash_courthouse",
+                "category": "Construction",
+                "level": 42,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Medium STASH Unit (inconspicuous bush)",
+                        "object_id": [29002],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Spin some Flax",
+                    "taskID": "Spin_flax",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Crafting",
+                    "level": 10,
+                    "completion_type": "CRAFTING",
+                    "required_items": [
+                        {
+                        "item": "Bow String",
+                        "item_ids": [1777],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Yew Log",
+                    "taskID": "burn_yew_log",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Willow Log",
+                    "taskID": "burn_willow_log",
+                    "category": "Firemaking",
+                    "level": 30,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Maple Log",
+                    "taskID": "burn_maple_log",
+                    "category": "Firemaking",
+                    "level": 45,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Maple Logs",
+                        "item_ids": [1517],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Bullseye Lantern Frame",
+                    "taskID": "smith_bullseye_lantern_frame",
+                    "category": "Smithing",
+                    "level": 49,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                            {
+                                "item": ["Bullseye Lantern Frame"],
+                                "item_ids": [4544],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Smith a Steel Platebody",
+                    "taskID": "smith_steel_platebody",
+                    "category": "Smithing",
+                    "level": 48,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                            {
+                                "item": ["Steel Platebody"],
+                                "item_ids": [1119],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Smith a Steel Kiteshield",
+                    "taskID": "smith_steel_kiteshield",
+                    "category": "Smithing",
+                    "level": 42,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                            {
+                                "item": ["Steel Kiteshield"],
+                                "item_ids": [1193],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Obtain a Felling Axe Handle",
+                    "taskID": "obtain_felling_axe_handle",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Felling Axe Handle"],
+                            "item_ids": [28177]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Obtain a Log Brace",
+                    "taskID": "obtain_log_brace",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Log Brace"],
+                            "item_ids": [28146]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Forestry Set",
+                    "taskID": "obtain_forestry_set",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Forestry Boots"],
+                            "item_ids": [28175],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Forestry Hat"],
+                            "item_ids": [28173],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Forestry Legs"],
+                            "item_ids": [28171],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Forestry Top"],
+                            "item_ids": [28169],
+                            "quantity": [1]
+                        }                                          
+                    ]
+                }                          
+            ],
+            "is_completed": false
+        }
