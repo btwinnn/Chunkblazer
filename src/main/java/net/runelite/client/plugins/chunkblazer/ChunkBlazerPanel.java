@@ -90,6 +90,17 @@ public class ChunkBlazerPanel extends PluginPanel
     private JLabel completedCollapsedLabel;
     private boolean isRefreshingFilters = false; // Prevent event loops during filter refresh
 
+    // Active Tasks Components
+    private JPanel selectedTaskPanel;
+    private JTextField activeTasksSearchField;
+    private JComboBox<String> activeTasksCategoryCombo;
+    private JComboBox<String> activeTasksRegionCombo;
+    private String activeTasksSearchText = "";
+    private String activeTasksSelectedCategory = "All";
+    private String activeTasksSelectedRegion = "All";
+    private boolean isRefreshingActiveFilters = false;
+    private NuzlockeTask selectedTask = null;
+
     public ChunkBlazerPanel()
     {
         super(false);
@@ -226,8 +237,7 @@ public class ChunkBlazerPanel extends PluginPanel
             BorderFactory.createLineBorder(new Color(100, 100, 180)),
             new EmptyBorder(6, 6, 6, 6)
         ));
-        // Constrain panel width to prevent horizontal expansion
-        panel.setMaximumSize(new Dimension(PANEL_WIDTH, Integer.MAX_VALUE));
+        panel.setAlignmentX(LEFT_ALIGNMENT);
 
         // Header row with toggle button
         JPanel headerRow = new JPanel(new BorderLayout(5, 0));
@@ -259,7 +269,7 @@ public class ChunkBlazerPanel extends PluginPanel
         completedTasksFilterPanel.setLayout(new BoxLayout(completedTasksFilterPanel, BoxLayout.Y_AXIS));
         completedTasksFilterPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         completedTasksFilterPanel.setAlignmentX(LEFT_ALIGNMENT);
-        completedTasksFilterPanel.setMaximumSize(new Dimension(PANEL_WIDTH - 20, 80));
+        completedTasksFilterPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
         completedTasksFilterPanel.setVisible(false);
 
         // Search text field
@@ -350,8 +360,7 @@ public class ChunkBlazerPanel extends PluginPanel
         completedTasksContentPanel = new JPanel();
         completedTasksContentPanel.setLayout(new BoxLayout(completedTasksContentPanel, BoxLayout.Y_AXIS));
         completedTasksContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-        completedTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 14)); // Right padding for scrollbar
-        completedTasksContentPanel.setMaximumSize(new Dimension(PANEL_WIDTH - 30, Integer.MAX_VALUE));
+        completedTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 5)); // Small right padding
 
         completedTasksScrollPane = new JScrollPane(completedTasksContentPanel);
         completedTasksScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -360,8 +369,6 @@ public class ChunkBlazerPanel extends PluginPanel
         completedTasksScrollPane.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         completedTasksScrollPane.getViewport().setBackground(ColorScheme.DARKER_GRAY_COLOR);
         completedTasksScrollPane.setAlignmentX(LEFT_ALIGNMENT);
-        completedTasksScrollPane.setMaximumSize(new Dimension(PANEL_WIDTH - 20, MAX_COMPLETED_TASKS_HEIGHT));
-        completedTasksScrollPane.setPreferredSize(new Dimension(PANEL_WIDTH - 20, MAX_COMPLETED_TASKS_HEIGHT));
         completedTasksScrollPane.setVisible(false);
 
         panel.add(completedTasksScrollPane);
@@ -385,14 +392,20 @@ public class ChunkBlazerPanel extends PluginPanel
 
         if (completedTasksExpanded)
         {
-            completedTasksScrollPane.setMaximumSize(new Dimension(PANEL_WIDTH - 20, MAX_COMPLETED_TASKS_HEIGHT_EXPANDED));
-            completedTasksScrollPane.setPreferredSize(new Dimension(PANEL_WIDTH - 20, MAX_COMPLETED_TASKS_HEIGHT_EXPANDED));
             refreshCompletedTasksFilters();
             updateCompletedTasksContent();
         }
 
+        // Revalidate the entire panel hierarchy
         completedTasksPanel.revalidate();
         completedTasksPanel.repaint();
+
+        // Also revalidate parent to fix layout
+        if (completedTasksPanel.getParent() != null)
+        {
+            completedTasksPanel.getParent().revalidate();
+            completedTasksPanel.getParent().repaint();
+        }
     }
 
     private void onCompletedTasksFilterChanged()
@@ -613,22 +626,132 @@ public class ChunkBlazerPanel extends PluginPanel
         taskPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         taskPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(100, 180, 100)),
-            new EmptyBorder(10, 10, 10, 10)
+            new EmptyBorder(6, 6, 6, 6)
         ));
+        taskPanel.setAlignmentX(LEFT_ALIGNMENT);
 
-        // Section title
+        // === SELECTED TASK HIGHLIGHT BOX ===
+        selectedTaskPanel = new JPanel();
+        selectedTaskPanel.setLayout(new BoxLayout(selectedTaskPanel, BoxLayout.Y_AXIS));
+        selectedTaskPanel.setBackground(new Color(60, 80, 60));
+        selectedTaskPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(255, 215, 0), 2), // Gold border
+            new EmptyBorder(6, 6, 6, 6)
+        ));
+        selectedTaskPanel.setAlignmentX(LEFT_ALIGNMENT);
+        selectedTaskPanel.setMaximumSize(new Dimension(PANEL_WIDTH - 20, 100));
+
+        JLabel selectedTitle = new JLabel("\u2605 SELECTED TASK \u2605"); // Star symbols
+        selectedTitle.setFont(FontManager.getRunescapeBoldFont());
+        selectedTitle.setForeground(new Color(255, 215, 0)); // Gold color
+        selectedTitle.setAlignmentX(LEFT_ALIGNMENT);
+        selectedTaskPanel.add(selectedTitle);
+
+        JLabel selectedTaskName = new JLabel("Click a task below to select");
+        selectedTaskName.setFont(FontManager.getRunescapeSmallFont());
+        selectedTaskName.setForeground(Color.LIGHT_GRAY);
+        selectedTaskName.setAlignmentX(LEFT_ALIGNMENT);
+        selectedTaskName.setName("selectedTaskName");
+        selectedTaskPanel.add(selectedTaskName);
+
+        selectedTaskPanel.setVisible(false); // Hidden until a task is selected
+        taskPanel.add(selectedTaskPanel);
+        taskPanel.add(Box.createVerticalStrut(4));
+
+        // === ACTIVE TASKS HEADER ===
         JLabel sectionTitle = new JLabel("Active Tasks");
         sectionTitle.setFont(FontManager.getRunescapeBoldFont().deriveFont(14f));
         sectionTitle.setForeground(new Color(100, 255, 100));
         sectionTitle.setAlignmentX(LEFT_ALIGNMENT);
         taskPanel.add(sectionTitle);
-        taskPanel.add(Box.createVerticalStrut(8));
+        taskPanel.add(Box.createVerticalStrut(4));
 
-        // Scrollable content panel for active tasks
+        // === SEARCH FIELD ===
+        JPanel searchRow = new JPanel(new BorderLayout(5, 0));
+        searchRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        searchRow.setAlignmentX(LEFT_ALIGNMENT);
+        searchRow.setMaximumSize(new Dimension(PANEL_WIDTH - 20, 22));
+
+        JLabel searchLabel = new JLabel("Search:");
+        searchLabel.setFont(FontManager.getRunescapeSmallFont());
+        searchLabel.setForeground(Color.LIGHT_GRAY);
+        searchRow.add(searchLabel, BorderLayout.WEST);
+
+        activeTasksSearchField = new JTextField();
+        activeTasksSearchField.setToolTipText("Search tasks by name");
+        activeTasksSearchField.getDocument().addDocumentListener(new DocumentListener()
+        {
+            @Override
+            public void insertUpdate(DocumentEvent e) { onActiveTasksFilterChanged(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { onActiveTasksFilterChanged(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { onActiveTasksFilterChanged(); }
+        });
+        searchRow.add(activeTasksSearchField, BorderLayout.CENTER);
+
+        taskPanel.add(searchRow);
+        taskPanel.add(Box.createVerticalStrut(4));
+
+        // === CATEGORY AND REGION FILTERS ===
+        JPanel filterRow = new JPanel(new GridLayout(1, 2, 4, 0));
+        filterRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        filterRow.setAlignmentX(LEFT_ALIGNMENT);
+        filterRow.setMaximumSize(new Dimension(PANEL_WIDTH - 20, 40));
+
+        // Category filter
+        JPanel categoryPanel = new JPanel(new BorderLayout(2, 0));
+        categoryPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+
+        JLabel catLabel = new JLabel("Category:");
+        catLabel.setFont(FontManager.getRunescapeSmallFont());
+        catLabel.setForeground(Color.LIGHT_GRAY);
+        categoryPanel.add(catLabel, BorderLayout.NORTH);
+
+        activeTasksCategoryCombo = new JComboBox<>(new String[]{"All"});
+        activeTasksCategoryCombo.setFont(FontManager.getRunescapeSmallFont());
+        activeTasksCategoryCombo.addActionListener(e -> {
+            if (!isRefreshingActiveFilters)
+            {
+                activeTasksSelectedCategory = (String) activeTasksCategoryCombo.getSelectedItem();
+                if (activeTasksSelectedCategory == null) activeTasksSelectedCategory = "All";
+                updateActiveTasksDisplay();
+            }
+        });
+        categoryPanel.add(activeTasksCategoryCombo, BorderLayout.CENTER);
+
+        filterRow.add(categoryPanel);
+
+        // Region filter
+        JPanel regionPanel = new JPanel(new BorderLayout(2, 0));
+        regionPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+
+        JLabel regLabel = new JLabel("Region:");
+        regLabel.setFont(FontManager.getRunescapeSmallFont());
+        regLabel.setForeground(Color.LIGHT_GRAY);
+        regionPanel.add(regLabel, BorderLayout.NORTH);
+
+        activeTasksRegionCombo = new JComboBox<>(new String[]{"All"});
+        activeTasksRegionCombo.setFont(FontManager.getRunescapeSmallFont());
+        activeTasksRegionCombo.addActionListener(e -> {
+            if (!isRefreshingActiveFilters)
+            {
+                activeTasksSelectedRegion = (String) activeTasksRegionCombo.getSelectedItem();
+                if (activeTasksSelectedRegion == null) activeTasksSelectedRegion = "All";
+                updateActiveTasksDisplay();
+            }
+        });
+        regionPanel.add(activeTasksRegionCombo, BorderLayout.CENTER);
+
+        filterRow.add(regionPanel);
+
+        taskPanel.add(filterRow);
+        taskPanel.add(Box.createVerticalStrut(4));
+
+        // === SCROLLABLE TASK LIST ===
         activeTasksContentPanel = new JPanel();
         activeTasksContentPanel.setLayout(new BoxLayout(activeTasksContentPanel, BoxLayout.Y_AXIS));
         activeTasksContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-        activeTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 12)); // Right padding for scrollbar
 
         activeTasksScrollPane = new JScrollPane(activeTasksContentPanel);
         activeTasksScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -637,8 +760,8 @@ public class ChunkBlazerPanel extends PluginPanel
         activeTasksScrollPane.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         activeTasksScrollPane.getViewport().setBackground(ColorScheme.DARKER_GRAY_COLOR);
         activeTasksScrollPane.setAlignmentX(LEFT_ALIGNMENT);
-        activeTasksScrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, MAX_ACTIVE_TASKS_HEIGHT));
-        activeTasksScrollPane.setPreferredSize(new Dimension(200, MAX_ACTIVE_TASKS_HEIGHT));
+        activeTasksScrollPane.setPreferredSize(new Dimension(PANEL_WIDTH - 20, MAX_ACTIVE_TASKS_HEIGHT));
+        activeTasksScrollPane.setMaximumSize(new Dimension(PANEL_WIDTH - 20, MAX_ACTIVE_TASKS_HEIGHT));
 
         // Placeholder
         taskNameLabel = new JLabel("Loading tasks...");
@@ -655,6 +778,165 @@ public class ChunkBlazerPanel extends PluginPanel
         taskProgressLabel = new JLabel("");
 
         return taskPanel;
+    }
+
+    private void onActiveTasksFilterChanged()
+    {
+        activeTasksSearchText = activeTasksSearchField.getText().toLowerCase().trim();
+        updateActiveTasksDisplay();
+    }
+
+    /**
+     * Refresh the category and region filter dropdowns for active tasks.
+     */
+    private void refreshActiveTasksFilters()
+    {
+        isRefreshingActiveFilters = true;
+        try
+        {
+            // Populate categories from all active tasks
+            Set<String> categories = plugin.getActiveTasks().stream()
+                .map(NuzlockeTask::getCategory)
+                .filter(c -> c != null && !c.isEmpty())
+                .collect(Collectors.toCollection(java.util.TreeSet::new));
+
+            String currentCategory = activeTasksSelectedCategory;
+            activeTasksCategoryCombo.removeAllItems();
+            activeTasksCategoryCombo.addItem("All");
+            for (String cat : categories)
+            {
+                activeTasksCategoryCombo.addItem(cat);
+            }
+            if (currentCategory != null && categories.contains(currentCategory))
+            {
+                activeTasksCategoryCombo.setSelectedItem(currentCategory);
+            }
+            else
+            {
+                activeTasksCategoryCombo.setSelectedItem("All");
+                activeTasksSelectedCategory = "All";
+            }
+
+            // Populate regions from active tasks
+            Set<String> regions = plugin.getActiveTaskRegions();
+            String currentRegion = activeTasksSelectedRegion;
+            activeTasksRegionCombo.removeAllItems();
+            activeTasksRegionCombo.addItem("All");
+            for (String reg : regions)
+            {
+                activeTasksRegionCombo.addItem(reg);
+            }
+            if (currentRegion != null && regions.contains(currentRegion))
+            {
+                activeTasksRegionCombo.setSelectedItem(currentRegion);
+            }
+            else
+            {
+                activeTasksRegionCombo.setSelectedItem("All");
+                activeTasksSelectedRegion = "All";
+            }
+        }
+        finally
+        {
+            isRefreshingActiveFilters = false;
+        }
+    }
+
+    /**
+     * Select a task and highlight it in the Selected Task box.
+     */
+    public void selectTask(NuzlockeTask task)
+    {
+        this.selectedTask = task;
+        updateSelectedTaskDisplay();
+        updateActiveTasksDisplay(); // Refresh to show selection highlight
+    }
+
+    private void updateSelectedTaskDisplay()
+    {
+        if (selectedTask == null)
+        {
+            selectedTaskPanel.setVisible(false);
+            return;
+        }
+
+        selectedTaskPanel.setVisible(true);
+
+        // Update the task name label
+        for (java.awt.Component comp : selectedTaskPanel.getComponents())
+        {
+            if (comp instanceof JLabel && "selectedTaskName".equals(comp.getName()))
+            {
+                JLabel nameLabel = (JLabel) comp;
+                nameLabel.setText("<html><b>" + selectedTask.getName() + "</b></html>");
+                nameLabel.setForeground(Color.WHITE);
+            }
+        }
+
+        // Rebuild the selected task panel with full details
+        selectedTaskPanel.removeAll();
+
+        JLabel selectedTitle = new JLabel("\u2605 SELECTED TASK \u2605");
+        selectedTitle.setFont(FontManager.getRunescapeBoldFont());
+        selectedTitle.setForeground(new Color(255, 215, 0));
+        selectedTitle.setAlignmentX(LEFT_ALIGNMENT);
+        selectedTaskPanel.add(selectedTitle);
+        selectedTaskPanel.add(Box.createVerticalStrut(4));
+
+        // Task name
+        JLabel nameLabel = new JLabel("<html>" + selectedTask.getName() + "</html>");
+        nameLabel.setFont(FontManager.getRunescapeSmallFont().deriveFont(Font.BOLD));
+        nameLabel.setForeground(Color.WHITE);
+        nameLabel.setAlignmentX(LEFT_ALIGNMENT);
+        selectedTaskPanel.add(nameLabel);
+
+        // Category and points
+        String info = selectedTask.getCategory() + " | " + selectedTask.getBasePoints() + " pts";
+        if (selectedTask.getLevelRequirement() > 1)
+        {
+            info += " | L" + selectedTask.getLevelRequirement();
+        }
+        JLabel infoLabel = new JLabel(info);
+        infoLabel.setFont(FontManager.getRunescapeSmallFont());
+        infoLabel.setForeground(new Color(255, 200, 100));
+        infoLabel.setAlignmentX(LEFT_ALIGNMENT);
+        selectedTaskPanel.add(infoLabel);
+
+        // Progress
+        int progress = selectedTask.getCurrentProgress();
+        int target = selectedTask.getTargetQuantity();
+        float pct = target > 0 ? (float) progress / target : 0;
+        pct = Math.min(pct, 1.0f);
+
+        JPanel progressRow = new JPanel(new BorderLayout(4, 0));
+        progressRow.setBackground(new Color(60, 80, 60));
+        progressRow.setAlignmentX(LEFT_ALIGNMENT);
+        progressRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 14));
+
+        final int BAR_WIDTH = 100;
+        JPanel progressBar = new JPanel(new BorderLayout());
+        progressBar.setBackground(new Color(30, 30, 30));
+        progressBar.setBorder(BorderFactory.createLineBorder(new Color(255, 215, 0)));
+        progressBar.setPreferredSize(new Dimension(BAR_WIDTH + 2, 12));
+
+        int fillWidth = Math.round(BAR_WIDTH * pct);
+        JPanel progressFill = new JPanel();
+        progressFill.setBackground(new Color(255, 215, 0)); // Gold fill
+        progressFill.setPreferredSize(new Dimension(fillWidth, 10));
+        progressBar.add(progressFill, BorderLayout.WEST);
+
+        progressRow.add(progressBar, BorderLayout.CENTER);
+
+        JLabel progressText = new JLabel(progress + "/" + target);
+        progressText.setFont(FontManager.getRunescapeSmallFont());
+        progressText.setForeground(Color.WHITE);
+        progressRow.add(progressText, BorderLayout.EAST);
+
+        selectedTaskPanel.add(Box.createVerticalStrut(4));
+        selectedTaskPanel.add(progressRow);
+
+        selectedTaskPanel.revalidate();
+        selectedTaskPanel.repaint();
     }
 
     private JLabel createDetailLabel(String text)
@@ -682,8 +964,6 @@ public class ChunkBlazerPanel extends PluginPanel
             BorderFactory.createLineBorder(new Color(100, 100, 150)),
             new EmptyBorder(6, 6, 6, 6)
         ));
-        // Constrain panel width to prevent horizontal expansion
-        controlsPanel.setMaximumSize(new Dimension(PANEL_WIDTH, Integer.MAX_VALUE));
 
         // Section title
         JLabel sectionTitle = new JLabel("Dev Controls");
@@ -845,8 +1125,7 @@ public class ChunkBlazerPanel extends PluginPanel
             BorderFactory.createLineBorder(ColorScheme.MEDIUM_GRAY_COLOR),
             new EmptyBorder(6, 6, 6, 6)
         ));
-        // Constrain panel width to prevent horizontal expansion
-        listPanel.setMaximumSize(new Dimension(PANEL_WIDTH, Integer.MAX_VALUE));
+        listPanel.setAlignmentX(LEFT_ALIGNMENT);
 
         // Header row with toggle button
         JPanel headerRow = new JPanel(new BorderLayout(5, 0));
@@ -875,7 +1154,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
         // Filter text field (visible when expanded)
         taskFilterField = new JTextField();
-        taskFilterField.setMaximumSize(new Dimension(PANEL_WIDTH - 20, 25));
+        taskFilterField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
         taskFilterField.setAlignmentX(LEFT_ALIGNMENT);
         taskFilterField.setToolTipText("Filter tasks by name");
         taskFilterField.getDocument().addDocumentListener(new DocumentListener()
@@ -895,8 +1174,7 @@ public class ChunkBlazerPanel extends PluginPanel
         taskListContentPanel = new JPanel();
         taskListContentPanel.setLayout(new BoxLayout(taskListContentPanel, BoxLayout.Y_AXIS));
         taskListContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-        taskListContentPanel.setBorder(new EmptyBorder(0, 0, 0, 14)); // Right padding for scrollbar
-        taskListContentPanel.setMaximumSize(new Dimension(PANEL_WIDTH - 30, Integer.MAX_VALUE));
+        taskListContentPanel.setBorder(new EmptyBorder(0, 0, 0, 5)); // Small right padding
 
         taskListScrollPane = new JScrollPane(taskListContentPanel);
         taskListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -905,8 +1183,6 @@ public class ChunkBlazerPanel extends PluginPanel
         taskListScrollPane.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         taskListScrollPane.getViewport().setBackground(ColorScheme.DARKER_GRAY_COLOR);
         taskListScrollPane.setAlignmentX(LEFT_ALIGNMENT);
-        taskListScrollPane.setMaximumSize(new Dimension(PANEL_WIDTH - 20, MAX_TASK_LIST_HEIGHT));
-        taskListScrollPane.setPreferredSize(new Dimension(PANEL_WIDTH - 20, MAX_TASK_LIST_HEIGHT));
         taskListScrollPane.setVisible(false); // Hidden by default
 
         listPanel.add(taskListScrollPane);
@@ -946,8 +1222,16 @@ public class ChunkBlazerPanel extends PluginPanel
             updateTaskListContent();
         }
 
+        // Revalidate the entire panel hierarchy
         taskListPanel.revalidate();
         taskListPanel.repaint();
+
+        // Also revalidate parent to fix layout
+        if (taskListPanel.getParent() != null)
+        {
+            taskListPanel.getParent().revalidate();
+            taskListPanel.getParent().repaint();
+        }
     }
 
     // --- Action Handlers ---
@@ -1201,14 +1485,68 @@ public class ChunkBlazerPanel extends PluginPanel
 
     public void updateTaskDisplay()
     {
+        updateActiveTasksDisplay();
+        // Also update selected task if it exists
+        if (selectedTask != null)
+        {
+            updateSelectedTaskDisplay();
+        }
+    }
+
+    public void updateActiveTasksDisplay()
+    {
+        // Refresh filter dropdowns
+        refreshActiveTasksFilters();
+
         // Only rebuild the scrollable content, not the whole panel
         activeTasksContentPanel.removeAll();
 
-        List<NuzlockeTask> tasks = plugin.getActiveTasks();
+        List<NuzlockeTask> allTasks = plugin.getActiveTasks();
 
-        if (tasks.isEmpty())
+        // Cache filter values
+        final String filterText = activeTasksSearchText != null ? activeTasksSearchText : "";
+        final String filterCategory = activeTasksSelectedCategory != null ? activeTasksSelectedCategory : "All";
+        final String filterRegion = activeTasksSelectedRegion != null ? activeTasksSelectedRegion : "All";
+
+        // Filter tasks based on search text, category, and region
+        List<NuzlockeTask> filteredTasks = allTasks.stream()
+            .filter(task -> {
+                // Search text filter
+                if (!filterText.isEmpty())
+                {
+                    String name = task.getName() != null ? task.getName().toLowerCase() : "";
+                    String category = task.getCategory() != null ? task.getCategory().toLowerCase() : "";
+                    if (!name.contains(filterText) && !category.contains(filterText))
+                    {
+                        return false;
+                    }
+                }
+                // Category filter
+                if (!"All".equals(filterCategory))
+                {
+                    String taskCategory = task.getCategory() != null ? task.getCategory() : "";
+                    if (!filterCategory.equals(taskCategory))
+                    {
+                        return false;
+                    }
+                }
+                // Region filter
+                if (!"All".equals(filterRegion))
+                {
+                    String taskRegion = plugin.getTaskRegionName(task);
+                    if (taskRegion == null || !filterRegion.equals(taskRegion))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            })
+            .collect(Collectors.toList());
+
+        if (filteredTasks.isEmpty())
         {
-            JLabel noTaskLabel = new JLabel("No active tasks");
+            String message = allTasks.isEmpty() ? "No active tasks" : "No tasks match filter";
+            JLabel noTaskLabel = new JLabel(message);
             noTaskLabel.setFont(FontManager.getRunescapeSmallFont());
             noTaskLabel.setForeground(Color.GRAY);
             noTaskLabel.setAlignmentX(LEFT_ALIGNMENT);
@@ -1216,43 +1554,102 @@ public class ChunkBlazerPanel extends PluginPanel
         }
         else
         {
-            for (NuzlockeTask task : tasks)
+            for (NuzlockeTask task : filteredTasks)
             {
                 activeTasksContentPanel.add(createActiveTaskItem(task));
                 activeTasksContentPanel.add(Box.createVerticalStrut(5));
             }
         }
 
-        // Update the section title in parent panel
-        if (currentTaskPanel.getComponentCount() > 0)
-        {
-            java.awt.Component first = currentTaskPanel.getComponent(0);
-            if (first instanceof JLabel)
-            {
-                ((JLabel) first).setText("Active Tasks (" + tasks.size() + ")");
-            }
-        }
+        // Update the section title to show count
+        updateActiveTasksSectionTitle(allTasks.size(), filteredTasks.size());
 
         activeTasksContentPanel.revalidate();
         activeTasksContentPanel.repaint();
     }
 
+    private void updateActiveTasksSectionTitle(int totalCount, int filteredCount)
+    {
+        // Find the "Active Tasks" label in currentTaskPanel and update it
+        for (java.awt.Component comp : currentTaskPanel.getComponents())
+        {
+            if (comp instanceof JLabel)
+            {
+                JLabel label = (JLabel) comp;
+                String text = label.getText();
+                if (text != null && text.startsWith("Active Tasks"))
+                {
+                    if (totalCount == filteredCount)
+                    {
+                        label.setText("Active Tasks (" + totalCount + ")");
+                    }
+                    else
+                    {
+                        label.setText("Active Tasks (" + filteredCount + "/" + totalCount + ")");
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
     private JPanel createActiveTaskItem(NuzlockeTask task)
     {
+        // Check if this task is currently selected
+        boolean isSelected = selectedTask != null &&
+            task.getTaskId() != null &&
+            task.getTaskId().equals(selectedTask.getTaskId());
+
         JPanel itemPanel = new JPanel();
         itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
-        itemPanel.setBackground(new Color(40, 50, 40));
+
+        // Different colors for selected vs unselected
+        Color bgColor = isSelected ? new Color(60, 70, 50) : new Color(40, 50, 40);
+        Color borderColor = isSelected ? new Color(255, 215, 0) : new Color(60, 80, 60);
+        int borderWidth = isSelected ? 2 : 1;
+
+        itemPanel.setBackground(bgColor);
         itemPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(60, 80, 60)),
+            BorderFactory.createLineBorder(borderColor, borderWidth),
             new EmptyBorder(4, 5, 4, 5)
         ));
         itemPanel.setAlignmentX(LEFT_ALIGNMENT);
 
-        // Task name with HTML wrapping - narrow width to fit panel with scrollbar
+        // Make clickable with cursor change
+        itemPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        itemPanel.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e)
+            {
+                selectTask(task);
+            }
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e)
+            {
+                if (!isSelected)
+                {
+                    itemPanel.setBackground(new Color(50, 60, 50));
+                }
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e)
+            {
+                if (!isSelected)
+                {
+                    itemPanel.setBackground(bgColor);
+                }
+            }
+        });
+
+        // Selection indicator + Task name
         String taskName = task.getName();
-        JLabel nameLabel = new JLabel("<html><body style='width: 140px'>" + taskName + "</body></html>");
+        String prefix = isSelected ? "\u2605 " : ""; // Star for selected
+        JLabel nameLabel = new JLabel("<html>" + prefix + taskName + "</html>");
         nameLabel.setFont(FontManager.getRunescapeSmallFont());
-        nameLabel.setForeground(new Color(150, 255, 150));
+        nameLabel.setForeground(isSelected ? new Color(255, 215, 0) : new Color(150, 255, 150));
         nameLabel.setAlignmentX(LEFT_ALIGNMENT);
         itemPanel.add(nameLabel);
 
@@ -1266,7 +1663,7 @@ public class ChunkBlazerPanel extends PluginPanel
         }
         JLabel infoLabel = new JLabel(infoText.toString());
         infoLabel.setFont(FontManager.getRunescapeSmallFont());
-        infoLabel.setForeground(Color.ORANGE);
+        infoLabel.setForeground(isSelected ? new Color(255, 200, 100) : Color.ORANGE);
         infoLabel.setAlignmentX(LEFT_ALIGNMENT);
         itemPanel.add(infoLabel);
 
@@ -1274,22 +1671,26 @@ public class ChunkBlazerPanel extends PluginPanel
         int progress = task.getCurrentProgress();
         int target = task.getTargetQuantity();
         float pct = target > 0 ? (float) progress / target : 0;
+        pct = Math.min(pct, 1.0f); // Cap at 100%
 
         JPanel progressRow = new JPanel(new BorderLayout(4, 0));
-        progressRow.setBackground(new Color(40, 50, 40));
+        progressRow.setBackground(bgColor);
         progressRow.setAlignmentX(LEFT_ALIGNMENT);
         progressRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 16));
 
-        // Progress bar - compact to fit panel
+        // Progress bar - use exact width calculation
+        final int BAR_WIDTH = 78; // Inner width (excluding border)
         JPanel progressBar = new JPanel();
         progressBar.setLayout(new BorderLayout());
         progressBar.setBackground(new Color(30, 30, 30));
-        progressBar.setBorder(BorderFactory.createLineBorder(new Color(60, 60, 60)));
-        progressBar.setPreferredSize(new Dimension(80, 10));
+        progressBar.setBorder(BorderFactory.createLineBorder(isSelected ? new Color(255, 215, 0) : new Color(60, 60, 60)));
+        progressBar.setPreferredSize(new Dimension(BAR_WIDTH + 2, 10)); // +2 for border
 
+        // Calculate fill width with rounding for accuracy
+        int fillWidth = Math.round(BAR_WIDTH * pct);
         JPanel progressFill = new JPanel();
-        progressFill.setBackground(new Color(80, 180, 80));
-        progressFill.setPreferredSize(new Dimension((int)(80 * pct), 10));
+        progressFill.setBackground(isSelected ? new Color(255, 215, 0) : new Color(80, 180, 80));
+        progressFill.setPreferredSize(new Dimension(fillWidth, 8)); // 8 = 10 - 2 for border
         progressBar.add(progressFill, BorderLayout.WEST);
 
         progressRow.add(progressBar, BorderLayout.CENTER);
@@ -1425,8 +1826,8 @@ public class ChunkBlazerPanel extends PluginPanel
         ));
         itemPanel.setAlignmentX(LEFT_ALIGNMENT);
 
-        // Task name with checkmark - use HTML for wrapping (narrow for scrollbar)
-        JLabel nameLabel = new JLabel("<html><body style='width: 140px'>\u2713 " + info.getName() + "</body></html>");
+        // Task name with checkmark - use HTML for wrapping
+        JLabel nameLabel = new JLabel("<html>\u2713 " + info.getName() + "</html>");
         nameLabel.setFont(FontManager.getRunescapeSmallFont());
         nameLabel.setForeground(new Color(100, 200, 100));
         nameLabel.setAlignmentX(LEFT_ALIGNMENT);
@@ -1442,9 +1843,9 @@ public class ChunkBlazerPanel extends PluginPanel
 
         // Region on separate line (truncate if too long)
         String regionName = info.getRegionName();
-        if (regionName != null && regionName.length() > 20)
+        if (regionName != null && regionName.length() > 30)
         {
-            regionName = regionName.substring(0, 17) + "...";
+            regionName = regionName.substring(0, 27) + "...";
         }
         JLabel regionLabel = new JLabel(regionName != null ? regionName : "Unknown");
         regionLabel.setFont(FontManager.getRunescapeSmallFont());

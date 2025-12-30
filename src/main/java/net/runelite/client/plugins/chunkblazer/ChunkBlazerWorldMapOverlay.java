@@ -297,6 +297,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
             .setType(MenuAction.RUNELITE);
     }
 
+
     private void showUnlockConfirmation(int regionId, String regionName, int unlockCost, int playerPoints)
     {
         SwingUtilities.invokeLater(() -> {
@@ -304,7 +305,8 @@ class ChunkBlazerWorldMapOverlay extends Overlay
             {
                 JOptionPane.showMessageDialog(
                     null,
-                    "Not enough points to unlock " + regionName + "!\n\n" +
+                    "Not enough points to unlock this chunk!\n\n" +
+                    regionName + "\n\n" +
                     "Cost: " + unlockCost + " points\n" +
                     "You have: " + playerPoints + " points\n" +
                     "Need: " + (unlockCost - playerPoints) + " more points",
@@ -316,11 +318,12 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 
             int confirm = JOptionPane.showConfirmDialog(
                 null,
-                "Unlock " + regionName + "?\n\n" +
+                "Ready to unlock this chunk?\n\n" +
+                regionName + "\n\n" +
                 "Cost: " + unlockCost + " points\n" +
                 "Your points: " + playerPoints + "\n" +
-                "Remaining: " + (playerPoints - unlockCost) + " points",
-                "Confirm Chunk Unlock",
+                "Remaining after unlock: " + (playerPoints - unlockCost) + " points",
+                "Unlock Chunk?",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE
             );
@@ -328,7 +331,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
             if (confirm == JOptionPane.YES_OPTION)
             {
                 plugin.unlockRegion(regionId);
-                log.info("Unlocked region {} for {} points", regionId, unlockCost);
+                log.info("Unlocked region {} for {} points", regionName, unlockCost);
             }
         });
     }
