@@ -1,0 +1,177 @@
+{
+            "region_id": [11320],
+            "Friendly_Name": "Death Plateau",
+            "neighbor_ids": [11319, 11576, 11321, 11064],
+            "tasks": [
+                {
+                    "name": "Defeat some Trolls",
+                    "taskID": "defeat_troll",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Troll"],
+                        "npc_ids": [5825, 5826, 5824, 5823, 698, 5830, 1876, 1877, 5831, 5829, 1875, 5828, 1874, 650, 652, 653, 701, 703, 704, 651, 654, 702, 705, 649, 700, 648, 699, 936, 937, 938, 939, 940, 941, 942, 4143, 7030, 925, 931, 932, 933, 934, 935, 4135, 4136, 4137, 4138, 4139, 4122, 4121, 4120, 4123, 4124, 4125, 4126, 4127, 4128, 4129, 4130],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Troll on Task",
+                    "taskID": "defeat_troll_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Troll"],
+                        "npc_ids": [5825, 5826, 5824, 5823, 698, 5830, 1876, 1877, 5831, 5829, 1875, 5828, 1874, 650, 652, 653, 701, 703, 704, 651, 654, 702, 705, 649, 700, 648, 699, 936, 937, 938, 939, 940, 941, 942, 4143, 7030, 925, 931, 932, 933, 934, 935, 4135, 4136, 4137, 4138, 4139, 4122, 4121, 4120, 4123, 4124, 4125, 4126, 4127, 4128, 4129, 4130],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Equip an Adamant Warhammer",
+                    "taskID": "equip_adamant_warhammer",
+                    "category": "Attack",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Warhammer"],
+                            "item_ids": [1345]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ensouled Troll Head",
+                    "taskID": "obtain_ensouled_troll_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Ensouled Troll Head"],
+                            "item_ids": [13483, 13484],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Long Bone",
+                    "taskID": "obtain_long_bone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Long Bone"],
+                            "item_ids": [10976],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Curved Bone",
+                    "taskID": "obtain_curved_bone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Curved Bone"],
+                            "item_ids": [10977],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Mountain Troll in 15 Seconds",
+                    "taskID": "defeat_mountain_troll_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Mountain Troll"],
+                        "npc_ids": [936, 937, 938, 939, 940, 941, 942, 4143],
+                        "quantity": [1]
+                    },               
+                    "constraints": {
+                        "time_in_ticks": [25],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }, 
+                {
+                    "name": "Obtain a Grimy Guam Leaf",
+                    "taskID": "obtain_grimy_guam",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Grimy Guam Leaf"],
+                            "item_ids": [199],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Marrentill",
+                    "taskID": "obtain_grimy_marrentill",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Grimy Marrentill"],
+                            "item_ids": [201],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Tarromin",
+                    "taskID": "obtain_grimy_tarromin",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Grimy Tarromin"],
+                            "item_ids": [203],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Ranarr Weed",
+                    "taskID": "obtain_grimy_ranarr",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Grimy Ranarr Weed",
+                        "item_ids": [207],
+                        "quantity": [1]
+                        }
+                    ]
+                }
+            ],                          
+            "is_completed": false
+        }

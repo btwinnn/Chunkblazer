@@ -1,0 +1,239 @@
+{
+            "region_id": [11573], 
+            "Friendly_Name": "Taverly Dungeon Entrance",
+            "neighbor_ids": [11572, 11829, 11574, 11317],
+            "tasks": [
+                {
+                    "name": "Use the Level 70 Agility Pipe Shortcut",
+                    "taskID": "agility_level_70_pipe_squeeze",
+                    "category": "Agility",
+                    "level": 70,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Defeat some Blue Dragons",
+                    "taskID": "defeat_blue_dragons",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Blue Dragon"],
+                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
+                        "quantity": [1, 50]
+                    }
+                },
+                {
+                    "name": "Defeat a Blue Dragon on Task",
+                    "taskID": "defeat_blue_dragon_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Blue Dragon"],
+                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat some Black Knights",
+                    "taskID": "defeat_some_black_knights",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Black Knight"],
+                        "npc_ids": [11953, 517, 4331, 11952, 516],
+                        "quantity": [1, 1200]
+                    }
+                },               
+                {
+                    "name": "Catch a Lava Eel",
+                    "taskID": "catch_lava_eel",
+                    "category": "Fishing",
+                    "level": 53,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Raw Lava Eel",
+                        "item_ids": [2148],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat Cerberus",
+                    "taskID": "defeat_cerberus",
+                    "category": "Slayer",
+                    "level": 91,
+                    "completion_type": "SLAYER",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "boss": "Cerberus",
+                    "target_npc": {
+                        "npc": ["Cerberus"],
+                        "npc_ids": [5862, 5863, 5866],
+                        "quantity": [1]
+                    }
+                },
+                {                           
+                    "name": "Defeat Cerberus in 80 Seconds",
+                    "taskID": "defeat_cerberus_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "boss":"Cerberus",
+                    "target_npc": {
+                        "npc": ["Cerberus"],
+                        "npc_ids": [5862, 5863, 5866],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [134],
+                            "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
+                },
+                {
+                    "name": "Obtain a Primordial Crystal",
+                    "taskID": "obtain_primordial_crystal",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Primordial Crystal"],
+                            "item_ids": [13231]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Pegasian Crystal",
+                    "taskID": "obtain_pegasian_crystal",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Pegasian Crystal"],
+                            "item_ids": [13229]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Eternal Crystal",
+                    "taskID": "obtain_eternal_crystal",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Eternal Crystal"],
+                            "item_ids": [13227]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Smouldering Stone",
+                    "taskID": "obtain_smouldering_stone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Smouldering Stone"],
+                            "item_ids": [13233]
+                        }
+                    ]
+                },
+                {
+                "name": "Complete the Cerberus Combat Achievements",
+                "taskID": "complete_cerberus_CAs",
+                "category": "Unlock",
+                "completion_type": "VARBIT_CHECK",
+                "base_points": 5,
+                "assignment_weight": 10,
+                "varbit_boolean": 1, 
+                "boss": "Cerberus",                 
+                "constraints": [                   
+                        {                       
+                        "varbit_id": 55,              
+                        "description": "Unrequired Antifire",
+                        "tier": "Elite"
+                        },
+                        {                       
+                        "varbit_id": 51,              
+                        "description": "Cerberus Veteran",
+                        "tier": "Elite"
+                        },
+                        {                       
+                        "varbit_id": 54,             
+                        "description": "Ghost Buster",
+                        "tier": "Elite"
+                        },
+                        {                       
+                        "varbit_id": 56,              
+                        "description": "Anti-Bite Mechanics",
+                        "tier": "Elite"
+                        },
+                        {                       
+                        "varbit_id": 52,             
+                        "description": "Cerberus Master",
+                        "tier": "Master"
+                        },
+                        {                       
+                        "varbit_id": 53,            
+                        "description": "Arooo No More",
+                        "tier": "Master"
+                        }                      
+                    ]
+                },
+                {
+                    "name": "Obtain some Uncut Dragonstones",
+                    "taskID": "obtain_uncut_dragonstone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                                "item": ["Uncut Dragonstone"],
+                                "item_ids": [1631],
+                                "quantity": [1, 5]
+                            }
+                        ]
+                }
+            ],
+                    "optional_quests_unlocked": [
+                        {
+                            "name": "Grim Tales",
+                            "points": 5
+                        },
+                        {
+                            "name": "While Guthix Sleeps",
+                            "points": 6
+                        },
+                        {
+                            "name": "Edgar's Ruse",
+                            "points": 2
+                        }                  
+                    ],                           
+            "is_completed": false
+        }

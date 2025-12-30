@@ -1,0 +1,68 @@
+{
+            "region_id": [11063],
+            "Friendly_Name": "Max Island",
+            "neighbor_ids": [11064, 11319, 11062, 10807],
+            "tasks": [
+                {
+                    "name": "Equip a Max Cape",
+                    "taskID": "equip_max_cape",
+                    "category": "Defence",
+                    "level": 99,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Max Cape"],
+                            "item_ids": [13280, 13342]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dizana's Max Cape",
+                    "taskID": "equip_dizana's_max_cape",
+                    "category": "Defence",
+                    "level": 99,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dizana's Max Cape"],
+                            "item_ids": [28902]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Infernal Max Cape",
+                    "taskID": "equip_infernal_max_cape",
+                    "category": "Defence",
+                    "level": 99,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Infernal Max Cape"],
+                            "item_ids": [21285]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Imbued Max Cape",
+                    "taskID": "equip_imbued_max_cape",
+                    "category": "Defence",
+                    "level": 99,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Imbued Max Cape"],
+                            "item_ids": [21784, 21776, 21780]
+                        }
+                    ]
+                }                             
+            ],                          
+            "is_completed": false
+        }

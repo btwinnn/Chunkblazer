@@ -1,0 +1,145 @@
+{
+            "region_id": [11319],
+            "Friendly_Name": "Warrior's Guild",
+            "neighbor_ids": [11320, 11575, 11318, 11063],
+            "tasks": [
+                {
+                    "name": "Equip a Rune Defender",
+                    "taskID": "equip_rune_defender",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Rune Defender"],
+                            "item_ids": [8850]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Defender",
+                    "taskID": "equip_dragon_defender",
+                    "category": "Defence",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Defender"],
+                            "item_ids": [12954]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat Anmiated Rune Armour",
+                    "taskID": "defeat_animated_rune_armour",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Animated Rune Armour"],
+                        "npc_ids": [2456],
+                        "quantity": [1]
+                    }                  
+                },
+                {
+                    "name": "Defeat Anmiated Adamant Armour",
+                    "taskID": "defeat_animated_adamant_armour",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Animated Adamant Armour"],
+                        "npc_ids": [2455],
+                        "quantity": [1]
+                    }                  
+                },
+                {
+                    "name": "Defeat Anmiated Mithril Armour",
+                    "taskID": "defeat_animated_mithril_armour",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Animated Mithril Armour"],
+                        "npc_ids": [2454],
+                        "quantity": [1]
+                    }                  
+                },
+                {
+                    "name": "Obtain some Warrior Guild Tokens",
+                    "taskID": "obtain_warrior_guild_tokens",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                                "item": ["Warrior Guild Token"],
+                                "item_ids": [8851],
+                                "quantity": [1000, 5000]
+                            }
+                        ]
+                },
+                {
+                    "name": "Obtain Climbing Boots",
+                    "taskID": "obtain_climbing_boots",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Climbing Boots"],
+                            "item_ids": [3105],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Black Knives",
+                    "taskID": "obtain_black_knife",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Black Knife"],
+                            "item_ids": [869],
+                            "quantity": [100, 1000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Cyclops in 10 Seconds",
+                    "taskID": "defeat_cyclops_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Cyclops"],
+                        "npc_ids": [2097, 7271, 7270, 2236, 2235, 2137, 2138, 2139, 2140, 2141, 2142, 2463, 2465, 2467, 2464, 2466, 2468],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [16],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }              
+            ],                           
+            "is_completed": false
+        }

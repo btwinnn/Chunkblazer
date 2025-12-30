@@ -1223,7 +1223,7 @@
             "is_completed": false
         },
         {
-            "region_id": [13364],
+            "region_id": [11828],
             "Friendly_Name": "West Falador",
             "neighbor_ids": [11829, 12084, 11827, 11572],
             "tasks": [
@@ -2501,7 +2501,7 @@
         },
         {
             "region_id": [11574],
-            "Friendly_Name": "Taverly",
+            "Friendly_Name": "Druids' Circle",
             "neighbor_ids": [11575, 11830, 11573, 11318],
             "tasks": [
                 {

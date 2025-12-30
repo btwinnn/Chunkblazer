@@ -1,0 +1,141 @@
+{
+            "region_id": [11318],
+            "Friendly_Name": "White Wolf Mountain",
+            "neighbor_ids": [11319, 11574, 11317, 11062],
+            "tasks": [
+                {
+                    "name": "Obtain Ice Gloves",
+                    "taskID": "obtain_ice_gloves",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Ice Gloves"],
+                            "item_ids": [1580],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Ice Warrior on Task",
+                    "taskID": "defeat_ice_warrior_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Warrior"],
+                        "npc_ids": [2842, 2851, 2841, 13802],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 53 Ice Giant on Task",
+                    "taskID": "defeat_level_53_ice_giant_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Giant"],
+                        "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat the Big Wolf of White Wolf Mountain",
+                    "taskID": "defeat_big_wolf_white_wolf_mountain",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Big Wolf#White Wolf Mountain"],
+                        "npc_ids": [109],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Use the Glider to Travel to White Wolf Mountain",
+                    "taskID": "glider_white_wolf_mountain",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Defeat a White Wolf on Task",
+                    "taskID": "defeat_white_wolf_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["White Wolf"],
+                        "npc_ids": [107, 108],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a White Wolf in 5 Seconds",
+                    "taskID": "defeat_white_wolf_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["White Wolf"],
+                        "npc_ids": [107, 108],
+                        "quantity": [1]
+                    },               
+                    "constraints": {
+                        "time_in_ticks": [8],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }, 
+                {
+                    "name": "Obtain a Dwarven Rock Cake",
+                    "taskID": "obtain_dwarven_rock_cake",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dwarven Rock Cake"],
+                            "item_ids": [7510, 7509],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some White Wolves",
+                    "taskID": "defeat_white_wolves",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["White Wolf"],
+                        "npc_ids": [107, 108, 109],
+                        "quantity": [1, 25]
+                    }
+                }
+            ],
+                "optional_quests_unlocked": [
+                    {
+                        "name": "Fishing Contest",
+                        "points": 1
+                    }                   
+                ],
+             
+            "is_completed": false
+        }

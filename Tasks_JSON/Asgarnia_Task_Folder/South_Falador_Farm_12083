@@ -1,0 +1,173 @@
+{
+            "region_id": [12083],
+            "Friendly_Name": "South Falador Farm",
+            "neighbor_ids": [12082, 12339, 12084, 11827],
+            "tasks": [
+                {
+                    "name": "Plant some Potatoes",
+                    "taskID": "plant_potatoes",
+                    "category": "Farming",
+                    "level": 1,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Potato Seed"],
+                            "item_ids": [5318],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Onions",
+                    "taskID": "plant_onions",
+                    "category": "Farming",
+                    "level": 5,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Onion Seed"],
+                            "item_ids": [5319],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Cabbages",
+                    "taskID": "plant_cabbages",
+                    "category": "Farming",
+                    "level": 7,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cabbage Seed"],
+                            "item_ids": [5324],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Tomato",
+                    "taskID": "plant_tomato",
+                    "category": "Farming",
+                    "level": 12,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Tomato Seed"],
+                            "item_ids": [5322],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Guam Seed",
+                    "taskID": "plant_guam",
+                    "category": "Farming",
+                    "level": 9,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Guam Seed"],
+                            "item_ids": [5291],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Marrentill Seed",
+                    "taskID": "plant_marrentill",
+                    "category": "Farming",
+                    "level": 14,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Marrentill Seed"],
+                            "item_ids": [5292],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Tarromin Seed",
+                    "taskID": "plant_tarromin",
+                    "category": "Farming",
+                    "level": 19,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Tarromin Seed"],
+                            "item_ids": [5293],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Marigold Seed",
+                    "taskID": "plant_marigold",
+                    "category": "Farming",
+                    "level": 2,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Marigold Seed"],
+                            "item_ids": [5096],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Rosemary Seed",
+                    "taskID": "plant_rosemary",
+                    "category": "Farming",
+                    "level": 11,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rosemary Seed"],
+                            "item_ids": [5097],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Explorer's Ring 1",
+                    "taskID": "obtain_explorer's_ring_1",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Explorer's Ring 1"],
+                            "item_ids": [13125],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "The Corsair Curse",
+                    "points": 2
+                }                
+            ],
+            "is_completed": false
+        }

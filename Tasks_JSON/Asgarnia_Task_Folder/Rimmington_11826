@@ -1,0 +1,223 @@
+{
+            "region_id": [11826],
+            "Friendly_Name": "Rimmington",
+            "neighbor_ids": [11825, 12082, 11570, 11827],
+            "tasks": [
+                {
+                "name": "Build an Easy STASH Unit in the Rimmington Mine",
+                "taskID": "build_easy_stash_unit_rimmington",
+                "category": "Construction",
+                "level": 27,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Teak Plank",
+                        "item_ids": [8780]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Easy STASH Unit (inconspicuous rocks)",
+                        "object_id": [28969],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Gold Ore",
+                    "taskID": "mine_gold",
+                    "category": "Mining",
+                    "level": 40,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Gold Ore",
+                            "item_ids": [444],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Mogre",
+                    "taskID": "defeat_mogre",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Mogre"],
+                        "npc_ids": [2592],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain some Adamant Arrows",
+                    "taskID": "obtain_adamant_arrows",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Arrow"],
+                            "item_ids": [890],
+                            "quantity": [1, 800]
+                        }
+                    ]
+                },
+                {
+                "name": "Build an Oak Larder",
+                "taskID": "build_oak_larder",
+                "category": "Construction",
+                "level": 33,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 10,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Oak Larder",
+                        "object_id": [13566],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Crafting Table 3",
+                "taskID": "build_crafting_table_3",
+                "category": "Construction",
+                "level": 34,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Molten Glass",
+                        "item_ids": [1775]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Crafting Table 3",
+                        "object_id": [6798],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build an Oak Altar",
+                "taskID": "build_oak_altar",
+                "category": "Construction",
+                "level": 45,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 5,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Oak Altar",
+                        "object_id": [40872, 13181, 13179, 13180],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build an Oak Kitchen Table",
+                "taskID": "build_oak_kitchen_ table",
+                "category": "Construction",
+                "level": 32,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Oak Kitchen Table",
+                        "object_id": [13578],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Willow Tree",
+                    "taskID": "Chop_willow_tree",
+                    "category": "Woodcutting",
+                    "level": 30,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bronze Scimitar",
+                    "taskID": "obtain_bronze_scimitar",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Bronze Scimitar"],
+                            "item_ids": [1321]
+                        }
+                    ]
+                }               
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Witch's Potion",
+                    "points": 1
+                }
+            ],
+            "is_completed": false
+        }

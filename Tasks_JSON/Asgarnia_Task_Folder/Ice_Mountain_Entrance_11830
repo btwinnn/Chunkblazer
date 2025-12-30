@@ -1,0 +1,132 @@
+{
+            "region_id": [11830],
+            "Friendly_Name": "Ice Mountain Entrance",
+            "neighbor_ids": [11829, 12086, 11831, 11574],
+            "tasks": [
+                 {
+                    "name": "Defeat The Whisperer",
+                    "taskID": "defeat_whisperer",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "boss": "The Whisperer",
+                    "target_npc": {
+                        "npc": ["Leviathan"],
+                        "npc_ids": [12206, 12207],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat the Awakened Whisperer",
+                    "taskID": "defeat_awakened_whisperer",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "boss": "The Whisperer",
+                    "target_npc": {
+                        "npc": ["Awakened Whisperer"],
+                        "npc_ids": [12204, 12205],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Bellator Vestige",
+                    "taskID": "obtain_bellator_vestige",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "boss": "The Whisperer",
+                    "required_items": [
+                        {
+                            "item": ["Bellator Vestige"],
+                            "item_ids": [28279]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Siren's Staff",
+                    "taskID": "obtain_siren's_staff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "boss": "The Whisperer",
+                    "required_items": [
+                        {
+                            "item": ["Siren's Staff"],
+                            "item_ids": [28323],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Barronite Mace",
+                    "taskID": "equip_barronite_mace",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Barronite Mace"],
+                            "item_ids": [25641]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Barronite Shards",
+                    "taskID": "mine_barronite_shards",
+                    "category": "Mining",
+                    "level": 14,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Barronite Shards",
+                        "item_ids": [25676],
+                        "quantity": [1, 500]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Imcando Hammer",
+                    "taskID": "obtain_imcando_hammer",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Imcamdo Hammer"],
+                            "item_ids": [25644]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Icefiend on Task",
+                    "taskID": "defeat_icefiend_on_task",
+                    "category": "Slayer",
+                    "level": 1,
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Icefiend"],
+                        "npc_ids": [4813, 3140],
+                        "quantity": [1]
+                    }
+                }              
+                    ],
+                    "optional_quests_unlocked": [
+                        {
+                            "name": "Goblin Diplomacy",
+                            "points": 1
+                        }                
+                    ],                 
+                    "is_completed": false
+        }

@@ -1,0 +1,231 @@
+{
+            "region_id": [11824],
+            "Friendly_Name": "Mudskipper Point",
+            "neighbor_ids": [11823, 12080, 11568, 11825],
+            "tasks": [
+                {
+                    "name": "Defeat some Skeletal Wyverns",
+                    "taskID": "defeat_skeletal_wyvern",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Skeletal Wyvern"],
+                        "npc_ids": [468, 465, 466, 467],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                "name": "Complete the Royal Titans Combat Achievements",
+                "taskID": "complete_royal_titan_CAs",
+                "category": "Unlock",
+                "completion_type": "VARBIT_CHECK",
+                "base_points": 4,
+                "assignment_weight": 10,
+                "varbit_boolean": 1, 
+                "boss": "Royal Titans",                 
+                "constraints": [                   
+                        {                       
+                        "varbit_id": 591,                                   
+                        "description": "One by one", 
+                        "tier": "Easy"
+                        },
+                        {                       
+                        "varbit_id": 597,              
+                        "description": "Let them fight",
+                        "tier": "Easy"
+                        },
+                        {                       
+                        "varbit_id": 594,             
+                        "description": "Elemental Company",
+                        "tier": "Easy"
+                        },
+                        {                       
+                        "varbit_id": 590,              
+                        "description": "Royal Titan Adept",
+                        "tier": "Medium"
+                        },
+                        {                       
+                        "varbit_id": 598,             
+                        "description": "It takes too long",
+                        "tier": "Medium"
+                        },
+                        {                       
+                        "varbit_id": 589,            
+                        "description": "Royal Titan Champion",
+                        "tier": "Medium"
+                        },
+                        {                       
+                        "varbit_id": 593,             
+                        "description": "Titan Killer",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 595,           
+                        "description": "I need room",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 592,             
+                        "description": "Royal Titan Speed-Runner",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 588,             
+                        "description": "Perfect Royal Titans",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 596,             
+                        "description": "No time to pray",
+                        "tier": "Elite"
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat the Royal Titans",
+                    "taskID": "defeat_royal_titans",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "boss": "royal Titans",
+                    "target_npc": {
+                        "npc": ["Royal Titans"],
+                        "npc_ids": [12596, 14148, 14149, 14147],
+                        "quantity": [1, 50]
+                    }
+                },
+                {                           
+                    "name": "Defeat Royal Titans with only a Weapon Equipped",
+                    "taskID": "defeat_royal_titans_weapon_only",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "boss": "Royal Titans",
+                    "target_npc": {
+                        "npc": ["Royal Titans"],
+                        "npc_ids": [12596, 14148, 14149, 14147],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                    }
+                },
+                {
+                    "name": "Obtain a Twinflame Staff",
+                    "taskID": "obtain_twinflame_staff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Twinflame Staff"],
+                            "item_ids": [30634]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Ice Element Staff Crown",
+                    "taskID": "obtain_ice_element_staff_crown",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Ice Element Staff Crown"],
+                            "item_ids": [30628]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Fire Element Staff Crown",
+                    "taskID": "obtain_fire_element_staff_crown",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Fire Element Staff Crown"],
+                            "item_ids": [30631]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Deadeye Prayer Scroll",
+                    "taskID": "obtain_deadeye_prayer_scroll",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Deadeye Prayer Scroll"],
+                            "item_ids": [30626]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Mystic Vigour Prayer Scroll",
+                    "taskID": "obtain_mystic_vigour_prayer_scroll",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Mystic Vigour Prayer Scroll"],
+                            "item_ids": [30627]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Ice Warrior on Task",
+                    "taskID": "defeat_ice_warrior_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Ice Warrior"],
+                        "npc_ids": [2842, 2851, 2841, 13802],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 53 Ice Giant on Task",
+                    "taskID": "defeat_level_53_ice_giant_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Ice Giant"],
+                        "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797],
+                        "quantity": [1]
+                    }
+                },               
+                {
+                    "name": "Equip a Dragonfire Shield",
+                    "taskID": "equip_dragonfire_shield",
+                    "category": "Defence",
+                    "level": 75,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Dragonfire Shield"],
+                            "item_ids": [11283, 11284]
+                        }
+                    ]
+                }
+            ],          
+            "is_completed": false
+        }

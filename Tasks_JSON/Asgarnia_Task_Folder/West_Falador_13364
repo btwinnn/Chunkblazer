@@ -1,0 +1,230 @@
+{
+            "region_id": [11828],
+            "Friendly_Name": "West Falador",
+            "neighbor_ids": [11829, 12084, 11827, 11572],
+            "tasks": [
+                {
+                "name": "Build a Fire of Eternal Light in the Mole Lair",
+                "taskID": "build_fire_eternal_light_mole_lair",
+                "category": "Firemaking",
+                "level": 66,
+                "completion_type": "FIREMAKING",
+                "base_points": 3,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                            "item": "Mahogany Plank",
+                            "item_ids": [8782],
+                            "quantity": [2]            
+                        },
+                        {
+                            "item": "Steel Bar",
+                            "item_ids": [2353],
+                            "quantity": [2]            
+                        },
+                        {
+                            "item": "Efh Salt",
+                            "item_ids": [22595],
+                            "quantity": [100]            
+                        },
+                        {
+                            "item": "Te Salt",
+                            "item_ids": [22593],
+                            "quantity": [300]            
+                        },
+                        {
+                            "item": "Urt Salt",
+                            "item_ids": [22597],
+                            "quantity": [50]            
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat the Gaint Mole",
+                    "taskID": "defeat_giant_mole",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "boss": "Giant Mole",
+                    "target_npc": {
+                        "npc": ["Giant Mole"],
+                        "npc_ids": [5779],
+                        "quantity": [1]
+                    }
+                },
+                {                           
+                    "name": "Defeat the Giant Mole with only a Weapon Equipped",
+                    "taskID": "defeat_giant_mole_weapon_only",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "boss": "Giant Mole",
+                    "target_npc": {
+                        "npc": ["Giant Mole"],
+                        "npc_ids": [5779],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                    }
+                },
+                {
+                "name": "Complete the Giant Mole Combat Achievements",
+                "taskID": "complete_giant_mole_CAs",
+                "category": "Unlock",
+                "completion_type": "VARBIT_CHECK",
+                "base_points": 4,
+                "assignment_weight": 10,
+                "varbit_boolean": 1, 
+                "boss": "Cerberus",                 
+                "constraints": [                   
+                        {                       
+                        "varbit_id": 177,              
+                        "description": "Giant Mole Novice",
+                        "tier": "Easy"
+                        },
+                        {                       
+                        "varbit_id": 182,              
+                        "description": "Avoiding those Little Arms",
+                        "tier": "Medium"
+                        },
+                        {                       
+                        "varbit_id": 178,             
+                        "description": "Giant Mole Champion",
+                        "tier": "Medium"
+                        },
+                        {                       
+                        "varbit_id": 179,              
+                        "description": "Why are you Running?",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 181,             
+                        "description": "Whack-a-Mole",
+                        "tier": "Hard"
+                        },
+                        {                       
+                        "varbit_id": 180,            
+                        "description": "Hard Hitter",
+                        "tier": "Elite"
+                        }                      
+                    ]
+                },
+                {
+                    "name": "Plant a Willow Sapling",
+                    "taskID": "plant_willow_sapling",
+                    "category": "Farming",
+                    "level": 30,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items":
+                        {
+                            "item": "Willow Sapling",
+                            "item_ids": [5371],
+                            "quantity": [1]
+                        } 
+                }, 
+                {
+                    "name": "Obtain some Mole Claws",
+                    "taskID": "obtain_mole_claw",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Mole Claw"],
+                            "item_ids": [7416],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Mole Skins",
+                    "taskID": "obtain_mole_skins",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Mole Skin"],
+                            "item_ids": [7418],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a White 2H Sword",
+                    "taskID": "equip_white_2h",
+                    "category": "Attack",
+                    "level": 10,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["White 2H Sword"],
+                            "item_ids": [6609]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Equip a White Platebody",
+                    "taskID": "equip_white_platebody",
+                    "category": "Defence",
+                    "level": 10,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["White Platebody"],
+                            "item_ids": [6617]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a White Med Helm",
+                    "taskID": "equip_white_med_helm",
+                    "category": "Defence",
+                    "level": 10,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["White Med Helm"],
+                            "item_ids": [6621]
+                        }
+                    ]
+                }                                 
+                    ],
+                    "optional_quests_unlocked": [
+                        {
+                            "name": "Black Knights' Fortress",
+                            "points": 2
+                        },
+                        {
+                            "name": "Recruitment Drive",
+                            "points": 1
+                        },
+                        {
+                            "name": "The Knight's Sword",
+                            "points": 2
+                        },
+                        {
+                            "name": "The Slug Menace",
+                            "points": 2
+                        },
+                        {
+                            "name": "Wanted!",
+                            "points": 2
+                        }
+                    ],                 
+                    "is_completed": false
+        }

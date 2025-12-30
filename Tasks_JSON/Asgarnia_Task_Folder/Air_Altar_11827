@@ -1,0 +1,161 @@
+{
+            "region_id": [11827],
+            "Friendly_Name": "Air Altar",
+            "neighbor_ids": [11826, 12083, 11828, 11571],
+            "tasks": [
+                {
+                    "name": "Runecraft an Air Rune",
+                    "taskID": "runecraft_air_rune",
+                    "is_unlocked": false,
+                    "category": "Runecrafting",
+                    "level": 1,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                            "item": "Air Rune",
+                            "item_ids": [556],
+                            "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Runecraft a Smoke Rune",
+                    "taskID": "runecraft_smoke_rune",
+                    "is_unlocked": false,
+                    "category": "Runecrafting",
+                    "level": 15,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Smoke Rune",
+                            "item_ids": [4697],
+                            "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Create an Air Tiara",
+                    "taskID": "runecraft_air_tiara",
+                    "category": "Runecrafting",
+                    "level": 1,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Air Tiara",
+                            "item_ids": [5527],
+                            "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Use the Level 26 Agility Underwall Tunnel",
+                    "taskID": "agility_level_26_underwall_tunnel",
+                    "category": "Agility",
+                    "level": 26,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 8
+                },
+                {
+                    "name": "Equip an Adamant Chainbody",
+                    "taskID": "equip_adamant_chainbody",
+                    "category": "Defence",
+                    "completion_type": "EQUIP",
+                    "level": 30,
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Chainbody"],
+                            "item_ids": [1111]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mithril Chainbody",
+                    "taskID": "equip_mithril_chainbody",
+                    "category": "Defence",
+                    "level": 20,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Mithril Chainbody"],
+                            "item_ids": [1109]
+                        }
+                    ]
+                },
+                {
+                    "name": "Spin a Crossbow String",
+                    "taskID": "spin_crossbow_string",
+                    "category": "Crafting",
+                    "level": 10,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Crossbow String"],
+                            "item_ids": [9438],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Yew Log",
+                    "taskID": "burn_yew_log",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch an Oak Shield",
+                    "taskID": "fletch_oak_shield",
+                    "category": "Fletching",
+                    "level": 27,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Oak Shield"],
+                            "item_ids": [22251],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],                      
+            "is_completed": false
+        }
