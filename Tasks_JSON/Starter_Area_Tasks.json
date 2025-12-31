@@ -1,7 +1,7 @@
 {
   "nuzlocke_chunks_lumbridge": [
     {
-      "region_id": [12850, 12950],
+      "region_id": [12850],
       "friendly_name": "Lumbridge",
       "unlock_cost": 1,
       "neighbor_ids": [12581, 12579, 12612, 12548],
@@ -799,7 +799,7 @@
       "is_completed": false
     },
     {
-      "region_id": [13106, 10315],
+      "region_id": [13106],
       "neighbor_ids": [12850, 13105, 13107, 13362],
       "Friendly_Name": "Al Kharid Toll Gate",
       "tasks": [
@@ -1008,7 +1008,7 @@
       "is_completed": false
     },
     {
-      "region_id": [13105, 11605],
+      "region_id": [13105],
       "Friendly_Name": "Al Kharid",
       "tasks": [
         {
@@ -1172,7 +1172,7 @@
       "is_completed": false
     },
     {
-      "region_id": [12593, 12693, 12949],
+      "region_id": [12593],
       "Friendly_Name": "Lumbridge West Swamp",
       "neighbor_ids": [12849, 12594, 12592, 12337],
       "tasks": [
@@ -1349,7 +1349,7 @@
       "is_completed": false
     },
     {
-      "region_id": 12595,
+      "region_id": [12595],
       "Friendly_Name": "Lumbridge Mill",
       "neighbor_ids": [12339, 12594, 12851, 12596],
       "tasks": [
@@ -1538,7 +1538,7 @@
       "is_completed": false
     },
     {
-      "region_id": 13107,
+      "region_id": [13107],
       "Friendly_Name": "Al Kharid Mine",
       "neighbor_ids": [12851, 13106, 13108, 13363],
       "tasks": [
