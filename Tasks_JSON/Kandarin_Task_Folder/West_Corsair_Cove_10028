@@ -122,10 +122,7 @@
                     },
 
                     "constraints": {
-                        "must_be_empty_slots": [
-                        "HEAD", "CAPE", "AMULET", "BODY", "SHIELD", "LEGS", 
-                        "GLOVES", "BOOTS", "RING", "AMMO", "WEAPON"
-                        ],                      
+                        "equip_nothing": "TRUE",                      
                         "prohibited_active_varbits": [
                             {
                                 "varbit_id": 57,

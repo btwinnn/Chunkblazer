@@ -81,7 +81,7 @@
                     }, 
                     
                     "constraints": {
-                        "must_be_empty_slots": ["WEAPON", "HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                        "equip_nothing": "TRUE"
                     }
                 },
                 {

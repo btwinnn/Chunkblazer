@@ -132,7 +132,7 @@
                     },
                     
                     "constraints": {
-                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                        "equippable_slots": ["WEAPON"]
                     }
                 },
                 {
