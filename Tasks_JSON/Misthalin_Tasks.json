@@ -1236,10 +1236,7 @@
                     },
 
                     "constraints": {
-                        "must_be_empty_slots": [
-                        "HEAD", "CAPE", "AMULET", "BODY", "SHIELD", "LEGS", 
-                        "GLOVES", "BOOTS", "RING", "AMMO", "WEAPON"
-                        ]
+                        "equip_nothing": "TRUE"
                     }
                     
                 },
@@ -1604,9 +1601,8 @@
                     },
 
                     "constraints": {
-                        "must_be_empty_slots": [
-                        "HEAD", "CAPE", "AMULET", "BODY", "SHIELD", "LEGS", 
-                        "GLOVES", "BOOTS", "RING", "AMMO", "WEAPON"
+                        "equip_nothing": [
+                    
                         ]
                     }
                     
@@ -1848,7 +1844,7 @@
                     "category": "Agility",
                     "level": 30,
                     "completion_type": "AGILITY",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "required_object": {
                         "object": ["Edge (Varrock Rooftop Course)"],
@@ -2279,7 +2275,7 @@
                     }, 
                     
                     "constraints": {
-                        "must_be_empty_slots": ["WEAPON"]
+                        "must_be_empty_slots": ["WEAPON"]                       
                     }
                 },
                 {                           
@@ -2296,8 +2292,8 @@
                         "quantity": [1]
                     }, 
                     
-                    "constraints": {
-                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                    "constraints": {                     
+                        "equippable_slots": ["WEAPON"]
                     }
                 },
                 {
@@ -2340,7 +2336,7 @@
                     
                     "constraints": {
                         "time_in_ticks": [100],
-                         "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                         "equippable_slots": ["WEAPON"]
                         }
                 },
                 {
@@ -2474,7 +2470,7 @@
                     }, 
                     
                     "constraints": {
-                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                        "equippable_slots": ["WEAPON"]
                     }
                 },
                 {                           
@@ -2541,7 +2537,7 @@
                     
                     "constraints": {
                         "time_in_ticks": [36],
-                         "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"],
+                         "equippable_slots": ["WEAPON"],
                          "prohibited_active_varbits": [
                                 {
                                     "varbit_id": 57,
