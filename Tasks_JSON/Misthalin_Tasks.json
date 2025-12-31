@@ -1601,9 +1601,7 @@
                     },
 
                     "constraints": {
-                        "equip_nothing": [
-                    
-                        ]
+                        "equip_nothing": "TRUE"                      
                     }
                     
                 },
