@@ -169,6 +169,26 @@
             "npc_ids": [3017, 3019],
             "quantity": [1, 25]
           }
+        },
+        {
+          "name": "Defeat a Level 2 Goblin and obtain bones",
+          "taskID": "Defeat_level_2_Goblin_and_obtain_bones",
+          "base_points": 1,
+          "assignment_weight": 8,
+          "category": "Combat",
+          "completion_type": "NPC_Kill",
+          "target_npc": {
+            "npc": ["Goblin"],
+            "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
+            "quantity": 1
+          },
+          "required_items": [
+            {
+              "item": "Bones",
+              "item_ids": [526],
+              "quantity": [1]
+            }
+          ] 
         }
       ],
       "optional_quests_unlocked": [
