@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
 import net.runelite.api.Point;
 import net.runelite.api.gameval.InterfaceID;
@@ -198,12 +199,16 @@ class ChunkBlazerWorldMapOverlay extends Overlay
             }
         }
 
-        // Add right-click menu for unlocking neighbors
+        // Add right-click menu for unlocking neighbors (only when Shift is held)
         if (isHoveredUnlockable && hoveredRegionId > 0)
         {
-            addUnlockMenuEntry(hoveredRegionId);
+            // Only show unlock menu when Shift is held
+            if (client.isKeyPressed(KeyCode.KC_SHIFT))
+            {
+                addUnlockMenuEntry(hoveredRegionId);
+            }
 
-            // Draw hover tooltip
+            // Always draw hover tooltip when hovering unlockable region
             drawHoverTooltip(graphics, mousePos, hoveredRegionId);
         }
 
@@ -225,7 +230,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
         // Build tooltip text
         String line1 = regionName;
         String line2 = "Cost: " + unlockCost + " pts";
-        String line3 = canAfford ? "Right-click to unlock" : "Need " + (unlockCost - playerPoints) + " more pts";
+        String line3 = canAfford ? "Shift+Right-click to unlock" : "Need " + (unlockCost - playerPoints) + " more pts";
 
         // Setup font
         Font font = FontManager.getRunescapeSmallFont();

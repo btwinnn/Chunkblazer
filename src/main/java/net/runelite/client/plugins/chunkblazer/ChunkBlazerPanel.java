@@ -80,6 +80,11 @@ public class ChunkBlazerPanel extends PluginPanel
     // Completed Tasks Filter Components
     private JToggleButton completedTasksToggle;
     private boolean completedTasksExpanded = false;
+
+    // Dev Controls Collapse
+    private JToggleButton devControlsToggle;
+    private boolean devControlsExpanded = false;
+    private JPanel devControlsContentPanel;
     private JTextField completedTasksSearchField;
     private JComboBox<String> categoryFilterCombo;
     private JComboBox<String> regionFilterCombo;
@@ -107,6 +112,7 @@ public class ChunkBlazerPanel extends PluginPanel
     }
 
     private static final int PANEL_WIDTH = 225; // Standard RuneLite panel width
+    private static final int CONTENT_WIDTH = PANEL_WIDTH - 24; // Width for content inside panels (accounting for borders/padding)
 
     public void init(ChunkBlazerPlugin plugin)
     {
@@ -114,9 +120,14 @@ public class ChunkBlazerPanel extends PluginPanel
 
         setLayout(new BorderLayout());
         setBackground(ColorScheme.DARK_GRAY_COLOR);
+        setPreferredSize(new Dimension(PANEL_WIDTH, 600));
+        setMaximumSize(new Dimension(PANEL_WIDTH, Integer.MAX_VALUE));
 
         // Wrap main panel in a scroll pane to prevent overflow
         JPanel mainContent = createMainPanel();
+        mainContent.setPreferredSize(new Dimension(PANEL_WIDTH - 10, mainContent.getPreferredSize().height));
+        mainContent.setMaximumSize(new Dimension(PANEL_WIDTH - 10, Integer.MAX_VALUE));
+
         JScrollPane mainScrollPane = new JScrollPane(mainContent);
         mainScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         mainScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -124,6 +135,7 @@ public class ChunkBlazerPanel extends PluginPanel
         mainScrollPane.setBackground(ColorScheme.DARK_GRAY_COLOR);
         mainScrollPane.getViewport().setBackground(ColorScheme.DARK_GRAY_COLOR);
         mainScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        mainScrollPane.setPreferredSize(new Dimension(PANEL_WIDTH, 600));
 
         add(mainScrollPane, BorderLayout.CENTER);
     }
@@ -165,51 +177,32 @@ public class ChunkBlazerPanel extends PluginPanel
         mainPanel.add(completedTasksPanel);
         mainPanel.add(Box.createVerticalStrut(8));
 
-        // Dev/Test Controls Section
-        devControlsPanel = createDevControlsSection();
-        setupSectionPanel(devControlsPanel);
-        mainPanel.add(devControlsPanel);
-        mainPanel.add(Box.createVerticalStrut(8));
-
-        // Task List Section
+        // Task List Section (Region Tasks)
         taskListPanel = createTaskListSection();
         setupSectionPanel(taskListPanel);
         mainPanel.add(taskListPanel);
         mainPanel.add(Box.createVerticalStrut(8));
 
-        // Social Links Section
-        JPanel social = createSocialLinksSection();
-        setupSectionPanel(social);
-        mainPanel.add(social);
+        // Dev/Test Controls Section (at the bottom, collapsible)
+        devControlsPanel = createDevControlsSection();
+        setupSectionPanel(devControlsPanel);
+        mainPanel.add(devControlsPanel);
 
         return mainPanel;
     }
 
     /**
      * Configure a section panel to fill width in BoxLayout.
+     * Lock horizontal width but allow vertical expansion.
      */
     private void setupSectionPanel(JPanel panel)
     {
         panel.setAlignmentX(LEFT_ALIGNMENT);
-        // Allow sections to take their preferred height but fill width
+        // Fixed width to prevent horizontal expansion, allow vertical growth
         Dimension pref = panel.getPreferredSize();
-        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Math.max(pref.height, 400)));
-    }
-
-    private JPanel createSocialLinksSection()
-    {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 5));
-        panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-        panel.setAlignmentX(LEFT_ALIGNMENT);
-
-        // Discord button with icon
-        JButton discordButton = new JButton("\uD83D\uDCAC Discord"); // Speech bubble emoji
-        discordButton.setForeground(new Color(88, 101, 242)); // Discord blurple
-        discordButton.setToolTipText("Join the Discord");
-        discordButton.addActionListener(e -> openLink("https://discord.gg/D8DYP45DV8"));
-        panel.add(discordButton);
-
-        return panel;
+        panel.setPreferredSize(new Dimension(PANEL_WIDTH - 10, pref.height));
+        panel.setMaximumSize(new Dimension(PANEL_WIDTH - 10, Integer.MAX_VALUE)); // Allow vertical expansion
+        panel.setMinimumSize(new Dimension(PANEL_WIDTH - 10, 0));
     }
 
     private void openLink(String url)
@@ -243,7 +236,8 @@ public class ChunkBlazerPanel extends PluginPanel
         JPanel headerRow = new JPanel(new BorderLayout(5, 0));
         headerRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         headerRow.setAlignmentX(LEFT_ALIGNMENT);
-        headerRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
+        headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
 
         JLabel sectionTitle = new JLabel("Completed Tasks");
         sectionTitle.setFont(FontManager.getRunescapeBoldFont());
@@ -253,6 +247,7 @@ public class ChunkBlazerPanel extends PluginPanel
         completedTasksToggle = new JToggleButton("\u25BC");
         completedTasksToggle.setFont(new Font("Arial", Font.PLAIN, 10));
         completedTasksToggle.setPreferredSize(new Dimension(30, 20));
+        completedTasksToggle.setMaximumSize(new Dimension(30, 20));
         completedTasksToggle.setToolTipText("Expand/collapse completed tasks with search");
         completedTasksToggle.addActionListener(e -> {
             completedTasksExpanded = completedTasksToggle.isSelected();
@@ -269,14 +264,16 @@ public class ChunkBlazerPanel extends PluginPanel
         completedTasksFilterPanel.setLayout(new BoxLayout(completedTasksFilterPanel, BoxLayout.Y_AXIS));
         completedTasksFilterPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         completedTasksFilterPanel.setAlignmentX(LEFT_ALIGNMENT);
-        completedTasksFilterPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+        completedTasksFilterPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 80));
+        completedTasksFilterPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 80));
         completedTasksFilterPanel.setVisible(false);
 
         // Search text field
         JPanel searchRow = new JPanel(new BorderLayout(5, 0));
         searchRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         searchRow.setAlignmentX(LEFT_ALIGNMENT);
-        searchRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        searchRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
+        searchRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
 
         JLabel searchLabel = new JLabel("Search:");
         searchLabel.setFont(FontManager.getRunescapeSmallFont());
@@ -303,7 +300,8 @@ public class ChunkBlazerPanel extends PluginPanel
         JPanel filterRow = new JPanel(new GridLayout(1, 2, 5, 0));
         filterRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         filterRow.setAlignmentX(LEFT_ALIGNMENT);
-        filterRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        filterRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 50));
+        filterRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 50));
 
         // Category filter
         JPanel categoryPanel = new JPanel(new BorderLayout(2, 0));
@@ -360,7 +358,7 @@ public class ChunkBlazerPanel extends PluginPanel
         completedTasksContentPanel = new JPanel();
         completedTasksContentPanel.setLayout(new BoxLayout(completedTasksContentPanel, BoxLayout.Y_AXIS));
         completedTasksContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-        completedTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 5)); // Small right padding
+        completedTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         completedTasksScrollPane = new JScrollPane(completedTasksContentPanel);
         completedTasksScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -369,6 +367,8 @@ public class ChunkBlazerPanel extends PluginPanel
         completedTasksScrollPane.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         completedTasksScrollPane.getViewport().setBackground(ColorScheme.DARKER_GRAY_COLOR);
         completedTasksScrollPane.setAlignmentX(LEFT_ALIGNMENT);
+        completedTasksScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, MAX_COMPLETED_TASKS_HEIGHT));
+        completedTasksScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, Integer.MAX_VALUE)); // Lock width, allow vertical expansion
         completedTasksScrollPane.setVisible(false);
 
         panel.add(completedTasksScrollPane);
@@ -394,6 +394,13 @@ public class ChunkBlazerPanel extends PluginPanel
         {
             refreshCompletedTasksFilters();
             updateCompletedTasksContent();
+            // Note: updateCompletedTasksContent() handles scroll pane sizing
+        }
+        else
+        {
+            // Reset to collapsed size
+            completedTasksScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, 0));
+            completedTasksScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, 0));
         }
 
         // Revalidate the entire panel hierarchy
@@ -471,12 +478,27 @@ public class ChunkBlazerPanel extends PluginPanel
             new EmptyBorder(6, 8, 6, 8)
         ));
 
-        // Title
+        // Title row with Discord button
+        JPanel titleRow = new JPanel(new BorderLayout(5, 0));
+        titleRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        titleRow.setAlignmentX(CENTER_ALIGNMENT);
+        titleRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
+
         JLabel titleLabel = new JLabel("ChunkBlazer");
         titleLabel.setFont(FontManager.getRunescapeBoldFont().deriveFont(16f));
         titleLabel.setForeground(new Color(255, 152, 0)); // Orange color
-        titleLabel.setAlignmentX(CENTER_ALIGNMENT);
-        headerPanel.add(titleLabel);
+        titleRow.add(titleLabel, BorderLayout.WEST);
+
+        // Small Discord button
+        JButton discordButton = new JButton("Discord");
+        discordButton.setFont(FontManager.getRunescapeSmallFont());
+        discordButton.setForeground(new Color(88, 101, 242)); // Discord blurple
+        discordButton.setPreferredSize(new Dimension(60, 20));
+        discordButton.setToolTipText("Join the Discord");
+        discordButton.addActionListener(e -> openLink("https://discord.gg/D8DYP45DV8"));
+        titleRow.add(discordButton, BorderLayout.EAST);
+
+        headerPanel.add(titleRow);
 
         // Region display (truncate if too long)
         regionLabel = new JLabel("Region: --");
@@ -639,7 +661,8 @@ public class ChunkBlazerPanel extends PluginPanel
             new EmptyBorder(6, 6, 6, 6)
         ));
         selectedTaskPanel.setAlignmentX(LEFT_ALIGNMENT);
-        selectedTaskPanel.setMaximumSize(new Dimension(PANEL_WIDTH - 20, 100));
+        selectedTaskPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 100));
+        selectedTaskPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 100));
 
         JLabel selectedTitle = new JLabel("\u2605 SELECTED TASK \u2605"); // Star symbols
         selectedTitle.setFont(FontManager.getRunescapeBoldFont());
@@ -670,7 +693,8 @@ public class ChunkBlazerPanel extends PluginPanel
         JPanel searchRow = new JPanel(new BorderLayout(5, 0));
         searchRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         searchRow.setAlignmentX(LEFT_ALIGNMENT);
-        searchRow.setMaximumSize(new Dimension(PANEL_WIDTH - 20, 22));
+        searchRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 22));
+        searchRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 22));
 
         JLabel searchLabel = new JLabel("Search:");
         searchLabel.setFont(FontManager.getRunescapeSmallFont());
@@ -697,7 +721,8 @@ public class ChunkBlazerPanel extends PluginPanel
         JPanel filterRow = new JPanel(new GridLayout(1, 2, 4, 0));
         filterRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         filterRow.setAlignmentX(LEFT_ALIGNMENT);
-        filterRow.setMaximumSize(new Dimension(PANEL_WIDTH - 20, 40));
+        filterRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 40));
+        filterRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 40));
 
         // Category filter
         JPanel categoryPanel = new JPanel(new BorderLayout(2, 0));
@@ -760,8 +785,8 @@ public class ChunkBlazerPanel extends PluginPanel
         activeTasksScrollPane.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         activeTasksScrollPane.getViewport().setBackground(ColorScheme.DARKER_GRAY_COLOR);
         activeTasksScrollPane.setAlignmentX(LEFT_ALIGNMENT);
-        activeTasksScrollPane.setPreferredSize(new Dimension(PANEL_WIDTH - 20, MAX_ACTIVE_TASKS_HEIGHT));
-        activeTasksScrollPane.setMaximumSize(new Dimension(PANEL_WIDTH - 20, MAX_ACTIVE_TASKS_HEIGHT));
+        activeTasksScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, MAX_ACTIVE_TASKS_HEIGHT));
+        activeTasksScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, Integer.MAX_VALUE)); // Lock width, allow vertical expansion
 
         // Placeholder
         taskNameLabel = new JLabel("Loading tasks...");
@@ -852,6 +877,29 @@ public class ChunkBlazerPanel extends PluginPanel
         updateActiveTasksDisplay(); // Refresh to show selection highlight
     }
 
+    /**
+     * Clear the selected task if it matches the given task (e.g., when task is completed).
+     */
+    public void clearSelectedTaskIfMatch(NuzlockeTask task)
+    {
+        if (selectedTask != null && task != null &&
+            selectedTask.getTaskId() != null &&
+            selectedTask.getTaskId().equals(task.getTaskId()))
+        {
+            selectedTask = null;
+            updateSelectedTaskDisplay();
+        }
+    }
+
+    /**
+     * Clear the selected task unconditionally.
+     */
+    public void clearSelectedTask()
+    {
+        selectedTask = null;
+        updateSelectedTaskDisplay();
+    }
+
     private void updateSelectedTaskDisplay()
     {
         if (selectedTask == null)
@@ -911,7 +959,8 @@ public class ChunkBlazerPanel extends PluginPanel
         JPanel progressRow = new JPanel(new BorderLayout(4, 0));
         progressRow.setBackground(new Color(60, 80, 60));
         progressRow.setAlignmentX(LEFT_ALIGNMENT);
-        progressRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 14));
+        progressRow.setPreferredSize(new Dimension(CONTENT_WIDTH - 30, 14));
+        progressRow.setMaximumSize(new Dimension(CONTENT_WIDTH - 30, 14));
 
         final int BAR_WIDTH = 100;
         JPanel progressBar = new JPanel(new BorderLayout());
@@ -965,19 +1014,46 @@ public class ChunkBlazerPanel extends PluginPanel
             new EmptyBorder(6, 6, 6, 6)
         ));
 
-        // Section title
+        // Header row with toggle button
+        JPanel headerRow = new JPanel(new BorderLayout(5, 0));
+        headerRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        headerRow.setAlignmentX(LEFT_ALIGNMENT);
+        headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
+        headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
+
         JLabel sectionTitle = new JLabel("Dev Controls");
         sectionTitle.setFont(FontManager.getRunescapeBoldFont());
         sectionTitle.setForeground(new Color(150, 150, 255));
-        sectionTitle.setAlignmentX(LEFT_ALIGNMENT);
-        controlsPanel.add(sectionTitle);
-        controlsPanel.add(Box.createVerticalStrut(8));
+        headerRow.add(sectionTitle, BorderLayout.WEST);
+
+        devControlsToggle = new JToggleButton("\u25BC"); // Down arrow (collapsed)
+        devControlsToggle.setFont(new Font("Arial", Font.PLAIN, 10));
+        devControlsToggle.setPreferredSize(new Dimension(30, 20));
+        devControlsToggle.setMaximumSize(new Dimension(30, 20));
+        devControlsToggle.setToolTipText("Expand/collapse dev controls");
+        devControlsToggle.addActionListener(e -> {
+            devControlsExpanded = devControlsToggle.isSelected();
+            devControlsToggle.setText(devControlsExpanded ? "\u25B2" : "\u25BC");
+            updateDevControlsVisibility();
+        });
+        headerRow.add(devControlsToggle, BorderLayout.EAST);
+
+        controlsPanel.add(headerRow);
+        controlsPanel.add(Box.createVerticalStrut(5));
+
+        // Collapsible content panel
+        devControlsContentPanel = new JPanel();
+        devControlsContentPanel.setLayout(new BoxLayout(devControlsContentPanel, BoxLayout.Y_AXIS));
+        devControlsContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        devControlsContentPanel.setAlignmentX(LEFT_ALIGNMENT);
+        devControlsContentPanel.setVisible(false); // Hidden by default
 
         // Task buttons row
         JPanel taskButtonsPanel = new JPanel(new GridLayout(1, 2, 4, 0));
         taskButtonsPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         taskButtonsPanel.setAlignmentX(LEFT_ALIGNMENT);
-        taskButtonsPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
+        taskButtonsPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+        taskButtonsPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
 
         JButton completeButton = new JButton("Complete");
         completeButton.setFont(FontManager.getRunescapeSmallFont());
@@ -991,14 +1067,15 @@ public class ChunkBlazerPanel extends PluginPanel
         rerollButton.addActionListener(e -> onRerollTask());
         taskButtonsPanel.add(rerollButton);
 
-        controlsPanel.add(taskButtonsPanel);
-        controlsPanel.add(Box.createVerticalStrut(4));
+        devControlsContentPanel.add(taskButtonsPanel);
+        devControlsContentPanel.add(Box.createVerticalStrut(4));
 
         // Points button row
         JPanel pointsPanel = new JPanel(new GridLayout(1, 2, 4, 0));
         pointsPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         pointsPanel.setAlignmentX(LEFT_ALIGNMENT);
-        pointsPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
+        pointsPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+        pointsPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
 
         JButton add10PointsButton = new JButton("+10 pts");
         add10PointsButton.setFont(FontManager.getRunescapeSmallFont());
@@ -1018,14 +1095,15 @@ public class ChunkBlazerPanel extends PluginPanel
         });
         pointsPanel.add(add100PointsButton);
 
-        controlsPanel.add(pointsPanel);
-        controlsPanel.add(Box.createVerticalStrut(4));
+        devControlsContentPanel.add(pointsPanel);
+        devControlsContentPanel.add(Box.createVerticalStrut(4));
 
         // Reset buttons row
         JPanel resetPanel = new JPanel(new GridLayout(1, 2, 4, 0));
         resetPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         resetPanel.setAlignmentX(LEFT_ALIGNMENT);
-        resetPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
+        resetPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+        resetPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
 
         JButton resetTasksButton = new JButton("Rst Tasks");
         resetTasksButton.setFont(FontManager.getRunescapeSmallFont());
@@ -1041,14 +1119,15 @@ public class ChunkBlazerPanel extends PluginPanel
         resetAllButton.addActionListener(e -> onResetAll());
         resetPanel.add(resetAllButton);
 
-        controlsPanel.add(resetPanel);
-        controlsPanel.add(Box.createVerticalStrut(4));
+        devControlsContentPanel.add(resetPanel);
+        devControlsContentPanel.add(Box.createVerticalStrut(4));
 
         // Debug button row
         JPanel debugPanel = new JPanel(new GridLayout(1, 2, 4, 0));
         debugPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         debugPanel.setAlignmentX(LEFT_ALIGNMENT);
-        debugPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
+        debugPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+        debugPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
 
         JButton debugButton = new JButton("Debug");
         debugButton.setFont(FontManager.getRunescapeSmallFont());
@@ -1064,9 +1143,26 @@ public class ChunkBlazerPanel extends PluginPanel
         logButton.addActionListener(e -> openLogFile());
         debugPanel.add(logButton);
 
-        controlsPanel.add(debugPanel);
+        devControlsContentPanel.add(debugPanel);
+
+        controlsPanel.add(devControlsContentPanel);
 
         return controlsPanel;
+    }
+
+    private void updateDevControlsVisibility()
+    {
+        devControlsContentPanel.setVisible(devControlsExpanded);
+
+        // Revalidate the panel hierarchy
+        devControlsPanel.revalidate();
+        devControlsPanel.repaint();
+
+        if (devControlsPanel.getParent() != null)
+        {
+            devControlsPanel.getParent().revalidate();
+            devControlsPanel.getParent().repaint();
+        }
     }
 
     private void onResetTasks()
@@ -1131,7 +1227,8 @@ public class ChunkBlazerPanel extends PluginPanel
         JPanel headerRow = new JPanel(new BorderLayout(5, 0));
         headerRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         headerRow.setAlignmentX(LEFT_ALIGNMENT);
-        headerRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
+        headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
 
         JLabel sectionTitle = new JLabel("Region Tasks");
         sectionTitle.setFont(FontManager.getRunescapeBoldFont());
@@ -1141,6 +1238,7 @@ public class ChunkBlazerPanel extends PluginPanel
         taskListToggle = new JToggleButton("\u25BC"); // Down arrow
         taskListToggle.setFont(new Font("Arial", Font.PLAIN, 10));
         taskListToggle.setPreferredSize(new Dimension(30, 20));
+        taskListToggle.setMaximumSize(new Dimension(30, 20));
         taskListToggle.setToolTipText("Expand/collapse task list");
         taskListToggle.addActionListener(e -> {
             taskListExpanded = taskListToggle.isSelected();
@@ -1154,7 +1252,8 @@ public class ChunkBlazerPanel extends PluginPanel
 
         // Filter text field (visible when expanded)
         taskFilterField = new JTextField();
-        taskFilterField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        taskFilterField.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
+        taskFilterField.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
         taskFilterField.setAlignmentX(LEFT_ALIGNMENT);
         taskFilterField.setToolTipText("Filter tasks by name");
         taskFilterField.getDocument().addDocumentListener(new DocumentListener()
@@ -1174,7 +1273,7 @@ public class ChunkBlazerPanel extends PluginPanel
         taskListContentPanel = new JPanel();
         taskListContentPanel.setLayout(new BoxLayout(taskListContentPanel, BoxLayout.Y_AXIS));
         taskListContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-        taskListContentPanel.setBorder(new EmptyBorder(0, 0, 0, 5)); // Small right padding
+        taskListContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         taskListScrollPane = new JScrollPane(taskListContentPanel);
         taskListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -1183,6 +1282,8 @@ public class ChunkBlazerPanel extends PluginPanel
         taskListScrollPane.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         taskListScrollPane.getViewport().setBackground(ColorScheme.DARKER_GRAY_COLOR);
         taskListScrollPane.setAlignmentX(LEFT_ALIGNMENT);
+        taskListScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, MAX_TASK_LIST_HEIGHT));
+        taskListScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, Integer.MAX_VALUE)); // Lock width, allow vertical expansion
         taskListScrollPane.setVisible(false); // Hidden by default
 
         listPanel.add(taskListScrollPane);
@@ -1220,6 +1321,18 @@ public class ChunkBlazerPanel extends PluginPanel
         if (taskListExpanded)
         {
             updateTaskListContent();
+
+            // Let the scroll pane expand to fit all content (no max height cap)
+            // Width is fixed, height expands as needed
+            int contentHeight = Math.max(100, taskListContentPanel.getPreferredSize().height + 10);
+            taskListScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, contentHeight));
+            taskListScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, contentHeight));
+        }
+        else
+        {
+            // Reset to collapsed size
+            taskListScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, 0));
+            taskListScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, 0));
         }
 
         // Revalidate the entire panel hierarchy
@@ -1566,6 +1679,12 @@ public class ChunkBlazerPanel extends PluginPanel
 
         activeTasksContentPanel.revalidate();
         activeTasksContentPanel.repaint();
+
+        // Resize scroll pane to fit content (fixed width, dynamic height)
+        int contentHeight = Math.max(60, activeTasksContentPanel.getPreferredSize().height + 10);
+        activeTasksScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, contentHeight));
+        activeTasksScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, contentHeight));
+        activeTasksScrollPane.revalidate();
     }
 
     private void updateActiveTasksSectionTitle(int totalCount, int filteredCount)
@@ -1676,7 +1795,8 @@ public class ChunkBlazerPanel extends PluginPanel
         JPanel progressRow = new JPanel(new BorderLayout(4, 0));
         progressRow.setBackground(bgColor);
         progressRow.setAlignmentX(LEFT_ALIGNMENT);
-        progressRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 16));
+        progressRow.setPreferredSize(new Dimension(CONTENT_WIDTH - 20, 16));
+        progressRow.setMaximumSize(new Dimension(CONTENT_WIDTH - 20, 16));
 
         // Progress bar - use exact width calculation
         final int BAR_WIDTH = 78; // Inner width (excluding border)
@@ -1813,6 +1933,31 @@ public class ChunkBlazerPanel extends PluginPanel
 
         completedTasksContentPanel.revalidate();
         completedTasksContentPanel.repaint();
+
+        // Resize scroll pane to fit content (fixed width, dynamic height)
+        if (completedTasksExpanded)
+        {
+            // Force layout calculation before measuring
+            completedTasksContentPanel.doLayout();
+
+            // Calculate proper height - each task item is ~65px + 5px spacing
+            int itemCount = 0;
+            for (java.awt.Component comp : completedTasksContentPanel.getComponents())
+            {
+                if (comp instanceof JPanel)
+                {
+                    itemCount++;
+                }
+            }
+            // Minimum 100px, or actual content height (65px per item + summary label ~25px)
+            int calculatedHeight = Math.max(100, (itemCount * 70) + 35);
+            int preferredHeight = Math.max(calculatedHeight, completedTasksContentPanel.getPreferredSize().height + 10);
+
+            completedTasksScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, preferredHeight));
+            completedTasksScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, preferredHeight));
+            completedTasksScrollPane.revalidate();
+            completedTasksScrollPane.repaint();
+        }
     }
 
     private JPanel createEnhancedCompletedTaskItem(CompletedTaskInfo info)
@@ -1825,12 +1970,21 @@ public class ChunkBlazerPanel extends PluginPanel
             new EmptyBorder(4, 5, 4, 5)
         ));
         itemPanel.setAlignmentX(LEFT_ALIGNMENT);
+        // Lock width to prevent horizontal expansion
+        itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, 80));
+        itemPanel.setPreferredSize(new Dimension(CONTENT_WIDTH - 10, 60));
 
-        // Task name with checkmark - use HTML for wrapping
-        JLabel nameLabel = new JLabel("<html>\u2713 " + info.getName() + "</html>");
+        // Task name with checkmark - truncate if too long
+        String taskName = info.getName();
+        if (taskName != null && taskName.length() > 28)
+        {
+            taskName = taskName.substring(0, 25) + "...";
+        }
+        JLabel nameLabel = new JLabel("\u2713 " + taskName);
         nameLabel.setFont(FontManager.getRunescapeSmallFont());
         nameLabel.setForeground(new Color(100, 200, 100));
         nameLabel.setAlignmentX(LEFT_ALIGNMENT);
+        nameLabel.setMaximumSize(new Dimension(CONTENT_WIDTH - 15, 18));
         itemPanel.add(nameLabel);
 
         // Info line: Category | Points
@@ -1839,18 +1993,20 @@ public class ChunkBlazerPanel extends PluginPanel
         infoLabel.setFont(FontManager.getRunescapeSmallFont());
         infoLabel.setForeground(Color.ORANGE);
         infoLabel.setAlignmentX(LEFT_ALIGNMENT);
+        infoLabel.setMaximumSize(new Dimension(CONTENT_WIDTH - 15, 16));
         itemPanel.add(infoLabel);
 
         // Region on separate line (truncate if too long)
         String regionName = info.getRegionName();
-        if (regionName != null && regionName.length() > 30)
+        if (regionName != null && regionName.length() > 25)
         {
-            regionName = regionName.substring(0, 27) + "...";
+            regionName = regionName.substring(0, 22) + "...";
         }
         JLabel regionLabel = new JLabel(regionName != null ? regionName : "Unknown");
         regionLabel.setFont(FontManager.getRunescapeSmallFont());
         regionLabel.setForeground(Color.CYAN);
         regionLabel.setAlignmentX(LEFT_ALIGNMENT);
+        regionLabel.setMaximumSize(new Dimension(CONTENT_WIDTH - 15, 16));
         itemPanel.add(regionLabel);
 
         return itemPanel;
@@ -1964,13 +2120,23 @@ public class ChunkBlazerPanel extends PluginPanel
 
         taskListContentPanel.revalidate();
         taskListContentPanel.repaint();
+
+        // Resize scroll pane to fit content (fixed width, dynamic height)
+        if (taskListExpanded)
+        {
+            int contentHeight = Math.max(100, taskListContentPanel.getPreferredSize().height + 10);
+            taskListScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, contentHeight));
+            taskListScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, contentHeight));
+            taskListScrollPane.revalidate();
+        }
     }
 
     private JPanel createTaskListItem(NuzlockeTask task)
     {
         JPanel itemPanel = new JPanel(new BorderLayout(5, 0));
         itemPanel.setBorder(new EmptyBorder(3, 5, 3, 5));
-        itemPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        itemPanel.setPreferredSize(new Dimension(CONTENT_WIDTH - 10, 40));
+        itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, 40));
         itemPanel.setAlignmentX(LEFT_ALIGNMENT);
 
         // Determine task status

@@ -45,6 +45,30 @@ public class TaskConstraints
     @SerializedName("solo_only")
     private Boolean soloOnly;
 
+    // Equipment constraints
+    @SerializedName("no_equipment")
+    private Boolean noEquipment;  // Must have nothing equipped at all
+
+    @SerializedName("required_equipment_ids")
+    private List<Integer> requiredEquipmentIds;  // These items MUST be equipped
+
+    @SerializedName("allowed_equipment_ids")
+    private List<Integer> allowedEquipmentIds;  // ONLY these items can be equipped (all others fail)
+
+    @SerializedName("forbidden_equipment_ids")
+    private List<Integer> forbiddenEquipmentIds;  // These items must NOT be equipped
+
+    // Slot-based equipment constraints (uses EquipmentInventorySlot indices)
+    // Slots: HEAD=0, CAPE=1, AMULET=2, WEAPON=3, BODY=4, SHIELD=5, LEGS=7, GLOVES=9, BOOTS=10, RING=12, AMMO=13
+    @SerializedName("must_be_empty")
+    private List<Integer> mustBeEmptySlots;  // These equipment slots MUST be empty
+
+    @SerializedName("equippable_slots")
+    private List<Integer> equippableSlots;  // ONLY these slots can have equipment (all others must be empty)
+
+    @SerializedName("equip_nothing")
+    private Boolean equipNothing;  // If true, player must have ZERO equipment (nothing equipped at all)
+
     public boolean hasTimeLimit()
     {
         return timeInTicks != null && timeInTicks > 0;
@@ -68,6 +92,27 @@ public class TaskConstraints
     public int getRequiredXp()
     {
         return requiredXp != null ? requiredXp : 0;
+    }
+
+    public boolean hasEquipmentConstraints()
+    {
+        return (noEquipment != null && noEquipment) ||
+               (equipNothing != null && equipNothing) ||
+               (requiredEquipmentIds != null && !requiredEquipmentIds.isEmpty()) ||
+               (allowedEquipmentIds != null && !allowedEquipmentIds.isEmpty()) ||
+               (forbiddenEquipmentIds != null && !forbiddenEquipmentIds.isEmpty()) ||
+               (mustBeEmptySlots != null && !mustBeEmptySlots.isEmpty()) ||
+               (equippableSlots != null && !equippableSlots.isEmpty());
+    }
+
+    public boolean isNoEquipment()
+    {
+        return noEquipment != null && noEquipment;
+    }
+
+    public boolean isEquipNothing()
+    {
+        return equipNothing != null && equipNothing;
     }
 
     /**
@@ -140,6 +185,18 @@ public class TaskConstraints
             constraints.setNoPrayer(readFlexibleBoolean(obj, "no_prayer"));
             constraints.setNoFood(readFlexibleBoolean(obj, "no_food"));
             constraints.setSoloOnly(readFlexibleBoolean(obj, "solo_only"));
+            constraints.setNoEquipment(readFlexibleBoolean(obj, "no_equipment"));
+            constraints.setEquipNothing(readFlexibleBoolean(obj, "equip_nothing"));
+
+            // Handle equipment ID arrays
+            constraints.setRequiredEquipmentIds(readIntArray(obj, "required_equipment_ids"));
+            constraints.setAllowedEquipmentIds(readIntArray(obj, "allowed_equipment_ids"));
+            constraints.setForbiddenEquipmentIds(readIntArray(obj, "forbidden_equipment_ids"));
+
+            // Handle slot-based equipment constraints
+            // Support both integer arrays and string slot name arrays
+            constraints.setMustBeEmptySlots(readSlotArray(obj, "must_be_empty", "must_be_empty_slots"));
+            constraints.setEquippableSlots(readSlotArray(obj, "equippable_slots", "equippable_slot_names"));
 
             return constraints;
         }
@@ -184,6 +241,137 @@ public class TaskConstraints
                 return el.getAsBoolean();
             }
             return null;
+        }
+
+        private List<Integer> readIntArray(JsonObject obj, String field)
+        {
+            if (!obj.has(field)) return null;
+
+            List<Integer> result = new ArrayList<>();
+            JsonElement el = obj.get(field);
+
+            if (el.isJsonArray())
+            {
+                for (JsonElement e : el.getAsJsonArray())
+                {
+                    if (e.isJsonPrimitive())
+                    {
+                        result.add(e.getAsInt());
+                    }
+                }
+            }
+            else if (el.isJsonPrimitive())
+            {
+                // Single value instead of array
+                result.add(el.getAsInt());
+            }
+
+            return result.isEmpty() ? null : result;
+        }
+
+        /**
+         * Read slot array that can be either integer indices or string slot names.
+         * Checks intField first (for integer indices or string names), then stringField as fallback.
+         */
+        private List<Integer> readSlotArray(JsonObject obj, String intField, String stringField)
+        {
+            // First try reading from the primary field (can be integers OR strings)
+            if (obj.has(intField))
+            {
+                List<Integer> result = readFlexibleSlotArray(obj.get(intField));
+                if (result != null && !result.isEmpty())
+                {
+                    return result;
+                }
+            }
+
+            // Try reading from the secondary/fallback field
+            if (obj.has(stringField))
+            {
+                List<Integer> result = readFlexibleSlotArray(obj.get(stringField));
+                if (result != null && !result.isEmpty())
+                {
+                    return result;
+                }
+            }
+
+            return null;
+        }
+
+        /**
+         * Read a slot array that can contain either integer indices or string slot names.
+         */
+        private List<Integer> readFlexibleSlotArray(JsonElement el)
+        {
+            List<Integer> result = new ArrayList<>();
+
+            if (el.isJsonArray())
+            {
+                for (JsonElement e : el.getAsJsonArray())
+                {
+                    if (e.isJsonPrimitive())
+                    {
+                        JsonPrimitive prim = e.getAsJsonPrimitive();
+                        if (prim.isNumber())
+                        {
+                            // Integer slot index
+                            result.add(prim.getAsInt());
+                        }
+                        else if (prim.isString())
+                        {
+                            // String slot name
+                            String slotName = prim.getAsString().toUpperCase();
+                            Integer slotIndex = slotNameToIndex(slotName);
+                            if (slotIndex != null)
+                            {
+                                result.add(slotIndex);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (el.isJsonPrimitive())
+            {
+                JsonPrimitive prim = el.getAsJsonPrimitive();
+                if (prim.isNumber())
+                {
+                    result.add(prim.getAsInt());
+                }
+                else if (prim.isString())
+                {
+                    String slotName = prim.getAsString().toUpperCase();
+                    Integer slotIndex = slotNameToIndex(slotName);
+                    if (slotIndex != null)
+                    {
+                        result.add(slotIndex);
+                    }
+                }
+            }
+
+            return result.isEmpty() ? null : result;
+        }
+
+        /**
+         * Convert slot name to slot index.
+         * Supports: HEAD, CAPE, AMULET, WEAPON, BODY, SHIELD, LEGS, GLOVES, BOOTS, RING, AMMO
+         */
+        private Integer slotNameToIndex(String slotName)
+        {
+            switch (slotName)
+            {
+                case "HEAD": return 0;
+                case "CAPE": return 1;
+                case "AMULET": return 2;
+                case "WEAPON": return 3;
+                case "BODY": return 4;
+                case "SHIELD": return 5;
+                case "LEGS": return 7;
+                case "GLOVES": return 9;
+                case "BOOTS": return 10;
+                case "RING": return 12;
+                case "AMMO": return 13;
+                default: return null;
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ import net.runelite.api.events.InteractingChanged;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
 import net.runelite.client.plugins.chunkblazer.TargetNpc;
+import net.runelite.client.plugins.chunkblazer.TaskConstraints;
 import net.runelite.client.plugins.chunkblazer.api.NpcKillReport;
 import net.runelite.client.plugins.chunkblazer.verification.VarPlayerVerificationService;
 
@@ -43,6 +44,10 @@ public class NpcKillModule extends AbstractTaskModule
     private int currentTargetIndex = -1; // Track by index to avoid reference issues
     private int damageDealtToTarget;
     private int lastKillingBlowAnimation;
+
+    // Equipment constraint tracking
+    private boolean equipmentConstraintViolated = false;
+    private String equipmentViolationReason = null;
 
     // For boss KC verification
     private int baselineKc = -1;
@@ -159,6 +164,12 @@ public class NpcKillModule extends AbstractTaskModule
     {
         tickCounter++;
 
+        // Continuously check equipment constraints while in combat
+        if (currentTarget != null && !equipmentConstraintViolated)
+        {
+            checkEquipmentConstraints();
+        }
+
         // Log heartbeat periodically to confirm event bus is working
         if (tickCounter % DEBUG_LOG_INTERVAL == 0)
         {
@@ -193,10 +204,30 @@ public class NpcKillModule extends AbstractTaskModule
             // Always track the current target if we have any active tasks
             if (!activeTasks.isEmpty())
             {
-                currentTarget = npc;
-                currentTargetIndex = npc.getIndex(); // Track by index for reliable matching
-                damageDealtToTarget = 0;
-                log.info(">>> Tracking target: {} (ID: {}, Index: {})", npc.getName(), npc.getId(), npc.getIndex());
+                // Only reset tracking if switching to a NEW target
+                // If same target (same index), preserve the equipment violation flag!
+                boolean isSameTarget = (currentTargetIndex == npc.getIndex());
+
+                if (!isSameTarget)
+                {
+                    // New target - reset everything
+                    currentTarget = npc;
+                    currentTargetIndex = npc.getIndex();
+                    damageDealtToTarget = 0;
+                    equipmentConstraintViolated = false;
+                    equipmentViolationReason = null;
+                    log.info(">>> NEW target: {} (ID: {}, Index: {}) - reset tracking", npc.getName(), npc.getId(), npc.getIndex());
+                }
+                else
+                {
+                    // Same target - keep equipment violation flag, just update reference
+                    currentTarget = npc;
+                    log.info(">>> SAME target: {} (Index: {}) - preserving equipmentConstraintViolated={}",
+                        npc.getName(), npc.getIndex(), equipmentConstraintViolated);
+                }
+
+                // Always check equipment constraints on each interaction
+                checkEquipmentConstraints();
             }
         }
     }
@@ -301,6 +332,23 @@ public class NpcKillModule extends AbstractTaskModule
         // Update progress for all matching tasks
         for (NuzlockeTask task : matchingTasks)
         {
+            // Check if equipment constraint was violated during combat
+            if (equipmentConstraintViolated)
+            {
+                log.info("Kill NOT credited for task '{}' - equipment constraint violated: {}",
+                    task.getName(), equipmentViolationReason);
+                continue; // Skip this task, don't credit the kill
+            }
+
+            // Final equipment check at time of kill
+            String finalViolation = validateEquipmentForTask(task);
+            if (finalViolation != null)
+            {
+                log.info("Kill NOT credited for task '{}' - equipment invalid at kill time: {}",
+                    task.getName(), finalViolation);
+                continue; // Skip this task, don't credit the kill
+            }
+
             // Send kill report to server
             sendKillReport(npc, task);
 
@@ -463,5 +511,264 @@ public class NpcKillModule extends AbstractTaskModule
         }
 
         return ids;
+    }
+
+    /**
+     * Get the item ID at a specific equipment slot.
+     * @param slotIndex The equipment slot index (see EquipmentInventorySlot)
+     * @return The item ID at that slot, or -1 if empty or invalid
+     */
+    private int getItemAtSlot(int slotIndex)
+    {
+        ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
+        if (equipment == null)
+        {
+            return -1;
+        }
+
+        Item[] items = equipment.getItems();
+        if (slotIndex < 0 || slotIndex >= items.length)
+        {
+            return -1;
+        }
+
+        Item item = items[slotIndex];
+        if (item == null || item.getId() <= 0)
+        {
+            return -1;
+        }
+
+        return item.getId();
+    }
+
+    /**
+     * Get a human-readable name for an equipment slot index.
+     */
+    private String getSlotName(int slotIndex)
+    {
+        switch (slotIndex)
+        {
+            case 0: return "Head";
+            case 1: return "Cape";
+            case 2: return "Amulet";
+            case 3: return "Weapon";
+            case 4: return "Body";
+            case 5: return "Shield";
+            case 7: return "Legs";
+            case 9: return "Gloves";
+            case 10: return "Boots";
+            case 12: return "Ring";
+            case 13: return "Ammo";
+            default: return "Slot " + slotIndex;
+        }
+    }
+
+    /**
+     * The 11 valid equipment slot indices (some indices are skipped in the game).
+     * HEAD=0, CAPE=1, AMULET=2, WEAPON=3, BODY=4, SHIELD=5, LEGS=7, GLOVES=9, BOOTS=10, RING=12, AMMO=13
+     */
+    private static final int[] VALID_EQUIPMENT_SLOTS = {0, 1, 2, 3, 4, 5, 7, 9, 10, 12, 13};
+
+    /**
+     * Log detailed equipment status for debugging.
+     */
+    private void logEquipmentStatus(String taskName)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(">>> PLAYER EQUIPMENT for task '").append(taskName).append("':\n");
+
+        ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
+        if (equipment == null)
+        {
+            log.info(">>> PLAYER EQUIPMENT: Unable to read equipment (container null)");
+            return;
+        }
+
+        Item[] items = equipment.getItems();
+        boolean hasAnyEquipment = false;
+
+        // Check all 11 valid equipment slots
+        for (int slotIndex : VALID_EQUIPMENT_SLOTS)
+        {
+            String slotName = getSlotName(slotIndex);
+
+            if (slotIndex < items.length)
+            {
+                Item item = items[slotIndex];
+                if (item != null && item.getId() > 0)
+                {
+                    sb.append(">>>   ").append(slotName).append(" [").append(slotIndex).append("]: Item ID ").append(item.getId()).append("\n");
+                    hasAnyEquipment = true;
+                }
+                else
+                {
+                    sb.append(">>>   ").append(slotName).append(" [").append(slotIndex).append("]: EMPTY\n");
+                }
+            }
+            else
+            {
+                sb.append(">>>   ").append(slotName).append(" [").append(slotIndex).append("]: EMPTY\n");
+            }
+        }
+
+        if (!hasAnyEquipment)
+        {
+            sb.append(">>>   (No equipment in any slot)\n");
+        }
+
+        log.info(sb.toString());
+    }
+
+    /**
+     * Check equipment constraints for all active tasks.
+     * If any constraint is violated, mark it so the kill won't count.
+     */
+    private void checkEquipmentConstraints()
+    {
+        if (activeTasks.isEmpty())
+        {
+            return;
+        }
+
+        // Check each active task for equipment constraints
+        for (NuzlockeTask task : activeTasks)
+        {
+            String violation = validateEquipmentForTask(task);
+            if (violation != null)
+            {
+                equipmentConstraintViolated = true;
+                equipmentViolationReason = violation;
+                log.info(">>> EQUIPMENT CONSTRAINT VIOLATED for task '{}': {}",
+                    task.getName(), violation);
+                return; // One violation is enough
+            }
+        }
+    }
+
+    /**
+     * Validate equipment against a task's constraints.
+     * @return null if valid, or a string describing the violation
+     */
+    private String validateEquipmentForTask(NuzlockeTask task)
+    {
+        TaskConstraints constraints = task.getConstraints();
+
+        // Log equipment status for debugging
+        logEquipmentStatus(task.getName());
+
+        if (constraints == null)
+        {
+            log.info(">>> EQUIPMENT CHECK for '{}': No constraints object on task", task.getName());
+            return null; // No equipment constraints
+        }
+
+        if (!constraints.hasEquipmentConstraints())
+        {
+            log.info(">>> EQUIPMENT CHECK for '{}': hasEquipmentConstraints() = false", task.getName());
+            log.info(">>>   no_equipment={}, equip_nothing={}, must_be_empty={}, equippable_slots={}",
+                constraints.getNoEquipment(), constraints.getEquipNothing(),
+                constraints.getMustBeEmptySlots(), constraints.getEquippableSlots());
+            return null; // No equipment constraints
+        }
+
+        log.info(">>> EQUIPMENT CHECK for '{}': Validating constraints...", task.getName());
+
+        List<Integer> equippedIds = getEquipmentIds();
+        log.info(">>> Total equipped item IDs: {}", equippedIds);
+
+        // Check no_equipment constraint (must have nothing equipped)
+        if (constraints.isNoEquipment())
+        {
+            if (!equippedIds.isEmpty())
+            {
+                return "Must have no equipment - currently have " + equippedIds.size() + " items equipped";
+            }
+        }
+
+        // Check equip_nothing constraint (must have ZERO equipment - nothing equipped at all)
+        if (constraints.isEquipNothing())
+        {
+            if (!equippedIds.isEmpty())
+            {
+                return "Equip nothing required - currently have " + equippedIds.size() + " items equipped";
+            }
+        }
+
+        // Check required_equipment_ids (these items MUST be equipped)
+        List<Integer> requiredIds = constraints.getRequiredEquipmentIds();
+        if (requiredIds != null && !requiredIds.isEmpty())
+        {
+            for (Integer requiredId : requiredIds)
+            {
+                if (!equippedIds.contains(requiredId))
+                {
+                    return "Missing required equipment: item ID " + requiredId;
+                }
+            }
+        }
+
+        // Check allowed_equipment_ids (ONLY these items can be equipped)
+        List<Integer> allowedIds = constraints.getAllowedEquipmentIds();
+        if (allowedIds != null && !allowedIds.isEmpty())
+        {
+            for (Integer equippedId : equippedIds)
+            {
+                if (!allowedIds.contains(equippedId))
+                {
+                    return "Forbidden equipment detected: item ID " + equippedId + " is not in allowed list";
+                }
+            }
+        }
+
+        // Check forbidden_equipment_ids (these items must NOT be equipped)
+        List<Integer> forbiddenIds = constraints.getForbiddenEquipmentIds();
+        if (forbiddenIds != null && !forbiddenIds.isEmpty())
+        {
+            for (Integer forbiddenId : forbiddenIds)
+            {
+                if (equippedIds.contains(forbiddenId))
+                {
+                    return "Forbidden equipment detected: item ID " + forbiddenId;
+                }
+            }
+        }
+
+        // Check must_be_empty slots (specific slots that MUST be empty)
+        List<Integer> mustBeEmptySlots = constraints.getMustBeEmptySlots();
+        if (mustBeEmptySlots != null && !mustBeEmptySlots.isEmpty())
+        {
+            for (Integer slotIndex : mustBeEmptySlots)
+            {
+                int itemId = getItemAtSlot(slotIndex);
+                if (itemId > 0)
+                {
+                    return getSlotName(slotIndex) + " slot must be empty (has item ID " + itemId + ")";
+                }
+            }
+        }
+
+        // Check equippable_slots (ONLY these slots can have equipment, all others must be empty)
+        List<Integer> equippableSlots = constraints.getEquippableSlots();
+        if (equippableSlots != null && !equippableSlots.isEmpty())
+        {
+            // Check all 11 valid equipment slots
+            for (int slotIndex : VALID_EQUIPMENT_SLOTS)
+            {
+                int itemId = getItemAtSlot(slotIndex);
+                boolean slotAllowed = equippableSlots.contains(slotIndex);
+
+                if (itemId > 0 && !slotAllowed)
+                {
+                    // Item in a slot that's not allowed
+                    return getSlotName(slotIndex) + " slot must be empty - only allowed slots: " +
+                           equippableSlots.stream()
+                               .map(this::getSlotName)
+                               .reduce((a, b) -> a + ", " + b)
+                               .orElse("none");
+                }
+            }
+        }
+
+        return null; // All constraints passed
     }
 }

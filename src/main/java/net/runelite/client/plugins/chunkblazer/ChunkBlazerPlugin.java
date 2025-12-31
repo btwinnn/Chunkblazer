@@ -342,32 +342,28 @@ public class ChunkBlazerPlugin extends Plugin
     }
 
     /**
-     * Unlock all starter area regions (Lumbridge, Al Kharid, etc.)
-     * These are always available as the player's starting zones.
+     * Unlock the free starting chunk (Lumbridge center).
+     * This is always available as the player's starting zone.
+     * In casual mode, players can start anywhere (the chunk they're standing on becomes unlocked).
      */
     public void unlockStarterRegions()
     {
         Set<String> currentlyUnlocked = getUnlockedRegionIds();
-        StringBuilder unlocked = new StringBuilder(config.unlockedChunks() != null ? config.unlockedChunks() : "");
 
-        int newlyUnlocked = 0;
-        for (int regionId : STARTER_REGION_IDS)
+        // Always ensure the free starting region is unlocked
+        if (!currentlyUnlocked.contains(String.valueOf(FREE_STARTING_REGION)))
         {
-            if (!currentlyUnlocked.contains(String.valueOf(regionId)))
+            String unlocked = config.unlockedChunks();
+            if (unlocked == null || unlocked.isEmpty())
             {
-                if (unlocked.length() > 0)
-                {
-                    unlocked.append(",");
-                }
-                unlocked.append(regionId);
-                newlyUnlocked++;
+                unlocked = String.valueOf(FREE_STARTING_REGION);
             }
-        }
-
-        if (newlyUnlocked > 0)
-        {
-            configManager.setConfiguration("chunkblazer", "unlockedChunks", unlocked.toString());
-            log.info("Unlocked {} starter area regions", newlyUnlocked);
+            else
+            {
+                unlocked = unlocked + "," + FREE_STARTING_REGION;
+            }
+            configManager.setConfiguration("chunkblazer", "unlockedChunks", unlocked);
+            log.info("Unlocked free starting region: {}", FREE_STARTING_REGION);
         }
     }
 
@@ -376,30 +372,22 @@ public class ChunkBlazerPlugin extends Plugin
 
     // List of all task JSON files to load
     private static final String[] TASK_JSON_FILES = {
-        "Starter_Area_Tasks.JSON",
+        "Starter_Area_Tasks.json",
         "Misthalin_Tasks.json",
         "Asgarnia_Tasks.json",
         "Kandarin_Tasks.json"
     };
 
-    // Starter area region IDs (always unlocked)
-    private static final int[] STARTER_REGION_IDS = {
-        12850, 12950,  // Lumbridge
-        12851,         // Lumbridge North Farm
-        12849,         // Lumbridge East Swamp
-        12594, 12694,  // H.A.M. Hideout
-        13106, 10315,  // Al Kharid Toll Gate
-        13105, 11605,  // Al Kharid
-        12593, 12693, 12949, // Lumbridge West Swamp
-        12595,         // Lumbridge Mill
-        13107          // Al Kharid Mine
-    };
+    // Free starting chunk (always unlocked for all modes)
+    private static final int FREE_STARTING_REGION = 12850;  // Lumbridge center
 
 
     private void loadChunkData()
     {
         allChunks.clear();
         chunksByRegionId.clear();
+
+        log.info("=== CHUNKBLAZER LOADING CHUNK DATA ===");
 
         Type mapType = new TypeToken<Map<String, List<NuzlockeChunk>>>(){}.getType();
         int totalChunksLoaded = 0;
@@ -409,21 +397,62 @@ public class ChunkBlazerPlugin extends Plugin
         {
             try
             {
+                log.info(">>> Attempting to load: {}", jsonFile);
                 InputStream is = getClass().getResourceAsStream(jsonFile);
                 if (is == null)
                 {
-                    log.warn("Could not find task file: {}", jsonFile);
-                    continue;
+                    log.error("FAILED to find task file: {} - trying alternate paths...", jsonFile);
+
+                    // Try with leading slash (absolute path from classpath root)
+                    is = getClass().getResourceAsStream("/net/runelite/client/plugins/chunkblazer/" + jsonFile);
+                    if (is == null)
+                    {
+                        // Try lowercase extension
+                        String lowerFile = jsonFile.replace(".JSON", ".json");
+                        is = getClass().getResourceAsStream(lowerFile);
+                        if (is == null)
+                        {
+                            is = getClass().getResourceAsStream("/net/runelite/client/plugins/chunkblazer/" + lowerFile);
+                        }
+                        if (is == null)
+                        {
+                            log.error("Also failed with alternate paths for: {}", jsonFile);
+                            continue;
+                        }
+                        log.info("Found {} using lowercase extension", jsonFile);
+                    }
+                    else
+                    {
+                        log.info("Found {} using absolute path", jsonFile);
+                    }
+                }
+                else
+                {
+                    log.info("Found {} using relative path", jsonFile);
                 }
 
-                Map<String, List<NuzlockeChunk>> data = gson.fromJson(
-                    new InputStreamReader(is, StandardCharsets.UTF_8), mapType);
+                String jsonContent = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+                log.info("Read {} bytes from {}", jsonContent.length(), jsonFile);
+
+                Map<String, List<NuzlockeChunk>> data = null;
+                try
+                {
+                    data = gson.fromJson(jsonContent, mapType);
+                }
+                catch (Exception parseEx)
+                {
+                    log.error("JSON PARSE ERROR for {}: {}", jsonFile, parseEx.getMessage(), parseEx);
+                    continue;
+                }
 
                 if (data != null && !data.isEmpty())
                 {
                     // Get the first (and typically only) key from the JSON
                     String rootKey = data.keySet().iterator().next();
                     List<NuzlockeChunk> chunks = data.get(rootKey);
+
+                    log.info("Found root key '{}' in {} with {} chunks",
+                        rootKey, jsonFile, chunks != null ? chunks.size() : 0);
 
                     if (chunks != null && !chunks.isEmpty())
                     {
@@ -440,7 +469,19 @@ public class ChunkBlazerPlugin extends Plugin
                                 {
                                     chunksByRegionId.put(regionId, chunk);
                                     regionCount++;
+                                    log.debug("Mapped region {} -> {} ({})",
+                                        regionId, chunk.getName(), jsonFile);
                                 }
+                                // Log first few region mappings at INFO level for starter file
+                                if (jsonFile.contains("Starter"))
+                                {
+                                    log.info("Starter area chunk: {} -> regions {}",
+                                        chunk.getName(), chunk.getRegionIds());
+                                }
+                            }
+                            else
+                            {
+                                log.warn("Chunk '{}' in {} has null regionIds!", chunk.getName(), jsonFile);
                             }
                         }
 
@@ -469,19 +510,15 @@ public class ChunkBlazerPlugin extends Plugin
 
         log.info("=== CHUNKBLAZER LOAD COMPLETE ===");
         log.info("Total: {} chunks, {} region mappings", totalChunksLoaded, totalRegionMappings);
-        log.info("Sample regions in map: {}", chunksByRegionId.keySet().stream().limit(10).collect(java.util.stream.Collectors.toList()));
 
-        // Debug: Check if specific region 9772 is loaded
-        if (chunksByRegionId.containsKey(9772))
+        // Debug: Log all loaded region IDs
+        if (!chunksByRegionId.isEmpty())
         {
-            NuzlockeChunk mythsGuild = chunksByRegionId.get(9772);
-            log.info("Region 9772 found: {} with {} tasks",
-                mythsGuild.getName(),
-                mythsGuild.getTasks() != null ? mythsGuild.getTasks().size() : 0);
+            log.info("All loaded region IDs: {}", chunksByRegionId.keySet());
         }
         else
         {
-            log.warn("Region 9772 (Myths' Guild) NOT FOUND in chunksByRegionId!");
+            log.error("NO REGIONS LOADED! chunksByRegionId is empty!");
         }
     }
     // --- Game Mode Methods ---
@@ -539,7 +576,33 @@ public class ChunkBlazerPlugin extends Plugin
         configManager.setConfiguration("chunkblazer", "gameMode", mode);
 
         log.info("Game mode locked to {} for account hash {}", mode, rsnHash);
+
+        // For Casual mode, unlock the current chunk the player is standing in
+        if (mode == GameMode.CASUAL)
+        {
+            int currentRegion = getCurrentRegionId();
+            log.info("Casual mode selected - checking current region: {}", currentRegion);
+
+            if (currentRegion > 0 && !isRegionUnlocked(currentRegion))
+            {
+                log.info("Unlocking current region {} for Casual mode start", currentRegion);
+                unlockRegionFree(currentRegion);
+
+                // Roll tasks for the newly unlocked region
+                Set<String> newTasks = rollTasksForRegion(currentRegion);
+                log.info("Rolled {} tasks for starting region {}", newTasks.size(), currentRegion);
+
+                // Reload active tasks
+                loadActiveTasks();
+            }
+            else if (currentRegion > 0)
+            {
+                log.info("Current region {} is already unlocked", currentRegion);
+            }
+        }
+
         panel.updateModeDisplay();
+        panel.updatePanel();
     }
 
     private String hashRsn(String rsn)
@@ -888,8 +951,7 @@ public class ChunkBlazerPlugin extends Plugin
 
     /**
      * Roll 4-5 random tasks for a region using weighted selection.
-     * Tasks are only excluded if they're locked or already rolled for THIS specific region.
-     * The same task CAN be rolled for different regions.
+     * Tasks are globally unique - once a task is assigned anywhere, it cannot be rolled again.
      */
     private Set<String> rollTasksForRegion(int regionId)
     {
@@ -908,18 +970,22 @@ public class ChunkBlazerPlugin extends Plugin
         log.info("rollTasksForRegion: Found chunk {} ({}) with {} tasks",
             regionId, chunk.getName(), chunk.getTasks().size());
 
-        // Get tasks already rolled for THIS region (not globally)
+        // Get tasks already rolled for this region
         Set<String> alreadyRolledForThisRegion = getRolledTasksForRegion(regionId);
 
-        // Filter available tasks: not locked and not already rolled for this region
+        // Get ALL globally assigned tasks (tasks assigned in ANY region)
+        Set<String> globallyAssignedTasks = getAssignedTaskIds();
+
+        // Filter available tasks: not locked, not already rolled for this region, and not globally assigned
         List<NuzlockeTask> availableTasks = chunk.getTasks().stream()
             .filter(t -> !t.isLocked())
             .filter(t -> !alreadyRolledForThisRegion.contains(t.getTaskId()))
+            .filter(t -> !globallyAssignedTasks.contains(t.getTaskId()))
             .collect(Collectors.toList());
 
         if (availableTasks.isEmpty())
         {
-            log.info("No available tasks for region {} (all locked or already rolled for this region)", regionId);
+            log.info("No available tasks for region {} (all locked or already assigned globally)", regionId);
             return new HashSet<>();
         }
 
@@ -1125,13 +1191,18 @@ public class ChunkBlazerPlugin extends Plugin
     public void rerollTask()
     {
         int currentRegion = getCurrentRegionId();
-        log.info("Rerolling tasks for region {}...", currentRegion);
+        log.info("DEV Rerolling tasks for region {}...", currentRegion);
 
         // Clear rolled tasks for current region
         if (currentRegion > 0)
         {
             clearRolledTasksForRegion(currentRegion);
         }
+
+        // DEV: Clear globally assigned tasks so reroll can get fresh tasks
+        // This bypasses the "no duplicate tasks globally" rule for testing
+        configManager.setConfiguration("chunkblazer", "assignedTasks", "");
+        log.info("DEV: Cleared global assigned tasks list for fresh reroll");
 
         // Clear task progress data
         configManager.setConfiguration("chunkblazer", "taskProgressData", "");
@@ -1147,7 +1218,7 @@ public class ChunkBlazerPlugin extends Plugin
         loadActiveTasks();
         panel.updatePanel();
 
-        log.info("Tasks re-rolled for region {}", currentRegion);
+        log.info("DEV: Tasks re-rolled for region {}", currentRegion);
     }
 
     public void devCompleteActiveTask()
@@ -1253,8 +1324,8 @@ public class ChunkBlazerPlugin extends Plugin
         // Reset points
         configManager.setConfiguration("chunkblazer", "totalPoints", 0);
 
-        // Reset unlocked chunks to default (starting area)
-        configManager.setConfiguration("chunkblazer", "unlockedChunks", "12850");
+        // Reset unlocked chunks to default (free starting chunk)
+        configManager.setConfiguration("chunkblazer", "unlockedChunks", String.valueOf(FREE_STARTING_REGION));
 
         // Reset game mode lock
         configManager.setConfiguration("chunkblazer", "accountModeHash", "");
@@ -1288,6 +1359,9 @@ public class ChunkBlazerPlugin extends Plugin
         saveActiveTasks();
 
         log.info("Task completed: {} (+{} points)", task.getName(), task.getBasePoints());
+
+        // Clear selected task if it was the completed one
+        panel.clearSelectedTaskIfMatch(task);
 
         // Update all panel sections
         panel.updateStats();
