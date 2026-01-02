@@ -132,7 +132,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
         // Wrap main panel in a scroll pane to prevent overflow
         JPanel mainContent = createMainPanel();
-        mainContent.setPreferredSize(new Dimension(PANEL_WIDTH - 10, mainContent.getPreferredSize().height));
+        // Don't set fixed preferred height - let content determine size for proper scrolling
         mainContent.setMaximumSize(new Dimension(PANEL_WIDTH - 10, Integer.MAX_VALUE));
 
         JScrollPane mainScrollPane = new JScrollPane(mainContent);
@@ -142,7 +142,7 @@ public class ChunkBlazerPanel extends PluginPanel
         mainScrollPane.setBackground(ColorScheme.DARK_GRAY_COLOR);
         mainScrollPane.getViewport().setBackground(ColorScheme.DARK_GRAY_COLOR);
         mainScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        mainScrollPane.setPreferredSize(new Dimension(PANEL_WIDTH, 600));
+        // Don't set fixed preferred size - let scroll pane expand based on content
 
         add(mainScrollPane, BorderLayout.CENTER);
     }
@@ -1863,10 +1863,11 @@ public class ChunkBlazerPanel extends PluginPanel
             }
         });
 
-        // Selection indicator + Task name (with text wrapping)
+        // Selection indicator + Task name (with text wrapping at word boundaries)
         String taskName = task.getName();
         String prefix = isSelected ? "\u2605 " : ""; // Star for selected
-        String wrappedName = "<html><body style='width: " + (CONTENT_WIDTH - 40) + "px'>" + prefix + taskName + "</body></html>";
+        int wrapWidth = CONTENT_WIDTH - 25; // More room for text
+        String wrappedName = "<html><body style='width: " + wrapWidth + "px; word-wrap: break-word'>" + prefix + taskName + "</body></html>";
         JLabel nameLabel = new JLabel(wrappedName);
         nameLabel.setFont(FontManager.getRunescapeSmallFont());
         nameLabel.setForeground(isSelected ? new Color(255, 215, 0) : new Color(150, 255, 150));
@@ -2064,9 +2065,10 @@ public class ChunkBlazerPanel extends PluginPanel
         // Allow dynamic height based on content
         itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, Integer.MAX_VALUE));
 
-        // Task name with checkmark (with text wrapping)
+        // Task name with checkmark (with text wrapping at word boundaries)
         String taskName = info.getName();
-        String wrappedName = "<html><body style='width: " + (CONTENT_WIDTH - 45) + "px'>\u2713 " + taskName + "</body></html>";
+        int wrapWidth = CONTENT_WIDTH - 30; // More room for text
+        String wrappedName = "<html><body style='width: " + wrapWidth + "px; word-wrap: break-word'>\u2713 " + taskName + "</body></html>";
         JLabel nameLabel = new JLabel(wrappedName);
         nameLabel.setFont(FontManager.getRunescapeSmallFont());
         nameLabel.setForeground(new Color(100, 200, 100));
@@ -2081,9 +2083,9 @@ public class ChunkBlazerPanel extends PluginPanel
         infoLabel.setAlignmentX(LEFT_ALIGNMENT);
         itemPanel.add(infoLabel);
 
-        // Region on separate line (with text wrapping)
+        // Region on separate line (with text wrapping at word boundaries)
         String regionName = info.getRegionName();
-        String wrappedRegion = "<html><body style='width: " + (CONTENT_WIDTH - 45) + "px'>" + (regionName != null ? regionName : "Unknown") + "</body></html>";
+        String wrappedRegion = "<html><body style='width: " + wrapWidth + "px; word-wrap: break-word'>" + (regionName != null ? regionName : "Unknown") + "</body></html>";
         JLabel regionLabel = new JLabel(wrappedRegion);
         regionLabel.setFont(FontManager.getRunescapeSmallFont());
         regionLabel.setForeground(Color.CYAN);
@@ -2260,9 +2262,10 @@ public class ChunkBlazerPanel extends PluginPanel
             textColor = Color.WHITE; // Available
         }
 
-        // Task name with text wrapping
+        // Task name with text wrapping at word boundaries
         String displayName = task.getName();
-        String wrappedName = "<html><body style='width: " + (CONTENT_WIDTH - 50) + "px'>" + displayName + "</body></html>";
+        int wrapWidth = CONTENT_WIDTH - 30; // More room for text
+        String wrappedName = "<html><body style='width: " + wrapWidth + "px; word-wrap: break-word'>" + displayName + "</body></html>";
         JLabel nameLabel = new JLabel(wrappedName);
         nameLabel.setFont(FontManager.getRunescapeSmallFont());
         nameLabel.setForeground(textColor);
