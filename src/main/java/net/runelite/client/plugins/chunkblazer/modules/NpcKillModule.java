@@ -49,6 +49,9 @@ public class NpcKillModule extends AbstractTaskModule
     private boolean equipmentConstraintViolated = false;
     private String equipmentViolationReason = null;
 
+    // Time constraint tracking - track when combat started (first hitsplat)
+    private int combatStartTick = -1;
+
     // For boss KC verification
     private int baselineKc = -1;
     private String currentBossName;
@@ -107,6 +110,7 @@ public class NpcKillModule extends AbstractTaskModule
         currentTarget = null;
         currentTargetIndex = -1;
         damageDealtToTarget = 0;
+        combatStartTick = -1;
         log.info("NpcKillModule stopped");
     }
 
@@ -117,6 +121,7 @@ public class NpcKillModule extends AbstractTaskModule
         currentTarget = null;
         currentTargetIndex = -1;
         damageDealtToTarget = 0;
+        combatStartTick = -1;
 
         // For boss tasks, get baseline KC from VarPlayer (instant server-side)
         TargetNpc targetNpc = task.getTargetNpc();
@@ -146,6 +151,7 @@ public class NpcKillModule extends AbstractTaskModule
         currentTarget = null;
         currentTargetIndex = -1;
         damageDealtToTarget = 0;
+        combatStartTick = -1;
         baselineKc = -1;
         currentBossName = null;
     }
@@ -216,6 +222,7 @@ public class NpcKillModule extends AbstractTaskModule
                     damageDealtToTarget = 0;
                     equipmentConstraintViolated = false;
                     equipmentViolationReason = null;
+                    combatStartTick = -1; // Reset combat timer for new target
                     log.info(">>> NEW target: {} (ID: {}, Index: {}) - reset tracking", npc.getName(), npc.getId(), npc.getIndex());
                 }
                 else
@@ -248,7 +255,16 @@ public class NpcKillModule extends AbstractTaskModule
             {
                 int damage = event.getHitsplat().getAmount();
                 damageDealtToTarget += damage;
-                log.info(">>> DAMAGE DEALT to {}: {} (total: {})", currentTarget.getName(), damage, damageDealtToTarget);
+
+                // Track combat start tick (first hitsplat on this target)
+                if (combatStartTick < 0)
+                {
+                    combatStartTick = client.getTickCount();
+                    log.info(">>> COMBAT STARTED on {} at tick {}", currentTarget.getName(), combatStartTick);
+                }
+
+                log.info(">>> DAMAGE DEALT to {}: {} (total: {}, combat tick: {})",
+                    currentTarget.getName(), damage, damageDealtToTarget, combatStartTick);
 
                 // Track animation for verification
                 Player player = client.getLocalPlayer();
@@ -349,6 +365,15 @@ public class NpcKillModule extends AbstractTaskModule
                 continue; // Skip this task, don't credit the kill
             }
 
+            // Time constraint check - validate kill was fast enough
+            String timeViolation = validateTimeConstraintForTask(task);
+            if (timeViolation != null)
+            {
+                log.info("Kill NOT credited for task '{}' - time constraint violated: {}",
+                    task.getName(), timeViolation);
+                continue; // Skip this task, don't credit the kill
+            }
+
             // Send kill report to server
             sendKillReport(npc, task);
 
@@ -370,6 +395,7 @@ public class NpcKillModule extends AbstractTaskModule
         currentTarget = null;
         currentTargetIndex = -1;
         damageDealtToTarget = 0;
+        combatStartTick = -1;
     }
 
     /**
@@ -482,7 +508,7 @@ public class NpcKillModule extends AbstractTaskModule
             .killingBlowAnimationId(lastKillingBlowAnimation)
             .damageDealt(damageDealtToTarget)
             .equipmentIds(getEquipmentIds())
-            .lootReceived(new ArrayList<>()); // Could track loot with LootReceived event
+            .lootReceived(new ArrayList<>());
 
         apiClient.reportNpcKill(builder.build())
             .thenAccept(this::handleVerificationResponse);
@@ -735,11 +761,13 @@ public class NpcKillModule extends AbstractTaskModule
 
         // Check must_be_empty slots (specific slots that MUST be empty)
         List<Integer> mustBeEmptySlots = constraints.getMustBeEmptySlots();
+        log.info(">>> MUST_BE_EMPTY CHECK for '{}': slots to check = {}", task.getName(), mustBeEmptySlots);
         if (mustBeEmptySlots != null && !mustBeEmptySlots.isEmpty())
         {
             for (Integer slotIndex : mustBeEmptySlots)
             {
                 int itemId = getItemAtSlot(slotIndex);
+                log.info(">>>   Checking slot {} ({}): itemId = {}", slotIndex, getSlotName(slotIndex), itemId);
                 if (itemId > 0)
                 {
                     return getSlotName(slotIndex) + " slot must be empty (has item ID " + itemId + ")";
@@ -749,6 +777,7 @@ public class NpcKillModule extends AbstractTaskModule
 
         // Check equippable_slots (ONLY these slots can have equipment, all others must be empty)
         List<Integer> equippableSlots = constraints.getEquippableSlots();
+        log.info(">>> EQUIPPABLE_SLOTS CHECK for '{}': allowed slots = {}", task.getName(), equippableSlots);
         if (equippableSlots != null && !equippableSlots.isEmpty())
         {
             // Check all 11 valid equipment slots
@@ -770,5 +799,46 @@ public class NpcKillModule extends AbstractTaskModule
         }
 
         return null; // All constraints passed
+    }
+
+    /**
+     * Validate that the kill was completed within the time limit.
+     * @param task The task with potential time constraints
+     * @return null if valid (or no constraint), or a string describing the violation
+     */
+    private String validateTimeConstraintForTask(NuzlockeTask task)
+    {
+        TaskConstraints constraints = task.getConstraints();
+
+        if (constraints == null || !constraints.hasTimeLimit())
+        {
+            log.info(">>> TIME CHECK for '{}': No time constraint", task.getName());
+            return null; // No time constraint
+        }
+
+        int allowedTicks = constraints.getTimeInTicks();
+        int currentTick = client.getTickCount();
+
+        // Check if we have a valid combat start tick
+        if (combatStartTick < 0)
+        {
+            log.info(">>> TIME CHECK for '{}': No combat start tick recorded", task.getName());
+            return "Time constraint failed - no combat start recorded";
+        }
+
+        int elapsedTicks = currentTick - combatStartTick;
+        double elapsedSeconds = elapsedTicks * 0.6;
+
+        log.info(">>> TIME CHECK for '{}': {} ticks elapsed (max allowed: {}), {:.1f} seconds",
+            task.getName(), elapsedTicks, allowedTicks, elapsedSeconds);
+
+        if (elapsedTicks > allowedTicks)
+        {
+            return String.format("Kill took %d ticks (%.1f sec), max allowed is %d ticks (%.1f sec)",
+                elapsedTicks, elapsedSeconds, allowedTicks, allowedTicks * 0.6);
+        }
+
+        log.info(">>> TIME CONSTRAINT PASSED for task '{}' - killed in {} tick(s)", task.getName(), elapsedTicks);
+        return null; // Constraint satisfied
     }
 }

@@ -69,6 +69,16 @@ public class TaskConstraints
     @SerializedName("equip_nothing")
     private Boolean equipNothing;  // If true, player must have ZERO equipment (nothing equipped at all)
 
+    // Dropped item constraints (for NPC kill tasks that require specific loot)
+    @SerializedName("dropped_item")
+    private String droppedItem;  // Name of the required drop (for display)
+
+    @SerializedName("dropped_item_id")
+    private List<Integer> droppedItemIds;  // Item IDs that count as the required drop
+
+    @SerializedName("quantity")
+    private Integer droppedItemQuantity;  // Required quantity of the dropped item
+
     public boolean hasTimeLimit()
     {
         return timeInTicks != null && timeInTicks > 0;
@@ -113,6 +123,16 @@ public class TaskConstraints
     public boolean isEquipNothing()
     {
         return equipNothing != null && equipNothing;
+    }
+
+    public boolean hasDroppedItemConstraint()
+    {
+        return droppedItemIds != null && !droppedItemIds.isEmpty();
+    }
+
+    public int getDroppedItemQuantity()
+    {
+        return droppedItemQuantity != null ? droppedItemQuantity : 1;
     }
 
     /**
@@ -197,6 +217,18 @@ public class TaskConstraints
             // Support both integer arrays and string slot name arrays
             constraints.setMustBeEmptySlots(readSlotArray(obj, "must_be_empty", "must_be_empty_slots"));
             constraints.setEquippableSlots(readSlotArray(obj, "equippable_slots", "equippable_slot_names"));
+
+            // Handle dropped item constraints
+            if (obj.has("dropped_item"))
+            {
+                JsonElement el = obj.get("dropped_item");
+                if (el.isJsonPrimitive())
+                {
+                    constraints.setDroppedItem(el.getAsString());
+                }
+            }
+            constraints.setDroppedItemIds(readIntArray(obj, "dropped_item_id"));
+            constraints.setDroppedItemQuantity(readFlexibleInt(obj, "quantity"));
 
             return constraints;
         }
