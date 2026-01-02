@@ -41,10 +41,10 @@ import net.runelite.client.ui.PluginPanel;
 @Slf4j
 public class ChunkBlazerPanel extends PluginPanel
 {
-    private static final int TASK_ITEM_HEIGHT = 60; // Approx height of one task item
+    private static final int TASK_ITEM_HEIGHT = 80; // Approx height of one task item (increased for text wrapping)
     private static final int VISIBLE_TASK_COUNT = 5; // Show 5 tasks at a time in scroll areas
     private static final int MAX_TASK_LIST_HEIGHT = TASK_ITEM_HEIGHT * VISIBLE_TASK_COUNT; // Show 5 items
-    private static final int MAX_ACTIVE_TASKS_HEIGHT = 180; // Max height for active tasks
+    private static final int MAX_ACTIVE_TASKS_HEIGHT = TASK_ITEM_HEIGHT * 4; // Max height for active tasks (4 items)
     private static final int MAX_COMPLETED_TASKS_HEIGHT = TASK_ITEM_HEIGHT * VISIBLE_TASK_COUNT; // Show 5 items
 
     private ChunkBlazerPlugin plugin;
@@ -194,6 +194,9 @@ public class ChunkBlazerPanel extends PluginPanel
         devControlsPanel = createDevControlsSection();
         setupSectionPanel(devControlsPanel);
         mainPanel.add(devControlsPanel);
+
+        // Add vertical glue at the bottom to push content up and prevent shrinking
+        mainPanel.add(Box.createVerticalGlue());
 
         return mainPanel;
     }
@@ -1677,12 +1680,8 @@ public class ChunkBlazerPanel extends PluginPanel
 
         if (regionId > 0)
         {
-            // Truncate region name if too long to fit panel
-            String displayName = regionName;
-            if (displayName != null && displayName.length() > 12)
-            {
-                displayName = displayName.substring(0, 10) + "...";
-            }
+            // Show full region name - no truncation
+            String displayName = regionName != null ? regionName : "Unknown";
             regionLabel.setText(displayName + " (" + regionId + ")");
         }
         else
@@ -1832,6 +1831,8 @@ public class ChunkBlazerPanel extends PluginPanel
             new EmptyBorder(4, 5, 4, 5)
         ));
         itemPanel.setAlignmentX(LEFT_ALIGNMENT);
+        // Allow dynamic height based on content
+        itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, Integer.MAX_VALUE));
 
         // Make clickable with cursor change
         itemPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -2214,10 +2215,11 @@ public class ChunkBlazerPanel extends PluginPanel
 
     private JPanel createTaskListItem(NuzlockeTask task)
     {
-        JPanel itemPanel = new JPanel(new BorderLayout(5, 0));
-        itemPanel.setBorder(new EmptyBorder(3, 5, 3, 5));
-        itemPanel.setPreferredSize(new Dimension(CONTENT_WIDTH - 10, 40));
-        itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, 40));
+        JPanel itemPanel = new JPanel();
+        itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
+        itemPanel.setBorder(new EmptyBorder(4, 5, 4, 5));
+        // Allow dynamic height based on content
+        itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, Integer.MAX_VALUE));
         itemPanel.setAlignmentX(LEFT_ALIGNMENT);
 
         // Determine task status
@@ -2239,34 +2241,38 @@ public class ChunkBlazerPanel extends PluginPanel
             itemPanel.setBackground(ColorScheme.DARK_GRAY_COLOR);
         }
 
-        // Task name with status indicator
-        String displayName = task.getName();
-        JLabel nameLabel = new JLabel(displayName);
-        nameLabel.setFont(FontManager.getRunescapeSmallFont());
-
-        // Color based on status
+        // Determine text color based on status
+        Color textColor;
         if (isActive)
         {
-            nameLabel.setForeground(new Color(100, 255, 100)); // Bright green for active
+            textColor = new Color(100, 255, 100); // Bright green for active
         }
         else if (isAssigned)
         {
-            nameLabel.setForeground(Color.GRAY); // Gray for already assigned
+            textColor = Color.GRAY; // Gray for already assigned
         }
         else if (task.isLocked())
         {
-            nameLabel.setForeground(Color.DARK_GRAY);
+            textColor = Color.DARK_GRAY;
         }
         else
         {
-            nameLabel.setForeground(Color.WHITE); // Available
+            textColor = Color.WHITE; // Available
         }
 
-        itemPanel.add(nameLabel, BorderLayout.CENTER);
+        // Task name with text wrapping
+        String displayName = task.getName();
+        String wrappedName = "<html><body style='width: " + (CONTENT_WIDTH - 50) + "px'>" + displayName + "</body></html>";
+        JLabel nameLabel = new JLabel(wrappedName);
+        nameLabel.setFont(FontManager.getRunescapeSmallFont());
+        nameLabel.setForeground(textColor);
+        nameLabel.setAlignmentX(LEFT_ALIGNMENT);
+        itemPanel.add(nameLabel);
 
-        // Task info (status + points + level)
-        JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
+        // Task info line (status + points + level)
+        JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         infoPanel.setBackground(itemPanel.getBackground());
+        infoPanel.setAlignmentX(LEFT_ALIGNMENT);
 
         // Status indicator
         if (isActive)
@@ -2297,7 +2303,7 @@ public class ChunkBlazerPanel extends PluginPanel
         pointsLabel.setForeground(isAssigned ? Color.GRAY : new Color(100, 200, 100));
         infoPanel.add(pointsLabel);
 
-        itemPanel.add(infoPanel, BorderLayout.EAST);
+        itemPanel.add(infoPanel);
 
         return itemPanel;
     }
