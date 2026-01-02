@@ -6817,6 +6817,304 @@
                 }
             ],                              
             "is_completed": false
+        },
+        {
+            "region_id": [10035],
+            "Friendly_Name": "West Ardougne",
+            "neighbor_ids": [10036, 10291, 10034, 9779],
+            "tasks": [
+                {
+                    "name": "Build an Elite STASH Unit at the Fight Arena",
+                    "taskID": "build_elite_stash_fight_arena",
+                    "category": "Construction",
+                    "level": 55,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mahogany Plank",
+                            "item_ids": [8782]
+                        },
+                        {
+                            "item": "Nails",
+                            "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+                    "required_object": [
+                        {
+                            "object": "Elite STASH Unit (crate)",
+                            "object_id": [29024],
+                            "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Hangover Cure",
+                    "taskID": "obtain_hangover_cure",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Hangover Cure"],
+                            "item_ids": [1504],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a West Ardougne Teleport Tablet",
+                    "taskID": "obtain_west_ardougne_teleport_tablet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["West Ardougne Teleport"],
+                            "item_ids": [19623],
+                            "quantity": [1]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Defeat a Level 19 Ghost in 6 Seconds",
+                    "taskID": "defeat_a_ghost_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 19 Ghost"],
+                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "time_in_ticks": [10],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                }               
+            ],                              
+            "is_completed": false
+        },      
+        {
+            "region_id": [9779],
+            "Friendly_Name": "Underground Pass",
+            "neighbor_ids": [9780, 10035, 9778, 9523],
+            "tasks": [
+                {
+                    "name": "Equip Klank's Gauntlets",
+                    "taskID": "equip_klank's_gauntlets",
+                    "category": "Defence",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Klank's Gauntlets"],
+                            "item_ids": [1495]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Iban's Staff",
+                    "taskID": "equip_iban's_staff",
+                    "category": "Attack",
+                    "level": 50,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iban's Staff"],
+                            "item_ids": [1409]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Iban's Staff(u)",
+                    "taskID": "equip_iban's_staff(u)",
+                    "category": "Attack",
+                    "level": 50,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iban's Staff(u)"],
+                            "item_ids": [12658]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Defeat a Blessed Spider",
+                    "taskID": "defeat_blesed_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Blessed Spider"],
+                        "npc_ids": [4533, 8978],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "time_in_ticks": [10],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                }               
+            ],                              
+            "is_completed": false
+        },
+        {
+            "region_id": [10036],
+            "Friendly_Name": "Combat Training Camp",
+            "neighbor_ids": [10037, 10292, 10035, 9780],
+            "tasks": [
+                {
+                    "name": "Smith a Dragon Square Shield",
+                    "taskID": "smith_dragon_sq_shield",
+                    "category": "Smithing",
+                    "level": 60,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                                "item": ["Dragon Sq Shield"],
+                                "item_ids": [1187],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {                           
+                    "name": "Defeat some Level 63 Ogres",
+                    "taskID": "defeat_level_63_ogres",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {                        
+                        "npc": "Level 63 Ogre",
+                        "npc_ids": [1153], 
+                        "quantity": [1, 25]                  
+                    }                                    
+                },
+                {
+                    "name": "Defeat a Level 63 Ogre in 12 Seconds",
+                    "taskID": "defeat_level_63_ogre_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {                        
+                        "npc": "Level 63 Ogre",
+                        "npc_ids": [1153], 
+                        "quantity": [1]                  
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [20],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },              
+                {                           
+                    "name": "Defeat a Level 63 Ogre on Task",
+                    "taskID": "defeat_level_63_ogre_on_task",
+                    "category": "Slayer",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {                        
+                        "npc": "Level 63 Ogre",
+                        "npc_ids": [1153], 
+                        "quantity": [1]                  
+                    }                                    
+                },
+                {
+                "name": "Build a Medium STASH Unit at the Combat Training Camp Ogre Pen",
+                "taskID": "build_medium_stash_combat_training_camp_ogre_pen",
+                "category": "Construction",
+                "level": 42,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Medium STASH Unit (inconspicuous hole)",
+                        "object_id": [28996],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Adamant 2H Sword",
+                    "taskID": "equip_adamant_2h_sword",
+                    "category": "Attack",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamant 2H Sword"],
+                            "item_ids": [1317]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat a Level 63 Ogre with Nothing Equipped",
+                    "taskID": "defeat_level_63_ogre_nothing_equipped",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {                        
+                        "npc": "Level 63 Ogre",
+                        "npc_ids": [1153], 
+                        "quantity": [1, 25]                  
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }                                    
+                }               
+            ],                              
+            "is_completed": false
         }
     ]
 }

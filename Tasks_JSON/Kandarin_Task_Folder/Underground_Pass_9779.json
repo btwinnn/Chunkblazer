@@ -1,0 +1,77 @@
+{
+            "region_id": [9779],
+            "Friendly_Name": "Underground Pass",
+            "neighbor_ids": [9780, 10035, 9778, 9523],
+            "tasks": [
+                {
+                    "name": "Equip Klank's Gauntlets",
+                    "taskID": "equip_klank's_gauntlets",
+                    "category": "Defence",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Klank's Gauntlets"],
+                            "item_ids": [1495]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Iban's Staff",
+                    "taskID": "equip_iban's_staff",
+                    "category": "Attack",
+                    "level": 50,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iban's Staff"],
+                            "item_ids": [1409]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Iban's Staff(u)",
+                    "taskID": "equip_iban's_staff(u)",
+                    "category": "Attack",
+                    "level": 50,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iban's Staff(u)"],
+                            "item_ids": [12658]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Defeat a Blessed Spider",
+                    "taskID": "defeat_blesed_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Blessed Spider"],
+                        "npc_ids": [4533, 8978],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "time_in_ticks": [10],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                }               
+            ],                              
+            "is_completed": false
+        }

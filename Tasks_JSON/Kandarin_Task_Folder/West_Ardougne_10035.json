@@ -1,0 +1,88 @@
+{
+            "region_id": [10035],
+            "Friendly_Name": "West Ardougne",
+            "neighbor_ids": [10036, 10291, 10034, 9779],
+            "tasks": [
+                {
+                    "name": "Build an Elite STASH Unit at the Fight Arena",
+                    "taskID": "build_elite_stash_fight_arena",
+                    "category": "Construction",
+                    "level": 55,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mahogany Plank",
+                            "item_ids": [8782]
+                        },
+                        {
+                            "item": "Nails",
+                            "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+                    "required_object": [
+                        {
+                            "object": "Elite STASH Unit (crate)",
+                            "object_id": [29024],
+                            "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Hangover Cure",
+                    "taskID": "obtain_hangover_cure",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Hangover Cure"],
+                            "item_ids": [1504],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a West Ardougne Teleport Tablet",
+                    "taskID": "obtain_west_ardougne_teleport_tablet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["West Ardougne Teleport"],
+                            "item_ids": [19623],
+                            "quantity": [1]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Defeat a Level 19 Ghost in 6 Seconds",
+                    "taskID": "defeat_a_ghost_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 19 Ghost"],
+                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "time_in_ticks": [10],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                }               
+            ],                              
+            "is_completed": false
+        }
