@@ -515,6 +515,19 @@ public class ChunkBlazerPlugin extends Plugin
         if (!chunksByRegionId.isEmpty())
         {
             log.info("All loaded region IDs: {}", chunksByRegionId.keySet());
+
+            // Specifically check for Lumbridge (12850)
+            if (chunksByRegionId.containsKey(12850))
+            {
+                NuzlockeChunk lumbridge = chunksByRegionId.get(12850);
+                log.info(">>> LUMBRIDGE (12850) FOUND: name={}, tasks={}",
+                    lumbridge.getName(),
+                    lumbridge.getTasks() != null ? lumbridge.getTasks().size() : 0);
+            }
+            else
+            {
+                log.error(">>> LUMBRIDGE (12850) NOT FOUND in chunksByRegionId!");
+            }
         }
         else
         {

@@ -671,7 +671,7 @@
                     }, 
                     
                     "constraints": {
-                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                        "equippable_slots": ["WEAPON"]
                     }
                 },
                 {
@@ -1223,7 +1223,7 @@
             "is_completed": false
         },
         {
-            "region_id": [13364],
+            "region_id": [11828],
             "Friendly_Name": "West Falador",
             "neighbor_ids": [11829, 12084, 11827, 11572],
             "tasks": [
@@ -1292,7 +1292,7 @@
                     },
                     
                     "constraints": {
-                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                        "equippable_slots": ["WEAPON"]
                     }
                 },
                 {
@@ -2359,9 +2359,9 @@
                 "name": "Build an Elite STASH Unit in the Edgeville Monastery",
                 "taskID": "build_elite_stash_edgeville_monestary",
                 "category": "Construction",
-                "level": 55,
+                "level": 77,
                 "completion_type": "CONSTRUCTION",
-                "base_points": 2,
+                "base_points": 3,
                 "assignment_weight": 8,
                 "required_items": [
                         {
@@ -2493,7 +2493,7 @@
                     },
                     
                     "constraints": {
-                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                        "equippable_slots": ["WEAPON"]
                     }
                 }                                        
             ],                 
@@ -2501,7 +2501,7 @@
         },
         {
             "region_id": [11574],
-            "Friendly_Name": "Taverly",
+            "Friendly_Name": "Druids' Circle",
             "neighbor_ids": [11575, 11830, 11573, 11318],
             "tasks": [
                 {

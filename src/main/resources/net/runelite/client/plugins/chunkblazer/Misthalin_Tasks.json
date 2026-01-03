@@ -1,16 +1,9 @@
 {
     "Misthalin_Tasks": [
         {
-            "region_id": [
-                12596
-            ],
+            "region_id": [12596],
             "Friendly_Name": "Champions' Guild",
-            "neighbor_ids": [
-                12595,
-                12340,
-                12852,
-                12597
-            ],
+            "neighbor_ids": [12595, 12340, 12852, 12597],
             "tasks": [
                 {
                     "name": "Plant some Cadava Berries",
@@ -22,11 +15,9 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Cadavaberry Seeds",
-                            "item_ids": [
-                                5102
-                            ],
-                            "quantity": 1
+                            "item": ["Cadavaberry Seeds"],
+                            "item_ids": [5102],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -39,14 +30,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Soft Clay",
-                            "item_ids": [
-                                1761
-                            ],
-                            "quantity_range": [
-                                1,
-                                50
-                            ]
+                            "item": ["Soft Clay"],
+                            "item_ids": [1761],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -77,10 +63,8 @@
                     "completion_type": "EQUIP",
                     "required_items": [
                         {
-                            "item": "Rune Platelegs",
-                            "item_ids": [
-                                1079
-                            ]
+                            "item": ["Rune Platelegs"],
+                            "item_ids": [1079]
                         }
                     ]
                 },
@@ -94,10 +78,8 @@
                     "completion_type": "EQUIP",
                     "required_items": [
                         {
-                            "item": "Rune Mace",
-                            "item_ids": [
-                                1432
-                            ]
+                            "item": ["Rune Mace"],
+                            "item_ids": [1432]
                         }
                     ]
                 },
@@ -118,12 +100,8 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Sourhog"
-                        ],
-                        "npc_ids": [
-                            10435
-                        ],
+                        "npc": ["Sourhog"],
+                        "npc_ids": [10435],
                         "quantity": 1
                     }
                 },
@@ -136,11 +114,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Yellow Cape",
-                            "item_ids": [
-                                1023
-                            ],
-                            "quantity": 1
+                            "item": ["Yellow Cape"],
+                            "item_ids": [1023],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -154,10 +130,8 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Green D'Hide Chaps",
-                            "item_ids": [
-                                1099
-                            ]
+                            "item": ["Green D'Hide Chaps"],
+                            "item_ids": [1099]
                         }
                     ]
                 },
@@ -170,10 +144,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "White Bead",
-                            "item_ids": [
-                                1476
-                            ]
+                            "item": ["White Bead"],
+                            "item_ids": [1476]
                         }
                     ]
                 },
@@ -185,29 +157,19 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Mugger"
-                        ],
-                        "npc_ids": [
-                            513,
-                            1461,
-                            6996
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Mugger"],
+                        "npc_ids": [513, 1461, 6996],
+                        "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [
-                            8
-                        ],
+                        "time_in_ticks": [8],
                         "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
                     }
                 }
             ],
@@ -220,17 +182,9 @@
             "is_completed": false
         },
         {
-            "region_id": [
-                12340,
-                12440
-            ],
+            "region_id": [12340, 12440],
             "Friendly_Name": "Draynor Manor",
-            "neighbor_ids": [
-                12339,
-                12084,
-                12341,
-                12596
-            ],
+            "neighbor_ids": [12339, 12084, 12341, 12596],
             "tasks": [
                 {
                     "name": "Plant some Belladonna Seeds",
@@ -242,11 +196,9 @@
                     "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": "Belladonna seed",
-                            "item_ids": [
-                                5281
-                            ],
-                            "quantity": 1
+                            "item": ["Belladonna seed"],
+                            "item_ids": [5281],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -258,37 +210,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Ghost"
-                        ],
-                        "npc_ids": [
-                            85,
-                            86,
-                            87,
-                            88,
-                            89,
-                            90,
-                            91,
-                            92,
-                            93,
-                            94,
-                            95,
-                            96,
-                            97,
-                            98,
-                            99,
-                            472,
-                            473,
-                            474,
-                            505,
-                            506,
-                            507,
-                            7263,
-                            7264
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Ghost"],
+                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -300,15 +224,9 @@
                     "base_points": 1,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": [
-                            "Killerwatt"
-                        ],
-                        "npc_ids": [
-                            469
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Killerwatt"],
+                        "npc_ids": [469],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -320,19 +238,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Rat"
-                        ],
-                        "npc_ids": [
-                            2854,
-                            2855,
-                            2492,
-                            2513
-                        ],
-                        "quantity": [
-                            1,
-                            20
-                        ]
+                        "npc": ["Rat"],
+                        "npc_ids": [2854, 2855, 2492, 2513],
+                        "quantity": [1, 20]
                     }
                 },
                 {
@@ -344,15 +252,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Skeleton"
-                        ],
-                        "npc_ids": [
-                            3565
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Skeleton"],
+                        "npc_ids": [3565],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -363,16 +265,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Count Draynor"
-                        ],
-                        "npc_ids": [
-                            3481,
-                            3482
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Count Draynor"],
+                        "npc_ids": [3481, 3482],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -384,11 +279,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Skull",
-                            "item_ids": [
-                                964
-                            ],
-                            "quantity": 1
+                            "item": ["Skull"],
+                            "item_ids": [964],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -401,11 +294,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Plant Cure",
-                            "item_ids": [
-                                6036
-                            ],
-                            "quantity": 1
+                            "item": ["Plant Cure"],
+                            "item_ids": [6036],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -418,11 +309,9 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Magic whistle",
-                            "item_ids": [
-                                16
-                            ],
-                            "quantity": 1
+                            "item": ["Magic whistle"],
+                            "item_ids": [16],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -434,26 +323,11 @@
                     "base_points": 2,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": [
-                            "Bob the Cat"
-                        ],
-                        "npc_ids": [
-                            2635,
-                            2636,
-                            4231,
-                            8034,
-                            8055,
-                            8111,
-                            8112,
-                            8113,
-                            8114,
-                            8115,
-                            8159
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Bob the Cat"],
+                        "npc_ids": [2635, 2636, 4231, 8034, 8055, 8111, 8112, 8113, 8114, 8115, 8159],
+                        "quantity": [1]
                     }
+
                 }
             ],
             "optional_quests_unlocked": [
@@ -469,18 +343,9 @@
             "is_completed": false
         },
         {
-            "region_id": [
-                12339,
-                12439,
-                12438
-            ],
+            "region_id": [12339, 12439, 12438],
             "Friendly_Name": "Draynor North",
-            "neighbor_ids": [
-                12083,
-                12338,
-                12595,
-                12340
-            ],
+            "neighbor_ids": [12083, 12338, 12595, 12340],
             "tasks": [
                 {
                     "name": "Obtain a Black Cape",
@@ -491,11 +356,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Black Cape",
-                            "item_ids": [
-                                1019
-                            ],
-                            "quantity": 1
+                            "item": ["Black Cape"],
+                            "item_ids": [1019],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -508,28 +371,19 @@
                     "base_points": 1,
                     "assignment_weight": 10,
                     "target_npc": {
-                        "npc": [
-                            "Highwayman"
-                        ],
-                        "npc_ids": [
-                            519,
-                            518
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Highwayman"],
+                        "npc_ids": [519, 518],
+                        "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [
-                            12
-                        ],
+                        "time_in_ticks": [12],
                         "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
                     }
                 },
                 {
@@ -541,17 +395,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_object": {
-                        "object": [
-                            "Draynor Rooftop Crate"
-                        ],
-                        "object_id": [
-                            11632,
-                            11358
-                        ],
-                        "quantity": [
-                            1,
-                            20
-                        ]
+                        "object": ["Draynor Rooftop Crate"],
+                        "object_id": [11632, 11358], 
+                        "quantity": [1, 20]
                     }
                 },
                 {
@@ -563,52 +409,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Goblin"
-                        ],
-                        "npc_ids": [
-                            5192,
-                            5193,
-                            5204,
-                            5205,
-                            5206,
-                            5207,
-                            5208,
-                            3028,
-                            3029,
-                            3030,
-                            3031,
-                            3032,
-                            3033,
-                            3034,
-                            3035,
-                            3036,
-                            3037,
-                            3038,
-                            3039,
-                            3040,
-                            3041,
-                            3042,
-                            3043,
-                            3044,
-                            3051,
-                            3052,
-                            3053,
-                            3054,
-                            5195,
-                            5196,
-                            5197,
-                            5198,
-                            5199,
-                            5200,
-                            5201,
-                            5202,
-                            5203
-                        ],
-                        "quantity": [
-                            1,
-                            20
-                        ]
+                        "npc": ["Goblin"],
+                        "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
+                        "quantity": [1, 20]
                     }
                 },
                 {
@@ -620,24 +423,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Zombie"
-                        ],
-                        "npc_ids": [
-                            49,
-                            50,
-                            51,
-                            52,
-                            53,
-                            54,
-                            55,
-                            56,
-                            57,
-                            58
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Zombie"],
+                        "npc_ids": [49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -650,11 +438,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Iron Arrowtips",
-                            "item_ids": [
-                                40
-                            ],
-                            "quantity": 1
+                            "item": ["Iron Arrowtips"],
+                            "item_ids": [40],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -668,14 +454,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Iron Arrow",
-                            "item_ids": [
-                                884
-                            ],
-                            "quantity_range": [
-                                25,
-                                100
-                            ]
+                            "item": ["Iron Arrow"],
+                            "item_ids": [884],
+                            "quantity": [25, 100]
                         }
                     ]
                 },
@@ -689,11 +470,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Iron Dagger",
-                            "item_ids": [
-                                1203
-                            ],
-                            "quantity": 1
+                            "item": ["Iron Dagger"],
+                            "item_ids": [1203],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -707,11 +486,9 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Oak Longbow (u)",
-                            "item_ids": [
-                                56
-                            ],
-                            "quantity": 1
+                            "item": ["Oak Longbow (u)"],
+                            "item_ids": [56],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -724,11 +501,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Enchanted Gem",
-                            "item_ids": [
-                                4155
-                            ],
-                            "quantity": 1
+                            "item": ["Enchanted Gem"],
+                            "item_ids": [4155],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -738,10 +513,10 @@
                     "category": "Unlock",
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 1,
-                    "assignment_weight": 5,
-                    "constraints": {
-                        "varbit_id": 2061,
-                        "varbit_boolean": 1,
+                    "assignment_weight": 5,                   
+                    "constraints": {                       
+                        "varbit_id": 2061,        
+                        "varbit_boolean": 1,      
                         "description": "Unlock status of Reptile Freezer"
                     }
                 },
@@ -755,10 +530,8 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Reinforced Goggles",
-                            "item_ids": [
-                                24942
-                            ]
+                            "item": ["Reinforced Goggles"],
+                            "item_ids": [24942]
                         }
                     ]
                 }
@@ -772,16 +545,9 @@
             "is_completed": false
         },
         {
-            "region_id": [
-                12338
-            ],
+            "region_id": [12338],
             "Friendly_Name": "Draynor South",
-            "neighbor_ids": [
-                12082,
-                12339,
-                12594,
-                12340
-            ],
+            "neighbor_ids": [12082, 12339, 12594, 12340],
             "tasks": [
                 {
                     "name": "Obtain Red Dye",
@@ -792,11 +558,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Red Dye",
-                            "item_ids": [
-                                1763
-                            ],
-                            "quantity": 1
+                            "item": ["Red Dye"],
+                            "item_ids": [1763],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -809,11 +573,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Yellow Dye",
-                            "item_ids": [
-                                1765
-                            ],
-                            "quantity": 1
+                            "item": ["Yellow Dye"],
+                            "item_ids": [1765],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -826,11 +588,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Blue Dye",
-                            "item_ids": [
-                                1767
-                            ],
-                            "quantity": 1
+                            "item": ["Blue Dye"],
+                            "item_ids": [1767],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -843,19 +603,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Jail Guard"
-                        ],
-                        "npc_ids": [
-                            4276,
-                            4277,
-                            4278,
-                            4279
-                        ],
-                        "quantity": [
-                            1,
-                            10
-                        ]
+                        "npc": ["Jail Guard"],
+                        "npc_ids": [4276, 4277, 4278, 4279],
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -867,10 +617,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Forestry Kit",
-                            "item_ids": [
-                                28136
-                            ]
+                            "item": ["Forestry Kit"],
+                            "item_ids": [28136]
                         }
                     ]
                 },
@@ -891,11 +639,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Secateurs Blade",
-                            "item_ids": [
-                                28159
-                            ],
-                            "quantity": 1
+                            "item": ["Secateurs Blade"],
+                            "item_ids": [28159],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -909,15 +655,9 @@
                     "assignment_weight": 8,
                     "required_object": [
                         {
-                            "object": [
-                                "Seed Stall"
-                            ],
-                            "object_id": [
-                                7053
-                            ],
-                            "quantity": [
-                                1
-                            ]
+                            "object": ["Seed Stall"],
+                            "object_id": [7053],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -930,11 +670,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Log Basket",
-                            "item_ids": [
-                                28140
-                            ],
-                            "quantity": 1
+                            "item": ["Log Basket"],
+                            "item_ids": [28140],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -946,18 +684,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Dark Wizard"
-                        ],
-                        "npc_ids": [
-                            512,
-                            5086,
-                            5087
-                        ],
-                        "quantity": [
-                            1,
-                            10
-                        ]
+                        "npc": ["Dark Wizard"],
+                        "npc_ids": [512, 5086, 5087],
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -968,30 +697,20 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Dark Wizard"
-                        ],
-                        "npc_ids": [
-                            512,
-                            5086,
-                            5087
-                        ],
-                        "quantity": [
-                            1,
-                            10
-                        ]
+                        "npc": ["Dark Wizard"],
+                        "npc_ids": [512, 5086, 5087],
+                        "quantity": [1, 10]
                     },
+                    
                     "constraints": {
-                        "time_in_ticks": [
-                            16
-                        ],
+                        "time_in_ticks": [16],
                         "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
                     }
                 },
                 {
@@ -1004,15 +723,9 @@
                     "assignment_weight": 8,
                     "required_object": [
                         {
-                            "object": [
-                                "Market Stall"
-                            ],
-                            "object_id": [
-                                14011
-                            ],
-                            "quantity": [
-                                1
-                            ]
+                            "object": ["Market Stall"],
+                            "object_id": [14011],
+                            "quantity": [1]
                         }
                     ]
                 }
@@ -1034,22 +747,9 @@
             "is_completed": false
         },
         {
-            "region_id": [
-                12337,
-                12437,
-                14483,
-                14484,
-                8036,
-                8292,
-                8291
-            ],
+            "region_id": [12337, 12437, 14483, 14484, 8036, 8292,8291],
             "Friendly_Name": "Wizards' Tower",
-            "neighbor_ids": [
-                12081,
-                12338,
-                12593,
-                12336
-            ],
+            "neighbor_ids": [12081, 12338, 12593, 12336],
             "tasks": [
                 {
                     "name": "Defeat a Level 82 Lesser Demon",
@@ -1059,22 +759,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Lesser Demon"
-                        ],
-                        "npc_ids": [
-                            2005,
-                            2006,
-                            2007,
-                            2008,
-                            2018,
-                            7656,
-                            7657,
-                            7664
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Lesser Demon"],
+                        "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -1086,16 +773,9 @@
                     "assignment_weight": 10,
                     "boss": "The Leviathan",
                     "target_npc": {
-                        "npc": [
-                            "Leviathan"
-                        ],
-                        "npc_ids": [
-                            12215,
-                            12219
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Leviathan"],
+                        "npc_ids": [12215, 12219],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -1107,15 +787,9 @@
                     "assignment_weight": 1,
                     "boss": "The Leviathan",
                     "target_npc": {
-                        "npc": [
-                            "Awakened Leviathan"
-                        ],
-                        "npc_ids": [
-                            12214
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Awakened Leviathan"],
+                        "npc_ids": [12214],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -1128,12 +802,10 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Chaos Rune",
-                            "item_ids": [
-                                562
-                            ],
-                            "action": "obtain",
-                            "quantity": 1
+                        "item": "Chaos Rune",
+                        "item_ids": [562],
+                        "action": "obtain",
+                        "quantity": [1]
                         }
                     ]
                 },
@@ -1147,10 +819,8 @@
                     "boss": "The Leviathan",
                     "required_items": [
                         {
-                            "item": "Venator Vestige",
-                            "item_ids": [
-                                28283
-                            ]
+                            "item": ["Venator Vestige"],
+                            "item_ids": [28283]
                         }
                     ]
                 },
@@ -1171,34 +841,24 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Splitbark Helm",
-                            "item_ids": [
-                                3385
-                            ]
+                            "item": ["Splitbark Helm"],
+                            "item_ids": [3385]
                         },
                         {
-                            "item": "Splitbark Body",
-                            "item_ids": [
-                                3387
-                            ]
+                            "item": ["Splitbark Body"],
+                            "item_ids": [3387]
                         },
                         {
-                            "item": "Splitbark Legs",
-                            "item_ids": [
-                                3389
-                            ]
+                            "item": ["Splitbark Legs"],
+                            "item_ids": [3389]
                         },
                         {
-                            "item": "Splitbark Gauntlets",
-                            "item_ids": [
-                                3391
-                            ]
+                            "item": ["Splitbark Gauntlets"],
+                            "item_ids": [3391]
                         },
                         {
-                            "item": "Splitbark Boots",
-                            "item_ids": [
-                                3393
-                            ]
+                            "item": ["Splitbark Boots"],
+                            "item_ids": [3393]
                         }
                     ]
                 },
@@ -1210,27 +870,20 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Wizard"
-                        ],
-                        "npc_ids": [
-                            3257
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Wizard"],
+                        "npc_ids": [3257],
+                        "quantity": [1]
                     },
+                    
                     "constraints": {
-                        "time_in_ticks": [
-                            10
-                        ],
+                        "time_in_ticks": [10],
                         "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
                     }
                 },
                 {
@@ -1243,11 +896,9 @@
                     "boss": "The Leviathan",
                     "required_items": [
                         {
-                            "item": "Leviathan's Lure",
-                            "item_ids": [
-                                28325
-                            ],
-                            "quantity": 1
+                            "item": ["Leviathan's Lure"],
+                            "item_ids": [28325],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1260,11 +911,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Rune Essence",
-                            "item_ids": [
-                                1436
-                            ],
-                            "quantity": 1
+                            "item": ["Rune Essence"],
+                            "item_ids": [1436],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1277,14 +926,12 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Abyssal Lantern Unlit",
-                            "item_ids": [
-                                26822
-                            ],
-                            "quantity": 1
+                            "item": ["Abyssal Lantern Unlit"],
+                            "item_ids": [26822],
+                            "quantity": [1]
                         }
                     ]
-                },
+                },               
                 {
                     "name": "Equip the Raiments of the Eye Set",
                     "taskID": "equip_raiments_of_eye_set",
@@ -1295,37 +942,21 @@
                     "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": "Hat of the Eye",
-                            "item_ids": [
-                                26850,
-                                26858,
-                                26864,
-                                26870
-                            ]
+                            "item": ["Hat of the Eye"],
+                            "item_ids": [26850, 26858, 26864, 26870]
                         },
                         {
-                            "item": "Robe Bottoms of the Eye",
-                            "item_ids": [
-                                26854,
-                                26862,
-                                26868,
-                                26874
-                            ]
+                            "item": ["Robe Bottoms of the Eye"],
+                            "item_ids": [26854, 26862, 26868, 26874
+                        ]
                         },
                         {
-                            "item": "Robe top of the Eye",
-                            "item_ids": [
-                                26852,
-                                26860,
-                                26866,
-                                26872
-                            ]
+                            "item": ["Robe top of the Eye"],
+                            "item_ids": [26852, 26860, 26866, 26872]
                         },
                         {
-                            "item": "Boots of the Eye",
-                            "item_ids": [
-                                26856
-                            ]
+                            "item": ["Boots of the Eye"],
+                            "item_ids": [26856]
                         }
                     ]
                 }
@@ -1339,16 +970,9 @@
             "is_completed": false
         },
         {
-            "region_id": [
-                12852
-            ],
+            "region_id": [12852],
             "Friendly_Name": "Dark Wizards' Stone Table",
-            "neighbor_ids": [
-                12853,
-                13108,
-                12851,
-                12596
-            ],
+            "neighbor_ids": [12853, 13108, 12851, 12596],
             "tasks": [
                 {
                     "name": "Defeat a Level 20 Dark Wizard",
@@ -1358,17 +982,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Dark Wizard Level 20"
-                        ],
-                        "npc_ids": [
-                            510,
-                            5088,
-                            5089
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Dark Wizard Level 20"],
+                        "npc_ids": [510, 5088, 5089],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -1379,29 +995,20 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Dark Wizard Level 20"
-                        ],
-                        "npc_ids": [
-                            510,
-                            5088,
-                            5089
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Dark Wizard Level 20"],
+                        "npc_ids": [510, 5088, 5089],
+                        "quantity": [1]
                     },
+                    
                     "constraints": {
-                        "time_in_ticks": [
-                            32
-                        ],
+                        "time_in_ticks": [32],
                         "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
                     }
                 },
                 {
@@ -1422,10 +1029,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Fire Talisman",
-                            "item_ids": [
-                                1442
-                            ]
+                            "item": ["Fire Talisman"],
+                            "item_ids": [1442]
                         }
                     ]
                 },
@@ -1438,10 +1043,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Black Robe",
-                            "item_ids": [
-                                581
-                            ]
+                            "item": ["Black Robe"],
+                            "item_ids": [581]
                         }
                     ]
                 },
@@ -1453,25 +1056,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Dark Wizard"
-                        ],
-                        "npc_ids": [
-                            512,
-                            5086,
-                            5087,
-                            2058,
-                            2059,
-                            510,
-                            5088,
-                            5089,
-                            2057,
-                            2056
-                        ],
-                        "quantity": [
-                            1,
-                            50
-                        ]
+                        "npc": ["Dark Wizard"],
+                        "npc_ids": [512, 5086, 5087, 2058, 2059, 510, 5088, 5089, 2057, 2056],
+                        "quantity": [1, 50]
                     }
                 },
                 {
@@ -1483,10 +1070,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Yellow Bead",
-                            "item_ids": [
-                                1472
-                            ]
+                            "item": ["Yellow Bead"],
+                            "item_ids": [1472]
                         }
                     ]
                 },
@@ -1498,38 +1083,22 @@
                     "base_points": 1,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": [
-                            "Wizard"
-                        ],
-                        "npc_ids": [
-                            510,
-                            5088,
-                            5089
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Wizard"],
+                        "npc_ids": [510, 5088, 5089],
+                        "quantity": [1]
                     },
+                    
                     "constraints": {
-                        "time_in_ticks": [
-                            1
-                        ]
+                        "time_in_ticks": [1]
                     }
-                }
+                }         
             ],
             "is_completed": false
         },
         {
-            "region_id": [
-                13108
-            ],
+            "region_id": [13108],
             "Friendly_Name": "Varrock East Mine",
-            "neighbor_ids": [
-                13364,
-                13107,
-                12852,
-                13109
-            ],
+            "neighbor_ids": [13364, 13107, 12852, 13109],
             "tasks": [
                 {
                     "name": "Mine some Iron Ore",
@@ -1541,14 +1110,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Iron Ore",
-                            "item_ids": [
-                                440
-                            ],
-                            "quantity_range": [
-                                1,
-                                50
-                            ]
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -1560,16 +1124,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Unicorn"
-                        ],
-                        "npc_ids": [
-                            2837,
-                            14043
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Unicorn"],
+                        "npc_ids": [2837, 14043],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -1580,13 +1137,10 @@
                     "completion_type": "HERBLORE",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "required_items": [
+                     "required_items": [
                         {
-                            "item": "Antipoison(3)",
-                            "item_ids": [
-                                175,
-                                2446
-                            ]
+                            "item": ["Antipoison(3)", "Antipoison(4)"],
+                            "item_ids": [175, 2446]
                         }
                     ]
                 },
@@ -1599,11 +1153,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Ensouled Unicorn Head",
-                            "item_ids": [
-                                13465,
-                                13466
-                            ]
+                            "item": ["Ensouled Unicorn Head"],
+                            "item_ids": [13465, 13466]
                         }
                     ]
                 },
@@ -1615,16 +1166,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Black Bear"
-                        ],
-                        "npc_ids": [
-                            2839
-                        ],
-                        "quantity": [
-                            1,
-                            25
-                        ]
+                        "npc": ["Black Bear"],
+                        "npc_ids": [2839],
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -1635,15 +1179,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Black Bear"
-                        ],
-                        "npc_ids": [
-                            2839
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Black Bear"],
+                        "npc_ids": [2839],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -1655,11 +1193,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Ensouled Bear Head",
-                            "item_ids": [
-                                13462,
-                                13463
-                            ]
+                            "item": ["Ensouled Bear Head"],
+                            "item_ids": [13462, 13463]
                         }
                     ]
                 },
@@ -1671,30 +1206,22 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "White Unicorn"
-                        ],
-                        "npc_ids": [
-                            2837,
-                            14043
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["White Unicorn"],
+                        "npc_ids": [2837, 14043],
+                        "quantity": [1]
                     },
+                    
                     "constraints": {
-                        "time_in_ticks": [
-                            20
-                        ],
+                        "time_in_ticks": [20],
                         "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
                     }
-                },
+                }, 
                 {
                     "name": "Defeat a Level 6 Giant Rat with nothing Equipped",
                     "taskID": "defeat_level_6_giant_rat_naked",
@@ -1703,33 +1230,15 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Giant Rat"
-                        ],
-                        "npc_ids": [
-                            2862,
-                            2863,
-                            2864
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Giant Rat"],
+                        "npc_ids": [2862, 2863, 2864],
+                        "quantity": [1]
                     },
+
                     "constraints": {
-                        "must_be_empty_slots": [
-                            "HEAD",
-                            "CAPE",
-                            "AMULET",
-                            "BODY",
-                            "SHIELD",
-                            "LEGS",
-                            "GLOVES",
-                            "BOOTS",
-                            "RING",
-                            "AMMO",
-                            "WEAPON"
-                        ]
+                        "equip_nothing": "TRUE"
                     }
+                    
                 },
                 {
                     "name": "Obtain some Unicorn Horns",
@@ -1740,14 +1249,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Unicorn Horn",
-                            "item_ids": [
-                                237
-                            ],
-                            "quantity_range": [
-                                1,
-                                25
-                            ]
+                            "item": ["Unicorn Horn"],
+                            "item_ids": [237],
+                            "quantity": [1,25]
                         }
                     ]
                 },
@@ -1757,14 +1261,10 @@
                     "category": "Dialogue",
                     "completion_type": "NPC_DIALOGUE",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 8,                  
                     "target_npc": {
-                        "npc": [
-                            "Guidor"
-                        ],
-                        "npc_ids": [
-                            1110
-                        ]
+                        "npc": ["Guidor"],
+                        "npc_ids": [1110]
                     }
                 },
                 {
@@ -1776,70 +1276,50 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Cadava Berries",
-                            "item_ids": [
-                                753
-                            ],
-                            "quantity": 1
+                            "item": ["Cadava Berries"],
+                            "item_ids": [753],
+                            "quantity": [1]
                         }
                     ]
                 }
-            ],
+                 ],
             "optional_quests_unlocked": [
                 {
                     "name": "What Lies Below",
                     "points": 2
                 }
-            ],
+            ],                 
             "is_completed": false
         },
         {
-            "region_id": [
-                13364
-            ],
+            "region_id": [13364],
             "Friendly_Name": "Exam Centre",
-            "neighbor_ids": [
-                13108,
-                13363,
-                13620,
-                13365
-            ],
+            "neighbor_ids": [13108, 13363, 13620, 13365],
             "tasks": [
                 {
-                    "name": "Build a Hard STASH Unit in the Exam Centre",
-                    "taskID": "build_hard_stash_exam_centre",
-                    "category": "Construction",
-                    "level": 55,
-                    "completion_type": "CONSTRUCTION",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
+                "name": "Build a Hard STASH Unit in the Exam Centre",
+                "taskID": "build_hard_stash_exam_centre",
+                "category": "Construction",
+                "level": 55,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
                         {
-                            "item": "Teak Plank",
-                            "item_ids": [
-                                8780
-                            ]
+                        "item": "Teak Plank",
+                        "item_ids": [8780]
                         },
                         {
-                            "item": "Nails",
-                            "item_ids": [
-                                4819,
-                                4820,
-                                1539,
-                                4821,
-                                4822,
-                                4823,
-                                4824
-                            ]
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
                         }
                     ],
-                    "required_object": [
+
+                "required_object": [
                         {
-                            "object": "Hard STASH Unit (crate)",
-                            "object_id": [
-                                29018
-                            ],
-                            "interaction_type": "use_item_on"
+                        "object": "Hard STASH Unit (crate)",
+                        "object_id": [29018],
+                        "interaction_type": "use_item_on"
                         }
                     ]
                 },
@@ -1853,11 +1333,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Longbow(u)",
-                            "item_ids": [
-                                48
-                            ],
-                            "quantity": 1
+                            "item": ["Longbow(u)"],
+                            "item_ids": [48],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1871,11 +1349,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "shortbow(u)",
-                            "item_ids": [
-                                50
-                            ],
-                            "quantity": 1
+                            "item": ["shortbow(u)"],
+                            "item_ids": [50],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1889,11 +1365,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Unfired Bowl",
-                            "item_ids": [
-                                1791
-                            ],
-                            "quantity": 1
+                            "item": ["Unfired Bowl"],
+                            "item_ids": [1791],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1907,11 +1381,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Unfired Cup",
-                            "item_ids": [
-                                28193
-                            ],
-                            "quantity": 1
+                            "item": ["Unfired Cup"],
+                            "item_ids": [28193],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1925,11 +1397,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Unfired Pie Dish",
-                            "item_ids": [
-                                1789
-                            ],
-                            "quantity": 1
+                            "item": ["Unfired Pie Dish"],
+                            "item_ids": [1789],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1943,11 +1413,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Unfired Plant Pot",
-                            "item_ids": [
-                                5352
-                            ],
-                            "quantity": 1
+                            "item": ["Unfired Plant Pot"],
+                            "item_ids": [5352],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1961,14 +1429,12 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Unfired Pot",
-                            "item_ids": [
-                                1787
-                            ],
-                            "quantity": 1
+                            "item": ["Unfired Pot"],
+                            "item_ids": [1787],
+                            "quantity": [1]
                         }
                     ]
-                },
+                }, 
                 {
                     "name": "Craft an Pot Lid",
                     "taskID": "craft_unfired_pot_lid",
@@ -1979,11 +1445,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Pot Lid",
-                            "item_ids": [
-                                4438
-                            ],
-                            "quantity": 1
+                            "item": ["Pot Lid"],
+                            "item_ids": [4438],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1997,53 +1461,40 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Oak Shield",
-                            "item_ids": [
-                                22251
-                            ],
-                            "quantity": 1
+                            "item": ["Oak Shield"],
+                            "item_ids": [22251],
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Build an Easy STASH Unit in the Exam Centre",
-                    "taskID": "build_easy_stash_exam_centre",
-                    "category": "Construction",
-                    "level": 27,
-                    "completion_type": "CONSTRUCTION",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
+                "name": "Build an Easy STASH Unit in the Exam Centre",
+                "taskID": "build_easy_stash_exam_centre",
+                "category": "Construction",
+                "level": 27,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
                         {
-                            "item": "Plank",
-                            "item_ids": [
-                                960
-                            ]
+                        "item": "Plank",
+                        "item_ids": [960]
                         },
                         {
-                            "item": "Nails",
-                            "item_ids": [
-                                4819,
-                                4820,
-                                1539,
-                                4821,
-                                4822,
-                                4823,
-                                4824
-                            ]
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
                         }
                     ],
-                    "required_object": [
+
+                "required_object": [
                         {
-                            "object": "Easy STASH Unit (inconspicuous bush)",
-                            "object_id": [
-                                28980
-                            ],
-                            "interaction_type": "use_item_on"
+                        "object": "Easy STASH Unit (inconspicuous bush)",
+                        "object_id": [28980],
+                        "interaction_type": "use_item_on"
                         }
                     ]
                 },
-                {
+                {                    
                     "name": "Pickpocket a Digsite Worker",
                     "taskID": "pickpocket_digsite_worker",
                     "category": "Thieving",
@@ -2052,54 +1503,43 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": "Digsite Worker",
-                        "npc_ids": [
-                            3628,
-                            3630,
-                            3631
-                        ]
+                    "npc": "Digsite Worker",
+                    "npc_ids": [3628, 3630, 3631]                    
                     }
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "The Dig Site",
-                    "points": 2
-                },
-                {
-                    "name": "Elemental Workshop II",
-                    "points": 2
-                }
-            ],
-            "is_completed": false
-        },
+                }                   
+                    ],
+                    "optional_quests_unlocked": [
+                        {
+                            "name": "The Dig Site",
+                            "points": 2
+                        },
+                        {
+                            "name": "Elemental Workshop II",
+                            "points": 2
+                        }
+                    ],                 
+                    "is_completed": false
+        },       
         {
-            "region_id": [
-                13109
-            ],
+            "region_id": [13109],
             "Friendly_Name": "Varrock East Gate",
-            "neighbor_ids": [
-                12853,
-                13108,
-                13365,
-                13110
-            ],
+            "neighbor_ids": [12853, 13108, 13365, 13110],
             "tasks": [
                 {
-                    "name": "Travel to Varlamore",
-                    "taskID": "travel_varlamore",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                "name": "Travel to Varlamore",
+                "taskID": "travel_varlamore",
+                "category": "Travel",
+                "completion_type": "TRAVEL",
+                "base_points": 1,
+                "assignment_weight": 10
                 },
                 {
-                    "name": "Travel through the Varrock Museum 153 Kudos Gate",
-                    "taskID": "travel_varrock_kudos_gate",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 8
+                "name": "Travel through the Varrock Museum 153 Kudos Gate",
+                "taskID": "travel_varrock_kudos_gate",
+                "category": "Travel",
+                "completion_type": "TRAVEL",
+                "base_points": 1,
+                "assignment_weight": 8
                 },
                 {
                     "name": "Steal from a Tea Stall",
@@ -2111,15 +1551,9 @@
                     "assignment_weight": 8,
                     "required_object": [
                         {
-                            "object": [
-                                "Tea Stall"
-                            ],
-                            "object_id": [
-                                635
-                            ],
-                            "quantity": [
-                                1
-                            ]
+                            "object": ["Tea Stall"],
+                            "object_id": [635],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -2133,10 +1567,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Right Eye Patch",
-                            "item_ids": [
-                                1025
-                            ]
+                            "item": ["Right Eye Patch"],
+                            "item_ids": [1025]
                         }
                     ]
                 },
@@ -2149,11 +1581,9 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Red Cape",
-                            "item_ids": [
-                                1007
-                            ],
-                            "quantity": 1
+                            "item": ["Red Cape"],
+                            "item_ids": [1007],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -2165,37 +1595,15 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Varrock Guard Level 21"
-                        ],
-                        "npc_ids": [
-                            11911,
-                            11912,
-                            11913,
-                            11914,
-                            11915,
-                            11916,
-                            11917
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Varrock Guard Level 21"],
+                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "quantity": [1]
                     },
+
                     "constraints": {
-                        "must_be_empty_slots": [
-                            "HEAD",
-                            "CAPE",
-                            "AMULET",
-                            "BODY",
-                            "SHIELD",
-                            "LEGS",
-                            "GLOVES",
-                            "BOOTS",
-                            "RING",
-                            "AMMO",
-                            "WEAPON"
-                        ]
+                        "equip_nothing": "TRUE"                      
                     }
+                    
                 },
                 {
                     "name": "Defeat a Varrock Guard in 1 Hit",
@@ -2205,33 +1613,13 @@
                     "base_points": 3,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Varrock Guard Level 21"
-                        ],
-                        "npc_ids": [
-                            11911,
-                            11912,
-                            11913,
-                            11914,
-                            11915,
-                            11916,
-                            11917
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Varrock Guard Level 21"],
+                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "quantity": [1]
                     },
+
                     "constraints": {
-                        "time_in_ticks": [
-                            1
-                        ],
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                        "time_in_ticks": [1]
                     }
                 },
                 {
@@ -2242,24 +1630,11 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Varrock Guard Level 21"
-                        ],
-                        "npc_ids": [
-                            11911,
-                            11912,
-                            11913,
-                            11914,
-                            11915,
-                            11916,
-                            11917
-                        ],
-                        "quantity": [
-                            1,
-                            25
-                        ]
+                        "npc": ["Varrock Guard Level 21"],
+                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "quantity": [1, 25]
                     }
-                },
+                }, 
                 {
                     "name": "Pickpocket a Varrock Guard",
                     "taskID": "pickpocket_varrock_guard",
@@ -2269,21 +1644,9 @@
                     "base_points": 2,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Varrock Guard Level 21"
-                        ],
-                        "npc_ids": [
-                            11911,
-                            11912,
-                            11913,
-                            11914,
-                            11915,
-                            11916,
-                            11917
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Varrock Guard Level 21"],
+                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -2295,11 +1658,9 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Gloves of Silence",
-                            "item_ids": [
-                                10075
-                            ],
-                            "quantity": 1
+                            "item": ["Gloves of Silence"],
+                            "item_ids": [10075],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -2313,11 +1674,9 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Spotted Cape",
-                            "item_ids": [
-                                10073
-                            ],
-                            "quantity": 1
+                            "item": ["Spotted Cape"],
+                            "item_ids": [10073],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -2331,84 +1690,88 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Spottier Cape",
-                            "item_ids": [
-                                10074
-                            ],
-                            "quantity": 1
+                            "item": ["Spottier Cape"],
+                            "item_ids": [10074],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Varrock Guard for some Bones",
+                    "taskID": "defeat_a_varrock_guard_for_bones",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Varrock Guard Level 21"],
+                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "quantity": [1, 25]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Bones",
+                        "dropped_item_id": [526],
+                        "quantity": [1]
                         }
                     ]
                 }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Family Crest",
-                    "points": 3
-                },
-                {
-                    "name": "A Soul's Bane",
-                    "points": 2
-                }
-            ],
-            "is_completed": false
+           ],
+                    "optional_quests_unlocked": [
+                        {
+                            "name": "Family Crest",
+                            "points": 3
+                        },
+                        {
+                            "name": "A Soul's Bane",
+                            "points": 2
+                        }
+                    ],                 
+                    "is_completed": false
         },
         {
-            "region_id": [
-                12853
-            ],
+            "region_id": [12853],
             "Friendly_Name": "Varrock Fountain",
-            "neighbor_ids": [
-                13109,
-                12852,
-                12597,
-                12854
-            ],
+            "neighbor_ids": [13109, 12852, 12597, 12854],
             "tasks": [
                 {
-                    "name": "Complete the Varrock Museum Quiz",
-                    "taskID": "complete_varrock_museum_quiz",
-                    "category": "Unlock",
-                    "completion_type": "VARBIT_CHECK",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "constraints": {
-                        "varbit_id": 699,
-                        "varbit_boolean": 1,
-                        "description": "Complete the Varrock Museum Quiz"
+                "name": "Complete the Varrock Museum Quiz",
+                "taskID": "complete_varrock_museum_quiz",
+                "category": "Unlock",
+                "completion_type": "VARBIT_CHECK",
+                "base_points": 1,
+                "assignment_weight": 8,                   
+                "constraints": {                       
+                    "varbit_id": 699,        
+                    "varbit_boolean": 1,      
+                    "description": "Complete the Varrock Museum Quiz"
                     }
                 },
                 {
-                    "name": "Obtain 100 Varrock Museum Kudos",
-                    "taskID": "obtain_100_kudos",
-                    "category": "Unlock",
-                    "completion_type": "VARP_CHECK",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "constraints": {
-                        "varp_id": 1438,
-                        "varp_value": 100,
-                        "description": "Obtain 100 Varrock Museum Kudos"
+                "name": "Obtain 100 Varrock Museum Kudos",
+                "taskID": "obtain_100_kudos",
+                "category": "Unlock",
+                "completion_type": "VARP_CHECK",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "constraints": {                       
+                    "varp_id": 1438,        
+                    "varp_value": 100,      
+                    "description": "Obtain 100 Varrock Museum Kudos"
                     }
                 },
                 {
-                    "name": "Obtain an Antique Lamp from Historian Minas",
-                    "taskID": "obtain_antique_lamp_historian_minas",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
+                "name": "Obtain an Antique Lamp from Historian Minas",
+                "taskID": "obtain_antique_lamp_historian_minas",
+                "category": "Obtain",
+                "completion_type": "OBTAIN",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
                         {
-                            "item": "Antique Lamp",
-                            "item_ids": [
-                                11188,
-                                28820,
-                                11187,
-                                11185,
-                                11186,
-                                11189
-                            ],
-                            "quantity": 1
+                            "item": ["Antique Lamp"],
+                            "item_ids": [11188, 28820, 11187, 11185, 11186, 11189],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -2422,10 +1785,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Mithril Platebody",
-                            "item_ids": [
-                                1121
-                            ]
+                            "item": ["Mithril Platebody"],
+                            "item_ids": [1121]
                         }
                     ]
                 },
@@ -2439,10 +1800,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Studded Body",
-                            "item_ids": [
-                                1133
-                            ]
+                            "item": ["Studded Body"],
+                            "item_ids": [1133]
                         }
                     ]
                 },
@@ -2456,10 +1815,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Maple Shortbow",
-                            "item_ids": [
-                                853
-                            ]
+                            "item": ["Maple Shortbow"],
+                            "item_ids": [853]
                         }
                     ]
                 },
@@ -2473,10 +1830,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Adamant Longsword",
-                            "item_ids": [
-                                1301
-                            ]
+                            "item": ["Adamant Longsword"],
+                            "item_ids": [1301]
                         }
                     ]
                 },
@@ -2489,13 +1844,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Elemental Staff(Air, Water, Fire, Earth)",
-                            "item_ids": [
-                                1387,
-                                1385,
-                                1383,
-                                1381
-                            ]
+                            "item": ["Elemental Staff(Air, Water, Fire, Earth)"],
+                            "item_ids": [1387, 1385, 1383, 1381]
                         }
                     ]
                 },
@@ -2505,19 +1855,12 @@
                     "category": "Agility",
                     "level": 30,
                     "completion_type": "AGILITY",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "required_object": {
-                        "object": [
-                            "Edge (Varrock Rooftop Course)"
-                        ],
-                        "object_id": [
-                            14841
-                        ],
-                        "quantity": [
-                            1,
-                            20
-                        ]
+                        "object": ["Edge (Varrock Rooftop Course)"],
+                        "object_id": [14841], 
+                        "quantity": [1, 20]
                     }
                 },
                 {
@@ -2530,49 +1873,37 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Pure Essence",
-                            "item_ids": [
-                                7936
-                            ],
-                            "quantity_range": [
-                                1,
-                                100
-                            ]
+                            "item": ["Pure Essence"],
+                            "item_ids": [7936],
+                            "quantity": [1, 100]
                         }
                     ]
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Demon slayer",
-                    "points": 1
-                },
-                {
-                    "name": "Romeo and Juliet",
-                    "points": 1
-                },
-                {
-                    "name": "Children of the Sun",
-                    "points": 1
-                },
-                {
-                    "name": "Bone Voyage",
-                    "points": 2
-                }
-            ],
-            "is_completed": false
+                }              
+           ],
+                    "optional_quests_unlocked": [
+                        {
+                            "name": "Demon slayer",
+                            "points": 1
+                        },
+                        {
+                            "name": "Romeo and Juliet",
+                            "points": 1
+                        },
+                        {
+                            "name": "Children of the Sun",
+                            "points": 1
+                        },
+                        {
+                            "name": "Bone Voyage",
+                            "points": 2
+                        }
+                    ],                 
+                    "is_completed": false
         },
         {
-            "region_id": [
-                12597
-            ],
+            "region_id": [12597],
             "Friendly_Name": "Varrock West Bank",
-            "neighbor_ids": [
-                12853,
-                12596,
-                12341,
-                12598
-            ],
+            "neighbor_ids": [12853, 12596, 12341, 12598],
             "tasks": [
                 {
                     "name": "Smith a Steel Dagger",
@@ -2583,14 +1914,12 @@
                     "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
-                        {
-                            "item": "Steel Dagger",
-                            "item_ids": [
-                                1207
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            {
+                                "item": ["Steel Dagger"],
+                                "item_ids": [1207],
+                                "quantity": [1]
+                            }
+                        ]
                 },
                 {
                     "name": "Smith an Iron Scimitar",
@@ -2601,14 +1930,12 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
-                        {
-                            "item": "Iron Scimitar",
-                            "item_ids": [
-                                1323
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            {
+                                "item": ["Iron Scimitar"],
+                                "item_ids": [1323],
+                                "quantity": [1]
+                            }
+                        ]
                 },
                 {
                     "name": "Obtain a Ruby Ring",
@@ -2618,14 +1945,12 @@
                     "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
-                        {
-                            "item": "Ruby Ring",
-                            "item_ids": [
-                                1641
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            {
+                                "item": ["Ruby Ring"],
+                                "item_ids": [1641],
+                                "quantity": [1]
+                            }
+                        ]
                 },
                 {
                     "name": "Obtain a Ring of Forging",
@@ -2635,14 +1960,12 @@
                     "base_points": 2,
                     "assignment_weight": 5,
                     "required_items": [
-                        {
-                            "item": "Ring of Forging",
-                            "item_ids": [
-                                2568
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            {
+                                "item": ["Ring of Forging"],
+                                "item_ids": [2568],
+                                "quantity": [1]
+                            }
+                        ]
                 },
                 {
                     "name": "Obtain a Gold Bar",
@@ -2653,10 +1976,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Gold Bar",
-                            "item_ids": [
-                                2357
-                            ]
+                            "item": ["Gold Bar"],
+                            "item_ids": [2357]
                         }
                     ]
                 },
@@ -2671,9 +1992,7 @@
                     "required_items": [
                         {
                             "item": "Fish Pie",
-                            "item_ids": [
-                                7188
-                            ]
+                            "item_ids": [7188]
                         }
                     ]
                 },
@@ -2688,9 +2007,7 @@
                     "required_items": [
                         {
                             "item": "Mud Pie",
-                            "item_ids": [
-                                7170
-                            ]
+                            "item_ids": [7170]
                         }
                     ]
                 },
@@ -2705,9 +2022,7 @@
                     "required_items": [
                         {
                             "item": "Redberry Pie",
-                            "item_ids": [
-                                2325
-                            ]
+                            "item_ids": [2325]
                         }
                     ]
                 },
@@ -2720,10 +2035,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Strength Potion(4)",
-                            "item_ids": [
-                                113
-                            ]
+                            "item": ["Strength Potion(4)"],
+                            "item_ids": [113]
                         }
                     ]
                 },
@@ -2736,39 +2049,30 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Energy Potion(4)",
-                            "item_ids": [
-                                3008
-                            ]
+                            "item": ["Energy Potion(4)"],
+                            "item_ids": [3008]
                         }
                     ]
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Gertrude's Cat",
-                    "points": 1
-                },
-                {
-                    "name": "Ratcatchers",
-                    "points": 2
-                }
-            ],
-            "is_completed": false
+                }              
+                    ],
+                    "optional_quests_unlocked": [
+                        {
+                            "name": "Gertrude's Cat",
+                            "points": 1
+                        },
+                        {
+                            "name": "Ratcatchers",
+                            "points": 2
+                        }                  
+                    ],                 
+                    "is_completed": false
         },
         {
-            "region_id": [
-                12341
-            ],
+            "region_id": [12341],
             "Friendly_Name": "Barbarian Village",
-            "neighbor_ids": [
-                12597,
-                12340,
-                12085,
-                12342
-            ],
+            "neighbor_ids": [12597, 12340, 12085, 12342],
             "tasks": [
-                {
+                {                           
                     "name": "Catch some Raw Trout",
                     "taskID": "catch_raw_trout",
                     "category": "Fishing",
@@ -2778,18 +2082,13 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Raw Trout",
-                            "item_ids": [
-                                335
-                            ],
-                            "quantity_range": [
-                                1,
-                                100
-                            ]
+                        "item": "Raw Trout",
+                        "item_ids": [335],
+                        "quantity": [1, 100]
                         }
-                    ]
+                    ]       
                 },
-                {
+                {                           
                     "name": "Cook some Trout",
                     "taskID": "cook_raw_trout",
                     "category": "Cooking",
@@ -2799,16 +2098,11 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Trout",
-                            "item_ids": [
-                                333
-                            ],
-                            "quantity_range": [
-                                1,
-                                100
-                            ]
+                        "item": "Trout",
+                        "item_ids": [333],
+                        "quantity": [1, 100]
                         }
-                    ]
+                    ]       
                 },
                 {
                     "name": "Obtain Stronghold of Security Boots",
@@ -2818,16 +2112,12 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
-                        {
-                            "item": "Fancy Boots",
-                            "item_ids": [
-                                9005,
-                                9006,
-                                28672
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            {
+                                "item": ["Fancy Boots", "Fighting Boots", "Fancier Boots"],
+                                "item_ids": [9005, 9006, 28672],
+                                "quantity": [1]
+                            }
+                        ]
                 },
                 {
                     "name": "Defeat some Level 10 Barbarians",
@@ -2837,25 +2127,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Barbarian Level 10"
-                        ],
-                        "npc_ids": [
-                            3065,
-                            3066,
-                            3067,
-                            3071,
-                            3056,
-                            3070,
-                            3061,
-                            3060,
-                            3059,
-                            3064
-                        ],
-                        "quantity": [
-                            1,
-                            25
-                        ]
+                        "npc": ["Barbarian Level 10"],
+                        "npc_ids": [3065, 3066, 3067, 3071, 3056, 3070, 3061, 3060, 3059, 3064],
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -2866,20 +2140,13 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Gunthor the Brave"
-                        ],
-                        "npc_ids": [
-                            299
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Gunthor the Brave"],
+                        "npc_ids": [299],
+                        "quantity": [1]
                     },
+
                     "constraints": {
-                        "must_be_empty_slots": [
-                            "WEAPON"
-                        ]
+                        "must_be_empty_slots": ["WEAPON"]
                     }
                 },
                 {
@@ -2892,14 +2159,9 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Coal",
-                            "item_ids": [
-                                453
-                            ],
-                            "quantity_range": [
-                                1,
-                                50
-                            ]
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -2912,16 +2174,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Minotaur"
-                        ],
-                        "npc_ids": [
-                            2481,
-                            2483
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Minotaur"],
+                        "npc_ids": [2481, 2483],
+                        "quantity": [1]
                     }
                 },
                 {
@@ -2935,9 +2190,7 @@
                     "required_items": [
                         {
                             "item": "Adamant Full Helm",
-                            "item_ids": [
-                                1161
-                            ]
+                            "item_ids": [1161]
                         }
                     ]
                 },
@@ -2949,32 +2202,21 @@
                     "base_points": 1,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": [
-                            "Goblin Level 5"
-                        ],
-                        "npc_ids": [
-                            3045,
-                            3073,
-                            3074,
-                            3075,
-                            3076
-                        ],
-                        "quantity": [
-                            1
-                        ]
-                    },
+                        "npc": ["Goblin Level 5"],
+                        "npc_ids": [3045, 3073, 3074, 3075, 3076],
+                        "quantity": [1]
+                        },
+                    
                     "constraints": {
-                        "time_in_ticks": [
-                            1
-                        ],
+                        "time_in_ticks": [1],
                         "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
-                    }
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
                 },
                 {
                     "name": "Defeat an Ankou",
@@ -2984,41 +2226,20 @@
                     "base_points": 1,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": [
-                            "Ankou"
-                        ],
-                        "npc_ids": [
-                            2514,
-                            2517,
-                            2515,
-                            2518,
-                            2516,
-                            2519,
-                            6608,
-                            7257,
-                            7864
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Ankou"],
+                        "npc_ids": [2514, 2517, 2515, 2518, 2516, 2519, 6608, 7257, 7864],
+                        "quantity": [1]
                     }
-                }
-            ],
-            "is_completed": false
+                }                            
+            ],                 
+                "is_completed": false
         },
         {
-            "region_id": [
-                12342
-            ],
+            "region_id": [12342],
             "Friendly_Name": "Edgeville",
-            "neighbor_ids": [
-                12598,
-                12341,
-                12086,
-                12343
-            ],
+            "neighbor_ids": [12598, 12341, 12086, 12343],
             "tasks": [
-                {
+                {                           
                     "name": "Defeat Obor",
                     "taskID": "defeat_obor",
                     "category": "Combat",
@@ -3027,19 +2248,12 @@
                     "assignment_weight": 10,
                     "boss": "Obor",
                     "target_npc": {
-                        "npc": [
-                            "Obor"
-                        ],
-                        "npc_ids": [
-                            7416
-                        ],
-                        "quantity": [
-                            1,
-                            10
-                        ]
+                        "npc": ["Obor"],
+                        "npc_ids": [7416],
+                        "quantity": [1, 10]
                     }
                 },
-                {
+                {                           
                     "name": "Defeat Obor in 60 Seconds",
                     "taskID": "defeat_obor",
                     "category": "Combat",
@@ -3048,23 +2262,16 @@
                     "assignment_weight": 8,
                     "boss": "Obor",
                     "target_npc": {
-                        "npc": [
-                            "Obor"
-                        ],
-                        "npc_ids": [
-                            7416
-                        ],
-                        "quantity": [
-                            1
-                        ]
-                    },
+                        "npc": ["Obor"],
+                        "npc_ids": [7416],
+                        "quantity": [1]
+                    }, 
+                    
                     "constraints": {
-                        "time_in_ticks": [
-                            100
-                        ]
-                    }
+                        "time_in_ticks": [100]
+                        }
                 },
-                {
+                {                           
                     "name": "Defeat Obor in with your Bare Fists",
                     "taskID": "defeat_obor",
                     "category": "Combat",
@@ -3073,23 +2280,16 @@
                     "assignment_weight": 8,
                     "boss": "Obor",
                     "target_npc": {
-                        "npc": [
-                            "Obor"
-                        ],
-                        "npc_ids": [
-                            7416
-                        ],
-                        "quantity": [
-                            1
-                        ]
-                    },
+                        "npc": ["Obor"],
+                        "npc_ids": [7416],
+                        "quantity": [1]
+                    }, 
+                    
                     "constraints": {
-                        "must_be_empty_slots": [
-                            "WEAPON"
-                        ]
+                        "must_be_empty_slots": ["WEAPON"]                       
                     }
                 },
-                {
+                {                           
                     "name": "Defeat Obor with only a Weapon Equipped",
                     "taskID": "defeat_obor",
                     "category": "Combat",
@@ -3098,28 +2298,13 @@
                     "assignment_weight": 8,
                     "boss": "Obor",
                     "target_npc": {
-                        "npc": [
-                            "Obor"
-                        ],
-                        "npc_ids": [
-                            7416
-                        ],
-                        "quantity": [
-                            1
-                        ]
-                    },
-                    "constraints": {
-                        "must_be_empty_slots": [
-                            "HEAD",
-                            "CAPE",
-                            "AMULET",
-                            "BODY",
-                            "SHIELD",
-                            "LEGS",
-                            "GLOVES",
-                            "BOOTS",
-                            "RING"
-                        ]
+                        "npc": ["Obor"],
+                        "npc_ids": [7416],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {                     
+                        "equippable_slots": ["WEAPON"]
                     }
                 },
                 {
@@ -3139,19 +2324,14 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
-                        {
-                            "item": "Giant Key",
-                            "item_ids": [
-                                20754
-                            ],
-                            "quantity_range": [
-                                1,
-                                5
-                            ]
-                        }
-                    ]
-                },
-                {
+                            {
+                                "item": ["Giant Key"],
+                                "item_ids": [20754],
+                                "quantity": [1, 5]
+                            }
+                        ]
+                },               
+                {                           
                     "name": "Defeat Obor in 60 Seconds with only a Weapon Equipped",
                     "taskID": "defeat_obor",
                     "category": "Combat",
@@ -3160,32 +2340,15 @@
                     "assignment_weight": 8,
                     "boss": "Obor",
                     "target_npc": {
-                        "npc": [
-                            "Obor"
-                        ],
-                        "npc_ids": [
-                            7416
-                        ],
-                        "quantity": [
-                            1
-                        ]
-                    },
+                        "npc": ["Obor"],
+                        "npc_ids": [7416],
+                        "quantity": [1]
+                    }, 
+                    
                     "constraints": {
-                        "time_in_ticks": [
-                            100
-                        ],
-                        "must_be_empty_slots": [
-                            "HEAD",
-                            "CAPE",
-                            "AMULET",
-                            "BODY",
-                            "SHIELD",
-                            "LEGS",
-                            "GLOVES",
-                            "BOOTS",
-                            "RING"
-                        ]
-                    }
+                        "time_in_ticks": [100],
+                         "equippable_slots": ["WEAPON"]
+                        }
                 },
                 {
                     "name": "Travel to Fairy Ring Code DKR",
@@ -3204,28 +2367,19 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Hill Giant Club",
-                            "item_ids": [
-                                20756
-                            ],
-                            "quantity": 1
+                            "item": ["Hill Giant Club"],
+                            "item_ids": [20756],
+                            "quantity": [1]
                         }
                     ]
-                }
-            ],
-            "is_completed": false
+                }                                        
+            ],                 
+                "is_completed": false
         },
         {
-            "region_id": [
-                12598
-            ],
+            "region_id": [12598],
             "Friendly_Name": "Grand Exchange",
-            "neighbor_ids": [
-                12342,
-                12597,
-                12854,
-                12599
-            ],
+            "neighbor_ids": [12342, 12597, 12854, 12599],
             "tasks": [
                 {
                     "name": "Use a Minecraft to travel to Keldagrim",
@@ -3260,33 +2414,20 @@
                     "assignment_weight": 8,
                     "completion_type": "NPC_DIALOGUE",
                     "target_npc": {
-                        "npc": [
-                            "Perdu"
-                        ],
-                        "npc_ids": [
-                            7456
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Perdu"],
+                        "npc_ids": [7456],
+                        "quantity": [1]
                     }
-                }
-            ],
-            "is_completed": false
+                }                                                       
+            ],                 
+                "is_completed": false
         },
         {
-            "region_id": [
-                12854
-            ],
+            "region_id": [12854],
             "Friendly_Name": "Varrock Palace",
-            "neighbor_ids": [
-                12598,
-                12855,
-                13110,
-                12853
-            ],
+            "neighbor_ids": [12598, 12855, 13110, 12853],
             "tasks": [
-                {
+                {                           
                     "name": "Defeat Scurrius in a Solo Instance",
                     "taskID": "defeat_scurrius_solo",
                     "category": "Combat",
@@ -3295,19 +2436,32 @@
                     "assignment_weight": 10,
                     "boss": "Scurrius",
                     "target_npc": {
-                        "npc": [
-                            "Scurrius"
-                        ],
-                        "npc_ids": [
-                            7222
-                        ],
-                        "quantity": [
-                            1,
-                            10
-                        ]
+                        "npc": ["Scurrius"],
+                        "npc_ids": [7222],
+                        "quantity": [1, 10]
                     }
                 },
                 {
+                    "name": "Defeat a Varrock Guard for some Bones",
+                    "taskID": "defeat_a_varrock_guard_for_bones",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Varrock Guard Level 21"],
+                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "quantity": [1, 25]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Bones",
+                        "dropped_item_id": [526],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {                           
                     "name": "Defeat Scurrius in 2:25 in a Solo Instance",
                     "taskID": "defeat_scurrius_fast",
                     "category": "Combat",
@@ -3316,30 +2470,23 @@
                     "assignment_weight": 5,
                     "boss": "Scurrius",
                     "target_npc": {
-                        "npc": [
-                            "Scurrius"
-                        ],
-                        "npc_ids": [
-                            7222
-                        ],
-                        "quantity": [
-                            1
-                        ]
-                    },
+                        "npc": ["Scurrius"],
+                        "npc_ids": [7222],
+                        "quantity": [1]
+                    }, 
+                    
                     "constraints": {
-                        "time_in_ticks": [
-                            200
-                        ],
+                        "time_in_ticks": [200],
                         "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
-                    }
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
                 },
-                {
+                {                           
                     "name": "Defeat Scurrius with only a Weapon Equipped in a Solo Instance",
                     "taskID": "defeat_scurrius_weapon_only",
                     "category": "Combat",
@@ -3348,31 +2495,16 @@
                     "assignment_weight": 5,
                     "boss": "Scurrius",
                     "target_npc": {
-                        "npc": [
-                            "Scurrius"
-                        ],
-                        "npc_ids": [
-                            7222
-                        ],
-                        "quantity": [
-                            1
-                        ]
-                    },
+                        "npc": ["Scurrius"],
+                        "npc_ids": [7222],
+                        "quantity": [1]
+                    }, 
+                    
                     "constraints": {
-                        "must_be_empty_slots": [
-                            "HEAD",
-                            "CAPE",
-                            "AMULET",
-                            "BODY",
-                            "SHIELD",
-                            "LEGS",
-                            "GLOVES",
-                            "BOOTS",
-                            "RING"
-                        ]
+                        "equippable_slots": ["WEAPON"]
                     }
                 },
-                {
+                {                           
                     "name": "Defeat Bryophyta",
                     "taskID": "defeat_bryophyta",
                     "category": "Combat",
@@ -3381,16 +2513,9 @@
                     "assignment_weight": 10,
                     "boss": "Bryophyta",
                     "target_npc": {
-                        "npc": [
-                            "Bryophyta"
-                        ],
-                        "npc_ids": [
-                            8195
-                        ],
-                        "quantity": [
-                            1,
-                            10
-                        ]
+                        "npc": ["Bryophyta"],
+                        "npc_ids": [8195],
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -3402,19 +2527,14 @@
                     "assignment_weight": 8,
                     "boss": "Scurrius",
                     "required_items": [
-                        {
-                            "item": "Scurrius' Spine",
-                            "item_ids": [
-                                28798
-                            ],
-                            "quantity_range": [
-                                1,
-                                5
-                            ]
-                        }
-                    ]
+                            {
+                                "item": ["Scurrius' Spine"],
+                                "item_ids": [28798],
+                                "quantity": [1, 5]
+                            }
+                        ]
                 },
-                {
+                {                           
                     "name": "Defeat Bryophyta in 60 Seconds",
                     "taskID": "defeat_bryophyta",
                     "category": "Combat",
@@ -3423,24 +2543,16 @@
                     "assignment_weight": 5,
                     "boss": "Bryophyta",
                     "target_npc": {
-                        "npc": [
-                            "Bryophyta"
-                        ],
-                        "npc_ids": [
-                            8195
-                        ],
-                        "quantity": [
-                            1,
-                            10
-                        ]
+                        "npc": ["Bryophyta"],
+                        "npc_ids": [8195],
+                        "quantity": [1, 10]
                     },
+
                     "constraints": {
-                        "time_in_ticks": [
-                            36
-                        ]
-                    }
+                        "time_in_ticks": [36]
+                        }
                 },
-                {
+                {                           
                     "name": "Defeat Bryophyta in 60 Seconds with only a Weapon Equipped",
                     "taskID": "defeat_bryophyta_fast",
                     "category": "Combat",
@@ -3449,39 +2561,22 @@
                     "assignment_weight": 5,
                     "boss": "Bryophyta",
                     "target_npc": {
-                        "npc": [
-                            "Bryophyta"
-                        ],
-                        "npc_ids": [
-                            8195
-                        ],
-                        "quantity": [
-                            1
-                        ]
-                    },
+                        "npc": ["Bryophyta"],
+                        "npc_ids": [8195],
+                        "quantity": [1]
+                    }, 
+                    
                     "constraints": {
-                        "time_in_ticks": [
-                            36
-                        ],
-                        "must_be_empty_slots": [
-                            "HEAD",
-                            "CAPE",
-                            "AMULET",
-                            "BODY",
-                            "SHIELD",
-                            "LEGS",
-                            "GLOVES",
-                            "BOOTS",
-                            "RING"
-                        ],
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
-                    }
+                        "time_in_ticks": [36],
+                         "equippable_slots": ["WEAPON"],
+                         "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
                 },
                 {
                     "name": "Obtain Bryophyta's Essence",
@@ -3492,14 +2587,12 @@
                     "assignment_weight": 8,
                     "boss": "Bryophyta",
                     "required_items": [
-                        {
-                            "item": "Bryophyta's Essence",
-                            "item_ids": [
-                                22372
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            {
+                                "item": ["Bryophyta's Essence"],
+                                "item_ids": [22372],
+                                "quantity": [1]
+                            }
+                        ]
                 },
                 {
                     "name": "Talk to an Estate Agent",
@@ -3509,82 +2602,58 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Estate Agent"
-                        ],
-                        "npc_ids": [
-                            3097,
-                            13343
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Estate Agent"],
+                        "npc_ids": [3097, 13343],
+                        "quantity": [1]
                     }
                 }
+
             ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Shield of Arrav",
-                    "points": 1
-                },
-                {
-                    "name": "Garden of Tranquility",
-                    "points": 2
-                },
-                {
-                    "name": "Priest in Peril",
-                    "points": 1
-                }
-            ],
+                "optional_quests_unlocked": [
+                    {
+                        "name": "Shield of Arrav",
+                        "points": 1
+                    },
+                    {
+                        "name": "Garden of Tranquility",
+                        "points": 2
+                    },
+                    {
+                        "name": "Priest in Peril",
+                        "points": 1
+                    }                  
+                ],                 
             "is_completed": false
         },
         {
-            "region_id": [
-                13110
-            ],
+            "region_id": [13110],
             "Friendly_Name": "Lumber Yard",
-            "neighbor_ids": [
-                12854,
-                13111,
-                13109,
-                13366
-            ],
+            "neighbor_ids": [12854, 13111, 13109, 13366],
             "tasks": [
                 {
-                    "name": "Build an Easy STASH Unit at the Lumber Yard",
-                    "taskID": "build_easy_stash_lumber_yard",
-                    "category": "Construction",
-                    "level": 27,
-                    "completion_type": "CONSTRUCTION",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
+                "name": "Build an Easy STASH Unit at the Lumber Yard",
+                "taskID": "build_easy_stash_lumber_yard",
+                "category": "Construction",
+                "level": 27,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
                         {
-                            "item": "Plank",
-                            "item_ids": [
-                                960
-                            ]
+                        "item": "Plank",
+                        "item_ids": [960]
                         },
                         {
-                            "item": "Nails",
-                            "item_ids": [
-                                4819,
-                                4820,
-                                1539,
-                                4821,
-                                4822,
-                                4823,
-                                4824
-                            ]
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
                         }
                     ],
-                    "required_object": [
+
+                "required_object": [
                         {
-                            "object": "Easy STASH Unit (inconspicuous bush)",
-                            "object_id": [
-                                28981
-                            ],
-                            "interaction_type": "use_item_on"
+                        "object": "Easy STASH Unit (inconspicuous bush)",
+                        "object_id": [28981],
+                        "interaction_type": "use_item_on"
                         }
                     ]
                 },
@@ -3596,14 +2665,12 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
-                        {
-                            "item": "Oak Plank",
-                            "item_ids": [
-                                8778
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            {
+                                "item": ["Oak Plank"],
+                                "item_ids": [8778],
+                                "quantity": [1]
+                            }
+                        ]
                 },
                 {
                     "name": "Obtain a Teak Plank",
@@ -3613,14 +2680,12 @@
                     "base_points": 2,
                     "assignment_weight": 5,
                     "required_items": [
-                        {
-                            "item": "Teak Plank",
-                            "item_ids": [
-                                8778
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            {
+                                "item": ["Teak Plank"],
+                                "item_ids": [8778],
+                                "quantity": [1]
+                            }
+                        ]
                 },
                 {
                     "name": "Travel to the Lumber Yard using the Hot Air Balloon",
@@ -3640,11 +2705,9 @@
                     "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": "Yew Longbow(u)",
-                            "item_ids": [
-                                68
-                            ],
-                            "quantity": 1
+                            "item": ["Yew Longbow(u)"],
+                            "item_ids": [68],
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -3656,13 +2719,11 @@
                     "base_points": 3,
                     "assignment_weight": 8,
                     "required_items": [
-                        {
-                            "item": "Chaos Gauntlet",
-                            "item_ids": [
-                                777
-                            ]
-                        }
-                    ]
+                            {
+                                "item": ["Chaos Gauntlet"],
+                                "item_ids": [777]
+                            }
+                        ]
                 },
                 {
                     "name": "Runecraft an Earth Rune",
@@ -3674,14 +2735,12 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
-                        {
+                            {
                             "item": "Earth Rune",
-                            "item_ids": [
-                                557
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            "item_ids": [557],
+                            "quantity": [1]
+                            }
+                        ]
                 },
                 {
                     "name": "Runecraft a Mud Rune",
@@ -3693,14 +2752,12 @@
                     "base_points": 1,
                     "assignment_weight": 5,
                     "required_items": [
-                        {
+                            {
                             "item": "Mud Rune",
-                            "item_ids": [
-                                4698
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            "item_ids": [4698],
+                            "quantity": [1]
+                            }
+                        ]
                 },
                 {
                     "name": "Create an Earth Tiara",
@@ -3711,14 +2768,12 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
-                        {
+                            {
                             "item": "Earth Tiara",
-                            "item_ids": [
-                                5535
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            "item_ids": [5535],
+                            "quantity": [1]
+                            }
+                        ]
                 },
                 {
                     "name": "Craft some Chaos Runes",
@@ -3730,11 +2785,9 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Chaos Rune",
-                            "item_ids": [
-                                562
-                            ],
-                            "quantity": 1
+                        "item": "Chaos Rune",
+                        "item_ids": [562],
+                        "quantity": [1]
                         }
                     ]
                 },
@@ -3747,35 +2800,27 @@
                     "base_points": 2,
                     "assignment_weight": 5,
                     "required_items": [
-                        {
+                            {
                             "item": "Chaos Tiara",
-                            "item_ids": [
-                                5543
-                            ],
-                            "quantity": 1
-                        }
-                    ]
+                            "item_ids": [5543],
+                            "quantity": [1]
+                            }
+                        ]
                 }
             ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Defender of Varrock",
-                    "points": 3
-                }
-            ],
+                "optional_quests_unlocked": [
+                    {
+                        "name": "Defender of Varrock",
+                        "points": 3
+                    }
+                ],
+             
             "is_completed": false
         },
         {
-            "region_id": [
-                13366
-            ],
+            "region_id": [13366],
             "Friendly_Name": "Silvarea",
-            "neighbor_ids": [
-                13110,
-                13365,
-                13622,
-                13367
-            ],
+            "neighbor_ids": [13110, 13365, 13622, 13367],
             "tasks": [
                 {
                     "name": "Equip a Zombie Axe",
@@ -3787,10 +2832,8 @@
                     "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": "Zombie Axe",
-                            "item_ids": [
-                                28810
-                            ]
+                            "item": ["Zombie Axe"],
+                            "item_ids": [28810]
                         }
                     ]
                 },
@@ -3802,52 +2845,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Armoured Zombie"
-                        ],
-                        "npc_ids": [
-                            12730,
-                            12731,
-                            12732,
-                            12733,
-                            12734,
-                            12736,
-                            12738,
-                            12755,
-                            12757,
-                            12758,
-                            12735,
-                            12738,
-                            12739,
-                            12761,
-                            12763,
-                            14135,
-                            14136,
-                            12720,
-                            12721,
-                            12722,
-                            12723,
-                            12724,
-                            12725,
-                            12726,
-                            12727,
-                            12728,
-                            12729,
-                            14113,
-                            14114,
-                            14115,
-                            14116,
-                            14117,
-                            14118,
-                            14119,
-                            14120,
-                            14121,
-                            14122
-                        ],
-                        "quantity": [
-                            1,
-                            100
-                        ]
+                        "npc": ["Armoured Zombie"],
+                        "npc_ids": [12730, 12731, 12732, 12733, 12734, 12736, 12738, 12755, 12757, 12758, 12735, 12738, 12739, 12761, 12763, 14135, 14136, 12720, 12721, 12722, 12723, 12724, 12725, 12726, 12727, 12728, 12729, 14113, 14114, 14115,  	14116, 14117, 14118, 14119, 14120, 14121, 14122],
+                        "quantity": [1, 100]
                     }
                 },
                 {
@@ -3858,29 +2858,19 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Bat Level 6"
-                        ],
-                        "npc_ids": [
-                            2827,
-                            10888,
-                            14042
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Bat Level 6"],
+                        "npc_ids": [2827, 10888, 14042],
+                        "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [
-                            1
-                        ],
+                        "time_in_ticks": [1],
                         "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
                     }
                 },
                 {
@@ -3893,52 +2883,36 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": "Limestone",
-                            "item_ids": [
-                                3211
-                            ],
-                            "quantity_range": [
-                                1,
-                                10
-                            ]
+                            "item": ["Limestone"],
+                            "item_ids": [3211],
+                            "quantity": [1, 10]
                         }
                     ]
                 },
                 {
-                    "name": "Build an Easy STASH Unit in Silvaera",
-                    "taskID": "build_easy_stash_silvarea",
-                    "category": "Construction",
-                    "level": 27,
-                    "completion_type": "CONSTRUCTION",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
+                "name": "Build an Easy STASH Unit in Silvaera",
+                "taskID": "build_easy_stash_silvarea",
+                "category": "Construction",
+                "level": 27,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
                         {
-                            "item": "Plank",
-                            "item_ids": [
-                                960
-                            ]
+                        "item": "Plank",
+                        "item_ids": [960]
                         },
                         {
-                            "item": "Nails",
-                            "item_ids": [
-                                4819,
-                                4820,
-                                1539,
-                                4821,
-                                4822,
-                                4823,
-                                4824
-                            ]
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
                         }
                     ],
-                    "required_object": [
+
+                "required_object": [
                         {
-                            "object": "Easy STASH Unit (inconspicuous rocks)",
-                            "object_id": [
-                                28961
-                            ],
-                            "interaction_type": "use_item_on"
+                        "object": "Easy STASH Unit (inconspicuous rocks)",
+                        "object_id": [28961],
+                        "interaction_type": "use_item_on"
                         }
                     ]
                 },
@@ -3952,14 +2926,9 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": "Arrow Shaft",
-                            "item_ids": [
-                                52
-                            ],
-                            "quantity_range": [
-                                1,
-                                1000
-                            ]
+                            "item": ["Arrow Shaft"],
+                            "item_ids": [52],
+                            "quantity": [1, 1000]
                         }
                     ]
                 },
@@ -3971,18 +2940,9 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Bat Level 6"
-                        ],
-                        "npc_ids": [
-                            2827,
-                            10888,
-                            14042
-                        ],
-                        "quantity": [
-                            1,
-                            25
-                        ]
+                        "npc": ["Bat Level 6"],
+                        "npc_ids": [2827, 10888, 14042],
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -3993,70 +2953,28 @@
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": [
-                            "Armoured Zombie"
-                        ],
-                        "npc_ids": [
-                            12730,
-                            12731,
-                            12732,
-                            12733,
-                            12734,
-                            12736,
-                            12738,
-                            12755,
-                            12757,
-                            12758,
-                            12735,
-                            12738,
-                            12739,
-                            12761,
-                            12763,
-                            14135,
-                            14136,
-                            12720,
-                            12721,
-                            12722,
-                            12723,
-                            12724,
-                            12725,
-                            12726,
-                            12727,
-                            12728,
-                            12729,
-                            14113,
-                            14114,
-                            14115,
-                            14116,
-                            14117,
-                            14118,
-                            14119,
-                            14120,
-                            14121,
-                            14122
-                        ],
-                        "quantity": [
-                            1
-                        ]
+                        "npc": ["Armoured Zombie"],
+                        "npc_ids": [12730, 12731, 12732, 12733, 12734, 12736, 12738, 12755, 12757, 12758, 12735, 12738, 12739, 12761, 12763, 14135, 14136, 12720, 12721, 12722, 12723, 12724, 12725, 12726, 12727, 12728, 12729, 14113, 14114, 14115,  	14116, 14117, 14118, 14119, 14120, 14121, 14122],
+                        "quantity": [1]
                     },
+
                     "constraints": {
-                        "time_in_ticks": [
-                            30
-                        ]
+                        "time_in_ticks": [30]
+                    }             
+                }
+            ],
+                "optional_quests_unlocked": [
+                    {
+                        "name": "Rag and Bone Man I",
+                        "points": 1
+                    },
+                    {
+                        "name": "Rag and Bone Man II",
+                        "points": 3
                     }
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Rag and Bone Man I",
-                    "points": 1
-                },
-                {
-                    "name": "Rag and Bone Man II",
-                    "points": 3
-                }
-            ],
+                ],
+             
             "is_completed": false
-        }
+        }           
     ]
 }

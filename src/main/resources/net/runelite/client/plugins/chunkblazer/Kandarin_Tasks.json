@@ -587,7 +587,7 @@
             "tasks": [
                 {
                     "name": "Complete some Laps of the Seers' Rooftop Course",
-                    "taskID": "complete_falador_roof",
+                    "taskID": "complete_seers'_roof",
                     "category": "Agility",
                     "level": 60,
                     "completion_type": "AGILITY",
@@ -2970,7 +2970,7 @@
         },
         {
             "region_id": [10291],
-            "Friendly_Name": "Ardounge Castle",
+            "Friendly_Name": "Ardougne Castle",
             "neighbor_ids": [10292, 10547, 10290, 10035],
             "tasks": [
                 {
@@ -3153,37 +3153,38 @@
                         }
                     ]
                 }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Underground Pass",
-                    "points": 3
-                },
-                {
-                    "name": "Regicide",
-                    "points": 3
-                },
-                {
-                    "name": "Secrets of the North",
-                    "points": 5
-                },
-                {
-                    "name": "Hazeel Cult",
-                    "points": 1
-                },
-                {
-                    "name": "Cold War",
-                    "points": 2
-                },
-                {
-                    "name": "Eagles' Peak",
-                    "points": 1
-                },
-                {
-                    "name": "Sheep Herder",
-                    "points": 1
-                }
-            ],
+
+            ],               
+                "optional_quests_unlocked": [
+                    {
+                        "name": "Underground Pass",
+                        "points": 3
+                    },
+                    {
+                        "name": "Regicide",
+                        "points": 3
+                    },
+                    {
+                        "name": "Secrets of the North",
+                        "points": 5
+                    }, 
+                    {
+                        "name": "Hazeel Cult",
+                        "points": 1
+                    }, 
+                    {
+                        "name": "Cold War",
+                        "points": 2
+                    },
+                    {
+                        "name": "Eagles' Peak",
+                        "points": 1
+                    },
+                    {
+                        "name": "Sheep Herder",
+                        "points": 1
+                    }                       
+                ],                                                  
             "is_completed": false
         },
         {
@@ -3642,7 +3643,7 @@
             "Friendly_Name": "East Yanille",
             "neighbor_ids": [10289, 10544, 10287, 10032],
             "tasks": [
-{
+                {
                     "task_name": "Picklock the door to the basement of Yanille Agility Dungeon",
                     "taskID": "picklock_door_basement_yanille_agility_dungeon",
                     "completion_type": "VARP_CHECK",
@@ -4074,9 +4075,9 @@
             "is_completed": false
         },
         {
-            "region_id": [10032],
+            "region_id": [10031],
             "Friendly_Name": "Gu'Tanoth",
-            "neighbor_ids": [10033, 10288, 10031, 9776],
+            "neighbor_ids": [10032, 10287, 10030, 9775],
             "tasks": [
                 {
                     "name": "Steal an Ogre Rock Cake",
@@ -6708,12 +6709,12 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Zamorak Warrior or Ranger or Mage",
+                    "name": "Defeat a Zamorak Warrior or Ranger or Mage", 
                     "taskID": "defeat_zamorak_warrior",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "target_npc": {
                         "npc": ["Zamorak Mage", "Zamorak Warrior", "Zamorak Ranger"],
                         "npc_ids": [7423, 7422, 7419, 7418, 7420, 7421],
@@ -6721,20 +6722,898 @@
                     }                               
                 },              
                 {
-                    "name": "Defeat a Khazard Trooper in 5 Seconds",
-                    "taskID": "defeat_khazard_trooper_fast",
+                    "name": "Equip a Zamorak Monk Robe Bottom",
+                    "taskID": "equip_zamorak_monk_robe_bottom",
+                    "category": "DEFENCE",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Zamorak Monk Bottom"],
+                            "item_ids": [1033]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Zamorak Monk Robe Top",
+                    "taskID": "equip_zamorak_monk_robe_top",
+                    "category": "DEFENCE",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Zamorak Monk Top"],
+                            "item_ids": [1035]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Nature Rune",
+                    "taskID": "runecraft_nature_rune",                   
+                    "category": "Runecrafting",
+                    "level": 44,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Nature Rune",
+                        "item_ids": [561],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Law Rune",
+                    "taskID": "runecraft_law_rune",                   
+                    "category": "Runecrafting",
+                    "level": 54,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Law Rune",
+                        "item_ids": [563],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Death Rune",
+                    "taskID": "runecraft_death_rune",                   
+                    "category": "Runecrafting",
+                    "level": 65,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Death Rune",
+                        "item_ids": [560],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Blood Rune",
+                    "taskID": "runecraft_blood_rune",                   
+                    "category": "Runecrafting",
+                    "level": 77,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Blood Rune",
+                        "item_ids": [565],
+                        "quantity": [1]
+                        }
+                    ]
+                }
+            ],                              
+            "is_completed": false
+        },
+        {
+            "region_id": [10035],
+            "Friendly_Name": "West Ardougne",
+            "neighbor_ids": [10036, 10291, 10034, 9779],
+            "tasks": [
+                {
+                    "name": "Build an Elite STASH Unit at the Fight Arena",
+                    "taskID": "build_elite_stash_fight_arena",
+                    "category": "Construction",
+                    "level": 55,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mahogany Plank",
+                            "item_ids": [8782]
+                        },
+                        {
+                            "item": "Nails",
+                            "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+                    "required_object": [
+                        {
+                            "object": "Elite STASH Unit (crate)",
+                            "object_id": [29024],
+                            "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Hangover Cure",
+                    "taskID": "obtain_hangover_cure",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Hangover Cure"],
+                            "item_ids": [1504],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a West Ardougne Teleport Tablet",
+                    "taskID": "obtain_west_ardougne_teleport_tablet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["West Ardougne Teleport"],
+                            "item_ids": [19623],
+                            "quantity": [1]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Defeat a Level 19 Ghost in 6 Seconds",
+                    "taskID": "defeat_a_ghost_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Khazard Trooper"],
-                        "npc_ids": [4969, 5964, 4970, 5965],
+                        "npc": ["Level 19 Ghost"],
+                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "time_in_ticks": [10],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                }               
+            ],                              
+            "is_completed": false
+        },      
+        {
+            "region_id": [9779],
+            "Friendly_Name": "Underground Pass",
+            "neighbor_ids": [9780, 10035, 9778, 9523],
+            "tasks": [
+                {
+                    "name": "Equip Klank's Gauntlets",
+                    "taskID": "equip_klank's_gauntlets",
+                    "category": "Defence",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Klank's Gauntlets"],
+                            "item_ids": [1495]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Iban's Staff",
+                    "taskID": "equip_iban's_staff",
+                    "category": "Attack",
+                    "level": 50,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iban's Staff"],
+                            "item_ids": [1409]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Iban's Staff(u)",
+                    "taskID": "equip_iban's_staff(u)",
+                    "category": "Attack",
+                    "level": 50,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iban's Staff(u)"],
+                            "item_ids": [12658]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Defeat a Blessed Spider",
+                    "taskID": "defeat_blesed_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Blessed Spider"],
+                        "npc_ids": [4533, 8978],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "time_in_ticks": [10],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                }               
+            ],                              
+            "is_completed": false
+        },
+        {
+            "region_id": [10036],
+            "Friendly_Name": "Combat Training Camp",
+            "neighbor_ids": [10037, 10292, 10035, 9780],
+            "tasks": [
+                {
+                    "name": "Smith a Dragon Square Shield",
+                    "taskID": "smith_dragon_sq_shield",
+                    "category": "Smithing",
+                    "level": 60,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                                "item": ["Dragon Sq Shield"],
+                                "item_ids": [1187],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {                           
+                    "name": "Defeat some Level 63 Ogres",
+                    "taskID": "defeat_level_63_ogres",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {                        
+                        "npc": "Level 63 Ogre",
+                        "npc_ids": [1153], 
+                        "quantity": [1, 25]                  
+                    }                                    
+                },
+                {
+                    "name": "Defeat a Level 63 Ogre in 12 Seconds",
+                    "taskID": "defeat_level_63_ogre_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {                        
+                        "npc": "Level 63 Ogre",
+                        "npc_ids": [1153], 
+                        "quantity": [1]                  
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [20],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },              
+                {                           
+                    "name": "Defeat a Level 63 Ogre on Task",
+                    "taskID": "defeat_level_63_ogre_on_task",
+                    "category": "Slayer",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {                        
+                        "npc": "Level 63 Ogre",
+                        "npc_ids": [1153], 
+                        "quantity": [1]                  
+                    }                                    
+                },
+                {
+                "name": "Build a Medium STASH Unit at the Combat Training Camp Ogre Pen",
+                "taskID": "build_medium_stash_combat_training_camp_ogre_pen",
+                "category": "Construction",
+                "level": 42,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Medium STASH Unit (inconspicuous hole)",
+                        "object_id": [28996],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Adamant 2H Sword",
+                    "taskID": "equip_adamant_2h_sword",
+                    "category": "Attack",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamant 2H Sword"],
+                            "item_ids": [1317]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat a Level 63 Ogre with Nothing Equipped",
+                    "taskID": "defeat_level_63_ogre_nothing_equipped",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {                        
+                        "npc": "Level 63 Ogre",
+                        "npc_ids": [1153], 
+                        "quantity": [1, 25]                  
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }                                    
+                }               
+            ],                              
+            "is_completed": false
+        },
+        {
+            "region_id": [9780],
+            "Friendly_Name": "Outpost",
+            "neighbor_ids": [9781, 10036, 9779, 9524],
+            "tasks": [
+                {
+                    "name": "Equip a Saradomin Mjolnir",
+                    "taskID": "equip_saradomin_mjolnir",
+                    "category": "Attack",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Saradomin Mjolnir"],
+                            "item_ids": [6762]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Zamorak Mjolnir",
+                    "taskID": "equip_zamorak_mjolnir",
+                    "category": "Attack",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Zamorak Mjolnir"],
+                            "item_ids": [6764]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Guthix Mjolnir",
+                    "taskID": "equip_guthix_mjolnir",
+                    "category": "Attack",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Guthix Mjolnir"],
+                            "item_ids": [6760]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Obtain the Enchanted Key",
+                    "taskID": "obtain_enchanted_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Enchanted Key"],
+                            "item_ids": [6754],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some Hobgoblins",
+                    "taskID": "defeat_hobgoblins",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hobgoblin"],
+                        "npc_ids": [3354, 132, 3049, 2241, 3050, 3286, 3289, 3287, 3288],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Hobgoblin in 15 Seconds",
+                    "taskID": "defeat_hobgoblin_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hobgoblin"],
+                        "npc_ids": [3354, 132, 3049, 2241, 3050, 3286, 3289, 3287, 3288],
                         "quantity": [1]
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [9],
+                        "time_in_ticks": [25],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                }                            
+            ],                              
+            "is_completed": false
+        },
+        {
+            "region_id": [9781],
+            "Friendly_Name": "Tree Gnome Stronghold South East",
+            "neighbor_ids": [9782, 10037, 9780, 9525],
+            "tasks": [
+                {
+                    "name": "Use the Spirit Tree to Teleport to the Tree Gnome Stronghold",
+                    "taskID": "spirit_tree_teleport_to_tree_gnome_stronghold",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 8
+                },
+                {
+                    "name": "Complete some Laps of the Gnome Agility Course",
+                    "taskID": "complete_gnome_agility",
+                    "category": "Agility",
+                    "level": 1,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Gnome Pipe"],
+                        "object_id": [23158], 
+                        "quantity": [1, 20]
+                    }
+                },
+                {
+                    "name": "Plant a Banana Tree Seed",
+                    "taskID": "plant_banana_tree_seed",
+                    "category": "Farming",
+                    "level": 33,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Banana Tree Seed"],
+                            "item_ids": [5284],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Orange Tree Seed",
+                    "taskID": "plant_orange_tree_seed",
+                    "category": "Farming",
+                    "level": 39,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Orange Tree Seed"],
+                            "item_ids": [5285],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Curry Tree Seed",
+                    "taskID": "plant_curry_tree_seed",
+                    "category": "Farming",
+                    "level": 42,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Curry Tree Seed"],
+                            "item_ids": [5286],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Pineapple Seed",
+                    "taskID": "plant_pineapple_tree_seed",
+                    "category": "Farming",
+                    "level": 51,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Pineapple Seed"],
+                            "item_ids": [5287],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Palm Tree Seed",
+                    "taskID": "plant_palm_tree_seed",
+                    "category": "Farming",
+                    "level": 68,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Palm Tree Seed"],
+                            "item_ids": [5289],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Willow Sapling",
+                    "taskID": "plant_willow_sapling",
+                    "category": "Farming",
+                    "level": 30,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items":
+                        {
+                            "item": "Willow Sapling",
+                            "item_ids": [5371],
+                            "quantity": [1]
+                        } 
+                },
+                {
+                    "name": "Plant a Maple Sapling",
+                    "taskID": "plant_maple_sapling",
+                    "category": "Farming",
+                    "level": 45,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items":
+                        {
+                            "item": "Maple Sapling",
+                            "item_ids": [5372],
+                            "quantity": [1]
+                        } 
+                },
+                {
+                    "name": "Plant a Yew Sapling",
+                    "taskID": "plant_Yew_sapling",
+                    "category": "Farming",
+                    "level": 60,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items":
+                        {
+                            "item": "Yew Sapling",
+                            "item_ids": [5373],
+                            "quantity": [1]
+                        } 
+                },
+                {
+                    "name": "Plant a Magic Sapling",
+                    "taskID": "plant_magic_sapling",
+                    "category": "Farming",
+                    "level": 60,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items":
+                        {
+                            "item": "Magic Sapling",
+                            "item_ids": [5374],
+                            "quantity": [1]
+                        } 
+                },
+                {
+                    "name": "Chop a Magic Tree",
+                    "taskID": "chop_magic_tree",
+                    "category": "Woodcutting",
+                    "level": 75,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Willow Tree",
+                    "taskID": "Chop_willow_tree",
+                    "category": "Woodcutting",
+                    "level": 30,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Yew Log",
+                    "taskID": "burn_yew_log",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Willow Log",
+                    "taskID": "burn_willow_log",
+                    "category": "Firemaking",
+                    "level": 30,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Magic Log",
+                    "taskID": "burn_magic_log",
+                    "category": "Firemaking",
+                    "level": 75,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Unlock Ring Bling",
+                    "taskID": "unlock_ring_bling",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 3207,        
+                        "varbit_boolean": 1,      
+                        "description": "Unlock status of Ring Bling"
+                    }
+                },
+                {
+                    "name": "Unlock Malevolent Masquerade",
+                    "taskID": "unlock_malevolent_masquerade",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 3202,        
+                        "varbit_boolean": 1,      
+                        "description": "Unlock status of Malevolent Masquerade"
+                    }
+                },
+                {
+                    "name": "Unlock Bigger and Badder",
+                    "taskID": "unlock_bigger_badder",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 5368,        
+                        "varbit_boolean": 1,      
+                        "description": "Unlock status of Bigger and Badder"
+                    }
+                }
+            ],                              
+            "is_completed": false
+        },
+        {
+            "region_id": [9525],
+            "Friendly_Name": "Tree Gnome Stronghold Slayer Cave",
+            "neighbor_ids": [9536, 9781, 9524, 9269],
+            "tasks": [
+                {
+                    "name": "Unlock Ring Bling",
+                    "taskID": "unlock_ring_bling",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 3207,        
+                        "varbit_boolean": 1,      
+                        "description": "Unlock status of Ring Bling"
+                    }
+                },
+                {
+                    "name": "Unlock Malevolent Masquerade",
+                    "taskID": "unlock_malevolent_masquerade",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 3202,        
+                        "varbit_boolean": 1,      
+                        "description": "Unlock status of Malevolent Masquerade"
+                    }
+                },
+                {
+                    "name": "Unlock Bigger and Badder",
+                    "taskID": "unlock_bigger_badder",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 5368,        
+                        "varbit_boolean": 1,      
+                        "description": "Unlock status of Bigger and Badder"
+                    }
+                },
+                {
+                    "name": "Defeat an Aberrant Spectre on Task",
+                    "taskID": "defeat_aberrant_spectre_on_task",
+                    "category": "Slayer",
+                    "level": 60,
+                    "completion_type": "SLAYER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Aberrant Spectre"],
+                        "npc_ids": [2, 3, 4, 5, 6, 7],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Abhorrent Spectre on Task",
+                    "taskID": "defeat_abhorrent_spectre_on_task",
+                    "category": "Slayer",
+                    "level": 60,
+                    "completion_type": "SLAYER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Abhorrent Spectre"],
+                        "npc_ids": [7402],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Aberrant Spectre in 18 Seconds",
+                    "taskID": "defeat_aberrant_spectre_fast",
+                    "category": "Combat",
+                    "level": 60,
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Aberrant Spectre"],
+                        "npc_ids": [2, 3, 4, 5, 6, 7],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [30],
                         "prohibited_active_varbits": [
                             {
                                 "varbit_id": 57,
@@ -6745,18 +7624,142 @@
                     }
                 },
                 {
-                    "name": "Defeat a Khazard Commander",
-                    "taskID": "defeat_khazard_commander",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "name": "Defeat a Bloodveld on Task",
+                    "taskID": "defeat_bloodveld_on_task",
+                    "category": "Slayer",
+                    "level": 50,
+                    "completion_type": "SLAYER",
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Khazard Commander"],
-                        "npc_ids": [4972],
+                        "npc": ["Bloodveld"],
+                        "npc_ids": [484, 485, 486, 487, 3138, 7276],
                         "quantity": [1]
-                    }                   
-                }
+                    }
+                },
+                {
+                    "name": "Defeat an Insatiable Bloodveld on Task",
+                    "taskID": "defeat_insatiable_bloodveld_on_task",
+                    "category": "Slayer",
+                    "level": 50,
+                    "completion_type": "SLAYER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Insatiable Bloodveld"],
+                        "npc_ids": [7397],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Bloodveld in 24 Seconds",
+                    "taskID": "defeat_aberrant_spectre_fast",
+                    "category": "Combat",
+                    "level": 50,
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bloodveld"],
+                        "npc_ids": [484, 485, 486, 487, 3138, 7276],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [40],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Use the Level 72 Agility Gnome Stronhold Slayer Cave Tunnel",
+                    "taskID": "agility_level_72_gnome_stronghold_slayer_cave_tunnel",
+                    "category": "Agility",
+                    "level": 72,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Obtain a Crystal Saw",
+                    "taskID": "obtain_crystal_saw",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Crystal Saw"],
+                            "item_ids": [9625],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dust Battlestaff",
+                    "taskID": "equip_dust_battlestaff",
+                    "category": "Attack",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dust Battlestaff"],
+                            "item_ids": [20736]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mist Battlestaff",
+                    "taskID": "equip_mist_battlestaff",
+                    "category": "Attack",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Mist Battlestaff"],
+                            "item_ids": [20730]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Imbued Heart",
+                    "taskID": "obtain_imbued_heart",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Imbued Heart"],
+                            "item_ids": [20724],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Eternal Gem",
+                    "taskID": "obtain_eternal_gem",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Eternal Gem"],
+                            "item_ids": [21270],
+                            "quantity": [1]
+                        }
+                    ]
+                }              
             ],                              
             "is_completed": false
         }
