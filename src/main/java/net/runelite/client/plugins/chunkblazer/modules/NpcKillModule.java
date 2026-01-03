@@ -45,9 +45,10 @@ public class NpcKillModule extends AbstractTaskModule
     private int damageDealtToTarget;
     private int lastKillingBlowAnimation;
 
-    // Equipment constraint tracking
-    private boolean equipmentConstraintViolated = false;
-    private String equipmentViolationReason = null;
+    // Equipment constraints are now checked per-task at kill time (no global flag needed)
+
+    // Time constraint tracking - track when combat started (first hitsplat)
+    private int combatStartTick = -1;
 
     // Time constraint tracking - track when combat started (first hitsplat)
     private int combatStartTick = -1;
@@ -170,11 +171,8 @@ public class NpcKillModule extends AbstractTaskModule
     {
         tickCounter++;
 
-        // Continuously check equipment constraints while in combat
-        if (currentTarget != null && !equipmentConstraintViolated)
-        {
-            checkEquipmentConstraints();
-        }
+        // Equipment constraints are now checked per-task at kill time in onActorDeath
+        // No need for global flag checking during combat
 
         // Log heartbeat periodically to confirm event bus is working
         if (tickCounter % DEBUG_LOG_INTERVAL == 0)
@@ -211,7 +209,6 @@ public class NpcKillModule extends AbstractTaskModule
             if (!activeTasks.isEmpty())
             {
                 // Only reset tracking if switching to a NEW target
-                // If same target (same index), preserve the equipment violation flag!
                 boolean isSameTarget = (currentTargetIndex == npc.getIndex());
 
                 if (!isSameTarget)
@@ -220,21 +217,21 @@ public class NpcKillModule extends AbstractTaskModule
                     currentTarget = npc;
                     currentTargetIndex = npc.getIndex();
                     damageDealtToTarget = 0;
+<<<<<<< Updated upstream
                     equipmentConstraintViolated = false;
                     equipmentViolationReason = null;
+=======
+>>>>>>> Stashed changes
                     combatStartTick = -1; // Reset combat timer for new target
                     log.info(">>> NEW target: {} (ID: {}, Index: {}) - reset tracking", npc.getName(), npc.getId(), npc.getIndex());
                 }
                 else
                 {
-                    // Same target - keep equipment violation flag, just update reference
+                    // Same target - just update reference
                     currentTarget = npc;
-                    log.info(">>> SAME target: {} (Index: {}) - preserving equipmentConstraintViolated={}",
-                        npc.getName(), npc.getIndex(), equipmentConstraintViolated);
+                    log.info(">>> SAME target: {} (Index: {})", npc.getName(), npc.getIndex());
                 }
-
-                // Always check equipment constraints on each interaction
-                checkEquipmentConstraints();
+                // Equipment constraints are checked per-task at kill time in onActorDeath
             }
         }
     }
@@ -348,20 +345,22 @@ public class NpcKillModule extends AbstractTaskModule
         // Update progress for all matching tasks
         for (NuzlockeTask task : matchingTasks)
         {
-            // Check if equipment constraint was violated during combat
-            if (equipmentConstraintViolated)
+            // Per-task equipment constraint check - only check THIS task's constraints
+            // (removed global flag check which was incorrectly blocking tasks without constraints)
+            String equipViolation = validateEquipmentForTask(task);
+            if (equipViolation != null)
             {
                 log.info("Kill NOT credited for task '{}' - equipment constraint violated: {}",
-                    task.getName(), equipmentViolationReason);
+                    task.getName(), equipViolation);
                 continue; // Skip this task, don't credit the kill
             }
 
-            // Final equipment check at time of kill
-            String finalViolation = validateEquipmentForTask(task);
-            if (finalViolation != null)
+            // Time constraint check - validate kill was fast enough
+            String timeViolation = validateTimeConstraintForTask(task);
+            if (timeViolation != null)
             {
-                log.info("Kill NOT credited for task '{}' - equipment invalid at kill time: {}",
-                    task.getName(), finalViolation);
+                log.info("Kill NOT credited for task '{}' - time constraint violated: {}",
+                    task.getName(), timeViolation);
                 continue; // Skip this task, don't credit the kill
             }
 
@@ -643,32 +642,6 @@ public class NpcKillModule extends AbstractTaskModule
         }
 
         log.info(sb.toString());
-    }
-
-    /**
-     * Check equipment constraints for all active tasks.
-     * If any constraint is violated, mark it so the kill won't count.
-     */
-    private void checkEquipmentConstraints()
-    {
-        if (activeTasks.isEmpty())
-        {
-            return;
-        }
-
-        // Check each active task for equipment constraints
-        for (NuzlockeTask task : activeTasks)
-        {
-            String violation = validateEquipmentForTask(task);
-            if (violation != null)
-            {
-                equipmentConstraintViolated = true;
-                equipmentViolationReason = violation;
-                log.info(">>> EQUIPMENT CONSTRAINT VIOLATED for task '{}': {}",
-                    task.getName(), violation);
-                return; // One violation is enough
-            }
-        }
     }
 
     /**
