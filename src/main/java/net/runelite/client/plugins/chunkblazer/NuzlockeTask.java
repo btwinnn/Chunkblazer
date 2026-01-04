@@ -77,6 +77,7 @@ public class NuzlockeTask
     /**
      * Custom deserializer that handles flexible JSON formats for NuzlockeTask.
      * Specifically handles required_items being an object instead of array.
+     * Also handles null values gracefully.
      */
     public static class NuzlockeTaskDeserializer implements JsonDeserializer<NuzlockeTask>
     {
@@ -87,19 +88,19 @@ public class NuzlockeTask
             NuzlockeTask task = new NuzlockeTask();
             JsonObject obj = json.getAsJsonObject();
 
-            // Simple string fields
-            if (obj.has("name")) task.setName(obj.get("name").getAsString());
-            if (obj.has("taskID")) task.setTaskId(obj.get("taskID").getAsString());
-            if (obj.has("category")) task.setCategory(obj.get("category").getAsString());
-            if (obj.has("completion_type")) task.setCompletionType(obj.get("completion_type").getAsString());
+            // Simple string fields (with null checks)
+            task.setName(getStringOrNull(obj, "name"));
+            task.setTaskId(getStringOrNull(obj, "taskID"));
+            task.setCategory(getStringOrNull(obj, "category"));
+            task.setCompletionType(getStringOrNull(obj, "completion_type"));
 
-            // Integer fields
-            if (obj.has("base_points")) task.setBasePoints(obj.get("base_points").getAsInt());
-            if (obj.has("assignment_weight")) task.setAssignmentWeight(obj.get("assignment_weight").getAsInt());
-            if (obj.has("level")) task.setLevel(obj.get("level").getAsInt());
+            // Integer fields (with null checks)
+            task.setBasePoints(getIntOrDefault(obj, "base_points", 0));
+            task.setAssignmentWeight(getIntOrDefault(obj, "assignment_weight", 1));
+            task.setLevel(getIntOrNull(obj, "level"));
 
-            // Boolean field
-            if (obj.has("is_unlocked")) task.setIsUnlocked(obj.get("is_unlocked").getAsBoolean());
+            // Boolean field (with null check)
+            task.setIsUnlocked(getBooleanOrNull(obj, "is_unlocked"));
 
             // Handle required_items - can be array or single object
             if (obj.has("required_items"))
@@ -136,6 +137,38 @@ public class NuzlockeTask
             }
 
             return task;
+        }
+
+        private String getStringOrNull(JsonObject obj, String field)
+        {
+            if (!obj.has(field)) return null;
+            JsonElement el = obj.get(field);
+            if (el.isJsonNull()) return null;
+            return el.getAsString();
+        }
+
+        private Integer getIntOrNull(JsonObject obj, String field)
+        {
+            if (!obj.has(field)) return null;
+            JsonElement el = obj.get(field);
+            if (el.isJsonNull()) return null;
+            return el.getAsInt();
+        }
+
+        private int getIntOrDefault(JsonObject obj, String field, int defaultValue)
+        {
+            if (!obj.has(field)) return defaultValue;
+            JsonElement el = obj.get(field);
+            if (el.isJsonNull()) return defaultValue;
+            return el.getAsInt();
+        }
+
+        private Boolean getBooleanOrNull(JsonObject obj, String field)
+        {
+            if (!obj.has(field)) return null;
+            JsonElement el = obj.get(field);
+            if (el.isJsonNull()) return null;
+            return el.getAsBoolean();
         }
     }
 }

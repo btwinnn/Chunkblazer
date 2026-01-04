@@ -50,9 +50,6 @@ public class NpcKillModule extends AbstractTaskModule
     // Time constraint tracking - track when combat started (first hitsplat)
     private int combatStartTick = -1;
 
-    // Time constraint tracking - track when combat started (first hitsplat)
-    private int combatStartTick = -1;
-
     // For boss KC verification
     private int baselineKc = -1;
     private String currentBossName;
@@ -217,11 +214,6 @@ public class NpcKillModule extends AbstractTaskModule
                     currentTarget = npc;
                     currentTargetIndex = npc.getIndex();
                     damageDealtToTarget = 0;
-<<<<<<< Updated upstream
-                    equipmentConstraintViolated = false;
-                    equipmentViolationReason = null;
-=======
->>>>>>> Stashed changes
                     combatStartTick = -1; // Reset combat timer for new target
                     log.info(">>> NEW target: {} (ID: {}, Index: {}) - reset tracking", npc.getName(), npc.getId(), npc.getIndex());
                 }
@@ -352,15 +344,6 @@ public class NpcKillModule extends AbstractTaskModule
             {
                 log.info("Kill NOT credited for task '{}' - equipment constraint violated: {}",
                     task.getName(), equipViolation);
-                continue; // Skip this task, don't credit the kill
-            }
-
-            // Time constraint check - validate kill was fast enough
-            String timeViolation = validateTimeConstraintForTask(task);
-            if (timeViolation != null)
-            {
-                log.info("Kill NOT credited for task '{}' - time constraint violated: {}",
-                    task.getName(), timeViolation);
                 continue; // Skip this task, don't credit the kill
             }
 
