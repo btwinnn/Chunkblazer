@@ -12,163 +12,163 @@ import java.util.List;
 @JsonAdapter(NuzlockeTask.NuzlockeTaskDeserializer.class)
 public class NuzlockeTask
 {
-    private String name;
+	private String name;
 
-    @SerializedName("taskID")
-    private String taskId;
+	@SerializedName("taskID")
+	private String taskId;
 
-    private String category;
+	private String category;
 
-    @SerializedName("completion_type")
-    private String completionType;
+	@SerializedName("completion_type")
+	private String completionType;
 
-    @SerializedName("base_points")
-    private int basePoints;
+	@SerializedName("base_points")
+	private int basePoints;
 
-    @SerializedName("assignment_weight")
-    private int assignmentWeight;
+	@SerializedName("assignment_weight")
+	private int assignmentWeight;
 
-    private Integer level;
+	private Integer level;
 
-    @SerializedName("is_unlocked")
-    private Boolean isUnlocked;
+	@SerializedName("is_unlocked")
+	private Boolean isUnlocked;
 
-    @SerializedName("required_items")
-    private List<RequiredItem> requiredItems;
+	@SerializedName("required_items")
+	private List<RequiredItem> requiredItems;
 
-    @SerializedName("target_npc")
-    private TargetNpc targetNpc;
+	@SerializedName("target_npc")
+	private TargetNpc targetNpc;
 
-    private TaskConstraints constraints;
+	private TaskConstraints constraints;
 
-    // Runtime tracking fields (not from JSON)
-    private transient int currentProgress;
-    private transient int targetQuantity;
-    private transient boolean completed;
+	// Runtime tracking fields (not from JSON)
+	private transient int currentProgress;
+	private transient int targetQuantity;
+	private transient boolean completed;
 
-    public int getLevelRequirement()
-    {
-        return level != null ? level : 1;
-    }
+	public int getLevelRequirement()
+	{
+		return level != null ? level : 1;
+	}
 
-    public boolean isLocked()
-    {
-        return isUnlocked != null && !isUnlocked;
-    }
+	public boolean isLocked()
+	{
+		return isUnlocked != null && !isUnlocked;
+	}
 
-    public String getDisplayName()
-    {
-        if (targetQuantity > 1)
-        {
-            return name + " (0/" + targetQuantity + ")";
-        }
-        return name;
-    }
+	public String getDisplayName()
+	{
+		if (targetQuantity > 1)
+		{
+			return name + " (0/" + targetQuantity + ")";
+		}
+		return name;
+	}
 
-    public String getProgressText()
-    {
-        if (targetQuantity > 1)
-        {
-            return currentProgress + "/" + targetQuantity;
-        }
-        return completed ? "Complete" : "In Progress";
-    }
+	public String getProgressText()
+	{
+		if (targetQuantity > 1)
+		{
+			return currentProgress + "/" + targetQuantity;
+		}
+		return completed ? "Complete" : "In Progress";
+	}
 
-    /**
-     * Custom deserializer that handles flexible JSON formats for NuzlockeTask.
-     * Specifically handles required_items being an object instead of array.
-     * Also handles null values gracefully.
-     */
-    public static class NuzlockeTaskDeserializer implements JsonDeserializer<NuzlockeTask>
-    {
-        @Override
-        public NuzlockeTask deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-            throws JsonParseException
-        {
-            NuzlockeTask task = new NuzlockeTask();
-            JsonObject obj = json.getAsJsonObject();
+	/**
+	 * Custom deserializer that handles flexible JSON formats for NuzlockeTask.
+	 * Specifically handles required_items being an object instead of array.
+	 * Also handles null values gracefully.
+	 */
+	public static class NuzlockeTaskDeserializer implements JsonDeserializer<NuzlockeTask>
+	{
+		@Override
+		public NuzlockeTask deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+			throws JsonParseException
+		{
+			NuzlockeTask task = new NuzlockeTask();
+			JsonObject obj = json.getAsJsonObject();
 
-            // Simple string fields (with null checks)
-            task.setName(getStringOrNull(obj, "name"));
-            task.setTaskId(getStringOrNull(obj, "taskID"));
-            task.setCategory(getStringOrNull(obj, "category"));
-            task.setCompletionType(getStringOrNull(obj, "completion_type"));
+			// Simple string fields (with null checks)
+			task.setName(getStringOrNull(obj, "name"));
+			task.setTaskId(getStringOrNull(obj, "taskID"));
+			task.setCategory(getStringOrNull(obj, "category"));
+			task.setCompletionType(getStringOrNull(obj, "completion_type"));
 
-            // Integer fields (with null checks)
-            task.setBasePoints(getIntOrDefault(obj, "base_points", 0));
-            task.setAssignmentWeight(getIntOrDefault(obj, "assignment_weight", 1));
-            task.setLevel(getIntOrNull(obj, "level"));
+			// Integer fields (with null checks)
+			task.setBasePoints(getIntOrDefault(obj, "base_points", 0));
+			task.setAssignmentWeight(getIntOrDefault(obj, "assignment_weight", 1));
+			task.setLevel(getIntOrNull(obj, "level"));
 
-            // Boolean field (with null check)
-            task.setIsUnlocked(getBooleanOrNull(obj, "is_unlocked"));
+			// Boolean field (with null check)
+			task.setIsUnlocked(getBooleanOrNull(obj, "is_unlocked"));
 
-            // Handle required_items - can be array or single object
-            if (obj.has("required_items"))
-            {
-                JsonElement itemsEl = obj.get("required_items");
-                List<RequiredItem> items = new ArrayList<>();
+			// Handle required_items - can be array or single object
+			if (obj.has("required_items"))
+			{
+				JsonElement itemsEl = obj.get("required_items");
+				List<RequiredItem> items = new ArrayList<>();
 
-                if (itemsEl.isJsonArray())
-                {
-                    // Normal case - array of items
-                    for (JsonElement el : itemsEl.getAsJsonArray())
-                    {
-                        items.add(context.deserialize(el, RequiredItem.class));
-                    }
-                }
-                else if (itemsEl.isJsonObject())
-                {
-                    // Single object instead of array
-                    items.add(context.deserialize(itemsEl, RequiredItem.class));
-                }
-                task.setRequiredItems(items);
-            }
+				if (itemsEl.isJsonArray())
+				{
+					// Normal case - array of items
+					for (JsonElement el : itemsEl.getAsJsonArray())
+					{
+						items.add(context.deserialize(el, RequiredItem.class));
+					}
+				}
+				else if (itemsEl.isJsonObject())
+				{
+					// Single object instead of array
+					items.add(context.deserialize(itemsEl, RequiredItem.class));
+				}
+				task.setRequiredItems(items);
+			}
 
-            // Handle target_npc - delegate to its deserializer
-            if (obj.has("target_npc"))
-            {
-                task.setTargetNpc(context.deserialize(obj.get("target_npc"), TargetNpc.class));
-            }
+			// Handle target_npc - delegate to its deserializer
+			if (obj.has("target_npc"))
+			{
+				task.setTargetNpc(context.deserialize(obj.get("target_npc"), TargetNpc.class));
+			}
 
-            // Handle constraints - delegate to its deserializer
-            if (obj.has("constraints"))
-            {
-                task.setConstraints(context.deserialize(obj.get("constraints"), TaskConstraints.class));
-            }
+			// Handle constraints - delegate to its deserializer
+			if (obj.has("constraints"))
+			{
+				task.setConstraints(context.deserialize(obj.get("constraints"), TaskConstraints.class));
+			}
 
-            return task;
-        }
+			return task;
+		}
 
-        private String getStringOrNull(JsonObject obj, String field)
-        {
-            if (!obj.has(field)) return null;
-            JsonElement el = obj.get(field);
-            if (el.isJsonNull()) return null;
-            return el.getAsString();
-        }
+		private String getStringOrNull(JsonObject obj, String field)
+		{
+			if (!obj.has(field)) return null;
+			JsonElement el = obj.get(field);
+			if (el.isJsonNull()) return null;
+			return el.getAsString();
+		}
 
-        private Integer getIntOrNull(JsonObject obj, String field)
-        {
-            if (!obj.has(field)) return null;
-            JsonElement el = obj.get(field);
-            if (el.isJsonNull()) return null;
-            return el.getAsInt();
-        }
+		private Integer getIntOrNull(JsonObject obj, String field)
+		{
+			if (!obj.has(field)) return null;
+			JsonElement el = obj.get(field);
+			if (el.isJsonNull()) return null;
+			return el.getAsInt();
+		}
 
-        private int getIntOrDefault(JsonObject obj, String field, int defaultValue)
-        {
-            if (!obj.has(field)) return defaultValue;
-            JsonElement el = obj.get(field);
-            if (el.isJsonNull()) return defaultValue;
-            return el.getAsInt();
-        }
+		private int getIntOrDefault(JsonObject obj, String field, int defaultValue)
+		{
+			if (!obj.has(field)) return defaultValue;
+			JsonElement el = obj.get(field);
+			if (el.isJsonNull()) return defaultValue;
+			return el.getAsInt();
+		}
 
-        private Boolean getBooleanOrNull(JsonObject obj, String field)
-        {
-            if (!obj.has(field)) return null;
-            JsonElement el = obj.get(field);
-            if (el.isJsonNull()) return null;
-            return el.getAsBoolean();
-        }
-    }
+		private Boolean getBooleanOrNull(JsonObject obj, String field)
+		{
+			if (!obj.has(field)) return null;
+			JsonElement el = obj.get(field);
+			if (el.isJsonNull()) return null;
+			return el.getAsBoolean();
+		}
+	}
 }

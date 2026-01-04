@@ -12,398 +12,398 @@ import java.util.List;
 @JsonAdapter(TaskConstraints.TaskConstraintsDeserializer.class)
 public class TaskConstraints
 {
-    @SerializedName("time_in_ticks")
-    private Integer timeInTicks;
+	@SerializedName("time_in_ticks")
+	private Integer timeInTicks;
 
-    @SerializedName("required_skill")
-    private String requiredSkill;
+	@SerializedName("required_skill")
+	private String requiredSkill;
 
-    @SerializedName("required_level")
-    private Integer requiredLevel;
+	@SerializedName("required_level")
+	private Integer requiredLevel;
 
-    @SerializedName("required_xp")
-    private Integer requiredXp;
+	@SerializedName("required_xp")
+	private Integer requiredXp;
 
-    @SerializedName("required_region")
-    private Integer requiredRegion;
+	@SerializedName("required_region")
+	private Integer requiredRegion;
 
-    @SerializedName("allowed_regions")
-    private List<Integer> allowedRegions;
+	@SerializedName("allowed_regions")
+	private List<Integer> allowedRegions;
 
-    @SerializedName("min_combat_level")
-    private Integer minCombatLevel;
+	@SerializedName("min_combat_level")
+	private Integer minCombatLevel;
 
-    @SerializedName("max_combat_level")
-    private Integer maxCombatLevel;
+	@SerializedName("max_combat_level")
+	private Integer maxCombatLevel;
 
-    @SerializedName("no_prayer")
-    private Boolean noPrayer;
+	@SerializedName("no_prayer")
+	private Boolean noPrayer;
 
-    @SerializedName("no_food")
-    private Boolean noFood;
+	@SerializedName("no_food")
+	private Boolean noFood;
 
-    @SerializedName("solo_only")
-    private Boolean soloOnly;
+	@SerializedName("solo_only")
+	private Boolean soloOnly;
 
-    // Equipment constraints
-    @SerializedName("no_equipment")
-    private Boolean noEquipment;  // Must have nothing equipped at all
+	// Equipment constraints
+	@SerializedName("no_equipment")
+	private Boolean noEquipment;  // Must have nothing equipped at all
 
-    @SerializedName("required_equipment_ids")
-    private List<Integer> requiredEquipmentIds;  // These items MUST be equipped
+	@SerializedName("required_equipment_ids")
+	private List<Integer> requiredEquipmentIds;  // These items MUST be equipped
 
-    @SerializedName("allowed_equipment_ids")
-    private List<Integer> allowedEquipmentIds;  // ONLY these items can be equipped (all others fail)
+	@SerializedName("allowed_equipment_ids")
+	private List<Integer> allowedEquipmentIds;  // ONLY these items can be equipped (all others fail)
 
-    @SerializedName("forbidden_equipment_ids")
-    private List<Integer> forbiddenEquipmentIds;  // These items must NOT be equipped
+	@SerializedName("forbidden_equipment_ids")
+	private List<Integer> forbiddenEquipmentIds;  // These items must NOT be equipped
 
-    // Slot-based equipment constraints (uses EquipmentInventorySlot indices)
-    // Slots: HEAD=0, CAPE=1, AMULET=2, WEAPON=3, BODY=4, SHIELD=5, LEGS=7, GLOVES=9, BOOTS=10, RING=12, AMMO=13
-    @SerializedName("must_be_empty")
-    private List<Integer> mustBeEmptySlots;  // These equipment slots MUST be empty
+	// Slot-based equipment constraints (uses EquipmentInventorySlot indices)
+	// Slots: HEAD=0, CAPE=1, AMULET=2, WEAPON=3, BODY=4, SHIELD=5, LEGS=7, GLOVES=9, BOOTS=10, RING=12, AMMO=13
+	@SerializedName("must_be_empty")
+	private List<Integer> mustBeEmptySlots;  // These equipment slots MUST be empty
 
-    @SerializedName("equippable_slots")
-    private List<Integer> equippableSlots;  // ONLY these slots can have equipment (all others must be empty)
+	@SerializedName("equippable_slots")
+	private List<Integer> equippableSlots;  // ONLY these slots can have equipment (all others must be empty)
 
-    @SerializedName("equip_nothing")
-    private Boolean equipNothing;  // If true, player must have ZERO equipment (nothing equipped at all)
+	@SerializedName("equip_nothing")
+	private Boolean equipNothing;  // If true, player must have ZERO equipment (nothing equipped at all)
 
-    // Dropped item constraints (for NPC kill tasks that require specific loot)
-    @SerializedName("dropped_item")
-    private String droppedItem;  // Name of the required drop (for display)
+	// Dropped item constraints (for NPC kill tasks that require specific loot)
+	@SerializedName("dropped_item")
+	private String droppedItem;  // Name of the required drop (for display)
 
-    @SerializedName("dropped_item_id")
-    private List<Integer> droppedItemIds;  // Item IDs that count as the required drop
+	@SerializedName("dropped_item_id")
+	private List<Integer> droppedItemIds;  // Item IDs that count as the required drop
 
-    @SerializedName("quantity")
-    private Integer droppedItemQuantity;  // Required quantity of the dropped item
+	@SerializedName("quantity")
+	private Integer droppedItemQuantity;  // Required quantity of the dropped item
 
-    public boolean hasTimeLimit()
-    {
-        return timeInTicks != null && timeInTicks > 0;
-    }
+	public boolean hasTimeLimit()
+	{
+		return timeInTicks != null && timeInTicks > 0;
+	}
 
-    public double getTimeInSeconds()
-    {
-        if (timeInTicks == null)
-        {
-            return 0;
-        }
-        // 1 game tick = 0.6 seconds
-        return timeInTicks * 0.6;
-    }
+	public double getTimeInSeconds()
+	{
+		if (timeInTicks == null)
+		{
+			return 0;
+		}
+		// 1 game tick = 0.6 seconds
+		return timeInTicks * 0.6;
+	}
 
-    public int getRequiredLevel()
-    {
-        return requiredLevel != null ? requiredLevel : 1;
-    }
+	public int getRequiredLevel()
+	{
+		return requiredLevel != null ? requiredLevel : 1;
+	}
 
-    public int getRequiredXp()
-    {
-        return requiredXp != null ? requiredXp : 0;
-    }
+	public int getRequiredXp()
+	{
+		return requiredXp != null ? requiredXp : 0;
+	}
 
-    public boolean hasEquipmentConstraints()
-    {
-        return (noEquipment != null && noEquipment) ||
-               (equipNothing != null && equipNothing) ||
-               (requiredEquipmentIds != null && !requiredEquipmentIds.isEmpty()) ||
-               (allowedEquipmentIds != null && !allowedEquipmentIds.isEmpty()) ||
-               (forbiddenEquipmentIds != null && !forbiddenEquipmentIds.isEmpty()) ||
-               (mustBeEmptySlots != null && !mustBeEmptySlots.isEmpty()) ||
-               (equippableSlots != null && !equippableSlots.isEmpty());
-    }
+	public boolean hasEquipmentConstraints()
+	{
+		return (noEquipment != null && noEquipment) ||
+			(equipNothing != null && equipNothing) ||
+			(requiredEquipmentIds != null && !requiredEquipmentIds.isEmpty()) ||
+			(allowedEquipmentIds != null && !allowedEquipmentIds.isEmpty()) ||
+			(forbiddenEquipmentIds != null && !forbiddenEquipmentIds.isEmpty()) ||
+			(mustBeEmptySlots != null && !mustBeEmptySlots.isEmpty()) ||
+			(equippableSlots != null && !equippableSlots.isEmpty());
+	}
 
-    public boolean isNoEquipment()
-    {
-        return noEquipment != null && noEquipment;
-    }
+	public boolean isNoEquipment()
+	{
+		return noEquipment != null && noEquipment;
+	}
 
-    public boolean isEquipNothing()
-    {
-        return equipNothing != null && equipNothing;
-    }
+	public boolean isEquipNothing()
+	{
+		return equipNothing != null && equipNothing;
+	}
 
-    public boolean hasDroppedItemConstraint()
-    {
-        return droppedItemIds != null && !droppedItemIds.isEmpty();
-    }
+	public boolean hasDroppedItemConstraint()
+	{
+		return droppedItemIds != null && !droppedItemIds.isEmpty();
+	}
 
-    public int getDroppedItemQuantity()
-    {
-        return droppedItemQuantity != null ? droppedItemQuantity : 1;
-    }
+	public int getDroppedItemQuantity()
+	{
+		return droppedItemQuantity != null ? droppedItemQuantity : 1;
+	}
 
-    /**
-     * Custom deserializer that handles flexible JSON formats.
-     * Also handles the case where "constraints" is an empty array [] instead of an object.
-     */
-    public static class TaskConstraintsDeserializer implements JsonDeserializer<TaskConstraints>
-    {
-        @Override
-        public TaskConstraints deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-            throws JsonParseException
-        {
-            // Handle case where constraints is an array instead of object
-            if (json.isJsonArray())
-            {
-                JsonArray arr = json.getAsJsonArray();
-                if (arr.size() == 0)
-                {
-                    // Empty array - return empty constraints
-                    return new TaskConstraints();
-                }
-                // Non-empty array - deserialize first element if it's an object
-                JsonElement first = arr.get(0);
-                if (first.isJsonObject())
-                {
-                    // Recursively deserialize the first object
-                    return deserialize(first, typeOfT, context);
-                }
-                return new TaskConstraints();
-            }
+	/**
+	 * Custom deserializer that handles flexible JSON formats.
+	 * Also handles the case where "constraints" is an empty array [] instead of an object.
+	 */
+	public static class TaskConstraintsDeserializer implements JsonDeserializer<TaskConstraints>
+	{
+		@Override
+		public TaskConstraints deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+			throws JsonParseException
+		{
+			// Handle case where constraints is an array instead of object
+			if (json.isJsonArray())
+			{
+				JsonArray arr = json.getAsJsonArray();
+				if (arr.size() == 0)
+				{
+					// Empty array - return empty constraints
+					return new TaskConstraints();
+				}
+				// Non-empty array - deserialize first element if it's an object
+				JsonElement first = arr.get(0);
+				if (first.isJsonObject())
+				{
+					// Recursively deserialize the first object
+					return deserialize(first, typeOfT, context);
+				}
+				return new TaskConstraints();
+			}
 
-            TaskConstraints constraints = new TaskConstraints();
-            JsonObject obj = json.getAsJsonObject();
+			TaskConstraints constraints = new TaskConstraints();
+			JsonObject obj = json.getAsJsonObject();
 
-            // Handle integer fields that might be arrays
-            constraints.setTimeInTicks(readFlexibleInt(obj, "time_in_ticks"));
-            constraints.setRequiredLevel(readFlexibleInt(obj, "required_level"));
-            constraints.setRequiredXp(readFlexibleInt(obj, "required_xp"));
-            constraints.setRequiredRegion(readFlexibleInt(obj, "required_region"));
-            constraints.setMinCombatLevel(readFlexibleInt(obj, "min_combat_level"));
-            constraints.setMaxCombatLevel(readFlexibleInt(obj, "max_combat_level"));
+			// Handle integer fields that might be arrays
+			constraints.setTimeInTicks(readFlexibleInt(obj, "time_in_ticks"));
+			constraints.setRequiredLevel(readFlexibleInt(obj, "required_level"));
+			constraints.setRequiredXp(readFlexibleInt(obj, "required_xp"));
+			constraints.setRequiredRegion(readFlexibleInt(obj, "required_region"));
+			constraints.setMinCombatLevel(readFlexibleInt(obj, "min_combat_level"));
+			constraints.setMaxCombatLevel(readFlexibleInt(obj, "max_combat_level"));
 
-            // Handle string field
-            if (obj.has("required_skill"))
-            {
-                JsonElement el = obj.get("required_skill");
-                if (el.isJsonArray() && el.getAsJsonArray().size() > 0)
-                {
-                    constraints.setRequiredSkill(el.getAsJsonArray().get(0).getAsString());
-                }
-                else if (el.isJsonPrimitive())
-                {
-                    constraints.setRequiredSkill(el.getAsString());
-                }
-            }
+			// Handle string field
+			if (obj.has("required_skill"))
+			{
+				JsonElement el = obj.get("required_skill");
+				if (el.isJsonArray() && el.getAsJsonArray().size() > 0)
+				{
+					constraints.setRequiredSkill(el.getAsJsonArray().get(0).getAsString());
+				}
+				else if (el.isJsonPrimitive())
+				{
+					constraints.setRequiredSkill(el.getAsString());
+				}
+			}
 
-            // Handle allowed_regions array
-            if (obj.has("allowed_regions"))
-            {
-                JsonArray arr = obj.getAsJsonArray("allowed_regions");
-                List<Integer> regions = new ArrayList<>();
-                for (JsonElement e : arr)
-                {
-                    regions.add(e.getAsInt());
-                }
-                constraints.setAllowedRegions(regions);
-            }
+			// Handle allowed_regions array
+			if (obj.has("allowed_regions"))
+			{
+				JsonArray arr = obj.getAsJsonArray("allowed_regions");
+				List<Integer> regions = new ArrayList<>();
+				for (JsonElement e : arr)
+				{
+					regions.add(e.getAsInt());
+				}
+				constraints.setAllowedRegions(regions);
+			}
 
-            // Handle boolean fields
-            constraints.setNoPrayer(readFlexibleBoolean(obj, "no_prayer"));
-            constraints.setNoFood(readFlexibleBoolean(obj, "no_food"));
-            constraints.setSoloOnly(readFlexibleBoolean(obj, "solo_only"));
-            constraints.setNoEquipment(readFlexibleBoolean(obj, "no_equipment"));
-            constraints.setEquipNothing(readFlexibleBoolean(obj, "equip_nothing"));
+			// Handle boolean fields
+			constraints.setNoPrayer(readFlexibleBoolean(obj, "no_prayer"));
+			constraints.setNoFood(readFlexibleBoolean(obj, "no_food"));
+			constraints.setSoloOnly(readFlexibleBoolean(obj, "solo_only"));
+			constraints.setNoEquipment(readFlexibleBoolean(obj, "no_equipment"));
+			constraints.setEquipNothing(readFlexibleBoolean(obj, "equip_nothing"));
 
-            // Handle equipment ID arrays
-            constraints.setRequiredEquipmentIds(readIntArray(obj, "required_equipment_ids"));
-            constraints.setAllowedEquipmentIds(readIntArray(obj, "allowed_equipment_ids"));
-            constraints.setForbiddenEquipmentIds(readIntArray(obj, "forbidden_equipment_ids"));
+			// Handle equipment ID arrays
+			constraints.setRequiredEquipmentIds(readIntArray(obj, "required_equipment_ids"));
+			constraints.setAllowedEquipmentIds(readIntArray(obj, "allowed_equipment_ids"));
+			constraints.setForbiddenEquipmentIds(readIntArray(obj, "forbidden_equipment_ids"));
 
-            // Handle slot-based equipment constraints
-            // Support both integer arrays and string slot name arrays
-            constraints.setMustBeEmptySlots(readSlotArray(obj, "must_be_empty", "must_be_empty_slots"));
-            constraints.setEquippableSlots(readSlotArray(obj, "equippable_slots", "equippable_slot_names"));
+			// Handle slot-based equipment constraints
+			// Support both integer arrays and string slot name arrays
+			constraints.setMustBeEmptySlots(readSlotArray(obj, "must_be_empty", "must_be_empty_slots"));
+			constraints.setEquippableSlots(readSlotArray(obj, "equippable_slots", "equippable_slot_names"));
 
-            // Handle dropped item constraints
-            if (obj.has("dropped_item"))
-            {
-                JsonElement el = obj.get("dropped_item");
-                if (el.isJsonPrimitive())
-                {
-                    constraints.setDroppedItem(el.getAsString());
-                }
-            }
-            constraints.setDroppedItemIds(readIntArray(obj, "dropped_item_id"));
-            constraints.setDroppedItemQuantity(readFlexibleInt(obj, "quantity"));
+			// Handle dropped item constraints
+			if (obj.has("dropped_item"))
+			{
+				JsonElement el = obj.get("dropped_item");
+				if (el.isJsonPrimitive())
+				{
+					constraints.setDroppedItem(el.getAsString());
+				}
+			}
+			constraints.setDroppedItemIds(readIntArray(obj, "dropped_item_id"));
+			constraints.setDroppedItemQuantity(readFlexibleInt(obj, "quantity"));
 
-            return constraints;
-        }
+			return constraints;
+		}
 
-        private Integer readFlexibleInt(JsonObject obj, String field)
-        {
-            if (!obj.has(field)) return null;
+		private Integer readFlexibleInt(JsonObject obj, String field)
+		{
+			if (!obj.has(field)) return null;
 
-            JsonElement el = obj.get(field);
-            if (el.isJsonArray())
-            {
-                JsonArray arr = el.getAsJsonArray();
-                if (arr.size() > 0)
-                {
-                    return arr.get(0).getAsInt();
-                }
-                return null;
-            }
-            else if (el.isJsonPrimitive())
-            {
-                return el.getAsInt();
-            }
-            return null;
-        }
+			JsonElement el = obj.get(field);
+			if (el.isJsonArray())
+			{
+				JsonArray arr = el.getAsJsonArray();
+				if (arr.size() > 0)
+				{
+					return arr.get(0).getAsInt();
+				}
+				return null;
+			}
+			else if (el.isJsonPrimitive())
+			{
+				return el.getAsInt();
+			}
+			return null;
+		}
 
-        private Boolean readFlexibleBoolean(JsonObject obj, String field)
-        {
-            if (!obj.has(field)) return null;
+		private Boolean readFlexibleBoolean(JsonObject obj, String field)
+		{
+			if (!obj.has(field)) return null;
 
-            JsonElement el = obj.get(field);
-            if (el.isJsonArray())
-            {
-                JsonArray arr = el.getAsJsonArray();
-                if (arr.size() > 0)
-                {
-                    return arr.get(0).getAsBoolean();
-                }
-                return null;
-            }
-            else if (el.isJsonPrimitive())
-            {
-                return el.getAsBoolean();
-            }
-            return null;
-        }
+			JsonElement el = obj.get(field);
+			if (el.isJsonArray())
+			{
+				JsonArray arr = el.getAsJsonArray();
+				if (arr.size() > 0)
+				{
+					return arr.get(0).getAsBoolean();
+				}
+				return null;
+			}
+			else if (el.isJsonPrimitive())
+			{
+				return el.getAsBoolean();
+			}
+			return null;
+		}
 
-        private List<Integer> readIntArray(JsonObject obj, String field)
-        {
-            if (!obj.has(field)) return null;
+		private List<Integer> readIntArray(JsonObject obj, String field)
+		{
+			if (!obj.has(field)) return null;
 
-            List<Integer> result = new ArrayList<>();
-            JsonElement el = obj.get(field);
+			List<Integer> result = new ArrayList<>();
+			JsonElement el = obj.get(field);
 
-            if (el.isJsonArray())
-            {
-                for (JsonElement e : el.getAsJsonArray())
-                {
-                    if (e.isJsonPrimitive())
-                    {
-                        result.add(e.getAsInt());
-                    }
-                }
-            }
-            else if (el.isJsonPrimitive())
-            {
-                // Single value instead of array
-                result.add(el.getAsInt());
-            }
+			if (el.isJsonArray())
+			{
+				for (JsonElement e : el.getAsJsonArray())
+				{
+					if (e.isJsonPrimitive())
+					{
+						result.add(e.getAsInt());
+					}
+				}
+			}
+			else if (el.isJsonPrimitive())
+			{
+				// Single value instead of array
+				result.add(el.getAsInt());
+			}
 
-            return result.isEmpty() ? null : result;
-        }
+			return result.isEmpty() ? null : result;
+		}
 
-        /**
-         * Read slot array that can be either integer indices or string slot names.
-         * Checks intField first (for integer indices or string names), then stringField as fallback.
-         */
-        private List<Integer> readSlotArray(JsonObject obj, String intField, String stringField)
-        {
-            // First try reading from the primary field (can be integers OR strings)
-            if (obj.has(intField))
-            {
-                List<Integer> result = readFlexibleSlotArray(obj.get(intField));
-                if (result != null && !result.isEmpty())
-                {
-                    return result;
-                }
-            }
+		/**
+		 * Read slot array that can be either integer indices or string slot names.
+		 * Checks intField first (for integer indices or string names), then stringField as fallback.
+		 */
+		private List<Integer> readSlotArray(JsonObject obj, String intField, String stringField)
+		{
+			// First try reading from the primary field (can be integers OR strings)
+			if (obj.has(intField))
+			{
+				List<Integer> result = readFlexibleSlotArray(obj.get(intField));
+				if (result != null && !result.isEmpty())
+				{
+					return result;
+				}
+			}
 
-            // Try reading from the secondary/fallback field
-            if (obj.has(stringField))
-            {
-                List<Integer> result = readFlexibleSlotArray(obj.get(stringField));
-                if (result != null && !result.isEmpty())
-                {
-                    return result;
-                }
-            }
+			// Try reading from the secondary/fallback field
+			if (obj.has(stringField))
+			{
+				List<Integer> result = readFlexibleSlotArray(obj.get(stringField));
+				if (result != null && !result.isEmpty())
+				{
+					return result;
+				}
+			}
 
-            return null;
-        }
+			return null;
+		}
 
-        /**
-         * Read a slot array that can contain either integer indices or string slot names.
-         */
-        private List<Integer> readFlexibleSlotArray(JsonElement el)
-        {
-            List<Integer> result = new ArrayList<>();
+		/**
+		 * Read a slot array that can contain either integer indices or string slot names.
+		 */
+		private List<Integer> readFlexibleSlotArray(JsonElement el)
+		{
+			List<Integer> result = new ArrayList<>();
 
-            if (el.isJsonArray())
-            {
-                for (JsonElement e : el.getAsJsonArray())
-                {
-                    if (e.isJsonPrimitive())
-                    {
-                        JsonPrimitive prim = e.getAsJsonPrimitive();
-                        if (prim.isNumber())
-                        {
-                            // Integer slot index
-                            result.add(prim.getAsInt());
-                        }
-                        else if (prim.isString())
-                        {
-                            // String slot name
-                            String slotName = prim.getAsString().toUpperCase();
-                            Integer slotIndex = slotNameToIndex(slotName);
-                            if (slotIndex != null)
-                            {
-                                result.add(slotIndex);
-                            }
-                        }
-                    }
-                }
-            }
-            else if (el.isJsonPrimitive())
-            {
-                JsonPrimitive prim = el.getAsJsonPrimitive();
-                if (prim.isNumber())
-                {
-                    result.add(prim.getAsInt());
-                }
-                else if (prim.isString())
-                {
-                    String slotName = prim.getAsString().toUpperCase();
-                    Integer slotIndex = slotNameToIndex(slotName);
-                    if (slotIndex != null)
-                    {
-                        result.add(slotIndex);
-                    }
-                }
-            }
+			if (el.isJsonArray())
+			{
+				for (JsonElement e : el.getAsJsonArray())
+				{
+					if (e.isJsonPrimitive())
+					{
+						JsonPrimitive prim = e.getAsJsonPrimitive();
+						if (prim.isNumber())
+						{
+							// Integer slot index
+							result.add(prim.getAsInt());
+						}
+						else if (prim.isString())
+						{
+							// String slot name
+							String slotName = prim.getAsString().toUpperCase();
+							Integer slotIndex = slotNameToIndex(slotName);
+							if (slotIndex != null)
+							{
+								result.add(slotIndex);
+							}
+						}
+					}
+				}
+			}
+			else if (el.isJsonPrimitive())
+			{
+				JsonPrimitive prim = el.getAsJsonPrimitive();
+				if (prim.isNumber())
+				{
+					result.add(prim.getAsInt());
+				}
+				else if (prim.isString())
+				{
+					String slotName = prim.getAsString().toUpperCase();
+					Integer slotIndex = slotNameToIndex(slotName);
+					if (slotIndex != null)
+					{
+						result.add(slotIndex);
+					}
+				}
+			}
 
-            return result.isEmpty() ? null : result;
-        }
+			return result.isEmpty() ? null : result;
+		}
 
-        /**
-         * Convert slot name to slot index.
-         * Supports: HEAD, CAPE, AMULET, WEAPON, BODY, SHIELD, LEGS, GLOVES, BOOTS, RING, AMMO
-         */
-        private Integer slotNameToIndex(String slotName)
-        {
-            switch (slotName)
-            {
-                case "HEAD": return 0;
-                case "CAPE": return 1;
-                case "AMULET": return 2;
-                case "WEAPON": return 3;
-                case "BODY": return 4;
-                case "SHIELD": return 5;
-                case "LEGS": return 7;
-                case "GLOVES": return 9;
-                case "BOOTS": return 10;
-                case "RING": return 12;
-                case "AMMO": return 13;
-                default: return null;
-            }
-        }
-    }
+		/**
+		 * Convert slot name to slot index.
+		 * Supports: HEAD, CAPE, AMULET, WEAPON, BODY, SHIELD, LEGS, GLOVES, BOOTS, RING, AMMO
+		 */
+		private Integer slotNameToIndex(String slotName)
+		{
+			switch (slotName)
+			{
+				case "HEAD": return 0;
+				case "CAPE": return 1;
+				case "AMULET": return 2;
+				case "WEAPON": return 3;
+				case "BODY": return 4;
+				case "SHIELD": return 5;
+				case "LEGS": return 7;
+				case "GLOVES": return 9;
+				case "BOOTS": return 10;
+				case "RING": return 12;
+				case "AMMO": return 13;
+				default: return null;
+			}
+		}
+	}
 }

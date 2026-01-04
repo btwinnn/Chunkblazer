@@ -14,72 +14,72 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TaskVerificationResponse
 {
-    /** Whether the verification was successful */
-    private boolean success;
+	/** Whether the verification was successful */
+	private boolean success;
 
-    /** Whether the task is now complete */
-    private boolean taskCompleted;
+	/** Whether the task is now complete */
+	private boolean taskCompleted;
 
-    /** Updated progress count (server-authoritative) */
-    private int verifiedProgress;
+	/** Updated progress count (server-authoritative) */
+	private int verifiedProgress;
 
-    /** Points awarded (if task completed) */
-    private int pointsAwarded;
+	/** Points awarded (if task completed) */
+	private int pointsAwarded;
 
-    /** Server-side task ID for tracking */
-    private String serverTaskId;
+	/** Server-side task ID for tracking */
+	private String serverTaskId;
 
-    /** Error message if verification failed */
-    private String errorMessage;
+	/** Error message if verification failed */
+	private String errorMessage;
 
-    /** Reason for rejection if not verified */
-    private String rejectionReason;
+	/** Reason for rejection if not verified */
+	private String rejectionReason;
 
-    /** Whether this was verified offline (for testing) */
-    private boolean offlineMode;
+	/** Whether this was verified offline (for testing) */
+	private boolean offlineMode;
 
-    /** Server timestamp of verification */
-    private long serverTimestamp;
+	/** Server timestamp of verification */
+	private long serverTimestamp;
 
-    /**
-     * Create an offline success response for testing without API.
-     */
-    public static TaskVerificationResponse offlineSuccess(String taskId)
-    {
-        return TaskVerificationResponse.builder()
-            .success(true)
-            .taskCompleted(false)
-            .verifiedProgress(1)
-            .offlineMode(true)
-            .serverTaskId(taskId)
-            .serverTimestamp(System.currentTimeMillis())
-            .build();
-    }
+	/**
+	 * Create an offline success response for testing without API.
+	 */
+	public static TaskVerificationResponse offlineSuccess(String taskId)
+	{
+		return TaskVerificationResponse.builder()
+			.success(true)
+			.taskCompleted(false)
+			.verifiedProgress(1)
+			.offlineMode(true)
+			.serverTaskId(taskId)
+			.serverTimestamp(System.currentTimeMillis())
+			.build();
+	}
 
-    /**
-     * Create an error response.
-     */
-    public static TaskVerificationResponse error(String message)
-    {
-        return TaskVerificationResponse.builder()
-            .success(false)
-            .taskCompleted(false)
-            .errorMessage(message)
-            .serverTimestamp(System.currentTimeMillis())
-            .build();
-    }
+	/**
+	 * Create an error response.
+	 */
+	public static TaskVerificationResponse error(String message)
+	{
+		return TaskVerificationResponse.builder()
+			.success(false)
+			.taskCompleted(false)
+			.errorMessage(message)
+			.serverTimestamp(System.currentTimeMillis())
+			.build();
+	}
 
-    /**
-     * Create a task completed response.
-     */
-    public static TaskVerificationResponse completed(String taskId, int points)
-    {
-        return TaskVerificationResponse.builder()
-            .success(true)
-            .taskCompleted(true)
-            .pointsAwarded(points)
-            .serverTaskId(taskId)
-            .serverTimestamp(System.currentTimeMillis())
-            .build();
-    }
+	/**
+	 * Create a task completed response.
+	 */
+	public static TaskVerificationResponse completed(String taskId, int points)
+	{
+		return TaskVerificationResponse.builder()
+			.success(true)
+			.taskCompleted(true)
+			.pointsAwarded(points)
+			.serverTaskId(taskId)
+			.serverTimestamp(System.currentTimeMillis())
+			.build();
+	}
 }

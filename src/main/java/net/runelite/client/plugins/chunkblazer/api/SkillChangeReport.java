@@ -10,45 +10,45 @@ import lombok.Data;
 @Builder
 public class SkillChangeReport
 {
-    /** Player RSN hash */
-    private String playerHash;
+	/** Player RSN hash */
+	private String playerHash;
 
-    /** Task ID this skill change is for */
-    private String taskId;
+	/** Task ID this skill change is for */
+	private String taskId;
 
-    /** Skill ID (0=Attack, 1=Defence, etc.) */
-    private int skillId;
+	/** Skill ID (0=Attack, 1=Defence, etc.) */
+	private int skillId;
 
-    /** Skill name */
-    private String skillName;
+	/** Skill name */
+	private String skillName;
 
-    /** Previous level */
-    private int previousLevel;
+	/** Previous level */
+	private int previousLevel;
 
-    /** New level */
-    private int newLevel;
+	/** New level */
+	private int newLevel;
 
-    /** Previous XP */
-    private int previousXp;
+	/** Previous XP */
+	private int previousXp;
 
-    /** New XP */
-    private int newXp;
+	/** New XP */
+	private int newXp;
 
-    /** XP gained in this event */
-    private int xpGained;
+	/** XP gained in this event */
+	private int xpGained;
 
-    /** Region ID where XP was gained */
-    private int regionId;
+	/** Region ID where XP was gained */
+	private int regionId;
 
-    /** Game tick when event occurred */
-    private int gameTick;
+	/** Game tick when event occurred */
+	private int gameTick;
 
-    /** Client timestamp */
-    private long timestamp;
+	/** Client timestamp */
+	private long timestamp;
 
-    /** Total level after this change */
-    private int totalLevel;
+	/** Total level after this change */
+	private int totalLevel;
 
-    /** Action that caused the XP gain (if known) */
-    private String action;
+	/** Action that caused the XP gain (if known) */
+	private String action;
 }
