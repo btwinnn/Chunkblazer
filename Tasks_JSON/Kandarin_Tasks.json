@@ -7762,6 +7762,81 @@
                 }              
             ],                              
             "is_completed": false
+        },
+        {
+            "region_id": [9526],
+            "Friendly_Name": "Tree Gnome Stronghold Gnomeball Field",
+            "neighbor_ids": [9527, 9782, 9525, 9270],
+            "tasks": [
+                {                    
+                    "name": "Pickpocket a Gnome",
+                    "taskID": "pickpocket_gnome",
+                    "category": "Thieving",
+                    "level": 75,
+                    "completion_type": "THIEVING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                    "npc": "Gnome",
+                    "npc_ids": [6078, 6079, 6077, 6086, 6087, 5969, 6094, 6095, 6096, 5968, 5970]                    
+                    }
+                },
+                {
+                    "name": "Mix an Agility Potion",
+                    "taskID": "mix_agility_potion",
+                    "category": "Herblore",
+                    "level": 34,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                     "required_items": [
+                        {
+                            "item": ["Agility Potion(3)", "Agility Potion(4)"],
+                            "item_ids": [3034, 3032]
+                        }
+                    ]
+                },
+                {
+                    "name": "DESTROY a Gnome Child in 1 Hit",
+                    "taskID": "defeat_gnome_child_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Gnome Child"],
+                        "npc_ids": [6078, 6079, 6077],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [30],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Obtain a Gnomeball",
+                    "taskID": "obtain_gnomeball",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Gnomeball"],
+                            "item_ids": [751],
+                            "quantity": [1]
+                        }
+                    ]
+                }                             
+            ],                              
+            "is_completed": false
         }
     ]
 }
