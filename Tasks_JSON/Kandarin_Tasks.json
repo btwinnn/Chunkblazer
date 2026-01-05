@@ -261,7 +261,7 @@
                     "constraints": {
                         "varbit_id": 4129
                     }                   
-                },              
+                },                            
                 {
                     "name": "Plant some Sweetcorn",
                     "taskID": "plant_sweetcorn_seed",
@@ -8646,7 +8646,257 @@
                             }                          
                 ],                                        
             "is_completed": false
-        }
+        },
+        {
+            "region_id": [10039],
+            "Friendly_Name": "Barbarian Outpost",
+            "neighbor_ids": [10040, 10295, 10038, 9783],
+            "tasks": [
+                {
+                    "name": "Complete some Laps of the Barbarian Outpost Course",
+                    "taskID": "complete_barbarian_outpost_course",
+                    "category": "Agility",
+                    "level": 35,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Crumbling Wall"],
+                        "object_id": [1948], 
+                        "quantity": [1, 20]
+                    }
+                },
+                {
+                "name": "Build a Medium STASH Unit at the Barbarian Outpost Course",
+                "taskID": "build_medium_stash_barbarian_outpost_course",
+                "category": "Construction",
+                "level": 42,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
 
+                "required_object": [
+                        {
+                        "object": "Medium STASH Unit (inconspicuous bush)",
+                        "object_id": [28992],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Unlock Level 5 Attacker at Barbarian Assault",
+                    "taskID": "unlock_level_5_attacker_barb_assault",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 5,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 3254,        
+                        "varbit_boolean": 5,      
+                        "description": "Unlock Level 5 Attacker Barbarian Assault"
+                    }
+                },
+                {
+                    "name": "Unlock Level 5 Colletor at Barbarian Assault",
+                    "taskID": "unlock_level_5_collector_barb_assault",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 5,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 3256,        
+                        "varbit_boolean": 5,      
+                        "description": "Unlock Level 5 Collector Barbarian Assault"
+                    }
+                },
+                {
+                    "name": "Unlock Level 5 Defender at Barbarian Assault",
+                    "taskID": "unlock_level_5_defender_barb_assault",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 5,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 3255,        
+                        "varbit_boolean": 5,      
+                        "description": "Unlock Level 5 Defender Barbarian Assault"
+                    }
+                }, 
+                {
+                    "name": "Unlock Level 5 Healer at Barbarian Assault",
+                    "taskID": "unlock_level_5_healer_barb_assault",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 5,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 3257,        
+                        "varbit_boolean": 5,      
+                        "description": "Unlock Level 5 Healer Barbarian Assault"
+                    }
+                },
+                {
+                    "name": "Equip a Granite Body",
+                    "taskID": "equip_granite_body",
+                    "category": "Defence",
+                    "level": 50,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Granite Body"],
+                            "item_ids": [10564]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Fighter Torso",
+                    "taskID": "equip_fighter_torso",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Fighter Torso"],
+                            "item_ids": [10551]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Fighter Hat",
+                    "taskID": "equip_fighter_hat",
+                    "category": "Defence",
+                    "level": 45,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Fighter Hat"],
+                            "item_ids": [10548]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Ranger Hat",
+                    "taskID": "equip_ranger_hat",
+                    "category": "Defence",
+                    "level": 45,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ranger Hat"],
+                            "item_ids": [10550]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Runner Hat",
+                    "taskID": "equip_runner_hat",
+                    "category": "Defence",
+                    "level": 45,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Runner Hat"],
+                            "item_ids": [10549]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Healer Hat",
+                    "taskID": "equip_healer_hat",
+                    "category": "Defence",
+                    "level": 45,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Healer Hat"],
+                            "item_ids": [10547]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Skirt",
+                    "taskID": "equip_penance_skirt",
+                    "category": "Ranged",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Penance Skirt"],
+                            "item_ids": [10555]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Penance Runner Boots",
+                    "taskID": "equip_penance_boots",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Runner Boots"],
+                            "item_ids": [10552]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Penance Gloves",
+                    "taskID": "equip_penance_gloves",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Penance Gloves"],
+                            "item_ids": [10554]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Barbarian Teleport Tablet",
+                    "taskID": "obtain_barbarian_teleport_tablet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Barbarian Teleport"],
+                            "item_ids": [24955],
+                            "quantity": [1]
+                        }
+                    ]
+                }                                           
+            ],                                        
+            "is_completed": false
+        }
     ]
 }
