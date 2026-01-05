@@ -1,0 +1,181 @@
+{
+            "region_id": [12596],
+            "Friendly_Name": "Champions' Guild",
+            "neighbor_ids": [12595, 12340, 12852, 12597],
+            "tasks": [
+                {
+                    "name": "Plant some Cadava Berries",
+                    "taskID": "plant_cadava_berries",
+                    "category": "Farming",
+                    "level": 22,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Cadavaberry Seeds"],
+                            "item_ids": [5102],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Soft Clay",
+                    "taskID": "obtain_soft_clay",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Soft Clay"],
+                            "item_ids": [1761],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Enter the Champions' Guild",
+                    "taskID": "enter_champions_guild",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 1,
+                    "assignment_weight": 10
+                },
+                {
+                    "name": "Use the Agility Stepping Stones",
+                    "taskID": "agility_stepping_stones",
+                    "category": "Agility",
+                    "level": 31,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 8
+                },
+                {
+                    "name": "Equip Rune Platelegs",
+                    "taskID": "equip_rune_platelegs",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Rune Platelegs"],
+                            "item_ids": [1079]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Mace",
+                    "taskID": "equip_rune_mace",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Rune Mace"],
+                            "item_ids": [1432]
+                        }
+                    ]
+                },
+                {
+                    "name": "Enter the Sourhog Cave",
+                    "taskID": "enter_sourhog_cave",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 1,
+                    "assignment_weight": 8
+                },
+                {
+                    "name": "Defeat a Sourhog on task",
+                    "taskID": "defeat_sourhog_on_task",
+                    "category": "Slayer",
+                    "level": 1,
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Sourhog"],
+                        "npc_ids": [10435],
+                        "quantity": 1
+                    }
+                },
+                {
+                    "name": "Obtain a Cape Yellow",
+                    "taskID": "obtain_yellow_cape",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Yellow Cape"],
+                            "item_ids": [1023],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Green D'Hide Chaps",
+                    "taskID": "equip_green_d'hide_chaps",
+                    "category": "Ranged",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Green D'Hide Chaps"],
+                            "item_ids": [1099]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a White Bead from an Imp",
+                    "taskID": "obtain_white_bead",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["White Bead"],
+                            "item_ids": [1476]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Mugger in 5 Seconds",
+                    "taskID": "defeat_mugger_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Mugger"],
+                        "npc_ids": [513, 1461, 6996],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [8],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Dragon Slayer I",
+                    "points": 3
+                }
+            ],
+            "is_completed": false
+        }

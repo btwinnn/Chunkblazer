@@ -1,0 +1,196 @@
+{
+            "region_id": [13108],
+            "Friendly_Name": "Varrock East Mine",
+            "neighbor_ids": [13364, 13107, 12852, 13109],
+            "tasks": [
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a White Unicorn",
+                    "taskID": "defeat_white_unicorn",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Unicorn"],
+                        "npc_ids": [2837, 14043],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Mix an Anti-Poison Potion",
+                    "taskID": "mix_anti-poison",
+                    "category": "Herblore",
+                    "level": 5,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                     "required_items": [
+                        {
+                            "item": ["Antipoison(3)", "Antipoison(4)"],
+                            "item_ids": [175, 2446]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ensouled Unicorn Head",
+                    "taskID": "obtain_ensouled_unicorn_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ensouled Unicorn Head"],
+                            "item_ids": [13465, 13466]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some Black Bears",
+                    "taskID": "defeat_some_black_bears",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Black Bear"],
+                        "npc_ids": [2839],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Black Bear on Task",
+                    "taskID": "defeat_black_bear_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Black Bear"],
+                        "npc_ids": [2839],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain an Ensouled Bear Head",
+                    "taskID": "obtain_ensouled_bear_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ensouled Bear Head"],
+                            "item_ids": [13462, 13463]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Unicorn in 13 Seconds",
+                    "taskID": "defeat_white_unicorn_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["White Unicorn"],
+                        "npc_ids": [2837, 14043],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [20],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }, 
+                {
+                    "name": "Defeat a Level 6 Giant Rat with nothing Equipped",
+                    "taskID": "defeat_level_6_giant_rat_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Rat"],
+                        "npc_ids": [2862, 2863, 2864],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                },
+                {
+                    "name": "Obtain some Unicorn Horns",
+                    "taskID": "obtain_unicorn_horns",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Unicorn Horn"],
+                            "item_ids": [237],
+                            "quantity": [1,25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Talk to Guidor",
+                    "taskID": "talk_to_guidor",
+                    "category": "Dialogue",
+                    "completion_type": "NPC_DIALOGUE",
+                    "base_points": 1,
+                    "assignment_weight": 8,                  
+                    "target_npc": {
+                        "npc": ["Guidor"],
+                        "npc_ids": [1110]
+                    }
+                },
+                {
+                    "name": "Obtain Cadava Berries",
+                    "taskID": "obtain_cadava_berries",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cadava Berries"],
+                            "item_ids": [753],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+                 ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "What Lies Below",
+                    "points": 2
+                }
+            ],                 
+            "is_completed": false
+        }

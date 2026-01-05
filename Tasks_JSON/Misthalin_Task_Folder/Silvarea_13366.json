@@ -1,0 +1,159 @@
+{
+            "region_id": [13366],
+            "Friendly_Name": "Silvarea",
+            "neighbor_ids": [13110, 13365, 13622, 13367],
+            "tasks": [
+                {
+                    "name": "Equip a Zombie Axe",
+                    "taskID": "equip_zombie_axe",
+                    "category": "Attack",
+                    "level": 65,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Zombie Axe"],
+                            "item_ids": [28810]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some Armoured Zombies",
+                    "taskID": "defeat_armoured_zombies",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Armoured Zombie"],
+                        "npc_ids": [12730, 12731, 12732, 12733, 12734, 12736, 12738, 12755, 12757, 12758, 12735, 12738, 12739, 12761, 12763, 14135, 14136, 12720, 12721, 12722, 12723, 12724, 12725, 12726, 12727, 12728, 12729, 14113, 14114, 14115,  	14116, 14117, 14118, 14119, 14120, 14121, 14122],
+                        "quantity": [1, 100]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 6 Bat in 1 Hit",
+                    "taskID": "defeat_bat_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bat Level 6"],
+                        "npc_ids": [2827, 10888, 14042],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Mine some Limestone",
+                    "taskID": "mine_limestone",
+                    "category": "Mining",
+                    "level": 10,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Limestone"],
+                            "item_ids": [3211],
+                            "quantity": [1, 10]
+                        }
+                    ]
+                },
+                {
+                "name": "Build an Easy STASH Unit in Silvaera",
+                "taskID": "build_easy_stash_silvarea",
+                "category": "Construction",
+                "level": 27,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Plank",
+                        "item_ids": [960]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Easy STASH Unit (inconspicuous rocks)",
+                        "object_id": [28961],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch some Arrow Shafts",
+                    "taskID": "fletch_arrow_shafts",
+                    "category": "Fletching",
+                    "level": 1,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Arrow Shaft"],
+                            "item_ids": [52],
+                            "quantity": [1, 1000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some Level 6 Bats",
+                    "taskID": "defeat_bats",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bat Level 6"],
+                        "npc_ids": [2827, 10888, 14042],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat an Armoured Zombie in 18 Seconds",
+                    "taskID": "defeat_armoured_zombies",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Armoured Zombie"],
+                        "npc_ids": [12730, 12731, 12732, 12733, 12734, 12736, 12738, 12755, 12757, 12758, 12735, 12738, 12739, 12761, 12763, 14135, 14136, 12720, 12721, 12722, 12723, 12724, 12725, 12726, 12727, 12728, 12729, 14113, 14114, 14115,  	14116, 14117, 14118, 14119, 14120, 14121, 14122],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "time_in_ticks": [30]
+                    }             
+                }
+            ],
+                "optional_quests_unlocked": [
+                    {
+                        "name": "Rag and Bone Man I",
+                        "points": 1
+                    },
+                    {
+                        "name": "Rag and Bone Man II",
+                        "points": 3
+                    }
+                ],
+             
+            "is_completed": false
+        }

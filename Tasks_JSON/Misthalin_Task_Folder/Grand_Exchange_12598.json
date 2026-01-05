@@ -1,0 +1,46 @@
+{
+            "region_id": [12598],
+            "Friendly_Name": "Grand Exchange",
+            "neighbor_ids": [12342, 12597, 12854, 12599],
+            "tasks": [
+                {
+                    "name": "Use a Minecraft to travel to Keldagrim",
+                    "taskID": "minecart_keldagrim",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 8
+                },
+                {
+                    "name": "Use the Spirit Tree to Teleport to the Grand Exchange",
+                    "taskID": "spirit_tree_teleport_to_GE",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 8
+                },
+                {
+                    "name": "Use the Level 21 Agility Underwall Tunnel",
+                    "taskID": "agility_level_21_underwall_tunnel",
+                    "category": "Agility",
+                    "level": 21,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 8
+                },
+                {
+                    "name": "Talk to Perdu",
+                    "taskID": "talk_to_perdu",
+                    "category": "Dialogue",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Perdu"],
+                        "npc_ids": [7456],
+                        "quantity": [1]
+                    }
+                }                                                       
+            ],                 
+                "is_completed": false
+        }

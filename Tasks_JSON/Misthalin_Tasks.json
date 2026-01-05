@@ -182,7 +182,7 @@
             "is_completed": false
         },
         {
-            "region_id": [12340, 12440],
+            "region_id": [12340],
             "Friendly_Name": "Draynor Manor",
             "neighbor_ids": [12339, 12084, 12341, 12596],
             "tasks": [
@@ -343,7 +343,7 @@
             "is_completed": false
         },
         {
-            "region_id": [12339, 12439, 12438],
+            "region_id": [12339],
             "Friendly_Name": "Draynor North",
             "neighbor_ids": [12083, 12338, 12595, 12340],
             "tasks": [
@@ -547,7 +547,7 @@
         {
             "region_id": [12338],
             "Friendly_Name": "Draynor South",
-            "neighbor_ids": [12082, 12339, 12594, 12340],
+            "neighbor_ids": [12082, 12339, 12594, 12337],
             "tasks": [
                 {
                     "name": "Obtain Red Dye",
@@ -747,7 +747,7 @@
             "is_completed": false
         },
         {
-            "region_id": [12337, 12437, 14483, 14484, 8036, 8292,8291],
+            "region_id": [12337],
             "Friendly_Name": "Wizards' Tower",
             "neighbor_ids": [12081, 12338, 12593, 12336],
             "tasks": [
@@ -1049,7 +1049,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a some Dark Wizards",
+                    "name": "Defeat some Dark Wizards",
                     "taskID": "defeat_some_dark_wizards",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

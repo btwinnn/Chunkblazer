@@ -1,0 +1,209 @@
+{
+            "region_id": [13109],
+            "Friendly_Name": "Varrock East Gate",
+            "neighbor_ids": [12853, 13108, 13365, 13110],
+            "tasks": [
+                {
+                "name": "Travel to Varlamore",
+                "taskID": "travel_varlamore",
+                "category": "Travel",
+                "completion_type": "TRAVEL",
+                "base_points": 1,
+                "assignment_weight": 10
+                },
+                {
+                "name": "Travel through the Varrock Museum 153 Kudos Gate",
+                "taskID": "travel_varrock_kudos_gate",
+                "category": "Travel",
+                "completion_type": "TRAVEL",
+                "base_points": 1,
+                "assignment_weight": 8
+                },
+                {
+                    "name": "Steal from a Tea Stall",
+                    "taskID": "steal_tea_stall",
+                    "category": "Thieving",
+                    "level": 5,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Tea Stall"],
+                            "object_id": [635],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Right Eye Patch",
+                    "taskID": "equip_right_eye_patch",
+                    "category": "Defence",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Right Eye Patch"],
+                            "item_ids": [1025]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Red Cape",
+                    "taskID": "obtain_red_cape",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Red Cape"],
+                            "item_ids": [1007],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Varrock Guard with nothing Equipped",
+                    "taskID": "defeat_varrock_guard_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Varrock Guard Level 21"],
+                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"                      
+                    }
+                    
+                },
+                {
+                    "name": "Defeat a Varrock Guard in 1 Hit",
+                    "taskID": "defeat_varrock_guard_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Varrock Guard Level 21"],
+                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat some Varrock Guards",
+                    "taskID": "defeat_some_varrock_guards",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Varrock Guard Level 21"],
+                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "quantity": [1, 25]
+                    }
+                }, 
+                {
+                    "name": "Pickpocket a Varrock Guard",
+                    "taskID": "pickpocket_varrock_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Varrock Guard Level 21"],
+                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain Gloves of Silence",
+                    "taskID": "obtain_gloves_of_silence",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Gloves of Silence"],
+                            "item_ids": [10075],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Spotted Cape",
+                    "taskID": "equip_spotted_cape",
+                    "category": "Hunter",
+                    "level": 40,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Spotted Cape"],
+                            "item_ids": [10073],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Spottier Cape",
+                    "taskID": "equip_spottier_cape",
+                    "category": "Hunter",
+                    "level": 66,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Spottier Cape"],
+                            "item_ids": [10074],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Varrock Guard for some Bones",
+                    "taskID": "defeat_a_varrock_guard_for_bones",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Varrock Guard Level 21"],
+                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "quantity": [1, 25]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Bones",
+                        "dropped_item_id": [526],
+                        "quantity": [1]
+                        }
+                    ]
+                }
+           ],
+                    "optional_quests_unlocked": [
+                        {
+                            "name": "Family Crest",
+                            "points": 3
+                        },
+                        {
+                            "name": "A Soul's Bane",
+                            "points": 2
+                        }
+                    ],                 
+                    "is_completed": false
+        }
