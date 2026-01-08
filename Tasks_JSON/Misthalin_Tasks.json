@@ -2705,7 +2705,7 @@
                     "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Yew Longbow(u)"],
+                            "item": ["Yew Shortbow(u)"],
                             "item_ids": [68],
                             "quantity": [1]
                         }
