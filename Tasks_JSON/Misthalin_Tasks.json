@@ -1648,22 +1648,7 @@
                         "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
                         "quantity": [1]
                     }
-                },
-                {
-                    "name": "Obtain Gloves of Silence",
-                    "taskID": "obtain_gloves_of_silence",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Gloves of Silence"],
-                            "item_ids": [10075],
-                            "quantity": [1]
-                        }
-                    ]
-                },
+                },              
                 {
                     "name": "Equip a Spotted Cape",
                     "taskID": "equip_spotted_cape",
@@ -1671,7 +1656,7 @@
                     "level": 40,
                     "completion_type": "HUNTER",
                     "base_points": 2,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Spotted Cape"],
@@ -1687,7 +1672,7 @@
                     "level": 66,
                     "completion_type": "HUNTER",
                     "base_points": 3,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Spottier Cape"],

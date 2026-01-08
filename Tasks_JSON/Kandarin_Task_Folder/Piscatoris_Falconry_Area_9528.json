@@ -1,0 +1,108 @@
+{
+            "region_id": [9528],
+            "Friendly_Name": "Piscatoris Falconry Area",
+            "neighbor_ids": [9529, 9784, 9527, 9272],
+            "tasks": [
+                {
+                    "name": "Obtain Gloves of Silence",
+                    "taskID": "obtain_gloves_of_silence",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Gloves of Silence"],
+                            "item_ids": [10075],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Spotted Cape",
+                    "taskID": "equip_spotted_cape",
+                    "category": "Hunter",
+                    "level": 40,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Spotted Cape"],
+                            "item_ids": [10073],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Spottier Cape",
+                    "taskID": "equip_spottier_cape",
+                    "category": "Hunter",
+                    "level": 66,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Spottier Cape"],
+                            "item_ids": [10074],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Spotted Kebbit",
+                    "taskID": "catch_spotted_kebbit",
+                    "category": "Hunter",
+                    "level": 47,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Spotted Kebbit Fur",
+                            "item_ids": [10125]
+                            }                           
+                        ]             
+                },
+                {
+                    "name": "Catch a Dark Kebbit",
+                    "taskID": "catch_dark_kebbit",
+                    "category": "Hunter",
+                    "level": 57,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Dark Kebbit Fur",
+                            "item_ids": [10115]
+                            }                           
+                        ]             
+                },
+                {
+                    "name": "Catch a Dashing Kebbit",
+                    "taskID": "catch_dashing_kebbit",
+                    "category": "Hunter",
+                    "level": 69,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Dashing Kebbit Fur",
+                            "item_ids": [10127]
+                            }                           
+                        ]             
+                },
+                {
+                    "name": "Travel to Fairy Ring Code AKQ",
+                    "taskID": "fairy_ring_AKQ",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }                                                                    
+            ],                                                                                                              
+            "is_completed": false
+        }
