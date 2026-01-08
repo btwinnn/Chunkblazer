@@ -134,7 +134,13 @@
                     "constraints": {                       
                     "equip_nothing": "TRUE"
                     }                  
-                }                                                                 
-            ],                                                                                                              
+                }
+            ],
+                        "optional_quests_unlocked": [
+                            {
+                                "name": "Swan Song",
+                                "points": 4
+                            }                           
+                ],                                                                                                                                                                                         
             "is_completed": false
         }
