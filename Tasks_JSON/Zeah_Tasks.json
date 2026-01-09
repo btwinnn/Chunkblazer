@@ -354,7 +354,37 @@
                         "quantity": [1]
                         }
                     ]
-                }           
+                },
+                {
+                    "name": "Obtain a Papaya Fruit",
+                    "taskID": "Obtain_papaya_fruit",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Papaya Fruit",
+                        "item_ids": [1927],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Bake a Botanical Pie",
+                    "taskID": "cook_botanical_pie",
+                    "category": "Cooking",
+                    "level": 52,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Botanical Pie",
+                            "item_ids": [19662]
+                        }
+                    ]
+                }          
             ],
             "is_completed": false
         },
