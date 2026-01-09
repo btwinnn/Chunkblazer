@@ -1,0 +1,161 @@
+{
+            "region_id": [6968],
+            "Friendly_Name": "Hosidius Square",
+            "neighbor_ids": [6969, 7224, 6967, 6712],
+            "tasks": [
+                {
+                    "name": "Steal from a Fruit Stall",
+                    "taskID": "steal_fruit_stall",
+                    "category": "Thieving",
+                    "level": 25,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Fruit Stall"],
+                            "object_id": [28823],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal from a Baker's Stall",
+                    "taskID": "steal_baker's_stall",
+                    "category": "Thieving",
+                    "level": 5,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Baker's Stall"],
+                            "object_id": [6945],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Guard Dog",
+                    "taskID": "defeat_guard_dog",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Guard Dog"],
+                        "npc_ids": [7209, 114, 4228],
+                        "quantity": [1]
+                    }                   
+                 
+                },
+                {
+                    "name": "Defeat a Guard Dog on Task",
+                    "taskID": "defeat_guard_dog_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Guard Dog"],
+                        "npc_ids": [7209, 114, 4228],
+                        "quantity": [1]
+                    }                   
+                 
+                },
+                {
+                    "name": "Defeat a Hosidius Guard",
+                    "taskID": "defeat_hosidius_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hosidius Guard"],
+                        "npc_ids": [397, 398, 399, 400],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Pickpocket a Hosidius Guard",
+                    "taskID": "pickpocket_hosidius_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hosidius Guard"],
+                        "npc_ids": [397, 398, 399, 400],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Hosidius Guard",
+                    "taskID": "defeat_hosidius_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hosidius Guard"],
+                        "npc_ids": [397, 398, 399, 400],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Hosidius Guard in 12 Seconds",
+                    "taskID": "defeat_highwayman_fast",
+                    "category": "Combat",
+                    "level": 5,
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hosidius Guard"],
+                        "npc_ids": [397, 398, 399, 400],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [20],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Steal Cowbells",
+                    "taskID": "pickpocket_cowbells",
+                    "category": "Thieving",
+                    "level": 15,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "npc": ["Diary Cow"],
+                        "npc_ids": [8689],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Bucket of Milk",
+                    "taskID": "Obtain_milk",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Bucket of Milk",
+                        "item_ids": [1927],
+                        "quantity": [1]
+                        }
+                    ]
+                }           
+            ],
+            "is_completed": false
+        }
