@@ -389,40 +389,209 @@
             "is_completed": false
         },
         {
-            "region_id": [12339],
-            "Friendly_Name": "Draynor North",
-            "neighbor_ids": [12083, 12338, 12595, 12340],
+            "region_id": [7224],
+            "Friendly_Name": "The Dibber",
+            "neighbor_ids": [7225, 7480, 7223, 6968],
             "tasks": [
                 {
-                    "name": "Obtain a Black Cape",
-                    "taskID": "obtain_black_cape",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
+                    "name": "Catch a Raw Shark",
+                    "taskID": "catch_raw_shark",
+                    "category": "Fishing",
+                    "level": 76,
+                    "completion_type": "FISHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Raw Shark",
+                        "item_ids": [383],
+                        "quantity": [1]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Cook a Shark",
+                    "taskID": "cook_shark",
+                    "category": "Cooking",
+                    "level": 80,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Shark",
+                            "item_ids": [385]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix a Prayer Potion",
+                    "taskID": "mix_prayer_potion",
+                    "category": "Herblore",
+                    "level": 38,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                     "required_items": [
+                        {
+                            "item": ["Prayer Potion(3)", "Prayer Potion(4)"],
+                            "item_ids": [139, 2434]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Bass",
+                    "taskID": "catch_raw_bass",
+                    "category": "Fishing",
+                    "level": 46,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Raw Bass",
+                        "item_ids": [363],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Cod",
+                    "taskID": "catch_raw_cod",
+                    "category": "Fishing",
+                    "level": 23,
+                    "completion_type": "FISHING",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Black Cape"],
-                            "item_ids": [1019],
+                        "item": "Raw Cod",
+                        "item_ids": [341],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Cod",
+                    "taskID": "cook_cod",
+                    "category": "Cooking",
+                    "level": 18,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Cod",
+                            "item_ids": [339]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Bass",
+                    "taskID": "cook_bass",
+                    "category": "Cooking",
+                    "level": 43,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Bass",
+                            "item_ids": [365]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Herring",
+                    "taskID": "catch_raw_herring",
+                    "category": "Fishing",
+                    "level": 10,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Herring",
+                        "item_ids": [345],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Herring",
+                    "taskID": "cook_herring",
+                    "category": "Cooking",
+                    "level": 5,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Herring",
+                            "item_ids": [347]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Magic Tree",
+                    "taskID": "chop_magic_tree",
+                    "category": "Woodcutting",
+                    "level": 75,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Highwayman in 7 Seconds",
-                    "taskID": "defeat_highwayman_fast",
+                    "name": "Burn a Magic Log",
+                    "taskID": "burn_magic_log",
+                    "category": "Firemaking",
+                    "level": 75,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some Unicorn Foal",
+                    "taskID": "defeat_unicorn_foal",
                     "category": "Combat",
-                    "level": 5,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 10,
+                    "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Highwayman"],
-                        "npc_ids": [519, 518],
-                        "quantity": [1]
+                        "npc": ["Unicorn Foal"],
+                        "npc_ids": [3910],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Unicorn Foal in 1 Hit",
+                    "taskID": "defeat_unicorn_foal_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Unicorn Foal"],
+                        "npc_ids": [3910],
+                        "quantity": [1, 10]
                     },
+                    
                     "constraints": {
-                        "time_in_ticks": [12],
+                        "time_in_ticks": [1],
                         "prohibited_active_varbits": [
                                 {
                                     "varbit_id": 57,
@@ -433,153 +602,104 @@
                     }
                 },
                 {
-                    "name": "Complete some Laps of the Draynor Village Rooftop Course",
-                    "taskID": "complete_draynor_roof",
-                    "category": "Agility",
-                    "level": 1,
-                    "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": {
-                        "object": ["Draynor Rooftop Crate"],
-                        "object_id": [11632, 11358], 
-                        "quantity": [1, 20]
-                    }
+                    "name": "Chop a Willow Tree",
+                    "taskID": "Chop_willow_tree",
+                    "category": "Woodcutting",
+                    "level": 30,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1]
+                        }
+                    ]
                 },
                 {
-                    "name": "Defeat a Gobiln on Task",
-                    "taskID": "defeat_goblin_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Goblin"],
-                        "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
-                        "quantity": [1, 20]
-                    }
+                    "name": "Burn a Willow Log",
+                    "taskID": "burn_willow_log",
+                    "category": "Firemaking",
+                    "level": 30,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1]
+                        }
+                    ]
                 },
                 {
-                    "name": "Defeat a Level 24 Zombie",
-                    "taskID": "defeat_level_24_zombie",
+                    "name": "Steal from a Fruit Stall",
+                    "taskID": "steal_fruit_stall",
+                    "category": "Thieving",
+                    "level": 25,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Fruit Stall"],
+                            "object_id": [28823],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Bake a Botanical Pie",
+                    "taskID": "cook_botanical_pie",
+                    "category": "Cooking",
+                    "level": 52,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Botanical Pie",
+                            "item_ids": [19662]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some Hobgoblins",
+                    "taskID": "defeat_hobgoblins",
                     "category": "Combat",
-                    "level": 24,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Zombie"],
-                        "npc_ids": [49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
+                        "npc": ["Hobgoblin"],
+                        "npc_ids": [3354, 132, 3049, 2241, 3050, 3286, 3289, 3287, 3288],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Hobgoblin in 15 Seconds",
+                    "taskID": "defeat_hobgoblin_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Hobgoblin"],
+                        "npc_ids": [3354, 132, 3049, 2241, 3050, 3286, 3289, 3287, 3288],
                         "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [25],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
                     }
-                },
-                {
-                    "name": "Smith Iron Arrowtips",
-                    "taskID": "smith_iron_arrowtips",
-                    "category": "Smithing",
-                    "level": 20,
-                    "completion_type": "SMITHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Iron Arrowtips"],
-                            "item_ids": [40],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Fletch some Iron Arrows",
-                    "taskID": "fletch_iron_arrows",
-                    "category": "Fletching",
-                    "level": 15,
-                    "completion_type": "FLETCHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Iron Arrow"],
-                            "item_ids": [884],
-                            "quantity": [25, 100]
-                        }
-                    ]
-                },
-                {
-                    "name": "Smith an Iron Dagger",
-                    "taskID": "smith_iron_dagger",
-                    "category": "Smithing",
-                    "level": 15,
-                    "completion_type": "SMITHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Iron Dagger"],
-                            "item_ids": [1203],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Fletch an Oak Longbow(u)",
-                    "taskID": "fletch_oak_longbow(u)",
-                    "category": "Fletching",
-                    "level": 25,
-                    "completion_type": "FLETCHING",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Oak Longbow (u)"],
-                            "item_ids": [56],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Enchanted Gem",
-                    "taskID": "obtain_enchanted_gem",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Enchanted Gem"],
-                            "item_ids": [4155],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Unlock Reptile Freezer",
-                    "taskID": "unlock_reptile_freezer",
-                    "category": "Unlock",
-                    "completion_type": "VARBIT_CHECK",
-                    "base_points": 1,
-                    "assignment_weight": 5,                   
-                    "constraints": {                       
-                        "varbit_id": 2061,        
-                        "varbit_boolean": 1,      
-                        "description": "Unlock status of Reptile Freezer"
-                    }
-                },
-                {
-                    "name": "Equip Reinforced Goggles",
-                    "taskID": "equip_reinforced_goggles",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Reinforced Goggles"],
-                            "item_ids": [24942]
-                        }
-                    ]
                 }
             ],
             "optional_quests_unlocked": [
@@ -644,7 +764,6 @@
                     "name": "Defeat a Jail Guard",
                     "taskID": "defeat_jail_guard",
                     "category": "Combat",
-                    "level": 26,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
