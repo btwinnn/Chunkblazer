@@ -79,6 +79,26 @@ public class TaskConstraints
 	@SerializedName("quantity")
 	private Integer droppedItemQuantity;  // Required quantity of the dropped item
 
+	// Varbit constraints (e.g., prohibit cannon use during timed tasks)
+	@SerializedName("prohibited_active_varbits")
+	private List<VarbitConstraint> prohibitedActiveVarbits;
+
+	/**
+	 * Represents a varbit constraint that must be checked during task verification.
+	 */
+	@Data
+	public static class VarbitConstraint
+	{
+		@SerializedName("varbit_id")
+		private int varbitId;
+
+		@SerializedName("must_be_value")
+		private int mustBeValue;
+
+		@SerializedName("fail_message")
+		private String failMessage;
+	}
+
 	public boolean hasTimeLimit()
 	{
 		return timeInTicks != null && timeInTicks > 0;
@@ -133,6 +153,16 @@ public class TaskConstraints
 	public int getDroppedItemQuantity()
 	{
 		return droppedItemQuantity != null ? droppedItemQuantity : 1;
+	}
+
+	public boolean hasVarbitConstraints()
+	{
+		return prohibitedActiveVarbits != null && !prohibitedActiveVarbits.isEmpty();
+	}
+
+	public List<VarbitConstraint> getProhibitedActiveVarbits()
+	{
+		return prohibitedActiveVarbits;
 	}
 
 	/**
@@ -229,6 +259,38 @@ public class TaskConstraints
 			}
 			constraints.setDroppedItemIds(readIntArray(obj, "dropped_item_id"));
 			constraints.setDroppedItemQuantity(readFlexibleInt(obj, "quantity"));
+
+			// Handle prohibited_active_varbits constraints
+			if (obj.has("prohibited_active_varbits"))
+			{
+				JsonElement varbitEl = obj.get("prohibited_active_varbits");
+				if (varbitEl.isJsonArray())
+				{
+					List<VarbitConstraint> varbitConstraints = new ArrayList<>();
+					for (JsonElement el : varbitEl.getAsJsonArray())
+					{
+						if (el.isJsonObject())
+						{
+							JsonObject vObj = el.getAsJsonObject();
+							VarbitConstraint vc = new VarbitConstraint();
+							if (vObj.has("varbit_id"))
+							{
+								vc.setVarbitId(vObj.get("varbit_id").getAsInt());
+							}
+							if (vObj.has("must_be_value"))
+							{
+								vc.setMustBeValue(vObj.get("must_be_value").getAsInt());
+							}
+							if (vObj.has("fail_message"))
+							{
+								vc.setFailMessage(vObj.get("fail_message").getAsString());
+							}
+							varbitConstraints.add(vc);
+						}
+					}
+					constraints.setProhibitedActiveVarbits(varbitConstraints);
+				}
+			}
 
 			return constraints;
 		}

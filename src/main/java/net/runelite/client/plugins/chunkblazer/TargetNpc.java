@@ -85,9 +85,19 @@ public class TargetNpc
 			JsonObject obj = json.getAsJsonObject();
 
 			// Handle "name" field - can be string or array
+			// Also check "npc" field as an alias (used in some JSON files)
+			JsonElement nameElement = null;
 			if (obj.has("name"))
 			{
-				JsonElement nameElement = obj.get("name");
+				nameElement = obj.get("name");
+			}
+			else if (obj.has("npc"))
+			{
+				nameElement = obj.get("npc");
+			}
+
+			if (nameElement != null)
+			{
 				if (nameElement.isJsonArray())
 				{
 					JsonArray arr = nameElement.getAsJsonArray();

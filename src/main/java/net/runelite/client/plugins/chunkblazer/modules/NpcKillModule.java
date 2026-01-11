@@ -1,10 +1,10 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +30,7 @@ import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.plugins.chunkblazer.ChunkBlazerConfig;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
 import net.runelite.client.plugins.chunkblazer.TargetNpc;
 import net.runelite.client.plugins.chunkblazer.TaskConstraints;
@@ -54,6 +55,9 @@ public class NPCKillModule extends AbstractTaskModule
 	@Inject
 	private ChatMessageManager chatMessageManager;
 
+	@Inject
+	private ChunkBlazerConfig config;
+
 	// Track the NPC we're currently fighting
 	private NPC currentTarget;
 	private int currentTargetIndex = -1; // Track by index to avoid reference issues
@@ -75,7 +79,8 @@ public class NPCKillModule extends AbstractTaskModule
 
 	// Pending drop-based kills: tasks waiting for a specific item to drop
 	// Key: task ID, Value: pending kill info
-	private final Map<String, PendingDropKill> pendingDropKills = new HashMap<>();
+	// Using ConcurrentHashMap for thread safety (accessed from multiple event handlers)
+	private final Map<String, PendingDropKill> pendingDropKills = new ConcurrentHashMap<>();
 	private static final int PENDING_DROP_TIMEOUT_TICKS = 10; // ~6 seconds to pick up item
 
 	/**
@@ -234,7 +239,17 @@ public class NPCKillModule extends AbstractTaskModule
 				log.info("      - dropped_item_ids: {}", constraints.getDroppedItemIds());
 				log.info("      - quantity: {}", constraints.getDroppedItemQuantity());
 			}
-			if (!constraints.hasTimeLimit() && !constraints.hasEquipmentConstraints() && !constraints.hasDroppedItemConstraint())
+			if (constraints.hasVarbitConstraints())
+			{
+				log.info("    Varbit Constraints: YES");
+				for (TaskConstraints.VarbitConstraint vc : constraints.getProhibitedActiveVarbits())
+				{
+					log.info("      - varbit_id: {}, must_be_value: {}, fail_message: {}",
+						vc.getVarbitId(), vc.getMustBeValue(), vc.getFailMessage());
+				}
+			}
+			if (!constraints.hasTimeLimit() && !constraints.hasEquipmentConstraints() &&
+				!constraints.hasDroppedItemConstraint() && !constraints.hasVarbitConstraints())
 			{
 				log.info("    (No active constraints)");
 			}
@@ -376,6 +391,10 @@ public class NPCKillModule extends AbstractTaskModule
 		if (constraints.hasDroppedItemConstraint())
 		{
 			parts.add("drop:" + constraints.getDroppedItem() + " IDs:" + constraints.getDroppedItemIds());
+		}
+		if (constraints.hasVarbitConstraints())
+		{
+			parts.add("varbits:" + constraints.getProhibitedActiveVarbits().size());
 		}
 
 		return parts.isEmpty() ? "none" : String.join(", ", parts);
@@ -563,7 +582,7 @@ public class NPCKillModule extends AbstractTaskModule
 	// Chat colors for ChunkBlazer messages
 	private static final String COLOR_BLUE = "3366ff";        // [ChunkBlazer] branding
 	private static final String COLOR_RED = "ff3333";         // Task Failed
-	private static final String COLOR_LIGHT_GREEN = "66ff66"; // Task Success
+	private static final String COLOR_DARK_BLUE = "1a5276";   // Task Success (dark blue, readable)
 	private static final String COLOR_DARK_GREEN = "228b22";  // Task Progress
 	private static final String COLOR_BLACK = "000000";       // Task name text
 
@@ -573,10 +592,17 @@ public class NPCKillModule extends AbstractTaskModule
 	 */
 	private void sendTaskSuccess(NuzlockeTask task, String details)
 	{
+		// Check config - if showChatSuccess is disabled, don't send
+		if (!config.showChatSuccess())
+		{
+			log.info("[CHAT] Task success (hidden by config): {} - {}", task.getName(), details);
+			return;
+		}
+
 		String message = "<col=" + COLOR_BLUE + ">[ChunkBlazer]</col> " +
-			"<col=" + COLOR_LIGHT_GREEN + ">Task Success:</col> " +
+			"<col=" + COLOR_DARK_BLUE + ">Task Success:</col> " +
 			"<col=" + COLOR_BLACK + ">" + task.getName() + "</col> " +
-			"(" + (task.getCurrentProgress() + 1) + "/" + task.getTargetQuantity() + ")";
+			"(" + task.getCurrentProgress() + "/" + task.getTargetQuantity() + ")";
 
 		chatMessageManager.queue(QueuedMessage.builder()
 			.type(ChatMessageType.GAMEMESSAGE)
@@ -602,6 +628,13 @@ public class NPCKillModule extends AbstractTaskModule
 	 */
 	private void sendTaskProgress(NuzlockeTask task, String details)
 	{
+		// Check config - if showChatProgress is disabled, don't send
+		if (!config.showChatProgress())
+		{
+			log.info("[CHAT] Task progress (hidden by config): {} - {}", task.getName(), details);
+			return;
+		}
+
 		String message = "<col=" + COLOR_BLUE + ">[ChunkBlazer]</col> " +
 			"<col=" + COLOR_DARK_GREEN + ">Task Progress:</col> " +
 			"<col=" + COLOR_BLACK + ">" + task.getName() + "</col> " +
@@ -630,6 +663,13 @@ public class NPCKillModule extends AbstractTaskModule
 	 */
 	private void sendTaskFailure(NuzlockeTask task, String reason)
 	{
+		// Check config - if showChatFailed is disabled, don't send
+		if (!config.showChatFailed())
+		{
+			log.info("[CHAT] Task failed (hidden by config): {} - Reason: {}", task.getName(), reason);
+			return;
+		}
+
 		String message = "<col=" + COLOR_BLUE + ">[ChunkBlazer]</col> " +
 			"<col=" + COLOR_RED + ">Task Failed:</col> " +
 			"<col=" + COLOR_BLACK + ">" + task.getName() + "</col>";
@@ -878,16 +918,27 @@ public class NPCKillModule extends AbstractTaskModule
 			boolean hasDropConstraint = constraints != null && constraints.hasDroppedItemConstraint();
 			boolean hasTimeConstraint = constraints != null && constraints.hasTimeLimit();
 			boolean hasEquipConstraint = constraints != null && constraints.hasEquipmentConstraints();
+			boolean hasVarbitConstraint = constraints != null && constraints.hasVarbitConstraints();
 
-			log.info("[TASK DEBUG] Evaluating task '{}' (ID: {}) - hasDropConstraint: {}, hasTimeConstraint: {}, hasEquipConstraint: {}",
-				task.getName(), task.getTaskId(), hasDropConstraint, hasTimeConstraint, hasEquipConstraint);
+			log.info("[TASK DEBUG] Evaluating task '{}' (ID: {}) - hasDropConstraint: {}, hasTimeConstraint: {}, hasEquipConstraint: {}, hasVarbitConstraint: {}",
+				task.getName(), task.getTaskId(), hasDropConstraint, hasTimeConstraint, hasEquipConstraint, hasVarbitConstraint);
 
-			// If task ONLY has dropped_item constraint (no time/equipment constraints),
+			// If task ONLY has dropped_item constraint (no time/equipment/varbit constraints),
 			// skip time and equipment checks - only verify the drop
-			boolean dropOnlyTask = hasDropConstraint && !hasTimeConstraint && !hasEquipConstraint;
+			boolean dropOnlyTask = hasDropConstraint && !hasTimeConstraint && !hasEquipConstraint && !hasVarbitConstraint;
 
 			if (!dropOnlyTask)
 			{
+				// Varbit constraint check (e.g., no cannon during timed tasks)
+				String varbitViolation = validateVarbitConstraintForTask(task);
+				if (varbitViolation != null)
+				{
+					log.warn("[TASK FAILED] Task '{}' (ID: {}) - Varbit constraint violated: {}",
+						task.getName(), task.getTaskId(), varbitViolation);
+					sendTaskFailure(task, varbitViolation);
+					continue; // Skip this task, don't credit the kill
+				}
+
 				// Per-task equipment constraint check - only check THIS task's constraints
 				// (removed global flag check which was incorrectly blocking tasks without constraints)
 				String equipViolation = validateEquipmentForTask(task);
@@ -1349,6 +1400,38 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	/**
+	 * Validate that no prohibited varbits are active.
+	 * For example, varbit 57 controls cannon deployment - value 0 means no cannon.
+	 * @param task The task with potential varbit constraints
+	 * @return null if valid (or no constraint), or a string describing the violation
+	 */
+	private String validateVarbitConstraintForTask(NuzlockeTask task)
+	{
+		TaskConstraints constraints = task.getConstraints();
+
+		if (constraints == null || !constraints.hasVarbitConstraints())
+		{
+			return null; // No varbit constraints
+		}
+
+		for (TaskConstraints.VarbitConstraint vc : constraints.getProhibitedActiveVarbits())
+		{
+			int currentValue = client.getVarbitValue(vc.getVarbitId());
+			if (currentValue != vc.getMustBeValue())
+			{
+				String failMsg = vc.getFailMessage();
+				if (failMsg != null && !failMsg.isEmpty())
+				{
+					return failMsg;
+				}
+				return "Varbit " + vc.getVarbitId() + " must be " + vc.getMustBeValue() + " but is " + currentValue;
+			}
+		}
+
+		return null; // All varbit constraints passed
+	}
+
+	/**
 	 * Validate that the kill was completed within the time limit.
 	 * @param task The task with potential time constraints
 	 * @return null if valid (or no constraint), or a string describing the violation
@@ -1376,8 +1459,8 @@ public class NPCKillModule extends AbstractTaskModule
 		int elapsedTicks = currentTick - combatStartTick;
 		double elapsedSeconds = elapsedTicks * 0.6;
 
-		log.info(">>> TIME CHECK for '{}': {} ticks elapsed (max allowed: {}), {:.1f} seconds",
-			task.getName(), elapsedTicks, allowedTicks, elapsedSeconds);
+		log.info(">>> TIME CHECK for '{}': {} ticks elapsed (max allowed: {}), {} seconds",
+			task.getName(), elapsedTicks, allowedTicks, String.format("%.1f", elapsedSeconds));
 
 		if (elapsedTicks > allowedTicks)
 		{

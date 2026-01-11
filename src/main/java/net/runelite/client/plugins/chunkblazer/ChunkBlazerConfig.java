@@ -232,9 +232,52 @@ public interface ChunkBlazerConfig extends Config
 	}
 
 	@ConfigSection(
+		name = "Chat Messages",
+		description = "Control which task messages appear in chat",
+		position = 3
+	)
+	String chatSection = "chat";
+
+	@ConfigItem(
+		keyName = "showChatProgress",
+		name = "Show Task Progress",
+		description = "Show messages when you make progress on a task",
+		section = chatSection,
+		position = 0
+	)
+	default boolean showChatProgress()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showChatSuccess",
+		name = "Show Task Success",
+		description = "Show messages when you complete a task",
+		section = chatSection,
+		position = 1
+	)
+	default boolean showChatSuccess()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showChatFailed",
+		name = "Show Task Failed",
+		description = "Show messages when a task attempt fails",
+		section = chatSection,
+		position = 2
+	)
+	default boolean showChatFailed()
+	{
+		return true;
+	}
+
+	@ConfigSection(
 		name = "Region Unlock",
 		description = "Region unlock settings",
-		position = 3
+		position = 4
 	)
 	String regionSection = "region";
 
