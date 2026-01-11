@@ -304,4 +304,71 @@ public interface ChunkBlazerConfig extends Config
 	{
 		return false;
 	}
+
+	@ConfigSection(
+		name = "Player Discovery",
+		description = "Settings for seeing other ChunkBlazer players",
+		position = 5
+	)
+	String playerDiscoverySection = "playerDiscovery";
+
+	@ConfigItem(
+		keyName = "showOtherPlayers",
+		name = "Show Other Players",
+		description = "Display an icon and info above other ChunkBlazer players in-game",
+		section = playerDiscoverySection,
+		position = 0
+	)
+	default boolean showOtherPlayers()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showChatIcons",
+		name = "Show Chat Icons",
+		description = "Display a ChunkBlazer icon next to player names in chat",
+		section = playerDiscoverySection,
+		position = 1
+	)
+	default boolean showChatIcons()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "visibleToOthers",
+		name = "Visible to Others",
+		description = "Allow other ChunkBlazer players to see you in-game. Disable for privacy.",
+		section = playerDiscoverySection,
+		position = 2
+	)
+	default boolean visibleToOthers()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showPlayerPoints",
+		name = "Show Player Points",
+		description = "Display point totals above other players",
+		section = playerDiscoverySection,
+		position = 3
+	)
+	default boolean showPlayerPoints()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showPlayerRank",
+		name = "Show Player Rank",
+		description = "Display leaderboard rank above other players",
+		section = playerDiscoverySection,
+		position = 4
+	)
+	default boolean showPlayerRank()
+	{
+		return true;
+	}
 }
