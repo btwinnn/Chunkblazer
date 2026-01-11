@@ -28,7 +28,7 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	private TaskCompletionHandler completionHandler;
 
 	@Inject
-	private NpcKillModule npcKillModule;
+	private NPCKillModule npcKillModule;
 
 	@Inject
 	private SkillModule skillModule;

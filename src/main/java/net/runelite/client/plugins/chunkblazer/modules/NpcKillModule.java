@@ -1,7 +1,10 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +14,21 @@ import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.NPC;
 import net.runelite.api.Player;
+import net.runelite.api.Scene;
+import net.runelite.api.Tile;
+import net.runelite.api.TileItem;
+import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.events.ActorDeath;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.InteractingChanged;
+import net.runelite.api.events.ItemSpawned;
+import net.runelite.client.chat.ChatColorType;
+import net.runelite.client.chat.ChatMessageBuilder;
+import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
 import net.runelite.client.plugins.chunkblazer.TargetNpc;
@@ -28,7 +42,7 @@ import net.runelite.client.plugins.chunkblazer.verification.VarPlayerVerificatio
  */
 @Slf4j
 @Singleton
-public class NpcKillModule extends AbstractTaskModule
+public class NPCKillModule extends AbstractTaskModule
 {
 	// Handles both NPC_KILL and COMBAT task types
 	private static final String COMPLETION_TYPE = "NPC_KILL";
@@ -36,6 +50,9 @@ public class NpcKillModule extends AbstractTaskModule
 
 	@Inject
 	private VarPlayerVerificationService varPlayerService;
+
+	@Inject
+	private ChatMessageManager chatMessageManager;
 
 	// Track the NPC we're currently fighting
 	private NPC currentTarget;
@@ -56,8 +73,38 @@ public class NpcKillModule extends AbstractTaskModule
 	private int tickCounter = 0;
 	private static final int DEBUG_LOG_INTERVAL = 100; // Log every 100 ticks (~60 seconds)
 
+	// Pending drop-based kills: tasks waiting for a specific item to drop
+	// Key: task ID, Value: pending kill info
+	private final Map<String, PendingDropKill> pendingDropKills = new HashMap<>();
+	private static final int PENDING_DROP_TIMEOUT_TICKS = 10; // ~6 seconds to pick up item
+
+	/**
+	 * Tracks a kill that's pending verification via dropped item.
+	 */
+	private static class PendingDropKill
+	{
+		final NuzlockeTask task;
+		final NPC killedNpc;
+		final WorldPoint deathLocation;
+		final int deathTick;
+		final List<Integer> requiredItemIds;
+		final int requiredQuantity;
+		int collectedQuantity = 0;
+
+		PendingDropKill(NuzlockeTask task, NPC npc, WorldPoint location, int tick,
+						List<Integer> requiredItemIds, int requiredQuantity)
+		{
+			this.task = task;
+			this.killedNpc = npc;
+			this.deathLocation = location;
+			this.deathTick = tick;
+			this.requiredItemIds = requiredItemIds;
+			this.requiredQuantity = requiredQuantity;
+		}
+	}
+
 	@Inject
-	public NpcKillModule()
+	public NPCKillModule()
 	{
 	}
 
@@ -107,6 +154,7 @@ public class NpcKillModule extends AbstractTaskModule
 		currentTargetIndex = -1;
 		damageDealtToTarget = 0;
 		combatStartTick = -1;
+		pendingDropKills.clear();
 		log.info("NpcKillModule stopped");
 	}
 
@@ -119,8 +167,85 @@ public class NpcKillModule extends AbstractTaskModule
 		damageDealtToTarget = 0;
 		combatStartTick = -1;
 
-		// For boss tasks, get baseline KC from VarPlayer (instant server-side)
+		// Log task assignment with full details
+		log.info("=== [TASK ASSIGNED] ===");
+		log.info("  Task Name: {}", task.getName());
+		log.info("  Task ID: {}", task.getTaskId());
+		log.info("  Completion Type: {}", task.getCompletionType());
+		log.info("  Progress: {}/{}", task.getCurrentProgress(), task.getTargetQuantity());
+
+		// Log target NPC details
 		TargetNpc targetNpc = task.getTargetNpc();
+		if (targetNpc != null)
+		{
+			log.info("  Target NPC: {} (IDs: {})", targetNpc.getName(), targetNpc.getNpcIds());
+		}
+		else
+		{
+			log.info("  Target NPC: (none specified)");
+		}
+
+		// Log constraint details
+		TaskConstraints constraints = task.getConstraints();
+		if (constraints != null)
+		{
+			log.info("  === CONSTRAINTS ===");
+			if (constraints.hasTimeLimit())
+			{
+				log.info("    Time Limit: {} ticks ({} seconds)",
+					constraints.getTimeInTicks(), constraints.getTimeInSeconds());
+			}
+			if (constraints.hasEquipmentConstraints())
+			{
+				log.info("    Equipment Constraints: YES");
+				if (constraints.isNoEquipment())
+				{
+					log.info("      - no_equipment: true (must have nothing equipped)");
+				}
+				if (constraints.isEquipNothing())
+				{
+					log.info("      - equip_nothing: true (must have zero equipment)");
+				}
+				if (constraints.getRequiredEquipmentIds() != null)
+				{
+					log.info("      - required_equipment_ids: {}", constraints.getRequiredEquipmentIds());
+				}
+				if (constraints.getAllowedEquipmentIds() != null)
+				{
+					log.info("      - allowed_equipment_ids: {}", constraints.getAllowedEquipmentIds());
+				}
+				if (constraints.getForbiddenEquipmentIds() != null)
+				{
+					log.info("      - forbidden_equipment_ids: {}", constraints.getForbiddenEquipmentIds());
+				}
+				if (constraints.getMustBeEmptySlots() != null)
+				{
+					log.info("      - must_be_empty slots: {}", constraints.getMustBeEmptySlots());
+				}
+				if (constraints.getEquippableSlots() != null)
+				{
+					log.info("      - equippable_slots: {}", constraints.getEquippableSlots());
+				}
+			}
+			if (constraints.hasDroppedItemConstraint())
+			{
+				log.info("    Dropped Item Constraint: YES");
+				log.info("      - dropped_item: {}", constraints.getDroppedItem());
+				log.info("      - dropped_item_ids: {}", constraints.getDroppedItemIds());
+				log.info("      - quantity: {}", constraints.getDroppedItemQuantity());
+			}
+			if (!constraints.hasTimeLimit() && !constraints.hasEquipmentConstraints() && !constraints.hasDroppedItemConstraint())
+			{
+				log.info("    (No active constraints)");
+			}
+		}
+		else
+		{
+			log.info("  Constraints: (none)");
+		}
+		log.info("=== END TASK DETAILS ===");
+
+		// For boss tasks, get baseline KC from VarPlayer (instant server-side)
 		if (targetNpc != null)
 		{
 			String bossName = targetNpc.getName();
@@ -134,8 +259,6 @@ public class NpcKillModule extends AbstractTaskModule
 			{
 				currentBossName = null;
 				baselineKc = -1;
-				log.info("Non-boss NPC task: {} (client-side tracking only)",
-					bossName != null ? bossName : "unknown");
 			}
 		}
 	}
@@ -150,6 +273,8 @@ public class NpcKillModule extends AbstractTaskModule
 		combatStartTick = -1;
 		baselineKc = -1;
 		currentBossName = null;
+		pendingDropKills.clear();
+		log.info("[TASK DEBUG] Task cleared - reset all tracking state");
 	}
 
 	@Override
@@ -165,26 +290,95 @@ public class NpcKillModule extends AbstractTaskModule
 	public void onGameTick(GameTick event)
 	{
 		tickCounter++;
+		int currentTick = client.getTickCount();
 
-		// Equipment constraints are now checked per-task at kill time in onActorDeath
-		// No need for global flag checking during combat
+		// Check for expired pending drop kills
+		if (!pendingDropKills.isEmpty())
+		{
+			Iterator<Map.Entry<String, PendingDropKill>> it = pendingDropKills.entrySet().iterator();
+			while (it.hasNext())
+			{
+				Map.Entry<String, PendingDropKill> entry = it.next();
+				PendingDropKill pending = entry.getValue();
+				int elapsed = currentTick - pending.deathTick;
+
+				if (elapsed > PENDING_DROP_TIMEOUT_TICKS)
+				{
+					String dropName = pending.task.getConstraints().getDroppedItem();
+					String reason = String.format("Required drop '%s' was not received (collected %d/%d)",
+						dropName, pending.collectedQuantity, pending.requiredQuantity);
+
+					log.warn("[TASK FAILED] Task '{}' (ID: {}) - {} - IDs checked: {}",
+						pending.task.getName(), pending.task.getTaskId(), reason, pending.requiredItemIds);
+
+					// Log all ground items near death location for debugging
+					log.info("[TASK DEBUG] Logging ground items near death location for debugging:");
+					logAllGroundItemsNearLocation(pending.deathLocation, 2);
+
+					// Send failure to chatbox
+					sendTaskFailure(pending.task, reason);
+
+					it.remove();
+				}
+			}
+		}
 
 		// Log heartbeat periodically to confirm event bus is working
 		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
 		{
-			log.info(">>> NpcKillModule HEARTBEAT - tick {} - activeTasks: {}, currentTarget: {}",
-				tickCounter, activeTasks.size(), currentTarget != null ? currentTarget.getName() : "none");
+			log.info(">>> NpcKillModule HEARTBEAT - tick {} - activeTasks: {}, currentTarget: {}, pendingDropKills: {}",
+				tickCounter, activeTasks.size(), currentTarget != null ? currentTarget.getName() : "none",
+				pendingDropKills.size());
 
 			// List all active combat tasks
 			for (NuzlockeTask task : activeTasks)
 			{
 				TargetNpc targetNpc = task.getTargetNpc();
 				String npcInfo = targetNpc != null ? "NPC IDs: " + targetNpc.getNpcIds() : "no target NPC";
-				log.info(">>>   Active combat task: {} ({}) - {}/{} - {}",
+				TaskConstraints constraints = task.getConstraints();
+				String constraintInfo = getConstraintSummary(constraints);
+				log.info(">>>   Active combat task: {} ({}) - {}/{} - {} - Constraints: [{}]",
 					task.getName(), task.getTaskId(),
-					task.getCurrentProgress(), task.getTargetQuantity(), npcInfo);
+					task.getCurrentProgress(), task.getTargetQuantity(), npcInfo, constraintInfo);
+			}
+
+			// List pending drop kills
+			for (Map.Entry<String, PendingDropKill> entry : pendingDropKills.entrySet())
+			{
+				PendingDropKill pending = entry.getValue();
+				log.info(">>>   Pending drop kill: {} - waiting for item IDs {} ({}/{} collected)",
+					pending.task.getName(), pending.requiredItemIds,
+					pending.collectedQuantity, pending.requiredQuantity);
 			}
 		}
+	}
+
+	/**
+	 * Get a summary of task constraints for logging.
+	 */
+	private String getConstraintSummary(TaskConstraints constraints)
+	{
+		if (constraints == null)
+		{
+			return "none";
+		}
+
+		List<String> parts = new ArrayList<>();
+
+		if (constraints.hasTimeLimit())
+		{
+			parts.add("time:" + constraints.getTimeInTicks() + "t");
+		}
+		if (constraints.hasEquipmentConstraints())
+		{
+			parts.add("equipment");
+		}
+		if (constraints.hasDroppedItemConstraint())
+		{
+			parts.add("drop:" + constraints.getDroppedItem() + " IDs:" + constraints.getDroppedItemIds());
+		}
+
+		return parts.isEmpty() ? "none" : String.join(", ", parts);
 	}
 
 	@Subscribe
@@ -264,6 +458,351 @@ public class NpcKillModule extends AbstractTaskModule
 	}
 
 	@Subscribe
+	public void onItemSpawned(ItemSpawned event)
+	{
+		if (pendingDropKills.isEmpty())
+		{
+			return;
+		}
+
+		TileItem item = event.getItem();
+		WorldPoint itemLocation = event.getTile().getWorldLocation();
+		int itemId = item.getId();
+		int quantity = item.getQuantity();
+		int ownership = item.getOwnership();
+		int currentTick = client.getTickCount();
+
+		log.info("[ITEM SPAWNED] Item ID {} (qty: {}) at {} - ownership: {}",
+			itemId, quantity, itemLocation, getOwnershipName(ownership));
+
+		// Check all pending drop kills
+		Iterator<Map.Entry<String, PendingDropKill>> it = pendingDropKills.entrySet().iterator();
+		while (it.hasNext())
+		{
+			Map.Entry<String, PendingDropKill> entry = it.next();
+			PendingDropKill pending = entry.getValue();
+
+			// OWNERSHIP CHECK: Must be our drop (OWNERSHIP_SELF only - no group ironmen in this mode)
+			// OWNERSHIP_NONE (0) = public, OWNERSHIP_SELF (1) = ours, OWNERSHIP_OTHER (2) = someone else's
+			if (ownership != TileItem.OWNERSHIP_SELF)
+			{
+				log.info("[ITEM SPAWNED] Skipping item {} - not our drop (ownership: {})",
+					itemId, getOwnershipName(ownership));
+				continue;
+			}
+
+			// TIMING CHECK: Item must spawn within 5 ticks of NPC death
+			// (drops can be delayed by animations, network latency, etc.)
+			int ticksSinceDeath = currentTick - pending.deathTick;
+			if (ticksSinceDeath > 5)
+			{
+				log.info("[ITEM SPAWNED] Skipping item {} - spawned {} ticks after NPC death (max 5)",
+					itemId, ticksSinceDeath);
+				continue;
+			}
+
+			// LOCATION CHECK: Item must spawn at or very near the death location (within 1 tile)
+			// NPC drops spawn at the NPC's location, so this should be exact or 1 tile away
+			int distance = itemLocation.distanceTo(pending.deathLocation);
+			if (distance > 1)
+			{
+				log.info("[ITEM SPAWNED] Skipping item {} - too far from death location ({} tiles)",
+					itemId, distance);
+				continue;
+			}
+
+			// Check if this is one of the required items
+			if (!pending.requiredItemIds.contains(itemId))
+			{
+				continue;
+			}
+
+			// Found a matching drop that belongs to us!
+			pending.collectedQuantity += quantity;
+			log.info("[TASK DEBUG] Task '{}' - OUR required drop found! Item ID {} (qty: {}), ownership: {}, " +
+					"distance: {} tiles, ticks since death: {}, total collected: {}/{}",
+				pending.task.getName(), itemId, quantity, getOwnershipName(ownership),
+				distance, ticksSinceDeath, pending.collectedQuantity, pending.requiredQuantity);
+
+			// Check if we've collected enough
+			if (pending.collectedQuantity >= pending.requiredQuantity)
+			{
+				String dropName = pending.task.getConstraints().getDroppedItem();
+				log.info("[TASK SUCCESS] Task '{}' (ID: {}) - All required drops obtained! Crediting kill.",
+					pending.task.getName(), pending.task.getTaskId());
+
+				// Send progress to chatbox
+				String details = String.format("Killed %s and received %s drop",
+					pending.killedNpc.getName(), dropName);
+				sendTaskProgress(pending.task, details);
+
+				// Credit the kill
+				sendKillReport(pending.killedNpc, pending.task);
+				incrementTaskProgress(pending.task, 1);
+
+				it.remove();
+			}
+		}
+	}
+
+	/**
+	 * Get human-readable name for item ownership value.
+	 */
+	private String getOwnershipName(int ownership)
+	{
+		switch (ownership)
+		{
+			case TileItem.OWNERSHIP_NONE: return "PUBLIC";
+			case TileItem.OWNERSHIP_SELF: return "SELF";
+			case TileItem.OWNERSHIP_OTHER: return "OTHER";
+			case TileItem.OWNERSHIP_GROUP: return "GROUP";
+			default: return "UNKNOWN(" + ownership + ")";
+		}
+	}
+
+	// Chat colors for ChunkBlazer messages
+	private static final String COLOR_BLUE = "3366ff";        // [ChunkBlazer] branding
+	private static final String COLOR_RED = "ff3333";         // Task Failed
+	private static final String COLOR_LIGHT_GREEN = "66ff66"; // Task Success
+	private static final String COLOR_DARK_GREEN = "228b22";  // Task Progress
+	private static final String COLOR_BLACK = "000000";       // Task name text
+
+	/**
+	 * Send a task success message to the player's chatbox.
+	 * Used when a task is fully completed.
+	 */
+	private void sendTaskSuccess(NuzlockeTask task, String details)
+	{
+		String message = "<col=" + COLOR_BLUE + ">[ChunkBlazer]</col> " +
+			"<col=" + COLOR_LIGHT_GREEN + ">Task Success:</col> " +
+			"<col=" + COLOR_BLACK + ">" + task.getName() + "</col> " +
+			"(" + (task.getCurrentProgress() + 1) + "/" + task.getTargetQuantity() + ")";
+
+		chatMessageManager.queue(QueuedMessage.builder()
+			.type(ChatMessageType.GAMEMESSAGE)
+			.value(message)
+			.build());
+
+		if (details != null && !details.isEmpty())
+		{
+			String detailMessage = "  - " + details;
+
+			chatMessageManager.queue(QueuedMessage.builder()
+				.type(ChatMessageType.GAMEMESSAGE)
+				.value(detailMessage)
+				.build());
+		}
+
+		log.info("[CHAT] Task success: {} - {}", task.getName(), details);
+	}
+
+	/**
+	 * Send a task progress message to the player's chatbox.
+	 * Used when progress is made but task is not yet complete.
+	 */
+	private void sendTaskProgress(NuzlockeTask task, String details)
+	{
+		String message = "<col=" + COLOR_BLUE + ">[ChunkBlazer]</col> " +
+			"<col=" + COLOR_DARK_GREEN + ">Task Progress:</col> " +
+			"<col=" + COLOR_BLACK + ">" + task.getName() + "</col> " +
+			"(" + (task.getCurrentProgress() + 1) + "/" + task.getTargetQuantity() + ")";
+
+		chatMessageManager.queue(QueuedMessage.builder()
+			.type(ChatMessageType.GAMEMESSAGE)
+			.value(message)
+			.build());
+
+		if (details != null && !details.isEmpty())
+		{
+			String detailMessage = "  - " + details;
+
+			chatMessageManager.queue(QueuedMessage.builder()
+				.type(ChatMessageType.GAMEMESSAGE)
+				.value(detailMessage)
+				.build());
+		}
+
+		log.info("[CHAT] Task progress: {} - {}", task.getName(), details);
+	}
+
+	/**
+	 * Send a task failure message to the player's chatbox.
+	 */
+	private void sendTaskFailure(NuzlockeTask task, String reason)
+	{
+		String message = "<col=" + COLOR_BLUE + ">[ChunkBlazer]</col> " +
+			"<col=" + COLOR_RED + ">Task Failed:</col> " +
+			"<col=" + COLOR_BLACK + ">" + task.getName() + "</col>";
+
+		chatMessageManager.queue(QueuedMessage.builder()
+			.type(ChatMessageType.GAMEMESSAGE)
+			.value(message)
+			.build());
+
+		String reasonMessage = "  - Reason: " + reason;
+
+		chatMessageManager.queue(QueuedMessage.builder()
+			.type(ChatMessageType.GAMEMESSAGE)
+			.value(reasonMessage)
+			.build());
+
+		log.info("[CHAT] Task failed: {} - Reason: {}", task.getName(), reason);
+	}
+
+	/**
+	 * Log all ground items at and around a location for debugging.
+	 */
+	private void logAllGroundItemsNearLocation(WorldPoint center, int radius)
+	{
+		log.info("[GROUND ITEMS] Scanning {}x{} area around {} for ground items...",
+			(radius * 2 + 1), (radius * 2 + 1), center);
+
+		Scene scene = client.getScene();
+		Tile[][][] tiles = scene.getTiles();
+		int plane = center.getPlane();
+		int itemsFound = 0;
+
+		for (int dx = -radius; dx <= radius; dx++)
+		{
+			for (int dy = -radius; dy <= radius; dy++)
+			{
+				WorldPoint checkPoint = new WorldPoint(
+					center.getX() + dx,
+					center.getY() + dy,
+					plane
+				);
+
+				LocalPoint localPoint = LocalPoint.fromWorld(client, checkPoint);
+				if (localPoint == null)
+				{
+					continue;
+				}
+
+				int sceneX = localPoint.getSceneX();
+				int sceneY = localPoint.getSceneY();
+
+				if (sceneX < 0 || sceneX >= tiles[plane].length ||
+					sceneY < 0 || sceneY >= tiles[plane][sceneX].length)
+				{
+					continue;
+				}
+
+				Tile tile = tiles[plane][sceneX][sceneY];
+				if (tile == null)
+				{
+					continue;
+				}
+
+				List<TileItem> groundItems = tile.getGroundItems();
+				if (groundItems == null || groundItems.isEmpty())
+				{
+					continue;
+				}
+
+				for (TileItem item : groundItems)
+				{
+					itemsFound++;
+					String itemName = client.getItemDefinition(item.getId()).getName();
+					log.info("[GROUND ITEMS]   ({},{}) Item: {} (ID: {}) qty: {} ownership: {}",
+						dx, dy, itemName, item.getId(), item.getQuantity(),
+						getOwnershipName(item.getOwnership()));
+				}
+			}
+		}
+
+		if (itemsFound == 0)
+		{
+			log.info("[GROUND ITEMS] No ground items found in area");
+		}
+		else
+		{
+			log.info("[GROUND ITEMS] Total items found: {}", itemsFound);
+		}
+	}
+
+	/**
+	 * Check ground items at a specific location for matching item IDs.
+	 * Only counts items that belong to us (OWNERSHIP_SELF).
+	 *
+	 * @param location The world location to check
+	 * @param requiredItemIds List of item IDs we're looking for
+	 * @return Total quantity of matching items found that belong to us
+	 */
+	private int checkGroundItemsAtLocation(WorldPoint location, List<Integer> requiredItemIds)
+	{
+		int totalFound = 0;
+
+		// Convert world point to local point for tile lookup
+		LocalPoint localPoint = LocalPoint.fromWorld(client, location);
+		if (localPoint == null)
+		{
+			log.info("[GROUND CHECK] Could not convert world location {} to local point", location);
+			return 0;
+		}
+
+		// Get the scene and tile
+		Scene scene = client.getScene();
+		Tile[][][] tiles = scene.getTiles();
+		int plane = location.getPlane();
+
+		// Convert local point to scene coordinates
+		int sceneX = localPoint.getSceneX();
+		int sceneY = localPoint.getSceneY();
+
+		// Bounds check
+		if (sceneX < 0 || sceneX >= tiles[plane].length ||
+			sceneY < 0 || sceneY >= tiles[plane][sceneX].length)
+		{
+			log.info("[GROUND CHECK] Scene coordinates out of bounds: ({}, {})", sceneX, sceneY);
+			return 0;
+		}
+
+		Tile tile = tiles[plane][sceneX][sceneY];
+		if (tile == null)
+		{
+			log.info("[GROUND CHECK] No tile at scene coordinates ({}, {})", sceneX, sceneY);
+			return 0;
+		}
+
+		// Check ground items on this tile
+		List<TileItem> groundItems = tile.getGroundItems();
+		if (groundItems == null || groundItems.isEmpty())
+		{
+			log.info("[GROUND CHECK] No ground items at {} (scene: {}, {})", location, sceneX, sceneY);
+			return 0;
+		}
+
+		log.info("[GROUND CHECK] Found {} ground items at {} - checking for IDs: {}",
+			groundItems.size(), location, requiredItemIds);
+
+		for (TileItem item : groundItems)
+		{
+			int itemId = item.getId();
+			int ownership = item.getOwnership();
+			int quantity = item.getQuantity();
+
+			log.info("[GROUND CHECK]   Item ID: {}, qty: {}, ownership: {}",
+				itemId, quantity, getOwnershipName(ownership));
+
+			// Only count items that belong to us
+			if (ownership != TileItem.OWNERSHIP_SELF)
+			{
+				log.info("[GROUND CHECK]   Skipping - not our item");
+				continue;
+			}
+
+			// Check if this is one of the required items
+			if (requiredItemIds.contains(itemId))
+			{
+				totalFound += quantity;
+				log.info("[GROUND CHECK]   MATCH! Running total: {}", totalFound);
+			}
+		}
+
+		return totalFound;
+	}
+
+	@Subscribe
 	public void onActorDeath(ActorDeath event)
 	{
 		Actor actor = event.getActor();
@@ -335,24 +874,102 @@ public class NpcKillModule extends AbstractTaskModule
 		// Update progress for all matching tasks
 		for (NuzlockeTask task : matchingTasks)
 		{
-			// Per-task equipment constraint check - only check THIS task's constraints
-			// (removed global flag check which was incorrectly blocking tasks without constraints)
-			String equipViolation = validateEquipmentForTask(task);
-			if (equipViolation != null)
+			TaskConstraints constraints = task.getConstraints();
+			boolean hasDropConstraint = constraints != null && constraints.hasDroppedItemConstraint();
+			boolean hasTimeConstraint = constraints != null && constraints.hasTimeLimit();
+			boolean hasEquipConstraint = constraints != null && constraints.hasEquipmentConstraints();
+
+			log.info("[TASK DEBUG] Evaluating task '{}' (ID: {}) - hasDropConstraint: {}, hasTimeConstraint: {}, hasEquipConstraint: {}",
+				task.getName(), task.getTaskId(), hasDropConstraint, hasTimeConstraint, hasEquipConstraint);
+
+			// If task ONLY has dropped_item constraint (no time/equipment constraints),
+			// skip time and equipment checks - only verify the drop
+			boolean dropOnlyTask = hasDropConstraint && !hasTimeConstraint && !hasEquipConstraint;
+
+			if (!dropOnlyTask)
 			{
-				log.info("Kill NOT credited for task '{}' - equipment constraint violated: {}",
-					task.getName(), equipViolation);
-				continue; // Skip this task, don't credit the kill
+				// Per-task equipment constraint check - only check THIS task's constraints
+				// (removed global flag check which was incorrectly blocking tasks without constraints)
+				String equipViolation = validateEquipmentForTask(task);
+				if (equipViolation != null)
+				{
+					log.warn("[TASK FAILED] Task '{}' (ID: {}) - Equipment constraint violated: {}",
+						task.getName(), task.getTaskId(), equipViolation);
+					sendTaskFailure(task, "Equipment: " + equipViolation);
+					continue; // Skip this task, don't credit the kill
+				}
+
+				// Time constraint check - validate kill was fast enough
+				String timeViolation = validateTimeConstraintForTask(task);
+				if (timeViolation != null)
+				{
+					log.warn("[TASK FAILED] Task '{}' (ID: {}) - Time constraint violated: {}",
+						task.getName(), task.getTaskId(), timeViolation);
+					sendTaskFailure(task, "Time: " + timeViolation);
+					continue; // Skip this task, don't credit the kill
+				}
+			}
+			else
+			{
+				log.info("[TASK DEBUG] Task '{}' - Drop-only task, skipping time/equipment constraint checks",
+					task.getName());
 			}
 
-			// Time constraint check - validate kill was fast enough
-			String timeViolation = validateTimeConstraintForTask(task);
-			if (timeViolation != null)
+			// If task has a dropped item constraint, check for the drop
+			if (hasDropConstraint)
 			{
-				log.info("Kill NOT credited for task '{}' - time constraint violated: {}",
-					task.getName(), timeViolation);
-				continue; // Skip this task, don't credit the kill
+				WorldPoint deathLocation = npc.getWorldLocation();
+				List<Integer> requiredItemIds = constraints.getDroppedItemIds();
+				int requiredQuantity = constraints.getDroppedItemQuantity();
+				String dropName = constraints.getDroppedItem();
+
+				log.info("[TASK DEBUG] Task '{}' - Requires dropped item '{}' (IDs: {}, qty: {}) - checking ground items",
+					task.getName(), dropName, requiredItemIds, requiredQuantity);
+
+				// Log all ground items near the death location for debugging
+				log.info("[TASK DEBUG] Scanning ground items near NPC death location:");
+				logAllGroundItemsNearLocation(deathLocation, 2);
+
+				// IMMEDIATELY check if the item is already on the ground at the death location
+				// (ItemSpawned might have fired BEFORE ActorDeath in the same tick)
+				int foundQuantity = checkGroundItemsAtLocation(deathLocation, requiredItemIds);
+
+				if (foundQuantity >= requiredQuantity)
+				{
+					log.info("[TASK SUCCESS] Task '{}' (ID: {}) - Required drop already on ground! Found {} of {} needed. Crediting kill.",
+						task.getName(), task.getTaskId(), foundQuantity, requiredQuantity);
+
+					// Send progress to chatbox
+					String details = String.format("Killed %s and received %s drop", npc.getName(), dropName);
+					sendTaskProgress(task, details);
+
+					// Credit the kill immediately
+					sendKillReport(npc, task);
+					incrementTaskProgress(task, 1);
+					continue;
+				}
+
+				// Item not found yet - add to pending and wait for ItemSpawned event
+				log.info("[TASK DEBUG] Task '{}' - Drop '%s' not found yet (found: {}/{}), waiting for ItemSpawned event",
+					task.getName(), dropName, foundQuantity, requiredQuantity);
+
+				PendingDropKill pending = new PendingDropKill(
+					task, npc, deathLocation, client.getTickCount(),
+					requiredItemIds, requiredQuantity);
+				pending.collectedQuantity = foundQuantity; // Track what we already found
+				pendingDropKills.put(task.getTaskId(), pending);
+
+				// Don't credit the kill yet - wait for the drop to appear
+				continue;
 			}
+
+			// No drop constraint - credit the kill immediately
+			log.info("[TASK SUCCESS] Task '{}' (ID: {}) - All constraints passed! Crediting kill.",
+				task.getName(), task.getTaskId());
+
+			// Send progress to chatbox
+			String details = String.format("Killed %s", npc.getName());
+			sendTaskProgress(task, details);
 
 			// Send kill report to server
 			sendKillReport(npc, task);
@@ -427,6 +1044,10 @@ public class NpcKillModule extends AbstractTaskModule
 		if (completionCallback != null)
 		{
 			log.info("Task completed: {}", task.getName());
+
+			// Send task completion message to chatbox
+			sendTaskSuccess(task, "Task complete!");
+
 			completionCallback.onTaskCompleted(task, task.getCurrentProgress());
 			activeTasks.remove(task);
 		}
