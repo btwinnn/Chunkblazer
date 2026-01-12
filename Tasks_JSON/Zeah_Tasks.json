@@ -749,114 +749,79 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Defeat a Jail Guard",
-                    "taskID": "defeat_jail_guard",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Jail Guard"],
-                        "npc_ids": [4276, 4277, 4278, 4279],
-                        "quantity": [1, 10]
-                    }
-                },
-                {
-                    "name": "Obtain a Forestry Kit",
-                    "taskID": "obtain_forestry_kit",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Forestry Kit"],
-                            "item_ids": [28136]
-                        }
-                    ]
-                },
-                {
-                    "name": "Travel to Fairy Ring Code CLP",
-                    "taskID": "fairy_ring_CLP",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
+                    "name": "Plant some Grape Seeds",
+                    "taskID": "plant_belladonna",
+                    "category": "Farming",
+                    "level": 36,
+                    "completion_type": "FARMING",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Grape seed"],
+                            "item_ids": [13657],
+                            "quantity": [1]
+                        }
+                    ]
                 },
                 {
-                    "name": "Obtain a Secateurs Blade",
-                    "taskID": "obtain_secateurs_blade",
+                    "name": "Obtain Zamorak's Grapes",
+                    "taskID": "obtain_zamorak's_grapes",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Secateurs Blade"],
-                            "item_ids": [28159],
-                            "quantity": [1]
+                            "item": ["Zamorak's Grapes"],
+                            "item_ids": [20749]
                         }
                     ]
                 },
                 {
-                    "name": "Steal from a Seed Stall",
-                    "taskID": "steal_seed_stall",
-                    "category": "Thieving",
-                    "level": 27,
-                    "completion_type": "THIEVING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": [
-                        {
-                            "object": ["Seed Stall"],
-                            "object_id": [7053],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Log Basket",
-                    "taskID": "obtain_log_basket",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
+                    "name": "Make a Jug of Wine",
+                    "taskID": "cook_wine",
+                    "category": "Cooking",
+                    "level": 35,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Log Basket"],
-                            "item_ids": [28140],
-                            "quantity": [1]
+                            "item": "Jug of Wine",
+                            "item_ids": [1993]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Level 7 Dark Wizard",
-                    "taskID": "defeat_level_7_dark_wizard",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "name": "Make a Wine of Zamorak",
+                    "taskID": "cook_wine",
+                    "category": "Cooking",
+                    "level": 65,
+                    "completion_type": "COOKING",
+                    "base_points": 3,
                     "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Dark Wizard"],
-                        "npc_ids": [512, 5086, 5087],
-                        "quantity": [1, 10]
-                    }
+                    "required_items": [
+                        {
+                            "item": "Wine of Zamorak",
+                            "item_ids": [245]
+                        }
+                    ]
                 },
                 {
-                    "name": "Defeat a Level 7 Dark Wizard in 10 Seconds",
-                    "taskID": "defeat_level_7_dark_wizard_fast",
+                    "name": "Defeat a Mugger in 5 Seconds",
+                    "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "target_npc": {
-                        "npc": ["Dark Wizard"],
-                        "npc_ids": [512, 5086, 5087],
-                        "quantity": [1, 10]
+                        "npc": ["Mugger"],
+                        "npc_ids": [513, 1461, 6996],
+                        "quantity": [1]
                     },
-                    
                     "constraints": {
-                        "time_in_ticks": [16],
+                        "time_in_ticks": [8],
                         "prohibited_active_varbits": [
                                 {
                                     "varbit_id": 57,
@@ -867,35 +832,33 @@
                     }
                 },
                 {
-                    "name": "Steal from Fortunato's Market Stall",
-                    "taskID": "steal_market_stall_draynor",
-                    "category": "Thieving",
-                    "level": 22,
-                    "completion_type": "THIEVING",
+                    "name": "Defeat a Mugger",
+                    "taskID": "defeat_mugger",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": [
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Mugger"],
+                        "npc_ids": [513, 1461, 6996],
+                        "quantity": [1]
+                    }                  
+                },
+                {
+                    "name": "Mix a Ranging Potion",
+                    "taskID": "mix_ranging_potion",
+                    "category": "Herblore",
+                    "level": 72,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                     "required_items": [
                         {
-                            "object": ["Market Stall"],
-                            "object_id": [14011],
-                            "quantity": [1]
+                            "item": ["Ranging Potion(3)", "Ranging Potion(4)"],
+                            "item_ids": [169, 2444]
                         }
                     ]
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Fairytale I - Growing Pains",
-                    "points": 2
-                },
-                {
-                    "name": "Fairytale II - Cure a Queen",
-                    "points": 3
-                },
-                {
-                    "name": "A Porcine of Interest",
-                    "points": 1
-                }
+                }                        
             ],
             "is_completed": false
         },
