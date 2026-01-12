@@ -152,15 +152,8 @@ public class ChunkBlazerPlugin extends Plugin
 		panel = new ChunkBlazerPanel();
 		panel.init(this);
 
-		// Create a simple orange icon (16x16)
-		BufferedImage icon = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-		for (int x = 0; x < 16; x++)
-		{
-			for (int y = 0; y < 16; y++)
-			{
-				icon.setRGB(x, y, 0xFFFF9800); // Orange color
-			}
-		}
+		// Create fire icon for navigation button
+		BufferedImage icon = ChunkBlazerIcons.createFireIcon(16);
 
 		navButton = NavigationButton.builder()
 			.tooltip("ChunkBlazer")
