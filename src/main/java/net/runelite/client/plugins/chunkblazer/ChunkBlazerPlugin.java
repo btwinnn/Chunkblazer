@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -81,7 +82,7 @@ public class ChunkBlazerPlugin extends Plugin
 	private NuzlockeTask activeTask; // Legacy single task for backward compatibility
 
 	@Getter
-	private final List<NuzlockeTask> activeTasks = new ArrayList<>(); // All active tasks for current region
+	private final List<NuzlockeTask> activeTasks = new CopyOnWriteArrayList<>(); // All active tasks for current region (thread-safe)
 
 	private final List<NuzlockeChunk> allChunks = new ArrayList<>();
 	private final Map<Integer, NuzlockeChunk> chunksByRegionId = new HashMap<>();
@@ -724,7 +725,10 @@ public class ChunkBlazerPlugin extends Plugin
 	private void loadActiveTasks()
 	{
 		activeTasks.clear();
+		taskModuleManager.clearTask(); // Clear module state to prevent duplicates
+
 		Set<String> completedTaskIds = getCompletedTaskIds();
+		Set<String> addedTaskIds = new HashSet<>(); // Track added tasks to prevent duplicates
 
 		for (String regionIdStr : getUnlockedRegionIds())
 		{
@@ -743,13 +747,16 @@ public class ChunkBlazerPlugin extends Plugin
 				{
 					for (NuzlockeTask task : chunk.getTasks())
 					{
-						if (rolledTaskIds.contains(task.getTaskId()) &&
-							!completedTaskIds.contains(task.getTaskId()) &&
+						String taskId = task.getTaskId();
+						if (rolledTaskIds.contains(taskId) &&
+							!completedTaskIds.contains(taskId) &&
+							!addedTaskIds.contains(taskId) && // Prevent duplicates
 							!task.isLocked())
 						{
 							// Initialize task
 							initializeTask(task);
 							activeTasks.add(task);
+							addedTaskIds.add(taskId);
 						}
 					}
 				}
@@ -1272,6 +1279,8 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public void devResetTasks()
 	{
+		log.info("DEV: devResetTasks() called");
+
 		// Clear rolled tasks for current region only
 		int currentRegion = getCurrentRegionId();
 		if (currentRegion > 0)
@@ -1279,12 +1288,20 @@ public class ChunkBlazerPlugin extends Plugin
 			clearRolledTasksForRegion(currentRegion);
 		}
 
+		// Log current state before clearing
+		log.info("DEV: Before clear - completedTasks={}", config.completedTasks());
+
 		// Clear completed tasks
 		configManager.setConfiguration("chunkblazer", "completedTasks", "");
 		// Clear task progress data
 		configManager.setConfiguration("chunkblazer", "taskProgressData", "");
 		// Clear assigned tasks
 		configManager.setConfiguration("chunkblazer", "assignedTasks", "");
+		// Also clear rolled tasks for ALL regions to fully reset
+		configManager.setConfiguration("chunkblazer", "regionRolledTasks", "");
+
+		// Verify the clear worked
+		log.info("DEV: After clear - completedTasks={}", config.completedTasks());
 
 		// Clear module state
 		taskModuleManager.clearTask();

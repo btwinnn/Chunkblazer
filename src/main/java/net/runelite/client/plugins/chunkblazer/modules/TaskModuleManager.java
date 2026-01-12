@@ -34,7 +34,7 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	private SkillModule skillModule;
 
 	@Inject
-	private ItemObtainModule itemObtainModule;
+	private ObtainModule obtainModule;
 
 	@Inject
 	public TaskModuleManager()
@@ -50,7 +50,7 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 		registerModule(npcKillModule);
 		registerModuleWithType(npcKillModule, "COMBAT"); // NpcKillModule handles COMBAT type too
 		registerModule(skillModule);
-		registerModule(itemObtainModule);
+		registerModule(obtainModule);
 
 		log.info("TaskModuleManager initialized with {} modules", modules.size());
 	}

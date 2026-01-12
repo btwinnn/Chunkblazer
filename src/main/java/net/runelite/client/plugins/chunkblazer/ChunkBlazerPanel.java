@@ -1278,7 +1278,8 @@ public class ChunkBlazerPanel extends PluginPanel
 			"This will:\n" +
 			"- Clear all rolled tasks (re-roll on next assign)\n" +
 			"- Clear assigned task history\n" +
-			"- Clear current active task\n\n" +
+			"- Clear current active task\n" +
+			"- Clear completed tasks list\n\n" +
 			"Points and unlocked chunks will be kept.",
 			"Reset Task Progress",
 			JOptionPane.YES_NO_OPTION,
@@ -1287,9 +1288,33 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		if (confirm == JOptionPane.YES_OPTION)
 		{
-			plugin.devResetTasks();
-			updatePanel();
-			JOptionPane.showMessageDialog(this, "Task progress reset!", "Reset Complete", JOptionPane.INFORMATION_MESSAGE);
+			log.info(">>> Dev: Reset Tasks confirmed, calling devResetTasks()...");
+			try
+			{
+				plugin.devResetTasks();
+				log.info(">>> Dev: devResetTasks() completed");
+
+				// Clear selected task
+				selectedTask = null;
+				updateSelectedTaskDisplay();
+
+				// Force refresh all sections
+				updatePanel();
+
+				// Explicitly clear and refresh completed tasks content
+				completedTasksContentPanel.removeAll();
+				updateCompletedTasksContent();
+				completedTasksContentPanel.revalidate();
+				completedTasksContentPanel.repaint();
+
+				log.info(">>> Dev: Reset complete, all panels refreshed");
+				JOptionPane.showMessageDialog(this, "Task progress reset!", "Reset Complete", JOptionPane.INFORMATION_MESSAGE);
+			}
+			catch (Exception e)
+			{
+				log.error(">>> Dev: Reset Tasks FAILED with exception: ", e);
+				JOptionPane.showMessageDialog(this, "Reset failed! Check logs.", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 
@@ -1504,9 +1529,27 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private void onRerollTask()
 	{
-		log.info("Dev: Reroll task requested");
-		plugin.rerollTask();
-		updateTaskDisplay();
+		log.info(">>> Dev: Reroll task button CLICKED");
+		try
+		{
+			plugin.rerollTask();
+			log.info(">>> Dev: rerollTask() completed, updating display...");
+
+			// Force update on EDT
+			SwingUtilities.invokeLater(() ->
+			{
+				updateTaskDisplay();
+				updateTaskList();
+				updateActiveTasksDisplay();
+				revalidate();
+				repaint();
+				log.info(">>> Dev: Reroll UI refresh complete");
+			});
+		}
+		catch (Exception e)
+		{
+			log.error(">>> Dev: Reroll FAILED with exception: ", e);
+		}
 	}
 
 	private void openLogFile()
@@ -1714,6 +1757,9 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	public void updateActiveTasksDisplay()
 	{
+		log.debug(">>> updateActiveTasksDisplay() CALLED");
+		log.debug(">>> Stack trace: {}", Thread.currentThread().getStackTrace()[2]);
+
 		// Refresh filter dropdowns
 		refreshActiveTasksFilters();
 
@@ -1721,6 +1767,18 @@ public class ChunkBlazerPanel extends PluginPanel
 		activeTasksContentPanel.removeAll();
 
 		List<NuzlockeTask> allTasks = plugin.getActiveTasks();
+
+		// Debug: check for duplicates
+		java.util.Set<String> taskIds = new java.util.HashSet<>();
+		for (NuzlockeTask t : allTasks)
+		{
+			if (taskIds.contains(t.getTaskId()))
+			{
+				log.warn(">>> DUPLICATE TASK DETECTED: {} ({})", t.getName(), t.getTaskId());
+			}
+			taskIds.add(t.getTaskId());
+		}
+		log.debug(">>> allTasks size: {}, unique taskIds: {}", allTasks.size(), taskIds.size());
 
 		// Cache filter values
 		final String filterText = activeTasksSearchText != null ? activeTasksSearchText : "";
@@ -1785,6 +1843,9 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Update the section title to show count
 		updateActiveTasksSectionTitle(allTasks.size(), filteredTasks.size());
+
+		log.debug(">>> updateActiveTasksDisplay() DONE - added {} items to panel, component count: {}",
+			filteredTasks.size(), activeTasksContentPanel.getComponentCount());
 
 		activeTasksContentPanel.revalidate();
 		activeTasksContentPanel.repaint();

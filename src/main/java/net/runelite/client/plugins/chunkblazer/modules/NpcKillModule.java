@@ -406,37 +406,68 @@ public class NPCKillModule extends AbstractTaskModule
 		Actor source = event.getSource();
 		Actor target = event.getTarget();
 
-		// Log all player interactions for debugging
-		if (source == client.getLocalPlayer() && target instanceof NPC)
+		// Only track player interactions with NPCs
+		if (source != client.getLocalPlayer() || !(target instanceof NPC))
 		{
-			NPC npc = (NPC) target;
-			log.info(">>> PLAYER ATTACKING NPC: {} (ID: {}, Index: {}) - activeTasks count: {}",
-				npc.getName(), npc.getId(), npc.getIndex(), activeTasks.size());
+			return;
+		}
 
-			// Always track the current target if we have any active tasks
-			if (!activeTasks.isEmpty())
+		NPC npc = (NPC) target;
+
+		// IMPORTANT: Only track combat-capable NPCs or task target NPCs
+		// This prevents resetting tracking when talking to shopkeepers, random events, etc.
+		boolean isCombatNpc = npc.getCombatLevel() > 0;
+		boolean isTaskTarget = isNpcTaskTarget(npc.getId());
+
+		if (!isCombatNpc && !isTaskTarget)
+		{
+			log.debug(">>> INTERACTING with non-combat NPC: {} (ID: {}) - NOT resetting combat tracking",
+				npc.getName(), npc.getId());
+			return; // Don't reset tracking for non-combat NPCs
+		}
+
+		log.info(">>> PLAYER ATTACKING NPC: {} (ID: {}, Index: {}, Combat: {}) - activeTasks count: {}",
+			npc.getName(), npc.getId(), npc.getIndex(), npc.getCombatLevel(), activeTasks.size());
+
+		// Always track the current target if we have any active tasks
+		if (!activeTasks.isEmpty())
+		{
+			// Only reset tracking if switching to a NEW target
+			boolean isSameTarget = (currentTargetIndex == npc.getIndex());
+
+			if (!isSameTarget)
 			{
-				// Only reset tracking if switching to a NEW target
-				boolean isSameTarget = (currentTargetIndex == npc.getIndex());
+				// New target - reset everything
+				currentTarget = npc;
+				currentTargetIndex = npc.getIndex();
+				damageDealtToTarget = 0;
+				combatStartTick = -1; // Reset combat timer for new target
+				log.info(">>> NEW target: {} (ID: {}, Index: {}) - reset tracking", npc.getName(), npc.getId(), npc.getIndex());
+			}
+			else
+			{
+				// Same target - just update reference
+				currentTarget = npc;
+				log.info(">>> SAME target: {} (Index: {})", npc.getName(), npc.getIndex());
+			}
+			// Equipment constraints are checked per-task at kill time in onActorDeath
+		}
+	}
 
-				if (!isSameTarget)
-				{
-					// New target - reset everything
-					currentTarget = npc;
-					currentTargetIndex = npc.getIndex();
-					damageDealtToTarget = 0;
-					combatStartTick = -1; // Reset combat timer for new target
-					log.info(">>> NEW target: {} (ID: {}, Index: {}) - reset tracking", npc.getName(), npc.getId(), npc.getIndex());
-				}
-				else
-				{
-					// Same target - just update reference
-					currentTarget = npc;
-					log.info(">>> SAME target: {} (Index: {})", npc.getName(), npc.getIndex());
-				}
-				// Equipment constraints are checked per-task at kill time in onActorDeath
+	/**
+	 * Check if an NPC ID is a target for any active task.
+	 */
+	private boolean isNpcTaskTarget(int npcId)
+	{
+		for (NuzlockeTask task : activeTasks)
+		{
+			TargetNpc targetNpc = task.getTargetNpc();
+			if (targetNpc != null && targetNpc.matchesNpcId(npcId))
+			{
+				return true;
 			}
 		}
+		return false;
 	}
 
 	@Subscribe

@@ -4,6 +4,7 @@ import com.google.common.hash.Hashing;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import javax.inject.Inject;
 import lombok.Getter;
@@ -42,7 +43,7 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 	protected NuzlockeTask activeTask; // Legacy single task
 
 	@Getter
-	protected List<NuzlockeTask> activeTasks = new ArrayList<>(); // Multiple active tasks
+	protected List<NuzlockeTask> activeTasks = new CopyOnWriteArrayList<>(); // Multiple active tasks (thread-safe)
 
 	@Getter
 	protected int currentProgress;
