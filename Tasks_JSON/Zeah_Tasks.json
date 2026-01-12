@@ -288,20 +288,7 @@
                         "npc_ids": [397, 398, 399, 400],
                         "quantity": [1]
                     }
-                },
-                {
-                    "name": "Defeat a Hosidius Guard",
-                    "taskID": "defeat_hosidius_guard",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Hosidius Guard"],
-                        "npc_ids": [397, 398, 399, 400],
-                        "quantity": [1]
-                    }
-                },
+                },             
                 {
                     "name": "Defeat a Hosidius Guard in 12 Seconds",
                     "taskID": "defeat_highwayman_fast",
@@ -1269,121 +1256,403 @@
             "is_completed": false
         },
         {
-            "region_id": [13108],
-            "Friendly_Name": "Varrock East Mine",
-            "neighbor_ids": [13364, 13107, 12852, 13109],
+            "region_id": [6967],
+            "Friendly_Name": "Hosidius Farming Patch",
+            "neighbor_ids": [6968, 7223, 6966, 6711],
             "tasks": [
                 {
-                    "name": "Mine some Iron Ore",
-                    "taskID": "mine_iron_ore",
-                    "category": "Mining",
-                    "level": 15,
-                    "completion_type": "MINING",
+                    "name": "Plant some Sweetcorn",
+                    "taskID": "plant_sweetcorn_seed",
+                    "category": "Farming",
+                    "level": 20,
+                    "completion_type": "FARMING",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Iron Ore"],
-                            "item_ids": [440],
-                            "quantity": [1, 50]
+                            "item": ["Sweetcorn Seed"],
+                            "item_ids": [5320],
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a White Unicorn",
-                    "taskID": "defeat_white_unicorn",
+                    "name": "Plant some Strawberries",
+                    "taskID": "plant_strawberry_seed",
+                    "category": "Farming",
+                    "level": 31,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Strawberry Seed"],
+                            "item_ids": [5323],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Watermelons",
+                    "taskID": "plant_watermelon_seed",
+                    "category": "Farming",
+                    "level": 47,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Watermelon Seed"],
+                            "item_ids": [5321],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Tomato",
+                    "taskID": "plant_tomato",
+                    "category": "Farming",
+                    "level": 12,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Tomato Seed"],
+                            "item_ids": [5322],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant Snape Grass",
+                    "taskID": "plant_snape_grass",
+                    "category": "Farming",
+                    "level": 61,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Snape Grass Seed"],
+                            "item_ids": [22879],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Harralander Seed",
+                    "taskID": "plant_harralander",
+                    "category": "Farming",
+                    "level": 26,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Harralander Seed"],
+                            "item_ids": [5294],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Ranarr Seed",
+                    "taskID": "plant_ranarr",
+                    "category": "Farming",
+                    "level": 32,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ranarr Seed"],
+                            "item_ids": [5295],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Toadflax Seed",
+                    "taskID": "plant_toadflax",
+                    "category": "Farming",
+                    "level": 38,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Toadflax Seed"],
+                            "item_ids": [5296],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Irit Seed",
+                    "taskID": "plant_irit",
+                    "category": "Farming",
+                    "level": 44,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Irit Seed"],
+                            "item_ids": [5297],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Avantoe Seed",
+                    "taskID": "plant_avantoe",
+                    "category": "Farming",
+                    "level": 50,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Avantoe Seed"],
+                            "item_ids": [5298],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Kwuarm Seed",
+                    "taskID": "plant_kwuarm",
+                    "category": "Farming",
+                    "level": 56,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Kwuarm Seed"],
+                            "item_ids": [5299],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Snapdragon Seed",
+                    "taskID": "plant_snapdragon",
+                    "category": "Farming",
+                    "level": 62,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Snapdragon Seed"],
+                            "item_ids": [5300],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Cadantine Seed",
+                    "taskID": "plant_cadantine",
+                    "category": "Farming",
+                    "level": 67,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Cadantine Seed"],
+                            "item_ids": [5301],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Lantadyme Seed",
+                    "taskID": "plant_lantadyme",
+                    "category": "Farming",
+                    "level": 73,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Lantadyme Seed"],
+                            "item_ids": [5302],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Dwarf Weed Seed",
+                    "taskID": "plant_dwarf_weed",
+                    "category": "Farming",
+                    "level": 79,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dwarf Weed Seed"],
+                            "item_ids": [5303],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Torstol Seed",
+                    "taskID": "plant_torstol",
+                    "category": "Farming",
+                    "level": 85,
+                    "completion_type": "FARMING",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Torstol Seed"],
+                            "item_ids": [5304],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Nasturtiums",
+                    "taskID": "plant_marigold",
+                    "category": "Farming",
+                    "level": 24,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Nasturtium Seed"],
+                            "item_ids": [5098],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Woad Seed",
+                    "taskID": "plant_woad_seed",
+                    "category": "Farming",
+                    "level": 25,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Woad Seed"],
+                            "item_ids": [5099],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Limpwurt Seed",
+                    "taskID": "plant_limpwurt_seed",
+                    "category": "Farming",
+                    "level": 26,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Limpwurt Seed"],
+                            "item_ids": [5100],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a White Lily Seed",
+                    "taskID": "plant_white_lily_seed",
+                    "category": "Farming",
+                    "level": 58,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["White Lily Seed"],
+                            "item_ids": [22887],
+                            "quantity": [1]
+                        }
+                    ]
+                    
+                },
+                {
+                    "name": "Chop a Magic Tree",
+                    "taskID": "chop_magic_tree",
+                    "category": "Woodcutting",
+                    "level": 75,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Magic Log",
+                    "taskID": "burn_magic_log",
+                    "category": "Firemaking",
+                    "level": 75,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Hosidius Guard",
+                    "taskID": "defeat_hosidius_guard",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Unicorn"],
-                        "npc_ids": [2837, 14043],
+                        "npc": ["Hosidius Guard"],
+                        "npc_ids": [397, 398, 399, 400],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Mix an Anti-Poison Potion",
-                    "taskID": "mix_anti-poison",
-                    "category": "Herblore",
+                    "name": "Pickpocket a Hosidius Guard",
+                    "taskID": "pickpocket_hosidius_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hosidius Guard"],
+                        "npc_ids": [397, 398, 399, 400],
+                        "quantity": [1]
+                    }
+                },             
+                {
+                    "name": "Defeat a Hosidius Guard in 12 Seconds",
+                    "taskID": "defeat_highwayman_fast",
+                    "category": "Combat",
                     "level": 5,
-                    "completion_type": "HERBLORE",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                     "required_items": [
-                        {
-                            "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Ensouled Unicorn Head",
-                    "taskID": "obtain_ensouled_unicorn_head",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Ensouled Unicorn Head"],
-                            "item_ids": [13465, 13466]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat some Black Bears",
-                    "taskID": "defeat_some_black_bears",
-                    "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Black Bear"],
-                        "npc_ids": [2839],
-                        "quantity": [1, 25]
-                    }
-                },
-                {
-                    "name": "Defeat a Black Bear on Task",
-                    "taskID": "defeat_black_bear_on_task",
-                    "category": "Slayer",
-                    "completion_type": "SLAYER",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Black Bear"],
-                        "npc_ids": [2839],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Obtain an Ensouled Bear Head",
-                    "taskID": "obtain_ensouled_bear_head",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Ensouled Bear Head"],
-                            "item_ids": [13462, 13463]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Unicorn in 13 Seconds",
-                    "taskID": "defeat_white_unicorn_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["White Unicorn"],
-                        "npc_ids": [2837, 14043],
+                        "npc": ["Hosidius Guard"],
+                        "npc_ids": [397, 398, 399, 400],
                         "quantity": [1]
                     },
-                    
                     "constraints": {
                         "time_in_ticks": [20],
                         "prohibited_active_varbits": [
@@ -1394,73 +1663,7 @@
                                 }
                             ]
                     }
-                }, 
-                {
-                    "name": "Defeat a Level 6 Giant Rat with nothing Equipped",
-                    "taskID": "defeat_level_6_giant_rat_naked",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Giant Rat"],
-                        "npc_ids": [2862, 2863, 2864],
-                        "quantity": [1]
-                    },
-
-                    "constraints": {
-                        "equip_nothing": "TRUE"
-                    }
-                    
-                },
-                {
-                    "name": "Obtain some Unicorn Horns",
-                    "taskID": "obtain_unicorn_horns",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Unicorn Horn"],
-                            "item_ids": [237],
-                            "quantity": [1,25]
-                        }
-                    ]
-                },
-                {
-                    "name": "Talk to Guidor",
-                    "taskID": "talk_to_guidor",
-                    "category": "Dialogue",
-                    "completion_type": "NPC_DIALOGUE",
-                    "base_points": 1,
-                    "assignment_weight": 8,                  
-                    "target_npc": {
-                        "npc": ["Guidor"],
-                        "npc_ids": [1110]
-                    }
-                },
-                {
-                    "name": "Obtain Cadava Berries",
-                    "taskID": "obtain_cadava_berries",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Cadava Berries"],
-                            "item_ids": [753],
-                            "quantity": [1]
-                        }
-                    ]
-                }
-                 ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "What Lies Below",
-                    "points": 2
-                }
+                }         
             ],                 
             "is_completed": false
         },
