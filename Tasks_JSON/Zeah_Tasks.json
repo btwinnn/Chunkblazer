@@ -863,194 +863,116 @@
             "is_completed": false
         },
         {
-            "region_id": [12337],
-            "Friendly_Name": "Wizards' Tower",
-            "neighbor_ids": [12081, 12338, 12593, 12336],
+            "region_id": [7222],
+            "Friendly_Name": "Tithe Farm",
+            "neighbor_ids": [7223, 7478, 7221, 6966],
             "tasks": [
                 {
-                    "name": "Defeat a Level 82 Lesser Demon",
-                    "taskID": "defeat_level_82_lesser_demon",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Lesser Demon"],
-                        "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat The Leviathan",
-                    "taskID": "defeat_leviathan",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
+                    "name": "Unlock Auto-Weed at Tithe Farm",
+                    "taskID": "unlock_auto-weed_tithe_farm",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
                     "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Leviathan",
-                    "target_npc": {
-                        "npc": ["Leviathan"],
-                        "npc_ids": [12215, 12219],
-                        "quantity": [1]
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 5557,        
+                        "varbit_boolean": 1,      
+                        "description": "Unlock Auto-Weed at Tith Farm"
                     }
                 },
                 {
-                    "name": "Defeat the Awakened Leviathan",
-                    "taskID": "defeat_awakened_leviathan",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 1,
-                    "boss": "The Leviathan",
-                    "target_npc": {
-                        "npc": ["Awakened Leviathan"],
-                        "npc_ids": [12214],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Craft some Chaos Runes",
-                    "taskID": "craft_chaos_runes",
-                    "category": "Runecrafting",
-                    "level": 35,
-                    "completion_type": "RUNECRAFTING",
+                    "name": "Plant a Golovanova Seed",
+                    "taskID": "plant_golovanova_seed",
+                    "category": "Farming",
+                    "level": 34,
+                    "completion_type": "FARMING",
                     "base_points": 2,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
-                        "item": "Chaos Rune",
-                        "item_ids": [562],
-                        "action": "obtain",
-                        "quantity": [1]
+                            "item": ["Golovanova Seed"],
+                            "item_ids": [13423],
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain a Venator Vestige",
-                    "taskID": "obtain_venator_vestige",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Leviathan",
+                    "name": "Plant a Bologano Seed",
+                    "taskID": "plant_bologano_seed",
+                    "category": "Farming",
+                    "level": 54,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Venator Vestige"],
-                            "item_ids": [28283]
+                            "item": ["Bologano Seed"],
+                            "item_ids": [13424],
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code DIS",
-                    "taskID": "fairy_ring_CLP",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
-                {
-                    "name": "Equip a Splitbark Set",
-                    "taskID": "equip_splitbark_set",
-                    "category": "Defence",
-                    "completion_type": "EQUIP",
+                    "name": "Plant a Logavano Seed",
+                    "taskID": "plant_logavano_seed",
+                    "category": "Farming",
+                    "level": 74,
+                    "completion_type": "FARMING",
                     "base_points": 3,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Splitbark Helm"],
-                            "item_ids": [3385]
-                        },
-                        {
-                            "item": ["Splitbark Body"],
-                            "item_ids": [3387]
-                        },
-                        {
-                            "item": ["Splitbark Legs"],
-                            "item_ids": [3389]
-                        },
-                        {
-                            "item": ["Splitbark Gauntlets"],
-                            "item_ids": [3391]
-                        },
-                        {
-                            "item": ["Splitbark Boots"],
-                            "item_ids": [3393]
+                            "item": ["Bologano Seed"],
+                            "item_ids": [13425],
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Level 9 Wizard in 6 Seconds",
-                    "taskID": "defeat_level_9_wizard_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Wizard"],
-                        "npc_ids": [3257],
-                        "quantity": [1]
-                    },
-                    
-                    "constraints": {
-                        "time_in_ticks": [10],
-                        "prohibited_active_varbits": [
-                                {
-                                    "varbit_id": 57,
-                                    "must_be_value": 0,
-                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
-                                }
-                            ]
-                    }
-                },
-                {
-                    "name": "Obtain a Leviathan's Lure",
-                    "taskID": "obtain_leviathan's_lure",
+                    "name": "Obtain Gricoller's Can",
+                    "taskID": "obtain_gricollar's_can",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 10,
-                    "boss": "The Leviathan",
                     "required_items": [
                         {
-                            "item": ["Leviathan's Lure"],
-                            "item_ids": [28325],
-                            "quantity": [1]
+                            "item": ["Gricollar's Can"],
+                            "item_ids": [13353]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain Rune Essence",
-                    "taskID": "obtain_rune_essence",
+                    "name": "Obtain a Seed Box",
+                    "taskID": "obtain_seed_box",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "base_points": 5,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": ["Rune Essence"],
-                            "item_ids": [1436],
-                            "quantity": [1]
+                            "item": ["Seed Box"],
+                            "item_ids": [13639]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain an Abyssal Lantern",
-                    "taskID": "obtain_abyssal_lantern",
+                    "name": "Obtain a Seed Pack",
+                    "taskID": "obtain_seed_pack",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 8,
+                    "base_points": 5,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Abyssal Lantern Unlit"],
-                            "item_ids": [26822],
-                            "quantity": [1]
+                            "item": ["Seed Pack"],
+                            "item_ids": [22993]
                         }
                     ]
-                },               
+                },                              
                 {
-                    "name": "Equip the Raiments of the Eye Set",
-                    "taskID": "equip_raiments_of_eye_set",
+                    "name": "Equip the Farmer's Set",
+                    "taskID": "equip_farmer's_set",
                     "category": "Runecrafting",
                     "level": 1,
                     "completion_type": "EQUIP",
@@ -1058,30 +980,23 @@
                     "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": ["Hat of the Eye"],
-                            "item_ids": [26850, 26858, 26864, 26870]
+                            "item": ["Farmer's Strawhat"],
+                            "item_ids": [13646, 13647]
                         },
                         {
-                            "item": ["Robe Bottoms of the Eye"],
-                            "item_ids": [26854, 26862, 26868, 26874
-                        ]
+                            "item": ["Farmer's Jacket"],
+                            "item_ids": [13642]
                         },
                         {
-                            "item": ["Robe top of the Eye"],
-                            "item_ids": [26852, 26860, 26866, 26872]
+                            "item": ["Farmer's Boro Trousers"],
+                            "item_ids": [13640, 13641]
                         },
                         {
-                            "item": ["Boots of the Eye"],
-                            "item_ids": [26856]
+                            "item": ["Farmer's Boots"],
+                            "item_ids": [13644, 13645]
                         }
                     ]
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Imp Catcher",
-                    "points": 1
-                }
+                }           
             ],
             "is_completed": false
         },

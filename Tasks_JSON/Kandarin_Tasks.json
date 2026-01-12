@@ -8702,46 +8702,7 @@
                         "bit_index": 5,      
                         "expected_value": 1
                     }
-                },              
-                {
-                    "name": "Unlock Level 5 Colletor at Barbarian Assault",
-                    "taskID": "unlock_level_5_collector_barb_assault",
-                    "category": "Unlock",
-                    "completion_type": "VARBIT_CHECK",
-                    "base_points": 5,
-                    "assignment_weight": 8,                   
-                    "constraints": {                       
-                        "varbit_id": 3256,        
-                        "varbit_boolean": 5,      
-                        "description": "Unlock Level 5 Collector Barbarian Assault"
-                    }
-                },
-                {
-                    "name": "Unlock Level 5 Defender at Barbarian Assault",
-                    "taskID": "unlock_level_5_defender_barb_assault",
-                    "category": "Unlock",
-                    "completion_type": "VARBIT_CHECK",
-                    "base_points": 5,
-                    "assignment_weight": 8,                   
-                    "constraints": {                       
-                        "varbit_id": 3255,        
-                        "varbit_boolean": 5,      
-                        "description": "Unlock Level 5 Defender Barbarian Assault"
-                    }
-                }, 
-                {
-                    "name": "Unlock Level 5 Healer at Barbarian Assault",
-                    "taskID": "unlock_level_5_healer_barb_assault",
-                    "category": "Unlock",
-                    "completion_type": "VARBIT_CHECK",
-                    "base_points": 5,
-                    "assignment_weight": 8,                   
-                    "constraints": {                       
-                        "varbit_id": 3257,        
-                        "varbit_boolean": 5,      
-                        "description": "Unlock Level 5 Healer Barbarian Assault"
-                    }
-                },
+                },                           
                 {
                     "name": "Equip a Granite Body",
                     "taskID": "equip_granite_body",

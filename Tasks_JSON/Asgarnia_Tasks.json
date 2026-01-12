@@ -181,7 +181,6 @@
                 {
                     "name": "Runecraft an Air Rune",
                     "taskID": "runecraft_air_rune",
-                    "is_unlocked": false,
                     "category": "Runecrafting",
                     "level": 1,
                     "completion_type": "RUNECRAFTING",
@@ -198,7 +197,6 @@
                 {
                     "name": "Runecraft a Smoke Rune",
                     "taskID": "runecraft_smoke_rune",
-                    "is_unlocked": false,
                     "category": "Runecrafting",
                     "level": 15,
                     "completion_type": "RUNECRAFTING",
