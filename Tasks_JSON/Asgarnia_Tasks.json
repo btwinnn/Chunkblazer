@@ -2391,11 +2391,7 @@
                         "npc": ["Monk"],
                         "npc_ids": [4246, 2579, 4068, 6956],
                         "quantity": [1]
-                    }, 
-                    
-                    "constraints": {
-                        "time_in_ticks": [36]
-                        }
+                    } 
                 },
                 {
                     "name": "Talk to Brother Jered",

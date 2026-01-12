@@ -1001,38 +1001,179 @@
             "is_completed": false
         },
         {
-            "region_id": [12852],
-            "Friendly_Name": "Dark Wizards' Stone Table",
-            "neighbor_ids": [12853, 13108, 12851, 12596],
+            "region_id": [6966],
+            "Friendly_Name": "Hosidius House Portal",
+            "neighbor_ids": [6967, 7222, 6965, 6710],
             "tasks": [
                 {
-                    "name": "Defeat a Level 20 Dark Wizard",
-                    "taskID": "defeat_level_20_dark_wizard",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Dark Wizard Level 20"],
-                        "npc_ids": [510, 5088, 5089],
-                        "quantity": [1]
-                    }
+                "name": "Build a Whetstone",
+                "taskID": "build_whetstone",
+                "category": "Construction",
+                "level": 35,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 5,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        },
+                        {
+                        "item": "Limestone Brick",
+                        "item_ids": [3420]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Whetstone",
+                        "object_id": [6801],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
                 },
                 {
-                    "name": "Defeat a Level 20 Dark Wizard in 19 Seconds",
-                    "taskID": "defeat_level_20_dark_wizard_fast",
+                "name": "Build an Oak Workbench",
+                "taskID": "build_oak_workbench",
+                "category": "Construction",
+                "level": 32,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 5,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        }                    
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Oak Workbench",
+                        "object_id": [6792],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Shield Easel",
+                "taskID": "build_shield_easel",
+                "category": "Construction",
+                "level": 41,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 5,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        }                    
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Shield Easel",
+                        "object_id": [6804],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Rope Bell Pull",
+                "taskID": "build_rope_bell_pull",
+                "category": "Construction",
+                "level": 26,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 1,
+                "assignment_weight": 5,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        },
+                        {
+                        "item": "Rope",
+                        "item_ids": [954]
+                        }                    
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Rope Bell Pull",
+                        "object_id": [13307],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Build a Mahogany Demon Lectern",
+                    "taskID": "build_mahogany_demon_lectern",
+                    "category": "Construction",
+                    "level": 67,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                            "item": "Mahogany Plank",
+                            "item_ids": [8778]
+                            },
+                            {
+                            "item": "Gold Leaf",
+                            "item_ids": [8784]
+                            }
+                        ],
+
+                    "required_object": [
+                            {
+                            "object": "Mahogany Demon Lectern",
+                            "object_id": [13648],
+                            "interaction_type": "use_item_on"
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Mahogany Eagle Lectern",
+                    "taskID": "build_mahogany_eagle_lectern",
+                    "category": "Construction",
+                    "level": 67,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                            "item": "Mahogany Plank",
+                            "item_ids": [8778]
+                            },
+                            {
+                            "item": "Gold Leaf",
+                            "item_ids": [8784]
+                            }
+                        ],
+
+                    "required_object": [
+                            {
+                            "object": "Mahogany Eagle Lectern",
+                            "object_id": [13647],
+                            "interaction_type": "use_item_on"
+                            }
+                        ]
+                },
+                {
+                    "name": "Defeat a Sand Crab in 12 Seconds",
+                    "taskID": "defeat_sand_crab_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 10,
                     "target_npc": {
-                        "npc": ["Dark Wizard Level 20"],
-                        "npc_ids": [510, 5088, 5089],
+                        "npc": ["Sand Crab"],
+                        "npc_ids": [5935, 7206],
                         "quantity": [1]
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [32],
+                        "time_in_ticks": [20],
                         "prohibited_active_varbits": [
                                 {
                                     "varbit_id": 57,
@@ -1043,86 +1184,87 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Fence Jump Shortcut",
-                    "taskID": "agility_fence_jump",
-                    "category": "Agility",
-                    "level": 13,
-                    "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
-                {
-                    "name": "Obtain a Fire Talisman",
-                    "taskID": "obtain_fire_talisman",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Fire Talisman"],
-                            "item_ids": [1442]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Black Robe",
-                    "taskID": "obtain_black_robe",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Black Robe"],
-                            "item_ids": [581]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat some Dark Wizards",
-                    "taskID": "defeat_some_dark_wizards",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Dark Wizard"],
-                        "npc_ids": [512, 5086, 5087, 2058, 2059, 510, 5088, 5089, 2057, 2056],
-                        "quantity": [1, 50]
-                    }
-                },
-                {
-                    "name": "Obtain a Yellow Bead",
-                    "taskID": "obtain_yellow_bead",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Yellow Bead"],
-                            "item_ids": [1472]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Level 20 Dark Wizard 1 Hit",
-                    "taskID": "defeat_level_20_dark_wizard_1_hit",
+                    "name": "Defeat a Monk in 5 Seconds",
+                    "taskID": "defeat_monk_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Wizard"],
-                        "npc_ids": [510, 5088, 5089],
+                        "npc": ["Monk"],
+                        "npc_ids": [4246, 2579, 4068, 6956],
                         "quantity": [1]
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [1]
+                        "time_in_ticks": [8],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
                     }
-                }         
+                },
+                {
+                    "name": "Defeat some Sand Crabs",
+                    "taskID": "defeat_sand_crabs",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Sand Crab"],
+                        "npc_ids": [5935, 7206],
+                        "quantity": [1, 100]
+                    }                 
+                },
+                {
+                    "name": "Activate Ultimate Strength",
+                    "taskID": "pray_ultimate_strength",
+                    "category": "Prayer",
+                    "level": 31,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "varbit_boolean": 1,
+                    "constraints": {
+                        "varbit_id": 4106
+                    }                   
+                },
+                {
+                    "name": "Mine some Silver Ore",
+                    "taskID": "mine_silver",
+                    "category": "Mining",
+                    "level": 20,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Silver Ore",
+                        "item_ids": [442],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft an Unstrung Symbol",
+                    "taskID": "craft_unstrung_symbol",
+                    "category": "Crafting",
+                    "level": 16,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Unstrung Symbol"],
+                            "item_ids": [1714],
+                            "quantity": [1]
+                        }
+                    ]
+                }
             ],
             "is_completed": false
         },
