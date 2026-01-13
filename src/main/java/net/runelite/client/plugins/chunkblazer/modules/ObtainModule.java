@@ -207,7 +207,7 @@ public class ObtainModule extends AbstractTaskModule
 
 		log.info(">>> ObtainModule: Initializing inventory tracking...");
 
-		// Track inventory
+		// Track inventory (using canonicalized IDs to handle noted items)
 		ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
 		if (inventory != null)
 		{
@@ -215,13 +215,16 @@ public class ObtainModule extends AbstractTaskModule
 			{
 				if (item != null && item.getId() > 0)
 				{
-					previousInventory.merge(item.getId(), item.getQuantity(), Integer::sum);
+					// Canonicalize to convert noted/placeholdered items to their base ID
+					int canonicalId = itemManager.canonicalize(item.getId());
+					previousInventory.merge(canonicalId, item.getQuantity(), Integer::sum);
 
 					// Log if this is a watched item
-					if (watchedItemIds.contains(item.getId()))
+					if (watchedItemIds.contains(canonicalId))
 					{
-						log.info(">>>   Already have watched item: {} (ID: {}) x {}",
-							getItemName(item.getId()), item.getId(), item.getQuantity());
+						String notedStr = (canonicalId != item.getId()) ? " (noted)" : "";
+						log.info(">>>   Already have watched item: {} (ID: {}{}) x {}",
+							getItemName(canonicalId), canonicalId, notedStr, item.getQuantity());
 					}
 				}
 			}
@@ -315,6 +318,7 @@ public class ObtainModule extends AbstractTaskModule
 	/**
 	 * Get total count of an item across inventory only.
 	 * We only check inventory since that's where items are "obtained".
+	 * Uses canonicalized IDs so noted items count toward the requirement.
 	 */
 	private int getItemCount(int itemId)
 	{
@@ -325,9 +329,14 @@ public class ObtainModule extends AbstractTaskModule
 		{
 			for (Item item : inventory.getItems())
 			{
-				if (item != null && item.getId() == itemId)
+				if (item != null && item.getId() > 0)
 				{
-					count += item.getQuantity();
+					// Canonicalize to handle noted items
+					int canonicalId = itemManager.canonicalize(item.getId());
+					if (canonicalId == itemId)
+					{
+						count += item.getQuantity();
+					}
 				}
 			}
 		}
@@ -408,7 +417,7 @@ public class ObtainModule extends AbstractTaskModule
 		log.info(">>> ObtainModule: INVENTORY CHANGED - checking for watched items...");
 		log.info(">>> Watched item IDs: {}", watchedItemIds);
 
-		// Build current inventory state
+		// Build current inventory state (using canonicalized IDs to handle noted items)
 		Map<Integer, Integer> currentInventory = new HashMap<>();
 		ItemContainer container = event.getItemContainer();
 		if (container != null)
@@ -417,12 +426,15 @@ public class ObtainModule extends AbstractTaskModule
 			{
 				if (item != null && item.getId() > 0)
 				{
-					currentInventory.merge(item.getId(), item.getQuantity(), Integer::sum);
-					// Log if this is a watched item
-					if (watchedItemIds.contains(item.getId()))
+					// Canonicalize to convert noted/placeholdered items to their base ID
+					int canonicalId = itemManager.canonicalize(item.getId());
+					currentInventory.merge(canonicalId, item.getQuantity(), Integer::sum);
+					// Log if this is a watched item (check both original and canonical ID)
+					if (watchedItemIds.contains(canonicalId))
 					{
-						log.info(">>>   FOUND watched item in inventory: {} (ID: {}) x {}",
-							getItemName(item.getId()), item.getId(), item.getQuantity());
+						String notedStr = (canonicalId != item.getId()) ? " (noted)" : "";
+						log.info(">>>   FOUND watched item in inventory: {} (ID: {}{}) x {}",
+							getItemName(canonicalId), canonicalId, notedStr, item.getQuantity());
 					}
 				}
 			}
