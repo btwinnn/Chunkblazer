@@ -921,7 +921,7 @@
           ]
         },
         {
-          "name": "Kill a man in 5 Seconds",
+          "name": "Defeat a Man or Woman in 5 Seconds",
           "taskID": "defeat_man_fast",
           "category": "Combat",
           "level": 2,

@@ -1729,100 +1729,113 @@
                     "is_completed": false
         },       
         {
-            "region_id": [13109],
-            "Friendly_Name": "Varrock East Gate",
-            "neighbor_ids": [12853, 13108, 13365, 13110],
+            "region_id": [6710],
+            "Friendly_Name": "Charcoal Burners",
+            "neighbor_ids": [6711, 6966, 6709, 6454],
             "tasks": [
                 {
-                "name": "Travel to Varlamore",
-                "taskID": "travel_varlamore",
-                "category": "Travel",
-                "completion_type": "TRAVEL",
-                "base_points": 1,
-                "assignment_weight": 10
-                },
-                {
-                "name": "Travel through the Varrock Museum 153 Kudos Gate",
-                "taskID": "travel_varrock_kudos_gate",
-                "category": "Travel",
-                "completion_type": "TRAVEL",
-                "base_points": 1,
-                "assignment_weight": 8
-                },
-                {
-                    "name": "Steal from a Tea Stall",
-                    "taskID": "steal_tea_stall",
-                    "category": "Thieving",
-                    "level": 5,
-                    "completion_type": "THIEVING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": [
-                        {
-                            "object": ["Tea Stall"],
-                            "object_id": [635],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip a Right Eye Patch",
-                    "taskID": "equip_right_eye_patch",
-                    "category": "Defence",
-                    "level": 1,
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Right Eye Patch"],
-                            "item_ids": [1025]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Red Cape",
-                    "taskID": "obtain_red_cape",
+                    "name": "Obtain Dynamite",
+                    "taskID": "obtain_dynamite",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Red Cape"],
-                            "item_ids": [1007],
+                            "item": ["Dynamite"],
+                            "item_ids": [13573],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Varrock Guard with nothing Equipped",
-                    "taskID": "defeat_varrock_guard_naked",
+                    "name": "Catch a Raw Lobster",
+                    "taskID": "catch_raw_lobster",
+                    "category": "Fishing",
+                    "level": 40,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Lobster",
+                        "item_ids": [377],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Lobster",
+                    "taskID": "cook_lobster",
+                    "category": "Cooking",
+                    "level": 40,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Lobster",
+                            "item_ids": [379]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Shark",
+                    "taskID": "catch_raw_shark",
+                    "category": "Fishing",
+                    "level": 76,
+                    "completion_type": "FISHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Raw Shark",
+                        "item_ids": [383],
+                        "quantity": [1]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Cook a Shark",
+                    "taskID": "cook_shark",
+                    "category": "Cooking",
+                    "level": 80,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Shark",
+                            "item_ids": [385]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch Raw Anchovies",
+                    "taskID": "catch_anchovies",
+                    "category": "Fishing",
+                    "level": 15,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Anchovies",
+                        "item_ids": [321],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Imp in 1 Hit",
+                    "taskID": "defeat_imp_1_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Varrock Guard Level 21"],
-                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
-                        "quantity": [1]
-                    },
-
-                    "constraints": {
-                        "equip_nothing": "TRUE"                      
-                    }
-                    
-                },
-                {
-                    "name": "Defeat a Varrock Guard in 1 Hit",
-                    "taskID": "defeat_varrock_guard_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 3,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Varrock Guard Level 21"],
-                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
+                        "npc": ["Imp"],
+                        "npc_ids": [3355, 3134, 5007],
                         "quantity": [1]
                     },
 
@@ -1831,95 +1844,152 @@
                     }
                 },
                 {
-                    "name": "Defeat some Varrock Guards",
-                    "taskID": "defeat_some_varrock_guards",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Varrock Guard Level 21"],
-                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
-                        "quantity": [1, 25]
-                    }
-                }, 
-                {
-                    "name": "Pickpocket a Varrock Guard",
-                    "taskID": "pickpocket_varrock_guard",
-                    "category": "Thieving",
-                    "level": 40,
-                    "completion_type": "THIEVING",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Varrock Guard Level 21"],
-                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
-                        "quantity": [1]
-                    }
-                },              
-                {
-                    "name": "Equip a Spotted Cape",
-                    "taskID": "equip_spotted_cape",
-                    "category": "Hunter",
-                    "level": 40,
-                    "completion_type": "HUNTER",
-                    "base_points": 2,
-                    "assignment_weight": 1,
-                    "required_items": [
-                        {
-                            "item": ["Spotted Cape"],
-                            "item_ids": [10073],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip a Spottier Cape",
-                    "taskID": "equip_spottier_cape",
-                    "category": "Hunter",
-                    "level": 66,
-                    "completion_type": "HUNTER",
+                    "name": "Fletch a Yew Shortbow",
+                    "taskID": "fletch_yew_shortbow",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
                     "base_points": 3,
                     "assignment_weight": 1,
                     "required_items": [
                         {
-                            "item": ["Spottier Cape"],
-                            "item_ids": [10074],
+                            "item": ["Yew Shortbow"],
+                            "item_ids": [857],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Varrock Guard for some Bones",
-                    "taskID": "defeat_a_varrock_guard_for_bones",
+                    "name": "Fletch a Yew Longbow",
+                    "taskID": "fletch_yew_longbow",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yew Longbow"],
+                            "item_ids": [855],
+                            "quantity": [1]
+                        }
+                    ]
+                },             
+                {
+                    "name": "Fletch a Yew Shield",
+                    "taskID": "fletch_yew_shield",
+                    "category": "Fletching",
+                    "level": 72,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yew Shield"],
+                            "item_ids": [22260],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Saltpetre",
+                    "taskID": "obtain_saltpetre",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Saltpetre"],
+                            "item_ids": [13421],
+                            "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix an Anti-Poison Potion",
+                    "taskID": "mix_anti-poison",
+                    "category": "Herblore",
+                    "level": 5,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                     "required_items": [
+                        {
+                            "item": ["Antipoison(3)", "Antipoison(4)"],
+                            "item_ids": [175, 2446]
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket a Man or Woman",
+                    "taskID": "pickpocket_man",
+                    "category": "Thieving",
+                    "level": 1,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc_ids": [3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
+                        "quantity": [1, 28]
+                    }
+                },
+                {
+                    "name": "Defeat a Man or Woman in 1 Hit",
+                    "taskID": "defeat_man_1_hit",
                     "category": "Combat",
+                    "level": 2,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Varrock Guard Level 21"],
-                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
-                        "quantity": [1, 25]
+                        "npc": ["Man, Woman"],
+                        "npc_ids": [3261, 3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
+                        "quantity": 1
                     },
-                    "constraints": [
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                            {
+                            "varbit_id": 57,
+                            "must_be_value": 0,
+                            "fail_message": "Cannon use is prohibited for timed combat tasks."
+                        }
+                        ]
+                    }
+                },
+                {
+                    "name": "Chop a Mature Juniper Tree",
+                    "taskID": "Chop_mature_juniper_tree",
+                    "category": "Woodcutting",
+                    "level": 42,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
                         {
-                        "dropped_item": "Bones",
-                        "dropped_item_id": [526],
+                        "item": "Juniper Logs",
+                        "item_ids": [13355],
                         "quantity": [1]
                         }
                     ]
-                }
-           ],
-                    "optional_quests_unlocked": [
+                },
+                {
+                    "name": "Obtain Juniper Charcoal",
+                    "taskID": "obtain_juniper_charcoal",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
                         {
-                            "name": "Family Crest",
-                            "points": 3
-                        },
-                        {
-                            "name": "A Soul's Bane",
-                            "points": 2
+                            "item": ["Juniper Charcoal"],
+                            "item_ids": [13570],
+                            "quantity": [1]
                         }
-                    ],                 
+                    ]
+                }         
+            ],                 
                     "is_completed": false
         },
         {
