@@ -2764,60 +2764,123 @@
                 "is_completed": false
         },
         {
-            "region_id": [12854],
-            "Friendly_Name": "Varrock Palace",
-            "neighbor_ids": [12598, 12855, 13110, 12853],
+            "region_id": [6197],
+            "Friendly_Name": "Barbarian Camp Jail",
+            "neighbor_ids": [6198, 6453, 6196, 5941],
             "tasks": [
-                {                           
-                    "name": "Defeat Scurrius in a Solo Instance",
-                    "taskID": "defeat_scurrius_solo",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 3,
-                    "assignment_weight": 10,
-                    "boss": "Scurrius",
-                    "target_npc": {
-                        "npc": ["Scurrius"],
-                        "npc_ids": [7222],
-                        "quantity": [1, 10]
-                    }
+                {
+                    "name": "Catch a Copper Longtail",
+                    "taskID": "catch_copper_longtail",
+                    "category": "Hunter",
+                    "level": 9,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Orange Feather",
+                            "item_ids": [10091]
+                            },
+                            {
+                            "item": "Raw Bird Meat",
+                            "item_ids": [9978]
+                            }
+                        ]             
                 },
                 {
-                    "name": "Defeat a Varrock Guard for some Bones",
-                    "taskID": "defeat_a_varrock_guard_for_bones",
+                    "name": "Chop an Oak Tree",
+                    "taskID": "chop_oak_tree",
+                    "category": "Woodcutting",
+                    "level": 15,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn an Oak Log",
+                    "taskID": "burn_oak_log",
+                    "category": "Firemaking",
+                    "level": 15,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch an Oak Shield",
+                    "taskID": "fletch_oak_shield",
+                    "category": "Fletching",
+                    "level": 27,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Oak Shield"],
+                            "item_ids": [22251],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch an Oak Longbow",
+                    "taskID": "fletch_oak_longbow",
+                    "category": "Fletching",
+                    "level": 25,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Oak Longbow"],
+                            "item_ids": [845],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Level 15 Barbarian in 9 Seconds",
+                    "taskID": "defeat_level_15_barbarian_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Varrock Guard Level 21"],
-                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
-                        "quantity": [1, 25]
+                        "npc": ["Barbarian Level 15"],
+                        "npc_ids": [3068, 10986],
+                        "quantity": [1]
                     },
-                    "constraints": [
-                        {
-                        "dropped_item": "Bones",
-                        "dropped_item_id": [526],
-                        "quantity": [1]
-                        }
-                    ]
-                },
-                {                           
-                    "name": "Defeat Scurrius in 2:25 in a Solo Instance",
-                    "taskID": "defeat_scurrius_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 4,
-                    "assignment_weight": 5,
-                    "boss": "Scurrius",
-                    "target_npc": {
-                        "npc": ["Scurrius"],
-                        "npc_ids": [7222],
-                        "quantity": [1]
-                    }, 
-                    
                     "constraints": {
-                        "time_in_ticks": [200],
+                        "time_in_ticks": [15],                        
                         "prohibited_active_varbits": [
                                 {
                                     "varbit_id": 57,
@@ -2827,90 +2890,21 @@
                             ]
                         }
                 },
-                {                           
-                    "name": "Defeat Scurrius with only a Weapon Equipped in a Solo Instance",
-                    "taskID": "defeat_scurrius_weapon_only",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 4,
-                    "assignment_weight": 5,
-                    "boss": "Scurrius",
-                    "target_npc": {
-                        "npc": ["Scurrius"],
-                        "npc_ids": [7222],
-                        "quantity": [1]
-                    }, 
-                    
-                    "constraints": {
-                        "equippable_slots": ["WEAPON"]
-                    }
-                },
-                {                           
-                    "name": "Defeat Bryophyta",
-                    "taskID": "defeat_bryophyta",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 2,
-                    "assignment_weight": 10,
-                    "boss": "Bryophyta",
-                    "target_npc": {
-                        "npc": ["Bryophyta"],
-                        "npc_ids": [8195],
-                        "quantity": [1, 10]
-                    }
-                },
                 {
-                    "name": "Obtain Scurrius' Spine",
-                    "taskID": "obtain_scurrius_spine",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "name": "Defeat a Level 9 Barbarian in 1 Hit",
+                    "taskID": "defeat_level_9_barbarian_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
                     "assignment_weight": 8,
-                    "boss": "Scurrius",
-                    "required_items": [
-                            {
-                                "item": ["Scurrius' Spine"],
-                                "item_ids": [28798],
-                                "quantity": [1, 5]
-                            }
-                        ]
-                },
-                {                           
-                    "name": "Defeat Bryophyta in 60 Seconds",
-                    "taskID": "defeat_bryophyta",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "boss": "Bryophyta",
                     "target_npc": {
-                        "npc": ["Bryophyta"],
-                        "npc_ids": [8195],
-                        "quantity": [1, 10]
-                    },
-
-                    "constraints": {
-                        "time_in_ticks": [36]
-                        }
-                },
-                {                           
-                    "name": "Defeat Bryophyta in 60 Seconds with only a Weapon Equipped",
-                    "taskID": "defeat_bryophyta_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 4,
-                    "assignment_weight": 5,
-                    "boss": "Bryophyta",
-                    "target_npc": {
-                        "npc": ["Bryophyta"],
-                        "npc_ids": [8195],
+                        "npc": ["Barbarian Level 9"],
+                        "npc_ids": [10988, 3072],
                         "quantity": [1]
-                    }, 
-                    
+                    },
                     "constraints": {
-                        "time_in_ticks": [36],
-                         "equippable_slots": ["WEAPON"],
-                         "prohibited_active_varbits": [
+                        "time_in_ticks": [1],                        
+                        "prohibited_active_varbits": [
                                 {
                                     "varbit_id": 57,
                                     "must_be_value": 0,
@@ -2920,50 +2914,53 @@
                         }
                 },
                 {
-                    "name": "Obtain Bryophyta's Essence",
-                    "taskID": "obtain_bryophyta_essence",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "boss": "Bryophyta",
-                    "required_items": [
-                            {
-                                "item": ["Bryophyta's Essence"],
-                                "item_ids": [22372],
-                                "quantity": [1]
-                            }
-                        ]
-                },
-                {
-                    "name": "Talk to an Estate Agent",
-                    "taskID": "talk_to_estate_agent",
-                    "category": "Dialogue",
-                    "completion_type": "NPC_DIALOGUE",
+                    "name": "Defeat a Level 10 Barbarian with nothing Equipped",
+                    "taskID": "defeat_level_10_barbarian_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Estate Agent"],
-                        "npc_ids": [3097, 13343],
-                        "quantity": [1]
-                    }
-                }
+                        "npc": ["Barbarian Level 10"],
+                        "npc_ids": [3065, 3066, 3067, 3071, 3056, 3070, 3061, 3060, 3059, 3064, 10984, 10985, 10987],
+                        "quantity": [1, 25]
+                    },
 
-            ],
-                "optional_quests_unlocked": [
-                    {
-                        "name": "Shield of Arrav",
-                        "points": 1
-                    },
-                    {
-                        "name": "Garden of Tranquility",
-                        "points": 2
-                    },
-                    {
-                        "name": "Priest in Peril",
-                        "points": 1
-                    }                  
-                ],                 
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                },
+                {
+                    "name": "Catch Raw Anchovies",
+                    "taskID": "catch_anchovies",
+                    "category": "Fishing",
+                    "level": 15,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Anchovies",
+                        "item_ids": [321],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Activate Burst of Strength",
+                    "taskID": "pray_burst_of_strength",
+                    "category": "Prayer",
+                    "level": 4,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "varbit_boolean": 1,
+                    "constraints": {
+                        "varbit_id": 4103
+                    }                   
+                }                             
+            ],                 
             "is_completed": false
         },
         {
