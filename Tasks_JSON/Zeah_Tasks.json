@@ -1993,175 +1993,122 @@
                     "is_completed": false
         },
         {
-            "region_id": [12853],
-            "Friendly_Name": "Varrock Fountain",
-            "neighbor_ids": [13109, 12852, 12597, 12854],
+            "region_id": [6712],
+            "Friendly_Name": "Lunch by the Lancalliums",
+            "neighbor_ids": [6713, 6968, 6711, 6456],
             "tasks": [
                 {
-                "name": "Complete the Varrock Museum Quiz",
-                "taskID": "complete_varrock_museum_quiz",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 1,
-                "assignment_weight": 8,                   
-                "constraints": {                       
-                    "varbit_id": 699,        
-                    "varbit_boolean": 1,      
-                    "description": "Complete the Varrock Museum Quiz"
-                    }
-                },
-                {
-                "name": "Obtain 100 Varrock Museum Kudos",
-                "taskID": "obtain_100_kudos",
-                "category": "Unlock",
-                "completion_type": "VARP_CHECK",
-                "base_points": 1,
-                "assignment_weight": 8,
-                "constraints": {                       
-                    "varp_id": 1438,        
-                    "varp_value": 100,      
-                    "description": "Obtain 100 Varrock Museum Kudos"
-                    }
-                },
-                {
-                "name": "Obtain an Antique Lamp from Historian Minas",
-                "taskID": "obtain_antique_lamp_historian_minas",
-                "category": "Obtain",
-                "completion_type": "OBTAIN",
-                "base_points": 1,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                            "item": ["Antique Lamp"],
-                            "item_ids": [11188, 28820, 11187, 11185, 11186, 11189],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip a Mithril Platebody",
-                    "taskID": "equip_mithril_platebody",
-                    "category": "Defence",
-                    "level": 20,
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Mithril Platebody"],
-                            "item_ids": [1121]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip a Studded Body",
-                    "taskID": "equip_studded_body",
-                    "category": "Defence",
-                    "level": 20,
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Studded Body"],
-                            "item_ids": [1133]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip a Maple ShortBow",
-                    "taskID": "equip_maple_shortbow",
-                    "category": "Ranged",
-                    "level": 30,
-                    "completion_type": "EQUIP",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Maple Shortbow"],
-                            "item_ids": [853]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip an Adamant Longsword",
-                    "taskID": "equip_adamant_longsword",
-                    "category": "Attack",
-                    "level": 30,
-                    "completion_type": "EQUIP",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Adamant Longsword"],
-                            "item_ids": [1301]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Elemental Staff",
-                    "taskID": "obtain_elemental_staff",
+                    "name": "Collect Feathers",
+                    "taskID": "Collect_feathers",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Elemental Staff(Air, Water, Fire, Earth)"],
-                            "item_ids": [1387, 1385, 1383, 1381]
+                        "item": "Feathers",
+                        "item_ids": [314],
+                        "quantity": [50, 1000]
                         }
                     ]
                 },
                 {
-                    "name": "Complete some Laps of the Varrock Rooftop Course",
-                    "taskID": "complete_varrock_roof",
-                    "category": "Agility",
-                    "level": 30,
-                    "completion_type": "AGILITY",
-                    "base_points": 2,
+                    "name": "Cook many Sharks",
+                    "taskID": "cook_many_sharks",
+                    "category": "Cooking",
+                    "level": 80,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
                     "assignment_weight": 8,
-                    "required_object": {
-                        "object": ["Edge (Varrock Rooftop Course)"],
-                        "object_id": [14841], 
-                        "quantity": [1, 20]
-                    }
+                    "required_items": [
+                        {
+                            "item": "Shark",
+                            "item_ids": [385],
+                            "quantity": [500, 3000]
+                        }
+                    ]
                 },
                 {
-                    "name": "Mine some Pure Essence",
-                    "taskID": "mine_pure_essence",
-                    "category": "Mining",
+                    "name": "Cook many Karambwans",
+                    "taskID": "cook_many_karambwan",
+                    "category": "Cooking",
                     "level": 30,
-                    "completion_type": "MINING",
+                    "completion_type": "COOKING",
                     "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Pure Essence"],
-                            "item_ids": [7936],
-                            "quantity": [1, 100]
+                            "item": "Cooked Karambwan",
+                            "item_ids": [3144],
+                            "quantity": [500, 3000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook many Lobsters",
+                    "taskID": "cook_many_lobsters",
+                    "category": "Cooking",
+                    "level": 40,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Lobster",
+                            "item_ids": [379],
+                            "quantity": [250, 500]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook many Swordfish",
+                    "taskID": "cook_many_swordfish",
+                    "category": "Cooking",
+                    "level": 45,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Swordfish",
+                            "item_ids": [373],
+                            "quantity": [250, 500]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook many Anglerfish",
+                    "taskID": "cook_many_anglerfish",
+                    "category": "Cooking",
+                    "level": 84,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Anglerfish",
+                            "item_ids": [13441],
+                            "quantity": [500, 1000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Cooking Gauntlets",
+                    "taskID": "equip_cooking_gauntlets",
+                    "category": ["Defence", "Cooking"],
+                    "level": [1, 1],
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cooking Gauntlets"],
+                            "item_ids": [775]
                         }
                     ]
                 }              
-           ],
-                    "optional_quests_unlocked": [
-                        {
-                            "name": "Demon slayer",
-                            "points": 1
-                        },
-                        {
-                            "name": "Romeo and Juliet",
-                            "points": 1
-                        },
-                        {
-                            "name": "Children of the Sun",
-                            "points": 1
-                        },
-                        {
-                            "name": "Bone Voyage",
-                            "points": 2
-                        }
-                    ],                 
-                    "is_completed": false
+            ],                 
+                "is_completed": false
         },
         {
             "region_id": [12597],
