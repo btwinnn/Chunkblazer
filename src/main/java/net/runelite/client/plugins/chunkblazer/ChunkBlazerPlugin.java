@@ -72,6 +72,9 @@ public class ChunkBlazerPlugin extends Plugin
 	private ChunkBlazerWorldMapOverlay worldMapOverlay;
 
 	@Inject
+	private TaskCompletionOverlay taskCompletionOverlay;
+
+	@Inject
 	private TaskModuleManager taskModuleManager;
 
 	@Inject
@@ -120,7 +123,22 @@ public class ChunkBlazerPlugin extends Plugin
 			public void onTaskCompleted(NuzlockeTask task, int progress)
 			{
 				// Task completed locally - request server verification
-				log.info("Task completed locally: {} (progress: {})", task.getName(), progress);
+				log.info(">>> onTaskCompleted CALLBACK TRIGGERED");
+				log.info(">>>   Task: {} (progress: {})", task != null ? task.getName() : "NULL", progress);
+				log.info(">>>   taskCompletionOverlay: {}", taskCompletionOverlay != null ? "NOT NULL" : "NULL");
+
+				// Show task completion popup
+				if (taskCompletionOverlay != null && task != null)
+				{
+					log.info(">>>   Calling taskCompletionOverlay.showTaskCompletion()...");
+					taskCompletionOverlay.showTaskCompletion(task, task.getBasePoints());
+					log.info(">>>   showTaskCompletion() call completed");
+				}
+				else
+				{
+					log.error(">>>   CANNOT show popup - overlay or task is null!");
+				}
+
 				completeTask(task);
 			}
 
@@ -168,6 +186,10 @@ public class ChunkBlazerPlugin extends Plugin
 		// Register world map overlay
 		overlayManager.add(worldMapOverlay);
 
+		// Register task completion popup overlay
+		overlayManager.add(taskCompletionOverlay);
+		log.info(">>> TaskCompletionOverlay registered with OverlayManager: {}", taskCompletionOverlay != null ? "OK" : "NULL");
+
 		// Load or assign a task if player is logged in
 		if (client.getGameState() == GameState.LOGGED_IN)
 		{
@@ -184,6 +206,7 @@ public class ChunkBlazerPlugin extends Plugin
 		log.info("ChunkBlazer shutting down...");
 		clientToolbar.removeNavigation(navButton);
 		overlayManager.remove(worldMapOverlay);
+		overlayManager.remove(taskCompletionOverlay);
 		taskModuleManager.shutDown();
 		varPlayerService.shutDown();
 		activeTask = null;

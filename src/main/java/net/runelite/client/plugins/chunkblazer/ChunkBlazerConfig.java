@@ -231,6 +231,18 @@ public interface ChunkBlazerConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "showTaskCompletionPopup",
+		name = "Show Task Completion Popup",
+		description = "Display a popup notification when you complete a task",
+		section = displaySection,
+		position = 2
+	)
+	default boolean showTaskCompletionPopup()
+	{
+		return true;
+	}
+
 	@ConfigSection(
 		name = "Chat Messages",
 		description = "Control which task messages appear in chat",
