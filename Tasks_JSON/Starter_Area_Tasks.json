@@ -355,7 +355,7 @@
           ]
         },
         {
-          "name": "Kill a Chicken in 1 Hit",
+          "name": "Defeat a Chicken in 1 Hit",
           "taskID": "defeat_chicken_fast",
           "category": "Combat",
           "completion_type": "NPC_Kill",
@@ -364,7 +364,7 @@
           "target_npc": {
             "npc": ["Chicken"],
             "npc_ids": [1173, 1174, 10495, 10496, 9488, 10494, 10497],
-            "quantity": 1
+            "quantity": [1]
           },
           "constraints": {
             "time_in_ticks": [1],

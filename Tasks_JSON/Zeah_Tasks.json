@@ -3206,163 +3206,368 @@
             "is_completed": false
         },
         {
-            "region_id": [13366],
-            "Friendly_Name": "Silvarea",
-            "neighbor_ids": [13110, 13365, 13622, 13367],
+            "region_id": [5942],
+            "Friendly_Name": "Land's End Moss Giants",
+            "neighbor_ids": [5943, 6198, 5941, 5686],
             "tasks": [
                 {
-                    "name": "Equip a Zombie Axe",
-                    "taskID": "equip_zombie_axe",
-                    "category": "Attack",
-                    "level": 65,
+                    "name": "Obtain Kharedst's Memoirs",
+                    "taskID": "obtain_kharedst's_memoirs",
+                    "category": "Obtain",
                     "completion_type": "EQUIP",
-                    "base_points": 3,
+                    "base_points": 1,
                     "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": ["Zombie Axe"],
-                            "item_ids": [28810]
+                            "item": ["Kharedst's Memoirs"],
+                            "item_ids": [21760]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat some Armoured Zombies",
-                    "taskID": "defeat_armoured_zombies",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Armoured Zombie"],
-                        "npc_ids": [12730, 12731, 12732, 12733, 12734, 12736, 12738, 12755, 12757, 12758, 12735, 12738, 12739, 12761, 12763, 14135, 14136, 12720, 12721, 12722, 12723, 12724, 12725, 12726, 12727, 12728, 12729, 14113, 14114, 14115,  	14116, 14117, 14118, 14119, 14120, 14121, 14122],
-                        "quantity": [1, 100]
-                    }
+                    "name": "Catch a Chinchompa",
+                    "taskID": "catch_chinchompa",
+                    "category": "Hunter",
+                    "level": 53,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                            {
+                            "item": "Chinchompa",
+                            "item_ids": [10033]
+                            }                   
+                        ]             
                 },
                 {
-                    "name": "Defeat a Level 6 Bat in 1 Hit",
-                    "taskID": "defeat_bat_fast",
+                    "name": "Catch a Ruby Harvest in a Butterfly Jar",
+                    "taskID": "catch_ruby_harvest_in_butterfly_jar",
+                    "category": "Hunter",
+                    "level": 15,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                            "item": "Ruby Harvest",
+                            "item_ids": [10020]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Defeat a Chicken in 1 Hit",
+                    "taskID": "defeat_chicken_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "target_npc": {
-                        "npc": ["Bat Level 6"],
-                        "npc_ids": [2827, 10888, 14042],
-                        "quantity": [1]
+                        "npc": ["Chicken"],
+                        "npc_ids": [1173, 1174, 10495, 10496, 9488, 10494, 10497],
+                        "quantity": 1
                     },
                     "constraints": {
                         "time_in_ticks": [1],
                         "prohibited_active_varbits": [
-                                {
-                                    "varbit_id": 57,
-                                    "must_be_value": 0,
-                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
-                                }
-                            ]
+                            {
+                            "varbit_id": 57,
+                            "must_be_value": 0,
+                            "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
                     }
                 },
                 {
-                    "name": "Mine some Limestone",
-                    "taskID": "mine_limestone",
-                    "category": "Mining",
-                    "level": 10,
-                    "completion_type": "MINING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Limestone"],
-                            "item_ids": [3211],
-                            "quantity": [1, 10]
-                        }
-                    ]
-                },
-                {
-                "name": "Build an Easy STASH Unit in Silvaera",
-                "taskID": "build_easy_stash_silvarea",
-                "category": "Construction",
-                "level": 27,
-                "completion_type": "CONSTRUCTION",
-                "base_points": 1,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Plank",
-                        "item_ids": [960]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
-                        {
-                        "object": "Easy STASH Unit (inconspicuous rocks)",
-                        "object_id": [28961],
-                        "interaction_type": "use_item_on"
-                        }
-                    ]
-                },
-                {
-                    "name": "Fletch some Arrow Shafts",
-                    "taskID": "fletch_arrow_shafts",
-                    "category": "Fletching",
-                    "level": 1,
-                    "completion_type": "FLETCHING",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Arrow Shaft"],
-                            "item_ids": [52],
-                            "quantity": [1, 1000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat some Level 6 Bats",
-                    "taskID": "defeat_bats",
+                    "name": "Defeat some Chickens",
+                    "taskID": "defeat_chickens",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Bat Level 6"],
-                        "npc_ids": [2827, 10888, 14042],
-                        "quantity": [1, 25]
-                    }
+                        "npc": ["Chicken"],
+                        "npc_ids": [1173, 1174, 10495, 10496, 9488, 10494, 10497],
+                        "quantity": [1, 50]
+                    }                    
                 },
                 {
-                    "name": "Defeat an Armoured Zombie in 18 Seconds",
-                    "taskID": "defeat_armoured_zombies",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
+                    "name": "Chop an Oak Tree",
+                    "taskID": "chop_oak_tree",
+                    "category": "Woodcutting",
+                    "level": 15,
+                    "completion_type": "WOODCUTTING",
                     "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Armoured Zombie"],
-                        "npc_ids": [12730, 12731, 12732, 12733, 12734, 12736, 12738, 12755, 12757, 12758, 12735, 12738, 12739, 12761, 12763, 14135, 14136, 12720, 12721, 12722, 12723, 12724, 12725, 12726, 12727, 12728, 12729, 14113, 14114, 14115,  	14116, 14117, 14118, 14119, 14120, 14121, 14122],
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
                         "quantity": [1]
-                    },
-
-                    "constraints": {
-                        "time_in_ticks": [30]
-                    }             
-                }
-            ],
-                "optional_quests_unlocked": [
-                    {
-                        "name": "Rag and Bone Man I",
-                        "points": 1
-                    },
-                    {
-                        "name": "Rag and Bone Man II",
-                        "points": 3
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn an Oak Log",
+                    "taskID": "burn_oak_log",
+                    "category": "Firemaking",
+                    "level": 15,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Moss Giant",
+                    "taskID": "defeat_moss_giant",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "quantity": [1]
                     }
-                ],
-             
+                },
+                {
+                    "name": "Equip a Black Square Shield",
+                    "taskID": "equip_black_sq_shield",
+                    "category": ["Defence"],
+                    "level": [10],
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Black Sq Shield"],
+                            "item_ids": [1179]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mithril Sword",
+                    "taskID": "equip_mithril_sword",
+                    "category": ["Attack"],
+                    "level": [20],
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mithril Sword"],
+                            "item_ids": [1285]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Moss Giant for a Mithril Sword",
+                    "taskID": "Defeat_moss_giant_for_mithril Sword",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852]                     
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Mithril Sword",
+                        "dropped_item_id": [1285],
+                        "quantity": [1]
+                        }
+                    ] 
+                }
+            ],             
             "is_completed": false
-        }           
+        },
+        {
+            "region_id": [5942],
+            "Friendly_Name": "Land's End Moss Giants",
+            "neighbor_ids": [5943, 6198, 5941, 5686],
+            "tasks": [
+                {
+                    "name": "Obtain Kharedst's Memoirs",
+                    "taskID": "obtain_kharedst's_memoirs",
+                    "category": "Obtain",
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Kharedst's Memoirs"],
+                            "item_ids": [21760]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Chinchompa",
+                    "taskID": "catch_chinchompa",
+                    "category": "Hunter",
+                    "level": 53,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                            {
+                            "item": "Chinchompa",
+                            "item_ids": [10033]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Catch a Ruby Harvest in a Butterfly Jar",
+                    "taskID": "catch_ruby_harvest_in_butterfly_jar",
+                    "category": "Hunter",
+                    "level": 15,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                            "item": "Ruby Harvest",
+                            "item_ids": [10020]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Defeat a Chicken in 1 Hit",
+                    "taskID": "defeat_chicken_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Chicken"],
+                        "npc_ids": [1173, 1174, 10495, 10496, 9488, 10494, 10497],
+                        "quantity": 1
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                            {
+                            "varbit_id": 57,
+                            "must_be_value": 0,
+                            "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Defeat some Chickens",
+                    "taskID": "defeat_chickens",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Chicken"],
+                        "npc_ids": [1173, 1174, 10495, 10496, 9488, 10494, 10497],
+                        "quantity": [1, 50]
+                    }                    
+                },
+                {
+                    "name": "Chop an Oak Tree",
+                    "taskID": "chop_oak_tree",
+                    "category": "Woodcutting",
+                    "level": 15,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn an Oak Log",
+                    "taskID": "burn_oak_log",
+                    "category": "Firemaking",
+                    "level": 15,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Moss Giant",
+                    "taskID": "defeat_moss_giant",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Equip a Black Square Shield",
+                    "taskID": "equip_black_sq_shield",
+                    "category": ["Defence"],
+                    "level": [10],
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Black Sq Shield"],
+                            "item_ids": [1179]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mithril Sword",
+                    "taskID": "equip_mithril_sword",
+                    "category": ["Attack"],
+                    "level": [20],
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mithril Sword"],
+                            "item_ids": [1285]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Moss Giant for a Mithril Sword",
+                    "taskID": "Defeat_moss_giant_for_mithril Sword",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852]                     
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Mithril Sword",
+                        "dropped_item_id": [1285],
+                        "quantity": [1]
+                        }
+                    ] 
+                }
+            ],             
+            "is_completed": false
+        }            
     ]
 }
