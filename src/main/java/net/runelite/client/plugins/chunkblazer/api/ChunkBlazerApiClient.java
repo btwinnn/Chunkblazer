@@ -728,6 +728,68 @@ public class ChunkBlazerApiClient
 	}
 
 	/**
+	 * Report item equipped for verification.
+	 * This endpoint allows the server to verify that:
+	 * - The item was legitimately equipped (was in inventory)
+	 * - The player meets level requirements
+	 * - The equip happened at a valid location/region
+	 * - The timing is consistent with normal gameplay
+	 */
+	public CompletableFuture<TaskVerificationResponse> reportItemEquipped(ItemEquippedReport report)
+	{
+		if (!config.apiEnabled())
+		{
+			return CompletableFuture.completedFuture(
+				TaskVerificationResponse.offlineSuccess(report.getTaskId())
+			);
+		}
+
+		CompletableFuture<TaskVerificationResponse> future = new CompletableFuture<>();
+
+		String url = config.apiBaseUrl() + "/api/v1/events/item-equipped";
+		String json = gson.toJson(report);
+
+		Request httpRequest = new Request.Builder()
+			.url(url)
+			.addHeader("X-API-Key", playerApiKey != null ? playerApiKey : config.apiKey())
+			.addHeader("Content-Type", "application/json")
+			.post(RequestBody.create(JSON, json))
+			.build();
+
+		httpClient.newCall(httpRequest).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				log.error("Item equipped report failed: {}", e.getMessage());
+				future.complete(TaskVerificationResponse.error("Network error"));
+			}
+
+			@Override
+			public void onResponse(Call call, Response response) throws IOException
+			{
+				try (response)
+				{
+					String body = response.body() != null ? response.body().string() : "";
+
+					if (response.isSuccessful())
+					{
+						TaskVerificationResponse verifyResponse = gson.fromJson(body, TaskVerificationResponse.class);
+						future.complete(verifyResponse);
+					}
+					else
+					{
+						log.warn("Item equipped report returned error {}: {}", response.code(), body);
+						future.complete(TaskVerificationResponse.error("Server error: " + response.code()));
+					}
+				}
+			}
+		});
+
+		return future;
+	}
+
+	/**
 	 * Sync player state with server (called periodically or on login).
 	 */
 	public CompletableFuture<PlayerSyncResponse> syncPlayerState(PlayerSyncRequest request)
