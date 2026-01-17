@@ -1,0 +1,152 @@
+{
+            "region_id": [6713],
+            "Friendly_Name": "Kingstown",
+            "neighbor_ids": [6714, 6969, 6712, 6457],
+            "tasks": [
+                {
+                    "name": "Catch a Raw Pike",
+                    "taskID": "catch_raw_pike",
+                    "category": "Fishing",
+                    "level": 25,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Pike",
+                        "item_ids": [349],
+                        "quantity": [1]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Cook a Pike",
+                    "taskID": "cook_pike",
+                    "category": "Cooking",
+                    "level": 20,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Pike",
+                            "item_ids": [351]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Rainbow Fish",
+                    "taskID": "catch_raw_rainbow_fish",
+                    "category": "Fishing",
+                    "level": 38,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Rainbow Fish",
+                        "item_ids": [10138],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Rainbow fish",
+                    "taskID": "cook_rainbow_fish",
+                    "category": "Cooking",
+                    "level": 35,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Rainbow fish",
+                            "item_ids": [10136]
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket a Shayzien Guard",
+                    "taskID": "pickpocket_shayzien_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Shayzien Guard Level 21", "Level 84 Head Guard"],
+                        "npc_ids": [11092, 11094, 11096, 11098, 11100, 11102, 11104, 11106, 11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Chop a Magic Tree",
+                    "taskID": "chop_magic_tree",
+                    "category": "Woodcutting",
+                    "level": 75,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Magic Log",
+                    "taskID": "burn_magic_log",
+                    "category": "Firemaking",
+                    "level": 75,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Level 82 Lesser Demon",
+                    "taskID": "defeat_level_82_lesser_demon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Lesser Demon"],
+                        "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Shayzien Guard in 1 Hit",
+                    "taskID": "defeat_shayzien_guard_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Shayzien Guard Level 21", "Level 84 Head Guard"],
+                        "npc_ids": [11092, 11094, 11096, 11098, 11100, 11102, 11104, 11106, 11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }
+            ],             
+        "is_completed": false
+    }
