@@ -1,0 +1,126 @@
+{
+            "region_id": [6201],
+            "Friendly_Name": "Reclaimed Battlefield",
+            "neighbor_ids": [6202, 6457, 6200, 5945],
+            "tasks": [
+                {
+                    "name": "Defeat a Boar",
+                    "taskID": "defeat_boar",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Boar"],
+                        "npc_ids": [11066, 11067],
+                        "quantity": 1
+                    }
+                },
+                {
+                    "name": "Defeat a Boar in 1 Hit",
+                    "taskID": "defeat_boar_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Boar"],
+                        "npc_ids": [11066, 11067],
+                        "quantity": 1
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }, 
+                {
+                    "name": "Burn an Oak Log",
+                    "taskID": "burn_oak_log",
+                    "category": "Firemaking",
+                    "level": 15,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Log",
+                    "taskID": "burn_log",
+                    "category": "Firemaking",
+                    "level": 1,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Logs",
+                        "item_ids": [1511],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Boar with nothing Equipped",
+                    "taskID": "defeat_boar_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Boar"],
+                        "npc_ids": [11066, 11067],
+                        "quantity": 1
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                },
+                {
+                    "name": "Smith an Iron Platebody",
+                    "taskID": "smith_iron_platebody",
+                    "category": "Smithing",
+                    "level": 33,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iron Platebody"],
+                            "item_ids": [1115],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Bronze Platebody",
+                    "taskID": "smith_bronze_platebody",
+                    "category": "Smithing",
+                    "level": 18,
+                    "completion_type": "SMITHING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Bronze Platebody"],
+                            "item_ids": [1117],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],             
+            "is_completed": false
+        }
