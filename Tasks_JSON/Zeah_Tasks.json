@@ -3388,68 +3388,64 @@
             "is_completed": false
         },
         {
-            "region_id": [5942],
-            "Friendly_Name": "Land's End Moss Giants",
-            "neighbor_ids": [5943, 6198, 5941, 5686],
+            "region_id": [5943],
+            "Friendly_Name": "Graveyard of Heroes",
+            "neighbor_ids": [5944, 6199, 5942, 5687],
             "tasks": [
                 {
-                    "name": "Obtain Kharedst's Memoirs",
-                    "taskID": "obtain_kharedst's_memoirs",
-                    "category": "Obtain",
-                    "completion_type": "EQUIP",
+                    "name": "Defeat a Necromancer",
+                    "taskID": "defeat_necromancer",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 10,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Necromancer"],
+                        "npc_ids": [11088, 1025],
+                        "quantity": [1]
+                    }                    
+                },
+                {
+                    "name": "Obtain a Cursed Amulet of Magic",
+                    "taskID": "obtain_cursed_amulet_of_magic",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Kharedst's Memoirs"],
-                            "item_ids": [21760]
+                            "item": ["Cursed Amulet of Magic"],
+                            "item_ids": [29486]
                         }
                     ]
                 },
                 {
-                    "name": "Catch a Chinchompa",
-                    "taskID": "catch_chinchompa",
-                    "category": "Hunter",
-                    "level": 53,
-                    "completion_type": "HUNTER",
-                    "base_points": 2,
-                    "assignment_weight": 1,
-                    "required_items": [
-                            {
-                            "item": "Chinchompa",
-                            "item_ids": [10033]
-                            }                   
-                        ]             
-                },
-                {
-                    "name": "Catch a Ruby Harvest in a Butterfly Jar",
-                    "taskID": "catch_ruby_harvest_in_butterfly_jar",
-                    "category": "Hunter",
-                    "level": 15,
-                    "completion_type": "HUNTER",
-                    "base_points": 1,
-                    "assignment_weight": 3,
-                    "required_items": [
-                            {
-                            "item": "Ruby Harvest",
-                            "item_ids": [10020]
-                            }                   
-                        ]             
-                },
-                {
-                    "name": "Defeat a Chicken in 1 Hit",
-                    "taskID": "defeat_chicken_fast",
+                    "name": "Defeat a Zombie in Kourend",
+                    "taskID": "defeat_zombie_kourend",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 3,
+                    "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Chicken"],
-                        "npc_ids": [1173, 1174, 10495, 10496, 9488, 10494, 10497],
-                        "quantity": 1
+                        "npc": ["Kourend Zombie"],
+                        "npc_ids": [7486, 7485, 7488, 7487, 8069, 8067, 8068],
+                        "quantity": [1]
+                    }                    
+                },
+                {
+                    "name": "Defeat a Necromancer in 19 Seconds",
+                    "taskID": "defeat_necormancer_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Necromancer"],
+                        "npc_ids": [11088, 1025],
+                        "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [1],
+                        "time_in_ticks": [33],
                         "prohibited_active_varbits": [
                             {
                             "varbit_id": 57,
@@ -3460,111 +3456,293 @@
                     }
                 },
                 {
-                    "name": "Defeat some Chickens",
-                    "taskID": "defeat_chickens",
+                    "name": "Defeat a Shayzien Crypt Skeleton",
+                    "taskID": "defeat_shayzien_crypt_skeleton",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Chicken"],
-                        "npc_ids": [1173, 1174, 10495, 10496, 9488, 10494, 10497],
-                        "quantity": [1, 50]
+                        "npc": ["Shayzien Crypt Skeleton"],
+                        "npc_ids": [8070, 8071, 8072],
+                        "quantity": [1]
                     }                    
                 },
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
-                    "category": "Woodcutting",
-                    "level": 15,
-                    "completion_type": "WOODCUTTING",
-                    "base_points": 1,
-                    "assignment_weight": 3,
-                    "required_items": [
-                        {
-                        "item": "Oak Logs",
-                        "item_ids": [1521],
-                        "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Burn an Oak Log",
-                    "taskID": "burn_oak_log",
-                    "category": "Firemaking",
-                    "level": 15,
-                    "completion_type": "FIREMAKING",
-                    "base_points": 1,
-                    "assignment_weight": 3,
-                    "required_items": [
-                        {
-                        "item": "Oak Logs",
-                        "item_ids": [1521],
-                        "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Moss Giant",
-                    "taskID": "defeat_moss_giant",
+                    "name": "Defeat a Shayzien Crypt Zombie without Prayer",
+                    "taskID": "defeat_shayzien_crypt_zombie_no_prayer",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Moss Giant"],
-                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "npc": ["Shayzien Crypt Zombie"],
+                        "npc_ids": [8069, 8067, 8068],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [33],
+                        "prohibited_active_varbits": [
+                            {
+                            "varbit_id": 375,
+                            "must_be_value": 0,
+                            "fail_message": "Prayer use is prohibited for this combat task."
+                            }
+                        ]
+                    }                    
+                },
+                {
+                    "name": "Pickpocket a Shayzien Guard",
+                    "taskID": "pickpocket_shayzien_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Shayzien Guard Level 21", "Level 84 Head Guard"],
+                        "npc_ids": [11092, 11094, 11096, 11098, 11100, 11102, 11104, 11106, 11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Equip a Black Square Shield",
-                    "taskID": "equip_black_sq_shield",
-                    "category": ["Defence"],
-                    "level": [10],
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Black Sq Shield"],
-                            "item_ids": [1179]
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Equip a Mithril Sword",
-                    "taskID": "equip_mithril_sword",
-                    "category": ["Attack"],
-                    "level": [20],
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Mithril Sword"],
-                            "item_ids": [1285]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Moss Giant for a Mithril Sword",
-                    "taskID": "Defeat_moss_giant_for_mithril Sword",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "name": "Defeat a Level 27 Giant Spider",
+                    "taskID": "defeat_leve_27_giant_spider",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Moss Giant"],
-                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852]                     
-                    },
-                    "constraints": [
-                        {
-                        "dropped_item": "Mithril Sword",
-                        "dropped_item_id": [1285],
+                        "npc": ["Level 27 Giant Spider"],
+                        "npc_ids": [3018],
                         "quantity": [1]
+                    }                    
+                },
+                {
+                    "name": "Cook Cooked Meat",
+                    "taskID": "cook_cooked_meat",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Cooked Meat",
+                            "item_ids": [2142]
                         }
-                    ] 
+                    ]
+                }, 
+                {
+                    "name": "Mix an Attack Potion",
+                    "taskID": "mix_attack_potion",
+                    "category": "Herblore",
+                    "level": 3,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                     "required_items": [
+                        {
+                            "item": ["Attack Potion(3)", "Attack Potion(4)"],
+                            "item_ids": [121, 2428]
+                        }
+                    ]
+                }
+            ],             
+            "is_completed": false
+        },
+        {
+            "region_id": [5943],
+            "Friendly_Name": "Graveyard of Heroes",
+            "neighbor_ids": [5944, 6199, 5942, 5687],
+            "tasks": [
+                {
+                    "name": "Defeat a Necromancer",
+                    "taskID": "defeat_necromancer",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Necromancer"],
+                        "npc_ids": [11088, 1025],
+                        "quantity": [1]
+                    }                    
+                },
+                {
+                    "name": "Obtain a Cursed Amulet of Magic",
+                    "taskID": "obtain_cursed_amulet_of_magic",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cursed Amulet of Magic"],
+                            "item_ids": [29486]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Zombie in Kourend",
+                    "taskID": "defeat_zombie_kourend",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Kourend Zombie"],
+                        "npc_ids": [7486, 7485, 7488, 7487, 8069, 8067, 8068],
+                        "quantity": [1]
+                    }                    
+                },
+                {
+                    "name": "Defeat a Necromancer in 19 Seconds",
+                    "taskID": "defeat_necormancer_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Necromancer"],
+                        "npc_ids": [11088, 1025],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [33],
+                        "prohibited_active_varbits": [
+                            {
+                            "varbit_id": 57,
+                            "must_be_value": 0,
+                            "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Defeat a Shayzien Crypt Skeleton",
+                    "taskID": "defeat_shayzien_crypt_skeleton",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Shayzien Crypt Skeleton"],
+                        "npc_ids": [8070, 8071, 8072],
+                        "quantity": [1]
+                    }                    
+                },
+                {
+                    "name": "Defeat a Shayzien Crypt Zombie without Prayer",
+                    "taskID": "defeat_shayzien_crypt_zombie_no_prayer",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Shayzien Crypt Zombie"],
+                        "npc_ids": [8069, 8067, 8068],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [33],
+                        "prohibited_active_varbits": [
+                            {
+                            "varbit_id": 375,
+                            "must_be_value": 0,
+                            "fail_message": "Prayer use is prohibited for this combat task."
+                            }
+                        ]
+                    }                    
+                },
+                {
+                    "name": "Pickpocket a Shayzien Guard",
+                    "taskID": "pickpocket_shayzien_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Shayzien Guard Level 21", "Level 84 Head Guard"],
+                        "npc_ids": [11092, 11094, 11096, 11098, 11100, 11102, 11104, 11106, 11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Level 27 Giant Spider",
+                    "taskID": "defeat_leve_27_giant_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 27 Giant Spider"],
+                        "npc_ids": [3018],
+                        "quantity": [1]
+                    }                    
+                },
+                {
+                    "name": "Cook Cooked Meat",
+                    "taskID": "cook_cooked_meat",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Cooked Meat",
+                            "item_ids": [2142]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Mix an Attack Potion",
+                    "taskID": "mix_attack_potion",
+                    "category": "Herblore",
+                    "level": 3,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                     "required_items": [
+                        {
+                            "item": ["Attack Potion(3)", "Attack Potion(4)"],
+                            "item_ids": [121, 2428]
+                        }
+                    ]
                 }
             ],             
             "is_completed": false

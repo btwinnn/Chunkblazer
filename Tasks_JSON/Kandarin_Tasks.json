@@ -3646,6 +3646,7 @@
                 {
                     "task_name": "Picklock the door to the basement of Yanille Agility Dungeon",
                     "taskID": "picklock_door_basement_yanille_agility_dungeon",
+                    "category": "Thieving",
                     "completion_type": "VARP_CHECK",
                     "base_points": 4,
                     "assignment_weight": 5,
@@ -3882,6 +3883,7 @@
                 {
                     "task_name": "Grapple shortcut the South Yanille Wall",
                     "taskID": "grapple_shortcut_south_yanille_wall",
+                    "category":"Agility",
                     "completion_type": "VARP_CHECK",
                     "base_points": 2,
                     "assignment_weight": 8,
@@ -8694,6 +8696,7 @@
                 {
                     "name": "Complete the Diary Step requiring Level 5 in all Barbarian Assault Roles",
                     "taskID": "unlock_level_5_all_roles_barb_assault",
+                    "category": "Unlock",
                     "completion_type": "VARP_CHECK",
                     "base_points": 5,
                     "assignment_weight": 8,                   
@@ -8896,6 +8899,7 @@
                 {
                     "task_name": "Travel to the Desert using the Eagle Transportation System",
                     "taskID": "travel_to_desert_using_eagle",
+                    "category": "Travel",
                     "completion_type": "VARP_CHECK",
                     "base_points": 2,
                     "assignment_weight": 10,
@@ -8909,6 +8913,7 @@
                 {
                     "task_name": "Travel to the Snowy Hunter Area using the Eagle Transportation System",
                     "taskID": "travel_to_snowy_hunter_using_eagle",
+                    "category": "Travel",
                     "completion_type": "VARP_CHECK",
                     "base_points": 2,
                     "assignment_weight": 10,
@@ -8922,6 +8927,7 @@
                 {
                     "task_name": "Travel to Feldip Hills using the Eagle Transportation System",
                     "taskID": "travel_to_feldip_hills_using_eagle",
+                    "category": "Travel",
                     "completion_type": "VARP_CHECK",
                     "base_points": 2,
                     "assignment_weight": 10,
