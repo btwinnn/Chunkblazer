@@ -4593,6 +4593,250 @@
                 }
             ],             
             "is_completed": false
+        },
+        {
+            "region_id": [7226],
+            "Friendly_Name": "Foodhall",
+            "neighbor_ids": [7227, 7482, 7225, 6970],
+            "tasks": [
+                {
+                "name": "Repair a Fishing Crane",
+                "taskID": "build_fishing_crane",
+                "category": ["Construction", "Crafting"],
+                "level": 30,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 5,
+                "required_items": [
+                        {
+                        "item": ["Plank", "Oak Plank", "Teak Plank", "Mahogany Plank"],
+                        "item_ids": [960, 8778, 8780, 8782]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Fishing Crane",
+                        "object_id": [27555],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Defeat a Pirate",
+                    "taskID": "defeat_pirate",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Pirate"],
+                        "npc_ids": [4926, 522, 6994, 4043, 4044, 4045, 4046, 4047, 4048, 4049, 4050, 4051, 4052, 521, 6993, 524, 6995, 1447],
+                        "quantity": 1
+                    }
+                },
+                {
+                    "name": "Steal from a Fish Stall",
+                    "taskID": "steal_fish_stall",
+                    "category": "Thieving",
+                    "level": 42,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_object": [
+                        {
+                            "object": ["Fish Stall"],
+                            "object_id": [31712, 57785, 58103, 37404, 57943, 58026, 4705, 4707, 4277],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Theif in the Warrens",
+                    "taskID": "defeat_theif_warrens",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Level 21 Thief"],
+                        "npc_ids": [7914, 7915, 7916],
+                        "quantity": 1
+                    }
+                },
+                {
+                    "name": "Defeat a Theif in the Warrens in 1 Hit",
+                    "taskID": "defeat_theif_warrens_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Level 21 Thief"],
+                        "npc_ids": [7914, 7915, 7916],
+                        "quantity": 1
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Deliver a Stolen Artifact to Captain Khaled",
+                    "taskID": "deliver_artifact_captain_khaled",
+                    "category": "Thieving",
+                    "completion_type": "VARP_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 10,                   
+                    "constraints": {                       
+                        "varp_id": 2086,        
+                        "bit_index": 1,      
+                        "expected_value": 1
+                    }
+                },
+                {
+                    "name": "Catch a Raw Anglerfish",
+                    "taskID": "catch_raw_anglerfish",
+                    "category": "Fishing",
+                    "level": 82,
+                    "completion_type": "FISHING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Raw Anglerfish",
+                        "item_ids": [13439],
+                        "quantity": [1]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Cook an Anglerfish",
+                    "taskID": "cook_anglerfish",
+                    "category": "Cooking",
+                    "level": 84,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": "Anglerfish",
+                            "item_ids": [13441]
+                        }
+                    ]
+                }                
+            ],             
+            "is_completed": false 
+        },
+        {
+            "region_id": [7227],
+            "Friendly_Name": "Port Piscarilius Bank",
+            "neighbor_ids": [7228, 7483, 7226, 6971],
+            "tasks": [
+                {
+                    "name": "Dig up a Sandworm",
+                    "taskID": "catch_sandworm",
+                    "category": "Hunter",
+                    "level": 15,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                            {
+                            "item": "Bucket of Sandworms",
+                            "item_ids": [13430]
+                            }                   
+                        ]             
+                }, 
+                {
+                    "name": "Obtain many Sandworms",
+                    "taskID": "obtain_sandworms",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Sandworms"],
+                            "item_ids": [13431],
+                            "quantity": [100, 1000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Anglerfish",
+                    "taskID": "catch_raw_anglerfish",
+                    "category": "Fishing",
+                    "level": 82,
+                    "completion_type": "FISHING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Raw Anglerfish",
+                        "item_ids": [13439],
+                        "quantity": [1]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Cook an Anglerfish",
+                    "taskID": "cook_anglerfish",
+                    "category": "Cooking",
+                    "level": 84,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": "Anglerfish",
+                            "item_ids": [13441]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch many Raw Anglerfish",
+                    "taskID": "catch_many_raw_anglerfish",
+                    "category": "Fishing",
+                    "level": 82,
+                    "completion_type": "FISHING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Raw Anglerfish",
+                        "item_ids": [13439],
+                        "quantity": [500, 2500]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a LOT of Fishing Bait ",
+                    "taskID": "obtain_many_fishing_bait",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Fishing Bait"],
+                            "item_ids": [313],
+                            "quantity": [1000, 10000]
+                        }
+                    ]
+                }               
+            ],             
+            "is_completed": false 
         }
                     
     ]

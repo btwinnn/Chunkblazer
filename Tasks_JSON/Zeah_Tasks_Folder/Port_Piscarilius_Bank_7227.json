@@ -1,0 +1,100 @@
+{
+            "region_id": [7227],
+            "Friendly_Name": "Port Piscarilius Bank",
+            "neighbor_ids": [7228, 7483, 7226, 6971],
+            "tasks": [
+                {
+                    "name": "Dig up a Sandworm",
+                    "taskID": "catch_sandworm",
+                    "category": "Hunter",
+                    "level": 15,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                            {
+                            "item": "Bucket of Sandworms",
+                            "item_ids": [13430]
+                            }                   
+                        ]             
+                }, 
+                {
+                    "name": "Obtain many Sandworms",
+                    "taskID": "obtain_sandworms",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Sandworms"],
+                            "item_ids": [13431],
+                            "quantity": [100, 1000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Anglerfish",
+                    "taskID": "catch_raw_anglerfish",
+                    "category": "Fishing",
+                    "level": 82,
+                    "completion_type": "FISHING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Raw Anglerfish",
+                        "item_ids": [13439],
+                        "quantity": [1]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Cook an Anglerfish",
+                    "taskID": "cook_anglerfish",
+                    "category": "Cooking",
+                    "level": 84,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": "Anglerfish",
+                            "item_ids": [13441]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch many Raw Anglerfish",
+                    "taskID": "catch_many_raw_anglerfish",
+                    "category": "Fishing",
+                    "level": 82,
+                    "completion_type": "FISHING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Raw Anglerfish",
+                        "item_ids": [13439],
+                        "quantity": [500, 2500]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a LOT of Fishing Bait ",
+                    "taskID": "obtain_many_fishing_bait",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Fishing Bait"],
+                            "item_ids": [313],
+                            "quantity": [1000, 10000]
+                        }
+                    ]
+                }               
+            ],             
+            "is_completed": false 
+        }
