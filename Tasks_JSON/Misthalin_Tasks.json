@@ -1790,7 +1790,7 @@
                     ]
                 },
                 {
-                    "name": "Equip a Maple ShortBow",
+                    "name": "Equip a Maple Shortbow",
                     "taskID": "equip_maple_shortbow",
                     "category": "Ranged",
                     "level": 30,

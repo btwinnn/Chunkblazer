@@ -1,0 +1,176 @@
+{
+            "region_id": [5943],
+            "Friendly_Name": "Xeric's Lookout",
+            "neighbor_ids": [5944, 6199, 5942, 5687],
+            "tasks": [
+                {
+                    "name": "Equip a Steel Med Helm",
+                    "taskID": "equip_steel_med_helm",
+                    "category": ["Defence"],
+                    "level": [5],
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Steel Med Helm"],
+                            "item_ids": [1141]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mithril 2H Sword",
+                    "taskID": "equip_mithril_2h_sword",
+                    "category": ["Attack"],
+                    "level": [20],
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mithril 2H Sword"],
+                            "item_ids": [1315]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Adamant Mace",
+                    "taskID": "equip_adamant_mace_sword",
+                    "category": ["Attack"],
+                    "level": [30],
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Mace"],
+                            "item_ids": [1430]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Yew Shortbow(u)",
+                    "taskID": "fletch_yew_shortbow(u)",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yew Shortbow(u)"],
+                            "item_ids": [66],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Yew Longbow(u)",
+                    "taskID": "fletch_yew_longbow(u)",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yew Longbow(u)"],
+                            "item_ids": [68],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket a Shayzien Guard",
+                    "taskID": "pickpocket_shayzien_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Shayzien Guard Level 21", "Level 84 Head Guard"],
+                        "npc_ids": [11092, 11094, 11096, 11098, 11100, 11102, 11104, 11106, 11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Burn a Yew Log",
+                    "taskID": "burn_yew_log",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Maple Longbow",
+                    "taskID": "equip_maple_longbow",
+                    "category": "Ranged",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Maple Longbow"],
+                            "item_ids": [851]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Willow Shortbow",
+                    "taskID": "equip_willow_shortbow",
+                    "category": "Ranged",
+                    "level": 20,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Willow Shortbow"],
+                            "item_ids": [849]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Obtain some Adamant Arrows",
+                    "taskID": "obtain_adamant_arrows",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Arrow"],
+                            "item_ids": [890],
+                            "quantity": [1, 200]
+                        }
+                    ]
+                }
+            ],             
+            "is_completed": false
+        }
