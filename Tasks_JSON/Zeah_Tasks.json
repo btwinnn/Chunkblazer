@@ -5122,6 +5122,107 @@
                             }                            
             ],             
             "is_completed": false 
+        },
+        {
+            "region_id": [6458],
+            "Friendly_Name": "Arceuus Bank",
+            "neighbor_ids": [6459, 6714, 6457, 6202],
+            "tasks": [
+                {
+                    "name": "Pickpocket a Shayzien Guard",
+                    "taskID": "pickpocket_shayzien_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Shayzien Guard Level 21", "Level 84 Head Guard"],
+                        "npc_ids": [11092, 11094, 11096, 11098, 11100, 11102, 11104, 11106, 11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Shayzien Head Guard in 29 Seconds",
+                    "taskID": "defeat_shayzien_head_guard_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 84 Head Guard"],
+                        "npc_ids": [11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [49],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Defeat a Shayzien Head Guard with nothing Equipped",
+                    "taskID": "defeat_shayzien_head_guard_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 84 Head Guard"],
+                        "npc_ids": [11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                }, 
+                {
+                    "name": "Defeat a Shayzien Guard with nothing Equipped",
+                    "taskID": "defeat_shayzien_guard_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Shayzien Guard Level 21", "Level 84 Head Guard"],
+                        "npc_ids": [11092, 11094, 11096, 11098, 11100, 11102, 11104, 11106, 11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                },
+                {
+                    "name": "Defeat a Dark Warrior for a Black Mace",
+                    "taskID": "Defeat_dark_warrior_for_black_mace",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Dark Warrior"],
+                        "npc_ids": [11111, 11110, 11109, 6606, 531]                     
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Black Mace",
+                        "dropped_item_id": [1426],
+                        "quantity": [1]
+                        }
+                    ] 
+                }
+                                                       
+            ],             
+            "is_completed": false 
         }
                     
     ]
