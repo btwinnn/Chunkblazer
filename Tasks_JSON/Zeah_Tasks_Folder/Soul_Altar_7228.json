@@ -1,0 +1,89 @@
+{
+            "region_id": [7228],
+            "Friendly_Name": "Soul Altar",
+            "neighbor_ids": [7229, 7484, 7227, 6972],
+            "tasks": [
+                {
+                    "name": "Craft some Soul Runes",
+                    "taskID": "craft_soul_runes",
+                    "category": "Runecrafting",
+                    "level": 90,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Soul Rune",
+                        "item_ids": [566],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Medium Clue Anagram Step: A HEART",
+                    "taskID": "obtain_medium_clue_anagram_step_a_heart",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Clue scroll (medium) - A HEART"],
+                            "item_ids": [19758],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Master STASH Unit at the Soul Altar",
+                "taskID": "build_master_stash_soul_altar",
+                "category": "Construction",
+                "level": 88,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 4,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Mahogany Plank",
+                        "item_ids": [8782]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Master STASH Unit (inconspicuous hole)",
+                        "object_id": [29046],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Defeat a Level 19 Ghost in 1 Hit",
+                    "taskID": "defeat_a_ghost_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ghost"],
+                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }                                                                                             
+            ],             
+            "is_completed": false 
+        }
