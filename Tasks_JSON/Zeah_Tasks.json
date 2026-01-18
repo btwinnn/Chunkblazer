@@ -5821,6 +5821,66 @@
                 }                                                                
             ],             
             "is_completed": false 
+        },
+        {
+            "region_id": [6972],
+            "Friendly_Name": "Dark Essence Mine",
+            "neighbor_ids": [6973, 7228, 6971, 6716],
+            "tasks": [
+                {
+                    "name": "Mine some Dense Essence Blocks",
+                    "taskID": "mine_dense_essence_blocks",
+                    "category": ["Mining", "Crafting"],
+                    "level": [38, 38],
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Dense Essence Block",
+                        "item_ids": [13445],
+                        "quantity": [100, 1000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 73 Agility Dark Essence Mine Rock Climb",
+                    "taskID": "agility_level_73_dark_essence_mine_rock_climb",
+                    "category": "Agility",
+                    "level": 73,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Use the Level 52 Agility Dark Essence Mine Rock Climb",
+                    "taskID": "agility_level_52_dark_essence_mine_rock_climb",
+                    "category": "Agility",
+                    "level": 52,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }, 
+                {
+                    "name": "Use the Level 49 Agility Dark Essence Mine Boulder Jump",
+                    "taskID": "agility_level_49_dark_essence_mine_rock_climb",
+                    "category": "Agility",
+                    "level": 49,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Use the Level 69 Agility Dark Essence Mine Rock Climb",
+                    "taskID": "agility_level_69_dark_essence_mine_rock_climb",
+                    "category": "Agility",
+                    "level": 69,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5
+                }                                                                               
+            ],             
+            "is_completed": false 
         }
                     
     ]
