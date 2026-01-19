@@ -1,0 +1,99 @@
+{
+            "region_id": [5948],
+            "Friendly_Name": "Blast Mine",
+            "neighbor_ids": [5949, 6204, 5947, 5692],
+            "tasks": [
+                {
+                    "name": "Excavate some Hard Rock",
+                    "taskID": "mine_hard_rock",
+                    "category": "Mining",
+                    "level": 43,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Hard Rock"],
+                            "object_id": [28580],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Dynamite",
+                    "taskID": "obtain_dynamite",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Dynamite"],
+                            "item_ids": [13573],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Poisoned Dynamite",
+                    "taskID": "obtain_poisoned_dynamite",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Dynamite(p)"],
+                            "item_ids": [27426],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Blasted Ore",
+                    "taskID": "obtain_blasted_ore",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Blasted Ore"],
+                            "item_ids": [13575],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Runite Ore",
+                    "taskID": "obtain_runite_ore",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Runite Ore"],
+                            "item_ids": [451],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Adamantite Ore",
+                    "taskID": "obtain_adamantite_ore",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1]
+                        }
+                    ]
+                }               
+            ],                                                      
+            "is_completed": false
+        } 
