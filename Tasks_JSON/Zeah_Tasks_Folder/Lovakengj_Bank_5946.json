@@ -1,0 +1,110 @@
+{
+            "region_id": [5946],
+            "Friendly_Name": "Lovakengj Bank",
+            "neighbor_ids": [5947, 6202, 5945, 5690],
+            "tasks": [
+                {
+                    "name": "Smith a Bronze 2H Sword",
+                    "taskID": "smith_bronze_2h_sword",
+                    "category": "Smithing",
+                    "level": 14,
+                    "completion_type": "SMITHING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Bronze 2H Sword"],
+                            "item_ids": [1307],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith an Iron 2H Sword",
+                    "taskID": "smith_iron_2h_sword",
+                    "category": "Smithing",
+                    "level": 29,
+                    "completion_type": "SMITHING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Iron 2H Sword"],
+                            "item_ids": [1309],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Steel 2H Sword",
+                    "taskID": "smith_steel_2h_sword",
+                    "category": "Smithing",
+                    "level": 44,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Steel 2H Sword"],
+                            "item_ids": [1311],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Mithril 2H Sword",
+                    "taskID": "smith_mithril_2h_sword",
+                    "category": "Smithing",
+                    "level": 64,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Mithril 2H Sword"],
+                            "item_ids": [1315],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith an Adamant 2H Sword",
+                    "taskID": "smith_adamant_2h_sword",
+                    "category": "Smithing",
+                    "level": 84,
+                    "completion_type": "SMITHING",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamant 2H Sword"],
+                            "item_ids": [1317],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Rune 2H Sword",
+                    "taskID": "smith_rune_2h_sword",
+                    "category": "Smithing",
+                    "level": 99,
+                    "completion_type": "SMITHING",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Rune 2H Sword"],
+                            "item_ids": [1319],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+                    "optional_quests_unlocked": [
+                        {
+                            "name": "The Forsaken Tower",
+                            "points": 2
+                        }
+            ],                                                      
+            "is_completed": false
+        }
