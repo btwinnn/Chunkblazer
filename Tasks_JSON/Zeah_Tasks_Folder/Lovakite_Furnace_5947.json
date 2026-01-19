@@ -1,0 +1,104 @@
+{
+            "region_id": [5947],
+            "Friendly_Name": "Lovakite Furnace",
+            "neighbor_ids": [5948, 6203, 5946, 5691],
+            "tasks": [
+                {
+                    "name": "Smelt a Lovakite Bar",
+                    "taskID": "smith_lovakite_bar",
+                    "category": "Smithing",
+                    "level": 45,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Lovakite Bar",
+                            "item_ids": [13354],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Shayzien Platebody(1)",
+                    "taskID": "smith_shayzien_platebody(1)",
+                    "category": "Smithing",
+                    "level": 53,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Shayzien Platebody(1)"],
+                            "item_ids": [13361],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Shayzien Platebody(2)",
+                    "taskID": "smith_shayzien_platebody(2)",
+                    "category": "Smithing",
+                    "level": 63,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Shayzien Platebody(2)"],
+                            "item_ids": [13366],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Shayzien Platebody(3)",
+                    "taskID": "smith_shayzien_platebody(3)",
+                    "category": "Smithing",
+                    "level": 73,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Shayzien Platebody(3)"],
+                            "item_ids": [13371],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Shayzien Platebody(4)",
+                    "taskID": "smith_shayzien_platebody(4)",
+                    "category": "Smithing",
+                    "level": 83,
+                    "completion_type": "SMITHING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Shayzien Platebody(4)"],
+                            "item_ids": [13376],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Shayzien Platebody(5)",
+                    "taskID": "smith_shayzien_platebody(5)",
+                    "category": "Smithing",
+                    "level": 93,
+                    "completion_type": "SMITHING",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Shayzien Platebody(5)"],
+                            "item_ids": [13381],
+                            "quantity": [1]
+                        }
+                    ]
+                }               
+            ],                                                      
+            "is_completed": false
+        } 
