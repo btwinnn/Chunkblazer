@@ -1,0 +1,145 @@
+{
+            "region_id": [6204],
+            "Friendly_Name": "Settlement Ruins",
+            "neighbor_ids": [6205, 6460, 6203, 5948],
+            "tasks": [
+                {
+                    "name": "Defeat an Ice Spider",
+                    "taskID": "defeat_ice_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Spider"],
+                        "npc_ids": [3022, 13798, 10722],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 53 Ice Giant on Task",
+                    "taskID": "defeat_level_53_ice_giant_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Giant"],
+                        "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Ice Spider on Task",
+                    "taskID": "defeat_ice_spider_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Spider"],
+                        "npc_ids": [3022, 13798, 10722],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 53 Ice Giant",
+                    "taskID": "defeat_level_53_ice_giant",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Giant"],
+                        "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 53 Ice Giant with Nothing Equipped",
+                    "taskID": "defeat_level_53_ice_giant_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Giant"],
+                        "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                },
+                {
+                    "name": "Defeat a Level 53 Ice Giant for a Limpwurt Seed",
+                    "taskID": "defeat_level_53_ice_giant_for_limpwurt_seed",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Giant"],
+                        "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Limpwurt Seed",
+                        "dropped_item_id": [5100],
+                        "quantity": [1]
+                        }
+                    ] 
+                },
+                {
+                    "name": "Defeat an Ice Wolf",
+                    "taskID": "defeat_ice_wolf",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Wolf"],
+                        "npc_ids": [647, 710, 711, 712, 713, 714, 715, 645, 646],
+                        "quantity": [1]
+                    }
+                }, 
+                {
+                    "name": "Defeat an Ice Wolf on Task",
+                    "taskID": "defeat_ice_wolf_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Wolf"],
+                        "npc_ids": [647, 710, 711, 712, 713, 714, 715, 645, 646],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Ice Wolf in 1 Hit",
+                    "taskID": "defeat_ice_wolf_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Wolf"],
+                        "npc_ids": [647, 710, 711, 712, 713, 714, 715, 645, 646],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }                                                         
+            ],                                                      
+            "is_completed": false
+        } 
