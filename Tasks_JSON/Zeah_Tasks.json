@@ -6829,6 +6829,132 @@
                 }                                           
             ],                                                      
             "is_completed": false
-        }                   
+        },
+        {
+            "region_id": [6461],
+            "Friendly_Name": "Doors of Dinh",
+            "neighbor_ids": [6462, 6717, 6460, 6205],
+            "tasks": [
+                {
+                    "name": "Obtain a Bruma Torch",
+                    "taskID": "obtain_bruma_torch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Bruma Torch"],
+                            "item_ids": [20720],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip the Pyromancer's Set",
+                    "taskID": "equip_pyromancer's_set",
+                    "category": ["Firemaking", "Defence"],
+                    "level": [50, 1],
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Pyromancer Hood"],
+                            "item_ids": [20708]
+                        },
+                        {
+                            "item": ["Pyromancer Garb"],
+                            "item_ids": [20704]
+                        },
+                        {
+                            "item": ["Pyromancer Robe"],
+                            "item_ids": [20706]
+                        },
+                        {
+                            "item": ["Pyromancer Boots"],
+                            "item_ids": [20710]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Warm Gloves",
+                    "taskID": "equip_warm_gloves",
+                    "category": "Firemaking",
+                    "level": 50,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Warm Gloves"],
+                            "item_ids": [20712]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Dragon Axe",
+                    "taskID": "obtain_dragon_axe",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Axe"],
+                            "item_ids": [6739, 25378, 30352, 30347, 30348, 25066, 25371, 13241, 13242],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Axe",
+                    "taskID": "equip_dragon_axe",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Axe"],
+                            "item_ids": [6739, 25378, 30352, 30347, 30348, 25066, 25371, 13241, 13242],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Burnt Page",
+                    "taskID": "obtain_burnt_page",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Burnt Page"],
+                            "item_ids": [20718],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Spirit Seed",
+                    "taskID": "obtain_spirit_Seed",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Spirit Seed"],
+                            "item_ids": [5317],
+                            "quantity": [1]
+                        }
+                    ]
+                }                                                          
+            ],                                                      
+            "is_completed": false
+        }                    
     ]
 }
