@@ -247,7 +247,6 @@
                     "name": "Defeat the Draynor Manor Skeleton",
                     "taskID": "defeat_draynor_manor_skeleton",
                     "category": "Combat",
-                    "level": 22,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
