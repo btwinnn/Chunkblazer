@@ -1,0 +1,75 @@
+{
+            "region_id": [5687],
+            "Friendly_Name": "East Shayzien Entrance",
+            "neighbor_ids": [5688, 5943, 5686, 5431],
+            "tasks": [
+                {
+                    "name": "Defeat a Head Guard or Shayzien Sergeant for a Rune Scimitar",
+                    "taskID": "defeat_head_guard_for_rune_scimitar",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Level 84 Head Guard", "Sergeant"],
+                        "npc_ids": [11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107, 11073, 11075, 11077, 11079, 11081, 11083, 11085, 11087, 11198, 8600, 10505, 10725],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Rune Scimitar",
+                        "dropped_item_id": [1333],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Head Guard or Shayzien Sergeant for a Rune Kiteshield",
+                    "taskID": "defeat_head_guard_for_rune_kiteshield",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Level 84 Head Guard", "Sergeant"],
+                        "npc_ids": [11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107, 11073, 11075, 11077, 11079, 11081, 11083, 11085, 11087, 11198, 8600, 10505, 10725],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Rune Kiteshield",
+                        "dropped_item_id": [1201],
+                        "quantity": [1]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Defeat a Lynx",
+                    "taskID": "defeat_lynx",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Lynx"],
+                        "npc_ids": [11069, 11068],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Lynx in 1 Hit",
+                    "taskID": "defeat_lynx_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Lynx"],
+                        "npc_ids": [11069, 11068],
+                        "quantity": [1]
+                    }
+                }
+                
+            ],             
+            "is_completed": false
+        }
