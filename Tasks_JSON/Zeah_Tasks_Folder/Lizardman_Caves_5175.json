@@ -1,13 +1,29 @@
 {
-            "region_id": [5689],
-            "Friendly_Name": "Lizardman Shaman Canyon",
-            "neighbor_ids": [5691, 5946, 5689, 5434],
+            "region_id": [5175],
+            "Friendly_Name": "Lizardman Caves",
+            "neighbor_ids": [5176, 5431, 5174, 4919],
             "tasks": [
                 {
                     "name": "Obtain a Dragon Warhammer",
                     "taskID": "obtain_dragon_warhammer",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Warhammer"],
+                            "item_ids": [13576, 28035, 26710],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Warhammer",
+                    "taskID": "equip_dragon_warhammer",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
                     "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [
@@ -59,22 +75,6 @@
                             "tier": "Easy"
                             }
                         ]
-                },
-                {
-                    "name": "Equip a Dragon Warhammer",
-                    "taskID": "equip_dragon_warhammer",
-                    "category": "Attack",
-                    "level": 60,
-                    "completion_type": "EQUIP",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": ["Dragon Warhammer"],
-                            "item_ids": [13576, 28035, 26710],
-                            "quantity": [1]
-                        }
-                    ]
                 },
                 {
                     "name": "Defeat a Lizardman Shaman",
@@ -178,7 +178,7 @@
                             "quantity": [1]
                         }
                     ]
-                }                                                          
-            ],                                                      
+                }
+            ],             
             "is_completed": false
         }
