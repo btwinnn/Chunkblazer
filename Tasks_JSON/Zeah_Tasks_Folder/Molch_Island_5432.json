@@ -121,6 +121,21 @@
                     ]
                 },
                 {
+                    "name": "Obtain a Golden Tench",
+                    "taskID": "obtain_golden_tench",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Golden Tench"],
+                            "item_ids": [22840],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
                     "name": "Catch a Bluegill",
                     "taskID": "catch_bluegill",
                     "category": ["Fishing", "Hunter"],
