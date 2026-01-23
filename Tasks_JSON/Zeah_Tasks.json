@@ -9004,6 +9004,341 @@
                 }                                                                                                                                             
             ],                                                      
             "is_completed": false
-        }                   
+        },
+        {
+            "region_id": [4922],
+            "Friendly_Name": "Farming Guild",
+            "neighbor_ids": [4923, 5178, 4921, 4666],
+            "tasks": [              
+                {
+                    "name": "Plant a Papaya Sapling",
+                    "taskID": "plant_papaya_sapling",
+                    "category": "Farming",
+                    "level": 57,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Papaya Sapling"],
+                            "item_ids": [5501],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Palm Tree Sapling",
+                    "taskID": "plant_palm_tree_sapling",
+                    "category": "Farming",
+                    "level": 68,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Palm Tree Sapling"],
+                            "item_ids": [5502],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Dragonfruit Tree Sapling",
+                    "taskID": "plant_dragonfruit_tree_sapling",
+                    "category": "Farming",
+                    "level": 81,
+                    "completion_type": "FARMING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragonfruit Tree Sapling"],
+                            "item_ids": [22866],
+                            "quantity": [1]
+                        }
+                    ]
+                },                            
+                {
+                    "name": "Plant a Yew Sapling",
+                    "taskID": "plant_Yew_sapling",
+                    "category": "Farming",
+                    "level": 60,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items":
+                        {
+                            "item": "Yew Sapling",
+                            "item_ids": [5373],
+                            "quantity": [1]
+                        } 
+                },
+                {
+                    "name": "Plant a Magic Sapling",
+                    "taskID": "plant_magic_sapling",
+                    "category": "Farming",
+                    "level": 75,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items":
+                        {
+                            "item": "Magic Sapling",
+                            "item_ids": [5374],
+                            "quantity": [1]
+                        } 
+                },
+                {
+                    "name": "Plant a Redwood Sapling",
+                    "taskID": "plant_redwood_sapling",
+                    "category": "Farming",
+                    "level": 90,
+                    "completion_type": "FARMING",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items":
+                        {
+                            "item": "Redwood Sapling",
+                            "item_ids": [22859],
+                            "quantity": [1]
+                        } 
+                },
+                {
+                    "name": "Plant a Celastrus Sapling",
+                    "taskID": "plant_celastrus_sapling",
+                    "category": "Farming",
+                    "level": 85,
+                    "completion_type": "FARMING",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items":
+                        {
+                            "item": "Celastrus Sapling",
+                            "item_ids": [22856],
+                            "quantity": [1]
+                        } 
+                },
+                {
+                    "name": "Plant a Spirit Sapling",
+                    "taskID": "plant_spirit_sapling",
+                    "category": "Farming",
+                    "level": 83,
+                    "completion_type": "FARMING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items":
+                        {
+                            "item": "Spirit Sapling",
+                            "item_ids": [5375],
+                            "quantity": [1]
+                        } 
+                },
+                {
+                    "name": "Plant some Watermelons",
+                    "taskID": "plant_watermelon_seed",
+                    "category": "Farming",
+                    "level": 47,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Watermelon Seed"],
+                            "item_ids": [5321],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant Snape Grass",
+                    "taskID": "plant_snape_grass",
+                    "category": "Farming",
+                    "level": 61,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Snape Grass Seed"],
+                            "item_ids": [22879],
+                            "quantity": [1]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Plant a Kwuarm Seed",
+                    "taskID": "plant_kwuarm",
+                    "category": "Farming",
+                    "level": 56,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Kwuarm Seed"],
+                            "item_ids": [5299],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Snapdragon Seed",
+                    "taskID": "plant_snapdragon",
+                    "category": "Farming",
+                    "level": 62,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Snapdragon Seed"],
+                            "item_ids": [5300],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Cadantine Seed",
+                    "taskID": "plant_cadantine",
+                    "category": "Farming",
+                    "level": 67,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Cadantine Seed"],
+                            "item_ids": [5301],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Lantadyme Seed",
+                    "taskID": "plant_lantadyme",
+                    "category": "Farming",
+                    "level": 73,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Lantadyme Seed"],
+                            "item_ids": [5302],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Dwarf Weed Seed",
+                    "taskID": "plant_dwarf_weed",
+                    "category": "Farming",
+                    "level": 79,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Dwarf Weed Seed"],
+                            "item_ids": [5303],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Torstol Seed",
+                    "taskID": "plant_torstol",
+                    "category": "Farming",
+                    "level": 85,
+                    "completion_type": "FARMING",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Torstol Seed"],
+                            "item_ids": [5304],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Seed Pack",
+                    "taskID": "obtain_seed_pack",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Seed Pack"],
+                            "item_ids": [22993]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bottomless Bucket",
+                    "taskID": "obtain_bottomless_bucket",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Bottomless Bucket"],
+                            "item_ids": [22994]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Attas Seed",
+                    "taskID": "plant_attas",
+                    "category": "Farming",
+                    "level": 76,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Attas Seed"],
+                            "item_ids": [22881],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Kronos Seed",
+                    "taskID": "plant_kronos",
+                    "category": "Farming",
+                    "level": 76,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Kronos Seed"],
+                            "item_ids": [22885],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Iasor Seed",
+                    "taskID": "plant_iasor",
+                    "category": "Farming",
+                    "level": 76,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Iasor Seed"],
+                            "item_ids": [22883],
+                            "quantity": [1]
+                        }
+                    ]
+                }                                                                                                                                             
+            ],                                                      
+            "is_completed": false
+        }                    
     ]
 }

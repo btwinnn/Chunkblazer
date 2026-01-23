@@ -87,8 +87,8 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Plant an Apple Tree Seed",
-                    "taskID": "plant_apple_tree_seed",
+                    "name": "Plant an Apple Tree Sapling",
+                    "taskID": "plant_apple_tree_sapling",
                     "category": "Farming",
                     "level": 27,
                     "completion_type": "FARMING",
@@ -96,15 +96,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Apple Tree Seed"],
-                            "item_ids": [5283],
+                            "item": ["Apple Tree Sapling"],
+                            "item_ids": [5496],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Banana Tree Seed",
-                    "taskID": "plant_banana_tree_seed",
+                    "name": "Plant a Banana Tree Sapling",
+                    "taskID": "plant_banana_tree_sapling",
                     "category": "Farming",
                     "level": 33,
                     "completion_type": "FARMING",
@@ -112,15 +112,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Banana Tree Seed"],
-                            "item_ids": [5284],
+                            "item": ["Banana Tree Sapling"],
+                            "item_ids": [5497],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant an Orange Tree Seed",
-                    "taskID": "plant_orange_tree_seed",
+                    "name": "Plant an Orange Tree Sapling",
+                    "taskID": "plant_orange_tree_sapling",
                     "category": "Farming",
                     "level": 39,
                     "completion_type": "FARMING",
@@ -128,15 +128,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Orange Tree Seed"],
-                            "item_ids": [5285],
+                            "item": ["Orange Tree Sapling"],
+                            "item_ids": [5498],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Curry Tree Seed",
-                    "taskID": "plant_curry_tree_seed",
+                    "name": "Plant a Curry Tree Sapling",
+                    "taskID": "plant_curry_tree_Sapling",
                     "category": "Farming",
                     "level": 42,
                     "completion_type": "FARMING",
@@ -144,15 +144,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Curry Tree Seed"],
-                            "item_ids": [5286],
+                            "item": ["Curry Tree Sapling"],
+                            "item_ids": [5499],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Pineapple Seed",
-                    "taskID": "plant_pineapple_tree_seed",
+                    "name": "Plant a Pineapple Sapling",
+                    "taskID": "plant_pineapple_sapling",
                     "category": "Farming",
                     "level": 51,
                     "completion_type": "FARMING",
@@ -160,8 +160,24 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Pineapple Seed"],
-                            "item_ids": [5287],
+                            "item": ["Pineapple Sapling"],
+                            "item_ids": [5500],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Papaya Sapling",
+                    "taskID": "plant_papaya_sapling",
+                    "category": "Farming",
+                    "level": 57,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Papaya Sapling"],
+                            "item_ids": [5501],
                             "quantity": [1]
                         }
                     ]
@@ -6153,8 +6169,8 @@
                     ]
                 },
                 {
-                    "name": "Plant an Apple Tree Seed",
-                    "taskID": "plant_apple_tree_seed",
+                    "name": "Plant an Apple Tree Sapling",
+                    "taskID": "plant_apple_tree_sapling",
                     "category": "Farming",
                     "level": 27,
                     "completion_type": "FARMING",
@@ -6162,15 +6178,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Apple Tree Seed"],
-                            "item_ids": [5283],
+                            "item": ["Apple Tree Sapling"],
+                            "item_ids": [5496],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Banana Tree Seed",
-                    "taskID": "plant_banana_tree_seed",
+                    "name": "Plant a Banana Tree Sapling",
+                    "taskID": "plant_banana_tree_sapling",
                     "category": "Farming",
                     "level": 33,
                     "completion_type": "FARMING",
@@ -6178,15 +6194,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Banana Tree Seed"],
-                            "item_ids": [5284],
+                            "item": ["Banana Tree Sapling"],
+                            "item_ids": [5497],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant an Orange Tree Seed",
-                    "taskID": "plant_orange_tree_seed",
+                    "name": "Plant an Orange Tree Sapling",
+                    "taskID": "plant_orange_tree_sapling",
                     "category": "Farming",
                     "level": 39,
                     "completion_type": "FARMING",
@@ -6194,15 +6210,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Orange Tree Seed"],
-                            "item_ids": [5285],
+                            "item": ["Orange Tree Sapling"],
+                            "item_ids": [5498],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Curry Tree Seed",
-                    "taskID": "plant_curry_tree_seed",
+                    "name": "Plant a Curry Tree Sapling",
+                    "taskID": "plant_curry_tree_Sapling",
                     "category": "Farming",
                     "level": 42,
                     "completion_type": "FARMING",
@@ -6210,15 +6226,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Curry Tree Seed"],
-                            "item_ids": [5286],
+                            "item": ["Curry Tree Sapling"],
+                            "item_ids": [5499],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Pineapple Seed",
-                    "taskID": "plant_pineapple_tree_seed",
+                    "name": "Plant a Pineapple Sapling",
+                    "taskID": "plant_pineapple_sapling",
                     "category": "Farming",
                     "level": 51,
                     "completion_type": "FARMING",
@@ -6226,15 +6242,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Pineapple Seed"],
-                            "item_ids": [5287],
+                            "item": ["Pineapple Sapling"],
+                            "item_ids": [5500],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Palm Tree Seed",
-                    "taskID": "plant_palm_tree_seed",
+                    "name": "Plant a Palm Tree Sapling",
+                    "taskID": "plant_palm_tree_sapling",
                     "category": "Farming",
                     "level": 68,
                     "completion_type": "FARMING",
@@ -6242,8 +6258,8 @@
                     "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Palm Tree Seed"],
-                            "item_ids": [5289],
+                            "item": ["Palm Tree Sapling"],
+                            "item_ids": [5502],
                             "quantity": [1]
                         }
                     ]
@@ -7248,8 +7264,8 @@
                     }
                 },
                 {
-                    "name": "Plant a Banana Tree Seed",
-                    "taskID": "plant_banana_tree_seed",
+                    "name": "Plant a Banana Tree Sapling",
+                    "taskID": "plant_banana_tree_sapling",
                     "category": "Farming",
                     "level": 33,
                     "completion_type": "FARMING",
@@ -7257,15 +7273,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Banana Tree Seed"],
-                            "item_ids": [5284],
+                            "item": ["Banana Tree Sapling"],
+                            "item_ids": [5497],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant an Orange Tree Seed",
-                    "taskID": "plant_orange_tree_seed",
+                    "name": "Plant an Orange Tree Sapling",
+                    "taskID": "plant_orange_tree_sapling",
                     "category": "Farming",
                     "level": 39,
                     "completion_type": "FARMING",
@@ -7273,15 +7289,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Orange Tree Seed"],
-                            "item_ids": [5285],
+                            "item": ["Orange Tree Sapling"],
+                            "item_ids": [5498],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Curry Tree Seed",
-                    "taskID": "plant_curry_tree_seed",
+                    "name": "Plant a Curry Tree Sapling",
+                    "taskID": "plant_curry_tree_Sapling",
                     "category": "Farming",
                     "level": 42,
                     "completion_type": "FARMING",
@@ -7289,15 +7305,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Curry Tree Seed"],
-                            "item_ids": [5286],
+                            "item": ["Curry Tree Sapling"],
+                            "item_ids": [5499],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Pineapple Seed",
-                    "taskID": "plant_pineapple_tree_seed",
+                    "name": "Plant a Pineapple Sapling",
+                    "taskID": "plant_pineapple_sapling",
                     "category": "Farming",
                     "level": 51,
                     "completion_type": "FARMING",
@@ -7305,15 +7321,15 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Pineapple Seed"],
-                            "item_ids": [5287],
+                            "item": ["Pineapple Sapling"],
+                            "item_ids": [5500],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Palm Tree Seed",
-                    "taskID": "plant_palm_tree_seed",
+                    "name": "Plant a Palm Tree Sapling",
+                    "taskID": "plant_palm_tree_sapling",
                     "category": "Farming",
                     "level": 68,
                     "completion_type": "FARMING",
@@ -7321,8 +7337,8 @@
                     "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Palm Tree Seed"],
-                            "item_ids": [5289],
+                            "item": ["Palm Tree Sapling"],
+                            "item_ids": [5502],
                             "quantity": [1]
                         }
                     ]
@@ -7376,7 +7392,7 @@
                     "name": "Plant a Magic Sapling",
                     "taskID": "plant_magic_sapling",
                     "category": "Farming",
-                    "level": 60,
+                    "level": 75,
                     "completion_type": "FARMING",
                     "base_points": 3,
                     "assignment_weight": 3,
