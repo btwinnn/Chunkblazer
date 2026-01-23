@@ -1746,6 +1746,36 @@
                     ]
                 },
                 {
+                "name": "Obtain an Old Coin",
+                "taskID": "obtain_old_coin",
+                "category": "Obtain",
+                "completion_type": "OBTAIN",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                            "item": ["Old Coin"],
+                            "item_ids": [11179],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                 {
+                "name": "Obtain an Ancient Coin",
+                "taskID": "obtain_ancient_coin",
+                "category": "Obtain",
+                "completion_type": "OBTAIN",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                            "item": ["Ancient Coin"],
+                            "item_ids": [11180],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
                     "name": "Equip a Mithril Platebody",
                     "taskID": "equip_mithril_platebody",
                     "category": "Defence",
