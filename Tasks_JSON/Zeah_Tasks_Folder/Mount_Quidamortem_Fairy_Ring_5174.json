@@ -1,0 +1,84 @@
+{
+            "region_id": [5174],
+            "Friendly_Name": "Mount Quidamortem Fairy Ring",
+            "neighbor_ids": [5175, 5430, 5173, 4918],
+            "tasks": [              
+                {
+                    "name": "Defeat a Big Frog in 1 Hit",
+                    "taskID": "defeat_big_frog_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Big Frog"],
+                        "npc_ids": [8701, 478],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Travel to Fairy Ring Code BLS",
+                    "taskID": "fairy_ring_BLS",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Defeat a Grizzly Bear in 1 Hit",
+                    "taskID": "defeat_grizzly_bear_1_Hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Grizzly Bear"],
+                        "npc_ids": [2838, 3423],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },                            
+                {
+                    "name": "Obtain Kasonde's Journal",
+                    "taskID": "obtain_kasonde's_journal",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Kasonde's Journal"],
+                            "item_ids": [27511],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+                    ],
+                        "optional_quests_unlocked": [
+                            {
+                                "name": "The Garden of Death",
+                                "points": 2
+                            }                                    
+            ],                                                      
+            "is_completed": false
+        } 
