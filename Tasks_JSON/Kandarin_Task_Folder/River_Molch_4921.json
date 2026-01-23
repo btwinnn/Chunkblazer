@@ -1,0 +1,200 @@
+{
+            "region_id": [4921],
+            "Friendly_Name": "River Molch",
+            "neighbor_ids": [4922, 5177, 4920, 4665],
+            "tasks": [              
+                {
+                    "name": "Obtain a Skills Necklace(4)",
+                    "taskID": "obtain_skills_necklace_(4)",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Skills Necklace(4)"],
+                            "item_ids": [11105],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Maple Tree",
+                    "taskID": "chop_maple_tree",
+                    "category": "Woodcutting",
+                    "level": 45,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Maple Logs",
+                            "item_ids": [1517],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Maple Log",
+                    "taskID": "burn_maple_log",
+                    "category": "Firemaking",
+                    "level": 45,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Maple Logs",
+                        "item_ids": [1517],
+                        "quantity": [1]
+                        }
+                    ]
+                },                            
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Burn a Yew Log",
+                    "taskID": "burn_yew_log",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch some Raw Salmon",
+                    "taskID": "catch_raw_salmon",
+                    "category": "Fishing",
+                    "level": 30,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Salmon",
+                        "item_ids": [331],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Cook some Salmon",
+                    "taskID": "cook_raw_salmon",
+                    "category": "Cooking",
+                    "level": 25,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Salmon",
+                        "item_ids": [329],
+                        "quantity": [1, 100]
+                        }
+                    ]       
+                },
+                {
+                    "name": "Activate Redemption",
+                    "taskID": "pray_redemption",
+                    "category": "Prayer",
+                    "level": 52,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "varbit_boolean": 1,
+                    "constraints": {
+                        "varbit_id": 4118
+                    }                   
+                },
+                {
+                    "name": "Cook Nettle Tea",
+                    "taskID": "cook_nettle_tea",
+                    "category": "Cooking",
+                    "level": 20,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Nettle Tea",
+                            "item_ids": [4239]
+                        }
+                    ]
+                },
+                {
+                    "name": "Bake a Cake",
+                    "taskID": "cook_cake",
+                    "category": "Cooking",
+                    "level": 40,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Cake",
+                            "item_ids": [1891]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Craft a Hardleather Body",
+                    "taskID": "craft_hardleather_body",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Crafting",
+                    "level": 28,
+                    "completion_type": "CRAFTING",
+                    "required_items": [
+                        {
+                        "item": "Hardleather Body",
+                        "item_ids": [1131],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Coif",
+                    "taskID": "craft_coif",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Crafting",
+                    "level": 38,
+                    "completion_type": "CRAFTING",
+                    "required_items": [
+                        {
+                        "item": "Coif",
+                        "item_ids": [1169],
+                        "quantity": [1]
+                        }
+                    ]
+                }
+                    ],
+                        "optional_quests_unlocked": [
+                            {
+                                "name": "Getting Ahead",
+                                "points": 2
+                            }                                                                                                                                                            
+            ],                                                      
+            "is_completed": false
+        } 
