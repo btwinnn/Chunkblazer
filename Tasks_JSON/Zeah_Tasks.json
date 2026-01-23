@@ -8940,6 +8940,70 @@
                 }                                                                        
             ],                                                      
             "is_completed": false
+        },
+        {
+            "region_id": [5178],
+            "Friendly_Name": "Farming Guild Fairy Ring",
+            "neighbor_ids": [5179, 5434, 5177, 4922],
+            "tasks": [
+                {
+                    "name": "Travel to Fairy Ring Code CIR",
+                    "taskID": "fairy_ring_CIR",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Craft a Snakeskin Shield",
+                    "taskID": "craft_snakeskin_shield",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Crafting",
+                    "level": 56,
+                    "completion_type": "CRAFTING",
+                    "required_items": [
+                        {
+                        "item": "Snakeskin Shield",
+                        "item_ids": [22272],
+                        "quantity": [1]
+                        }
+                    ]
+                },                
+                {
+                    "name": "Craft a Green D'Hide Shield",
+                    "taskID": "craft_green_d'hide_shield",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "category": "Crafting",
+                    "level": 62,
+                    "completion_type": "CRAFTING",
+                    "required_items": [
+                        {
+                        "item": "Green D'Hide Shield",
+                        "item_ids": [22275],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Hard Leather Shield",
+                    "taskID": "craft_hard_leather_shield",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Crafting",
+                    "level": 41,
+                    "completion_type": "CRAFTING",
+                    "required_items": [
+                        {
+                        "item": "Hard Leather Shield",
+                        "item_ids": [22269],
+                        "quantity": [1]
+                        }
+                    ]
+                }                                                                                                                                             
+            ],                                                      
+            "is_completed": false
         }                   
     ]
 }
