@@ -1729,20 +1729,7 @@
                     "varbit_boolean": 1,      
                     "description": "Complete the Varrock Museum Quiz"
                     }
-                },
-                {
-                "name": "Obtain 100 Varrock Museum Kudos",
-                "taskID": "obtain_100_kudos",
-                "category": "Unlock",
-                "completion_type": "VARP_CHECK",
-                "base_points": 1,
-                "assignment_weight": 8,
-                "constraints": {                       
-                    "varp_id": 1438,        
-                    "varp_value": 100,      
-                    "description": "Obtain 100 Varrock Museum Kudos"
-                    }
-                },
+                },               
                 {
                 "name": "Obtain an Antique Lamp from Historian Minas",
                 "taskID": "obtain_antique_lamp_historian_minas",

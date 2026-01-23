@@ -2,20 +2,7 @@
             "region_id": [12853],
             "Friendly_Name": "Varrock Fountain",
             "neighbor_ids": [13109, 12852, 12597, 12854],
-            "tasks": [
-                {
-                "name": "Complete the Varrock Museum Quiz",
-                "taskID": "complete_varrock_museum_quiz",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 1,
-                "assignment_weight": 8,                   
-                "constraints": {                       
-                    "varbit_id": 699,        
-                    "varbit_boolean": 1,      
-                    "description": "Complete the Varrock Museum Quiz"
-                    }
-                },
+            "tasks": [               
                 {
                 "name": "Obtain 100 Varrock Museum Kudos",
                 "taskID": "obtain_100_kudos",
