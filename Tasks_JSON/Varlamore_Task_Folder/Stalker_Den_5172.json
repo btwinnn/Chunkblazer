@@ -1,0 +1,174 @@
+ {
+            "region_id": [5172],
+            "Friendly_Name": "Stalker Den",
+            "neighbor_ids": [5173, 5428, 5171, 4916],
+            "tasks": [
+                {
+                    "name": "Catch some Raw Salmon",
+                    "taskID": "catch_raw_salmon",
+                    "category": "Fishing",
+                    "level": 30,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Raw Salmon",
+                        "item_ids": [331],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Cook some Salmon",
+                    "taskID": "cook_raw_salmon",
+                    "category": "Cooking",
+                    "level": 25,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Salmon",
+                        "item_ids": [329],
+                        "quantity": [1, 50]
+                        }
+                    ]       
+                },               
+                {
+                    "name": "Defeat a Juvenile Custodian Stalker",
+                    "taskID": "defeat_juvenile_custodian_stalker",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Juvenile Custodian Stalker"],
+                        "npc_ids": [14702],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Mature Custodian Stalker",
+                    "taskID": "defeat_mature_custodian_stalker",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Mature Custodian Stalker"],
+                        "npc_ids": [14703],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Elder Custodian Stalker",
+                    "taskID": "defeat_elder_custodian_stalker",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Elder Custodian Stalker"],
+                        "npc_ids": [14704],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Elder Custodian Stalker on Task",
+                    "taskID": "defeat_elder_custodian_stalker on task",
+                    "category": "Slayer",
+                    "level": 76,
+                    "completion_type": "SLAYER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Elder Custodian Stalker"],
+                        "npc_ids": [14704],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Ancient Custodian Stalker",
+                    "taskID": "defeat_ancient_custodian_stalker",
+                    "category": "Slayer",
+                    "level": 76,
+                    "completion_type": "SLAYER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ancient Custodian Stalker"],
+                        "npc_ids": [14704],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain an Alchemist's Signet",
+                    "taskID": "obtain_alchemist's_signet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Alchemist's Signet"],
+                            "item_ids": [31084],
+                            "quantity": [1, 5]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Antler Guard",
+                    "taskID": "equip_antler_guard",
+                    "category": ["Prayer", "Defence"],
+                    "level": [50, 1],
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Antler Guard"],
+                            "item_ids": [31081]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Antler Guard",
+                    "taskID": "obtain_antler_guard",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Antler Guard"],
+                            "item_ids": [31081],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                 {
+                    "name": "Use the Level 64 Agility Stepping Stone Shortcut in the Stalker Den",
+                    "taskID": "agility_level_64_agility_stepping_stone_stalker_den",
+                    "category": "Agility",
+                    "level": 64,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Defeat many Stalkers",
+                    "taskID": "defeat_many_stalkers",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Juvenile Custodian Stalker", "Mature Custodian Stalker", "Elder Custodian Stalker"],
+                        "npc_ids": [14702, 14703, 14704],
+                        "quantity": [100, 500]
+                    }                                                       
+                }               
+            ],
+            "is_completed": false
+        }
