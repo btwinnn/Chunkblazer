@@ -1,0 +1,80 @@
+{
+            "region_id": [4916],
+            "Friendly_Name": "Custodia Pass",
+            "neighbor_ids": [4917, 5172, 4915, 4660],
+            "tasks": [               
+                {
+                    "name": "Defeat a Stag",
+                    "taskID": "defeat_stag",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Stag"],
+                        "npc_ids": [1845, 14222],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat a Stag in 1 Hit",
+                    "taskID": "defeat_stag_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Stag"],
+                        "npc_ids": [1845, 14222],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Defeat a Stag with nothing Equipped",
+                    "taskID": "defeat_stag_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Stag"],
+                        "npc_ids": [1845, 14222],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                },
+                {
+                    "name": "Defeat a Lynx with nothing Equipped",
+                    "taskID": "defeat_lynx_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Lynx"],
+                        "npc_ids": [11069, 11068],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                }               
+            ],
+            "is_completed": false
+        }
