@@ -193,7 +193,7 @@
                     "level": 63,
                     "completion_type": "FARMING",
                     "base_points": 3,
-                    "assignment_weight": 3,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Belladonna seed"],

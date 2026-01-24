@@ -102,7 +102,21 @@
                         "npc_ids": [14663, 14664, 14665, 14666, 14667, 14668, 14669, 14669],
                         "quantity": [1]
                     }
-                }              
+                },
+                {
+                    "name": "Obtain a Mahogany Plank",
+                    "taskID": "obtain_mahogany_plank",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Mahogany Plank"],
+                            "item_ids": [8782]
+                        }
+                    ]
+                }             
             ],
             "optional_quests_unlocked": [
                 {

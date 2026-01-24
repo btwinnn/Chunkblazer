@@ -710,6 +710,20 @@
                         "npc_ids": [14663, 14664, 14665, 14666, 14667, 14668, 14669, 14669],
                         "quantity": [1]
                     }
+                },
+                {
+                    "name": "Obtain a Mahogany Plank",
+                    "taskID": "obtain_mahogany_plank",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Mahogany Plank"],
+                            "item_ids": [8782]
+                        }
+                    ]
                 }              
             ],
             "optional_quests_unlocked": [
@@ -721,134 +735,238 @@
             "is_completed": false
         },
         {
-            "region_id": [12852],
-            "Friendly_Name": "Dark Wizards' Stone Table",
-            "neighbor_ids": [12853, 13108, 12851, 12596],
+            "region_id": [5684],
+            "Friendly_Name": "Auburnvale East Bank",
+            "neighbor_ids": [5685, 5940, 5683, 5428],
             "tasks": [
                 {
-                    "name": "Defeat a Level 20 Dark Wizard",
-                    "taskID": "defeat_level_20_dark_wizard",
+                    "name": "Plant some Belladonna Seeds",
+                    "taskID": "plant_belladonna",
+                    "category": "Farming",
+                    "level": 63,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Belladonna seed"],
+                            "item_ids": [5281],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Maple Tree",
+                    "taskID": "chop_maple_tree",
+                    "category": "Woodcutting",
+                    "level": 45,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Maple Logs",
+                            "item_ids": [1517],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ent Seed",
+                    "taskID": "obtain_ent_seed",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ent Seed"],
+                            "item_ids": [31018]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Auburnvale Guard",
+                    "taskID": "defeat_auburnvale_guard",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "target_npc": {
-                        "npc": ["Dark Wizard Level 20"],
-                        "npc_ids": [510, 5088, 5089],
+                        "npc": ["Auburnvale Guard Level 21"],
+                        "npc_ids": [14663, 14664, 14665, 14666, 14667, 14668, 14669, 14669],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Defeat a Level 20 Dark Wizard in 19 Seconds",
-                    "taskID": "defeat_level_20_dark_wizard_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Dark Wizard Level 20"],
-                        "npc_ids": [510, 5088, 5089],
-                        "quantity": [1]
-                    },
-                    
-                    "constraints": {
-                        "time_in_ticks": [32],
-                        "prohibited_active_varbits": [
-                                {
-                                    "varbit_id": 57,
-                                    "must_be_value": 0,
-                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
-                                }
-                            ]
-                    }
+                "name": "Build an Oak Totem",
+                "taskID": "build_oak_totem",
+                "category": "Fletching",
+                "level": 20,
+                "completion_type": "FLETCHING",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521]
+                        }                      
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Oak Totem #Top",
+                        "object_id": [57069],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
                 },
                 {
-                    "name": "Use the Level 13 Agility Fence Jump Shortcut",
-                    "taskID": "agility_level_13_fence_jump",
+                "name": "Build a Willow Totem",
+                "taskID": "build_willow_totem",
+                "category": "Fletching",
+                "level": 35,
+                "completion_type": "FLETCHING",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519]
+                        }                      
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Willow Totem #Top",
+                        "object_id": [57074],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Maple Totem",
+                "taskID": "build_maple_totem",
+                "category": "Fletching",
+                "level": 50,
+                "completion_type": "FLETCHING",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Maple Logs",
+                        "item_ids": [1517]
+                        }                      
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Maple Totem #Top",
+                        "object_id": [57079],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Yew Totem",
+                "taskID": "build_yew_totem",
+                "category": "Fletching",
+                "level": 65,
+                "completion_type": "FLETCHING",
+                "base_points": 3,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Yew Logs",
+                        "item_ids": [1515]
+                        }                      
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Yew Totem #Top",
+                        "object_id": [57084],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Magic Totem",
+                "taskID": "build_magic_totem",
+                "category": "Fletching",
+                "level": 80,
+                "completion_type": "FLETCHING",
+                "base_points": 4,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Magic Logs",
+                        "item_ids": [1513]
+                        }                      
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Magic Totem #Top",
+                        "object_id": [57089],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Redwood Totem",
+                "taskID": "build_redwood_totem",
+                "category": "Fletching",
+                "level": 90,
+                "completion_type": "FLETCHING",
+                "base_points": 5,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Redwood Logs",
+                        "item_ids": [19669]
+                        }                      
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Redwood Totem #Top",
+                        "object_id": [57094],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Redwood Hiking Staff",
+                    "taskID": "fletch_redwood_hiking_staff",
+                    "category": "Fletching",
+                    "level": 90,
+                    "completion_type": "FLETCHING",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Redwood Hiking Staff"],
+                            "item_ids": [31049],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 45 Agility Log Balance in Auburnvale",
+                    "taskID": "agility_level_45_log_balance_auburnvale",
                     "category": "Agility",
-                    "level": 13,
+                    "level": 45,
                     "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
-                {
-                    "name": "Obtain a Fire Talisman",
-                    "taskID": "obtain_fire_talisman",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Fire Talisman"],
-                            "item_ids": [1442]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Black Robe",
-                    "taskID": "obtain_black_robe",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Black Robe"],
-                            "item_ids": [581]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat some Dark Wizards",
-                    "taskID": "defeat_some_dark_wizards",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Dark Wizard"],
-                        "npc_ids": [512, 5086, 5087, 2058, 2059, 510, 5088, 5089, 2057, 2056],
-                        "quantity": [1, 50]
-                    }
-                },
-                {
-                    "name": "Obtain a Yellow Bead",
-                    "taskID": "obtain_yellow_bead",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Yellow Bead"],
-                            "item_ids": [1472]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Level 20 Dark Wizard 1 Hit",
-                    "taskID": "defeat_level_20_dark_wizard_1_hit",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "target_npc": {
-                        "npc": ["Wizard"],
-                        "npc_ids": [510, 5088, 5089],
-                        "quantity": [1]
-                    },
-                    
-                    "constraints": {
-                        "time_in_ticks": [1]
-                    }
-                }         
+                    "base_points": 2,
+                    "assignment_weight": 3
+                }        
             ],
             "is_completed": false
         },
         {
-            "region_id": [13108],
-            "Friendly_Name": "Varrock East Mine",
+            "region_id": [5683],
+            "Friendly_Name": "Auburn Valley",
             "neighbor_ids": [13364, 13107, 12852, 13109],
             "tasks": [
                 {
