@@ -607,224 +607,115 @@
             "is_completed": false
         },
         {
-            "region_id": [12337],
-            "Friendly_Name": "Wizards' Tower",
-            "neighbor_ids": [12081, 12338, 12593, 12336],
+            "region_id": [5428],
+            "Friendly_Name": "Totem Fletching",
+            "neighbor_ids": [5429, 5684, 5427, 5172],
             "tasks": [
                 {
-                    "name": "Defeat a Level 82 Lesser Demon",
-                    "taskID": "defeat_level_82_lesser_demon",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Lesser Demon"],
-                        "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat The Leviathan",
-                    "taskID": "defeat_leviathan",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Leviathan",
-                    "target_npc": {
-                        "npc": ["Leviathan"],
-                        "npc_ids": [12215, 12219],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat the Awakened Leviathan",
-                    "taskID": "defeat_awakened_leviathan",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 1,
-                    "boss": "The Leviathan",
-                    "target_npc": {
-                        "npc": ["Awakened Leviathan"],
-                        "npc_ids": [12214],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Craft some Chaos Runes",
-                    "taskID": "craft_chaos_runes",
-                    "category": "Runecrafting",
-                    "level": 35,
-                    "completion_type": "RUNECRAFTING",
+                    "name": "Craft a Basket",
+                    "taskID": "craft_basket",
+                    "category": "Crafting",
+                    "level": 36,
+                    "completion_type": "CRAFTING",
                     "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                        "item": "Chaos Rune",
-                        "item_ids": [562],
-                        "action": "obtain",
-                        "quantity": [1]
+                            "item": ["Basket"],
+                            "item_ids": [5376],
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain a Venator Vestige",
-                    "taskID": "obtain_venator_vestige",
+                    "name": "Obtain a Bow String Spool",
+                    "taskID": "obtain_bow_string_spool",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Leviathan",
-                    "required_items": [
-                        {
-                            "item": ["Venator Vestige"],
-                            "item_ids": [28283]
-                        }
-                    ]
-                },
-                {
-                    "name": "Travel to Fairy Ring Code DIS",
-                    "taskID": "fairy_ring_CLP",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
-                },
-                {
-                    "name": "Equip a Splitbark Set",
-                    "taskID": "equip_splitbark_set",
-                    "category": "Defence",
-                    "completion_type": "EQUIP",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Splitbark Helm"],
-                            "item_ids": [3385]
-                        },
-                        {
-                            "item": ["Splitbark Body"],
-                            "item_ids": [3387]
-                        },
-                        {
-                            "item": ["Splitbark Legs"],
-                            "item_ids": [3389]
-                        },
-                        {
-                            "item": ["Splitbark Gauntlets"],
-                            "item_ids": [3391]
-                        },
-                        {
-                            "item": ["Splitbark Boots"],
-                            "item_ids": [3393]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Level 9 Wizard in 6 Seconds",
-                    "taskID": "defeat_level_9_wizard_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Wizard"],
-                        "npc_ids": [3257],
-                        "quantity": [1]
-                    },
-                    
-                    "constraints": {
-                        "time_in_ticks": [10],
-                        "prohibited_active_varbits": [
-                                {
-                                    "varbit_id": 57,
-                                    "must_be_value": 0,
-                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
-                                }
-                            ]
-                    }
-                },
-                {
-                    "name": "Obtain a Leviathan's Lure",
-                    "taskID": "obtain_leviathan's_lure",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
                     "assignment_weight": 10,
-                    "boss": "The Leviathan",
                     "required_items": [
                         {
-                            "item": ["Leviathan's Lure"],
-                            "item_ids": [28325],
-                            "quantity": [1]
+                            "item": ["Bow String Spool"],
+                            "item_ids": [31052]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain Rune Essence",
-                    "taskID": "obtain_rune_essence",
+                    "name": "Obtain an Ent Branch",
+                    "taskID": "obtain_ent_branch",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": ["Rune Essence"],
-                            "item_ids": [1436],
-                            "quantity": [1]
+                            "item": ["Ent Branch"],
+                            "item_ids": [31032]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain an Abyssal Lantern",
-                    "taskID": "obtain_abyssal_lantern",
+                    "name": "Obtain a Fletching Knife",
+                    "taskID": "obtain_fletching_knife",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 3,
-                    "assignment_weight": 8,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": ["Abyssal Lantern Unlit"],
-                            "item_ids": [26822],
-                            "quantity": [1]
+                            "item": ["Fletching Knife"],
+                            "item_ids": [31043]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Greenman Mask",
+                    "taskID": "obtain_greenman_mask",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Greenman Mask"],
+                            "item_ids": [31034]
                         }
                     ]
                 },               
                 {
-                    "name": "Equip the Raiments of the Eye Set",
-                    "taskID": "equip_raiments_of_eye_set",
-                    "category": "Runecrafting",
-                    "level": 1,
+                    "name": "Equip an Adamant Battleaxe",
+                    "taskID": "equip_adamant_battleaxe",
+                    "category": "Attack",
                     "completion_type": "EQUIP",
-                    "base_points": 5,
-                    "assignment_weight": 10,
+                    "base_points": 2,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Hat of the Eye"],
-                            "item_ids": [26850, 26858, 26864, 26870]
-                        },
-                        {
-                            "item": ["Robe Bottoms of the Eye"],
-                            "item_ids": [26854, 26862, 26868, 26874
-                        ]
-                        },
-                        {
-                            "item": ["Robe top of the Eye"],
-                            "item_ids": [26852, 26860, 26866, 26872]
-                        },
-                        {
-                            "item": ["Boots of the Eye"],
-                            "item_ids": [26856]
+                            "item": ["Adamant Battleaxe"],
+                            "item_ids": [1371]
                         }
                     ]
-                }
+                },
+                {
+                    "name": "Pickpocket an Auburnvale Guard",
+                    "taskID": "pickpocket_auburnvale_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Auburnvale Guard Level 21"],
+                        "npc_ids": [14663, 14664, 14665, 14666, 14667, 14668, 14669, 14669],
+                        "quantity": [1]
+                    }
+                }              
             ],
             "optional_quests_unlocked": [
                 {
-                    "name": "Imp Catcher",
-                    "points": 1
+                    "name": "Shadows of Custodia",
+                    "points": 3
                 }
             ],
             "is_completed": false
@@ -2638,8 +2529,8 @@
                         ]
                 },
                 {
-                    "name": "Craft some Chaos Runes",
-                    "taskID": "craft_chaos_runes",
+                    "name": "Runecraft some Chaos Runes",
+                    "taskID": "Runecraft_chaos_runes",
                     "category": "Runecrafting",
                     "level": 35,
                     "completion_type": "RUNECRAFTING",

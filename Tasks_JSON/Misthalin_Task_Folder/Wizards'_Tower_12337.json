@@ -45,8 +45,8 @@
                     }
                 },
                 {
-                    "name": "Craft some Chaos Runes",
-                    "taskID": "craft_chaos_runes",
+                    "name": "Runecraft some Chaos Runes",
+                    "taskID": "Runecraft_chaos_runes",
                     "category": "Runecrafting",
                     "level": 35,
                     "completion_type": "RUNECRAFTING",

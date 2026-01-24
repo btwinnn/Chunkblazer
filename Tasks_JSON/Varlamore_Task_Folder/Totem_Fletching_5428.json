@@ -1,0 +1,114 @@
+{
+            "region_id": [5428],
+            "Friendly_Name": "Totem Fletching",
+            "neighbor_ids": [5429, 5684, 5427, 5172],
+            "tasks": [
+                {
+                    "name": "Craft a Basket",
+                    "taskID": "craft_basket",
+                    "category": "Crafting",
+                    "level": 36,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Basket"],
+                            "item_ids": [5376],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bow String Spool",
+                    "taskID": "obtain_bow_string_spool",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Bow String Spool"],
+                            "item_ids": [31052]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ent Branch",
+                    "taskID": "obtain_ent_branch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Ent Branch"],
+                            "item_ids": [31032]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Fletching Knife",
+                    "taskID": "obtain_fletching_knife",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Fletching Knife"],
+                            "item_ids": [31043]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Greenman Mask",
+                    "taskID": "obtain_greenman_mask",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Greenman Mask"],
+                            "item_ids": [31034]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Equip an Adamant Battleaxe",
+                    "taskID": "equip_adamant_battleaxe",
+                    "category": "Attack",
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Battleaxe"],
+                            "item_ids": [1371]
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket an Auburnvale Guard",
+                    "taskID": "pickpocket_auburnvale_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Auburnvale Guard Level 21"],
+                        "npc_ids": [14663, 14664, 14665, 14666, 14667, 14668, 14669, 14669],
+                        "quantity": [1]
+                    }
+                }              
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Shadows of Custodia",
+                    "points": 3
+                }
+            ],
+            "is_completed": false
+        }
