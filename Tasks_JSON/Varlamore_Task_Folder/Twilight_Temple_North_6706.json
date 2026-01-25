@@ -1,0 +1,200 @@
+{
+            "region_id": [6706],
+            "Friendly_Name": "Twilight Temple North",
+            "neighbor_ids": [6707, 6962, 6705, 6450],
+            "tasks": [
+                {
+                    "name": "Mine some Gold Ore",
+                    "taskID": "mine_gold",
+                    "category": "Mining",
+                    "level": 40,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Gold Ore",
+                        "item_ids": [444],
+                        "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt an Iron Bar",
+                    "taskID": "smith_iron_bar",
+                    "category": "Smithing",
+                    "level": 15,
+                    "completion_type": "SMITHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Iron Bar",
+                        "item_ids": [2351]                      
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt a Gold Bar",
+                    "taskID": "smith_gold_bar",
+                    "category": "Smithing",
+                    "level": 40,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Gold Bar",
+                            "item_ids": [2357],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Activate Protect from Melee",
+                    "taskID": "pray_protect_from_melee",
+                    "category": "Prayer",
+                    "level": 43,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "varbit_boolean": 1,
+                    "constraints": {
+                        "varbit_id": 4117
+                    }                   
+                },               
+                {
+                    "name": "Defeat an Emissary Chosen",
+                    "taskID": "defeat_emissary_chosen",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Emissary Chosen"],
+                        "npc_ids": [13764, 14471, 13738, 13739, 13740, 13741, 13742, 13743],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Emissary Acolyte",
+                    "taskID": "defeat_emissary_acolyte",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Emissary Acolyte"],
+                        "npc_ids": [13763, 14470, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13765, 14472, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Emissary Chosen in 1 Hit",
+                    "taskID": "defeat_emissary_chosen_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Emissary Chosen"],
+                        "npc_ids": [13764, 14471, 13738, 13739, 13740, 13741, 13742, 13743],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
+                },
+                {
+                    "name": "Defeat an Emissary Acolyte in 1 Hit",
+                    "taskID": "defeat_emissary_acolyte_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Emissary Acolyte"],
+                        "npc_ids": [13763, 14470, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13765, 14472, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
+                },
+                {
+                "name": "Build a Medium STASH Unit North of the Twilight Temple",
+                "taskID": "build_medium_stash_north_twilight_temple",
+                "category": "Construction",
+                "level": 42,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Medium STASH Unit (inconspicuous hole)",
+                        "object_id": [55403],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Caerula Berries",
+                    "taskID": "obtain_caerula_berries",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                                "item": ["Caerula Berries"],
+                                "item_ids": [30937],
+                                "quantity": [1]
+                            }
+                        ]
+                }                             
+            ],                 
+                "is_completed": false
+        }

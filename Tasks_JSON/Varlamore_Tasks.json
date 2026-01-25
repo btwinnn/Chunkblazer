@@ -1708,144 +1708,124 @@
                     "is_completed": false
         },
         {
-            "region_id": [12341],
-            "Friendly_Name": "Barbarian Village",
-            "neighbor_ids": [12597, 12340, 12085, 12342],
+            "region_id": [6706],
+            "Friendly_Name": "Twilight Temple North",
+            "neighbor_ids": [6707, 6962, 6705, 6450],
             "tasks": [
-                {                           
-                    "name": "Catch some Raw Trout",
-                    "taskID": "catch_raw_trout",
-                    "category": "Fishing",
-                    "level": 20,
-                    "completion_type": "FISHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Raw Trout",
-                        "item_ids": [335],
-                        "quantity": [1, 100]
-                        }
-                    ]       
-                },
-                {                           
-                    "name": "Cook some Trout",
-                    "taskID": "cook_raw_trout",
-                    "category": "Cooking",
-                    "level": 15,
-                    "completion_type": "COOKING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Trout",
-                        "item_ids": [333],
-                        "quantity": [1, 100]
-                        }
-                    ]       
-                },
                 {
-                    "name": "Obtain Stronghold of Security Boots",
-                    "taskID": "obtain_stronghold_security_boots",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                            {
-                                "item": ["Fancy Boots", "Fighting Boots", "Fancier Boots"],
-                                "item_ids": [9005, 9006, 28672],
-                                "quantity": [1]
-                            }
-                        ]
-                },
-                {
-                    "name": "Defeat some Level 10 Barbarians",
-                    "taskID": "defeat_level_10_barbarians",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Barbarian Level 10"],
-                        "npc_ids": [3065, 3066, 3067, 3071, 3056, 3070, 3061, 3060, 3059, 3064, 10984, 10985, 10987],
-                        "quantity": [1, 25]
-                    }
-                },
-                {
-                    "name": "Defeat Gunthor the Brave with your Bare Fists",
-                    "taskID": "defeat_gunthor_brave_no_weapon",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Gunthor the Brave"],
-                        "npc_ids": [299],
-                        "quantity": [1]
-                    },
-
-                    "constraints": {
-                        "must_be_empty_slots": ["WEAPON"]
-                    }
-                },
-                {
-                    "name": "Mine some Coal",
-                    "taskID": "mine_coal",
+                    "name": "Mine some Gold Ore",
+                    "taskID": "mine_gold",
                     "category": "Mining",
-                    "level": 30,
+                    "level": 40,
                     "completion_type": "MINING",
                     "base_points": 2,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                        "item": "Coal",
-                        "item_ids": [453],
-                        "quantity": [1, 50]
+                        "item": "Gold Ore",
+                        "item_ids": [444],
+                        "quantity": [1, 25]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Minotaur on Task",
-                    "taskID": "defeat_minotaur_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt an Iron Bar",
+                    "taskID": "smith_iron_bar",
+                    "category": "Smithing",
+                    "level": 15,
+                    "completion_type": "SMITHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Iron Bar",
+                        "item_ids": [2351]                      
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt a Gold Bar",
+                    "taskID": "smith_gold_bar",
+                    "category": "Smithing",
+                    "level": 40,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Gold Bar",
+                            "item_ids": [2357],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Activate Protect from Melee",
+                    "taskID": "pray_protect_from_melee",
+                    "category": "Prayer",
+                    "level": 43,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "varbit_boolean": 1,
+                    "constraints": {
+                        "varbit_id": 4117
+                    }                   
+                },               
+                {
+                    "name": "Defeat an Emissary Chosen",
+                    "taskID": "defeat_emissary_chosen",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Minotaur"],
-                        "npc_ids": [2481, 2483],
+                        "npc": ["Emissary Chosen"],
+                        "npc_ids": [13764, 14471, 13738, 13739, 13740, 13741, 13742, 13743],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Equip an Adamant Full Helm",
-                    "taskID": "equip_adamant_full_helm",
-                    "category": "Defence",
-                    "level": 30,
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": "Adamant Full Helm",
-                            "item_ids": [1161]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Level 5 Goblin in 1 Hit",
-                    "taskID": "defeat_level_5_goblin_fast",
+                    "name": "Defeat an Emissary Acolyte",
+                    "taskID": "defeat_emissary_acolyte",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Emissary Acolyte"],
+                        "npc_ids": [13763, 14470, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13765, 14472, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Emissary Chosen in 1 Hit",
+                    "taskID": "defeat_emissary_chosen_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Goblin Level 5"],
-                        "npc_ids": [3045, 3073, 3074, 3075, 3076],
+                        "npc": ["Emissary Chosen"],
+                        "npc_ids": [13764, 14471, 13738, 13739, 13740, 13741, 13742, 13743],
                         "quantity": [1]
-                        },
+                    },
                     
                     "constraints": {
                         "time_in_ticks": [1],
@@ -1859,18 +1839,71 @@
                         }
                 },
                 {
-                    "name": "Defeat an Ankou",
-                    "taskID": "defeat_ankou",
+                    "name": "Defeat an Emissary Acolyte in 1 Hit",
+                    "taskID": "defeat_emissary_acolyte_1_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Ankou"],
-                        "npc_ids": [2514, 2517, 2515, 2518, 2516, 2519, 6608, 7257, 7864],
+                        "npc": ["Emissary Acolyte"],
+                        "npc_ids": [13763, 14470, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13765, 14472, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737, 13732, 13733, 13734, 13735, 13736, 13737],
                         "quantity": [1]
-                    }
-                }                            
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
+                },
+                {
+                "name": "Build a Medium STASH Unit North of the Twilight Temple",
+                "taskID": "build_medium_stash_north_twilight_temple",
+                "category": "Construction",
+                "level": 42,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Medium STASH Unit (inconspicuous hole)",
+                        "object_id": [55403],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Caerula Berries",
+                    "taskID": "obtain_caerula_berries",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                                "item": ["Caerula Berries"],
+                                "item_ids": [30937],
+                                "quantity": [1]
+                            }
+                        ]
+                }                             
             ],                 
                 "is_completed": false
         },
