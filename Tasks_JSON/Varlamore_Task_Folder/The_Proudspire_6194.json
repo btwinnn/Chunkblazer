@@ -1,0 +1,67 @@
+{
+            "region_id": [6194],
+            "Friendly_Name": "The Proudspire",
+            "neighbor_ids": [6195, 6450, 6193, 5938],
+            "tasks": [
+                {
+                    "name": "Defeat a White Wolf in 1 Hit",
+                    "taskID": "defeat_white_wolf_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["White Wolf"],
+                        "npc_ids": [107, 108],
+                        "quantity": [1]
+                    },               
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }, 
+                {
+                    "name": "Defeat a White Wolf with nothing Equipped",
+                    "taskID": "defeat_white_wolf_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["White Wolf"],
+                        "npc_ids": [107, 108],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                },
+                {
+                    "name": "Use the Level 45 Agility Rock Climb at The Proudspire",
+                    "taskID": "agility_level_45_rock_climb_proudspire",
+                    "category": "Agility",
+                    "level": 45,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Use the Level 71 Agility Rock Climb at The Proudspire",
+                    "taskID": "agility_level_71_rock_climb_proudspire",
+                    "category": "Agility",
+                    "level": 45,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5
+                }                                                      
+            ],                 
+                "is_completed": false
+        }
