@@ -57,7 +57,7 @@
                     "name": "Use the Level 71 Agility Rock Climb at The Proudspire",
                     "taskID": "agility_level_71_rock_climb_proudspire",
                     "category": "Agility",
-                    "level": 45,
+                    "level": 71,
                     "completion_type": "AGILITY",
                     "base_points": 3,
                     "assignment_weight": 5

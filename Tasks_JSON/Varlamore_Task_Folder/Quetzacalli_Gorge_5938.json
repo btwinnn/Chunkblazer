@@ -1,0 +1,173 @@
+{
+            "region_id": [5938],
+            "Friendly_Name": "Quetzacalli Gorge",
+            "neighbor_ids": [5939, 6194, 5937, 5682],
+            "tasks": [
+                {
+                    "name": "Talk to Prince Itzla",
+                    "taskID": "talk_to_prince_itzla",
+                    "category": "Dialogue",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Prince Itzla"],
+                        "npc_ids": [13784, 13785, 12650, 12651, 14286, 14276, 13691, 13693, 13786],
+                        "quantity": [1]
+                    }
+                }, 
+                {                    
+                    "name": "Pickpocket a Master Farmer",
+                    "taskID": "pickpocket_master_farmer",
+                    "category": "Thieving",
+                    "level": 38,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                    "npc": "Master Farmer",
+                    "npc_ids": [5730, 14757, 5731, 11940, 11941, 13240, 13241, 13242, 13243, 13236, 13237, 13238, 13239, 14756, 14758, 14755]                    
+                    }
+                },
+                {                    
+                    "name": "Pickpocket a Master Farmer for a Ranarr Seed",
+                    "taskID": "pickpocket_master_farmer",
+                    "category": "Thieving",
+                    "level": 38,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                    "npc": "Master Farmer",
+                    "npc_ids": [5730, 14757, 5731, 11940, 11941, 13240, 13241, 13242, 13243, 13236, 13237, 13238, 13239, 14756, 14758, 14755]                    
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Ranarr Seed",
+                        "dropped_item_id": [5295],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {                    
+                    "name": "Pickpocket a Master Farmer for a Snape Grass Seed",
+                    "taskID": "pickpocket_master_farmer",
+                    "category": "Thieving",
+                    "level": 38,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                    "npc": "Master Farmer",
+                    "npc_ids": [5730, 14757, 5731, 11940, 11941, 13240, 13241, 13242, 13243, 13236, 13237, 13238, 13239, 14756, 14758, 14755]                    
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Snape Grass Seed",
+                        "dropped_item_id": [22879],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Yew Shortbow",
+                    "taskID": "fletch_yew_shortbow",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Yew Shortbow"],
+                            "item_ids": [857],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Burn a Yew Log",
+                    "taskID": "burn_yew_log",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Spin some Flax",
+                    "taskID": "Spin_flax",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "category": "Crafting",
+                    "level": 10,
+                    "completion_type": "CRAFTING",
+                    "required_items": [
+                        {
+                        "item": "Bow String",
+                        "item_ids": [1777],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket a Varlamore Guard",
+                    "taskID": "pickpocket_varlamore_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Varlamore Guard",
+                    "taskID": "defeat_a_varlamore_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Travel to the Quetzacalli Gorge using the Mountain Guide",
+                    "taskID": "travel_quetzacalli_gorge_using_mountain_guide",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }
+            ],                 
+                "is_completed": false
+        }
