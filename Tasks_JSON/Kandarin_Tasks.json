@@ -4543,15 +4543,7 @@
             "region_id": [10030],
             "Friendly_Name": "Feldip Hills Glider",
             "neighbor_ids": [10031, 10286, 10029, 9774],
-            "tasks": [
-                {
-                    "name": "Use the Glider to Travel to the Feldip Hills",
-                    "taskID": "glider_feldip_hills",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
+            "tasks": [            
                 {
                     "name": "Defeat some Level 64 Wolves",
                     "taskID": "defeat_level_64_wolves",
@@ -4575,7 +4567,7 @@
                     "target_npc": {
                         "npc": ["Level 64 Wolf"],
                         "npc_ids": [106, 3912],
-                        "quantity": [1, 25]
+                        "quantity": [1]
                     },               
                     "constraints": {
                         "time_in_ticks": [28],

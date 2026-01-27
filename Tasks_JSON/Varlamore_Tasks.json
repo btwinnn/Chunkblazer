@@ -2308,195 +2308,225 @@
             "is_completed": false
         },
         {
-            "region_id": [13110],
-            "Friendly_Name": "Lumber Yard",
-            "neighbor_ids": [12854, 13111, 13109, 13366],
+            "region_id": [6450],
+            "Friendly_Name": "Tower of Ascension",
+            "neighbor_ids": [6451, 6706, 6449, 6194],
             "tasks": [
                 {
-                "name": "Build an Easy STASH Unit at the Lumber Yard",
-                "taskID": "build_easy_stash_lumber_yard",
-                "category": "Construction",
-                "level": 27,
-                "completion_type": "CONSTRUCTION",
-                "base_points": 1,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Plank",
-                        "item_ids": [960]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
-                        {
-                        "object": "Easy STASH Unit (inconspicuous bush)",
-                        "object_id": [28981],
-                        "interaction_type": "use_item_on"
-                        }
-                    ]
+                    "name": "Defeat some Frost Naguas",
+                    "taskID": "defeat_some_frost_naguas",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Frost Nagua"],
+                        "npc_ids": [13728, 13787, 13788],
+                        "quantity": [1, 25]
+                    }
                 },
                 {
-                    "name": "Obtain an Oak Plank",
-                    "taskID": "obtain_oak_plank",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
+                    "name": "Defeat some Frost Naguas on Task",
+                    "taskID": "defeat_some_frost_naguas_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Frost Nagua"],
+                        "npc_ids": [13728, 13787, 13788],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Frost Nagua in 12 Seconds",
+                    "taskID": "defeat_frost_nagua_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "required_items": [
+                    "target_npc": {
+                        "npc": ["Frost Nagua"],
+                        "npc_ids": [13728, 13787, 13788],
+                        "quantity": [1]
+                    },            
+                    "constraints": {
+                        "time_in_ticks": [20],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Defeat a Frost Nagua without using Prayer",
+                    "taskID": "defeat_frost_nagua_no_prayer",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Frost Nagua"],
+                        "npc_ids": [13728, 13787, 13788],
+                        "quantity": [1]
+                    },
+                                   
+                    "prohibited_active_varbits": [
                             {
-                                "item": ["Oak Plank"],
-                                "item_ids": [8778],
-                                "quantity": [1]
+                            "varbit_id": 375,
+                            "must_be_value": 0,
+                            "fail_message": "Prayer use is prohibited for this combat task."
                             }
                         ]
                 },
                 {
-                    "name": "Obtain a Teak Plank",
-                    "taskID": "obtain_teak_plank",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
+                    "name": "Defeat a Frost Nagua for a Brimstone Key",
+                    "taskID": "Defeat_frost_nagua_for_brimstone_key",
                     "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                            {
-                                "item": ["Teak Plank"],
-                                "item_ids": [8780],
-                                "quantity": [1]
-                            }
-                        ]
-                },
-                {
-                    "name": "Travel to the Lumber Yard using the Hot Air Balloon",
-                    "taskID": "travel_lumber_yard_hot_air_balloon",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
-                {
-                    "name": "Fletch a Yew Shortbow(u)",
-                    "taskID": "fletch_yew_shortbow(u)",
-                    "category": "Fletching",
-                    "level": 65,
-                    "completion_type": "FLETCHING",
-                    "base_points": 3,
                     "assignment_weight": 3,
-                    "required_items": [
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Frost Nagua"],
+                        "npc_ids": [13728, 13787, 13788],
+                        "quantity": [1]
+                    },
+                    "constraints": [
                         {
-                            "item": ["Yew Shortbow(u)"],
-                            "item_ids": [68],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain Chaos Gauntlets",
-                    "taskID": "obtain_chaos_gauntlets",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 8,
-                    "required_items": [
-                            {
-                                "item": ["Chaos Gauntlet"],
-                                "item_ids": [777]
-                            }
-                        ]
-                },
-                {
-                    "name": "Runecraft an Earth Rune",
-                    "taskID": "runecraft_earth_rune",
-                    "is_unlocked": false,
-                    "category": "Runecrafting",
-                    "level": 9,
-                    "completion_type": "RUNECRAFTING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                            {
-                            "item": "Earth Rune",
-                            "item_ids": [557],
-                            "quantity": [1]
-                            }
-                        ]
-                },
-                {
-                    "name": "Runecraft a Mud Rune",
-                    "taskID": "runecraft_mud_rune",
-                    "is_unlocked": false,
-                    "category": "Runecrafting",
-                    "level": 13,
-                    "completion_type": "RUNECRAFTING",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                            {
-                            "item": "Mud Rune",
-                            "item_ids": [4698],
-                            "quantity": [1]
-                            }
-                        ]
-                },
-                {
-                    "name": "Create an Earth Tiara",
-                    "taskID": "runecraft_earth_tiara",
-                    "category": "Runecrafting",
-                    "level": 1,
-                    "completion_type": "RUNECRAFTING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                            {
-                            "item": "Earth Tiara",
-                            "item_ids": [5535],
-                            "quantity": [1]
-                            }
-                        ]
-                },
-                {
-                    "name": "Runecraft some Chaos Runes",
-                    "taskID": "Runecraft_chaos_runes",
-                    "category": "Runecrafting",
-                    "level": 35,
-                    "completion_type": "RUNECRAFTING",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                        "item": "Chaos Rune",
-                        "item_ids": [562],
+                        "dropped_item": "Brimstone Key",
+                        "dropped_item_id": [23083],
                         "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Create a Chaos Tiara",
-                    "taskID": "runecraft_chaos_tiara",
-                    "category": "Runecrafting",
-                    "level": 1,
-                    "completion_type": "RUNECRAFTING",
+                    "name": "Defeat a Frost Nagua for a Pendant of Ates",
+                    "taskID": "Defeat_frost_nagua_for_pendant_of_ates",
                     "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                            {
-                            "item": "Chaos Tiara",
-                            "item_ids": [5543],
-                            "quantity": [1]
-                            }
-                        ]
-                }
-            ],
-                "optional_quests_unlocked": [
-                    {
-                        "name": "Defender of Varrock",
-                        "points": 3
+                    "assignment_weight": 3,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Frost Nagua"],
+                        "npc_ids": [13728, 13787, 13788],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Pendant of Ates",
+                        "dropped_item_id": [29892],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Frost Nagua for a Glacial Temotli",
+                    "taskID": "Defeat_frost_nagua_for_glacial_temotli",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Frost Nagua"],
+                        "npc_ids": [13728, 13787, 13788],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Glacial Temotli",
+                        "dropped_item_id": [29889],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Frost Nagua for a Tooth Half of Moon Key",
+                    "taskID": "Defeat_frost_nagua_for_tooth_half_moon_key",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Frost Nagua"],
+                        "npc_ids": [13728, 13787, 13788],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Tooth Half of Moon Key",
+                        "dropped_item_id": [30105],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Cave Crawler",
+                    "taskID": "defeat_cave_crawler",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Cave Crawler"],
+                        "npc_ids": [13800, 13801, 406, 407, 408, 409],
+                        "quantity": [1]
                     }
-                ],
-             
+                },
+                {
+                    "name": "Defeat a Frost Crab",
+                    "taskID": "defeat_frost_crab",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Frost Crab"],
+                        "npc_ids": [13789, 13791],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Frost Crab in 1 Hit",
+                    "taskID": "defeat_frost_crab_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Frost Crab"],
+                        "npc_ids": [13789, 13791],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
+                },
+                {
+                    "name": "Obtain some Sunfire Splinters",
+                    "taskID": "obtain_sunfire_splinters",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Sunfire Splinters"],
+                            "item_ids": [31084],
+                            "quantity": [250]
+                        }
+                    ]
+                }          
+            ],          
             "is_completed": false
         },
         {

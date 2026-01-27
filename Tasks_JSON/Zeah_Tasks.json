@@ -3366,7 +3366,7 @@
                 },
                 {
                     "name": "Defeat a Moss Giant for a Mithril Sword",
-                    "taskID": "Defeat_moss_giant_for_mithril Sword",
+                    "taskID": "Defeat_moss_giant_for_mithril_Sword",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "category": "Combat",
