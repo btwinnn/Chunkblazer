@@ -2052,7 +2052,7 @@
                     "level": 65,
                     "completion_type": "FLETCHING",
                     "base_points": 3,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
                             "item": ["Yew Shortbow"],
@@ -2099,7 +2099,7 @@
                     "base_points": 1,
                     "assignment_weight": 1,
                     "category": "Crafting",
-                    "level": 10,
+                    "level": 8,
                     "completion_type": "CRAFTING",
                     "required_items": [
                         {
@@ -2116,7 +2116,7 @@
                     "level": 40,
                     "completion_type": "THIEVING",
                     "base_points": 2,
-                    "assignment_weight": 3,
+                    "assignment_weight": 5,
                     "target_npc": {
                         "npc": ["Varlamore Guard Level 21"],
                         "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
@@ -2129,7 +2129,7 @@
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "target_npc": {
                         "npc": ["Varlamore Guard Level 21"],
                         "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
@@ -2148,60 +2148,37 @@
                 "is_completed": false
         },
         {
-            "region_id": [12854],
-            "Friendly_Name": "Varrock Palace",
-            "neighbor_ids": [12598, 12855, 13110, 12853],
+            "region_id": [5682],
+            "Friendly_Name": "Mons Gratia",
+            "neighbor_ids": [5683, 5938, 5681, 5426],
             "tasks": [
                 {                           
-                    "name": "Defeat Scurrius in a Solo Instance",
-                    "taskID": "defeat_scurrius_solo",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 3,
-                    "assignment_weight": 10,
-                    "boss": "Scurrius",
-                    "target_npc": {
-                        "npc": ["Scurrius"],
-                        "npc_ids": [7222],
-                        "quantity": [1, 10]
-                    }
-                },
-                {
-                    "name": "Defeat a Varrock Guard for some Bones",
-                    "taskID": "defeat_a_varrock_guard_for_bones",
+                    "name": "Defeat a White Jaguar",
+                    "taskID": "defeat_white_Jaguar",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Varrock Guard Level 21"],
-                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
-                        "quantity": [1, 25]
-                    },
-                    "constraints": [
-                        {
-                        "dropped_item": "Bones",
-                        "dropped_item_id": [526],
+                        "npc": ["White Jaguar"],
+                        "npc_ids": [12979],
                         "quantity": [1]
-                        }
-                    ]
+                    }
                 },
-                {                           
-                    "name": "Defeat Scurrius in 2:25 in a Solo Instance",
-                    "taskID": "defeat_scurrius_fast",
+                {
+                    "name": "Defeat a White Jaguar in 12 Seconds",
+                    "taskID": "defeat_a_white_jaguar_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 4,
-                    "assignment_weight": 5,
-                    "boss": "Scurrius",
+                    "base_points": 1,
+                    "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Scurrius"],
-                        "npc_ids": [7222],
+                        "npc": ["White Jaguar"],
+                        "npc_ids": [12979],
                         "quantity": [1]
-                    }, 
-                    
+                    },
                     "constraints": {
-                        "time_in_ticks": [200],
+                        "time_in_ticks": [20],
                         "prohibited_active_varbits": [
                                 {
                                     "varbit_id": 57,
@@ -2211,90 +2188,114 @@
                             ]
                         }
                 },
-                {                           
-                    "name": "Defeat Scurrius with only a Weapon Equipped in a Solo Instance",
-                    "taskID": "defeat_scurrius_weapon_only",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 4,
-                    "assignment_weight": 5,
-                    "boss": "Scurrius",
-                    "target_npc": {
-                        "npc": ["Scurrius"],
-                        "npc_ids": [7222],
-                        "quantity": [1]
-                    }, 
-                    
-                    "constraints": {
-                        "equippable_slots": ["WEAPON"]
-                    }
-                },
-                {                           
-                    "name": "Defeat Bryophyta",
-                    "taskID": "defeat_bryophyta",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 2,
-                    "assignment_weight": 10,
-                    "boss": "Bryophyta",
-                    "target_npc": {
-                        "npc": ["Bryophyta"],
-                        "npc_ids": [8195],
-                        "quantity": [1, 10]
-                    }
-                },
                 {
-                    "name": "Obtain Scurrius' Spine",
-                    "taskID": "obtain_scurrius_spine",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
+                    "name": "Craft a Mixed Hide Cape",
+                    "taskID": "craft_mixed_hide_cape",
+                    "category": "Crafting",
+                    "level": 68,
+                    "completion_type": "CRAFTING",
                     "base_points": 3,
                     "assignment_weight": 8,
-                    "boss": "Scurrius",
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Cape"],
+                            "item_ids": [29289],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mixed Hide Cape",
+                    "taskID": "equip_mixed_hide_cape",
+                    "category": ["Ranged", "Defence"],
+                    "level": [60, 50],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Cape"],
+                            "item_ids": [29289]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Cerulean Twitch",
+                    "taskID": "catch_cerulean_twitch",
+                    "category": "Hunter",
+                    "level": 11,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
                     "required_items": [
                             {
-                                "item": ["Scurrius' Spine"],
-                                "item_ids": [28798],
-                                "quantity": [1, 5]
+                            "item": "Blue Feather",
+                            "item_ids": [10089]
+                            },
+                            {
+                            "item": "Raw Bird Meat",
+                            "item_ids": [9978]
                             }
-                        ]
+                        ]             
+                },
+                {
+                    "name": "Catch a Sapphire Glacialis in a Butterfly Jar",
+                    "taskID": "catch_sapphire_glacialis_in_butterfly_jar",
+                    "category": "Hunter",
+                    "level": 25,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Sapphire Glacialis",
+                            "item_ids": [10018]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Catch a Snowy Knight in a Butterfly Jar",
+                    "taskID": "catch_snowy_knight_in_butterfly_jar",
+                    "category": "Hunter",
+                    "level": 35,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Snowy Knight",
+                            "item_ids": [10016]
+                            }                   
+                        ]             
                 },
                 {                           
-                    "name": "Defeat Bryophyta in 60 Seconds",
-                    "taskID": "defeat_bryophyta",
+                    "name": "Defeat an Icefiend",
+                    "taskID": "defeat_icefiend",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "boss": "Bryophyta",
+                    "base_points": 1,
+                    "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Bryophyta"],
-                        "npc_ids": [8195],
-                        "quantity": [1, 10]
-                    },
-
-                    "constraints": {
-                        "time_in_ticks": [36]
-                        }
-                },
-                {                           
-                    "name": "Defeat Bryophyta in 60 Seconds with only a Weapon Equipped",
-                    "taskID": "defeat_bryophyta_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 4,
-                    "assignment_weight": 5,
-                    "boss": "Bryophyta",
-                    "target_npc": {
-                        "npc": ["Bryophyta"],
-                        "npc_ids": [8195],
+                        "npc": ["Icefiend"],
+                        "npc_ids": [4813, 3140],
                         "quantity": [1]
-                    }, 
-                    
+                    }
+                },
+                {                           
+                    "name": "Defeat an Icefiend in 1 Hit",
+                    "taskID": "defeat_icefiend_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Icefiend"],
+                        "npc_ids": [4813, 3140],
+                        "quantity": [1]
+                    },
                     "constraints": {
-                        "time_in_ticks": [36],
-                         "equippable_slots": ["WEAPON"],
-                         "prohibited_active_varbits": [
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
                                 {
                                     "varbit_id": 57,
                                     "must_be_value": 0,
@@ -2302,52 +2303,8 @@
                                 }
                             ]
                         }
-                },
-                {
-                    "name": "Obtain Bryophyta's Essence",
-                    "taskID": "obtain_bryophyta_essence",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "boss": "Bryophyta",
-                    "required_items": [
-                            {
-                                "item": ["Bryophyta's Essence"],
-                                "item_ids": [22372],
-                                "quantity": [1]
-                            }
-                        ]
-                },
-                {
-                    "name": "Talk to an Estate Agent",
-                    "taskID": "talk_to_estate_agent",
-                    "category": "Dialogue",
-                    "completion_type": "NPC_DIALOGUE",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Estate Agent"],
-                        "npc_ids": [3097, 13343],
-                        "quantity": [1]
-                    }
-                }
-
-            ],
-                "optional_quests_unlocked": [
-                    {
-                        "name": "Shield of Arrav",
-                        "points": 1
-                    },
-                    {
-                        "name": "Garden of Tranquility",
-                        "points": 2
-                    },
-                    {
-                        "name": "Priest in Peril",
-                        "points": 1
-                    }                  
-                ],                 
+                }                                
+            ],                 
             "is_completed": false
         },
         {
