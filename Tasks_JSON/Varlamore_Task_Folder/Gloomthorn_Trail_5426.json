@@ -1,0 +1,135 @@
+{
+            "region_id": [5426],
+            "Friendly_Name": "Gloomthorn Trail",
+            "neighbor_ids": [5427, 5682, 5425, 5170],
+            "tasks": [
+                {
+                    "name": "Defeat some Level 64 Wolves",
+                    "taskID": "defeat_level_64_wolves",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 64 Wolf"],
+                        "npc_ids": [106, 3912],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 64 Wolf in 17 Seconds",
+                    "taskID": "defeat_level_64_wolf_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 64 Wolf"],
+                        "npc_ids": [106, 3912],
+                        "quantity": [1]
+                    },               
+                    "constraints": {
+                        "time_in_ticks": [28],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 64 Wolf on Task",
+                    "taskID": "defeat_level_64_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 64 Wolf"],
+                        "npc_ids": [106, 3912],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 27 Giant Spider",
+                    "taskID": "defeat_leve_27_giant_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 27 Giant Spider"],
+                        "npc_ids": [3018],
+                        "quantity": [1]
+                    }                    
+                },
+                {                           
+                    "name": "Defeat a Giant Bat in 1 Hit",
+                    "taskID": "defeat_giant_bat_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]                       
+                        }
+                },
+                {                           
+                    "name": "Defeat a Giant Bat in 10 Seconds",
+                    "taskID": "defeat_giant_bat_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [17],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]                       
+                        }
+                },
+                {                           
+                    "name": "Defeat a Giant Bat with only a Weapon Equipped",
+                    "taskID": "defeat_giant_bat_weapon_only",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "equippable_slots": ["WEAPON"]
+                    }
+                }           
+            ],           
+            "is_completed": false
+        } 

@@ -2530,52 +2530,37 @@
             "is_completed": false
         },
         {
-            "region_id": [13366],
-            "Friendly_Name": "Silvarea",
-            "neighbor_ids": [13110, 13365, 13622, 13367],
+            "region_id": [5426],
+            "Friendly_Name": "Gloomthorn Trail",
+            "neighbor_ids": [5427, 5682, 5425, 5170],
             "tasks": [
                 {
-                    "name": "Equip a Zombie Axe",
-                    "taskID": "equip_zombie_axe",
-                    "category": "Attack",
-                    "level": 65,
-                    "completion_type": "EQUIP",
-                    "base_points": 3,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": ["Zombie Axe"],
-                            "item_ids": [28810]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat some Armoured Zombies",
-                    "taskID": "defeat_armoured_zombies",
+                    "name": "Defeat some Level 64 Wolves",
+                    "taskID": "defeat_level_64_wolves",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Armoured Zombie"],
-                        "npc_ids": [12730, 12731, 12732, 12733, 12734, 12736, 12738, 12755, 12757, 12758, 12735, 12738, 12739, 12761, 12763, 14135, 14136, 12720, 12721, 12722, 12723, 12724, 12725, 12726, 12727, 12728, 12729, 14113, 14114, 14115,  	14116, 14117, 14118, 14119, 14120, 14121, 14122],
-                        "quantity": [1, 100]
+                        "npc": ["Level 64 Wolf"],
+                        "npc_ids": [106, 3912],
+                        "quantity": [1, 25]
                     }
                 },
                 {
-                    "name": "Defeat a Level 6 Bat in 1 Hit",
-                    "taskID": "defeat_bat_fast",
+                    "name": "Defeat a Level 64 Wolf in 17 Seconds",
+                    "taskID": "defeat_level_64_wolf_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Bat Level 6"],
-                        "npc_ids": [2827, 10888, 14042],
+                        "npc": ["Level 64 Wolf"],
+                        "npc_ids": [106, 3912],
                         "quantity": [1]
-                    },
+                    },               
                     "constraints": {
-                        "time_in_ticks": [1],
+                        "time_in_ticks": [28],
                         "prohibited_active_varbits": [
                                 {
                                     "varbit_id": 57,
@@ -2586,107 +2571,233 @@
                     }
                 },
                 {
-                    "name": "Mine some Limestone",
-                    "taskID": "mine_limestone",
-                    "category": "Mining",
-                    "level": 10,
-                    "completion_type": "MINING",
+                    "name": "Defeat a Level 64 Wolf on Task",
+                    "taskID": "defeat_level_64_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Limestone"],
-                            "item_ids": [3211],
-                            "quantity": [1, 10]
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Level 64 Wolf"],
+                        "npc_ids": [106, 3912],
+                        "quantity": [1]
+                    }
                 },
                 {
-                "name": "Build an Easy STASH Unit in Silvaera",
-                "taskID": "build_easy_stash_silvarea",
-                "category": "Construction",
-                "level": 27,
-                "completion_type": "CONSTRUCTION",
-                "base_points": 1,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Plank",
-                        "item_ids": [960]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
-                        {
-                        "object": "Easy STASH Unit (inconspicuous rocks)",
-                        "object_id": [28961],
-                        "interaction_type": "use_item_on"
-                        }
-                    ]
-                },
-                {
-                    "name": "Fletch some Arrow Shafts",
-                    "taskID": "fletch_arrow_shafts",
-                    "category": "Fletching",
-                    "level": 1,
-                    "completion_type": "FLETCHING",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Arrow Shaft"],
-                            "item_ids": [52],
-                            "quantity": [1, 1000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat some Level 6 Bats",
-                    "taskID": "defeat_bats",
+                    "name": "Defeat a Level 27 Giant Spider",
+                    "taskID": "defeat_leve_27_giant_spider",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Bat Level 6"],
-                        "npc_ids": [2827, 10888, 14042],
+                        "npc": ["Level 27 Giant Spider"],
+                        "npc_ids": [3018],
+                        "quantity": [1]
+                    }                    
+                },
+                {                           
+                    "name": "Defeat a Giant Bat in 1 Hit",
+                    "taskID": "defeat_giant_bat_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]                       
+                        }
+                },
+                {                           
+                    "name": "Defeat a Giant Bat in 10 Seconds",
+                    "taskID": "defeat_giant_bat_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [17],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]                       
+                        }
+                },
+                {                           
+                    "name": "Defeat a Giant Bat with only a Weapon Equipped",
+                    "taskID": "defeat_giant_bat_weapon_only",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "equippable_slots": ["WEAPON"]
+                    }
+                }           
+            ],           
+            "is_completed": false
+        },
+        {
+            "region_id": [5426],
+            "Friendly_Name": "Gloomthorn Trail",
+            "neighbor_ids": [5427, 5682, 5425, 5170],
+            "tasks": [
+                {
+                    "name": "Defeat some Level 64 Wolves",
+                    "taskID": "defeat_level_64_wolves",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 64 Wolf"],
+                        "npc_ids": [106, 3912],
                         "quantity": [1, 25]
                     }
                 },
                 {
-                    "name": "Defeat an Armoured Zombie in 18 Seconds",
-                    "taskID": "defeat_armoured_zombies",
+                    "name": "Defeat a Level 64 Wolf in 17 Seconds",
+                    "taskID": "defeat_level_64_wolf_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Armoured Zombie"],
-                        "npc_ids": [12730, 12731, 12732, 12733, 12734, 12736, 12738, 12755, 12757, 12758, 12735, 12738, 12739, 12761, 12763, 14135, 14136, 12720, 12721, 12722, 12723, 12724, 12725, 12726, 12727, 12728, 12729, 14113, 14114, 14115,  	14116, 14117, 14118, 14119, 14120, 14121, 14122],
+                        "npc": ["Level 64 Wolf"],
+                        "npc_ids": [106, 3912],
+                        "quantity": [1]
+                    },               
+                    "constraints": {
+                        "time_in_ticks": [28],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 64 Wolf on Task",
+                    "taskID": "defeat_level_64_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 64 Wolf"],
+                        "npc_ids": [106, 3912],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 27 Giant Spider",
+                    "taskID": "defeat_leve_27_giant_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 27 Giant Spider"],
+                        "npc_ids": [3018],
+                        "quantity": [1]
+                    }                    
+                },
+                {                           
+                    "name": "Defeat a Giant Bat in 1 Hit",
+                    "taskID": "defeat_giant_bat_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]                       
+                        }
+                },
+                {                           
+                    "name": "Defeat a Giant Bat in 10 Seconds",
+                    "taskID": "defeat_giant_bat_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [17],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]                       
+                        }
+                },
+                {                           
+                    "name": "Defeat a Giant Bat with only a Weapon Equipped",
+                    "taskID": "defeat_giant_bat_weapon_only",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Bat"],
+                        "npc_ids": [4504, 6824, 2834],
                         "quantity": [1]
                     },
-
+                    
                     "constraints": {
-                        "time_in_ticks": [30]
-                    }             
-                }
-            ],
-                "optional_quests_unlocked": [
-                    {
-                        "name": "Rag and Bone Man I",
-                        "points": 1
-                    },
-                    {
-                        "name": "Rag and Bone Man II",
-                        "points": 3
+                        "equippable_slots": ["WEAPON"]
                     }
-                ],
-             
+                }           
+            ],           
             "is_completed": false
-        }           
+        }            
     ]
 }
