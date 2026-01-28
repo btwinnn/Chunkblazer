@@ -1,0 +1,197 @@
+{
+            "region_id": [5425],
+            "Friendly_Name": "Tlati Rainforest North",
+            "neighbor_ids": [5426, 5681, 5424, 5169],
+            "tasks": [
+                {
+                    "name": "Chop a Teak Tree",
+                    "taskID": "Chop_willow_tree",
+                    "category": "Woodcutting",
+                    "level": 35,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Teak Log",
+                    "taskID": "burn_teak_log",
+                    "category": "Firemaking",
+                    "level": 35,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Red Chinchompa",
+                    "taskID": "catch_red_chinchimpa",
+                    "category": "Hunter",
+                    "level": 63,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Red Chinchompa",
+                            "item_ids": [10034]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Obtain a Red Chinchompa Tuft",
+                    "taskID": "obtain_red_chinchompa_tuft",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Red Chinchompa Tuft"],
+                            "item_ids": [29235],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 40 Agility Log Balance Shortcut in the Tlati Rainforest",
+                    "taskID": "agility_level_40_agility_log_balance_tlati_rainforest",
+                    "category": "Agility",
+                    "level": 40,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Defeat a Jaguar in 1 Hit",
+                    "taskID": "defeat_jaguar_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Jaguar"],
+                        "npc_ids": [12976],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
+                },
+                {
+                    "name": "Craft a Mixed Hide Cape",
+                    "taskID": "craft_mixed_hide_cape",
+                    "category": "Crafting",
+                    "level": 68,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Cape"],
+                            "item_ids": [29289],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mixed Hide Cape",
+                    "taskID": "equip_mixed_hide_cape",
+                    "category": ["Ranged", "Defence"],
+                    "level": [60, 50],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Cape"],
+                            "item_ids": [29289]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Black Warlock in a Butterfly Jar",
+                    "taskID": "catch_black_warlock_in_butterfly_jar",
+                    "category": "Hunter",
+                    "level": 45,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Black Warlock",
+                            "item_ids": [10014]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Defeat a Jaguar Cub in 1 Hit",
+                    "taskID": "defeat_jaguar_cub_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Jaguar Cub"],
+                        "npc_ids": [12977],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                        }
+                },
+                {                           
+                    "name": "Defeat a Jaguar",
+                    "taskID": "defeat_jaguar",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jaguar"],
+                        "npc_ids": [12976],
+                        "quantity": [1]
+                    }
+                },
+                {                           
+                    "name": "Defeat a Jaguar Cub",
+                    "taskID": "defeat_jaguar_cub",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jaguar Cub"],
+                        "npc_ids": [12977],
+                        "quantity": [1]
+                    }
+                }          
+            ],           
+            "is_completed": false
+        }
