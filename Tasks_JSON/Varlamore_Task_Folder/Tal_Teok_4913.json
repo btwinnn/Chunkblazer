@@ -1,0 +1,187 @@
+{
+            "region_id": [4913],
+            "Friendly_Name": "Tal Teok",
+            "neighbor_ids": [4914, 5169, 4912, 4657],
+            "tasks": [
+                {
+                    "name": "Defeat the Gemstone Crab for an Uncut Opal",
+                    "taskID": "Defeat_gemstone_crab_for_uncut_opal",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Gemstone Crab"],
+                        "npc_ids": [14779, 14780],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Uncut Opal",
+                        "dropped_item_id": [1625],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Gemstone Crab for an Uncut Jade",
+                    "taskID": "Defeat_gemstone_crab_for_uncut_jade",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Gemstone Crab"],
+                        "npc_ids": [14779, 14780],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Uncut Jade",
+                        "dropped_item_id": [1627],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Gemstone Crab for an Uncut Red Topaz",
+                    "taskID": "Defeat_gemstone_crab_for_uncut_red_topaz",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Gemstone Crab"],
+                        "npc_ids": [14779, 14780],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Uncut Red Topaz",
+                        "dropped_item_id": [1629],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Gemstone Crab for an Uncut Sapphire",
+                    "taskID": "Defeat_gemstone_crab_for_uncut_sapphire",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Gemstone Crab"],
+                        "npc_ids": [14779, 14780],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Uncut Sapphire",
+                        "dropped_item_id": [1623],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Gemstone Crab for an Uncut Emereald",
+                    "taskID": "Defeat_gemstone_crab_for_uncut_emerald",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Gemstone Crab"],
+                        "npc_ids": [14779, 14780],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Uncut Emereald",
+                        "dropped_item_id": [1621],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Gemstone Crab for an Uncut Ruby",
+                    "taskID": "Defeat_gemstone_crab_for_uncut_ruby",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Gemstone Crab"],
+                        "npc_ids": [14779, 14780],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Uncut Ruby",
+                        "dropped_item_id": [1619],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Gemstone Crab for an Uncut Diamond",
+                    "taskID": "Defeat_gemstone_crab_for_uncut_diamond",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Gemstone Crab"],
+                        "npc_ids": [14779, 14780],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Uncut Diamond",
+                        "dropped_item_id": [1617],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Gemstone Crab for an Uncut Dragonstone",
+                    "taskID": "Defeat_gemstone_crab_for_uncut_dragonstone",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Gemstone Crab"],
+                        "npc_ids": [14779, 14780],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Uncut Dragonstone",
+                        "dropped_item_id": [1631],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Gemstone Crab",
+                    "taskID": "Defeat_gemstone_crab",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Gemstone Crab"],
+                        "npc_ids": [14779, 14780],
+                        "quantity": [1]
+                    }
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Scrambled!",
+                    "points": 2
+                }                                        
+            ],           
+            "is_completed": false
+        } 
