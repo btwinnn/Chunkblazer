@@ -1,0 +1,162 @@
+{
+            "region_id": [4912],
+            "Friendly_Name": "Tal Teklan East",
+            "neighbor_ids": [4913, 5168, 4911, 4656],
+            "tasks": [
+                {
+                    "name": "Activate Chivalry",
+                    "taskID": "pray_chivalry",
+                    "category": "Prayer",
+                    "level": 60,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "varbit_boolean": 1,
+                    "constraints": {
+                        "varbit_id": 4122
+                    }                   
+                },
+                {
+                    "name": "Defeat a Tlati Guard",
+                    "taskID": "Defeat_tlati_guard",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Tlati Guard"],
+                        "npc_ids": [14716, 14717, 14718, 14719, 14720, 14721, 14722, 14723],
+                        "quantity": [1]
+                    }                  
+                },
+                {
+                    "name": "Pickpocket a Tlati Guard",
+                    "taskID": "pickpocket_tlati_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Tlati Guard"],
+                        "npc_ids": [14716, 14717, 14718, 14719, 14720, 14721, 14722, 14723],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Tlati Guard in 1 Hit",
+                    "taskID": "Defeat_tlati_guard_1_hit",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Tlati Guard"],
+                        "npc_ids": [14716, 14717, 14718, 14719, 14720, 14721, 14722, 14723],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }                  
+                },
+                {
+                    "name": "Chop a Mahogany Tree",
+                    "taskID": "chop_mahogany_tree",
+                    "category": "Woodcutting",
+                    "level": 50,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Mahogany Logs",
+                            "item_ids": [6332],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                 {
+                    "name": "Burn a Mahogany Log",
+                    "taskID": "burn_mahogany_log",
+                    "category": "Firemaking",
+                    "level": 50,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Mahogany Logs",
+                            "item_ids": [6332],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch some Raw Salmon",
+                    "taskID": "catch_raw_salmon",
+                    "category": "Fishing",
+                    "level": 30,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Raw Salmon",
+                        "item_ids": [331],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Cook some Salmon",
+                    "taskID": "cook_raw_salmon",
+                    "category": "Cooking",
+                    "level": 25,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Salmon",
+                        "item_ids": [329],
+                        "quantity": [1, 50]
+                        }
+                    ]       
+                },
+                {
+                    "name": "Catch a Tropical Wagtail",
+                    "taskID": "catch_tropical_wagtail",
+                    "category": "Hunter",
+                    "level": 19,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Stripy Feather",
+                            "item_ids": [10087]
+                            },
+                            {
+                            "item": "Raw Bird Meat",
+                            "item_ids": [9978]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Travel to Tal Teklan via Quetzal",
+                    "taskID": "travel_tal_teklan_quetzal",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }                                                  
+            ],           
+            "is_completed": false
+        }
