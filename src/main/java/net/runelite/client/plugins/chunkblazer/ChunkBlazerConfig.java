@@ -243,10 +243,22 @@ public interface ChunkBlazerConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "playTaskCompletionSound",
+		name = "Play Task Completion Sound",
+		description = "Play a region-specific sound when you complete a task",
+		section = displaySection,
+		position = 3
+	)
+	default boolean playTaskCompletionSound()
+	{
+		return true;
+	}
+
 	@ConfigSection(
 		name = "Chat Messages",
 		description = "Control which task messages appear in chat",
-		position = 3
+		position = 4
 	)
 	String chatSection = "chat";
 
