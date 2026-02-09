@@ -153,7 +153,10 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 			}
 		}
 
-		// Second pass: Draw borders
+		// Second pass: Draw borders and region IDs
+		Font regionFont = FontManager.getRunescapeBoldFont().deriveFont(14f);
+		graphics.setFont(regionFont);
+
 		for (int x = xRegionMin; x < xRegionMax; x += REGION_SIZE)
 		{
 			for (int y = yRegionMin; y < yRegionMax; y += REGION_SIZE)
@@ -196,6 +199,37 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 				{
 					graphics.drawRect(xPos + 1, yPos + 1, regionPixelSize - 2, regionPixelSize - 2);
 				}
+
+				// Draw region ID in top-left corner of each chunk (only if chunk is large enough to show text)
+				if (regionPixelSize > 20)
+				{
+					String idText = String.valueOf(regionId);
+					int textX = xPos + 4;
+					int textY = yPos + 16;
+
+					// Make sure text position is within the map bounds
+					if (textX > worldMapRect.getX() && textY > worldMapRect.getY())
+					{
+						// Simple drop shadow (single offset, bottom-right)
+						graphics.setColor(Color.BLACK);
+						graphics.drawString(idText, textX + 1, textY + 1);
+
+						// Draw text in green for unlocked, gold for neighbor, red for locked
+						if (isUnlocked)
+						{
+							graphics.setColor(new Color(0, 255, 0));
+						}
+						else if (isNeighbor)
+						{
+							graphics.setColor(new Color(255, 215, 0));
+						}
+						else
+						{
+							graphics.setColor(new Color(255, 80, 80));
+						}
+						graphics.drawString(idText, textX, textY);
+					}
+				}
 			}
 		}
 
@@ -212,7 +246,61 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 			drawHoverTooltip(graphics, mousePos, hoveredRegionId);
 		}
 
+		// Draw region ID in top-left corner of world map
+		if (hoveredRegionId > 0)
+		{
+			drawRegionIdDisplay(graphics, worldMapRect, hoveredRegionId);
+		}
+		else
+		{
+			// Show current player region if not hovering
+			drawRegionIdDisplay(graphics, worldMapRect, currentRegionId);
+		}
+
 		return null;
+	}
+
+	private void drawRegionIdDisplay(Graphics2D graphics, Rectangle worldMapRect, int regionId)
+	{
+		if (regionId <= 0)
+		{
+			return;
+		}
+
+		String regionName = plugin.getRegionName(regionId);
+		String regionIdText = "Region: " + regionId;
+
+		Font font = FontManager.getRunescapeSmallFont();
+		graphics.setFont(font);
+		FontMetrics fm = graphics.getFontMetrics();
+
+		int padding = 4;
+		int lineHeight = fm.getHeight();
+		int maxWidth = Math.max(fm.stringWidth(regionName), fm.stringWidth(regionIdText));
+		int boxWidth = maxWidth + padding * 2;
+		int boxHeight = lineHeight * 2 + padding * 2;
+
+		int boxX = (int) worldMapRect.getX() + 5;
+		int boxY = (int) worldMapRect.getY() + 5;
+
+		// Draw background
+		graphics.setColor(new Color(0, 0, 0, 180));
+		graphics.fillRect(boxX, boxY, boxWidth, boxHeight);
+
+		// Draw border
+		graphics.setColor(new Color(255, 215, 0, 200));
+		graphics.drawRect(boxX, boxY, boxWidth, boxHeight);
+
+		// Draw region name
+		int textX = boxX + padding;
+		int textY = boxY + padding + fm.getAscent();
+		graphics.setColor(Color.WHITE);
+		graphics.drawString(regionName, textX, textY);
+
+		// Draw region ID
+		textY += lineHeight;
+		graphics.setColor(new Color(200, 200, 200));
+		graphics.drawString(regionIdText, textX, textY);
 	}
 
 	private void drawHoverTooltip(Graphics2D graphics, Point mousePos, int regionId)

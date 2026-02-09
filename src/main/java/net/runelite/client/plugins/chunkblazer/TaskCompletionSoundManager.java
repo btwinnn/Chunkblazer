@@ -66,119 +66,119 @@ public class TaskCompletionSoundManager
 	{
 		// Pre-define known sound files for each region
 		areaSoundFiles.put("Misthalin_Sounds", List.of(
-			"Correct!_(Recipe_for_Disaster_-_Lumbridge_Guide).ogg",
-			"Fancy_Stone_Entrance_(POH).ogg",
-			"Logic_(Recruitment_Drive).ogg",
-			"Quest_Complete_1.ogg",
-			"Quest_Complete_3.ogg",
-			"Rift_Closed_(Guardians_of_the_Rift).ogg",
-			"Task_Mastered_(Leagues).ogg",
-			"The_Watchtower_Shield.ogg",
-			"Tinsay_Satisfied_(Tai_Bwo_Wannai_Trio).ogg"
+			"Correct!_(Recipe_for_Disaster_-_Lumbridge_Guide).wav",
+			"Fancy_Stone_Entrance_(POH).wav",
+			"Logic_(Recruitment_Drive).wav",
+			"Quest_Complete_1.wav",
+			"Quest_Complete_3.wav",
+			"Rift_Closed_(Guardians_of_the_Rift).wav",
+			"Task_Mastered_(Leagues).wav",
+			"The_Watchtower_Shield.wav",
+			"Tinsay_Satisfied_(Tai_Bwo_Wannai_Trio).wav"
 		));
 
 		areaSoundFiles.put("Asgarnia_Sounds", List.of(
-			"Draw_(Burthorpe_Games_Room).ogg",
-			"Maze_Centre.ogg",
-			"Memory_(Recruitment_Drive).ogg",
-			"Pest_Controlled_(Pest_Control).ogg",
-			"Safe_Cracked_(Rouges__Den).ogg",
-			"Treasure!_(Treasure_Trails).ogg",
-			"Victory!_(Burthorpe_Games_Room).ogg",
-			"You_Are_Victorious!_(Emir_s_Arena).ogg"
+			"Draw_(Burthorpe_Games_Room).wav",
+			"Maze_Centre.wav",
+			"Memory_(Recruitment_Drive).wav",
+			"Pest_Controlled_(Pest_Control).wav",
+			"Safe_Cracked_(Rouges__Den).wav",
+			"Treasure!_(Treasure_Trails).wav",
+			"Victory!_(Burthorpe_Games_Room).wav",
+			"You_Are_Victorious!_(Emir_s_Arena).wav"
 		));
 
 		areaSoundFiles.put("Kandarin_Sounds", List.of(
-			"A_Forgettable_Puzzle..._(Forgettable_Tale...).ogg",
-			"Box_of_Health_(Stronghold_of_Security).ogg",
-			"Case_Closed_(King_s_Ransom).ogg",
-			"Draw._(Castle_Wars).ogg",
-			"Gnomeball_GOAL!.ogg",
-			"King_has_Come_(King_s_Ransom).ogg",
-			"Victory!_(Castle_Wars).ogg"
+			"A_Forgettable_Puzzle..._(Forgettable_Tale...).wav",
+			"Box_of_Health_(Stronghold_of_Security).wav",
+			"Case_Closed_(King_s_Ransom).wav",
+			"Draw._(Castle_Wars).wav",
+			"Gnomeball_GOAL!.wav",
+			"King_has_Come_(King_s_Ransom).wav",
+			"Victory!_(Castle_Wars).wav"
 		));
 
 		areaSoundFiles.put("Karamja_Sounds", List.of(
-			"All_Easy_Tasks_(Karamja_Diary).ogg",
-			"Easy_Task_(Karamja_Diary).ogg",
-			"Hard_Task_(Karamja_Diary).ogg",
-			"Last_Man_Standing!_(Fight_Pits).ogg",
-			"Meanwhile._(Monkey_Madness).ogg",
-			"Medium_Task_(Karamja_Diary).ogg",
-			"Tagged_a_Ticket!_(Brimhaven_Agility_Arena).ogg",
-			"The_Fight_Continues_(Fight_Cave).ogg"
+			"All_Easy_Tasks_(Karamja_Diary).wav",
+			"Easy_Task_(Karamja_Diary).wav",
+			"Hard_Task_(Karamja_Diary).wav",
+			"Last_Man_Standing!_(Fight_Pits).wav",
+			"Meanwhile._(Monkey_Madness).wav",
+			"Medium_Task_(Karamja_Diary).wav",
+			"Tagged_a_Ticket!_(Brimhaven_Agility_Arena).wav",
+			"The_Fight_Continues_(Fight_Cave).wav"
 		));
 
 		areaSoundFiles.put("Morytania_Sounds", List.of(
-			"Air_Guitar.ogg",
-			"Canifis_Entrance_(POH).ogg",
-			"Danger_Evaded_(Temple_Trekking).ogg",
-			"Dangers_of_Morytania_(Temple_Trekking).ogg",
-			"Deathly_Mansion_Entrance_(POH).ogg",
-			"Petrification_of_the_Basilisk_(The_Fremennik_Exiles).ogg",
-			"Rat_Beats_Cat_(Rat_Pits).ogg",
-			"Trek_Continues_(Temple_Trekking).ogg",
-			"Trek_Destination_(Temple_Trekking).ogg"
+			"Air_Guitar.wav",
+			"Canifis_Entrance_(POH).wav",
+			"Danger_Evaded_(Temple_Trekking).wav",
+			"Dangers_of_Morytania_(Temple_Trekking).wav",
+			"Deathly_Mansion_Entrance_(POH).wav",
+			"Petrification_of_the_Basilisk_(The_Fremennik_Exiles).wav",
+			"Rat_Beats_Cat_(Rat_Pits).wav",
+			"Trek_Continues_(Temple_Trekking).wav",
+			"Trek_Destination_(Temple_Trekking).wav"
 		));
 
 		areaSoundFiles.put("Fremmy_Sounds", List.of(
-			"Ballad_Refrain_(Fremennik_Trials).ogg",
-			"Border_Broken_(Leagues).ogg",
-			"Fremennik-Style_Wood_Entrance_(POH).ogg",
-			"Making_Sense_of_Dwarven_Schematics_(Between_a_Rock).ogg",
-			"Perfectly_Tuned_(Fremennik_Trials).ogg",
-			"The_Royal_Decree_(The_Fremennik_Isles).ogg",
-			"Tiadeche_Thankful_(Tai_Bwo_Wannai_Trio).ogg"
+			"Ballad_Refrain_(Fremennik_Trials).wav",
+			"Border_Broken_(Leagues).wav",
+			"Fremennik-Style_Wood_Entrance_(POH).wav",
+			"Making_Sense_of_Dwarven_Schematics_(Between_a_Rock).wav",
+			"Perfectly_Tuned_(Fremennik_Trials).wav",
+			"The_Royal_Decree_(The_Fremennik_Isles).wav",
+			"Tiadeche_Thankful_(Tai_Bwo_Wannai_Trio).wav"
 		));
 
 		areaSoundFiles.put("Tirannwn_Sounds", List.of(
-			"Audience_of_Nature.ogg",
-			"Clearing_the_Gauntlet.ogg",
-			"Fairy_Queen_Awakens!_(A_Fairy_Tale_Part_II).ogg",
-			"Flamtaer_Restored.ogg",
-			"Quest_Complete_2.ogg",
-			"Star_of_Your_Own_(Shooting_Stars).ogg",
-			"Stealing_from_the_Godfather_(A_Fairy_Tale_Part_II).ogg",
-			"The_Chest_of_Light_(Mourning_s_End_Part_II).ogg"
+			"Audience_of_Nature.wav",
+			"Clearing_the_Gauntlet.wav",
+			"Fairy_Queen_Awakens!_(A_Fairy_Tale_Part_II).wav",
+			"Flamtaer_Restored.wav",
+			"Quest_Complete_2.wav",
+			"Star_of_Your_Own_(Shooting_Stars).wav",
+			"Stealing_from_the_Godfather_(A_Fairy_Tale_Part_II).wav",
+			"The_Chest_of_Light_(Mourning_s_End_Part_II).wav"
 		));
 
 		areaSoundFiles.put("Wilderness_Sounds", List.of(
-			"An_Ogre_Sail.ogg",
-			"Defeated!_(Soul_Wars).ogg",
-			"Honourable_Victory!_(Barbarian_Assault).ogg",
-			"Oh_Dear!.ogg",
-			"Sudden_Cry_(The_Eyes_of_Glouphrie).ogg",
-			"Sword_Good._Hand_Over._(Giants__Foundry).ogg",
-			"Victorious!_(Soul_Wars).ogg",
-			"Void_Knight_Defeated..._(Pest_Control).ogg"
+			"An_Ogre_Sail.wav",
+			"Defeated!_(Soul_Wars).wav",
+			"Honourable_Victory!_(Barbarian_Assault).wav",
+			"Oh_Dear!.wav",
+			"Sudden_Cry_(The_Eyes_of_Glouphrie).wav",
+			"Sword_Good._Hand_Over._(Giants__Foundry).wav",
+			"Victorious!_(Soul_Wars).wav",
+			"Void_Knight_Defeated..._(Pest_Control).wav"
 		));
 
 		areaSoundFiles.put("Kourend_Sounds", List.of(
-			"Commence_The_Fight!_(Duel_Arena).ogg",
-			"Hosidius_Entrance_(POH).ogg",
-			"Lucky_Win_(Death_Plateau).ogg",
-			"Observation_(Recruitment_Drive).ogg",
-			"Order_(Recruitment_Drive).ogg",
-			"Relic_of_Power_(Leagues).ogg",
-			"Tamayu_Slays_the_Shaikahan_(Tai_Bwo_Wannai_Trio).ogg"
+			"Commence_The_Fight!_(Duel_Arena).wav",
+			"Hosidius_Entrance_(POH).wav",
+			"Lucky_Win_(Death_Plateau).wav",
+			"Observation_(Recruitment_Drive).wav",
+			"Order_(Recruitment_Drive).wav",
+			"Relic_of_Power_(Leagues).wav",
+			"Tamayu_Slays_the_Shaikahan_(Tai_Bwo_Wannai_Trio).wav"
 		));
 
 		areaSoundFiles.put("Desert_Sounds", List.of(
-			"Icthlarin_s_Little_Puzzle.ogg",
-			"Rune_Casket_Open!_(Rouge_Trader).ogg",
-			"Snake_Charming_(Pyramid_Plunder).ogg",
-			"Snake_Charming_(The_Feud).ogg",
-			"Top_of_the_Pyramid!.ogg",
-			"Whitewashed_Stone_Entrance_(POH).ogg"
+			"Icthlarin_s_Little_Puzzle.wav",
+			"Rune_Casket_Open!_(Rouge_Trader).wav",
+			"Snake_Charming_(Pyramid_Plunder).wav",
+			"Snake_Charming_(The_Feud).wav",
+			"Top_of_the_Pyramid!.wav",
+			"Whitewashed_Stone_Entrance_(POH).wav"
 		));
 
 		areaSoundFiles.put("Varlamore_Sounds", List.of(
-			"A_New_Champion!_(Champion_s_Challenge).ogg",
-			"Civitas_Entrance_(POH).ogg",
-			"First_Sunshine_(Death_to_the_Dorgeshuun).ogg",
-			"Scape_Jingle.ogg",
-			"Star_of_Your_Own_(Shooting_Stars).ogg",
-			"Tinsay_Satisfied_(Tai_Bwo_Wannai_Trio).ogg"
+			"A_New_Champion!_(Champion_s_Challenge).wav",
+			"Civitas_Entrance_(POH).wav",
+			"First_Sunshine_(Death_to_the_Dorgeshuun).wav",
+			"Scape_Jingle.wav",
+			"Star_of_Your_Own_(Shooting_Stars).wav",
+			"Tinsay_Satisfied_(Tai_Bwo_Wannai_Trio).wav"
 		));
 
 		log.info("TaskCompletionSoundManager initialized with {} area mappings and {} sound folders",
@@ -248,10 +248,10 @@ public class TaskCompletionSoundManager
 
 		// Try to load the folder's sounds by checking if resources exist
 		String[] commonSounds = {
-			"Quest_Complete_1.ogg",
-			"Quest_Complete_2.ogg",
-			"Quest_Complete_3.ogg",
-			"Task_Mastered_(Leagues).ogg"
+			"Quest_Complete_1.wav",
+			"Quest_Complete_2.wav",
+			"Quest_Complete_3.wav",
+			"Task_Mastered_(Leagues).wav"
 		};
 
 		for (String sound : commonSounds)
@@ -308,7 +308,7 @@ public class TaskCompletionSoundManager
 			{
 				FloatControl volume = (FloatControl) currentClip.getControl(FloatControl.Type.MASTER_GAIN);
 				// Convert percentage to decibels (-80 to 6 dB range typically)
-				float volumePercent = 0.7f; // 70% volume
+				float volumePercent = 0.35f; // 35% volume - quieter default
 				float dB = (float) (Math.log(volumePercent) / Math.log(10.0) * 20.0);
 				volume.setValue(Math.max(volume.getMinimum(), Math.min(volume.getMaximum(), dB)));
 			}
