@@ -3307,7 +3307,7 @@
                         }
                     ]
                 },
-                 {
+                {
                     "name": "Burn a Mahogany Log",
                     "taskID": "burn_mahogany_log",
                     "category": "Firemaking",
@@ -3384,6 +3384,159 @@
                 }                                                  
             ],           
             "is_completed": false
-        }                    
+        },
+        {
+            "region_id": [4656],
+            "Friendly_Name": "Tal Teklan West",
+            "neighbor_ids": [4657, 4912, 4655, 4400],
+            "tasks": [              
+                {
+                    "name": "Defeat a Tlati Guard",
+                    "taskID": "Defeat_tlati_guard",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Tlati Guard"],
+                        "npc_ids": [14716, 14717, 14718, 14719, 14720, 14721, 14722, 14723],
+                        "quantity": [1]
+                    }                  
+                },
+                {
+                    "name": "Pickpocket a Tlati Guard",
+                    "taskID": "pickpocket_tlati_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Tlati Guard"],
+                        "npc_ids": [14716, 14717, 14718, 14719, 14720, 14721, 14722, 14723],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Tlati Guard in 1 Hit",
+                    "taskID": "Defeat_tlati_guard_1_hit",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Tlati Guard"],
+                        "npc_ids": [14716, 14717, 14718, 14719, 14720, 14721, 14722, 14723],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }                  
+                },
+                {
+                    "name": "Equip a Maple Shortbow",
+                    "taskID": "equip_maple_shortbow",
+                    "category": "Ranged",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Maple Shortbow"],
+                            "item_ids": [853]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt a Silver Bar",
+                    "taskID": "smith_silver_bar",
+                    "category": "Smithing",
+                    "level": 20,
+                    "completion_type": "SMITHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Silver Bar",
+                        "item_ids": [2355],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft an Emerald Amulet",
+                    "taskID": "craft_emerald_amulet",
+                    "category": "Crafting",
+                    "level": 31,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Emerald Amulet"],
+                            "item_ids": [1696],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Sapphire Amulet",
+                    "taskID": "craft_sapphire_amulet",
+                    "category": "Crafting",
+                    "level": 24,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Sapphire Amulet"],
+                            "item_ids": [1694],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Ruby Amulet",
+                    "taskID": "craft_ruby_amulet",
+                    "category": "Crafting",
+                    "level": 50,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ruby Amulet"],
+                            "item_ids": [1698],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Diamond Amulet",
+                    "taskID": "craft_diamond_amulet",
+                    "category": "Crafting",
+                    "level": 70,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Diamond Amulet"],
+                            "item_ids": [1700],
+                            "quantity": [1]
+                        }
+                    ]
+                }                                                  
+            ],           
+            "is_completed": false
+        }                           
     ]
 }
