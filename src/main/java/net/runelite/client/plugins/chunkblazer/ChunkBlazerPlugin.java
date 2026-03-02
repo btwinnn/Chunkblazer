@@ -75,10 +75,16 @@ public class ChunkBlazerPlugin extends Plugin
 	private TaskCompletionOverlay taskCompletionOverlay;
 
 	@Inject
+	private TaskCompletionAnimationOverlay taskCompletionAnimationOverlay;
+
+	@Inject
 	private TaskModuleManager taskModuleManager;
 
 	@Inject
 	private VarPlayerVerificationService varPlayerService;
+
+	@Inject
+	private TaskCompletionSoundManager soundManager;
 
 	// --- Plugin State ---
 	@Getter
@@ -126,18 +132,41 @@ public class ChunkBlazerPlugin extends Plugin
 				log.info(">>> onTaskCompleted CALLBACK TRIGGERED");
 				log.info(">>>   Task: {} (progress: {})", task != null ? task.getName() : "NULL", progress);
 				log.info(">>>   taskCompletionOverlay: {}", taskCompletionOverlay != null ? "NOT NULL" : "NULL");
+				log.info(">>>   taskCompletionAnimationOverlay: {}", taskCompletionAnimationOverlay != null ? "NOT NULL" : "NULL");
 
-				// Show task completion popup
-				if (taskCompletionOverlay != null && task != null)
+				// Show animated task completion popup
+				if (taskCompletionAnimationOverlay != null && task != null)
 				{
-					log.info(">>>   Calling taskCompletionOverlay.showTaskCompletion()...");
-					taskCompletionOverlay.showTaskCompletion(task, task.getBasePoints());
-					log.info(">>>   showTaskCompletion() call completed");
+					log.info(">>>   Calling taskCompletionAnimationOverlay.showTaskCompletion()...");
+					String regionName = getTaskRegionName(task);
+					taskCompletionAnimationOverlay.showTaskCompletion(task, task.getBasePoints(), regionName);
+					log.info(">>>   Animated popup triggered with region: {}", regionName);
+
+					// Play region-specific completion sound
+					if (config.playTaskCompletionSound())
+					{
+						String area = getTaskArea(task);
+						if (soundManager != null && area != null)
+						{
+							soundManager.playRandomSoundForArea(area);
+							log.info(">>>   Playing completion sound for area: {}", area);
+						}
+					}
 				}
 				else
 				{
-					log.error(">>>   CANNOT show popup - overlay or task is null!");
+					log.error(">>>   CANNOT show animated popup - overlay or task is null!");
 				}
+
+				// Legacy popup disabled - using new animation overlay instead
+				// if (taskCompletionOverlay != null && task != null)
+				// {
+				// 	log.info(">>>   Calling taskCompletionOverlay.showTaskCompletion()...");
+				// 	String regionName = getTaskRegionName(task);
+				// 	String area = getTaskArea(task);
+				// 	taskCompletionOverlay.showTaskCompletion(task, task.getBasePoints(), regionName, area);
+				// 	log.info(">>>   Legacy popup completed with region: {}, area: {}", regionName, area);
+				// }
 
 				completeTask(task);
 			}
@@ -186,9 +215,13 @@ public class ChunkBlazerPlugin extends Plugin
 		// Register world map overlay
 		overlayManager.add(worldMapOverlay);
 
-		// Register task completion popup overlay
-		overlayManager.add(taskCompletionOverlay);
-		log.info(">>> TaskCompletionOverlay registered with OverlayManager: {}", taskCompletionOverlay != null ? "OK" : "NULL");
+		// Legacy task completion popup overlay disabled - using animation overlay instead
+		// overlayManager.add(taskCompletionOverlay);
+		// log.info(">>> TaskCompletionOverlay registered with OverlayManager: {}", taskCompletionOverlay != null ? "OK" : "NULL");
+
+		// Register animated task completion overlay
+		overlayManager.add(taskCompletionAnimationOverlay);
+		log.info(">>> TaskCompletionAnimationOverlay registered with OverlayManager: {}", taskCompletionAnimationOverlay != null ? "OK" : "NULL");
 
 		// Load or assign a task if player is logged in
 		if (client.getGameState() == GameState.LOGGED_IN)
@@ -206,9 +239,14 @@ public class ChunkBlazerPlugin extends Plugin
 		log.info("ChunkBlazer shutting down...");
 		clientToolbar.removeNavigation(navButton);
 		overlayManager.remove(worldMapOverlay);
-		overlayManager.remove(taskCompletionOverlay);
+		// overlayManager.remove(taskCompletionOverlay); // Legacy overlay disabled
+		overlayManager.remove(taskCompletionAnimationOverlay);
 		taskModuleManager.shutDown();
 		varPlayerService.shutDown();
+		if (soundManager != null)
+		{
+			soundManager.shutdown();
+		}
 		activeTask = null;
 	}
 
@@ -478,9 +516,14 @@ public class ChunkBlazerPlugin extends Plugin
 						int chunkCount = chunks.size();
 						int regionCount = 0;
 
+						// Extract area name from filename (e.g., "Misthalin_Tasks.json" -> "Misthalin")
+						String areaName = jsonFile.replace("_Tasks.json", "")
+							.replace("_", " ");
+
 						// Add chunks and build mappings
 						for (NuzlockeChunk chunk : chunks)
 						{
+							chunk.setArea(areaName);
 							allChunks.add(chunk);
 							if (chunk.getRegionIds() != null)
 							{
@@ -1634,6 +1677,27 @@ public class ChunkBlazerPlugin extends Plugin
 		if (regionId > 0)
 		{
 			return getRegionName(regionId);
+		}
+		return null;
+	}
+
+	/**
+	 * Get the area name for a specific task (e.g., "Misthalin", "Asgarnia").
+	 */
+	public String getTaskArea(NuzlockeTask task)
+	{
+		if (task == null || task.getTaskId() == null)
+		{
+			return null;
+		}
+		int regionId = findRegionForTask(task.getTaskId());
+		if (regionId > 0)
+		{
+			NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+			if (chunk != null)
+			{
+				return chunk.getArea();
+			}
 		}
 		return null;
 	}

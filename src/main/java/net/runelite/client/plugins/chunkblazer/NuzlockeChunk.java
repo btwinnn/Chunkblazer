@@ -18,6 +18,12 @@ public class NuzlockeChunk
 	@SerializedName("Friendly_Name")
 	private String friendlyNameAlt;
 
+	/**
+	 * The area this chunk belongs to (e.g., "Misthalin", "Asgarnia", "Zeah").
+	 * Set at load time based on the JSON file name.
+	 */
+	private String area;
+
 	@SerializedName("neighbor_ids")
 	private List<Integer> neighborIds;
 
@@ -57,6 +63,16 @@ public class NuzlockeChunk
 	public int getUnlockCostValue()
 	{
 		return unlockCost != null ? unlockCost : 1;
+	}
+
+	public String getArea()
+	{
+		return area;
+	}
+
+	public void setArea(String area)
+	{
+		this.area = area;
 	}
 
 	@Data
