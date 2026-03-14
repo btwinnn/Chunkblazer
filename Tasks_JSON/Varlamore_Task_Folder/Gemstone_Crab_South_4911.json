@@ -1,6 +1,6 @@
 {
             "region_id": [4911],
-            "Friendly_Name": "South Gemstone Crab",
+            "Friendly_Name": "Gemstone Crab South",
             "neighbor_ids": [4655, 4912, 5167, 4910],
             "tasks": [
                 {
@@ -175,13 +175,7 @@
                         "npc_ids": [14779, 14780],
                         "quantity": [1]
                     }
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Scrambled!",
-                    "points": 2
-                }                                        
+                }                                                  
             ],           
             "is_completed": false
         }

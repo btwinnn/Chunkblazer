@@ -1,0 +1,177 @@
+{
+            "region_id": [5168],
+            "Friendly_Name": "Tlati Rainforest Center",
+            "neighbor_ids": [5169, 5424, 5167, 4912],
+            "tasks": [
+                {
+                    "name": "Defeat a Rockslug",
+                    "taskID": "Defeat_rockslug",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Rockslug"],
+                        "npc_ids": [421, 14423, 422, 7392],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Rockslug on Task",
+                    "taskID": "Defeat_rockslug_on_task",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "category": "Slayer",
+                    "level": 20,
+                    "completion_type": "SLAYER",
+                    "target_npc": {
+                        "npc": ["Rockslug"],
+                        "npc_ids": [421, 14423, 422, 7392],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Earthen Nagua",
+                    "taskID": "Defeat_earthen_nagua",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Earthen Nagua"],
+                        "npc_ids": [14420, 14421, 14420],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Earthen Nagua on Task",
+                    "taskID": "Defeat_earthen_nagua_on_task",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "level": 48,
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "target_npc": {
+                        "npc": ["Earthen Nagua"],
+                        "npc_ids": [14420, 14421, 14420],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Earthen Nagua in 15 Seconds",
+                    "taskID": "Defeat_earthen_nagua_fast",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Earthen Nagua"],
+                        "npc_ids": [14420, 14421, 14420],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [25],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Equip an Earthbound Tecpatl",
+                    "taskID": "equip_earthbound_tecpatl",
+                    "category": ["Attack"],
+                    "level": [55],
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Earthbound Tecpatl"],
+                            "item_ids": [30957]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Earthbound Tecpatl",
+                    "taskID": "obtain_earthbound_tecpatl",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Earthbound Tecpatl"],
+                            "item_ids": [30957]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Grimy Lizard",
+                    "taskID": "Defeat_grimy_lizard",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Grimy Liazard"],
+                        "npc_ids": [13029, 14430],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Grimy Lizard on Task",
+                    "taskID": "Defeat_grimy_lizard_on_task",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "level": 44,
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "target_npc": {
+                        "npc": ["Grimy Liazard"],
+                        "npc_ids": [13029, 14430],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Giant Rock Crab",
+                    "taskID": "Defeat_giant_rock_crab",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Giant Rock Crab"],
+                        "npc_ids": [2261, 2262, 14425, 5940, 5941],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Giant Rock Crab in 15 Seconds",
+                    "taskID": "Defeat_giant_rock_crab_fast",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Giant Rock Crab"],
+                        "npc_ids": [2261, 2262, 14425, 5940, 5941],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [25],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }                                                
+            ],           
+            "is_completed": false
+        }
