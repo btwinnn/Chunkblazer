@@ -4140,6 +4140,278 @@
                 }
             ],                      
             "is_completed": false
-        }                           
+        },
+        {
+            "region_id": [5423],
+            "Friendly_Name": "Kastori",
+            "neighbor_ids": [5424, 5679, 5422, 5167],
+            "tasks": [
+                {                           
+                    "name": "Cook some Sweetcorn",
+                    "taskID": "cook_sweetcorn",
+                    "category": "Cooking",
+                    "level": 28,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Cooked Sweetcorn",
+                        "item_ids": [5988],
+                        "quantity": [1, 25]
+                        }
+                    ]       
+                },
+                {                           
+                    "name": "Cook some Tuna Potatoes",
+                    "taskID": "cook_tuna_potatoes",
+                    "category": "Cooking",
+                    "level": 68,
+                    "completion_type": "COOKING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Tuna Potato",
+                        "item_ids": [7060],
+                        "quantity": [1, 25]
+                        }
+                    ]       
+                },
+                {
+                    "name": "Obtain a Yellow Bead",
+                    "taskID": "obtain_yellow_bead",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yellow Bead"],
+                            "item_ids": [1472]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a White Bead from an Imp",
+                    "taskID": "obtain_white_bead",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["White Bead"],
+                            "item_ids": [1476]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Black Bead",
+                    "taskID": "obtain_black_bead",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Black Bead",
+                        "item_ids": [1474],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Red Bead",
+                    "taskID": "obtain_red_bead",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Red Bead",
+                        "item_ids": [1470],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Banana Tree Sapling",
+                    "taskID": "plant_banana_tree_sapling",
+                    "category": "Farming",
+                    "level": 33,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Banana Tree Sapling"],
+                            "item_ids": [5497],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Orange Tree Sapling",
+                    "taskID": "plant_orange_tree_sapling",
+                    "category": "Farming",
+                    "level": 39,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Orange Tree Sapling"],
+                            "item_ids": [5498],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Curry Tree Sapling",
+                    "taskID": "plant_curry_tree_Sapling",
+                    "category": "Farming",
+                    "level": 42,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Curry Tree Sapling"],
+                            "item_ids": [5499],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Pineapple Sapling",
+                    "taskID": "plant_pineapple_sapling",
+                    "category": "Farming",
+                    "level": 51,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Pineapple Sapling"],
+                            "item_ids": [5500],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Palm Tree Sapling",
+                    "taskID": "plant_palm_tree_sapling",
+                    "category": "Farming",
+                    "level": 68,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Palm Tree Sapling"],
+                            "item_ids": [5502],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Calquat Sapling",
+                    "taskID": "plant_calquat_sapling",
+                    "category": "Farming",
+                    "level": 72,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Calquat Sapling"],
+                            "item_ids": [5503],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Nasturtiums",
+                    "taskID": "plant_marigold",
+                    "category": "Farming",
+                    "level": 24,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Nasturtium Seed"],
+                            "item_ids": [5098],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Woad Seed",
+                    "taskID": "plant_woad_seed",
+                    "category": "Farming",
+                    "level": 25,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Woad Seed"],
+                            "item_ids": [5099],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Limpwurt Seed",
+                    "taskID": "plant_limpwurt_seed",
+                    "category": "Farming",
+                    "level": 26,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Limpwurt Seed"],
+                            "item_ids": [5100],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a White Lily Seed",
+                    "taskID": "plant_white_lily_seed",
+                    "category": "Farming",
+                    "level": 58,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["White Lily Seed"],
+                            "item_ids": [22887],
+                            "quantity": [1]
+                        }
+                    ]
+                    
+                },
+                {                    
+                    "name": "Pickpocket a Master Farmer",
+                    "taskID": "pickpocket_master_farmer",
+                    "category": "Thieving",
+                    "level": 38,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                    "npc": "Master Farmer",
+                    "npc_ids": [5730, 14757, 5731, 11940, 11941, 13240, 13241, 13242, 13243, 13236, 13237, 13238, 13239, 14756, 14758, 14755]                    
+                    }
+                }
+            ],                      
+            "is_completed": false
+        }                               
     ]
 }
