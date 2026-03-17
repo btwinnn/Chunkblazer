@@ -1,0 +1,67 @@
+{
+            "region_id": [5681],
+            "Friendly_Name": "Ralos Rise",
+            "neighbor_ids": [5682, 5937, 5680, 5425],
+            "tasks": [
+                {
+                    "name": "Obtain Jug of Blessed Sunfire Wine",
+                    "taskID": "obtain_jug_of_blessed_sunfire_wine",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Jug of Blessed Sunfire Wine"],
+                            "item_ids": [29384],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Jug of Blessed Wine",
+                    "taskID": "obtain_jug_of_blessed_wine",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Jug of Blessed Wine"],
+                            "item_ids": [29386],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Bone Shards",
+                    "taskID": "obtain_bone_shards",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Bone Shards"],
+                            "item_ids": [29386],
+                            "quantity": [10000, 100000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Travel to the Ralos Rise via Quetzal",
+                    "taskID": "travel_salvager_overlook_quetzal",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }            
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Heart of Darkness",
+                    "points": 3
+                }
+            ],                      
+            "is_completed": false
+        }
