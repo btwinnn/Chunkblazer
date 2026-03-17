@@ -1,0 +1,64 @@
+{
+            "region_id": [4910],
+            "Friendly_Name": "Capybara Picnic",
+            "neighbor_ids": [4911, 5166, 4909, 4654],
+            "tasks": [
+                {
+                    "name": "Equip an Orange",
+                    "taskID": "equip_orange",
+                    "category": ["Defence"],
+                    "level": [1],
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Orange(hat)"],
+                            "item_ids": [31117]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Mahogany Tree",
+                    "taskID": "chop_mahogany_tree",
+                    "category": "Woodcutting",
+                    "level": 50,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Mahogany Logs",
+                            "item_ids": [6332],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Mahogany Log",
+                    "taskID": "burn_mahogany_log",
+                    "category": "Firemaking",
+                    "level": 50,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Mahogany Logs",
+                            "item_ids": [6332],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 43 Agility Rock Climb Shortcut to the Capybara Picnic",
+                    "taskID": "agility_level_43_agility_rock_climb_capybara_picnic",
+                    "category": "Agility",
+                    "level": 43,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }              
+            ],                      
+            "is_completed": false
+        } 
