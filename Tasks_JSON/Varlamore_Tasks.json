@@ -4623,6 +4623,80 @@
                 }
             ],                      
             "is_completed": false
+        },
+        {
+            "region_id": [5937],
+            "Friendly_Name": "Book of Earthen Might",
+            "neighbor_ids": [5938, 6193, 5936, 5681],
+            "tasks": [
+                {
+                    "name": "Obtain some Soiled Pages",
+                    "taskID": "obtain_some_soiled_pages",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Soiled Page"],
+                            "item_ids": [30068],
+                            "quantity": [1, 1000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Varlamore Bandit",
+                    "taskID": "defeat_varlamore_bandit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bandit (Varlamore)"],
+                        "npc_ids": [13283, 13284, 13285, 13286, 13287, 13288, 13289, 13290],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat a Varlamore Bandit in 1 Hit",
+                    "taskID": "defeat_varlamore_bandit_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bandit (Varlamore)"],
+                        "npc_ids": [13283, 13284, 13285, 13286, 13287, 13288, 13289, 13290],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }                   
+                }, 
+                {
+                    "name": "Equip a Steel Longsword",
+                    "taskID": "equip_steel_longsword",
+                    "category": ["Attack"],
+                    "level": [5],
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Steel Longsword"],
+                            "item_ids": [1295]
+                        }
+                    ]
+                }                        
+            ],                      
+            "is_completed": false
         }                                
     ]
 }

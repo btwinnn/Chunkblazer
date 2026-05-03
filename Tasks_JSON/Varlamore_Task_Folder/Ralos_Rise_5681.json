@@ -4,7 +4,7 @@
             "neighbor_ids": [5682, 5937, 5680, 5425],
             "tasks": [
                 {
-                    "name": "Obtain Jug of Blessed Sunfire Wine",
+                    "name": "Obtain a Jug of Blessed Sunfire Wine",
                     "taskID": "obtain_jug_of_blessed_sunfire_wine",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -34,8 +34,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Bone Shards",
-                    "taskID": "obtain_bone_shards",
+                    "name": "Obtain some Blessed Bone Shards",
+                    "taskID": "obtain_blessed_bone_shards",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
@@ -43,7 +43,7 @@
                     "required_items": [
                         {
                             "item": ["Bone Shards"],
-                            "item_ids": [29386],
+                            "item_ids": [29381],
                             "quantity": [10000, 100000]
                         }
                     ]
