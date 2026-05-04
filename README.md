@@ -14,7 +14,23 @@ A Nuzlocke-style chunk unlocking plugin for Old School RuneScape (OSRS) via Rune
 
 ## Installation
 
-### For Development (RuneLite Source)
+### Quick Start (For Testers)
+
+**Requirements:**
+- [Git](https://git-scm.com/download/win)
+- [Java 11+ JDK](https://adoptium.net/) (not just JRE)
+- [Maven](https://maven.apache.org/download.cgi) (add to PATH)
+
+**First-Time Setup:**
+1. Clone this repository: `git clone https://github.com/YourUsername/ChunkBlazer.git C:\ChunkBlazer`
+2. Right-click `setup-chunkblazer.bat` and select **Run as administrator**
+3. Wait for the build to complete (5-10 minutes first time)
+
+**Running the Dev Client:**
+- Double-click `run-chunkblazer.bat`
+- This will pull latest updates and launch RuneLite with ChunkBlazer
+
+### Manual Installation (For Development)
 
 1. Clone the RuneLite repository
 2. Copy the contents of `src/` into RuneLite's `runelite-client/src/`
