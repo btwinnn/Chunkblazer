@@ -1030,6 +1030,8 @@
     {
       "region_id": [13105],
       "Friendly_Name": "Al Kharid",
+      "neighbor_ids": [13106, 13104, 13361, 12849],
+      "unlock_cost": 1,
       "tasks": [
         {
           "name": "Equip some Adamant Platelegs",

@@ -397,28 +397,42 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Unlock the free starting chunk (Lumbridge center).
-	 * This is always available as the player's starting zone.
+	 * Unlock all starter area regions.
+	 * These are always available as the player's starting zone.
 	 * In casual mode, players can start anywhere (the chunk they're standing on becomes unlocked).
 	 */
 	public void unlockStarterRegions()
 	{
 		Set<String> currentlyUnlocked = getUnlockedRegionIds();
+		StringBuilder newUnlocked = new StringBuilder();
+		boolean needsUpdate = false;
 
-		// Always ensure the free starting region is unlocked
-		if (!currentlyUnlocked.contains(String.valueOf(FREE_STARTING_REGION)))
+		// Start with current unlocked regions
+		String existing = config.unlockedChunks();
+		if (existing != null && !existing.isEmpty())
 		{
-			String unlocked = config.unlockedChunks();
-			if (unlocked == null || unlocked.isEmpty())
+			newUnlocked.append(existing);
+		}
+
+		// Add all starter regions that aren't already unlocked
+		for (int regionId : STARTER_REGIONS)
+		{
+			if (!currentlyUnlocked.contains(String.valueOf(regionId)))
 			{
-				unlocked = String.valueOf(FREE_STARTING_REGION);
+				if (newUnlocked.length() > 0)
+				{
+					newUnlocked.append(",");
+				}
+				newUnlocked.append(regionId);
+				needsUpdate = true;
+				log.info("Unlocking starter region: {}", regionId);
 			}
-			else
-			{
-				unlocked = unlocked + "," + FREE_STARTING_REGION;
-			}
-			configManager.setConfiguration("chunkblazer", "unlockedChunks", unlocked);
-			log.info("Unlocked free starting region: {}", FREE_STARTING_REGION);
+		}
+
+		if (needsUpdate)
+		{
+			configManager.setConfiguration("chunkblazer", "unlockedChunks", newUnlocked.toString());
+			log.info("Unlocked all starter regions: {}", java.util.Arrays.toString(STARTER_REGIONS));
 		}
 	}
 
@@ -435,6 +449,19 @@ public class ChunkBlazerPlugin extends Plugin
 
 	// Free starting chunk (always unlocked for all modes)
 	private static final int FREE_STARTING_REGION = 12850;  // Lumbridge center
+
+	// All starter area regions that should be unlocked by default
+	private static final int[] STARTER_REGIONS = {
+		12850,  // Lumbridge center
+		12851,  // Lumbridge North Farm
+		12849,  // Lumbridge East Swamp
+		12593,  // Lumbridge West Swamp
+		12594,  // H.A.M. Hideout
+		12595,  // Lumbridge Mill
+		13105,  // Al Kharid
+		13106,  // Al Kharid Toll Gate
+		13107   // Al Kharid Mine
+	};
 
 
 	private void loadChunkData()
