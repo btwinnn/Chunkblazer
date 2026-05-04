@@ -43,8 +43,17 @@ call :log "  RUNELITE_DIR: %RUNELITE_DIR%"
 call :log "  LOG_FILE: %LOG_FILE%"
 call :log ""
 
+:: Pull latest ChunkBlazer updates first
+call :log "[1/5] Pulling latest ChunkBlazer updates..."
+cd /d "%CHUNKBLAZER_DIR%"
+git pull >> "%LOG_FILE%" 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    call :log "WARNING: Git pull failed - continuing with local version"
+)
+call :log ""
+
 :: Check for Java
-call :log "[1/4] Checking for Java..."
+call :log "[2/5] Checking for Java..."
 java -version >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     call :log ""
@@ -78,30 +87,31 @@ for /f "tokens=*" %%i in ('git --version') do call :log "  %%i"
 call :log "Git found!"
 call :log ""
 
-:: Check if RuneLite already exists and has gradlew
-if exist "%RUNELITE_DIR%\gradlew.bat" (
-    call :log "[2/4] RuneLite directory already exists at %RUNELITE_DIR%"
-    call :log "  Skipping clone..."
-) else (
+:: Always delete and re-clone RuneLite to ensure clean state
+call :log "[3/5] Preparing fresh RuneLite clone..."
+if exist "%RUNELITE_DIR%" (
+    call :log "  Removing existing RuneLite directory..."
+    rd /s /q "%RUNELITE_DIR%" 2>nul
     if exist "%RUNELITE_DIR%" (
-        call :log "[2/4] RuneLite directory exists but appears incomplete."
-        call :log "  Removing and re-cloning..."
-        rd /s /q "%RUNELITE_DIR%" 2>nul
-    ) else (
-        call :log "[2/4] Cloning RuneLite repository..."
-    )
-    call :log "  Target: %RUNELITE_DIR%"
-    call :log "  This may take a few minutes..."
-    git clone https://github.com/runelite/runelite.git "%RUNELITE_DIR%" >> "%LOG_FILE%" 2>&1
-    if %ERRORLEVEL% NEQ 0 (
-        call :log "ERROR: Failed to clone RuneLite"
-        call :log "Check log for details: %LOG_FILE%"
+        call :log "ERROR: Could not delete %RUNELITE_DIR%"
+        call :log "Please close any programs using that folder and try again."
         call :logfail
         pause
         exit /b 1
     )
-    call :log "  Clone complete!"
 )
+call :log "  Cloning RuneLite repository..."
+call :log "  Target: %RUNELITE_DIR%"
+call :log "  This may take a few minutes..."
+git clone https://github.com/runelite/runelite.git "%RUNELITE_DIR%" >> "%LOG_FILE%" 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    call :log "ERROR: Failed to clone RuneLite"
+    call :log "Check log for details: %LOG_FILE%"
+    call :logfail
+    pause
+    exit /b 1
+)
+call :log "  Clone complete!"
 call :log ""
 
 :: Verify gradlew exists
@@ -114,7 +124,7 @@ if not exist "%RUNELITE_DIR%\gradlew.bat" (
 )
 
 :: Copy ChunkBlazer plugin into RuneLite (instead of symlinks)
-call :log "[3/4] Copying ChunkBlazer plugin into RuneLite..."
+call :log "[4/5] Copying ChunkBlazer plugin into RuneLite..."
 set "JAVA_PLUGINS_DIR=%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins"
 set "RES_PLUGINS_DIR=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins"
 
@@ -177,7 +187,7 @@ call :log "Plugin files copied successfully!"
 call :log ""
 
 :: Build RuneLite using Gradle
-call :log "[4/4] Building RuneLite with Gradle..."
+call :log "[5/5] Building RuneLite with Gradle..."
 call :log "  This may take several minutes on first run..."
 call :log "  Build output is being logged to: %LOG_FILE%"
 call :log ""
