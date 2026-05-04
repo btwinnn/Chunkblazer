@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 title ChunkBlazer Dev Client
 color 0A
 
@@ -8,24 +9,16 @@ echo ========================================
 echo.
 
 :: Set paths
-set CHUNKBLAZER_DIR=%~dp0
-set RUNELITE_DIR=C:\runelite
-set TOOLS_DIR=%CHUNKBLAZER_DIR%tools
-set MAVEN_DIR=%TOOLS_DIR%\maven
-set MAVEN_VERSION=3.9.6
+set "CHUNKBLAZER_DIR=%~dp0"
+if "%CHUNKBLAZER_DIR:~-1%"=="\" set "CHUNKBLAZER_DIR=%CHUNKBLAZER_DIR:~0,-1%"
+set "RUNELITE_DIR=C:\runelite"
 
-:: Determine which Maven to use
-where mvn >nul 2>&1
-if %ERRORLEVEL% EQU 0 (
-    set "MVN_CMD=mvn"
-) else (
-    if exist "%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd" (
-        set "MVN_CMD=%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd"
-    ) else (
-        echo ERROR: Maven not found. Please run setup-chunkblazer.bat first.
-        pause
-        exit /b 1
-    )
+:: Check RuneLite exists
+if not exist "%RUNELITE_DIR%\gradlew.bat" (
+    echo ERROR: RuneLite not found at %RUNELITE_DIR%
+    echo Please run setup-chunkblazer.bat first.
+    pause
+    exit /b 1
 )
 
 :: Pull latest ChunkBlazer updates
@@ -39,8 +32,9 @@ echo.
 
 :: Build RuneLite with ChunkBlazer
 echo [2/3] Building RuneLite with ChunkBlazer...
+echo      (This may take a minute...)
 cd /d "%RUNELITE_DIR%"
-call "%MVN_CMD%" install -DskipTests -pl runelite-client -am
+call "%RUNELITE_DIR%\gradlew.bat" :runelite-client:build -x test
 if %ERRORLEVEL% NEQ 0 (
     echo.
     echo ERROR: Build failed! Check the output above for errors.
@@ -49,9 +43,22 @@ if %ERRORLEVEL% NEQ 0 (
 )
 echo.
 
-:: Run the client
+:: Find the shaded jar
 echo [3/3] Launching RuneLite Dev Client...
+set "CLIENT_JAR="
+for %%f in ("%RUNELITE_DIR%\runelite-client\build\libs\client-*-shaded.jar") do (
+    set "CLIENT_JAR=%%f"
+)
+
+if "%CLIENT_JAR%"=="" (
+    echo ERROR: Could not find client shaded jar.
+    echo Expected in: %RUNELITE_DIR%\runelite-client\build\libs\
+    pause
+    exit /b 1
+)
+
+echo Starting: %CLIENT_JAR%
 echo.
-call "%MVN_CMD%" -pl runelite-client exec:java
+java -jar "%CLIENT_JAR%" --developer-mode
 
 pause

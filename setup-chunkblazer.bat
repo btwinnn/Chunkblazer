@@ -15,18 +15,14 @@ echo Started: %DATE% %TIME%>> "%LOG_FILE%"
 echo ========================================>> "%LOG_FILE%"
 echo.>> "%LOG_FILE%"
 
-:: Define a logging subroutine at the end, call it with: call :log "message"
-:: For now, use a simple approach: tee each output
-
 call :log "========================================"
 call :log "    ChunkBlazer First-Time Setup"
 call :log "========================================"
 call :log ""
 call :log "This script will:"
-call :log "  1. Download Maven (if needed)"
-call :log "  2. Clone RuneLite source code"
-call :log "  3. Create symlinks to ChunkBlazer"
-call :log "  4. Build RuneLite"
+call :log "  1. Clone RuneLite source code (if needed)"
+call :log "  2. Create symlinks to ChunkBlazer plugin"
+call :log "  3. Build RuneLite with Gradle"
 call :log ""
 call :log "REQUIREMENTS:"
 call :log "  - Git installed and in PATH"
@@ -49,23 +45,17 @@ if %ERRORLEVEL% NEQ 0 (
 :: Set paths
 set "CHUNKBLAZER_DIR=%SCRIPT_DIR%"
 set "RUNELITE_DIR=C:\runelite"
-set "TOOLS_DIR=%CHUNKBLAZER_DIR%\tools"
-set "MAVEN_DIR=%TOOLS_DIR%\maven"
-set "MAVEN_VERSION=3.9.6"
-set "MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/%MAVEN_VERSION%/binaries/apache-maven-%MAVEN_VERSION%-bin.zip"
 set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\net\runelite\client\plugins\chunkblazer"
 set "PLUGIN_RESOURCES=%CHUNKBLAZER_DIR%\src\main\resources\net\runelite\client\plugins\chunkblazer"
 
 call :log "Configuration:"
 call :log "  CHUNKBLAZER_DIR: %CHUNKBLAZER_DIR%"
 call :log "  RUNELITE_DIR: %RUNELITE_DIR%"
-call :log "  TOOLS_DIR: %TOOLS_DIR%"
-call :log "  MAVEN_DIR: %MAVEN_DIR%"
 call :log "  LOG_FILE: %LOG_FILE%"
 call :log ""
 
 :: Check for Java
-call :log "Checking for Java..."
+call :log "[1/4] Checking for Java..."
 java -version >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     call :log ""
@@ -99,130 +89,21 @@ for /f "tokens=*" %%i in ('git --version') do call :log "  %%i"
 call :log "Git found!"
 call :log ""
 
-:: Setup Maven
-call :log "[1/5] Setting up Maven..."
-where mvn >nul 2>&1
-if %ERRORLEVEL% EQU 0 (
-    call :log "Maven found in PATH, using system Maven."
-    for /f "tokens=*" %%i in ('mvn --version 2^>^&1 ^| findstr /i "Apache Maven"') do call :log "  %%i"
-    set "MVN_CMD=mvn"
-    goto :maven_done
-)
-
-if exist "%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd" (
-    call :log "Using local Maven installation."
-    call :log "  Version: %MAVEN_VERSION%"
-    set "MVN_CMD=%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd"
-    goto :maven_done
-)
-
-call :log "Maven not found. Downloading Maven %MAVEN_VERSION%..."
-
-:: Create directories using PowerShell (more reliable across Windows versions)
-call :log "Creating directories..."
-call :log "  Target: %MAVEN_DIR%"
-powershell -Command "New-Item -ItemType Directory -Force -Path '%MAVEN_DIR%' | Out-Null" 2>nul
-if not exist "%MAVEN_DIR%" (
-    call :log "  PowerShell mkdir failed, trying md command..."
-    md "%MAVEN_DIR%" 2>nul
-)
-if not exist "%MAVEN_DIR%" (
-    call :log "ERROR: Failed to create directory: %MAVEN_DIR%"
-    call :log "Please create this directory manually and re-run the script."
-    call :logfail
-    pause
-    exit /b 1
-)
-call :log "  Directory created successfully."
-
-:: Download Maven using PowerShell with better error handling
-call :log "Downloading Maven..."
-call :log "  URL: %MAVEN_URL%"
-call :log "  This may take a minute..."
-set "MAVEN_ZIP=%MAVEN_DIR%\maven.zip"
-
-:: Try PowerShell Invoke-WebRequest first
-call :log "  Attempting download via PowerShell..."
-powershell -ExecutionPolicy Bypass -Command "$ProgressPreference = 'SilentlyContinue'; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; try { Invoke-WebRequest -Uri '%MAVEN_URL%' -OutFile '%MAVEN_ZIP%' -UseBasicParsing; exit 0 } catch { Write-Host $_.Exception.Message; exit 1 }"
-if %ERRORLEVEL% NEQ 0 (
-    call :log "  PowerShell download failed, trying curl..."
-    curl -L -o "%MAVEN_ZIP%" "%MAVEN_URL%" 2>nul
-    if %ERRORLEVEL% NEQ 0 (
-        call :log ""
-        call :log "ERROR: Failed to download Maven."
-        call :log "Please check your internet connection and try again."
-        call :log ""
-        call :log "Alternative: Download Maven manually from:"
-        call :log "  %MAVEN_URL%"
-        call :log "And extract to: %MAVEN_DIR%"
-        call :logfail
-        pause
-        exit /b 1
-    )
-)
-
-:: Verify download
-if not exist "%MAVEN_ZIP%" (
-    call :log "ERROR: Maven download file not found."
-    call :logfail
-    pause
-    exit /b 1
-)
-for %%A in ("%MAVEN_ZIP%") do set "ZIP_SIZE=%%~zA"
-if "%ZIP_SIZE%"=="" set "ZIP_SIZE=0"
-call :log "  Downloaded: %ZIP_SIZE% bytes"
-if %ZIP_SIZE% LSS 1000000 (
-    call :log "ERROR: Downloaded file is too small (%ZIP_SIZE% bytes). Download may have failed."
-    del "%MAVEN_ZIP%" 2>nul
-    call :logfail
-    pause
-    exit /b 1
-)
-call :log "  Download complete!"
-
-:: Extract Maven using PowerShell
-call :log "Extracting Maven..."
-call :log "  Source: %MAVEN_ZIP%"
-call :log "  Destination: %MAVEN_DIR%"
-powershell -ExecutionPolicy Bypass -Command "try { Expand-Archive -Path '%MAVEN_ZIP%' -DestinationPath '%MAVEN_DIR%' -Force; exit 0 } catch { Write-Host $_.Exception.Message; exit 1 }"
-if %ERRORLEVEL% NEQ 0 (
-    call :log "ERROR: Failed to extract Maven."
-    call :log "Please extract manually: %MAVEN_ZIP%"
-    call :log "To: %MAVEN_DIR%"
-    call :logfail
-    pause
-    exit /b 1
-)
-
-:: Verify extraction
-if not exist "%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd" (
-    call :log "ERROR: Maven extraction verification failed."
-    call :log "Expected file not found: %MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd"
-    call :logfail
-    pause
-    exit /b 1
-)
-call :log "  Extraction complete!"
-
-:: Clean up zip file
-del "%MAVEN_ZIP%" 2>nul
-call :log "  Cleaned up zip file."
-
-call :log "Maven installed successfully!"
-set "MVN_CMD=%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd"
-
-:maven_done
-call :log ""
-
-:: Check if RuneLite already exists
-if exist "%RUNELITE_DIR%" (
-    call :log "[2/5] RuneLite directory already exists at %RUNELITE_DIR%"
+:: Check if RuneLite already exists and has gradlew
+if exist "%RUNELITE_DIR%\gradlew.bat" (
+    call :log "[2/4] RuneLite directory already exists at %RUNELITE_DIR%"
     call :log "  Skipping clone..."
 ) else (
-    call :log "[2/5] Cloning RuneLite repository..."
+    if exist "%RUNELITE_DIR%" (
+        call :log "[2/4] RuneLite directory exists but appears incomplete."
+        call :log "  Removing and re-cloning..."
+        rd /s /q "%RUNELITE_DIR%" 2>nul
+    ) else (
+        call :log "[2/4] Cloning RuneLite repository..."
+    )
     call :log "  Target: %RUNELITE_DIR%"
     call :log "  This may take a few minutes..."
-    git clone --depth 1 https://github.com/runelite/runelite.git "%RUNELITE_DIR%" >> "%LOG_FILE%" 2>&1
+    git clone https://github.com/runelite/runelite.git "%RUNELITE_DIR%" >> "%LOG_FILE%" 2>&1
     if %ERRORLEVEL% NEQ 0 (
         call :log "ERROR: Failed to clone RuneLite"
         call :log "Check log for details: %LOG_FILE%"
@@ -234,8 +115,17 @@ if exist "%RUNELITE_DIR%" (
 )
 call :log ""
 
+:: Verify gradlew exists
+if not exist "%RUNELITE_DIR%\gradlew.bat" (
+    call :log "ERROR: gradlew.bat not found in %RUNELITE_DIR%"
+    call :log "The RuneLite clone may be corrupted. Try deleting C:\runelite and running again."
+    call :logfail
+    pause
+    exit /b 1
+)
+
 :: Create plugin directories if they don't exist
-call :log "[3/5] Creating plugin directories..."
+call :log "[3/4] Creating symlinks to ChunkBlazer..."
 set "JAVA_PLUGINS_DIR=%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins"
 set "RES_PLUGINS_DIR=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins"
 
@@ -253,11 +143,6 @@ if not exist "%RES_PLUGINS_DIR%" (
         powershell -Command "New-Item -ItemType Directory -Force -Path '%RES_PLUGINS_DIR%' | Out-Null"
     )
 )
-call :log "  Plugin directories ready."
-call :log ""
-
-:: Create symlinks
-call :log "[4/5] Creating symlinks to ChunkBlazer..."
 
 set "JAVA_LINK=%JAVA_PLUGINS_DIR%\chunkblazer"
 set "RES_LINK=%RES_PLUGINS_DIR%\chunkblazer"
@@ -314,16 +199,17 @@ call :log "  Resources symlink created!"
 call :log "Symlinks created successfully!"
 call :log ""
 
-:: Build RuneLite
-call :log "[5/5] Building RuneLite..."
+:: Build RuneLite using Gradle
+call :log "[4/4] Building RuneLite with Gradle..."
 call :log "  This may take several minutes on first run..."
 call :log "  Build output is being logged to: %LOG_FILE%"
 call :log ""
 echo Building... (this takes a while, check %LOG_FILE% for progress)
 cd /d "%RUNELITE_DIR%"
 
-:: Run Maven and capture output to log
-call "%MVN_CMD%" install -DskipTests >> "%LOG_FILE%" 2>&1
+:: Run Gradle build and capture output to log
+call :log "  Running: gradlew.bat build -x test"
+call "%RUNELITE_DIR%\gradlew.bat" build -x test >> "%LOG_FILE%" 2>&1
 set "BUILD_RESULT=%ERRORLEVEL%"
 
 if %BUILD_RESULT% NEQ 0 (
@@ -336,6 +222,7 @@ if %BUILD_RESULT% NEQ 0 (
     call :log ""
     call :log "Common issues:"
     call :log "  - Java JDK not installed (need JDK, not just JRE)"
+    call :log "  - Wrong Java version (need Java 11+)"
     call :log "  - Network issues downloading dependencies"
     call :log "  - Disk space issues"
     call :log ""
