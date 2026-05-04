@@ -10,7 +10,7 @@
                     "level": 70,
                     "completion_type": "MINING",
                     "base_points": 3,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Adamantite Ore"],
@@ -58,7 +58,7 @@
                     "level": 15,
                     "completion_type": "MINING",
                     "base_points": 1,
-                    "assignment_weight": 3,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Iron Ore"],
