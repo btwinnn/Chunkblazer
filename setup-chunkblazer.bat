@@ -194,13 +194,17 @@ call :log ""
 echo Building... (this takes a while, check %LOG_FILE% for progress)
 cd /d "%RUNELITE_DIR%"
 
-:: Clean first to ensure Lombok processes all files
-call :log "  Running: gradlew.bat :client:clean"
-call "%RUNELITE_DIR%\gradlew.bat" :client:clean >> "%LOG_FILE%" 2>&1
+:: Stop any running Gradle daemons to ensure clean state
+call :log "  Stopping Gradle daemons..."
+call "%RUNELITE_DIR%\gradlew.bat" --stop >> "%LOG_FILE%" 2>&1
 
-:: Run Gradle build and capture output to log
-call :log "  Running: gradlew.bat :client:build -x test -x pmdMain -x checkstyleMain"
-call "%RUNELITE_DIR%\gradlew.bat" :client:build -x test -x pmdMain -x checkstyleMain >> "%LOG_FILE%" 2>&1
+:: Clear Gradle cache for this project to fix Lombok issues
+call :log "  Clearing project build cache..."
+if exist "%RUNELITE_DIR%\.gradle" rd /s /q "%RUNELITE_DIR%\.gradle" 2>nul
+
+:: Run Gradle build with no daemon to avoid caching issues
+call :log "  Running: gradlew.bat --no-daemon :client:build -x test -x pmdMain -x checkstyleMain"
+call "%RUNELITE_DIR%\gradlew.bat" --no-daemon :client:build -x test -x pmdMain -x checkstyleMain >> "%LOG_FILE%" 2>&1
 set "BUILD_RESULT=%ERRORLEVEL%"
 
 if %BUILD_RESULT% NEQ 0 (
