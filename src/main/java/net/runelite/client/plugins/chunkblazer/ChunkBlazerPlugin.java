@@ -444,7 +444,9 @@ public class ChunkBlazerPlugin extends Plugin
 		"Starter_Area_Tasks.json",
 		"Misthalin_Tasks.json",
 		"Asgarnia_Tasks.json",
-		"Kandarin_Tasks.json"
+		"Kandarin_Tasks.json",
+		"Varlamore_Tasks.json",
+		"Zeah_Tasks.json"
 	};
 
 	// Free starting chunk (always unlocked for all modes)
