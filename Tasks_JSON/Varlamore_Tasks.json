@@ -4623,6 +4623,395 @@
                 }
             ],                      
             "is_completed": false
+        },
+        {
+            "region_id": [5937],
+            "Friendly_Name": "Book of Earthen Might",
+            "neighbor_ids": [5938, 6193, 5936, 5681],
+            "tasks": [
+                {
+                    "name": "Obtain some Soiled Pages",
+                    "taskID": "obtain_some_soiled_pages",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Soiled Page"],
+                            "item_ids": [30068],
+                            "quantity": [1, 1000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Varlamore Bandit",
+                    "taskID": "defeat_varlamore_bandit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bandit (Varlamore)"],
+                        "npc_ids": [13283, 13284, 13285, 13286, 13287, 13288, 13289, 13290],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat a Varlamore Bandit in 1 Hit",
+                    "taskID": "defeat_varlamore_bandit_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bandit (Varlamore)"],
+                        "npc_ids": [13283, 13284, 13285, 13286, 13287, 13288, 13289, 13290],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }                   
+                }, 
+                {
+                    "name": "Equip a Steel Longsword",
+                    "taskID": "equip_steel_longsword",
+                    "category": ["Attack"],
+                    "level": [5],
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Steel Longsword"],
+                            "item_ids": [1295]
+                        }
+                    ]
+                }                        
+            ],                      
+            "is_completed": false
+        },
+        {
+            "region_id": [5936],
+            "Friendly_Name": "Bard Encampment",
+            "neighbor_ids": [5937, 6192, 5935, 5680],
+            "tasks": [
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Copper Ore",
+                    "taskID": "mine_copper",
+                    "category": "Mining",
+                    "level": 1,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Copper Ore",
+                        "item_ids": [436],
+                        "quantity": [5, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Tin Ore",
+                    "taskID": "mine_tin",
+                    "category": "Mining",
+                    "level": 1,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Tin Ore",
+                        "item_ids": [438],
+                        "quantity": [5, 100]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Dire Wolf",
+                    "taskID": "defeat_dire_wolf",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Dire Wolf"],
+                        "npc_ids": [9181, 3426, 13813, 13812],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat a Dire Wolf in 1 Hit",
+                    "taskID": "defeat_dire_wolf_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Dire Wolf"],
+                        "npc_ids": [9181, 3426, 13813, 13812],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Defeat a Dire Wolf Alpha",
+                    "taskID": "defeat_dire_wolf_alpha",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Dire Wolf Alpha"],
+                        "npc_ids": [13812],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat an Oryx",
+                    "taskID": "defeat_oryx",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Oryx"],
+                        "npc_ids": [13006],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat an Oryx in 1 Hit",
+                    "taskID": "defeat_oryx_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Oryx"],
+                        "npc_ids": [13006],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Catch a Tecu Salamander",
+                    "taskID": "catch_tecu_salamander",
+                    "category": "Hunter",
+                    "level": 79,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                            "item": ["Tecu salamander", "Immature tecu salamander"], 
+                            "item_ids": [28834, 28831]
+                            }
+                           
+                        ]             
+                },
+                {
+                    "name": "Equip a Tecu Salamander",
+                    "taskID": "equip_tecu_salamander",
+                    "category": ["Attack", "Ranged", "Magic"],
+                    "level": [80, 80, 80],
+                    "completion_type": "EQUIP",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Tecu salamander"],
+                            "item_ids": [28834]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Tecu Salamander",
+                    "taskID": "obtain_Tecu_Salamander",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Tecu salamander"],
+                            "item_ids": [28834]
+                        }
+                    ]
+                }                     
+            ],                      
+            "is_completed": false
+        },
+        {
+            "region_id": [5935],
+            "Friendly_Name": "Jerboa Plains",
+            "neighbor_ids": [5936, 6191, 5934, 5679],
+            "tasks": [
+                {
+                    "name": "Catch an Embertailed Jerboa",
+                    "taskID": "catch_jerboa",
+                    "category": "Hunter",
+                    "level": 39,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                            "item": ["Jerboa Tail"], 
+                            "item_ids": [29166]
+                            }
+                           
+                        ]             
+                },
+                {
+                    "name": "Obtain a Large Jerboa Tail",
+                    "taskID": "obtain_large_jerboa_tail",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Large Jerboa Tail"],
+                            "item_ids": [29228]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop an Oak Tree",
+                    "taskID": "chop_oak_tree",
+                    "category": "Woodcutting",
+                    "level": 15,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
+                        "quantity": [1]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Defeat an Oryx",
+                    "taskID": "defeat_oryx",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Oryx"],
+                        "npc_ids": [13006],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat an Oryx in 1 Hit",
+                    "taskID": "defeat_oryx_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Oryx"],
+                        "npc_ids": [13006],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 5 Snake in 1 Hit",
+                    "taskID": "defeat_level_5_snake_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 5 Snake"],
+                        "npc_ids": [2845, 13002, 14916],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                                {
+                                    "varbit_id": 57,
+                                    "must_be_value": 0,
+                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
+                                }
+                            ]
+                    }
+                }                                  
+            ],                      
+            "is_completed": false
         }                                
     ]
 }
