@@ -55,6 +55,7 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 		// Register modules
 		registerModule(npcKillModule);
 		registerModuleWithType(npcKillModule, "COMBAT"); // NpcKillModule handles COMBAT type too
+		registerModuleWithType(npcKillModule, "SLAYER"); // NpcKillModule handles SLAYER type with task verification
 		registerModule(skillModule);
 		registerModule(obtainModule);
 		registerModule(equipModule);

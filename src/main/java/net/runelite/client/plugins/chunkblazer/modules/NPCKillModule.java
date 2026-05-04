@@ -45,9 +45,13 @@ import net.runelite.client.plugins.chunkblazer.verification.VarPlayerVerificatio
 @Singleton
 public class NPCKillModule extends AbstractTaskModule
 {
-	// Handles both NPC_KILL and COMBAT task types
+	// Handles NPC_KILL, COMBAT, and SLAYER task types
 	private static final String COMPLETION_TYPE = "NPC_KILL";
 	private static final String COMBAT_TYPE = "COMBAT";
+	private static final String SLAYER_TYPE = "SLAYER";
+
+	// Slayer task VarPlayer IDs (from RuneLite's SlayerPlugin)
+	private static final int SLAYER_TASK_COUNT_VARP = 394;  // VarPlayerID.SLAYER_COUNT
 
 	@Inject
 	private VarPlayerVerificationService varPlayerService;
@@ -126,16 +130,19 @@ public class NPCKillModule extends AbstractTaskModule
 		String type = task.getCompletionType();
 		if (type != null)
 		{
-			// Handle NPC_KILL and COMBAT completion types
-			if (COMPLETION_TYPE.equalsIgnoreCase(type) || COMBAT_TYPE.equalsIgnoreCase(type))
+			// Handle NPC_KILL, COMBAT, and SLAYER completion types
+			if (COMPLETION_TYPE.equalsIgnoreCase(type) ||
+				COMBAT_TYPE.equalsIgnoreCase(type) ||
+				SLAYER_TYPE.equalsIgnoreCase(type))
 			{
 				return true;
 			}
 		}
 
-		// Also check category field for "combat" tasks
+		// Also check category field for "combat" or "slayer" tasks
 		String category = task.getCategory();
-		if (category != null && COMBAT_TYPE.equalsIgnoreCase(category))
+		if (category != null &&
+			(COMBAT_TYPE.equalsIgnoreCase(category) || SLAYER_TYPE.equalsIgnoreCase(category)))
 		{
 			return true;
 		}
@@ -945,6 +952,19 @@ public class NPCKillModule extends AbstractTaskModule
 		// Update progress for all matching tasks
 		for (NuzlockeTask task : matchingTasks)
 		{
+			// SLAYER task check - must be on a slayer task to credit SLAYER completion type kills
+			if (SLAYER_TYPE.equalsIgnoreCase(task.getCompletionType()))
+			{
+				if (!hasActiveSlayerTask())
+				{
+					log.warn("[TASK FAILED] Task '{}' (ID: {}) - SLAYER task requires an active slayer assignment",
+						task.getName(), task.getTaskId());
+					sendTaskFailure(task, "Not on a slayer task");
+					continue; // Skip this task, don't credit the kill
+				}
+				log.info("[TASK DEBUG] Task '{}' - SLAYER task check passed (player is on slayer task)", task.getName());
+			}
+
 			TaskConstraints constraints = task.getConstraints();
 			boolean hasDropConstraint = constraints != null && constraints.hasDroppedItemConstraint();
 			boolean hasTimeConstraint = constraints != null && constraints.hasTimeLimit();
@@ -1298,6 +1318,18 @@ public class NPCKillModule extends AbstractTaskModule
 		}
 
 		log.info(sb.toString());
+	}
+
+	/**
+	 * Check if the player currently has an active slayer task.
+	 * Uses VarPlayer SLAYER_COUNT - if > 0, player has an active task.
+	 * @return true if player has an active slayer task, false otherwise
+	 */
+	private boolean hasActiveSlayerTask()
+	{
+		int slayerTaskCount = client.getVarpValue(SLAYER_TASK_COUNT_VARP);
+		log.info(">>> SLAYER CHECK: VarPlayer {} (SLAYER_COUNT) = {}", SLAYER_TASK_COUNT_VARP, slayerTaskCount);
+		return slayerTaskCount > 0;
 	}
 
 	/**
