@@ -83,6 +83,13 @@ public class TaskConstraints
 	@SerializedName("prohibited_active_varbits")
 	private List<VarbitConstraint> prohibitedActiveVarbits;
 
+	// Direct varbit/varp ID for VARBIT_CHECK and VARP_CHECK tasks
+	@SerializedName("varbit_id")
+	private Integer varbitId;
+
+	@SerializedName("varp_id")
+	private Integer varpId;
+
 	/**
 	 * Represents a varbit constraint that must be checked during task verification.
 	 */
@@ -259,6 +266,10 @@ public class TaskConstraints
 			}
 			constraints.setDroppedItemIds(readIntArray(obj, "dropped_item_id"));
 			constraints.setDroppedItemQuantity(readFlexibleInt(obj, "quantity"));
+
+			// Handle direct varbit_id and varp_id for VARBIT_CHECK/VARP_CHECK tasks
+			constraints.setVarbitId(readFlexibleInt(obj, "varbit_id"));
+			constraints.setVarpId(readFlexibleInt(obj, "varp_id"));
 
 			// Handle prohibited_active_varbits constraints
 			if (obj.has("prohibited_active_varbits"))

@@ -52,6 +52,12 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	private ConstructionModule constructionModule;
 
 	@Inject
+	private VarbitCheckModule varbitCheckModule;
+
+	@Inject
+	private NpcDialogueModule npcDialogueModule;
+
+	@Inject
 	public TaskModuleManager()
 	{
 	}
@@ -72,6 +78,9 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 		registerModule(agilityModule);
 		registerModule(thievingModule);
 		registerModule(constructionModule);
+		registerModule(varbitCheckModule);
+		registerModuleWithType(varbitCheckModule, "VARP_CHECK"); // VarbitCheckModule handles both types
+		registerModule(npcDialogueModule);
 
 		// Register ObtainModule for all production-based skilling types
 		// These all work the same way - tracking items appearing in inventory

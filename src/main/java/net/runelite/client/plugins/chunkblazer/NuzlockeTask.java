@@ -41,6 +41,9 @@ public class NuzlockeTask
 
 	private TaskConstraints constraints;
 
+	@SerializedName("varbit_boolean")
+	private Integer varbitBoolean;
+
 	// Runtime tracking fields (not from JSON)
 	private transient int currentProgress;
 	private transient int targetQuantity;
@@ -135,6 +138,9 @@ public class NuzlockeTask
 			{
 				task.setConstraints(context.deserialize(obj.get("constraints"), TaskConstraints.class));
 			}
+
+			// Handle varbit_boolean for VARBIT_CHECK tasks
+			task.setVarbitBoolean(getIntOrNull(obj, "varbit_boolean"));
 
 			return task;
 		}
