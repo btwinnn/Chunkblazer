@@ -21,7 +21,7 @@ call :log "========================================"
 call :log ""
 call :log "This script will:"
 call :log "  1. Clone RuneLite source code (if needed)"
-call :log "  2. Create symlinks to ChunkBlazer plugin"
+call :log "  2. Copy ChunkBlazer plugin into RuneLite"
 call :log "  3. Build RuneLite with Gradle"
 call :log ""
 call :log "REQUIREMENTS:"
@@ -30,17 +30,6 @@ call :log "  - Java 11+ installed (JDK, not just JRE)"
 call :log ""
 echo Press any key to continue or Ctrl+C to cancel...
 pause >nul
-
-:: Check if running as admin (needed for symlinks on some Windows configs)
-net session >nul 2>&1
-if %ERRORLEVEL% NEQ 0 (
-    call :log ""
-    call :log "WARNING: Not running as Administrator."
-    call :log "Symlink creation may fail. If it does, right-click this script"
-    call :log "and select 'Run as administrator'"
-    call :log ""
-    pause
-)
 
 :: Set paths
 set "CHUNKBLAZER_DIR=%SCRIPT_DIR%"
@@ -124,79 +113,67 @@ if not exist "%RUNELITE_DIR%\gradlew.bat" (
     exit /b 1
 )
 
-:: Create plugin directories if they don't exist
-call :log "[3/4] Creating symlinks to ChunkBlazer..."
+:: Copy ChunkBlazer plugin into RuneLite (instead of symlinks)
+call :log "[3/4] Copying ChunkBlazer plugin into RuneLite..."
 set "JAVA_PLUGINS_DIR=%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins"
 set "RES_PLUGINS_DIR=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins"
 
+:: Create plugin directories if they don't exist
 if not exist "%JAVA_PLUGINS_DIR%" (
     call :log "  Creating: %JAVA_PLUGINS_DIR%"
     md "%JAVA_PLUGINS_DIR%" 2>nul
-    if not exist "%JAVA_PLUGINS_DIR%" (
-        powershell -Command "New-Item -ItemType Directory -Force -Path '%JAVA_PLUGINS_DIR%' | Out-Null"
-    )
 )
 if not exist "%RES_PLUGINS_DIR%" (
     call :log "  Creating: %RES_PLUGINS_DIR%"
     md "%RES_PLUGINS_DIR%" 2>nul
-    if not exist "%RES_PLUGINS_DIR%" (
-        powershell -Command "New-Item -ItemType Directory -Force -Path '%RES_PLUGINS_DIR%' | Out-Null"
+)
+
+set "JAVA_DEST=%JAVA_PLUGINS_DIR%\chunkblazer"
+set "RES_DEST=%RES_PLUGINS_DIR%\chunkblazer"
+
+call :log "  Copying Java sources..."
+call :log "    From: %PLUGIN_JAVA_SRC%"
+call :log "    To: %JAVA_DEST%"
+
+:: Remove existing plugin folder if it exists
+if exist "%JAVA_DEST%" (
+    call :log "    Removing existing Java folder..."
+    rd /s /q "%JAVA_DEST%" 2>nul
+)
+
+:: Copy Java sources
+xcopy "%PLUGIN_JAVA_SRC%" "%JAVA_DEST%" /E /I /H /Y >> "%LOG_FILE%" 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    call :log "ERROR: Failed to copy Java sources."
+    call :logfail
+    pause
+    exit /b 1
+)
+call :log "    Java sources copied!"
+
+call :log "  Copying resources..."
+call :log "    From: %PLUGIN_RESOURCES%"
+call :log "    To: %RES_DEST%"
+
+:: Remove existing resources folder if it exists
+if exist "%RES_DEST%" (
+    call :log "    Removing existing resources folder..."
+    rd /s /q "%RES_DEST%" 2>nul
+)
+
+:: Copy resources (if they exist)
+if exist "%PLUGIN_RESOURCES%" (
+    xcopy "%PLUGIN_RESOURCES%" "%RES_DEST%" /E /I /H /Y >> "%LOG_FILE%" 2>&1
+    if %ERRORLEVEL% NEQ 0 (
+        call :log "WARNING: Failed to copy resources (may be empty)."
+    ) else (
+        call :log "    Resources copied!"
     )
+) else (
+    call :log "    No resources folder found (skipping)."
 )
 
-set "JAVA_LINK=%JAVA_PLUGINS_DIR%\chunkblazer"
-set "RES_LINK=%RES_PLUGINS_DIR%\chunkblazer"
-
-call :log "  Java source symlink:"
-call :log "    Link: %JAVA_LINK%"
-call :log "    Target: %PLUGIN_JAVA_SRC%"
-call :log "  Resources symlink:"
-call :log "    Link: %RES_LINK%"
-call :log "    Target: %PLUGIN_RESOURCES%"
-
-:: Remove existing symlinks/folders if they exist
-if exist "%JAVA_LINK%" (
-    call :log "  Removing existing Java link..."
-    rmdir "%JAVA_LINK%" 2>nul
-    if exist "%JAVA_LINK%" rd /s /q "%JAVA_LINK%" 2>nul
-)
-if exist "%RES_LINK%" (
-    call :log "  Removing existing resources link..."
-    rmdir "%RES_LINK%" 2>nul
-    if exist "%RES_LINK%" rd /s /q "%RES_LINK%" 2>nul
-)
-
-:: Create new symlinks
-call :log "  Creating Java symlink..."
-mklink /D "%JAVA_LINK%" "%PLUGIN_JAVA_SRC%" >> "%LOG_FILE%" 2>&1
-if %ERRORLEVEL% NEQ 0 (
-    call :log ""
-    call :log "ERROR: Failed to create Java symlink."
-    call :log ""
-    call :log "This usually means you need to run as Administrator."
-    call :log "Right-click setup-chunkblazer.bat and select 'Run as administrator'"
-    call :log ""
-    call :logfail
-    pause
-    exit /b 1
-)
-call :log "  Java symlink created!"
-
-call :log "  Creating resources symlink..."
-mklink /D "%RES_LINK%" "%PLUGIN_RESOURCES%" >> "%LOG_FILE%" 2>&1
-if %ERRORLEVEL% NEQ 0 (
-    call :log ""
-    call :log "ERROR: Failed to create resources symlink."
-    call :log ""
-    call :log "This usually means you need to run as Administrator."
-    call :log "Right-click setup-chunkblazer.bat and select 'Run as administrator'"
-    call :log ""
-    call :logfail
-    pause
-    exit /b 1
-)
-call :log "  Resources symlink created!"
-call :log "Symlinks created successfully!"
+call :log "Plugin files copied successfully!"
 call :log ""
 
 :: Build RuneLite using Gradle
@@ -208,8 +185,8 @@ echo Building... (this takes a while, check %LOG_FILE% for progress)
 cd /d "%RUNELITE_DIR%"
 
 :: Run Gradle build and capture output to log
-call :log "  Running: gradlew.bat build -x test"
-call "%RUNELITE_DIR%\gradlew.bat" build -x test >> "%LOG_FILE%" 2>&1
+call :log "  Running: gradlew.bat :runelite-client:build -x test"
+call "%RUNELITE_DIR%\gradlew.bat" :runelite-client:build -x test >> "%LOG_FILE%" 2>&1
 set "BUILD_RESULT=%ERRORLEVEL%"
 
 if %BUILD_RESULT% NEQ 0 (
@@ -225,6 +202,7 @@ if %BUILD_RESULT% NEQ 0 (
     call :log "  - Wrong Java version (need Java 11+)"
     call :log "  - Network issues downloading dependencies"
     call :log "  - Disk space issues"
+    call :log "  - Plugin code compilation errors"
     call :log ""
     call :logfail
     echo.
@@ -241,6 +219,9 @@ call :log ""
 call :log "Finished: %DATE% %TIME%"
 call :log ""
 call :log "You can now use run-chunkblazer.bat to launch the dev client."
+call :log ""
+call :log "NOTE: Plugin files were COPIED to RuneLite."
+call :log "      If you update ChunkBlazer, re-run this setup script."
 call :log ""
 call :log "Log saved to: %LOG_FILE%"
 
