@@ -43,6 +43,15 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	private FiremakingModule firemakingModule;
 
 	@Inject
+	private AgilityModule agilityModule;
+
+	@Inject
+	private ThievingModule thievingModule;
+
+	@Inject
+	private ConstructionModule constructionModule;
+
+	@Inject
 	public TaskModuleManager()
 	{
 	}
@@ -60,6 +69,9 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 		registerModule(obtainModule);
 		registerModule(equipModule);
 		registerModule(firemakingModule);
+		registerModule(agilityModule);
+		registerModule(thievingModule);
+		registerModule(constructionModule);
 
 		// Register ObtainModule for all production-based skilling types
 		// These all work the same way - tracking items appearing in inventory
