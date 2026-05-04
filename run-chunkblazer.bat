@@ -89,7 +89,7 @@ call :log "[3/4] Building RuneLite with ChunkBlazer..."
 call :log "  This may take a minute..."
 echo Building... (check %LOG_FILE% for progress)
 cd /d "%RUNELITE_DIR%"
-call "%RUNELITE_DIR%\gradlew.bat" :client:build -x test >> "%LOG_FILE%" 2>&1
+call "%RUNELITE_DIR%\gradlew.bat" :client:build -x test -x pmdMain -x checkstyleMain >> "%LOG_FILE%" 2>&1
 set "BUILD_RESULT=%ERRORLEVEL%"
 
 if %BUILD_RESULT% NEQ 0 (

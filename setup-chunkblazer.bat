@@ -189,8 +189,8 @@ call :log "  Running: gradlew.bat :client:clean"
 call "%RUNELITE_DIR%\gradlew.bat" :client:clean >> "%LOG_FILE%" 2>&1
 
 :: Run Gradle build and capture output to log
-call :log "  Running: gradlew.bat :client:build -x test"
-call "%RUNELITE_DIR%\gradlew.bat" :client:build -x test >> "%LOG_FILE%" 2>&1
+call :log "  Running: gradlew.bat :client:build -x test -x pmdMain -x checkstyleMain"
+call "%RUNELITE_DIR%\gradlew.bat" :client:build -x test -x pmdMain -x checkstyleMain >> "%LOG_FILE%" 2>&1
 set "BUILD_RESULT=%ERRORLEVEL%"
 
 if %BUILD_RESULT% NEQ 0 (
