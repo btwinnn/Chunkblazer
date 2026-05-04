@@ -185,8 +185,8 @@ echo Building... (this takes a while, check %LOG_FILE% for progress)
 cd /d "%RUNELITE_DIR%"
 
 :: Run Gradle build and capture output to log
-call :log "  Running: gradlew.bat :runelite-client:build -x test"
-call "%RUNELITE_DIR%\gradlew.bat" :runelite-client:build -x test >> "%LOG_FILE%" 2>&1
+call :log "  Running: gradlew.bat :client:build -x test"
+call "%RUNELITE_DIR%\gradlew.bat" :client:build -x test >> "%LOG_FILE%" 2>&1
 set "BUILD_RESULT=%ERRORLEVEL%"
 
 if %BUILD_RESULT% NEQ 0 (

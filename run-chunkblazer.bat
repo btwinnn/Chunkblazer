@@ -58,7 +58,7 @@ echo.
 echo [3/4] Building RuneLite with ChunkBlazer...
 echo      (This may take a minute...)
 cd /d "%RUNELITE_DIR%"
-call "%RUNELITE_DIR%\gradlew.bat" :runelite-client:build -x test
+call "%RUNELITE_DIR%\gradlew.bat" :client:build -x test
 if %ERRORLEVEL% NEQ 0 (
     echo.
     echo ERROR: Build failed! Check the output above for errors.
