@@ -8,9 +8,9 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Set;
 import javax.inject.Inject;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.client.callback.ClientThread;
+import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.api.Client;
 import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
@@ -43,12 +43,15 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 	private final Client client;
 	private final ChunkBlazerPlugin plugin;
 	private final ChunkBlazerConfig config;
+	private final ChatboxPanelManager chatboxPanelManager;
+	private final ClientThread clientThread;
 
 	private int hoveredRegionId = -1;
 	private boolean isHoveredUnlockable = false;
 
 	@Inject
-	private ChunkBlazerWorldMapOverlay(Client client, ChunkBlazerPlugin plugin, ChunkBlazerConfig config)
+	private ChunkBlazerWorldMapOverlay(Client client, ChunkBlazerPlugin plugin, ChunkBlazerConfig config,
+		ChatboxPanelManager chatboxPanelManager, ClientThread clientThread)
 	{
 		setPosition(OverlayPosition.DYNAMIC);
 		setPriority(PRIORITY_HIGH);
@@ -57,6 +60,8 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 		this.client = client;
 		this.plugin = plugin;
 		this.config = config;
+		this.chatboxPanelManager = chatboxPanelManager;
+		this.clientThread = clientThread;
 	}
 
 	@Override
@@ -393,40 +398,31 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 
 	private void showUnlockConfirmation(int regionId, String regionName, int unlockCost, int playerPoints)
 	{
-		SwingUtilities.invokeLater(() ->
+		clientThread.invokeLater(() ->
 		{
 			if (playerPoints < unlockCost)
 			{
-				JOptionPane.showMessageDialog(
-					null,
-					"Not enough points to unlock this chunk!\n\n" +
-					regionName + "\n\n" +
-					"Cost: " + unlockCost + " points\n" +
-					"You have: " + playerPoints + " points\n" +
-					"Need: " + (unlockCost - playerPoints) + " more points",
-					"Cannot Unlock Chunk",
-					JOptionPane.WARNING_MESSAGE
-				);
+				// Show "not enough points" message with OK button
+				chatboxPanelManager.openTextMenuInput(
+						"Cannot unlock " + regionName + "! " +
+						"Need " + (unlockCost - playerPoints) + " more points. " +
+						"(Cost: " + unlockCost + ", You have: " + playerPoints + ")")
+					.option("OK", () -> {})
+					.build();
 				return;
 			}
 
-			int confirm = JOptionPane.showConfirmDialog(
-				null,
-				"Ready to unlock this chunk?\n\n" +
-				regionName + "\n\n" +
-				"Cost: " + unlockCost + " points\n" +
-				"Your points: " + playerPoints + "\n" +
-				"Remaining after unlock: " + (playerPoints - unlockCost) + " points",
-				"Unlock Chunk?",
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.QUESTION_MESSAGE
-			);
-
-			if (confirm == JOptionPane.YES_OPTION)
-			{
-				plugin.unlockRegion(regionId);
-				log.info("Unlocked region {} for {} points", regionName, unlockCost);
-			}
+			// Show unlock confirmation with Yes/No options
+			chatboxPanelManager.openTextMenuInput(
+					"Unlock " + regionName + " for " + unlockCost + " points? " +
+					"(Remaining: " + (playerPoints - unlockCost) + " points)")
+				.option("Yes, unlock it!", () ->
+				{
+					plugin.unlockRegion(regionId);
+					log.info("Unlocked region {} for {} points", regionName, unlockCost);
+				})
+				.option("No", () -> {})
+				.build();
 		});
 	}
 }

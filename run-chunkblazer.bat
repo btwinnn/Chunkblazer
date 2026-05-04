@@ -42,17 +42,26 @@ if not exist "%RUNELITE_DIR%\gradlew.bat" (
     exit /b 1
 )
 
+:: Pull latest RuneLite updates (prevents j5connect and other version mismatches)
+call :log "[1/5] Pulling latest RuneLite updates..."
+cd /d "%RUNELITE_DIR%"
+git pull origin master >> "%LOG_FILE%" 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    call :log "WARNING: RuneLite git pull failed - continuing with local version"
+)
+call :log ""
+
 :: Pull latest ChunkBlazer updates
-call :log "[1/4] Pulling latest ChunkBlazer updates..."
+call :log "[2/5] Pulling latest ChunkBlazer updates..."
 cd /d "%CHUNKBLAZER_DIR%"
 git pull >> "%LOG_FILE%" 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    call :log "WARNING: Git pull failed - continuing with local version"
+    call :log "WARNING: ChunkBlazer git pull failed - continuing with local version"
 )
 call :log ""
 
 :: Copy latest plugin files into RuneLite
-call :log "[2/4] Syncing ChunkBlazer plugin files..."
+call :log "[3/5] Syncing ChunkBlazer plugin files..."
 set "JAVA_DEST=%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer"
 set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer"
 
@@ -85,7 +94,7 @@ call :log "Plugin files synced."
 call :log ""
 
 :: Build RuneLite with ChunkBlazer
-call :log "[3/4] Building RuneLite with ChunkBlazer..."
+call :log "[4/5] Building RuneLite with ChunkBlazer..."
 call :log "  This may take a minute..."
 echo Building... (check %LOG_FILE% for progress)
 cd /d "%RUNELITE_DIR%"
@@ -109,7 +118,7 @@ call :log "Build complete!"
 call :log ""
 
 :: Find the shaded jar
-call :log "[4/4] Launching RuneLite Dev Client..."
+call :log "[5/5] Launching RuneLite Dev Client..."
 set "CLIENT_JAR="
 for %%f in ("%RUNELITE_DIR%\runelite-client\build\libs\client-*-shaded.jar") do (
     set "CLIENT_JAR=%%f"
