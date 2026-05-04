@@ -3,86 +3,155 @@ setlocal enabledelayedexpansion
 title ChunkBlazer Dev Client
 color 0A
 
-echo ========================================
-echo      ChunkBlazer Dev Client Launcher
-echo ========================================
-echo.
+:: Set up logging
+set "SCRIPT_DIR=%~dp0"
+if "%SCRIPT_DIR:~-1%"=="\" set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+set "LOG_FILE=%SCRIPT_DIR%\run-log.txt"
+
+:: Clear previous log and start fresh
+echo ========================================> "%LOG_FILE%"
+echo ChunkBlazer Run Log>> "%LOG_FILE%"
+echo Started: %DATE% %TIME%>> "%LOG_FILE%"
+echo ========================================>> "%LOG_FILE%"
+echo.>> "%LOG_FILE%"
+
+call :log "========================================"
+call :log "     ChunkBlazer Dev Client Launcher"
+call :log "========================================"
+call :log ""
 
 :: Set paths
-set "CHUNKBLAZER_DIR=%~dp0"
-if "%CHUNKBLAZER_DIR:~-1%"=="\" set "CHUNKBLAZER_DIR=%CHUNKBLAZER_DIR:~0,-1%"
+set "CHUNKBLAZER_DIR=%SCRIPT_DIR%"
 set "RUNELITE_DIR=C:\runelite"
 set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\net\runelite\client\plugins\chunkblazer"
 set "PLUGIN_RESOURCES=%CHUNKBLAZER_DIR%\src\main\resources\net\runelite\client\plugins\chunkblazer"
 
+call :log "Configuration:"
+call :log "  CHUNKBLAZER_DIR: %CHUNKBLAZER_DIR%"
+call :log "  RUNELITE_DIR: %RUNELITE_DIR%"
+call :log "  LOG_FILE: %LOG_FILE%"
+call :log ""
+
 :: Check RuneLite exists
 if not exist "%RUNELITE_DIR%\gradlew.bat" (
-    echo ERROR: RuneLite not found at %RUNELITE_DIR%
-    echo Please run setup-chunkblazer.bat first.
+    call :log "ERROR: RuneLite not found at %RUNELITE_DIR%"
+    call :log "Please run setup-chunkblazer.bat first."
+    call :logfail
+    echo ERROR: RuneLite not found. Please run setup-chunkblazer.bat first.
     pause
     exit /b 1
 )
 
 :: Pull latest ChunkBlazer updates
-echo [1/4] Pulling latest ChunkBlazer updates...
+call :log "[1/4] Pulling latest ChunkBlazer updates..."
 cd /d "%CHUNKBLAZER_DIR%"
-git pull
+git pull >> "%LOG_FILE%" 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    echo WARNING: Git pull failed - continuing with local version
+    call :log "WARNING: Git pull failed - continuing with local version"
 )
-echo.
+call :log ""
 
 :: Copy latest plugin files into RuneLite
-echo [2/4] Syncing ChunkBlazer plugin files...
+call :log "[2/4] Syncing ChunkBlazer plugin files..."
 set "JAVA_DEST=%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer"
 set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer"
 
+call :log "  Copying Java sources..."
+call :log "    From: %PLUGIN_JAVA_SRC%"
+call :log "    To: %JAVA_DEST%"
+
 :: Remove and re-copy Java sources
 if exist "%JAVA_DEST%" rd /s /q "%JAVA_DEST%" 2>nul
-xcopy "%PLUGIN_JAVA_SRC%" "%JAVA_DEST%" /E /I /H /Y >nul 2>&1
+xcopy "%PLUGIN_JAVA_SRC%" "%JAVA_DEST%" /E /I /H /Y >> "%LOG_FILE%" 2>&1
 if %ERRORLEVEL% NEQ 0 (
+    call :log "ERROR: Failed to sync Java sources."
+    call :logfail
     echo ERROR: Failed to sync Java sources.
     pause
     exit /b 1
 )
+call :log "  Java sources synced."
 
 :: Remove and re-copy resources (if they exist)
+call :log "  Copying resources..."
 if exist "%RES_DEST%" rd /s /q "%RES_DEST%" 2>nul
 if exist "%PLUGIN_RESOURCES%" (
-    xcopy "%PLUGIN_RESOURCES%" "%RES_DEST%" /E /I /H /Y >nul 2>&1
+    xcopy "%PLUGIN_RESOURCES%" "%RES_DEST%" /E /I /H /Y >> "%LOG_FILE%" 2>&1
+    call :log "  Resources synced."
+) else (
+    call :log "  No resources folder found (skipping)."
 )
-echo Plugin files synced.
-echo.
+call :log "Plugin files synced."
+call :log ""
 
 :: Build RuneLite with ChunkBlazer
-echo [3/4] Building RuneLite with ChunkBlazer...
-echo      (This may take a minute...)
+call :log "[3/4] Building RuneLite with ChunkBlazer..."
+call :log "  This may take a minute..."
+echo Building... (check %LOG_FILE% for progress)
 cd /d "%RUNELITE_DIR%"
-call "%RUNELITE_DIR%\gradlew.bat" :client:build -x test
-if %ERRORLEVEL% NEQ 0 (
+call "%RUNELITE_DIR%\gradlew.bat" :client:build -x test >> "%LOG_FILE%" 2>&1
+set "BUILD_RESULT=%ERRORLEVEL%"
+
+if %BUILD_RESULT% NEQ 0 (
+    call :log ""
+    call :log "========================================"
+    call :log "    BUILD FAILED"
+    call :log "========================================"
+    call :log ""
+    call :log "Check the full log for errors: %LOG_FILE%"
+    call :logfail
     echo.
-    echo ERROR: Build failed! Check the output above for errors.
+    echo BUILD FAILED - Check log file: %LOG_FILE%
     pause
     exit /b 1
 )
-echo.
+call :log "Build complete!"
+call :log ""
 
 :: Find the shaded jar
-echo [4/4] Launching RuneLite Dev Client...
+call :log "[4/4] Launching RuneLite Dev Client..."
 set "CLIENT_JAR="
 for %%f in ("%RUNELITE_DIR%\runelite-client\build\libs\client-*-shaded.jar") do (
     set "CLIENT_JAR=%%f"
 )
 
 if "%CLIENT_JAR%"=="" (
+    call :log "ERROR: Could not find client shaded jar."
+    call :log "Expected in: %RUNELITE_DIR%\runelite-client\build\libs\"
+    call :logfail
     echo ERROR: Could not find client shaded jar.
-    echo Expected in: %RUNELITE_DIR%\runelite-client\build\libs\
     pause
     exit /b 1
 )
+
+call :log "Starting: %CLIENT_JAR%"
+call :log ""
+call :log "========================================"
+call :log "    Launching Client"
+call :log "========================================"
+call :log "Finished: %DATE% %TIME%"
 
 echo Starting: %CLIENT_JAR%
 echo.
 java -jar "%CLIENT_JAR%" --developer-mode
 
 pause
+exit /b 0
+
+:: ========================================
+:: Subroutines
+:: ========================================
+
+:log
+:: Logs message to both console and file
+echo %~1
+echo %~1>> "%LOG_FILE%"
+goto :eof
+
+:logfail
+:: Appends failure marker to log
+echo.>> "%LOG_FILE%"
+echo ======================================== >> "%LOG_FILE%"
+echo RUN FAILED: %DATE% %TIME% >> "%LOG_FILE%"
+echo ======================================== >> "%LOG_FILE%"
+goto :eof

@@ -184,6 +184,10 @@ call :log ""
 echo Building... (this takes a while, check %LOG_FILE% for progress)
 cd /d "%RUNELITE_DIR%"
 
+:: Clean first to ensure Lombok processes all files
+call :log "  Running: gradlew.bat :client:clean"
+call "%RUNELITE_DIR%\gradlew.bat" :client:clean >> "%LOG_FILE%" 2>&1
+
 :: Run Gradle build and capture output to log
 call :log "  Running: gradlew.bat :client:build -x test"
 call "%RUNELITE_DIR%\gradlew.bat" :client:build -x test >> "%LOG_FILE%" 2>&1
