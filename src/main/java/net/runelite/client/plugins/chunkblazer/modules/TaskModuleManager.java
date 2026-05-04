@@ -40,6 +40,9 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	private EquipModule equipModule;
 
 	@Inject
+	private FiremakingModule firemakingModule;
+
+	@Inject
 	public TaskModuleManager()
 	{
 	}
@@ -55,8 +58,21 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 		registerModule(skillModule);
 		registerModule(obtainModule);
 		registerModule(equipModule);
+		registerModule(firemakingModule);
+
+		// Register ObtainModule for all production-based skilling types
+		// These all work the same way - tracking items appearing in inventory
+		String[] skillingTypes = {
+			"COOKING", "CRAFTING", "SMITHING", "MINING", "WOODCUTTING",
+			"FISHING", "FLETCHING", "HERBLORE", "RUNECRAFTING", "HUNTER"
+		};
+		for (String type : skillingTypes)
+		{
+			registerModuleWithType(obtainModule, type);
+		}
 
 		log.info("TaskModuleManager initialized with {} modules", modules.size());
+		log.info("ObtainModule registered for types: OBTAIN + {} skilling types", skillingTypes.length);
 	}
 
 	private void registerModule(AbstractTaskModule module)

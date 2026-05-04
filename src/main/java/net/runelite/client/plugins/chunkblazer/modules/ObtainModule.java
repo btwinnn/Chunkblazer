@@ -35,6 +35,21 @@ public class ObtainModule extends AbstractTaskModule
 {
 	private static final String COMPLETION_TYPE = "OBTAIN";
 
+	// All completion types this module handles (production-based skilling + obtain)
+	private static final Set<String> HANDLED_TYPES = Set.of(
+		"OBTAIN",
+		"COOKING",
+		"CRAFTING",
+		"SMITHING",
+		"MINING",
+		"WOODCUTTING",
+		"FISHING",
+		"FLETCHING",
+		"HERBLORE",
+		"RUNECRAFTING",
+		"HUNTER"
+	);
+
 	// Chat colors for ChunkBlazer messages (matching NPCKillModule)
 	private static final String COLOR_BLUE = "3366ff";        // [ChunkBlazer] branding
 	private static final String COLOR_DARK_BLUE = "1a5276";   // Task Success (dark blue, readable)
@@ -76,12 +91,13 @@ public class ObtainModule extends AbstractTaskModule
 	@Override
 	public boolean canHandle(NuzlockeTask task)
 	{
-		// Handle both "OBTAIN" completion type and "Obtain" category
+		// Handle OBTAIN and all production-based skilling types
+		// (COOKING, CRAFTING, SMITHING, MINING, WOODCUTTING, FISHING, FLETCHING, HERBLORE, RUNECRAFTING, HUNTER)
 		String type = task.getCompletionType();
 		String category = task.getCategory();
 
-		return (type != null && type.equalsIgnoreCase(COMPLETION_TYPE)) ||
-			(category != null && category.equalsIgnoreCase(COMPLETION_TYPE));
+		return (type != null && HANDLED_TYPES.contains(type.toUpperCase())) ||
+			(category != null && HANDLED_TYPES.contains(category.toUpperCase()));
 	}
 
 	@Override
