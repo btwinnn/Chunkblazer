@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 title ChunkBlazer First-Time Setup
 color 0E
 
@@ -30,15 +31,16 @@ if %ERRORLEVEL% NEQ 0 (
     pause
 )
 
-:: Set paths
-set CHUNKBLAZER_DIR=%~dp0
-set RUNELITE_DIR=C:\runelite
-set TOOLS_DIR=%CHUNKBLAZER_DIR%tools
-set MAVEN_DIR=%TOOLS_DIR%\maven
-set MAVEN_VERSION=3.9.6
-set MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/%MAVEN_VERSION%/binaries/apache-maven-%MAVEN_VERSION%-bin.zip
-set PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%src\main\java\net\runelite\client\plugins\chunkblazer
-set PLUGIN_RESOURCES=%CHUNKBLAZER_DIR%src\main\resources\net\runelite\client\plugins\chunkblazer
+:: Set paths - remove any trailing backslash from dp0 for consistency
+set "CHUNKBLAZER_DIR=%~dp0"
+if "%CHUNKBLAZER_DIR:~-1%"=="\" set "CHUNKBLAZER_DIR=%CHUNKBLAZER_DIR:~0,-1%"
+set "RUNELITE_DIR=C:\runelite"
+set "TOOLS_DIR=%CHUNKBLAZER_DIR%\tools"
+set "MAVEN_DIR=%TOOLS_DIR%\maven"
+set "MAVEN_VERSION=3.9.6"
+set "MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/%MAVEN_VERSION%/binaries/apache-maven-%MAVEN_VERSION%-bin.zip"
+set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\net\runelite\client\plugins\chunkblazer"
+set "PLUGIN_RESOURCES=%CHUNKBLAZER_DIR%\src\main\resources\net\runelite\client\plugins\chunkblazer"
 
 :: Check for Java
 echo Checking for Java...
@@ -72,42 +74,98 @@ where mvn >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo Maven found in PATH, using system Maven.
     set "MVN_CMD=mvn"
-) else (
-    if exist "%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd" (
-        echo Using local Maven installation.
-        set "MVN_CMD=%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd"
-    ) else (
-        echo Maven not found. Downloading Maven %MAVEN_VERSION%...
+    goto :maven_done
+)
 
-        :: Create tools directory
-        if not exist "%TOOLS_DIR%" mkdir "%TOOLS_DIR%"
-        if not exist "%MAVEN_DIR%" mkdir "%MAVEN_DIR%"
+if exist "%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd" (
+    echo Using local Maven installation.
+    set "MVN_CMD=%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd"
+    goto :maven_done
+)
 
-        :: Download Maven using PowerShell
-        echo Downloading from %MAVEN_URL%...
-        powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%MAVEN_URL%' -OutFile '%MAVEN_DIR%\maven.zip'}"
-        if %ERRORLEVEL% NEQ 0 (
-            echo ERROR: Failed to download Maven.
-            pause
-            exit /b 1
-        )
+echo Maven not found. Downloading Maven %MAVEN_VERSION%...
 
-        :: Extract Maven using PowerShell
-        echo Extracting Maven...
-        powershell -Command "& {Expand-Archive -Path '%MAVEN_DIR%\maven.zip' -DestinationPath '%MAVEN_DIR%' -Force}"
-        if %ERRORLEVEL% NEQ 0 (
-            echo ERROR: Failed to extract Maven.
-            pause
-            exit /b 1
-        )
+:: Create directories using PowerShell (more reliable across Windows versions)
+echo Creating directories...
+powershell -Command "New-Item -ItemType Directory -Force -Path '%MAVEN_DIR%' | Out-Null" 2>nul
+if not exist "%MAVEN_DIR%" (
+    :: Fallback to md command
+    md "%MAVEN_DIR%" 2>nul
+)
+if not exist "%MAVEN_DIR%" (
+    echo ERROR: Failed to create directory: %MAVEN_DIR%
+    echo Please create this directory manually and re-run the script.
+    pause
+    exit /b 1
+)
+echo Directory created: %MAVEN_DIR%
 
-        :: Clean up zip file
-        del "%MAVEN_DIR%\maven.zip"
+:: Download Maven using PowerShell with better error handling
+echo Downloading from %MAVEN_URL%...
+echo This may take a minute...
+set "MAVEN_ZIP=%MAVEN_DIR%\maven.zip"
 
-        echo Maven installed successfully!
-        set "MVN_CMD=%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd"
+:: Try PowerShell Invoke-WebRequest first
+powershell -ExecutionPolicy Bypass -Command "$ProgressPreference = 'SilentlyContinue'; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; try { Invoke-WebRequest -Uri '%MAVEN_URL%' -OutFile '%MAVEN_ZIP%' -UseBasicParsing; exit 0 } catch { Write-Host $_.Exception.Message; exit 1 }"
+if %ERRORLEVEL% NEQ 0 (
+    echo PowerShell download failed, trying curl...
+    :: Try curl as fallback (available on Windows 10+)
+    curl -L -o "%MAVEN_ZIP%" "%MAVEN_URL%" 2>nul
+    if %ERRORLEVEL% NEQ 0 (
+        echo.
+        echo ERROR: Failed to download Maven.
+        echo Please check your internet connection and try again.
+        echo.
+        echo Alternative: Download Maven manually from:
+        echo %MAVEN_URL%
+        echo And extract to: %MAVEN_DIR%
+        pause
+        exit /b 1
     )
 )
+
+:: Verify download
+if not exist "%MAVEN_ZIP%" (
+    echo ERROR: Maven download file not found.
+    pause
+    exit /b 1
+)
+for %%A in ("%MAVEN_ZIP%") do set "ZIP_SIZE=%%~zA"
+if "%ZIP_SIZE%"=="" set "ZIP_SIZE=0"
+if %ZIP_SIZE% LSS 1000000 (
+    echo ERROR: Downloaded file is too small ^(%ZIP_SIZE% bytes^). Download may have failed.
+    del "%MAVEN_ZIP%" 2>nul
+    pause
+    exit /b 1
+)
+echo Download complete! ^(%ZIP_SIZE% bytes^)
+
+:: Extract Maven using PowerShell
+echo Extracting Maven...
+powershell -ExecutionPolicy Bypass -Command "try { Expand-Archive -Path '%MAVEN_ZIP%' -DestinationPath '%MAVEN_DIR%' -Force; exit 0 } catch { Write-Host $_.Exception.Message; exit 1 }"
+if %ERRORLEVEL% NEQ 0 (
+    echo ERROR: Failed to extract Maven.
+    echo Please extract manually: %MAVEN_ZIP%
+    echo To: %MAVEN_DIR%
+    pause
+    exit /b 1
+)
+
+:: Verify extraction
+if not exist "%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd" (
+    echo ERROR: Maven extraction verification failed.
+    echo Expected file not found: %MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd
+    pause
+    exit /b 1
+)
+
+:: Clean up zip file
+del "%MAVEN_ZIP%" 2>nul
+
+echo Maven installed successfully!
+set "MVN_CMD=%MAVEN_DIR%\apache-maven-%MAVEN_VERSION%\bin\mvn.cmd"
+
+:maven_done
 echo.
 
 :: Check if RuneLite already exists
@@ -116,7 +174,7 @@ if exist "%RUNELITE_DIR%" (
     echo Skipping clone...
 ) else (
     echo [2/5] Cloning RuneLite repository...
-    git clone https://github.com/runelite/runelite.git "%RUNELITE_DIR%"
+    git clone --depth 1 https://github.com/runelite/runelite.git "%RUNELITE_DIR%"
     if %ERRORLEVEL% NEQ 0 (
         echo ERROR: Failed to clone RuneLite
         pause
@@ -127,38 +185,61 @@ echo.
 
 :: Create plugin directories if they don't exist
 echo [3/5] Creating plugin directories...
-if not exist "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins" (
-    mkdir "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins"
+set "JAVA_PLUGINS_DIR=%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins"
+set "RES_PLUGINS_DIR=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins"
+
+if not exist "%JAVA_PLUGINS_DIR%" (
+    md "%JAVA_PLUGINS_DIR%" 2>nul
+    if not exist "%JAVA_PLUGINS_DIR%" (
+        powershell -Command "New-Item -ItemType Directory -Force -Path '%JAVA_PLUGINS_DIR%' | Out-Null"
+    )
 )
-if not exist "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins" (
-    mkdir "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins"
+if not exist "%RES_PLUGINS_DIR%" (
+    md "%RES_PLUGINS_DIR%" 2>nul
+    if not exist "%RES_PLUGINS_DIR%" (
+        powershell -Command "New-Item -ItemType Directory -Force -Path '%RES_PLUGINS_DIR%' | Out-Null"
+    )
 )
+echo Plugin directories ready.
 echo.
 
 :: Create symlinks
 echo [4/5] Creating symlinks to ChunkBlazer...
 
+set "JAVA_LINK=%JAVA_PLUGINS_DIR%\chunkblazer"
+set "RES_LINK=%RES_PLUGINS_DIR%\chunkblazer"
+
 :: Remove existing symlinks/folders if they exist
-if exist "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer" (
-    rmdir "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer" 2>nul
-    del "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer" 2>nul
+if exist "%JAVA_LINK%" (
+    rmdir "%JAVA_LINK%" 2>nul
+    if exist "%JAVA_LINK%" rd /s /q "%JAVA_LINK%" 2>nul
 )
-if exist "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer" (
-    rmdir "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer" 2>nul
-    del "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer" 2>nul
+if exist "%RES_LINK%" (
+    rmdir "%RES_LINK%" 2>nul
+    if exist "%RES_LINK%" rd /s /q "%RES_LINK%" 2>nul
 )
 
 :: Create new symlinks
-mklink /D "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer" "%PLUGIN_JAVA_SRC%"
+mklink /D "%JAVA_LINK%" "%PLUGIN_JAVA_SRC%"
 if %ERRORLEVEL% NEQ 0 (
-    echo ERROR: Failed to create Java symlink. Try running as Administrator.
+    echo.
+    echo ERROR: Failed to create Java symlink.
+    echo.
+    echo This usually means you need to run as Administrator.
+    echo Right-click setup-chunkblazer.bat and select "Run as administrator"
+    echo.
     pause
     exit /b 1
 )
 
-mklink /D "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer" "%PLUGIN_RESOURCES%"
+mklink /D "%RES_LINK%" "%PLUGIN_RESOURCES%"
 if %ERRORLEVEL% NEQ 0 (
-    echo ERROR: Failed to create resources symlink. Try running as Administrator.
+    echo.
+    echo ERROR: Failed to create resources symlink.
+    echo.
+    echo This usually means you need to run as Administrator.
+    echo Right-click setup-chunkblazer.bat and select "Run as administrator"
+    echo.
     pause
     exit /b 1
 )
@@ -166,12 +247,22 @@ echo Symlinks created successfully!
 echo.
 
 :: Build RuneLite
-echo [5/5] Building RuneLite (this may take a few minutes)...
+echo [5/5] Building RuneLite (this may take several minutes on first run)...
+echo.
 cd /d "%RUNELITE_DIR%"
 call "%MVN_CMD%" install -DskipTests
 if %ERRORLEVEL% NEQ 0 (
     echo.
-    echo ERROR: Build failed! Check the output above for errors.
+    echo ========================================
+    echo     BUILD FAILED
+    echo ========================================
+    echo.
+    echo Check the output above for errors.
+    echo Common issues:
+    echo   - Java JDK not installed (need JDK, not just JRE)
+    echo   - Network issues downloading dependencies
+    echo   - Disk space issues
+    echo.
     pause
     exit /b 1
 )
