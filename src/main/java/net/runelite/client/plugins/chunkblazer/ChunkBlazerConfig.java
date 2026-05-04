@@ -222,11 +222,23 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "showChunkBorders",
 		name = "Show Chunk Borders",
-		description = "Highlight locked/unlocked chunk borders on the map",
+		description = "Highlight locked/unlocked chunk borders on the world map",
 		section = displaySection,
 		position = 1
 	)
 	default boolean showChunkBorders()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showMinimapChunks",
+		name = "Show Minimap Chunks",
+		description = "Highlight chunk borders on the minimap. Click on neighbor chunks to unlock them.",
+		section = displaySection,
+		position = 2
+	)
+	default boolean showMinimapChunks()
 	{
 		return true;
 	}
@@ -327,6 +339,18 @@ public interface ChunkBlazerConfig extends Config
 	default boolean autoUnlockFree()
 	{
 		return false;
+	}
+
+	@ConfigItem(
+		keyName = "showUnlockPopup",
+		name = "Show Unlock Popup",
+		description = "Show an in-game popup to unlock regions when you walk into them (when Auto-Unlock is disabled).",
+		section = regionSection,
+		position = 2
+	)
+	default boolean showUnlockPopup()
+	{
+		return true;
 	}
 
 	@ConfigSection(

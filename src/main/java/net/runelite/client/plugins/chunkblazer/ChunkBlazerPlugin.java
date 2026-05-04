@@ -23,10 +23,13 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
+import net.runelite.api.MenuAction;
 import net.runelite.api.Player;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuEntryAdded;
+import net.runelite.api.widgets.ComponentID;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -35,6 +38,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.chunkblazer.modules.TaskModuleManager;
 import net.runelite.client.plugins.chunkblazer.verification.VarPlayerVerificationService;
 
@@ -72,6 +76,9 @@ public class ChunkBlazerPlugin extends Plugin
 	private ChunkBlazerWorldMapOverlay worldMapOverlay;
 
 	@Inject
+	private ChunkBlazerMinimapOverlay minimapOverlay;
+
+	@Inject
 	private TaskCompletionOverlay taskCompletionOverlay;
 
 	@Inject
@@ -85,6 +92,9 @@ public class ChunkBlazerPlugin extends Plugin
 
 	@Inject
 	private TaskCompletionSoundManager soundManager;
+
+	@Inject
+	private ChatboxPanelManager chatboxPanelManager;
 
 	// --- Plugin State ---
 	@Getter
@@ -215,6 +225,9 @@ public class ChunkBlazerPlugin extends Plugin
 		// Register world map overlay
 		overlayManager.add(worldMapOverlay);
 
+		// Register minimap overlay for chunk visualization and click-to-unlock
+		overlayManager.add(minimapOverlay);
+
 		// Legacy task completion popup overlay disabled - using animation overlay instead
 		// overlayManager.add(taskCompletionOverlay);
 		// log.info(">>> TaskCompletionOverlay registered with OverlayManager: {}", taskCompletionOverlay != null ? "OK" : "NULL");
@@ -239,6 +252,7 @@ public class ChunkBlazerPlugin extends Plugin
 		log.info("ChunkBlazer shutting down...");
 		clientToolbar.removeNavigation(navButton);
 		overlayManager.remove(worldMapOverlay);
+		overlayManager.remove(minimapOverlay);
 		// overlayManager.remove(taskCompletionOverlay); // Legacy overlay disabled
 		overlayManager.remove(taskCompletionAnimationOverlay);
 		taskModuleManager.shutDown();
@@ -299,10 +313,90 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				tryAutoUnlockCurrentRegion(currentRegionId);
 			}
+			else if (config.showUnlockPopup())
+			{
+				// Show unlock popup if entering an unlockable neighbor region
+				showUnlockPopupIfNeeded(currentRegionId);
+			}
 
 			panel.updateRegionDisplay();
 			panel.updateTaskList();
 		}
+	}
+
+	@Subscribe
+	public void onMenuEntryAdded(MenuEntryAdded event)
+	{
+		// Add unlock option to minimap when hovering over unlockable region
+		if (!config.showMinimapChunks())
+		{
+			return;
+		}
+
+		// Check if this is a minimap-related menu
+		int componentId = event.getActionParam1();
+		if (componentId != ComponentID.FIXED_VIEWPORT_MINIMAP_DRAW_AREA &&
+			componentId != ComponentID.RESIZABLE_VIEWPORT_MINIMAP_DRAW_AREA &&
+			componentId != ComponentID.RESIZABLE_VIEWPORT_BOTTOM_LINE_MINIMAP_DRAW_AREA)
+		{
+			return;
+		}
+
+		// Get the hovered region from the minimap overlay
+		int hoveredRegion = minimapOverlay.getHoveredRegionId();
+		if (hoveredRegion <= 0)
+		{
+			return;
+		}
+
+		// Check if it's an unlockable neighbor
+		if (!getNeighborRegionIds().contains(hoveredRegion) || isRegionUnlocked(hoveredRegion))
+		{
+			return;
+		}
+
+		// Add unlock menu entry
+		String regionName = getRegionName(hoveredRegion);
+		int cost = getRegionUnlockCost(hoveredRegion);
+
+		client.createMenuEntry(-1)
+			.setOption("Unlock chunk")
+			.setTarget("<col=ffff00>" + regionName + "</col> (" + cost + " pts)")
+			.setType(MenuAction.RUNELITE)
+			.onClick(e -> showMinimapUnlockPopup(hoveredRegion));
+	}
+
+	private void showMinimapUnlockPopup(int regionId)
+	{
+		String regionName = getRegionName(regionId);
+		int cost = getRegionUnlockCost(regionId);
+		int currentPoints = getTotalPoints();
+
+		clientThread.invokeLater(() ->
+		{
+			if (currentPoints < cost)
+			{
+				chatboxPanelManager.openTextMenuInput(
+						"Cannot unlock " + regionName + "! " +
+						"Need " + (cost - currentPoints) + " more points. " +
+						"(Cost: " + cost + ", You have: " + currentPoints + ")")
+					.option("OK", () -> {})
+					.build();
+			}
+			else
+			{
+				chatboxPanelManager.openTextMenuInput(
+						"Unlock " + regionName + " for " + cost + " points? " +
+						"(Remaining: " + (currentPoints - cost) + " points)")
+					.option("Yes, unlock!", () ->
+					{
+						unlockRegion(regionId);
+						log.info("Player unlocked region {} via minimap", regionName);
+					})
+					.option("No", () -> {})
+					.build();
+			}
+		});
 	}
 
 	/**
@@ -329,6 +423,16 @@ public class ChunkBlazerPlugin extends Plugin
 			log.info("Auto-unlocking region {} ({}) for FREE (exploration mode)",
 				regionId, chunkName);
 			unlockRegionFree(regionId);
+
+			// Roll tasks for this region if it has tasks defined
+			if (chunk != null && chunk.getTasks() != null && !chunk.getTasks().isEmpty())
+			{
+				Set<String> existingRolled = getRolledTasksForRegion(regionId);
+				if (existingRolled.isEmpty())
+				{
+					rollTasksForRegion(regionId);
+				}
+			}
 
 			// Reload tasks for the newly unlocked region
 			loadActiveTasks();
@@ -371,6 +475,65 @@ public class ChunkBlazerPlugin extends Plugin
 			loadActiveTasks();
 			panel.updatePanel();
 		}
+	}
+
+	/**
+	 * Show an in-game popup to unlock a region if the player enters an unlockable neighbor.
+	 */
+	private void showUnlockPopupIfNeeded(int regionId)
+	{
+		// Skip if already unlocked
+		if (isRegionUnlocked(regionId))
+		{
+			return;
+		}
+
+		// Check if this region has tasks defined
+		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+		if (chunk == null)
+		{
+			return; // No tasks for this region
+		}
+
+		// Check if it's a neighbor of any unlocked region
+		Set<Integer> neighbors = getNeighborRegionIds();
+		if (!neighbors.contains(regionId))
+		{
+			return; // Not a neighbor
+		}
+
+		// Show the unlock popup
+		int cost = getRegionUnlockCost(regionId);
+		int currentPoints = getTotalPoints();
+		String regionName = chunk.getName();
+
+		clientThread.invokeLater(() ->
+		{
+			if (currentPoints < cost)
+			{
+				// Not enough points - show info message
+				chatboxPanelManager.openTextMenuInput(
+						"New region: " + regionName + "! " +
+						"Need " + (cost - currentPoints) + " more points to unlock. " +
+						"(Cost: " + cost + ", You have: " + currentPoints + ")")
+					.option("OK", () -> {})
+					.build();
+			}
+			else
+			{
+				// Can afford - show unlock confirmation
+				chatboxPanelManager.openTextMenuInput(
+						"Unlock " + regionName + " for " + cost + " points? " +
+						"(Remaining: " + (currentPoints - cost) + " points)")
+					.option("Yes, unlock!", () ->
+					{
+						unlockRegion(regionId);
+						log.info("Player unlocked region {} via popup", regionName);
+					})
+					.option("No, not yet", () -> {})
+					.build();
+			}
+		});
 	}
 
 	/**
