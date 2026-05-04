@@ -24,3 +24,6 @@ Thumbs.db
 *.class
 *.jar
 *.log
+
+# Local tools (Maven, etc.)
+tools/
