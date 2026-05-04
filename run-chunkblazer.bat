@@ -133,7 +133,7 @@ call :log "Finished: %DATE% %TIME%"
 
 echo Starting: %CLIENT_JAR%
 echo.
-java -jar "%CLIENT_JAR%" --developer-mode
+java -ea -jar "%CLIENT_JAR%" --developer-mode
 
 pause
 exit /b 0
