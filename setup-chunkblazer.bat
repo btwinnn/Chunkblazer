@@ -229,6 +229,46 @@ if %BUILD_RESULT% NEQ 0 (
     exit /b 1
 )
 
+:: ========================================
+:: Optional: Jagex Launcher credentials setup
+:: ========================================
+call :log ""
+call :log "========================================"
+call :log "    Optional: Jagex Account Setup"
+call :log "========================================"
+call :log ""
+call :log "If you log in via the Jagex Launcher, the dev client reads"
+call :log "tokens from %USERPROFILE%\.runelite\credentials.properties"
+call :log "(NOT committed to git - lives outside the project)."
+call :log ""
+set "RL_CREDS_DIR=%USERPROFILE%\.runelite"
+set "RL_CREDS_FILE=%RL_CREDS_DIR%\credentials.properties"
+choice /c YN /n /m "Open credentials.properties in Notepad to paste tokens? (Y/N): "
+if errorlevel 2 (
+    call :log "  Skipped credentials setup."
+    call :log "  You can edit %RL_CREDS_FILE% later."
+    goto :skip_creds
+)
+if not exist "%RL_CREDS_DIR%" md "%RL_CREDS_DIR%"
+if not exist "%RL_CREDS_FILE%" (
+    (
+        echo # Jagex Launcher credentials for the RuneLite dev client.
+        echo # Paste the token values from your Jagex Launcher session below.
+        echo # This file is private to your Windows user profile.
+        echo JX_DISPLAY_NAME=
+        echo JX_CHARACTER_ID=
+        echo JX_ACCESS_TOKEN=
+        echo JX_REFRESH_TOKEN=
+        echo JX_SESSION_ID=
+    ) > "%RL_CREDS_FILE%"
+    call :log "  Created stub credentials file."
+)
+call :log "  Opening Notepad. Save and close it when done to continue."
+notepad "%RL_CREDS_FILE%"
+call :log "  Credentials file ready."
+:skip_creds
+call :log ""
+
 call :log ""
 call :log "========================================"
 call :log "    Setup Complete!"
