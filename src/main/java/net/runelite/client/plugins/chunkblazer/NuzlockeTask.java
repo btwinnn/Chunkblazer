@@ -133,10 +133,20 @@ public class NuzlockeTask
 				task.setTargetNpc(context.deserialize(obj.get("target_npc"), TargetNpc.class));
 			}
 
-			// Handle constraints - delegate to its deserializer
+			// Handle constraints - some JSON files use object form ({...}), others use
+			// single-element array form ([{...}]). Accept both so a malformed entry doesn't
+			// tank the entire JSON file (which is what was breaking Starter_Area_Tasks.json).
 			if (obj.has("constraints"))
 			{
-				task.setConstraints(context.deserialize(obj.get("constraints"), TaskConstraints.class));
+				JsonElement constraintsEl = obj.get("constraints");
+				if (constraintsEl.isJsonObject())
+				{
+					task.setConstraints(context.deserialize(constraintsEl, TaskConstraints.class));
+				}
+				else if (constraintsEl.isJsonArray() && constraintsEl.getAsJsonArray().size() > 0)
+				{
+					task.setConstraints(context.deserialize(constraintsEl.getAsJsonArray().get(0), TaskConstraints.class));
+				}
 			}
 
 			// Handle varbit_boolean for VARBIT_CHECK tasks
