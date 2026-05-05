@@ -136,7 +136,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain a White Bead from an Imp",
+                    "name": "Obtain a White Bead",
                     "taskID": "obtain_white_bead",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -175,7 +175,7 @@
             "is_completed": false
         },
         {
-            "region_id": [12340, 12440],
+            "region_id": [12340],
             "Friendly_Name": "Draynor Manor",
             "neighbor_ids": [12339, 12084, 12341, 12596],
             "tasks": [
@@ -186,7 +186,7 @@
                     "level": 63,
                     "completion_type": "FARMING",
                     "base_points": 3,
-                    "assignment_weight": 3,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Belladonna seed"],
@@ -240,7 +240,6 @@
                     "name": "Defeat the Draynor Manor Skeleton",
                     "taskID": "defeat_draynor_manor_skeleton",
                     "category": "Combat",
-                    "level": 22,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
@@ -320,7 +319,6 @@
                         "npc_ids": [2635, 2636, 4231, 8034, 8055, 8111, 8112, 8113, 8114, 8115, 8159],
                         "quantity": [1]
                     }
-
                 }
             ],
             "optional_quests_unlocked": [
@@ -336,7 +334,7 @@
             "is_completed": false
         },
         {
-            "region_id": [12339, 12439, 12438],
+            "region_id": [12339],
             "Friendly_Name": "Draynor North",
             "neighbor_ids": [12083, 12338, 12595, 12340],
             "tasks": [
@@ -387,7 +385,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a Gobiln on Task",
+                    "name": "Defeat a Goblin on Task",
                     "taskID": "defeat_goblin_on_task",
                     "category": "Slayer",
                     "level": 1,
@@ -533,7 +531,7 @@
         {
             "region_id": [12338],
             "Friendly_Name": "Draynor South",
-            "neighbor_ids": [12082, 12339, 12594, 12340],
+            "neighbor_ids": [12082, 12339, 12594, 12337],
             "tasks": [
                 {
                     "name": "Obtain Red Dye",
@@ -672,7 +670,7 @@
                     "target_npc": {
                         "npc": ["Dark Wizard"],
                         "npc_ids": [512, 5086, 5087],
-                        "quantity": [1, 10]
+                        "quantity": [1]
                     }
                 },
                 {
@@ -685,7 +683,7 @@
                     "target_npc": {
                         "npc": ["Dark Wizard"],
                         "npc_ids": [512, 5086, 5087],
-                        "quantity": [1, 10]
+                        "quantity": [1]
                     },
                     
                     "constraints": {
@@ -726,7 +724,7 @@
             "is_completed": false
         },
         {
-            "region_id": [12337, 12437, 14483, 14484, 8036, 8292,8291],
+            "region_id": [12337],
             "Friendly_Name": "Wizards' Tower",
             "neighbor_ids": [12081, 12338, 12593, 12336],
             "tasks": [
@@ -772,8 +770,8 @@
                     }
                 },
                 {
-                    "name": "Craft some Chaos Runes",
-                    "taskID": "craft_chaos_runes",
+                    "name": "Runecraft some Chaos Runes",
+                    "taskID": "Runecraft_chaos_runes",
                     "category": "Runecrafting",
                     "level": 35,
                     "completion_type": "RUNECRAFTING",
@@ -1014,7 +1012,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a some Dark Wizards",
+                    "name": "Defeat some Dark Wizards",
                     "taskID": "defeat_some_dark_wizards",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1394,7 +1392,7 @@
                     ]
                 }, 
                 {
-                    "name": "Craft an Pot Lid",
+                    "name": "Craft a Pot Lid",
                     "taskID": "craft_unfired_pot_lid",
                     "category": "Crafting",
                     "level": 25,
@@ -1606,22 +1604,7 @@
                         "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
                         "quantity": [1]
                     }
-                },
-                {
-                    "name": "Obtain Gloves of Silence",
-                    "taskID": "obtain_gloves_of_silence",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Gloves of Silence"],
-                            "item_ids": [10075],
-                            "quantity": [1]
-                        }
-                    ]
-                },
+                },              
                 {
                     "name": "Equip a Spotted Cape",
                     "taskID": "equip_spotted_cape",
@@ -1629,7 +1612,7 @@
                     "level": 40,
                     "completion_type": "HUNTER",
                     "base_points": 2,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Spotted Cape"],
@@ -1645,7 +1628,7 @@
                     "level": 66,
                     "completion_type": "HUNTER",
                     "base_points": 3,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Spottier Cape"],
@@ -1704,20 +1687,7 @@
                     "varbit_boolean": 1,      
                     "description": "Complete the Varrock Museum Quiz"
                     }
-                },
-                {
-                "name": "Obtain 100 Varrock Museum Kudos",
-                "taskID": "obtain_100_kudos",
-                "category": "Unlock",
-                "completion_type": "VARP_CHECK",
-                "base_points": 1,
-                "assignment_weight": 8,
-                "constraints": {                       
-                    "varp_id": 1438,        
-                    "varp_value": 100,      
-                    "description": "Obtain 100 Varrock Museum Kudos"
-                    }
-                },
+                },               
                 {
                 "name": "Obtain an Antique Lamp from Historian Minas",
                 "taskID": "obtain_antique_lamp_historian_minas",
@@ -1729,6 +1699,36 @@
                         {
                             "item": ["Antique Lamp"],
                             "item_ids": [11188, 28820, 11187, 11185, 11186, 11189],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                "name": "Obtain an Old Coin",
+                "taskID": "obtain_old_coin",
+                "category": "Obtain",
+                "completion_type": "OBTAIN",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                            "item": ["Old Coin"],
+                            "item_ids": [11179],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                 {
+                "name": "Obtain an Ancient Coin",
+                "taskID": "obtain_ancient_coin",
+                "category": "Obtain",
+                "completion_type": "OBTAIN",
+                "base_points": 1,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                            "item": ["Ancient Coin"],
+                            "item_ids": [11180],
                             "quantity": [1]
                         }
                     ]
@@ -1764,7 +1764,7 @@
                     ]
                 },
                 {
-                    "name": "Equip a Maple ShortBow",
+                    "name": "Equip a Maple Shortbow",
                     "taskID": "equip_maple_shortbow",
                     "category": "Ranged",
                     "level": 30,
@@ -2086,7 +2086,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Barbarian Level 10"],
-                        "npc_ids": [3065, 3066, 3067, 3071, 3056, 3070, 3061, 3060, 3059, 3064],
+                        "npc_ids": [3065, 3066, 3067, 3071, 3056, 3070, 3061, 3060, 3059, 3064, 10984, 10985, 10987],
                         "quantity": [1, 25]
                     }
                 },
@@ -2333,7 +2333,7 @@
             "neighbor_ids": [12342, 12597, 12854, 12599],
             "tasks": [
                 {
-                    "name": "Use a Minecraft to travel to Keldagrim",
+                    "name": "Use a Minecart to travel to Keldagrim",
                     "taskID": "minecart_keldagrim",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -2649,7 +2649,7 @@
                     "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Yew Longbow(u)"],
+                            "item": ["Yew Shortbow(u)"],
                             "item_ids": [68],
                             "quantity": [1]
                         }

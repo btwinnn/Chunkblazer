@@ -87,8 +87,8 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Plant an Apple Tree Seed",
-                    "taskID": "plant_apple_tree_seed",
+                    "name": "Plant an Apple Tree Sapling",
+                    "taskID": "plant_apple_tree_sapling",
                     "category": "Farming",
                     "level": 27,
                     "completion_type": "FARMING",
@@ -96,15 +96,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Apple Tree Seed"],
-                            "item_ids": [5283],
+                            "item": ["Apple Tree Sapling"],
+                            "item_ids": [5496],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Banana Tree Seed",
-                    "taskID": "plant_banana_tree_seed",
+                    "name": "Plant a Banana Tree Sapling",
+                    "taskID": "plant_banana_tree_sapling",
                     "category": "Farming",
                     "level": 33,
                     "completion_type": "FARMING",
@@ -112,15 +112,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Banana Tree Seed"],
-                            "item_ids": [5284],
+                            "item": ["Banana Tree Sapling"],
+                            "item_ids": [5497],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant an Orange Tree Seed",
-                    "taskID": "plant_orange_tree_seed",
+                    "name": "Plant an Orange Tree Sapling",
+                    "taskID": "plant_orange_tree_sapling",
                     "category": "Farming",
                     "level": 39,
                     "completion_type": "FARMING",
@@ -128,15 +128,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Orange Tree Seed"],
-                            "item_ids": [5285],
+                            "item": ["Orange Tree Sapling"],
+                            "item_ids": [5498],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Curry Tree Seed",
-                    "taskID": "plant_curry_tree_seed",
+                    "name": "Plant a Curry Tree Sapling",
+                    "taskID": "plant_curry_tree_Sapling",
                     "category": "Farming",
                     "level": 42,
                     "completion_type": "FARMING",
@@ -144,15 +144,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Curry Tree Seed"],
-                            "item_ids": [5286],
+                            "item": ["Curry Tree Sapling"],
+                            "item_ids": [5499],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Pineapple Seed",
-                    "taskID": "plant_pineapple_tree_seed",
+                    "name": "Plant a Pineapple Sapling",
+                    "taskID": "plant_pineapple_sapling",
                     "category": "Farming",
                     "level": 51,
                     "completion_type": "FARMING",
@@ -160,8 +160,24 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Pineapple Seed"],
-                            "item_ids": [5287],
+                            "item": ["Pineapple Sapling"],
+                            "item_ids": [5500],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Papaya Sapling",
+                    "taskID": "plant_papaya_sapling",
+                    "category": "Farming",
+                    "level": 57,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Papaya Sapling"],
+                            "item_ids": [5501],
                             "quantity": [1]
                         }
                     ]
@@ -261,7 +277,7 @@
                     "constraints": {
                         "varbit_id": 4129
                     }                   
-                },              
+                },                            
                 {
                     "name": "Plant some Sweetcorn",
                     "taskID": "plant_sweetcorn_seed",
@@ -2494,7 +2510,7 @@
                     },
                     
                     "constraints": {
-                        "must_be_empty_slots": ["HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
+                        "equippable_slots": ["WEAPON"]
                     }
                 },
                 {
@@ -3167,6 +3183,225 @@
             "is_completed": false
         },
         {
+            "region_id": [10547],
+            "Friendly_Name": "Ardougne Market",
+            "neighbor_ids": [10548, 10803, 10546, 10291],
+            "tasks": [
+                {
+                    "name": "Equip a Black Platebody",
+                    "taskID": "equip_black_platebody",
+                    "category": "Defence",
+                    "level": 10,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Black Platebody"],
+                            "item_ids": [1125]
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal from a Baker's Stall",
+                    "taskID": "steal_baker_stall",
+                    "category": "Thieving",
+                    "level": 5,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_object": [
+                        {
+                            "object": ["Bakery Stall"],
+                            "object_id": [11730, 51937, 6945, 6163],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal from a Fur Stall",
+                    "taskID": "steal_fur_stall",
+                    "category": "Thieving",
+                    "level": 35,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_object": [
+                        {
+                            "object": ["Fur Stall"],
+                            "object_id": [58102, 37405, 11732, 51934, 4278],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal from a Spice Stall",
+                    "taskID": "steal_spice_stall",
+                    "category": "Thieving",
+                    "level": 65,
+                    "completion_type": "THIEVING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Spice Stall"],
+                            "object_id": [58105, 11733, 51936, 36572],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal from a Gem Stall",
+                    "taskID": "steal_gem_stall",
+                    "category": "Thieving",
+                    "level": 75,
+                    "completion_type": "THIEVING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Gem Stall"],
+                            "object_id": [58106, 11731, 51935, 6162, 36571],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 33 Ardougne Log Balance",
+                    "taskID": "agility_level_33_ardougne_log_balance",
+                    "category": "Agility",
+                    "level": 33,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 8
+                },
+                {
+                    "name": "Defeat a Level 3 Monkey in 1 Hit",
+                    "taskID": "defeat_monkey_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 3 Monkey"],
+                        "npc_ids": [2848],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Pickpocket a Paladin",
+                    "taskID": "pickpocket_paladin",
+                    "category": "Thieving",
+                    "level": 70,
+                    "completion_type": "THIEVING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": [
+                        {
+                            "npc": "Paladin",
+                            "npc_ids": [3294],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Cyclops",
+                    "taskID": "defeat_cyclops",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Cyclops"],
+                        "npc_ids": [2097, 7271, 7270, 2236, 2235, 2137, 2138, 2139, 2140, 2141, 2142, 2463, 2465, 2467, 2464, 2466, 2468],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain an Ardougne Cloak 1",
+                    "taskID": "obtain_ardougne_cloak_1",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ardougne Cloak 1"],
+                            "item_ids": [13121]
+                        }
+                    ]
+                },
+                {
+                    "name": "Build an Easy STASH Unit in the Ardougne Zoo",
+                    "taskID": "build_easy_stash_ardougne_zoo",
+                    "category": "Construction",
+                    "level": 27,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Plank",
+                            "item_ids": [960]
+                        },
+                        {
+                            "item": "Nails",
+                            "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+                    "required_object": [
+                        {
+                            "object": "Easy STASH Unit (inconspicuous bush)",
+                            "object_id": [28975],
+                            "interaction_type": "use_item_on"
+                        }
+                    ]
+                }
+
+            ],               
+                "optional_quests_unlocked": [
+                    {
+                        "name": "Underground Pass",
+                        "points": 3
+                    },
+                    {
+                        "name": "Regicide",
+                        "points": 3
+                    },
+                    {
+                        "name": "Secrets of the North",
+                        "points": 5
+                    }, 
+                    {
+                        "name": "Hazeel Cult",
+                        "points": 1
+                    }, 
+                    {
+                        "name": "Cold War",
+                        "points": 2
+                    },
+                    {
+                        "name": "Eagles' Peak",
+                        "points": 1
+                    },
+                    {
+                        "name": "Sheep Herder",
+                        "points": 1
+                    }                       
+                ],                                                  
+            "is_completed": false
+        },
+        {
             "region_id": [10290],
             "Friendly_Name": "Ardougne Monastery",
             "neighbor_ids": [10291, 10546, 10289, 10034],
@@ -3471,7 +3706,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain a White Bead from an Imp",
+                    "name": "Obtain a White Bead",
                     "taskID": "obtain_white_bead",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -3591,7 +3826,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Khazard Guard"],
-                        "npc_ids": [13531, 13532, 13533, 13534],
+                        "npc_ids": [13531, 13532, 13533, 13534, 1211, 12021, 12022, 12024, 1208, 12019, 12023, 12020],
                         "quantity": [1]
                     }
                 },
@@ -3625,6 +3860,7 @@
                 {
                     "task_name": "Picklock the door to the basement of Yanille Agility Dungeon",
                     "taskID": "picklock_door_basement_yanille_agility_dungeon",
+                    "category": "Thieving",
                     "completion_type": "VARP_CHECK",
                     "base_points": 4,
                     "assignment_weight": 5,
@@ -3861,6 +4097,7 @@
                 {
                     "task_name": "Grapple shortcut the South Yanille Wall",
                     "taskID": "grapple_shortcut_south_yanille_wall",
+                    "category":"Agility",
                     "completion_type": "VARP_CHECK",
                     "base_points": 2,
                     "assignment_weight": 8,
@@ -4458,16 +4695,15 @@
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "boss": "Royal Titans",
                     "target_npc": {
                         "npc": ["Jungle Spider"],
                         "npc_ids": [5243, 3020, 6267, 6271],
                         "quantity": [1]
                     }, 
                     
-                    "constraints": {
-                        "must_be_empty_slots": ["WEAPON", "HEAD","CAPE","AMULET","BODY","SHIELD","LEGS","GLOVES","BOOTS","RING"]
-                    }
+                    "constraints": {                       
+                    "equip_nothing": "TRUE"
+                    }                  
                 },
                 {
                     "name": "Travel to Fairy Ring Code CLS",
@@ -4484,15 +4720,7 @@
             "region_id": [10030],
             "Friendly_Name": "Feldip Hills Glider",
             "neighbor_ids": [10031, 10286, 10029, 9774],
-            "tasks": [
-                {
-                    "name": "Use the Glider to Travel to the Feldip Hills",
-                    "taskID": "glider_feldip_hills",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
+            "tasks": [            
                 {
                     "name": "Defeat some Level 64 Wolves",
                     "taskID": "defeat_level_64_wolves",
@@ -4516,7 +4744,7 @@
                     "target_npc": {
                         "npc": ["Level 64 Wolf"],
                         "npc_ids": [106, 3912],
-                        "quantity": [1, 25]
+                        "quantity": [1]
                     },               
                     "constraints": {
                         "time_in_ticks": [28]
@@ -5277,19 +5505,17 @@
                         "quantity": [1]
                     },
 
-                    "constraints": {
-                        "must_be_empty_slots": [
-                        "HEAD", "CAPE", "AMULET", "BODY", "SHIELD", "LEGS", 
-                        "GLOVES", "BOOTS", "RING", "AMMO", "WEAPON"
-                        ],                      
+                    "constraints": {                       
+                        "equip_nothing": "TRUE"
+                    },
+
                         "prohibited_active_varbits": [
                             {
                                 "varbit_id": 57,
                                 "must_be_value": 0,
                                 "fail_message": "Cannon use is prohibited for equipment combat tasks."
                             }
-                        ]
-                    }                   
+                        ]                                      
                 },
                 {
                     "name": "Cook a Tuna",
@@ -6105,8 +6331,8 @@
                     ]
                 },
                 {
-                    "name": "Plant an Apple Tree Seed",
-                    "taskID": "plant_apple_tree_seed",
+                    "name": "Plant an Apple Tree Sapling",
+                    "taskID": "plant_apple_tree_sapling",
                     "category": "Farming",
                     "level": 27,
                     "completion_type": "FARMING",
@@ -6114,15 +6340,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Apple Tree Seed"],
-                            "item_ids": [5283],
+                            "item": ["Apple Tree Sapling"],
+                            "item_ids": [5496],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Banana Tree Seed",
-                    "taskID": "plant_banana_tree_seed",
+                    "name": "Plant a Banana Tree Sapling",
+                    "taskID": "plant_banana_tree_sapling",
                     "category": "Farming",
                     "level": 33,
                     "completion_type": "FARMING",
@@ -6130,15 +6356,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Banana Tree Seed"],
-                            "item_ids": [5284],
+                            "item": ["Banana Tree Sapling"],
+                            "item_ids": [5497],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant an Orange Tree Seed",
-                    "taskID": "plant_orange_tree_seed",
+                    "name": "Plant an Orange Tree Sapling",
+                    "taskID": "plant_orange_tree_sapling",
                     "category": "Farming",
                     "level": 39,
                     "completion_type": "FARMING",
@@ -6146,15 +6372,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Orange Tree Seed"],
-                            "item_ids": [5285],
+                            "item": ["Orange Tree Sapling"],
+                            "item_ids": [5498],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Curry Tree Seed",
-                    "taskID": "plant_curry_tree_seed",
+                    "name": "Plant a Curry Tree Sapling",
+                    "taskID": "plant_curry_tree_Sapling",
                     "category": "Farming",
                     "level": 42,
                     "completion_type": "FARMING",
@@ -6162,15 +6388,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Curry Tree Seed"],
-                            "item_ids": [5286],
+                            "item": ["Curry Tree Sapling"],
+                            "item_ids": [5499],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Pineapple Seed",
-                    "taskID": "plant_pineapple_tree_seed",
+                    "name": "Plant a Pineapple Sapling",
+                    "taskID": "plant_pineapple_sapling",
                     "category": "Farming",
                     "level": 51,
                     "completion_type": "FARMING",
@@ -6178,15 +6404,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Pineapple Seed"],
-                            "item_ids": [5287],
+                            "item": ["Pineapple Sapling"],
+                            "item_ids": [5500],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Palm Tree Seed",
-                    "taskID": "plant_palm_tree_seed",
+                    "name": "Plant a Palm Tree Sapling",
+                    "taskID": "plant_palm_tree_sapling",
                     "category": "Farming",
                     "level": 68,
                     "completion_type": "FARMING",
@@ -6194,8 +6420,8 @@
                     "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Palm Tree Seed"],
-                            "item_ids": [5289],
+                            "item": ["Palm Tree Sapling"],
+                            "item_ids": [5502],
                             "quantity": [1]
                         }
                     ]
@@ -7200,8 +7426,8 @@
                     }
                 },
                 {
-                    "name": "Plant a Banana Tree Seed",
-                    "taskID": "plant_banana_tree_seed",
+                    "name": "Plant a Banana Tree Sapling",
+                    "taskID": "plant_banana_tree_sapling",
                     "category": "Farming",
                     "level": 33,
                     "completion_type": "FARMING",
@@ -7209,15 +7435,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Banana Tree Seed"],
-                            "item_ids": [5284],
+                            "item": ["Banana Tree Sapling"],
+                            "item_ids": [5497],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant an Orange Tree Seed",
-                    "taskID": "plant_orange_tree_seed",
+                    "name": "Plant an Orange Tree Sapling",
+                    "taskID": "plant_orange_tree_sapling",
                     "category": "Farming",
                     "level": 39,
                     "completion_type": "FARMING",
@@ -7225,15 +7451,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Orange Tree Seed"],
-                            "item_ids": [5285],
+                            "item": ["Orange Tree Sapling"],
+                            "item_ids": [5498],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Curry Tree Seed",
-                    "taskID": "plant_curry_tree_seed",
+                    "name": "Plant a Curry Tree Sapling",
+                    "taskID": "plant_curry_tree_Sapling",
                     "category": "Farming",
                     "level": 42,
                     "completion_type": "FARMING",
@@ -7241,15 +7467,15 @@
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Curry Tree Seed"],
-                            "item_ids": [5286],
+                            "item": ["Curry Tree Sapling"],
+                            "item_ids": [5499],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Pineapple Seed",
-                    "taskID": "plant_pineapple_tree_seed",
+                    "name": "Plant a Pineapple Sapling",
+                    "taskID": "plant_pineapple_sapling",
                     "category": "Farming",
                     "level": 51,
                     "completion_type": "FARMING",
@@ -7257,15 +7483,15 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Pineapple Seed"],
-                            "item_ids": [5287],
+                            "item": ["Pineapple Sapling"],
+                            "item_ids": [5500],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Palm Tree Seed",
-                    "taskID": "plant_palm_tree_seed",
+                    "name": "Plant a Palm Tree Sapling",
+                    "taskID": "plant_palm_tree_sapling",
                     "category": "Farming",
                     "level": 68,
                     "completion_type": "FARMING",
@@ -7273,8 +7499,8 @@
                     "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Palm Tree Seed"],
-                            "item_ids": [5289],
+                            "item": ["Palm Tree Sapling"],
+                            "item_ids": [5502],
                             "quantity": [1]
                         }
                     ]
@@ -7328,7 +7554,7 @@
                     "name": "Plant a Magic Sapling",
                     "taskID": "plant_magic_sapling",
                     "category": "Farming",
-                    "level": 60,
+                    "level": 75,
                     "completion_type": "FARMING",
                     "base_points": 3,
                     "assignment_weight": 3,
@@ -7712,6 +7938,2032 @@
                     ]
                 }              
             ],                              
+            "is_completed": false
+        },
+        {
+            "region_id": [9526],
+            "Friendly_Name": "Tree Gnome Stronghold Gnomeball Field",
+            "neighbor_ids": [9527, 9782, 9525, 9270],
+            "tasks": [
+                {                    
+                    "name": "Pickpocket a Gnome",
+                    "taskID": "pickpocket_gnome",
+                    "category": "Thieving",
+                    "level": 75,
+                    "completion_type": "THIEVING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                    "npc": "Gnome",
+                    "npc_ids": [6078, 6079, 6077, 6086, 6087, 5969, 6094, 6095, 6096, 5968, 5970]                    
+                    }
+                },
+                {
+                    "name": "Mix an Agility Potion",
+                    "taskID": "mix_agility_potion",
+                    "category": "Herblore",
+                    "level": 34,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                     "required_items": [
+                        {
+                            "item": ["Agility Potion(3)", "Agility Potion(4)"],
+                            "item_ids": [3034, 3032]
+                        }
+                    ]
+                },
+                {
+                    "name": "DESTROY a Gnome Child in 1 Hit",
+                    "taskID": "defeat_gnome_child_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Gnome Child"],
+                        "npc_ids": [6078, 6079, 6077],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [30],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Obtain a Gnomeball",
+                    "taskID": "obtain_gnomeball",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Gnomeball"],
+                            "item_ids": [751],
+                            "quantity": [1]
+                        }
+                    ]
+                }                             
+            ],                              
+            "is_completed": false
+        },
+        {
+            "region_id": [9782],
+            "Friendly_Name": "The Grand Tree",
+            "neighbor_ids": [9783, 10038, 9781, 9526],
+            "tasks": [
+                {
+                    "name": "Use the Glider to Travel to The Grand Tree",
+                    "taskID": "glider_grand_tree",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Use the Hot Air Balloon to Travel to The Grand Tree",
+                    "taskID": "balloon_grand_tree",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Make a Fruit Blast",
+                    "taskID": "cook_fruit_blast",
+                    "category": "Cooking",
+                    "level": 6,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Fruit Blast",
+                            "item_ids": [2084]
+                        }
+                    ]
+                },
+                {
+                    "name": "Make a Pineapple Punch",
+                    "taskID": "cook_pineapple_punch",
+                    "category": "Cooking",
+                    "level": 8,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Pineapple Punch",
+                            "item_ids": [2048]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook Toad Crunchies",
+                    "taskID": "cook_toad_crunchies",
+                    "category": "Cooking",
+                    "level": 10,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Toad Crunchies",
+                            "item_ids": [2217]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook Spicy Crunchies",
+                    "taskID": "cook_spicy_crunchies",
+                    "category": "Cooking",
+                    "level": 12,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Spicy Crunchies",
+                            "item_ids": [2213]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook Worm Crunchies",
+                    "taskID": "cook_worm_crunchies",
+                    "category": "Cooking",
+                    "level": 14,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Worm Crunchies",
+                            "item_ids": [2205]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook Chocolate Chip Crunchies",
+                    "taskID": "cook_chocolate_chip_crunchies",
+                    "category": "Cooking",
+                    "level": 16,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Chocolate Chip Crunchies",
+                            "item_ids": [2209]
+                        }
+                    ]
+                },
+                {
+                    "name": "Make a Wizard Blizzard",
+                    "taskID": "cook_wizard_blizzard",
+                    "category": "Cooking",
+                    "level": 18,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Wizard Blizzard",
+                            "item_ids": [2054]
+                        }
+                    ]
+                },
+                {
+                    "name": "Make a Short Green Guy",
+                    "taskID": "cook_short_green_guy",
+                    "category": "Cooking",
+                    "level": 20,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Short Green Guy",
+                            "item_ids": [2080]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Fruit Batta",
+                    "taskID": "cook_fruit_batta",
+                    "category": "Cooking",
+                    "level": 25,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Fruit Batta",
+                            "item_ids": [2277]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Toad Batta",
+                    "taskID": "cook_toad_batta",
+                    "category": "Cooking",
+                    "level": 26,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Toad Batta",
+                            "item_ids": [2255]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Worm Batta",
+                    "taskID": "cook_worm_batta",
+                    "category": "Cooking",
+                    "level": 27,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Worm Batta",
+                            "item_ids": [2253]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Vegetable Batta",
+                    "taskID": "cook_vegetable_batta",
+                    "category": "Cooking",
+                    "level": 28,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Vegetable Batta",
+                            "item_ids": [2281]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Cheese and Tomato Batta",
+                    "taskID": "cook_cheese_tomato_batta",
+                    "category": "Cooking",
+                    "level": 29,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Cheese and Tomato Batta",
+                            "item_ids": [2259]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Worm Hole",
+                    "taskID": "cook_worm_hole",
+                    "category": "Cooking",
+                    "level": 30,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Worm Hole",
+                            "item_ids": [2191]
+                        }
+                    ]
+                },
+                {
+                    "name": "Make a Drunk Dragon",
+                    "taskID": "cook_drunk_dragon",
+                    "category": "Cooking",
+                    "level": 32,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Drunk Dragon",
+                            "item_ids": [2092]
+                        }
+                    ]
+                },
+                {
+                    "name": "Make a Chocolate Saturday",
+                    "taskID": "cook_chocolate_saturday",
+                    "category": "Cooking",
+                    "level": 33,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Chocolate Saturday",
+                            "item_ids": [2074]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Vegetable Ball",
+                    "taskID": "cook_vegetable_ball",
+                    "category": "Cooking",
+                    "level": 35,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Vegetable Ball",
+                            "item_ids": [2195]
+                        }
+                    ]
+                },
+                {
+                    "name": "Make a Blurberry Special",
+                    "taskID": "cook_blurberry_special",
+                    "category": "Cooking",
+                    "level": 37,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Blurberry Special",
+                            "item_ids": [2064]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Tangled Toad's Legs",
+                    "taskID": "cook_tangled_toad's_legs",
+                    "category": "Cooking",
+                    "level": 40,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Tangled Toad's Legs",
+                            "item_ids": [2187]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Chocolate Bomb",
+                    "taskID": "cook_chocolate_bomb",
+                    "category": "Cooking",
+                    "level": 42,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Chocolate Bomb",
+                            "item_ids": [2185]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Gnome Goggles",
+                    "taskID": "obtain_gnome_goggles",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 2,
+                    "required_items": [
+                        {
+                            "item": ["Gnome Goggles"],
+                            "item_ids": [9472],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Gnome Scarf",
+                    "taskID": "obtain_gnome_scarf",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 2,
+                    "required_items": [
+                        {
+                            "item": ["Gnome Scarf"],
+                            "item_ids": [9470],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Mint Cake",
+                    "taskID": "obtain_mint_cake",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 2,
+                    "required_items": [
+                        {
+                            "item": ["Mint Cake"],
+                            "item_ids": [9475],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Zenyte Shards",
+                    "taskID": "obtain_zenyte_shards",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Zenyte Shard"],
+                            "item_ids": [19529],
+                            "quantity": [1, 4]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Royal Seed Pod",
+                    "taskID": "obtain_royal_seed_pod",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Royal Seed Pod"],
+                            "item_ids": [19564],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+                    ],
+                        "optional_quests_unlocked": [
+                            {
+                                "name": "The Grand Tree",
+                                "points": 2
+                            },
+                            {
+                                "name": "Monkey Madness I",
+                                "points": 4
+                            },
+                            {
+                                "name": "Monkey Madness II",
+                                "points": 5
+                            }
+                ],                                         
+            "is_completed": false
+        },
+        {
+            "region_id": [10037],
+            "Friendly_Name": "Shadow Dungeon",
+            "neighbor_ids": [10038, 10293, 10036, 9781],
+            "tasks": [
+                {
+                    "name": "Equip a Dragon Dagger",
+                    "taskID": "equip_dragon_dagger",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Dagger"],
+                            "item_ids": [1215]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat Damis",
+                    "taskID": "defeat_damis",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {                        
+                        "npc": "Damis Second Form",
+                        "npc_ids": [683], 
+                        "quantity": [1]                  
+                    }                                    
+                },
+                {
+                    "name": "Talk to Valdez",
+                    "taskID": "talk_to_valdez",
+                    "category": "Dialogue",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Valdez"],
+                        "npc_ids": [3452],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Catch some Raw Salmon",
+                    "taskID": "catch_raw_salmon",
+                    "category": "Fishing",
+                    "level": 30,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Salmon",
+                        "item_ids": [331],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Cook some Salmon",
+                    "taskID": "cook_raw_salmon",
+                    "category": "Cooking",
+                    "level": 25,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Salmon",
+                        "item_ids": [329],
+                        "quantity": [1, 100]
+                        }
+                    ]       
+                }, 
+                {                           
+                    "name": "Catch some Raw Trout",
+                    "taskID": "catch_raw_trout",
+                    "category": "Fishing",
+                    "level": 20,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Trout",
+                        "item_ids": [335],
+                        "quantity": [1, 100]
+                        }
+                    ]       
+                },
+                {                           
+                    "name": "Cook some Trout",
+                    "taskID": "cook_raw_trout",
+                    "category": "Cooking",
+                    "level": 15,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Trout",
+                        "item_ids": [333],
+                        "quantity": [1, 100]
+                        }
+                    ]       
+                },
+                {
+                    "name": "Defeat a Moss Giant",
+                    "taskID": "defeat_moss_giant",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Moss Giant on Task",
+                    "taskID": "defeat_moss_giant_on_task",
+                    "category": "Slayer",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Moss Giant in 24 Seconds",
+                    "taskID": "defeat_moss_giant_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [40],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Defeat a Moss Guardian with nothing Equipped",
+                    "taskID": "defeat_moss_guardian_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Guardian"],
+                        "npc_ids": [891],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }                   
+                },
+                {
+                    "name": "Defeat a Moss Giant for some Ranarr Seeds",
+                    "taskID": "Defeat_moss_giant_for_ranarr_seeds",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852]                     
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Ranarr Seed",
+                        "dropped_item_id": [5295],
+                        "quantity": [1, 3]
+                        }
+                    ] 
+                }
+            ],                              
+            "is_completed": false
+        },
+        {
+            "region_id": [10038],
+            "Friendly_Name": "Otto's Grotto",
+            "neighbor_ids": [10039, 10294, 10037, 9782],
+            "tasks": [
+                {                           
+                    "name": "Catch a Leaping Trout",
+                    "taskID": "catch_leaping_trout",
+                    "category": "Fishing",
+                    "level": 48,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Leaping Trout",
+                        "item_ids": [11328],
+                        "quantity": [1]
+                        }
+                    ]       
+                },
+                {                           
+                    "name": "Catch a Leaping Salmon",
+                    "taskID": "catch_leaping_salmon",
+                    "category": "Fishing",
+                    "level": 58,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Leaping Salmon",
+                        "item_ids": [11330],
+                        "quantity": [1]
+                        }
+                    ]       
+                },
+                {                           
+                    "name": "Catch a Leaping Sturgeon",
+                    "taskID": "catch_leaping_sturgeon",
+                    "category": "Fishing",
+                    "level": 70,
+                    "completion_type": "FISHING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Leaping Sturgeon",
+                        "item_ids": [11332],
+                        "quantity": [1]
+                        }
+                    ]       
+                },
+                {
+                    "name": "Mix a Strength Mix",
+                    "taskID": "mix_strength_mix",
+                    "category": "Herblore",
+                    "level": 14,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                     "required_items": [
+                        {
+                            "item": ["Strength Mix(2)"],
+                            "item_ids": [11443]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix a Defence Mix",
+                    "taskID": "mix_defence_mix",
+                    "category": "Herblore",
+                    "level": 33,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                     "required_items": [
+                        {
+                            "item": ["Defence Mix(2)"],
+                            "item_ids": [11457]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Mix a Prayer Mix",
+                    "taskID": "mix_prayer_mix",
+                    "category": "Herblore",
+                    "level": 42,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                     "required_items": [
+                        {
+                            "item": ["Prayer Mix(2)"],
+                            "item_ids": [11465]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix a Super Restore Mix",
+                    "taskID": "mix_super_restore_mix",
+                    "category": "Herblore",
+                    "level": 67,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                     "required_items": [
+                        {
+                            "item": ["Super Restore Mix(2)"],
+                            "item_ids": [11493]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Mithril Dragon",
+                    "taskID": "defeat_mithril_dragon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Mithril Dragon"],
+                        "npc_ids": [2919, 8088, 8089],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Brutal Green Dragon",
+                    "taskID": "defeat_brutal_green_dragon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Brutal Green Dragon"],
+                        "npc_ids": [2918],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Mithril Dragon for some Chewed Bones",
+                    "taskID": "Defeat_mithril_dragon_for_chewed_bones",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Mithril Dragon"],
+                        "npc_ids": [2919, 8088, 8089],
+                        "quantity": [1]
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Chewed Bones",
+                        "dropped_item_id": [11338],
+                        "quantity": [1, 3]
+                        }
+                    ] 
+                },
+                {
+                    "name": "Equip a Dragon Full Helm",
+                    "taskID": "equip_dragon_full_helm",
+                    "category": "Defence",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Full Helm"],
+                            "item_ids": [11335]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Dragon Platebody",
+                    "taskID": "smith_dragon_platebody",
+                    "category": "Smithing",
+                    "level": 90,
+                    "completion_type": "SMITHING",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Platebody"],
+                            "item_ids": [21892]
+                        }
+                    ]
+                }
+                    ],
+                        "optional_quests_unlocked": [
+                            {
+                                "name": "Waterfall Quest",
+                                "points": 2
+                            }                          
+                ],                                        
+            "is_completed": false
+        },
+        {
+            "region_id": [10039],
+            "Friendly_Name": "Barbarian Outpost",
+            "neighbor_ids": [10040, 10295, 10038, 9783],
+            "tasks": [
+                {
+                    "name": "Complete some Laps of the Barbarian Outpost Course",
+                    "taskID": "complete_barbarian_outpost_course",
+                    "category": "Agility",
+                    "level": 35,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Crumbling Wall"],
+                        "object_id": [1948], 
+                        "quantity": [1, 20]
+                    }
+                },
+                
+                {
+                "name": "Build a Medium STASH Unit at the Barbarian Outpost Course",
+                "taskID": "build_medium_stash_barbarian_outpost_course",
+                "category": "Construction",
+                "level": 42,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,
+                "required_items": [
+                        {
+                        "item": "Oak Plank",
+                        "item_ids": [8778]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Medium STASH Unit (inconspicuous bush)",
+                        "object_id": [28992],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                    "name": "Complete the Diary Step requiring Level 5 in all Barbarian Assault Roles",
+                    "taskID": "unlock_level_5_all_roles_barb_assault",
+                    "category": "Unlock",
+                    "completion_type": "VARP_CHECK",
+                    "base_points": 5,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varp_id": 1179,        
+                        "bit_index": 5,      
+                        "expected_value": 1
+                    }
+                },                           
+                {
+                    "name": "Equip a Granite Body",
+                    "taskID": "equip_granite_body",
+                    "category": "Defence",
+                    "level": 50,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Granite Body"],
+                            "item_ids": [10564]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Fighter Torso",
+                    "taskID": "equip_fighter_torso",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Fighter Torso"],
+                            "item_ids": [10551]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Fighter Hat",
+                    "taskID": "equip_fighter_hat",
+                    "category": "Defence",
+                    "level": 45,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Fighter Hat"],
+                            "item_ids": [10548]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Ranger Hat",
+                    "taskID": "equip_ranger_hat",
+                    "category": "Defence",
+                    "level": 45,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ranger Hat"],
+                            "item_ids": [10550]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Runner Hat",
+                    "taskID": "equip_runner_hat",
+                    "category": "Defence",
+                    "level": 45,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Runner Hat"],
+                            "item_ids": [10549]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Healer Hat",
+                    "taskID": "equip_healer_hat",
+                    "category": "Defence",
+                    "level": 45,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Healer Hat"],
+                            "item_ids": [10547]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Penance Skirt",
+                    "taskID": "equip_penance_skirt",
+                    "category": "Ranged",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Penance Skirt"],
+                            "item_ids": [10555]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Penance Runner Boots",
+                    "taskID": "equip_penance_boots",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Runner Boots"],
+                            "item_ids": [10552]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Penance Gloves",
+                    "taskID": "equip_penance_gloves",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Penance Gloves"],
+                            "item_ids": [10554]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Barbarian Teleport Tablet",
+                    "taskID": "obtain_barbarian_teleport_tablet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Barbarian Teleport"],
+                            "item_ids": [24955],
+                            "quantity": [1]
+                        }
+                    ]
+                }                                           
+            ],                                        
+            "is_completed": false
+        },
+        {
+            "region_id": [9270],
+            "Friendly_Name": "Eagles' Peak",
+            "neighbor_ids": [9271, 9526, 9269, 9014],
+            "tasks": [
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Yew Log",
+                    "taskID": "burn_yew_log",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "task_name": "Travel to the Desert using the Eagle Transportation System",
+                    "taskID": "travel_to_desert_using_eagle",
+                    "category": "Travel",
+                    "completion_type": "VARP_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "constraints": 
+                    {
+                        "varp_id": 1198,
+                        "bit_index": 17,
+                        "expected_value": 1
+                    }                
+                },
+                {
+                    "task_name": "Travel to the Snowy Hunter Area using the Eagle Transportation System",
+                    "taskID": "travel_to_snowy_hunter_using_eagle",
+                    "category": "Travel",
+                    "completion_type": "VARP_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "constraints": 
+                    {
+                        "varp_id": 1184,
+                        "bit_index": 12,
+                        "expected_value": 1
+                    }                
+                },
+                {
+                    "task_name": "Travel to Feldip Hills using the Eagle Transportation System",
+                    "taskID": "travel_to_feldip_hills_using_eagle",
+                    "category": "Travel",
+                    "completion_type": "VARP_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "constraints": 
+                    {
+                        "varp_id": 1182,
+                        "bit_index": 20,
+                        "expected_value": 1
+                    }                
+                }, 
+                {
+                    "name": "Fletch a Yew Shortbow",
+                    "taskID": "fletch_yew_shortbow",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yew Shortbow"],
+                            "item_ids": [857],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Yew Longbow",
+                    "taskID": "fletch_yew_longbow",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yew Longbow"],
+                            "item_ids": [855],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Ferret",
+                    "taskID": "catch_ferret",
+                    "category": "Hunter",
+                    "level": 27,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Ferret",
+                            "item_ids": [10092]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Use the Level 25 Agility Eagle's Peak Shortcut",
+                    "taskID": "agility_level_25_eagle's_peak",
+                    "category": "Agility",
+                    "level": 25,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 5,                                     
+                    "required_object": {
+                        "object": ["Rocks(Eagle's Peak)"],
+                        "object_id": [19849], 
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Equip an Eagle Cape",
+                    "taskID": "equip_eagle_cape",
+                    "category": "Defence",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Eagle Cape"],
+                            "item_ids": [10171]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Fake Beak",
+                    "taskID": "equip_fake_beak",
+                    "category": "Defence",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Fake Beak"],
+                            "item_ids": [10172]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Golden Feather",
+                    "taskID": "obtain_golden_feather",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Golden Feather"],
+                            "item_ids": [10175, 2950],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+                        "optional_quests_unlocked": [
+                            {
+                                "name": "Eagles' Peak",
+                                "points": 1
+                            }                           
+                ],                                                                                                              
+            "is_completed": false
+        },
+        {
+            "region_id": [9524],
+            "Friendly_Name": "Arandar Gate",
+            "neighbor_ids": [9525, 9780, 9523, 9268],
+            "tasks": [
+                {
+                    "name": "Travel into the Arandar Mountain Pass",
+                    "taskID": "arandar_mountain_pass",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 10
+                },
+                {
+                    "name": "Defeat a Grizzly Bear in 12 Seconds",
+                    "taskID": "defeat_grizzly_bear_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Grizzly Bear"],
+                        "npc_ids": [2838, 3423],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [20],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Defeat some Grizzly Bears",
+                    "taskID": "defeat_grizzly_bears",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Grizzly Bear"],
+                        "npc_ids": [2838, 3423],
+                        "quantity": [1, 25]
+                    }                 
+                },
+                {
+                    "name": "Defeat a Grizzly Bear with nothing Equipped",
+                    "taskID": "defeat_grizzly_bear_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Grizzly Bear"],
+                        "npc_ids": [2838, 3423],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {                       
+                        "equip_nothing": "TRUE"
+                    },
+
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for equipment combat tasks."
+                            }
+                        ]                                      
+                },
+                {
+                    "name": "Defeat a Grizzly Bear on Task",
+                    "taskID": "defeat_grizzly_bear_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Grizzly Bear"],
+                        "npc_ids": [2838, 3423],
+                        "quantity": [1]
+                    }
+                }                                                       
+            ],                                                                                                              
+            "is_completed": false
+        },
+        {
+            "region_id": [9271],
+            "Friendly_Name": "Piscatoris Fields",
+            "neighbor_ids": [9272, 9527, 9270, 9015],
+            "tasks": [
+                {
+                    "name": "Catch a Wild Kebbit",
+                    "taskID": "catch_wild_kebbit",
+                    "category": "Hunter",
+                    "level": 23,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Kebbit Claws",
+                            "item_ids": [10113]
+                            },
+                            {
+                            "item": "Raw Wild Kebbit",
+                            "item_ids": [29104]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Obtain a Kebbity Tuft",
+                    "taskID": "obtain_kebbity_tuft",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Kebbity Tuft"],
+                            "item_ids": [29223],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Ruby Harvest in a Butterfly Jar",
+                    "taskID": "catch_ruby_harvest_in_butterfly_jar",
+                    "category": "Hunter",
+                    "level": 15,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Ruby Harvest",
+                            "item_ids": [10020]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Catch a White Rabbit",
+                    "taskID": "catch_white_rabbit",
+                    "category": "Hunter",
+                    "level": 27,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Raw Rabbit",
+                            "item_ids": [3226]
+                            },
+                            {
+                            "item": "Rabbit Foot",
+                            "item_ids": [10134]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Craft a Strung Rabbit Foot",
+                    "taskID": "craft_strung_rabbit_foot",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Crafting",
+                    "level": 37,
+                    "completion_type": "CRAFTING",
+                    "required_items": [
+                        {
+                        "item": "Strung Rabbit Foot",
+                        "item_ids": [10132],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Chinchompa",
+                    "taskID": "catch_chinchompa",
+                    "category": "Hunter",
+                    "level": 53,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Chinchompa",
+                            "item_ids": [10033]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Obtain a Chinchompa Tuft",
+                    "taskID": "obtain_chinchompa_tuft",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Chinchompa Tuft"],
+                            "item_ids": [29221],
+                            "quantity": [1]
+                        }
+                    ]
+                }                                                       
+            ],                                                                                                              
+            "is_completed": false
+        },
+        {
+            "region_id": [9271],
+            "Friendly_Name": "Piscatoris Fairy Ring",
+            "neighbor_ids": [9272, 9527, 9270, 9015],
+            "tasks": [
+                {
+                    "name": "Catch a Copper Longtail",
+                    "taskID": "catch_copper_longtail",
+                    "category": "Hunter",
+                    "level": 9,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Orange Feather",
+                            "item_ids": [10091]
+                            },
+                            {
+                            "item": "Raw Bird Meat",
+                            "item_ids": [9978]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Obtain a Kebbity Tuft",
+                    "taskID": "obtain_kebbity_tuft",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Kebbity Tuft"],
+                            "item_ids": [29223],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Razor-Backed Kebbit",
+                    "taskID": "catch_razor-backed_kebbit",
+                    "category": "Hunter",
+                    "level": 49,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Long Kebbit Spike",
+                            "item_ids": [10107]
+                            },
+                            {
+                            "item": "Raw Beast Meat",
+                            "item_ids": [9986]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Catch a Prickly Kebbit",
+                    "taskID": "catch_prickly_kebbit",
+                    "category": "Hunter",
+                    "level": 37,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Kebbit Spike",
+                            "item_ids": [10105]
+                            }                           
+                        ]             
+                },
+                {
+                    "name": "Fletch a Yew Shortbow",
+                    "taskID": "fletch_yew_shortbow",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yew Shortbow"],
+                            "item_ids": [857],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Yew Longbow",
+                    "taskID": "fletch_yew_longbow",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yew Longbow"],
+                            "item_ids": [855],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Travel to Fairy Ring Code AKQ",
+                    "taskID": "fairy_ring_AKQ",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }                                                                    
+            ],                                                                                                              
+            "is_completed": false
+        },
+        {
+            "region_id": [9528],
+            "Friendly_Name": "Piscatoris Falconry Area",
+            "neighbor_ids": [9529, 9784, 9527, 9272],
+            "tasks": [
+                {
+                    "name": "Obtain Gloves of Silence",
+                    "taskID": "obtain_gloves_of_silence",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Gloves of Silence"],
+                            "item_ids": [10075],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Spotted Cape",
+                    "taskID": "equip_spotted_cape",
+                    "category": "Hunter",
+                    "level": 40,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Spotted Cape"],
+                            "item_ids": [10073],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Spottier Cape",
+                    "taskID": "equip_spottier_cape",
+                    "category": "Hunter",
+                    "level": 66,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Spottier Cape"],
+                            "item_ids": [10074],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Spotted Kebbit",
+                    "taskID": "catch_spotted_kebbit",
+                    "category": "Hunter",
+                    "level": 47,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Spotted Kebbit Fur",
+                            "item_ids": [10125]
+                            }                           
+                        ]             
+                },
+                {
+                    "name": "Catch a Dark Kebbit",
+                    "taskID": "catch_dark_kebbit",
+                    "category": "Hunter",
+                    "level": 57,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Dark Kebbit Fur",
+                            "item_ids": [10115]
+                            }                           
+                        ]             
+                },
+                {
+                    "name": "Catch a Dashing Kebbit",
+                    "taskID": "catch_dashing_kebbit",
+                    "category": "Hunter",
+                    "level": 69,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Dashing Kebbit Fur",
+                            "item_ids": [10127]
+                            }                           
+                        ]             
+                },
+                {
+                    "name": "Travel to Fairy Ring Code AKQ",
+                    "taskID": "fairy_ring_AKQ",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }                                                                    
+            ],                                                                                                              
+            "is_completed": false
+        },
+        {
+            "region_id": [9273],
+            "Friendly_Name": "Piscatoris Fishing Colony",
+            "neighbor_ids": [9274, 9529, 9272, 9017],
+            "tasks": [
+                {
+                    "name": "Obtain a Piscatoris Teleport Scroll",
+                    "taskID": "obtain_piscatoris_teleport_scroll",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Piscatoris Teleport"],
+                            "item_ids": [12408],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch some Raw Monkfish",
+                    "taskID": "catch_raw_monkfish",
+                    "category": "Fishing",
+                    "level": 62,
+                    "completion_type": "FISHING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Monkfish",
+                        "item_ids": [7944],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Monkfish",
+                    "taskID": "cook_monkfish",
+                    "category": "Cooking",
+                    "level": 62,
+                    "completion_type": "COOKING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Monkfish",
+                            "item_ids": [7946]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt a Mithril Bar",
+                    "taskID": "smith_mithril_bar",
+                    "category": "Smithing",
+                    "level": 50,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mithril Bar",
+                            "item_ids": [2359],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt an Adamantite Bar",
+                    "taskID": "smith_adamantite_bar",
+                    "category": "Smithing",
+                    "level": 70,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Adamantite Bar",
+                            "item_ids": [2361],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Level 83 Skeleton Mage",
+                    "taskID": "defeat_level_83_skeleton_mage",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 83 Skeleton Mage"],
+                        "npc_ids": [4319],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 83 Skeleton Mage in 12 Seconds",
+                    "taskID": "defeat_level_83_skeleton_mage_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 83 Skeleton Mage"],
+                        "npc_ids": [4319],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [20],
+                        "prohibited_active_varbits": [
+                            {
+                                "varbit_id": 57,
+                                "must_be_value": 0,
+                                "fail_message": "Cannon use is prohibited for timed combat tasks."
+                            }
+                        ]
+                    }
+                },
+                {                           
+                    "name": "Defeat a Level 83 Skeleton Mage with nothing Equipped",
+                    "taskID": "defeat_level_83_skeleton_mage_with_nothing",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 83 Skeleton Mage"],
+                        "npc_ids": [4319],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {                       
+                    "equip_nothing": "TRUE"
+                    }                  
+                }
+                    ],
+                        "optional_quests_unlocked": [
+                            {
+                                "name": "Swan Song",
+                                "points": 4
+                            }                           
+                ],                                                                                                                                                              
+            "is_completed": false
+        },
+        {
+            "region_id": [9263],
+            "Friendly_Name": "Castle Wars Teak Tree",
+            "neighbor_ids": [9264, 9519, 9262, 9007],
+            "tasks": [
+                {
+                    "name": "Chop a Teak Tree",
+                    "taskID": "Chop_willow_tree",
+                    "category": "Woodcutting",
+                    "level": 35,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Teak Log",
+                    "taskID": "burn_teak_log",
+                    "category": "Firemaking",
+                    "level": 35,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ogre Bowman Hat",
+                    "taskID": "obtain_ogre_bowman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre bowman)"],
+                            "item_ids": [2978]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bowman Hat",
+                    "taskID": "obtain_bowman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 9,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (bowman)"],
+                            "item_ids": [2979]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ogre Yeoman Hat",
+                    "taskID": "obtain_ogre_yeoman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre yeoman)"],
+                            "item_ids": [2980]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Yeoman Hat",
+                    "taskID": "obtain_yeoman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 7,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (yeoman)"],
+                            "item_ids": [2981]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ogre Marksman Hat",
+                    "taskID": "obtain_ogre_marksman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 6,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre marksman)"],
+                            "item_ids": [2982]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Obtain a Marksman Hat",
+                    "taskID": "obtain_marksman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (marksman)"],
+                            "item_ids": [2983]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ogre Woodsman Hat",
+                    "taskID": "obtain_ogre_woodsman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 4,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (ogre woodsman)"],
+                            "item_ids": [2984]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Woodsman Hat",
+                    "taskID": "obtain_woodsman_hat",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Chompy bird hat (woodsman)"],
+                            "item_ids": [2985]
+                        }
+                    ]
+                }                                                                
+            ],                                                                                                              
             "is_completed": false
         }
     ]

@@ -181,7 +181,6 @@
                 {
                     "name": "Runecraft an Air Rune",
                     "taskID": "runecraft_air_rune",
-                    "is_unlocked": false,
                     "category": "Runecrafting",
                     "level": 1,
                     "completion_type": "RUNECRAFTING",
@@ -198,7 +197,6 @@
                 {
                     "name": "Runecraft a Smoke Rune",
                     "taskID": "runecraft_smoke_rune",
-                    "is_unlocked": false,
                     "category": "Runecrafting",
                     "level": 15,
                     "completion_type": "RUNECRAFTING",
@@ -1718,7 +1716,7 @@
                     "required_items": [
                         {
                             "item": ["Pay-dirt"],
-                            "item_ids": [449],
+                            "item_ids": [12011],
                             "quantity": [1, 50]
                         }
                     ]
@@ -1733,22 +1731,22 @@
                     "required_items": [
                         {
                             "item": ["Prospector's Jacket"],
-                            "item_ids": [12014, 29474],
+                            "item_ids": [12014, 29474, 25551],
                             "quantity": [1]
                         },
                         {
                             "item": ["Prospector's Boots"],
-                            "item_ids": [12016, 29478],
+                            "item_ids": [12016, 29478, 25555],
                             "quantity": [1]
                         },
                         {
                             "item": ["Prospector's Helmet"],
-                            "item_ids": [12013, 29472],
+                            "item_ids": [12013, 29472, 25549],
                             "quantity": [1]
                         },
                         {
                             "item": ["Prospector's Legs"],
-                            "item_ids": [12015, 29476],
+                            "item_ids": [12015, 29476, 25553],
                             "quantity": [1]
                         }
                     ]
@@ -2393,11 +2391,7 @@
                         "npc": ["Monk"],
                         "npc_ids": [4246, 2579, 4068, 6956],
                         "quantity": [1]
-                    }, 
-                    
-                    "constraints": {
-                        "time_in_ticks": [36]
-                        }
+                    } 
                 },
                 {
                     "name": "Talk to Brother Jered",
@@ -2598,7 +2592,7 @@
                     "required_items": [
                         {
                             "item": ["Dragon Mace"],
-                            "item_ids": [1377]
+                            "item_ids": [1434]
                         }
                     ]
                 },
@@ -2613,7 +2607,7 @@
                     "required_items": [
                         {
                             "item": ["Dragon Battleaxe"],
-                            "item_ids": [1434]
+                            "item_ids": [1377]
                         }
                     ]
                 },

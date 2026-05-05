@@ -11,6 +11,14 @@ color 0A
 :: editing/committing in C:\Chunkblazer so the dev client
 :: picks up the latest plugin code.
 ::
+:: Pipeline:
+::   [1/3] Tasks_JSON\*.json   -> src\main\resources\...\chunkblazer\
+::         (Tasks_JSON is source of truth for the 6 task JSONs
+::          loaded by ChunkBlazerPlugin.TASK_JSON_FILES; this
+::          step overwrites the resources copy.)
+::   [2/3] src\main\java\...   -> runelite\runelite-client\...\java\
+::   [3/3] src\main\resources\... -> runelite\runelite-client\...\resources\
+::
 :: Mirrors (deletions propagate) by removing the destination
 :: folders first, then xcopy /E /I /H /Y. No build is run -
 :: launch via run-chunkblazer.bat or rebuild from your IDE
@@ -26,11 +34,17 @@ if "%SCRIPT_DIR:~-1%"=="\" set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
 set "CHUNKBLAZER_DIR=%SCRIPT_DIR%"
 set "RUNELITE_DIR=C:\runelite"
 
+set "TASKS_JSON_SRC=%CHUNKBLAZER_DIR%\Tasks_JSON"
 set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\net\runelite\client\plugins\chunkblazer"
 set "PLUGIN_RES_SRC=%CHUNKBLAZER_DIR%\src\main\resources\net\runelite\client\plugins\chunkblazer"
 
 set "JAVA_DEST=%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer"
 set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer"
+
+:: Files the plugin actually loads at runtime (must match
+:: ChunkBlazerPlugin.TASK_JSON_FILES). If you add a new task
+:: JSON to TASK_JSON_FILES, add it here too.
+set TASK_JSONS=Starter_Area_Tasks.json Misthalin_Tasks.json Asgarnia_Tasks.json Kandarin_Tasks.json Varlamore_Tasks.json Zeah_Tasks.json
 
 echo ========================================
 echo    Sync ChunkBlazer -^> RuneLite
@@ -48,8 +62,38 @@ if not exist "%RUNELITE_DIR%" (
     exit /b 1
 )
 
+:: ---- Refresh JSON resources from Tasks_JSON -----------------------------
+echo [1/3] Refreshing task JSONs from Tasks_JSON...
+echo   From: %TASKS_JSON_SRC%
+echo   To:   %PLUGIN_RES_SRC%
+if not exist "%TASKS_JSON_SRC%" (
+    echo   WARNING: %TASKS_JSON_SRC% not found - skipping JSON refresh.
+) else (
+    if not exist "%PLUGIN_RES_SRC%" (
+        echo ERROR: Resources folder missing: %PLUGIN_RES_SRC%
+        pause
+        exit /b 1
+    )
+    set MISSING_COUNT=0
+    for %%F in (%TASK_JSONS%) do (
+        if exist "%TASKS_JSON_SRC%\%%F" (
+            copy /Y "%TASKS_JSON_SRC%\%%F" "%PLUGIN_RES_SRC%\%%F" >nul
+            if !ERRORLEVEL! NEQ 0 (
+                echo   ERROR: Copy failed for %%F
+                pause
+                exit /b 1
+            )
+            echo   Copied %%F
+        ) else (
+            echo   WARNING: %%F not found in Tasks_JSON - resources copy left untouched.
+            set /a MISSING_COUNT+=1
+        )
+    )
+)
+echo.
+
 :: ---- Java sources -------------------------------------------------------
-echo [1/2] Mirroring Java sources...
+echo [2/3] Mirroring Java sources...
 echo   From: %PLUGIN_JAVA_SRC%
 echo   To:   %JAVA_DEST%
 if exist "%JAVA_DEST%" rd /s /q "%JAVA_DEST%"
@@ -63,7 +107,7 @@ echo   Done.
 echo.
 
 :: ---- Resources ----------------------------------------------------------
-echo [2/2] Mirroring resources...
+echo [3/3] Mirroring resources...
 echo   From: %PLUGIN_RES_SRC%
 echo   To:   %RES_DEST%
 if exist "%RES_DEST%" rd /s /q "%RES_DEST%"

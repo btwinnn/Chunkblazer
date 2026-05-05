@@ -4,7 +4,7 @@
       "region_id": [12850],
       "friendly_name": "Lumbridge",
       "unlock_cost": 1,
-      "neighbor_ids": [12851, 12849, 12594, 13106, 12595, 13107, 12593, 13105],
+      "neighbor_ids": [12581, 12579, 12612, 12548],
       "tasks": [
         {
           "name": "Defeat a Level 2 Goblin",
@@ -355,7 +355,7 @@
           ]
         },
         {
-          "name": "Kill a Chicken in 1 Hit",
+          "name": "Defeat a Chicken in 1 Hit",
           "taskID": "defeat_chicken_fast",
           "category": "Combat",
           "completion_type": "NPC_Kill",
@@ -364,7 +364,7 @@
           "target_npc": {
             "npc": ["Chicken"],
             "npc_ids": [1173, 1174, 10495, 10496, 9488, 10494, 10497],
-            "quantity": 1
+            "quantity": [1]
           },
           "constraints": {
             "time_in_ticks": [1],
@@ -921,7 +921,7 @@
           ]
         },
         {
-          "name": "Kill a man in 5 Seconds",
+          "name": "Defeat a Man or Woman in 5 Seconds",
           "taskID": "defeat_man_fast",
           "category": "Combat",
           "level": 2,
@@ -1030,8 +1030,6 @@
     {
       "region_id": [13105],
       "Friendly_Name": "Al Kharid",
-      "neighbor_ids": [13106, 13104, 13361, 12849],
-      "unlock_cost": 1,
       "tasks": [
         {
           "name": "Equip some Adamant Platelegs",
