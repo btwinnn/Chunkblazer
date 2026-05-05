@@ -108,7 +108,7 @@ public class ChunkBlazerPlugin extends Plugin
 	private final Map<String, NuzlockeTask> completedTaskCache = new HashMap<>(); // Cache completed tasks for lookup
 	private ChunkBlazerPanel panel;
 	private NavigationButton navButton;
-	private int lastRegionId = -1;
+	private volatile int lastRegionId = -1;
 	private final Random random = new Random();
 
 	// --- Constants ---
@@ -908,12 +908,8 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public int getCurrentRegionId()
 	{
-		Player player = client.getLocalPlayer();
-		if (player == null)
-		{
-			return -1;
-		}
-		return player.getWorldLocation().getRegionID();
+		// Cached value updated on the client thread in onGameTick — getWorldLocation() asserts client-thread, panel callers run on EDT.
+		return lastRegionId;
 	}
 
 	public String getCurrentRegionName()

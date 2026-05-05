@@ -155,36 +155,52 @@ public class NuzlockeTask
 			return task;
 		}
 
+		// Some JSON files store scalars as arrays (e.g. "category": ["Ranged", "Defence"], "level": [50, 1]).
+		// Collapse to the first non-null primitive so a stray array doesn't tank the whole file.
+		private JsonElement firstScalar(JsonElement el)
+		{
+			if (el == null || el.isJsonNull()) return null;
+			if (el.isJsonArray())
+			{
+				JsonArray arr = el.getAsJsonArray();
+				for (JsonElement e : arr)
+				{
+					if (e != null && !e.isJsonNull() && e.isJsonPrimitive())
+					{
+						return e;
+					}
+				}
+				return null;
+			}
+			return el.isJsonPrimitive() ? el : null;
+		}
+
 		private String getStringOrNull(JsonObject obj, String field)
 		{
 			if (!obj.has(field)) return null;
-			JsonElement el = obj.get(field);
-			if (el.isJsonNull()) return null;
-			return el.getAsString();
+			JsonElement el = firstScalar(obj.get(field));
+			return el == null ? null : el.getAsString();
 		}
 
 		private Integer getIntOrNull(JsonObject obj, String field)
 		{
 			if (!obj.has(field)) return null;
-			JsonElement el = obj.get(field);
-			if (el.isJsonNull()) return null;
-			return el.getAsInt();
+			JsonElement el = firstScalar(obj.get(field));
+			return el == null ? null : el.getAsInt();
 		}
 
 		private int getIntOrDefault(JsonObject obj, String field, int defaultValue)
 		{
 			if (!obj.has(field)) return defaultValue;
-			JsonElement el = obj.get(field);
-			if (el.isJsonNull()) return defaultValue;
-			return el.getAsInt();
+			JsonElement el = firstScalar(obj.get(field));
+			return el == null ? defaultValue : el.getAsInt();
 		}
 
 		private Boolean getBooleanOrNull(JsonObject obj, String field)
 		{
 			if (!obj.has(field)) return null;
-			JsonElement el = obj.get(field);
-			if (el.isJsonNull()) return null;
-			return el.getAsBoolean();
+			JsonElement el = firstScalar(obj.get(field));
+			return el == null ? null : el.getAsBoolean();
 		}
 	}
 }
