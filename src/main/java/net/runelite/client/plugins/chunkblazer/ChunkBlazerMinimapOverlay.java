@@ -1,11 +1,8 @@
 package net.runelite.client.plugins.chunkblazer;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.Stroke;
 import java.util.Set;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -23,16 +20,13 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 
 /**
- * Overlay that renders chunk borders on the minimap and allows click-to-unlock.
+ * Overlay that enables right-click to unlock chunks on the minimap.
+ * No visual drawing - just tracks mouse position for menu entries.
  */
 @Slf4j
 public class ChunkBlazerMinimapOverlay extends Overlay
 {
 	private static final int REGION_SIZE = 64; // 64 tiles per region
-	private static final Color UNLOCKED_COLOR = new Color(0, 255, 0, 100);
-	private static final Color LOCKED_COLOR = new Color(255, 0, 0, 60);
-	private static final Color NEIGHBOR_COLOR = new Color(255, 215, 0, 120);
-	private static final Color CURRENT_COLOR = new Color(0, 200, 255, 150);
 
 	private final Client client;
 	private final ClientThread clientThread;
@@ -95,8 +89,6 @@ public class ChunkBlazerMinimapOverlay extends Overlay
 			return null;
 		}
 
-		int playerRegionId = playerLocation.getRegionID();
-		Set<String> unlockedRegions = plugin.getUnlockedRegionIds();
 		Set<Integer> neighborRegions = plugin.getNeighborRegionIds();
 
 		// Get mouse position for hover detection
@@ -110,20 +102,22 @@ public class ChunkBlazerMinimapOverlay extends Overlay
 		// Minimap scale (approximate)
 		double scale = 4.0; // pixels per tile (approximate, varies with zoom)
 
-		// Draw chunk borders for nearby regions
-		graphics.setClip(minimapBounds);
-		Stroke oldStroke = graphics.getStroke();
-		graphics.setStroke(new BasicStroke(2));
-
 		// Calculate visible region range (roughly 3x3 regions around player)
 		int playerRegionX = playerLocation.getX() >> 6;
 		int playerRegionY = playerLocation.getY() >> 6;
 
+		// Only track hover for right-click menu - no drawing
 		for (int rx = playerRegionX - 1; rx <= playerRegionX + 1; rx++)
 		{
 			for (int ry = playerRegionY - 1; ry <= playerRegionY + 1; ry++)
 			{
 				int regionId = (rx << 8) | ry;
+
+				// Only care about neighbor regions for unlock
+				if (!neighborRegions.contains(regionId))
+				{
+					continue;
+				}
 
 				// Calculate region corners in world coordinates
 				int regionBaseX = rx << 6;
@@ -147,64 +141,16 @@ public class ChunkBlazerMinimapOverlay extends Overlay
 					continue;
 				}
 
-				// Check hover
+				// Check hover - only set if it's an unlockable neighbor
 				if (mousePos != null && regionRect.contains(mousePos.getX(), mousePos.getY()))
 				{
-					hoveredRegionId = regionId;
-				}
-
-				// Determine color based on state
-				boolean isUnlocked = unlockedRegions.contains(String.valueOf(regionId));
-				boolean isNeighbor = neighborRegions.contains(regionId);
-				boolean isCurrent = regionId == playerRegionId;
-
-				Color fillColor;
-				Color borderColor;
-
-				if (isCurrent)
-				{
-					fillColor = new Color(0, 200, 255, 40);
-					borderColor = CURRENT_COLOR;
-				}
-				else if (isUnlocked)
-				{
-					fillColor = new Color(0, 255, 0, 20);
-					borderColor = UNLOCKED_COLOR;
-				}
-				else if (isNeighbor)
-				{
-					// Brighter if hovered
-					if (regionId == hoveredRegionId)
+					if (!plugin.isRegionUnlocked(regionId))
 					{
-						fillColor = new Color(255, 215, 0, 80);
+						hoveredRegionId = regionId;
 					}
-					else
-					{
-						fillColor = new Color(255, 215, 0, 30);
-					}
-					borderColor = NEIGHBOR_COLOR;
 				}
-				else
-				{
-					fillColor = new Color(0, 0, 0, 40);
-					borderColor = LOCKED_COLOR;
-				}
-
-				// Clip to minimap bounds
-				Rectangle clippedRect = minimapBounds.intersection(regionRect);
-
-				// Draw fill
-				graphics.setColor(fillColor);
-				graphics.fill(clippedRect);
-
-				// Draw border
-				graphics.setColor(borderColor);
-				graphics.draw(clippedRect);
 			}
 		}
-
-		graphics.setStroke(oldStroke);
-		graphics.setClip(null);
 
 		return null;
 	}

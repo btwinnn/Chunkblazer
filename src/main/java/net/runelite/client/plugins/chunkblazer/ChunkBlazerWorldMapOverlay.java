@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.api.Client;
-import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
 import net.runelite.api.Point;
 import net.runelite.api.gameval.InterfaceID;
@@ -238,16 +237,12 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 			}
 		}
 
-		// Add right-click menu for unlocking neighbors (only when Shift is held)
+		// Add right-click menu for unlocking neighbors
 		if (isHoveredUnlockable && hoveredRegionId > 0)
 		{
-			// Only show unlock menu when Shift is held
-			if (client.isKeyPressed(KeyCode.KC_SHIFT))
-			{
-				addUnlockMenuEntry(hoveredRegionId);
-			}
+			addUnlockMenuEntry(hoveredRegionId);
 
-			// Always draw hover tooltip when hovering unlockable region
+			// Draw hover tooltip when hovering unlockable region
 			drawHoverTooltip(graphics, mousePos, hoveredRegionId);
 		}
 
@@ -323,7 +318,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 		// Build tooltip text
 		String line1 = regionName;
 		String line2 = "Cost: " + unlockCost + " pts";
-		String line3 = canAfford ? "Shift+Right-click to unlock" : "Need " + (unlockCost - playerPoints) + " more pts";
+		String line3 = canAfford ? "Right-click to unlock" : "Need " + (unlockCost - playerPoints) + " more pts";
 
 		// Setup font
 		Font font = FontManager.getRunescapeSmallFont();
@@ -412,16 +407,16 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 				return;
 			}
 
-			// Show unlock confirmation with Yes/No options
+			// Show unlock confirmation with Confirm/Cancel options
 			chatboxPanelManager.openTextMenuInput(
-					"Unlock " + regionName + " for " + unlockCost + " points? " +
-					"(Remaining: " + (playerPoints - unlockCost) + " points)")
-				.option("Yes, unlock it!", () ->
+					"Confirm: it costs " + unlockCost + " points to unlock " + regionName + ". " +
+					"(Remaining after unlock: " + (playerPoints - unlockCost) + " points)")
+				.option("Confirm", () ->
 				{
 					plugin.unlockRegion(regionId);
 					log.info("Unlocked region {} for {} points", regionName, unlockCost);
 				})
-				.option("No", () -> {})
+				.option("Cancel", () -> {})
 				.build();
 		});
 	}

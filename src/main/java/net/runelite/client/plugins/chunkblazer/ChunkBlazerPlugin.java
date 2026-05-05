@@ -555,6 +555,18 @@ public class ChunkBlazerPlugin extends Plugin
 
 		log.info("Unlocked region {} for FREE", regionId);
 
+		// Roll tasks for this region if it has a chunk defined
+		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+		if (chunk != null && chunk.getTasks() != null && !chunk.getTasks().isEmpty())
+		{
+			Set<String> existingRolled = getRolledTasksForRegion(regionId);
+			if (existingRolled.isEmpty())
+			{
+				Set<String> newTasks = rollTasksForRegion(regionId);
+				log.info("Rolled {} tasks for free-unlocked region {}", newTasks.size(), regionId);
+			}
+		}
+
 		// Update panel
 		panel.updateStats();
 	}
@@ -596,6 +608,26 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			configManager.setConfiguration("chunkblazer", "unlockedChunks", newUnlocked.toString());
 			log.info("Unlocked all starter regions: {}", java.util.Arrays.toString(STARTER_REGIONS));
+		}
+
+		// Ensure tasks are rolled for all starter regions
+		for (int regionId : STARTER_REGIONS)
+		{
+			Set<String> rolledTasks = getRolledTasksForRegion(regionId);
+			if (rolledTasks.isEmpty())
+			{
+				NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+				if (chunk != null && chunk.getTasks() != null && !chunk.getTasks().isEmpty())
+				{
+					log.info("Rolling tasks for starter region {} ({})", regionId, chunk.getName());
+					Set<String> newTasks = rollTasksForRegion(regionId);
+					log.info("Rolled {} tasks for starter region {}: {}", newTasks.size(), regionId, newTasks);
+				}
+				else
+				{
+					log.warn("Starter region {} has no chunk or tasks defined", regionId);
+				}
+			}
 		}
 	}
 
@@ -988,7 +1020,10 @@ public class ChunkBlazerPlugin extends Plugin
 		Set<String> completedTaskIds = getCompletedTaskIds();
 		Set<String> addedTaskIds = new HashSet<>(); // Track added tasks to prevent duplicates
 
-		for (String regionIdStr : getUnlockedRegionIds())
+		Set<String> unlockedRegions = getUnlockedRegionIds();
+		log.info("Loading tasks for {} unlocked regions: {}", unlockedRegions.size(), unlockedRegions);
+
+		for (String regionIdStr : unlockedRegions)
 		{
 			try
 			{
