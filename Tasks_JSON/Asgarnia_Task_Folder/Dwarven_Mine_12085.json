@@ -14,7 +14,7 @@
                     "required_items": [
                         {
                             "item": ["Pay-dirt"],
-                            "item_ids": [449],
+                            "item_ids": [12011],
                             "quantity": [1, 50]
                         }
                     ]
@@ -29,22 +29,22 @@
                     "required_items": [
                         {
                             "item": ["Prospector's Jacket"],
-                            "item_ids": [12014, 29474],
+                            "item_ids": [12014, 29474, 25551],
                             "quantity": [1]
                         },
                         {
                             "item": ["Prospector's Boots"],
-                            "item_ids": [12016, 29478],
+                            "item_ids": [12016, 29478, 25555],
                             "quantity": [1]
                         },
                         {
                             "item": ["Prospector's Helmet"],
-                            "item_ids": [12013, 29472],
+                            "item_ids": [12013, 29472, 25549],
                             "quantity": [1]
                         },
                         {
                             "item": ["Prospector's Legs"],
-                            "item_ids": [12015, 29476],
+                            "item_ids": [12015, 29476, 25553],
                             "quantity": [1]
                         }
                     ]

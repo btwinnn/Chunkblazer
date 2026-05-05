@@ -57,7 +57,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a Gobiln on Task",
+                    "name": "Defeat a Goblin on Task",
                     "taskID": "defeat_goblin_on_task",
                     "category": "Slayer",
                     "level": 1,

@@ -399,7 +399,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a Gobiln on Task",
+                    "name": "Defeat a Goblin on Task",
                     "taskID": "defeat_goblin_on_task",
                     "category": "Slayer",
                     "level": 1,
@@ -684,7 +684,7 @@
                     "target_npc": {
                         "npc": ["Dark Wizard"],
                         "npc_ids": [512, 5086, 5087],
-                        "quantity": [1, 10]
+                        "quantity": [1]
                     }
                 },
                 {
@@ -697,7 +697,7 @@
                     "target_npc": {
                         "npc": ["Dark Wizard"],
                         "npc_ids": [512, 5086, 5087],
-                        "quantity": [1, 10]
+                        "quantity": [1]
                     },
                     
                     "constraints": {
