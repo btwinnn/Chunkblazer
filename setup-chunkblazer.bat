@@ -253,8 +253,17 @@ if not exist "%RL_CREDS_DIR%" md "%RL_CREDS_DIR%"
 if not exist "%RL_CREDS_FILE%" (
     (
         echo # Jagex Launcher credentials for the RuneLite dev client.
-        echo # Paste the token values from your Jagex Launcher session below.
         echo # This file is private to your Windows user profile.
+        echo #
+        echo # EASIEST WAY TO POPULATE THIS FILE:
+        echo #   1. Run run-chunkblazer.bat
+        echo #   2. At the RuneLite login screen, choose "Jagex account"
+        echo #   3. Complete the browser login with your Jagex account
+        echo #   4. Tokens are written here automatically ^(thanks to
+        echo #      --insecure-write-credentials in run-chunkblazer.bat^)
+        echo #
+        echo # No manual editing required - the fields below will be filled in
+        echo # the first time you log in.
         echo JX_DISPLAY_NAME=
         echo JX_CHARACTER_ID=
         echo JX_ACCESS_TOKEN=
