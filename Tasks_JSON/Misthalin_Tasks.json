@@ -1434,7 +1434,7 @@
                     ]
                 }, 
                 {
-                    "name": "Craft an Pot Lid",
+                    "name": "Craft a Pot Lid",
                     "taskID": "craft_unfired_pot_lid",
                     "category": "Crafting",
                     "level": 25,
