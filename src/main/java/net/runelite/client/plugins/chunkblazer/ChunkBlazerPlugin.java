@@ -647,17 +647,9 @@ public class ChunkBlazerPlugin extends Plugin
 	// Free starting chunk (always unlocked for all modes)
 	private static final int FREE_STARTING_REGION = 12850;  // Lumbridge center
 
-	// All starter area regions that should be unlocked by default
+	// Starter regions unlocked by default - only Lumbridge center
 	private static final int[] STARTER_REGIONS = {
-		12850,  // Lumbridge center
-		12851,  // Lumbridge North Farm
-		12849,  // Lumbridge East Swamp
-		12593,  // Lumbridge West Swamp
-		12594,  // H.A.M. Hideout
-		12595,  // Lumbridge Mill
-		13105,  // Al Kharid
-		13106,  // Al Kharid Toll Gate
-		13107   // Al Kharid Mine
+		12850   // Lumbridge center
 	};
 
 
