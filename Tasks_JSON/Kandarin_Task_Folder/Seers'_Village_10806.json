@@ -235,7 +235,7 @@
                 {
                     "name": "Obtain the Forestry Set",
                     "taskID": "obtain_forestry_set",
-                    "category": "Obtain",
+                    "category": "Obtain_Set",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 10,
