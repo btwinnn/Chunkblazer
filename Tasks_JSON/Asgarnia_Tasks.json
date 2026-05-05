@@ -1716,7 +1716,7 @@
                     "required_items": [
                         {
                             "item": ["Pay-dirt"],
-                            "item_ids": [449],
+                            "item_ids": [12011],
                             "quantity": [1, 50]
                         }
                     ]
