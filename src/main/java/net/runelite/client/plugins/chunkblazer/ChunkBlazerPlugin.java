@@ -1276,11 +1276,16 @@ public class ChunkBlazerPlugin extends Plugin
 		// Get ALL globally assigned tasks (tasks assigned in ANY region)
 		Set<String> globallyAssignedTasks = getAssignedTaskIds();
 
-		// Filter available tasks: not locked, not already rolled for this region, and not globally assigned
+		// Get all completed task IDs - completed tasks must never re-roll into the active list
+		Set<String> completedTaskIds = getCompletedTaskIds();
+
+		// Filter available tasks: not locked, not already rolled for this region,
+		// not globally assigned, and not previously completed.
 		List<NuzlockeTask> availableTasks = chunk.getTasks().stream()
 			.filter(t -> !t.isLocked())
 			.filter(t -> !alreadyRolledForThisRegion.contains(t.getTaskId()))
 			.filter(t -> !globallyAssignedTasks.contains(t.getTaskId()))
+			.filter(t -> !completedTaskIds.contains(t.getTaskId()))
 			.collect(Collectors.toList());
 
 		if (availableTasks.isEmpty())

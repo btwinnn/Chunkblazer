@@ -66,6 +66,11 @@ public class ObtainModule extends AbstractTaskModule
 	// Map: taskId -> (Map: itemId -> required quantity)
 	private final Map<String, Map<Integer, Integer>> taskTargetItems = new ConcurrentHashMap<>();
 
+	// Cumulative obtained per task per item. Increments on detected inventory deltas;
+	// never decreases when items are banked/sold/eaten. This is what progress is computed from
+	// (not raw inventory counts) so mining/cooking/etc. don't regress when items leave inventory.
+	private final Map<String, Map<Integer, Integer>> taskObtainedCounts = new ConcurrentHashMap<>();
+
 	// Track previous inventory state for detecting new items
 	private final Map<Integer, Integer> previousInventory = new ConcurrentHashMap<>();
 
@@ -114,6 +119,7 @@ public class ObtainModule extends AbstractTaskModule
 		eventBus.unregister(this);
 		previousInventory.clear();
 		taskTargetItems.clear();
+		taskObtainedCounts.clear();
 		watchedItemIds.clear();
 		log.info("ObtainModule stopped");
 	}
@@ -170,14 +176,17 @@ public class ObtainModule extends AbstractTaskModule
 			}
 
 			taskTargetItems.put(task.getTaskId(), targetItems);
+			taskObtainedCounts.put(task.getTaskId(), new ConcurrentHashMap<>());
 			log.info("  Total items being watched for this task: {}", targetItems.size());
 			log.info("  All watched item IDs across all tasks: {}", watchedItemIds);
 			log.info("=== END ADDING TASK ===");
 
-			// Initialize inventory tracking on client thread
+			// Initialize inventory tracking on client thread, then seed cumulative
+			// counters from whatever's already in the inventory at task start.
 			clientThread.invokeLater(() ->
 			{
 				initializeInventoryTracking();
+				seedObtainedFromInventory(task);
 				checkTaskProgress(task);
 			});
 		}
@@ -200,8 +209,32 @@ public class ObtainModule extends AbstractTaskModule
 	{
 		super.onTaskCleared();
 		taskTargetItems.clear();
+		taskObtainedCounts.clear();
 		watchedItemIds.clear();
 		previousInventory.clear();
+	}
+
+	/**
+	 * Seed the cumulative obtained map for this task from whatever's currently
+	 * in the inventory. Called once when the task is added so existing items
+	 * count toward progress. Must run on the client thread.
+	 */
+	private void seedObtainedFromInventory(NuzlockeTask task)
+	{
+		Map<Integer, Integer> targets = taskTargetItems.get(task.getTaskId());
+		Map<Integer, Integer> obtained = taskObtainedCounts.get(task.getTaskId());
+		if (targets == null || obtained == null)
+		{
+			return;
+		}
+		for (Integer itemId : targets.keySet())
+		{
+			int inv = getItemCount(itemId);
+			if (inv > 0)
+			{
+				obtained.put(itemId, inv);
+			}
+		}
 	}
 
 	@Override
@@ -263,7 +296,8 @@ public class ObtainModule extends AbstractTaskModule
 		}
 
 		Map<Integer, Integer> targetItems = taskTargetItems.get(task.getTaskId());
-		if (targetItems == null || targetItems.isEmpty())
+		Map<Integer, Integer> obtainedCounts = taskObtainedCounts.get(task.getTaskId());
+		if (targetItems == null || targetItems.isEmpty() || obtainedCounts == null)
 		{
 			return;
 		}
@@ -279,38 +313,42 @@ public class ObtainModule extends AbstractTaskModule
 			int required = target.getValue();
 			totalRequired += required;
 
-			int current = getItemCount(itemId);
-			int countForTask = Math.min(current, required);
+			// Use cumulative obtained, NOT current inventory - banking should not regress progress
+			int cumulative = obtainedCounts.getOrDefault(itemId, 0);
+			int countForTask = Math.min(cumulative, required);
 			totalObtained += countForTask;
 
 			if (itemDetails.length() > 0)
 			{
 				itemDetails.append(", ");
 			}
-			itemDetails.append(getItemName(itemId)).append(" ").append(current).append("/").append(required);
+			itemDetails.append(getItemName(itemId)).append(" ").append(cumulative).append("/").append(required);
 
-			log.debug("ObtainModule: Item {} - have {}/{}", getItemName(itemId), current, required);
+			log.debug("ObtainModule: Item {} - obtained {}/{}", getItemName(itemId), cumulative, required);
 		}
 
+		// Floor progress at the previously-saved value so we never regress across sessions
+		// or before the cumulative map is fully reseeded.
 		int previousProgress = task.getCurrentProgress();
-		task.setCurrentProgress(totalObtained);
+		int newProgress = Math.max(previousProgress, totalObtained);
+		task.setCurrentProgress(newProgress);
 
-		// Send progress chat message if progress changed
-		if (totalObtained != previousProgress && totalObtained > previousProgress)
+		// Send progress chat message if progress increased
+		if (newProgress > previousProgress)
 		{
 			String details = "Obtained: " + itemDetails.toString();
-			sendTaskProgress(task, details, totalObtained, totalRequired);
+			sendTaskProgress(task, details, newProgress, totalRequired);
 
 			if (completionCallback != null)
 			{
-				completionCallback.onProgressUpdated(task, totalObtained);
+				completionCallback.onProgressUpdated(task, newProgress);
 			}
 		}
 
-		log.debug("ObtainModule: Task '{}' progress: {}/{}", task.getName(), totalObtained, totalRequired);
+		log.debug("ObtainModule: Task '{}' progress: {}/{}", task.getName(), newProgress, totalRequired);
 
 		// Check for completion
-		if (totalObtained >= totalRequired && !task.isCompleted())
+		if (newProgress >= totalRequired && !task.isCompleted())
 		{
 			log.info("ObtainModule: Task '{}' COMPLETED! ({}/{})", task.getName(), totalObtained, totalRequired);
 			task.setCompleted(true);
@@ -321,11 +359,12 @@ public class ObtainModule extends AbstractTaskModule
 
 			if (completionCallback != null)
 			{
-				completionCallback.onTaskCompleted(task, totalObtained);
+				completionCallback.onTaskCompleted(task, newProgress);
 			}
 
 			// Clean up task tracking
 			taskTargetItems.remove(task.getTaskId());
+			taskObtainedCounts.remove(task.getTaskId());
 			activeTasks.remove(task);
 			rebuildWatchedItems();
 		}
@@ -472,12 +511,25 @@ public class ObtainModule extends AbstractTaskModule
 				log.info(">>> ObtainModule: DETECTED {} x {} obtained!", obtained, getItemName(watchedItemId));
 				anyNewItems = true;
 
+				// Increment cumulative obtained for every active task watching this item.
+				// This is what makes mining/cooking/etc. progress survive banking - the
+				// count goes up here and never comes down.
+				for (NuzlockeTask t : activeTasks)
+				{
+					Map<Integer, Integer> targets = taskTargetItems.get(t.getTaskId());
+					Map<Integer, Integer> obtainedMap = taskObtainedCounts.get(t.getTaskId());
+					if (targets != null && obtainedMap != null && targets.containsKey(watchedItemId))
+					{
+						obtainedMap.merge(watchedItemId, obtained, Integer::sum);
+					}
+				}
+
 				// Send report for tracking (optional, for server verification)
 				sendItemObtainedReport(watchedItemId, obtained);
 			}
 			else if (currentCount < previousCount)
 			{
-				log.info(">>>   Item {} DECREASED (dropped/used?)", getItemName(watchedItemId));
+				log.info(">>>   Item {} DECREASED (dropped/used?) - progress unaffected", getItemName(watchedItemId));
 			}
 		}
 
