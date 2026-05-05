@@ -1036,6 +1036,19 @@ public class ChunkBlazerPlugin extends Plugin
 						{
 							// Initialize task
 							initializeTask(task);
+
+							// Self-heal stuck tasks where progress saved but completion never fired (e.g. throw in popup code between onProgressUpdated and onTaskCompleted).
+							if (task.getCurrentProgress() >= task.getTargetQuantity())
+							{
+								log.info("Self-healing stuck task '{}' ({}/{}) — crediting as completed",
+									task.getName(), task.getCurrentProgress(), task.getTargetQuantity());
+								completedTaskCache.put(taskId, task);
+								addPoints(task.getBasePoints());
+								markTaskCompleted(taskId);
+								addedTaskIds.add(taskId);
+								continue;
+							}
+
 							activeTasks.add(task);
 							addedTaskIds.add(taskId);
 						}
