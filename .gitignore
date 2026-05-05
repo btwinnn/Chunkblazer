@@ -28,3 +28,4 @@ Thumbs.db
 # Local tools (Maven, etc.)
 tools/
 run-log.txt
+update-runelite-log.txt
