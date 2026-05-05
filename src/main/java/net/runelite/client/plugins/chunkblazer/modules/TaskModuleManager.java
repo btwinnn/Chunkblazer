@@ -186,11 +186,12 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	 */
 	public void clearTask()
 	{
-		if (activeModule != null)
+		// Clear every module's per-module list, not just the legacy activeModule. Otherwise modules retain stale tasks across resets and end up with duplicates after re-registration.
+		for (AbstractTaskModule module : modules)
 		{
-			activeModule.onTaskCleared();
-			activeModule = null;
+			module.onTaskCleared();
 		}
+		activeModule = null;
 		activeTasks.clear();
 		taskToModuleMap.clear();
 	}

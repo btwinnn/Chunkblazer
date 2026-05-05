@@ -1662,6 +1662,8 @@ public class ChunkBlazerPlugin extends Plugin
 		configManager.setConfiguration("chunkblazer", "regionRolledTasks", "");
 		configManager.setConfiguration("chunkblazer", "assignedTasks", "");
 		configManager.setConfiguration("chunkblazer", "completedTasks", "");
+		configManager.setConfiguration("chunkblazer", "taskProgressData", "");
+		taskModuleManager.clearTask();
 		activeTask = null;
 		activeTasks.clear();
 		completedTaskCache.clear();
@@ -1679,8 +1681,8 @@ public class ChunkBlazerPlugin extends Plugin
 
 		log.info("DEV: Full reset complete");
 
-		// Assign a new task
-		assignNewTask();
+		// Re-roll and load tasks for the now-only-starter region so the panel populates.
+		loadActiveTasks();
 	}
 
 	private void completeTask(NuzlockeTask task)
