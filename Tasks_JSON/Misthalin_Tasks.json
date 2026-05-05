@@ -2382,7 +2382,7 @@
             "neighbor_ids": [12342, 12597, 12854, 12599],
             "tasks": [
                 {
-                    "name": "Use a Minecraft to travel to Keldagrim",
+                    "name": "Use a Minecart to travel to Keldagrim",
                     "taskID": "minecart_keldagrim",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
