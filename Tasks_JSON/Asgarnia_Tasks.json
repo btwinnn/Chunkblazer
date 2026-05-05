@@ -2463,14 +2463,7 @@
                     }, 
                     
                     "constraints": {
-                        "time_in_ticks": [25],
-                        "prohibited_active_varbits": [
-                                {
-                                    "varbit_id": 57,
-                                    "must_be_value": 0,
-                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
-                                }
-                            ]                       
+                        "time_in_ticks": [25]                       
                         }
                 },
                 {                           
@@ -3016,14 +3009,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [16],
-                        "prohibited_active_varbits": [
-                                {
-                                    "varbit_id": 57,
-                                    "must_be_value": 0,
-                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
-                                }
-                            ]
+                        "time_in_ticks": [16]
                     }
                 }              
             ],                           
@@ -3122,14 +3108,7 @@
                         "quantity": [1]
                     },               
                     "constraints": {
-                        "time_in_ticks": [8],
-                        "prohibited_active_varbits": [
-                                {
-                                    "varbit_id": 57,
-                                    "must_be_value": 0,
-                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
-                                }
-                            ]
+                        "time_in_ticks": [8]
                     }
                 }, 
                 {
@@ -3274,14 +3253,7 @@
                         "quantity": [1]
                     },               
                     "constraints": {
-                        "time_in_ticks": [25],
-                        "prohibited_active_varbits": [
-                                {
-                                    "varbit_id": 57,
-                                    "must_be_value": 0,
-                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
-                                }
-                            ]
+                        "time_in_ticks": [25]
                     }
                 }, 
                 {
