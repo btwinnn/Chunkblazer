@@ -1802,33 +1802,49 @@ public class ChunkBlazerPlugin extends Plugin
 	public int findRegionForTask(String taskId)
 	{
 		String data = config.regionRolledTasks();
-		if (data == null || data.isEmpty())
+		if (data != null && !data.isEmpty())
 		{
-			return -1;
-		}
-
-		for (String regionEntry : data.split("\\|"))
-		{
-			if (regionEntry.isEmpty()) continue;
-
-			String[] parts = regionEntry.split(":");
-			if (parts.length == 2)
+			for (String regionEntry : data.split("\\|"))
 			{
-				try
+				if (regionEntry.isEmpty()) continue;
+
+				String[] parts = regionEntry.split(":");
+				if (parts.length == 2)
 				{
-					int regionId = Integer.parseInt(parts[0]);
-					String[] tasks = parts[1].split(",");
-					for (String tid : tasks)
+					try
 					{
-						if (tid.equals(taskId))
+						int regionId = Integer.parseInt(parts[0]);
+						String[] tasks = parts[1].split(",");
+						for (String tid : tasks)
 						{
-							return regionId;
+							if (tid.equals(taskId))
+							{
+								return regionId;
+							}
 						}
 					}
+					catch (NumberFormatException e)
+					{
+						// Skip invalid entries
+					}
 				}
-				catch (NumberFormatException e)
+			}
+		}
+
+		// Fallback: locate the chunk that defines this task. Tasks completed outside
+		// the rolled-task flow (or after rolled data is cleared) still need a region
+		// so the popup shows the right name and the area-specific jingle plays.
+		for (NuzlockeChunk chunk : allChunks)
+		{
+			if (chunk.getTasks() == null || chunk.getRegionIds() == null || chunk.getRegionIds().isEmpty())
+			{
+				continue;
+			}
+			for (NuzlockeTask task : chunk.getTasks())
+			{
+				if (taskId.equals(task.getTaskId()))
 				{
-					// Skip invalid entries
+					return chunk.getRegionIds().get(0);
 				}
 			}
 		}
