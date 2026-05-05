@@ -308,7 +308,7 @@ public class TaskCompletionSoundManager
 			{
 				FloatControl volume = (FloatControl) currentClip.getControl(FloatControl.Type.MASTER_GAIN);
 				// Convert percentage to decibels (-80 to 6 dB range typically)
-				float volumePercent = 0.25f; // 25% volume baseline
+				float volumePercent = 0.15f; // 15% volume baseline
 				float dB = (float) (Math.log(volumePercent) / Math.log(10.0) * 20.0);
 				volume.setValue(Math.max(volume.getMinimum(), Math.min(volume.getMaximum(), dB)));
 			}
