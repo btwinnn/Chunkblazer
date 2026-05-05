@@ -87,6 +87,14 @@ public class NPCKillModule extends AbstractTaskModule
 	private final Map<String, PendingDropKill> pendingDropKills = new ConcurrentHashMap<>();
 	private static final int PENDING_DROP_TIMEOUT_TICKS = 10; // ~6 seconds to pick up item
 
+	// NPC deaths queued for end-of-tick processing.
+	// Why: ActorDeath can fire BEFORE the killing blow's HitsplatApplied on same-tick
+	// kills (one-shots, low-HP NPCs like Highwayman/Man). At ActorDeath time damage is
+	// still 0 and combatStartTick is still -1, so the kill gets rejected and the time
+	// constraint can't be evaluated. Draining this list in onGameTick ensures all
+	// same-tick hitsplats have been processed before we decide.
+	private final List<NPC> pendingDeaths = new ArrayList<>();
+
 	/**
 	 * Tracks a kill that's pending verification via dropped item.
 	 */
@@ -167,6 +175,7 @@ public class NPCKillModule extends AbstractTaskModule
 		damageDealtToTarget = 0;
 		combatStartTick = -1;
 		pendingDropKills.clear();
+		pendingDeaths.clear();
 		log.info("NpcKillModule stopped");
 	}
 
@@ -296,6 +305,7 @@ public class NPCKillModule extends AbstractTaskModule
 		baselineKc = -1;
 		currentBossName = null;
 		pendingDropKills.clear();
+		pendingDeaths.clear();
 		log.info("[TASK DEBUG] Task cleared - reset all tracking state");
 	}
 
@@ -313,6 +323,19 @@ public class NPCKillModule extends AbstractTaskModule
 	{
 		tickCounter++;
 		int currentTick = client.getTickCount();
+
+		// Drain deaths queued from this tick's ActorDeath events. By now any same-tick
+		// HitsplatApplied for the killing blow has been processed, so damageDealtToTarget
+		// and combatStartTick are correct.
+		if (!pendingDeaths.isEmpty())
+		{
+			List<NPC> toProcess = new ArrayList<>(pendingDeaths);
+			pendingDeaths.clear();
+			for (NPC deadNpc : toProcess)
+			{
+				processNpcDeath(deadNpc);
+			}
+		}
 
 		// Check for expired pending drop kills
 		if (!pendingDropKills.isEmpty())
@@ -891,8 +914,19 @@ public class NPCKillModule extends AbstractTaskModule
 
 		NPC npc = (NPC) actor;
 
-		// Debug: Log every NPC death
-		log.info("DEBUG: NPC died - Name: {}, ID: {}, Index: {}, activeTasks: {}, currentTargetIndex: {}, damageDealt: {}",
+		// Defer to onGameTick. ActorDeath can fire BEFORE the killing blow's
+		// HitsplatApplied on same-tick kills (one-shots, low-HP NPCs), so damage
+		// and combatStartTick are still 0/-1 here. Processing on the next GameTick
+		// drain ensures hitsplats from this tick are counted first.
+		log.info("DEBUG: Queued NPC death - Name: {}, ID: {}, Index: {}",
+			npc.getName(), npc.getId(), npc.getIndex());
+		pendingDeaths.add(npc);
+	}
+
+	private void processNpcDeath(NPC npc)
+	{
+		// Debug: Log every NPC death being processed
+		log.info("DEBUG: Processing NPC death - Name: {}, ID: {}, Index: {}, activeTasks: {}, currentTargetIndex: {}, damageDealt: {}",
 			npc.getName(), npc.getId(), npc.getIndex(), activeTasks.size(),
 			currentTargetIndex, damageDealtToTarget);
 
