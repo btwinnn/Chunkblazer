@@ -17,9 +17,10 @@ A Nuzlocke-style chunk unlocking plugin for Old School RuneScape (OSRS) via Rune
 ### Quick Start (For Testers)
 
 **Requirements:**
-- [Git](https://git-scm.com/download/win)
-- [Java 11+ JDK](https://adoptium.net/) (not just JRE)
-- [Maven](https://maven.apache.org/download.cgi) (add to PATH)
+- [Git](https://git-scm.com/download/win) (auto-downloads the Windows installer)
+- [Adoptium Temurin JDK 11 (Windows x64)](https://api.adoptium.net/v3/installer/latest/11/ga/windows/x64/jdk/hotspot/normal/eclipse) — direct MSI of the latest JDK 11 LTS (not JRE)
+
+The build uses Gradle via the wrapper (`gradlew.bat`) bundled with RuneLite — no separate Maven or Gradle install needed.
 
 **First-Time Setup:**
 1. Clone this repository: `git clone https://github.com/YourUsername/ChunkBlazer.git C:\ChunkBlazer`
@@ -32,10 +33,10 @@ A Nuzlocke-style chunk unlocking plugin for Old School RuneScape (OSRS) via Rune
 
 ### Manual Installation (For Development)
 
-1. Clone the RuneLite repository
+1. Clone the RuneLite repository to `C:\runelite`
 2. Copy the contents of `src/` into RuneLite's `runelite-client/src/`
-3. Build RuneLite: `mvn install -DskipTests`
-4. Run: `mvn -pl runelite-client exec:java`
+3. Build the client: `gradlew.bat :client:build -x test -x pmdMain -x checkstyleMain`
+4. Run: `java -jar runelite-client\build\libs\client-*-shaded.jar`
 
 ### File Structure
 
