@@ -27,5 +27,11 @@ Thumbs.db
 
 # Local tools (Maven, etc.)
 tools/
+
+# Logs (per-tester local output — never commit)
 run-log.txt
 update-runelite-log.txt
+session_logs/
+logs/
+*-log.txt
+*.log.txt

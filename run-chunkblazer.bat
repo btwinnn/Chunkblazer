@@ -140,10 +140,32 @@ call :log "    Launching Client"
 call :log "========================================"
 call :log "Finished: %DATE% %TIME%"
 
-echo Starting: %CLIENT_JAR%
-echo.
-java -ea -jar "%CLIENT_JAR%" --developer-mode --insecure-write-credentials
+:: Set up per-session runtime log (captures plugin/game output, not just build steps)
+set "SESSION_LOG_DIR=%CHUNKBLAZER_DIR%\session_logs"
+if not exist "%SESSION_LOG_DIR%" mkdir "%SESSION_LOG_DIR%"
 
+:: Sortable timestamp for filename (locale-independent via wmic)
+for /f "tokens=2 delims==" %%a in ('wmic os get localdatetime /value 2^>nul ^| find "="') do set "DT=%%a"
+set "TS=%DT:~0,4%-%DT:~4,2%-%DT:~6,2%_%DT:~8,2%-%DT:~10,2%-%DT:~12,2%"
+set "SESSION_LOG=%SESSION_LOG_DIR%\session_%TS%.txt"
+
+:: Prune: keep newest 5 session logs, delete the rest
+for /f "skip=5 delims=" %%f in ('dir /b /o-d "%SESSION_LOG_DIR%\session_*.txt" 2^>nul') do del "%SESSION_LOG_DIR%\%%f"
+
+call :log "Session log: %SESSION_LOG%"
+echo Starting: %CLIENT_JAR%
+echo Session output saving to: %SESSION_LOG%
+echo.
+
+:: Tee stdout+stderr to the session log via PowerShell so the terminal still shows live output.
+:: --debug flips the root logger to DEBUG so chunkblazer module log.debug() calls actually appear.
+:: Paths are passed via env vars to avoid cmd/PowerShell quoting issues with spaces.
+set "JAR=%CLIENT_JAR%"
+set "OUT=%SESSION_LOG%"
+powershell -NoProfile -Command "& { java -ea -jar $env:JAR --developer-mode --debug --insecure-write-credentials 2>&1 | Tee-Object -FilePath $env:OUT }"
+
+echo.
+echo Session log saved to: %SESSION_LOG%
 pause
 exit /b 0
 
