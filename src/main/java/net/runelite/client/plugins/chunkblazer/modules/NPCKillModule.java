@@ -85,7 +85,15 @@ public class NPCKillModule extends AbstractTaskModule
 	// Key: task ID, Value: pending kill info
 	// Using ConcurrentHashMap for thread safety (accessed from multiple event handlers)
 	private final Map<String, PendingDropKill> pendingDropKills = new ConcurrentHashMap<>();
-	private static final int PENDING_DROP_TIMEOUT_TICKS = 10; // ~6 seconds to pick up item
+	// How many ticks after NPC death we'll still credit a drop. Needs to cover
+	// the full death animation + server loot delay (observed at ~7 ticks for
+	// goblins, can be higher for larger NPCs). Set generously — false-positives
+	// are blocked by ownership/distance checks anyway.
+	private static final int PENDING_DROP_TIMEOUT_TICKS = 20; // ~12s
+	// Per-event freshness check inside onItemSpawned. Must be >= the longest
+	// realistic death-animation-to-loot delay in OSRS. 5 was too tight (goblins
+	// alone hit 7); 15 covers all known cases including larger boss death anims.
+	private static final int DROP_SPAWN_FRESHNESS_TICKS = 15; // ~9s
 
 	// NPC deaths queued for end-of-tick processing.
 	// Why: ActorDeath can fire BEFORE the killing blow's HitsplatApplied on same-tick
@@ -571,13 +579,14 @@ public class NPCKillModule extends AbstractTaskModule
 				continue;
 			}
 
-			// TIMING CHECK: Item must spawn within 5 ticks of NPC death
-			// (drops can be delayed by animations, network latency, etc.)
+			// TIMING CHECK: drops can lag the death event by the full death
+			// animation + server loot delay. Goblins observed at ~7 ticks;
+			// larger NPCs are higher. Use the constant rather than a literal.
 			int ticksSinceDeath = currentTick - pending.deathTick;
-			if (ticksSinceDeath > 5)
+			if (ticksSinceDeath > DROP_SPAWN_FRESHNESS_TICKS)
 			{
-				log.info("[ITEM SPAWNED] Skipping item {} - spawned {} ticks after NPC death (max 5)",
-					itemId, ticksSinceDeath);
+				log.info("[ITEM SPAWNED] Skipping item {} - spawned {} ticks after NPC death (max {})",
+					itemId, ticksSinceDeath, DROP_SPAWN_FRESHNESS_TICKS);
 				continue;
 			}
 
