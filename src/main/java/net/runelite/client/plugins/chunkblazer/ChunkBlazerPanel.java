@@ -1704,6 +1704,11 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	public void updateStats()
 	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(this::updateStats);
+			return;
+		}
 		int points = plugin.getTotalPoints();
 		int chunks = plugin.getUnlockedRegionIds().size();
 		int tasks = plugin.getCompletedTaskCount();
@@ -1715,6 +1720,11 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	public void updateModeDisplay()
 	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(this::updateModeDisplay);
+			return;
+		}
 		boolean isLocked = plugin.isModeLocked();
 		modeSelectionPanel.setVisible(!isLocked);
 
@@ -1737,6 +1747,11 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	public void updateRegionDisplay()
 	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(this::updateRegionDisplay);
+			return;
+		}
 		int regionId = plugin.getCurrentRegionId();
 		String regionName = plugin.getCurrentRegionName();
 
@@ -1754,6 +1769,11 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	public void updateTaskDisplay()
 	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(this::updateTaskDisplay);
+			return;
+		}
 		updateActiveTasksDisplay();
 		// Also update selected task if it exists
 		if (selectedTask != null)
@@ -1764,6 +1784,11 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	public void updateActiveTasksDisplay()
 	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(this::updateActiveTasksDisplay);
+			return;
+		}
 		log.debug(">>> updateActiveTasksDisplay() CALLED");
 		log.debug(">>> Stack trace: {}", Thread.currentThread().getStackTrace()[2]);
 
@@ -2005,6 +2030,11 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	public void updateCompletedTasks()
 	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(this::updateCompletedTasks);
+			return;
+		}
 		List<CompletedTaskInfo> completedTasks = plugin.getCompletedTasksWithInfo();
 		int count = completedTasks.size();
 
@@ -2190,6 +2220,11 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	public void updateTaskList()
 	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(this::updateTaskList);
+			return;
+		}
 		// Update the header with task count
 		List<NuzlockeTask> tasks = plugin.getCurrentRegionTasks();
 		int availableCount = 0;
