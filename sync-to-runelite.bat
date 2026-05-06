@@ -12,10 +12,15 @@ color 0A
 :: picks up the latest plugin code.
 ::
 :: Pipeline:
-::   [1/3] Tasks_JSON\*.json   -> src\main\resources\...\chunkblazer\
-::         (Tasks_JSON is source of truth for the 6 task JSONs
-::          loaded by ChunkBlazerPlugin.TASK_JSON_FILES; this
-::          step overwrites the resources copy.)
+::   [1/3] Tasks_JSON\<sub>\*.json -> src\main\resources\...\chunkblazer\
+::         For each file in TASK_JSONS, walks JSON_SEARCH_DIRS
+::         (in priority order) and copies the first match found.
+::         Current canonical homes:
+::           Starter_Area_Tasks.json -> Lumbridge_Task_Folder\
+::           Misthalin/Asgarnia/Kandarin/Varlamore/Zeah_Tasks.json
+::                                   -> All_Areas_Task_Folder\
+::         If a JSON moves to a new subfolder, just add it to
+::         JSON_SEARCH_DIRS — no need to rewrite the loop.
 ::   [2/3] src\main\java\...   -> runelite\runelite-client\...\java\
 ::   [3/3] src\main\resources\... -> runelite\runelite-client\...\resources\
 ::
@@ -46,6 +51,12 @@ set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\cli
 :: JSON to TASK_JSON_FILES, add it here too.
 set TASK_JSONS=Starter_Area_Tasks.json Misthalin_Tasks.json Asgarnia_Tasks.json Kandarin_Tasks.json Varlamore_Tasks.json Zeah_Tasks.json
 
+:: Subfolders under Tasks_JSON\ that may contain TASK_JSONS files.
+:: Searched in priority order — first match wins. The trailing "."
+:: means "Tasks_JSON top-level itself" (legacy path before the
+:: per-area subfolder reorg, kept for back-compat).
+set JSON_SEARCH_DIRS=Lumbridge_Task_Folder All_Areas_Task_Folder .
+
 echo ========================================
 echo    Sync ChunkBlazer -^> RuneLite
 echo ========================================
@@ -63,7 +74,7 @@ if not exist "%RUNELITE_DIR%" (
 )
 
 :: ---- Refresh JSON resources from Tasks_JSON -----------------------------
-echo [1/3] Refreshing task JSONs from Tasks_JSON...
+echo [1/3] Refreshing task JSONs from Tasks_JSON subfolders...
 echo   From: %TASKS_JSON_SRC%
 echo   To:   %PLUGIN_RES_SRC%
 if not exist "%TASKS_JSON_SRC%" (
@@ -76,16 +87,26 @@ if not exist "%TASKS_JSON_SRC%" (
     )
     set MISSING_COUNT=0
     for %%F in (%TASK_JSONS%) do (
-        if exist "%TASKS_JSON_SRC%\%%F" (
-            copy /Y "%TASKS_JSON_SRC%\%%F" "%PLUGIN_RES_SRC%\%%F" >nul
+        set "FOUND_AT="
+        set "FOUND_DIR="
+        for %%D in (%JSON_SEARCH_DIRS%) do (
+            if not defined FOUND_AT (
+                if exist "%TASKS_JSON_SRC%\%%D\%%F" (
+                    set "FOUND_AT=%TASKS_JSON_SRC%\%%D\%%F"
+                    set "FOUND_DIR=%%D"
+                )
+            )
+        )
+        if defined FOUND_AT (
+            copy /Y "!FOUND_AT!" "%PLUGIN_RES_SRC%\%%F" >nul
             if !ERRORLEVEL! NEQ 0 (
                 echo   ERROR: Copy failed for %%F
                 pause
                 exit /b 1
             )
-            echo   Copied %%F
+            echo   Copied %%F ^(from !FOUND_DIR!^)
         ) else (
-            echo   WARNING: %%F not found in Tasks_JSON - resources copy left untouched.
+            echo   WARNING: %%F not found in any of [%JSON_SEARCH_DIRS%] - resources copy left untouched.
             set /a MISSING_COUNT+=1
         )
     )

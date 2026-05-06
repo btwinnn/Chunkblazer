@@ -644,6 +644,24 @@ public class ChunkBlazerPlugin extends Plugin
 	// Do not re-introduce inline arrays here — read from StarterArea.REGIONS.
 
 
+	/**
+	 * Returns the filename with .json/.JSON extension flipped to the opposite case,
+	 * or unchanged if it doesn't end in either. Used to defensively try both case
+	 * variants when reading bundled task JSON resources.
+	 */
+	private static String flipJsonExtensionCase(String filename)
+	{
+		if (filename.endsWith(".json"))
+		{
+			return filename.substring(0, filename.length() - 5) + ".JSON";
+		}
+		if (filename.endsWith(".JSON"))
+		{
+			return filename.substring(0, filename.length() - 5) + ".json";
+		}
+		return filename;
+	}
+
 	private void loadChunkData()
 	{
 		allChunks.clear();
@@ -662,38 +680,34 @@ public class ChunkBlazerPlugin extends Plugin
 			try
 			{
 				log.info(">>> Attempting to load: {}", jsonFile);
-				InputStream is = getClass().getResourceAsStream(jsonFile);
+
+				// Resource lookups inside a JAR are case-sensitive (unlike Windows fs),
+				// so a file shipped as Foo.JSON breaks a getResourceAsStream("Foo.json")
+				// caller and vice versa. We try both cases at both relative and absolute
+				// classpath paths so the loader survives any case mismatch in the bundle.
+				String altCase = flipJsonExtensionCase(jsonFile);
+				String absPrefix = "/net/runelite/client/plugins/chunkblazer/";
+				String[] candidates = { jsonFile, absPrefix + jsonFile, altCase, absPrefix + altCase };
+
+				InputStream is = null;
+				String foundVia = null;
+				for (String path : candidates)
+				{
+					InputStream s = getClass().getResourceAsStream(path);
+					if (s != null)
+					{
+						is = s;
+						foundVia = path;
+						break;
+					}
+				}
 				if (is == null)
 				{
-					log.error("FAILED to find task file: {} - trying alternate paths...", jsonFile);
-
-					// Try with leading slash (absolute path from classpath root)
-					is = getClass().getResourceAsStream("/net/runelite/client/plugins/chunkblazer/" + jsonFile);
-					if (is == null)
-					{
-						// Try lowercase extension
-						String lowerFile = jsonFile.replace(".JSON", ".json");
-						is = getClass().getResourceAsStream(lowerFile);
-						if (is == null)
-						{
-							is = getClass().getResourceAsStream("/net/runelite/client/plugins/chunkblazer/" + lowerFile);
-						}
-						if (is == null)
-						{
-							log.error("Also failed with alternate paths for: {}", jsonFile);
-							continue;
-						}
-						log.info("Found {} using lowercase extension", jsonFile);
-					}
-					else
-					{
-						log.info("Found {} using absolute path", jsonFile);
-					}
+					log.error("FAILED to find task file: {} (tried {})",
+						jsonFile, java.util.Arrays.toString(candidates));
+					continue;
 				}
-				else
-				{
-					log.info("Found {} using relative path", jsonFile);
-				}
+				log.info("Found {} via {}", jsonFile, foundVia);
 
 				String jsonContent = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 				log.info("Read {} bytes from {}", jsonContent.length(), jsonFile);
