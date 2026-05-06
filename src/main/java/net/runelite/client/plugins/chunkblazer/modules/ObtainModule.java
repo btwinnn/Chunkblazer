@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -66,14 +65,6 @@ public class ObtainModule extends AbstractTaskModule
 	// Map: taskId -> (Map: itemId -> required quantity)
 	private final Map<String, Map<Integer, Integer>> taskTargetItems = new ConcurrentHashMap<>();
 
-	// Cumulative obtained per task per item. Increments on detected inventory deltas;
-	// never decreases when items are banked/sold/eaten. This is what progress is computed from
-	// (not raw inventory counts) so mining/cooking/etc. don't regress when items leave inventory.
-	private final Map<String, Map<Integer, Integer>> taskObtainedCounts = new ConcurrentHashMap<>();
-
-	// Track previous inventory state for detecting new items
-	private final Map<Integer, Integer> previousInventory = new ConcurrentHashMap<>();
-
 	// Items we're currently watching for (union of all task requirements)
 	// Use thread-safe set to avoid ConcurrentModificationException
 	private final Set<Integer> watchedItemIds = ConcurrentHashMap.newKeySet();
@@ -117,9 +108,7 @@ public class ObtainModule extends AbstractTaskModule
 	public void shutDown()
 	{
 		eventBus.unregister(this);
-		previousInventory.clear();
 		taskTargetItems.clear();
-		taskObtainedCounts.clear();
 		watchedItemIds.clear();
 		log.info("ObtainModule stopped");
 	}
@@ -176,19 +165,14 @@ public class ObtainModule extends AbstractTaskModule
 			}
 
 			taskTargetItems.put(task.getTaskId(), targetItems);
-			taskObtainedCounts.put(task.getTaskId(), new ConcurrentHashMap<>());
 			log.info("  Total items being watched for this task: {}", targetItems.size());
 			log.info("  All watched item IDs across all tasks: {}", watchedItemIds);
 			log.info("=== END ADDING TASK ===");
 
-			// Initialize inventory tracking on client thread, then seed cumulative
-			// counters from whatever's already in the inventory at task start.
-			clientThread.invokeLater(() ->
-			{
-				initializeInventoryTracking();
-				seedObtainedFromInventory(task);
-				checkTaskProgress(task);
-			});
+			// Run an initial progress check on the client thread. checkTaskProgress
+			// reads inv+bank+equip directly, so anything the player already holds
+			// (e.g. cowhide stockpiled in the bank) counts immediately.
+			clientThread.invokeLater(() -> checkTaskProgress(task));
 		}
 		catch (Exception e)
 		{
@@ -209,32 +193,7 @@ public class ObtainModule extends AbstractTaskModule
 	{
 		super.onTaskCleared();
 		taskTargetItems.clear();
-		taskObtainedCounts.clear();
 		watchedItemIds.clear();
-		previousInventory.clear();
-	}
-
-	/**
-	 * Seed the cumulative obtained map for this task from whatever's currently
-	 * in the inventory. Called once when the task is added so existing items
-	 * count toward progress. Must run on the client thread.
-	 */
-	private void seedObtainedFromInventory(NuzlockeTask task)
-	{
-		Map<Integer, Integer> targets = taskTargetItems.get(task.getTaskId());
-		Map<Integer, Integer> obtained = taskObtainedCounts.get(task.getTaskId());
-		if (targets == null || obtained == null)
-		{
-			return;
-		}
-		for (Integer itemId : targets.keySet())
-		{
-			int inv = getItemCount(itemId);
-			if (inv > 0)
-			{
-				obtained.put(itemId, inv);
-			}
-		}
 	}
 
 	@Override
@@ -244,44 +203,6 @@ public class ObtainModule extends AbstractTaskModule
 		for (NuzlockeTask task : activeTasks)
 		{
 			checkTaskProgress(task);
-		}
-	}
-
-	/**
-	 * Initialize tracking of current inventory state.
-	 */
-	private void initializeInventoryTracking()
-	{
-		previousInventory.clear();
-
-		log.info(">>> ObtainModule: Initializing inventory tracking...");
-
-		// Track inventory (using canonicalized IDs to handle noted items)
-		ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
-		if (inventory != null)
-		{
-			for (Item item : inventory.getItems())
-			{
-				if (item != null && item.getId() > 0)
-				{
-					// Canonicalize to convert noted/placeholdered items to their base ID
-					int canonicalId = itemManager.canonicalize(item.getId());
-					previousInventory.merge(canonicalId, item.getQuantity(), Integer::sum);
-
-					// Log if this is a watched item
-					if (watchedItemIds.contains(canonicalId))
-					{
-						String notedStr = (canonicalId != item.getId()) ? " (noted)" : "";
-						log.info(">>>   Already have watched item: {} (ID: {}{}) x {}",
-							getItemName(canonicalId), canonicalId, notedStr, item.getQuantity());
-					}
-				}
-			}
-			log.info(">>> ObtainModule: Initialized with {} unique items in inventory", previousInventory.size());
-		}
-		else
-		{
-			log.warn(">>> ObtainModule: Inventory container is NULL during initialization!");
 		}
 	}
 
@@ -296,8 +217,7 @@ public class ObtainModule extends AbstractTaskModule
 		}
 
 		Map<Integer, Integer> targetItems = taskTargetItems.get(task.getTaskId());
-		Map<Integer, Integer> obtainedCounts = taskObtainedCounts.get(task.getTaskId());
-		if (targetItems == null || targetItems.isEmpty() || obtainedCounts == null)
+		if (targetItems == null || targetItems.isEmpty())
 		{
 			return;
 		}
@@ -313,18 +233,22 @@ public class ObtainModule extends AbstractTaskModule
 			int required = target.getValue();
 			totalRequired += required;
 
-			// Use cumulative obtained, NOT current inventory - banking should not regress progress
-			int cumulative = obtainedCounts.getOrDefault(itemId, 0);
-			int countForTask = Math.min(cumulative, required);
+			// Count what the player actually holds across inventory + bank +
+			// equipment. Dropped items are NOT counted, which defeats the
+			// drop-and-pick-up cheat. The Math.max(prev, ...) below preserves
+			// progress when items are consumed (eaten, used, etc.) so this
+			// only credits items that came in from outside the cheat path.
+			int held = getItemCount(itemId);
+			int countForTask = Math.min(held, required);
 			totalObtained += countForTask;
 
 			if (itemDetails.length() > 0)
 			{
 				itemDetails.append(", ");
 			}
-			itemDetails.append(getItemName(itemId)).append(" ").append(cumulative).append("/").append(required);
+			itemDetails.append(getItemName(itemId)).append(" ").append(held).append("/").append(required);
 
-			log.debug("ObtainModule: Item {} - obtained {}/{}", getItemName(itemId), cumulative, required);
+			log.debug("ObtainModule: Item {} - held {}/{} (inv+bank+equip)", getItemName(itemId), held, required);
 		}
 
 		// Floor progress at the previously-saved value so we never regress across sessions
@@ -364,38 +288,49 @@ public class ObtainModule extends AbstractTaskModule
 
 			// Clean up task tracking
 			taskTargetItems.remove(task.getTaskId());
-			taskObtainedCounts.remove(task.getTaskId());
 			activeTasks.remove(task);
 			rebuildWatchedItems();
 		}
 	}
 
 	/**
-	 * Get total count of an item across inventory only.
-	 * We only check inventory since that's where items are "obtained".
-	 * Uses canonicalized IDs so noted items count toward the requirement.
+	 * Total count of an item across inventory + bank + equipment.
+	 *
+	 * <p>Why all three: progress for OBTAIN-style tasks is "items the player
+	 * actually possesses". Dropped items are intentionally NOT counted, which
+	 * defeats the drop-and-pick-up cheat — the count can't be inflated by
+	 * dropping then re-collecting because the dropped item wasn't in any of
+	 * these containers in the first place. Banking is preserved because banked
+	 * items still belong to the player.
+	 *
+	 * <p>Uses canonicalized IDs so noted items count toward the requirement.
 	 */
 	private int getItemCount(int itemId)
 	{
-		int count = 0;
+		return countIn(InventoryID.INVENTORY, itemId)
+			+ countIn(InventoryID.BANK, itemId)
+			+ countIn(InventoryID.EQUIPMENT, itemId);
+	}
 
-		ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
-		if (inventory != null)
+	private int countIn(InventoryID containerId, int itemId)
+	{
+		ItemContainer container = client.getItemContainer(containerId);
+		if (container == null)
 		{
-			for (Item item : inventory.getItems())
+			return 0;
+		}
+		int count = 0;
+		for (Item item : container.getItems())
+		{
+			if (item != null && item.getId() > 0)
 			{
-				if (item != null && item.getId() > 0)
+				int canonicalId = itemManager.canonicalize(item.getId());
+				if (canonicalId == itemId)
 				{
-					// Canonicalize to handle noted items
-					int canonicalId = itemManager.canonicalize(item.getId());
-					if (canonicalId == itemId)
-					{
-						count += item.getQuantity();
-					}
+					count += item.getQuantity();
 				}
 			}
 		}
-
 		return count;
 	}
 
@@ -442,114 +377,31 @@ public class ObtainModule extends AbstractTaskModule
 	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged event)
 	{
+		if (activeTasks.isEmpty() || watchedItemIds.isEmpty())
+		{
+			return;
+		}
+
 		int containerId = event.getContainerId();
+		boolean isRelevant = containerId == InventoryID.INVENTORY.getId()
+			|| containerId == InventoryID.BANK.getId()
+			|| containerId == InventoryID.EQUIPMENT.getId();
 
-		// Log ALL container changes for debugging (at debug level to not spam)
-		log.debug(">>> ItemContainerChanged: containerId={} (INVENTORY={})",
-			containerId, InventoryID.INVENTORY.getId());
-
-		// Skip if no tasks or no watched items
-		if (activeTasks.isEmpty())
+		if (!isRelevant)
 		{
-			log.debug(">>> ObtainModule: No active tasks, ignoring container change");
 			return;
 		}
 
-		if (watchedItemIds.isEmpty())
+		// Container progress is computed directly from current inv+bank+equip
+		// counts inside checkTaskProgress. Math.max with the previously-saved
+		// progress prevents regression when items are consumed, and dropped
+		// items aren't in any container so the drop-and-pickup cheat can't
+		// inflate the count.
+		log.debug(">>> ObtainModule: container {} changed - rechecking progress for {} tasks",
+			containerId, activeTasks.size());
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
-			log.debug(">>> ObtainModule: No watched item IDs, ignoring container change");
-			return;
-		}
-
-		// Only track inventory changes
-		if (containerId != InventoryID.INVENTORY.getId())
-		{
-			log.debug(">>> ObtainModule: Container {} is not INVENTORY ({}), ignoring",
-				containerId, InventoryID.INVENTORY.getId());
-			return;
-		}
-
-		log.info(">>> ObtainModule: INVENTORY CHANGED - checking for watched items...");
-		log.info(">>> Watched item IDs: {}", watchedItemIds);
-
-		// Build current inventory state (using canonicalized IDs to handle noted items)
-		Map<Integer, Integer> currentInventory = new HashMap<>();
-		ItemContainer container = event.getItemContainer();
-		if (container != null)
-		{
-			for (Item item : container.getItems())
-			{
-				if (item != null && item.getId() > 0)
-				{
-					// Canonicalize to convert noted/placeholdered items to their base ID
-					int canonicalId = itemManager.canonicalize(item.getId());
-					currentInventory.merge(canonicalId, item.getQuantity(), Integer::sum);
-					// Log if this is a watched item (check both original and canonical ID)
-					if (watchedItemIds.contains(canonicalId))
-					{
-						String notedStr = (canonicalId != item.getId()) ? " (noted)" : "";
-						log.info(">>>   FOUND watched item in inventory: {} (ID: {}{}) x {}",
-							getItemName(canonicalId), canonicalId, notedStr, item.getQuantity());
-					}
-				}
-			}
-		}
-
-		// Check for newly obtained watched items
-		boolean anyNewItems = false;
-		for (int watchedItemId : watchedItemIds)
-		{
-			int previousCount = previousInventory.getOrDefault(watchedItemId, 0);
-			int currentCount = currentInventory.getOrDefault(watchedItemId, 0);
-
-			log.info(">>>   Item {} ({}): previous={}, current={}",
-				getItemName(watchedItemId), watchedItemId, previousCount, currentCount);
-
-			if (currentCount > previousCount)
-			{
-				int obtained = currentCount - previousCount;
-				log.info(">>> ObtainModule: DETECTED {} x {} obtained!", obtained, getItemName(watchedItemId));
-				anyNewItems = true;
-
-				// Increment cumulative obtained for every active task watching this item.
-				// This is what makes mining/cooking/etc. progress survive banking - the
-				// count goes up here and never comes down.
-				for (NuzlockeTask t : activeTasks)
-				{
-					Map<Integer, Integer> targets = taskTargetItems.get(t.getTaskId());
-					Map<Integer, Integer> obtainedMap = taskObtainedCounts.get(t.getTaskId());
-					if (targets != null && obtainedMap != null && targets.containsKey(watchedItemId))
-					{
-						obtainedMap.merge(watchedItemId, obtained, Integer::sum);
-					}
-				}
-
-				// Send report for tracking (optional, for server verification)
-				sendItemObtainedReport(watchedItemId, obtained);
-			}
-			else if (currentCount < previousCount)
-			{
-				log.info(">>>   Item {} DECREASED (dropped/used?) - progress unaffected", getItemName(watchedItemId));
-			}
-		}
-
-		// Update previous state
-		previousInventory.clear();
-		previousInventory.putAll(currentInventory);
-		log.info(">>> Updated previousInventory with {} unique items", previousInventory.size());
-
-		// Check progress for all tasks if any watched items were obtained
-		if (anyNewItems)
-		{
-			log.info(">>> New items detected - checking progress for {} active tasks", activeTasks.size());
-			for (NuzlockeTask task : new HashSet<>(activeTasks))
-			{
-				checkTaskProgress(task);
-			}
-		}
-		else
-		{
-			log.info(">>> No new watched items detected in this inventory change");
+			checkTaskProgress(task);
 		}
 	}
 
