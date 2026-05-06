@@ -117,6 +117,12 @@ public class ChunkBlazerPanel extends PluginPanel
 	private static final int PANEL_WIDTH = 225; // Standard RuneLite panel width
 	private static final int CONTENT_WIDTH = PANEL_WIDTH - 24; // Width for content inside panels (accounting for borders/padding)
 
+	// Width passed to <html><body style="width:..."> for wrapped task labels.
+	// Subtracts the vertical scrollbar (~17px), item-panel borders, and HTML body
+	// default margin so the rendered text never gets clipped at the right edge.
+	private static final int TASK_TEXT_WRAP_WIDTH = CONTENT_WIDTH - 40;
+	private static final String WRAP_BODY_STYLE = "margin:0; padding:0; word-wrap:break-word";
+
 	public void init(ChunkBlazerPlugin plugin)
 	{
 		this.plugin = plugin;
@@ -1050,7 +1056,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		selectedTaskPanel.add(Box.createVerticalStrut(4));
 
 		// Task name
-		JLabel nameLabel = new JLabel("<html>" + selectedTask.getName() + "</html>");
+		JLabel nameLabel = new JLabel("<html><body style='width:" + TASK_TEXT_WRAP_WIDTH + "px; " + WRAP_BODY_STYLE + "'>" + selectedTask.getName() + "</body></html>");
 		nameLabel.setFont(FontManager.getRunescapeSmallFont().deriveFont(Font.BOLD));
 		nameLabel.setForeground(Color.WHITE);
 		nameLabel.setAlignmentX(LEFT_ALIGNMENT);
@@ -1935,8 +1941,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		String taskName = task.getName();
 		String numberPrefix = taskNumber + ". ";
 		String selectionPrefix = isSelected ? "\u2605 " : ""; // Star for selected
-		int wrapWidth = CONTENT_WIDTH - 25; // More room for text
-		String wrappedName = "<html><body style='width: " + wrapWidth + "px; word-wrap: break-word'>" + numberPrefix + selectionPrefix + taskName + "</body></html>";
+		String wrappedName = "<html><body style='width:" + TASK_TEXT_WRAP_WIDTH + "px; " + WRAP_BODY_STYLE + "'>" + numberPrefix + selectionPrefix + taskName + "</body></html>";
 		JLabel nameLabel = new JLabel(wrappedName);
 		nameLabel.setFont(FontManager.getRunescapeSmallFont());
 		nameLabel.setForeground(isSelected ? new Color(255, 215, 0) : new Color(150, 255, 150));
@@ -2140,8 +2145,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Task name with checkmark (with text wrapping at word boundaries)
 		String taskName = info.getName();
-		int wrapWidth = CONTENT_WIDTH - 30; // More room for text
-		String wrappedName = "<html><body style='width: " + wrapWidth + "px; word-wrap: break-word'>\u2713 " + taskName + "</body></html>";
+		String wrappedName = "<html><body style='width:" + TASK_TEXT_WRAP_WIDTH + "px; " + WRAP_BODY_STYLE + "'>\u2713 " + taskName + "</body></html>";
 		JLabel nameLabel = new JLabel(wrappedName);
 		nameLabel.setFont(FontManager.getRunescapeSmallFont());
 		nameLabel.setForeground(new Color(100, 200, 100));
@@ -2158,7 +2162,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Region on separate line (with text wrapping at word boundaries)
 		String regionName = info.getRegionName();
-		String wrappedRegion = "<html><body style='width: " + wrapWidth + "px; word-wrap: break-word'>" + (regionName != null ? regionName : "Unknown") + "</body></html>";
+		String wrappedRegion = "<html><body style='width:" + TASK_TEXT_WRAP_WIDTH + "px; " + WRAP_BODY_STYLE + "'>" + (regionName != null ? regionName : "Unknown") + "</body></html>";
 		JLabel regionLabel = new JLabel(wrappedRegion);
 		regionLabel.setFont(FontManager.getRunescapeSmallFont());
 		regionLabel.setForeground(Color.CYAN);
@@ -2338,8 +2342,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Task name with text wrapping at word boundaries
 		String displayName = task.getName();
-		int wrapWidth = CONTENT_WIDTH - 30; // More room for text
-		String wrappedName = "<html><body style='width: " + wrapWidth + "px; word-wrap: break-word'>" + displayName + "</body></html>";
+		String wrappedName = "<html><body style='width:" + TASK_TEXT_WRAP_WIDTH + "px; " + WRAP_BODY_STYLE + "'>" + displayName + "</body></html>";
 		JLabel nameLabel = new JLabel(wrappedName);
 		nameLabel.setFont(FontManager.getRunescapeSmallFont());
 		nameLabel.setForeground(textColor);
