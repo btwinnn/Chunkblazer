@@ -240,8 +240,8 @@
           ]
         },
         {
-          "name": "Collect Feathers",
-          "taskID": "Collect_feathers",
+          "name": "Obtain Feathers",
+          "taskID": "obtain_feathers",
           "category": "Obtain",
           "completion_type": "OBTAIN",
           "base_points": 1,
@@ -250,7 +250,7 @@
             {
               "item": "Feathers",
               "item_ids": [314],
-              "quantity": [50, 1000]
+              "quantity": [1]
             }
           ]
         },
@@ -287,7 +287,7 @@
           ]
         },
         {
-          "name": "Collect some Cowhide",
+          "name": "Obtain Cowhide",
           "taskID": "obtain_cowhide",
           "category": "Obtain",
           "completion_type": "OBTAIN",
@@ -297,12 +297,12 @@
             {
               "item": "Cowhide",
               "item_ids": [1739],
-              "quantity": [5, 100]
+              "quantity": [1]
             }
           ]
         },
         {
-          "name": "Collect some Raw Beef",
+          "name": "Obtain Raw Beef",
           "taskID": "obtain_raw_beef",
           "category": "Obtain",
           "completion_type": "OBTAIN",
@@ -312,7 +312,7 @@
             {
               "item": "Raw Beef",
               "item_ids": [2132],
-              "quantity": [5, 100]
+              "quantity": [1]
             }
           ]
         },

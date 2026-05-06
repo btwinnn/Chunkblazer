@@ -140,8 +140,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain many Oak Planks",
-                    "taskID": "obtain_many_oak_planks",
+                    "name": "Obtain an Oak Plank",
+                    "taskID": "obtain_oak_plank",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -150,7 +150,7 @@
                             {
                                 "item": ["Oak Plank"],
                                 "item_ids": [8778],
-                                "quantity": [100, 500]
+                                "quantity": [1]
                             }
                         ]
                 },

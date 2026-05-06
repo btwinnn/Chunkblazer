@@ -1814,67 +1814,7 @@
                             "quantity": [1, 25]
                         }
                     ]
-                },
-                {
-                    "name": "Obtain a lot of Coal",
-                    "taskID": "obtain_coal",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Coal"],
-                            "item_ids": [453],
-                            "quantity": [2500, 10000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a lot of Gold Ore",
-                    "taskID": "obtain_gold_ore",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Gold Ore"],
-                            "item_ids": [444],
-                            "quantity": [2500, 10000]
-                        }
-                    ]
-                }, 
-                {
-                    "name": "Obtain a lot of Mithril Ore",
-                    "taskID": "obtain_mithril_ore",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Mithril Ore"],
-                            "item_ids": [447],
-                            "quantity": [2500, 10000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a lot of Adamantite Ore",
-                    "taskID": "obtain_adamantite_ore",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Adamantite Ore"],
-                            "item_ids": [449],
-                            "quantity": [2500, 10000]
-                        }
-                    ]
-                },
+                },               
                 {
                     "name": "Obtain a Coal Bag",
                     "taskID": "obtain_Coal_Bag",

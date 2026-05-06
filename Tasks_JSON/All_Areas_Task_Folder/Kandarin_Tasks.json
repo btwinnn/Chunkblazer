@@ -2512,22 +2512,7 @@
                     "constraints": {
                         "equippable_slots": ["WEAPON"]
                     }
-                },
-                {
-                    "name": "Obtain a lot of Coal",
-                    "taskID": "obtain_coal",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Coal"],
-                            "item_ids": [453],
-                            "quantity": [2500, 10000]
-                        }
-                    ]
-                },
+                },              
                 {
                     "name": "Mine some Coal",
                     "taskID": "mine_coal",

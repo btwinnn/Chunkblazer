@@ -1941,8 +1941,8 @@
             "neighbor_ids": [6713, 6968, 6711, 6456],
             "tasks": [
                 {
-                    "name": "Collect Feathers",
-                    "taskID": "Collect_feathers",
+                    "name": "Obtain Feathers",
+                    "taskID": "obtain_feathers",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -1951,7 +1951,7 @@
                         {
                         "item": "Feathers",
                         "item_ids": [314],
-                        "quantity": [50, 1000]
+                        "quantity": [1]
                         }
                     ]
                 },
@@ -4653,7 +4653,7 @@
                         ]             
                 }, 
                 {
-                    "name": "Obtain many Sandworms",
+                    "name": "Obtain Sandworms",
                     "taskID": "obtain_sandworms",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -4663,7 +4663,7 @@
                         {
                             "item": ["Sandworms"],
                             "item_ids": [13431],
-                            "quantity": [100, 1000]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -4715,8 +4715,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain a LOT of Fishing Bait",
-                    "taskID": "obtain_many_fishing_bait",
+                    "name": "Obtain Fishing Bait",
+                    "taskID": "obtain_fishing_bait",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -4725,7 +4725,7 @@
                         {
                             "item": ["Fishing Bait"],
                             "item_ids": [313],
-                            "quantity": [1000, 10000]
+                            "quantity": [1]
                         }
                     ]
                 }

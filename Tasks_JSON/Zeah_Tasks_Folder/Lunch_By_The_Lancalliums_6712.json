@@ -4,8 +4,8 @@
             "neighbor_ids": [6713, 6968, 6711, 6456],
             "tasks": [
                 {
-                    "name": "Collect Feathers",
-                    "taskID": "Collect_feathers",
+                    "name": "Obtain Feathers",
+                    "taskID": "obtain_feathers",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -14,10 +14,10 @@
                         {
                         "item": "Feathers",
                         "item_ids": [314],
-                        "quantity": [50, 1000]
+                        "quantity": [1]
                         }
                     ]
-                },
+                    },
                 {
                     "name": "Cook many Sharks",
                     "taskID": "cook_many_sharks",

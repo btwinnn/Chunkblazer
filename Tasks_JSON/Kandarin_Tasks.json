@@ -2512,7 +2512,7 @@
                     "constraints": {
                         "equippable_slots": ["WEAPON"]
                     }
-                },             
+                },               
                 {
                     "name": "Mine some Coal",
                     "taskID": "mine_coal",

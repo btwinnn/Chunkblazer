@@ -1814,7 +1814,7 @@
                             "quantity": [1, 25]
                         }
                     ]
-                },               
+                },             
                 {
                     "name": "Obtain a Coal Bag",
                     "taskID": "obtain_Coal_Bag",
