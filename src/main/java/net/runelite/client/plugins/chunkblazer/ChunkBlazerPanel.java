@@ -29,6 +29,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.client.plugins.chunkblazer.ui.WrappingTextLabel;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.PluginPanel;
@@ -117,11 +118,10 @@ public class ChunkBlazerPanel extends PluginPanel
 	private static final int PANEL_WIDTH = 225; // Standard RuneLite panel width
 	private static final int CONTENT_WIDTH = PANEL_WIDTH - 24; // Width for content inside panels (accounting for borders/padding)
 
-	// Width passed to <html><body style="width:..."> for wrapped task labels.
-	// Subtracts the vertical scrollbar (~17px), item-panel borders, and HTML body
-	// default margin so the rendered text never gets clipped at the right edge.
-	private static final int TASK_TEXT_WRAP_WIDTH = CONTENT_WIDTH - 40;
-	private static final String WRAP_BODY_STYLE = "margin:0; padding:0; word-wrap:break-word";
+	// Max width passed to WrappingTextLabel as a hard cap for BoxLayout.
+	// Subtracts the vertical scrollbar (~17px) and item-panel borders so the
+	// component never tries to render wider than the actual visible area.
+	private static final int TASK_TEXT_WRAP_WIDTH = CONTENT_WIDTH - 25;
 
 	public void init(ChunkBlazerPlugin plugin)
 	{
@@ -1055,11 +1055,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		selectedTaskPanel.add(selectedTitle);
 		selectedTaskPanel.add(Box.createVerticalStrut(4));
 
-		// Task name
-		JLabel nameLabel = new JLabel("<html><body style='width:" + TASK_TEXT_WRAP_WIDTH + "px; " + WRAP_BODY_STYLE + "'>" + selectedTask.getName() + "</body></html>");
-		nameLabel.setFont(FontManager.getRunescapeSmallFont().deriveFont(Font.BOLD));
-		nameLabel.setForeground(Color.WHITE);
-		nameLabel.setAlignmentX(LEFT_ALIGNMENT);
+		// Task name (wrapped via WrappingTextLabel).
+		WrappingTextLabel nameLabel = new WrappingTextLabel(
+			selectedTask.getName(),
+			FontManager.getRunescapeSmallFont().deriveFont(Font.BOLD),
+			Color.WHITE,
+			TASK_TEXT_WRAP_WIDTH);
 		selectedTaskPanel.add(nameLabel);
 
 		// Category and points
@@ -1937,15 +1938,15 @@ public class ChunkBlazerPanel extends PluginPanel
 			}
 		});
 
-		// Task number + Selection indicator + Task name (with text wrapping at word boundaries)
+		// Task number + Selection indicator + Task name (wrapped via WrappingTextLabel).
 		String taskName = task.getName();
 		String numberPrefix = taskNumber + ". ";
 		String selectionPrefix = isSelected ? "\u2605 " : ""; // Star for selected
-		String wrappedName = "<html><body style='width:" + TASK_TEXT_WRAP_WIDTH + "px; " + WRAP_BODY_STYLE + "'>" + numberPrefix + selectionPrefix + taskName + "</body></html>";
-		JLabel nameLabel = new JLabel(wrappedName);
-		nameLabel.setFont(FontManager.getRunescapeSmallFont());
-		nameLabel.setForeground(isSelected ? new Color(255, 215, 0) : new Color(150, 255, 150));
-		nameLabel.setAlignmentX(LEFT_ALIGNMENT);
+		WrappingTextLabel nameLabel = new WrappingTextLabel(
+			numberPrefix + selectionPrefix + taskName,
+			FontManager.getRunescapeSmallFont(),
+			isSelected ? new Color(255, 215, 0) : new Color(150, 255, 150),
+			TASK_TEXT_WRAP_WIDTH);
 		itemPanel.add(nameLabel);
 
 		// Info line: Category | Points | Level (compact single line)
@@ -2143,13 +2144,13 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Allow dynamic height based on content
 		itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, Integer.MAX_VALUE));
 
-		// Task name with checkmark (with text wrapping at word boundaries)
+		// Task name with checkmark (wrapped via WrappingTextLabel).
 		String taskName = info.getName();
-		String wrappedName = "<html><body style='width:" + TASK_TEXT_WRAP_WIDTH + "px; " + WRAP_BODY_STYLE + "'>\u2713 " + taskName + "</body></html>";
-		JLabel nameLabel = new JLabel(wrappedName);
-		nameLabel.setFont(FontManager.getRunescapeSmallFont());
-		nameLabel.setForeground(new Color(100, 200, 100));
-		nameLabel.setAlignmentX(LEFT_ALIGNMENT);
+		WrappingTextLabel nameLabel = new WrappingTextLabel(
+			"\u2713 " + taskName,
+			FontManager.getRunescapeSmallFont(),
+			new Color(100, 200, 100),
+			TASK_TEXT_WRAP_WIDTH);
 		itemPanel.add(nameLabel);
 
 		// Info line: Category | Points
@@ -2160,13 +2161,13 @@ public class ChunkBlazerPanel extends PluginPanel
 		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
 		itemPanel.add(infoLabel);
 
-		// Region on separate line (with text wrapping at word boundaries)
+		// Region on separate line (wrapped via WrappingTextLabel).
 		String regionName = info.getRegionName();
-		String wrappedRegion = "<html><body style='width:" + TASK_TEXT_WRAP_WIDTH + "px; " + WRAP_BODY_STYLE + "'>" + (regionName != null ? regionName : "Unknown") + "</body></html>";
-		JLabel regionLabel = new JLabel(wrappedRegion);
-		regionLabel.setFont(FontManager.getRunescapeSmallFont());
-		regionLabel.setForeground(Color.CYAN);
-		regionLabel.setAlignmentX(LEFT_ALIGNMENT);
+		WrappingTextLabel regionLabel = new WrappingTextLabel(
+			regionName != null ? regionName : "Unknown",
+			FontManager.getRunescapeSmallFont(),
+			Color.CYAN,
+			TASK_TEXT_WRAP_WIDTH);
 		itemPanel.add(regionLabel);
 
 		return itemPanel;
@@ -2340,13 +2341,13 @@ public class ChunkBlazerPanel extends PluginPanel
 			textColor = Color.WHITE; // Available
 		}
 
-		// Task name with text wrapping at word boundaries
+		// Task name (wrapped via WrappingTextLabel).
 		String displayName = task.getName();
-		String wrappedName = "<html><body style='width:" + TASK_TEXT_WRAP_WIDTH + "px; " + WRAP_BODY_STYLE + "'>" + displayName + "</body></html>";
-		JLabel nameLabel = new JLabel(wrappedName);
-		nameLabel.setFont(FontManager.getRunescapeSmallFont());
-		nameLabel.setForeground(textColor);
-		nameLabel.setAlignmentX(LEFT_ALIGNMENT);
+		WrappingTextLabel nameLabel = new WrappingTextLabel(
+			displayName,
+			FontManager.getRunescapeSmallFont(),
+			textColor,
+			TASK_TEXT_WRAP_WIDTH);
 		itemPanel.add(nameLabel);
 
 		// Task info line (status + points + level)

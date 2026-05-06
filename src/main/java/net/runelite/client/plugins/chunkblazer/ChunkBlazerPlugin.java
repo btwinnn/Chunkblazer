@@ -40,6 +40,7 @@ import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.chunkblazer.modules.TaskModuleManager;
+import net.runelite.client.plugins.chunkblazer.starter.StarterArea;
 import net.runelite.client.plugins.chunkblazer.verification.VarPlayerVerificationService;
 
 @Slf4j
@@ -590,7 +591,7 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		// Add all starter regions that aren't already unlocked
-		for (int regionId : STARTER_REGIONS)
+		for (int regionId : StarterArea.REGIONS)
 		{
 			if (!currentlyUnlocked.contains(String.valueOf(regionId)))
 			{
@@ -607,11 +608,11 @@ public class ChunkBlazerPlugin extends Plugin
 		if (needsUpdate)
 		{
 			configManager.setConfiguration("chunkblazer", "unlockedChunks", newUnlocked.toString());
-			log.info("Unlocked all starter regions: {}", java.util.Arrays.toString(STARTER_REGIONS));
+			log.info("Unlocked all starter regions: {}", java.util.Arrays.toString(StarterArea.REGIONS));
 		}
 
 		// Ensure tasks are rolled for all starter regions
-		for (int regionId : STARTER_REGIONS)
+		for (int regionId : StarterArea.REGIONS)
 		{
 			Set<String> rolledTasks = getRolledTasksForRegion(regionId);
 			if (rolledTasks.isEmpty())
@@ -644,13 +645,8 @@ public class ChunkBlazerPlugin extends Plugin
 		"Zeah_Tasks.json"
 	};
 
-	// Free starting chunk (always unlocked for all modes)
-	private static final int FREE_STARTING_REGION = 12850;  // Lumbridge center
-
-	// Starter regions unlocked by default - only Lumbridge center
-	private static final int[] STARTER_REGIONS = {
-		12850   // Lumbridge center
-	};
+	// Starter region constants live in StarterArea (3x3 grid centered on Lumbridge).
+	// Do not re-introduce inline arrays here — read from StarterArea.REGIONS.
 
 
 	private void loadChunkData()
@@ -1672,8 +1668,8 @@ public class ChunkBlazerPlugin extends Plugin
 		// Reset points
 		configManager.setConfiguration("chunkblazer", "totalPoints", 0);
 
-		// Reset unlocked chunks to default (free starting chunk)
-		configManager.setConfiguration("chunkblazer", "unlockedChunks", String.valueOf(FREE_STARTING_REGION));
+		// Reset unlocked chunks to the full starter 3x3 (Lumbridge + 8 neighbors).
+		configManager.setConfiguration("chunkblazer", "unlockedChunks", StarterArea.regionsCsv());
 
 		// Reset game mode lock
 		configManager.setConfiguration("chunkblazer", "accountModeHash", "");

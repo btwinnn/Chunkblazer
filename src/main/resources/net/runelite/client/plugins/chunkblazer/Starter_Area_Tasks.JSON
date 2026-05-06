@@ -4,7 +4,7 @@
       "region_id": [12850],
       "friendly_name": "Lumbridge",
       "unlock_cost": 1,
-      "neighbor_ids": [12581, 12579, 12612, 12548],
+      "neighbor_ids": [12851, 12849, 12594, 13106],
       "tasks": [
         {
           "name": "Defeat a Level 2 Goblin",
