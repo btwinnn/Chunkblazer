@@ -5216,6 +5216,228 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [6191],
+            "Friendly_Name": "Hunter Guild",
+            "neighbor_ids": [6192, 6447, 6190, 5935],
+            "tasks": [
+                {
+                    "name": "Catch a Moonlight Moth in a Butterfly Jar",
+                    "taskID": "catch_moonlight_moth_in_butterfly_jar",
+                    "category": "Hunter",
+                    "level": 75,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                            {
+                            "item": "Moonlight Moth",
+                            "item_ids": [28893]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Catch a Moonlight Antelope",
+                    "taskID": "catch_moonlight_antelope",
+                    "category": "Hunter",
+                    "level": 91,
+                    "completion_type": "HUNTER",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                            "item": "Raw moonlight antelope",
+                            "item_ids": [29113]
+                            },
+                            {
+                            "item": "Big Bones",
+                            "item_ids": [532]
+                            },
+                            {
+                            "item": "Moonlight antelope antler",
+                            "item_ids": [29171]
+                            },
+                            {
+                            "item": "Moonlight antelope fur",
+                            "item_ids": [29174]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Obtain a Moonlight Antelope Hoof Shard",
+                    "taskID": "obtain_moonlight_antelope_hoof_shard",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Antelope hoof shard (moonlight)"],
+                            "item_ids": [29241],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Moonlight Moth Wing",
+                    "taskID": "obtain_moonlight_moth_wing",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Moonlight moth wing"],
+                            "item_ids": [29240],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Basic Quetzal Whistle",
+                    "taskID": "obtain_basic_quetzal_whistle",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Basic Quetzal Whistle"],
+                            "item_ids": [29271],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Tattered Request Note",
+                    "taskID": "obtain_tattered_request_note",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Tattered Request Note"],
+                            "item_ids": [29317],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Enhanced Quetzal Whistle",
+                    "taskID": "obtain_enhanced_quetzal_whistle",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Enhanced Quetzal Whistle"],
+                            "item_ids": [29273],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Perfected Quetzal Whistle",
+                    "taskID": "obtain_perfected_quetzal_whistle",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Perfected Quetzal Whistle"],
+                            "item_ids": [29275],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Guild History Excerpt",
+                    "taskID": "obtain_guild_history_excerpt",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Guild History Excerpt"],
+                            "item_ids": [29319],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Apatura's Note",
+                    "taskID": "obtain_apatura's_note",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Apatura's Note"],
+                            "item_ids": [29321],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Guild Hunter Set",
+                    "taskID": "obtain_guild_hunter_set",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Guild Hunter Boots"],
+                            "item_ids": [29269],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Guild Hunter Headwear"],
+                            "item_ids": [29263],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Guild Hunter Legs"],
+                            "item_ids": [29267],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Guild Hunter Top"],
+                            "item_ids": [29265],
+                            "quantity": [1]
+                        }
+                    ]
+                }, 
+                {                           
+                    "name": "Cook some Moonlight Antelope",
+                    "taskID": "cook_moonlight_antelope",
+                    "category": "Cooking",
+                    "level": 92,
+                    "completion_type": "COOKING",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Cooked Moonlight Antelope",
+                        "item_ids": [29143],
+                        "quantity": [1, 50]
+                        }
+                    ]       
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "At First Light",
+                    "points": 2
+                }            
+            ],
+            "is_completed": false
         }                                
     ]
 }
