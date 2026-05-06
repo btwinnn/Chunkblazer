@@ -13,8 +13,10 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
+import net.runelite.api.Skill;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
@@ -69,6 +71,17 @@ public class ObtainModule extends AbstractTaskModule
 	// Use thread-safe set to avoid ConcurrentModificationException
 	private final Set<Integer> watchedItemIds = ConcurrentHashMap.newKeySet();
 
+	// Count of XP drops in the task's relevant skill, observed since the task
+	// was assigned. Used to gate progress for skilling tasks: even if the player
+	// holds the required items, progress only credits up to the XP-drop count
+	// so traded/looted items don't count without actual skilling activity.
+	// OBTAIN tasks (no associated skill) skip this gate.
+	private final Map<String, Integer> xpDropsForTask = new ConcurrentHashMap<>();
+
+	// Last observed XP per skill, used to detect XP gains in onStatChanged.
+	// Seeded from initial StatChanged events; null for a skill we haven't seen yet.
+	private final Map<Skill, Integer> previousXp = new ConcurrentHashMap<>();
+
 	// Debug heartbeat
 	private int tickCounter = 0;
 	private static final int DEBUG_LOG_INTERVAL = 100; // Log every 100 ticks (~60 seconds)
@@ -110,6 +123,8 @@ public class ObtainModule extends AbstractTaskModule
 		eventBus.unregister(this);
 		taskTargetItems.clear();
 		watchedItemIds.clear();
+		xpDropsForTask.clear();
+		previousXp.clear();
 		log.info("ObtainModule stopped");
 	}
 
@@ -165,8 +180,12 @@ public class ObtainModule extends AbstractTaskModule
 			}
 
 			taskTargetItems.put(task.getTaskId(), targetItems);
+			// Reset XP-drop counter so prior skilling activity doesn't pre-credit
+			// this task. Only XP gained from this point on counts toward it.
+			xpDropsForTask.put(task.getTaskId(), 0);
 			log.info("  Total items being watched for this task: {}", targetItems.size());
 			log.info("  All watched item IDs across all tasks: {}", watchedItemIds);
+			log.info("  Skill for XP gating: {}", skillForCompletionType(task.getCompletionType()));
 			log.info("=== END ADDING TASK ===");
 
 			// Run an initial progress check on the client thread. checkTaskProgress
@@ -194,6 +213,7 @@ public class ObtainModule extends AbstractTaskModule
 		super.onTaskCleared();
 		taskTargetItems.clear();
 		watchedItemIds.clear();
+		xpDropsForTask.clear();
 	}
 
 	@Override
@@ -225,6 +245,16 @@ public class ObtainModule extends AbstractTaskModule
 		int totalRequired = 0;
 		int totalObtained = 0;
 
+		// XP-drop gate: for skilling tasks (MINING, COOKING, SMITHING, ...),
+		// progress is also capped by the count of XP drops in the relevant
+		// skill since the task was assigned. This stops a player satisfying
+		// e.g. "Smelt 5 Gold Bars" by buying bars off the GE — they need to
+		// have produced the XP drops too. OBTAIN tasks have null skill and
+		// skip this gate entirely.
+		Skill taskSkill = skillForCompletionType(task.getCompletionType());
+		int xpGate = (taskSkill == null) ? Integer.MAX_VALUE
+			: xpDropsForTask.getOrDefault(task.getTaskId(), 0);
+
 		// Build details about each item for logging
 		StringBuilder itemDetails = new StringBuilder();
 		for (Map.Entry<Integer, Integer> target : targetItems.entrySet())
@@ -249,6 +279,15 @@ public class ObtainModule extends AbstractTaskModule
 			itemDetails.append(getItemName(itemId)).append(" ").append(held).append("/").append(required);
 
 			log.debug("ObtainModule: Item {} - held {}/{} (inv+bank+equip)", getItemName(itemId), held, required);
+		}
+
+		// Apply the XP-drop cap across the task as a whole (not per-item; some
+		// tasks list multiple item IDs that share a single produced-action).
+		if (taskSkill != null)
+		{
+			totalObtained = Math.min(totalObtained, xpGate);
+			log.debug("ObtainModule: Task '{}' XP-gated to {} (skill {} drops: {})",
+				task.getName(), totalObtained, taskSkill.getName(), xpGate);
 		}
 
 		// Floor progress at the previously-saved value so we never regress across sessions
@@ -288,6 +327,7 @@ public class ObtainModule extends AbstractTaskModule
 
 			// Clean up task tracking
 			taskTargetItems.remove(task.getTaskId());
+			xpDropsForTask.remove(task.getTaskId());
 			activeTasks.remove(task);
 			rebuildWatchedItems();
 		}
@@ -343,6 +383,79 @@ public class ObtainModule extends AbstractTaskModule
 		for (Map<Integer, Integer> items : taskTargetItems.values())
 		{
 			watchedItemIds.addAll(items.keySet());
+		}
+	}
+
+	/**
+	 * Map a task completion type to the OSRS skill whose XP drops should
+	 * verify the player actually performed the activity. Returns null for
+	 * non-skilling types (OBTAIN), where no XP gating applies.
+	 */
+	private static Skill skillForCompletionType(String completionType)
+	{
+		if (completionType == null)
+		{
+			return null;
+		}
+		switch (completionType.toUpperCase())
+		{
+			case "COOKING":      return Skill.COOKING;
+			case "CRAFTING":     return Skill.CRAFTING;
+			case "SMITHING":     return Skill.SMITHING;
+			case "MINING":       return Skill.MINING;
+			case "WOODCUTTING":  return Skill.WOODCUTTING;
+			case "FISHING":      return Skill.FISHING;
+			case "FLETCHING":    return Skill.FLETCHING;
+			case "HERBLORE":     return Skill.HERBLORE;
+			case "RUNECRAFTING": return Skill.RUNECRAFT;
+			case "HUNTER":       return Skill.HUNTER;
+			default:             return null;
+		}
+	}
+
+	@Subscribe
+	public void onStatChanged(StatChanged event)
+	{
+		Skill skill = event.getSkill();
+		int newXp = event.getXp();
+		Integer prevXp = previousXp.put(skill, newXp);
+
+		// First sighting of this skill (e.g. login/initial sync) — record baseline only.
+		if (prevXp == null)
+		{
+			return;
+		}
+		// Stat changes can fire for level/boost recalcs without an XP gain. Filter.
+		if (newXp <= prevXp)
+		{
+			return;
+		}
+		if (activeTasks.isEmpty())
+		{
+			return;
+		}
+
+		// Increment the XP-drop counter for every active task whose relevant
+		// skill matches this XP gain, then re-check those tasks (a previously
+		// item-met-but-XP-blocked task may now unlock).
+		boolean anyMatched = false;
+		for (NuzlockeTask task : activeTasks)
+		{
+			Skill taskSkill = skillForCompletionType(task.getCompletionType());
+			if (taskSkill == skill)
+			{
+				int newCount = xpDropsForTask.merge(task.getTaskId(), 1, Integer::sum);
+				log.debug("ObtainModule: XP drop for {} on task '{}' (count now {})",
+					skill.getName(), task.getName(), newCount);
+				anyMatched = true;
+			}
+		}
+		if (anyMatched)
+		{
+			for (NuzlockeTask task : new HashSet<>(activeTasks))
+			{
+				checkTaskProgress(task);
+			}
 		}
 	}
 
