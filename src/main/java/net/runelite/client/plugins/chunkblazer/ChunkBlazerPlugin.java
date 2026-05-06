@@ -590,44 +590,39 @@ public class ChunkBlazerPlugin extends Plugin
 			newUnlocked.append(existing);
 		}
 
-		// Add all starter regions that aren't already unlocked
-		for (int regionId : StarterArea.REGIONS)
+		// Auto-unlock the starter center only. The other 8 chunks of the 3x3
+		// scope are visible on the world map but must be unlocked with points.
+		if (!currentlyUnlocked.contains(String.valueOf(StarterArea.CENTER)))
 		{
-			if (!currentlyUnlocked.contains(String.valueOf(regionId)))
+			if (newUnlocked.length() > 0)
 			{
-				if (newUnlocked.length() > 0)
-				{
-					newUnlocked.append(",");
-				}
-				newUnlocked.append(regionId);
-				needsUpdate = true;
-				log.info("Unlocking starter region: {}", regionId);
+				newUnlocked.append(",");
 			}
+			newUnlocked.append(StarterArea.CENTER);
+			needsUpdate = true;
+			log.info("Unlocking starter center: {}", StarterArea.CENTER);
 		}
 
 		if (needsUpdate)
 		{
 			configManager.setConfiguration("chunkblazer", "unlockedChunks", newUnlocked.toString());
-			log.info("Unlocked all starter regions: {}", java.util.Arrays.toString(StarterArea.REGIONS));
+			log.info("Unlocked starter center {} (other 8 chunks remain unlockable)", StarterArea.CENTER);
 		}
 
-		// Ensure tasks are rolled for all starter regions
-		for (int regionId : StarterArea.REGIONS)
+		// Pre-roll tasks for the starter center so they're ready immediately.
+		// Other starter regions get their tasks rolled lazily when unlocked.
+		if (getRolledTasksForRegion(StarterArea.CENTER).isEmpty())
 		{
-			Set<String> rolledTasks = getRolledTasksForRegion(regionId);
-			if (rolledTasks.isEmpty())
+			NuzlockeChunk chunk = chunksByRegionId.get(StarterArea.CENTER);
+			if (chunk != null && chunk.getTasks() != null && !chunk.getTasks().isEmpty())
 			{
-				NuzlockeChunk chunk = chunksByRegionId.get(regionId);
-				if (chunk != null && chunk.getTasks() != null && !chunk.getTasks().isEmpty())
-				{
-					log.info("Rolling tasks for starter region {} ({})", regionId, chunk.getName());
-					Set<String> newTasks = rollTasksForRegion(regionId);
-					log.info("Rolled {} tasks for starter region {}: {}", newTasks.size(), regionId, newTasks);
-				}
-				else
-				{
-					log.warn("Starter region {} has no chunk or tasks defined", regionId);
-				}
+				log.info("Rolling tasks for starter center {} ({})", StarterArea.CENTER, chunk.getName());
+				Set<String> newTasks = rollTasksForRegion(StarterArea.CENTER);
+				log.info("Rolled {} tasks for starter center: {}", newTasks.size(), newTasks);
+			}
+			else
+			{
+				log.warn("Starter center {} has no chunk or tasks defined", StarterArea.CENTER);
 			}
 		}
 	}
@@ -1668,8 +1663,9 @@ public class ChunkBlazerPlugin extends Plugin
 		// Reset points
 		configManager.setConfiguration("chunkblazer", "totalPoints", 0);
 
-		// Reset unlocked chunks to the full starter 3x3 (Lumbridge + 8 neighbors).
-		configManager.setConfiguration("chunkblazer", "unlockedChunks", StarterArea.regionsCsv());
+		// Reset unlocked chunks to the starter center only. The other 8 chunks
+		// of the 3x3 scope must be unlocked with points after reset.
+		configManager.setConfiguration("chunkblazer", "unlockedChunks", String.valueOf(StarterArea.CENTER));
 
 		// Reset game mode lock
 		configManager.setConfiguration("chunkblazer", "accountModeHash", "");
