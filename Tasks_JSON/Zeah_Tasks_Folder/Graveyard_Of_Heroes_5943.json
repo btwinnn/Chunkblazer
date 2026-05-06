@@ -163,7 +163,7 @@
                 {
                     "name": "Mix an Attack Potion",
                     "taskID": "mix_attack_potion",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
                     "base_points": 1,

@@ -5774,7 +5774,7 @@
                 {
                     "name": "Mix an Anti-firebreath Potion",
                     "taskID": "mix_anti-firebreath_potion",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 69,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -5789,7 +5789,7 @@
                 {
                     "name": "Mix a Super Antifire Potion",
                     "taskID": "mix_super_antifire_potion",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 92,
                     "completion_type": "HERBLORE",
                     "base_points": 5,
@@ -5915,7 +5915,7 @@
                 {
                     "name": "Mix a Relicym's Balm",
                     "taskID": "mix_relicym's_balm",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 8,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -5930,7 +5930,7 @@
                 {
                     "name": "Mix a Sanfew Serum",
                     "taskID": "mix_sanfew_serum",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 65,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -7901,7 +7901,7 @@
                 {
                     "name": "Mix an Agility Potion",
                     "taskID": "mix_agility_potion",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 34,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -8622,7 +8622,7 @@
                 {
                     "name": "Mix a Strength Mix",
                     "taskID": "mix_strength_mix",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 14,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -8637,7 +8637,7 @@
                 {
                     "name": "Mix a Defence Mix",
                     "taskID": "mix_defence_mix",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 33,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -8652,7 +8652,7 @@
                 {
                     "name": "Mix a Prayer Mix",
                     "taskID": "mix_prayer_mix",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 42,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -8667,7 +8667,7 @@
                 {
                     "name": "Mix a Super Restore Mix",
                     "taskID": "mix_super_restore_mix",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 67,
                     "completion_type": "HERBLORE",
                     "base_points": 3,

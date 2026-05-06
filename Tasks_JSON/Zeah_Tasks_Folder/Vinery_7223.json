@@ -134,7 +134,7 @@
                 {
                     "name": "Mix a Ranging Potion",
                     "taskID": "mix_ranging_potion",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
                     "base_points": 3,

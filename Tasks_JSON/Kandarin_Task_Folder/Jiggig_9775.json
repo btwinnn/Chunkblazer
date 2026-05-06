@@ -6,7 +6,7 @@
                 {
                     "name": "Mix a Relicym's Balm",
                     "taskID": "mix_relicym's_balm",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 8,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -21,7 +21,7 @@
                 {
                     "name": "Mix a Sanfew Serum",
                     "taskID": "mix_sanfew_serum",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 65,
                     "completion_type": "HERBLORE",
                     "base_points": 2,

@@ -35,7 +35,7 @@
                 {
                     "name": "Mix an Anti-Poison Potion",
                     "taskID": "mix_anti-poison",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
                     "base_points": 1,

@@ -126,7 +126,7 @@
                 {
                     "name": "Mix a Stamina Potion",
                     "taskID": "mix_stamina_potion",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 77,
                     "completion_type": "HERBLORE",
                     "base_points": 3,

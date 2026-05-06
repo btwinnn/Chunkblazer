@@ -6,7 +6,7 @@
                 {
                     "name": "Mix a Saradomin Brew",
                     "taskID": "mix_saradomin_brew",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 81,
                     "completion_type": "HERBLORE",
                     "base_points": 4,
@@ -21,7 +21,7 @@
                 {
                     "name": "Mix a Super Combat Potion",
                     "taskID": "mix_super_combat_potion",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 90,
                     "completion_type": "HERBLORE",
                     "base_points": 5,
@@ -36,7 +36,7 @@
                 {
                     "name": "Mix a Super Attack Potion",
                     "taskID": "mix_super_attack_potion",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 45,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -51,7 +51,7 @@
                 {
                     "name": "Mix a Super Strength Potion",
                     "taskID": "mix_super_strength_potion",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 55,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -66,7 +66,7 @@
                 {
                     "name": "Mix a Super Defence Potion",
                     "taskID": "mix_super_defence_potion",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 66,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -81,7 +81,7 @@
                 {
                     "name": "Mix a Ranging Potion",
                     "taskID": "mix_ranging_potion",
-                    "category": "Herblore",
+                    "category": "Obtain_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
