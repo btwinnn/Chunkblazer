@@ -186,6 +186,8 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	 */
 	public void clearTask()
 	{
+		// Diagnostic: clearTask wipes module per-task state. If this fires unexpectedly during a session, log the trigger so we can correlate with progress regressions.
+		log.debug("clearTask() called, current activeTasks={}, caller stack:", activeTasks.size(), new Throwable());
 		// Clear every module's per-module list, not just the legacy activeModule. Otherwise modules retain stale tasks across resets and end up with duplicates after re-registration.
 		for (AbstractTaskModule module : modules)
 		{

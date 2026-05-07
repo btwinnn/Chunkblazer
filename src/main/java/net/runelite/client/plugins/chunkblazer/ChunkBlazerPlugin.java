@@ -1090,6 +1090,16 @@ public class ChunkBlazerPlugin extends Plugin
 		int savedProgress = savedData[0];
 		int savedTargetQty = savedData[1];
 
+		// Regression alarm: if in-memory progress is higher than what we're about to restore,
+		// we're losing real progress (probably because a progress event hasn't been flushed
+		// to config yet). Log a stack so we can find the trigger.
+		int inMemoryProgress = task.getCurrentProgress();
+		if (inMemoryProgress > savedProgress)
+		{
+			log.warn("PROGRESS REGRESSION: task '{}' (id={}) in-memory={}, restoring from config={} — caller stack:",
+				task.getName(), task.getTaskId(), inMemoryProgress, savedProgress, new Throwable());
+		}
+
 		int targetQty;
 		if (savedTargetQty > 0)
 		{

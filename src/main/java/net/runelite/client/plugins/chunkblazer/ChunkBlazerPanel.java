@@ -109,6 +109,10 @@ public class ChunkBlazerPanel extends PluginPanel
 	private String activeTasksSelectedRegion = "All";
 	private boolean isRefreshingActiveFilters = false;
 	private NuzlockeTask selectedTask = null;
+	// Tracks the region ID the bottom task list was last rendered for. When the player
+	// changes region (e.g. climbing a ladder) the list shows a different region's tasks,
+	// so a saved viewport position is meaningless — we scroll to top instead.
+	private int lastRenderedTaskListRegionId = Integer.MIN_VALUE;
 
 	public ChunkBlazerPanel()
 	{
@@ -1012,6 +1016,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		{
 			selectedTask = null;
 			updateSelectedTaskDisplay();
+			// Also refresh the active task list — otherwise a row that was just completed
+			// keeps its gold "selected" border/star until something else triggers a rebuild.
+			updateActiveTasksDisplay();
 		}
 	}
 
@@ -1029,6 +1036,14 @@ public class ChunkBlazerPanel extends PluginPanel
 		if (selectedTask == null)
 		{
 			selectedTaskPanel.setVisible(false);
+			// Force the parent layout to recompute so the gap left by the now-hidden panel
+			// closes immediately instead of leaving a ghost slot until the next interaction.
+			java.awt.Container parent = selectedTaskPanel.getParent();
+			if (parent != null)
+			{
+				parent.revalidate();
+				parent.repaint();
+			}
 			return;
 		}
 
@@ -1792,6 +1807,10 @@ public class ChunkBlazerPanel extends PluginPanel
 		log.debug(">>> updateActiveTasksDisplay() CALLED");
 		log.debug(">>> Stack trace: {}", Thread.currentThread().getStackTrace()[2]);
 
+		// Capture scroll position so the rebuild below doesn't snap the user back to the top
+		// when a chunk is unlocked or a task completes.
+		final java.awt.Point savedActiveViewPos = activeTasksScrollPane.getViewport().getViewPosition();
+
 		// Refresh filter dropdowns
 		refreshActiveTasksFilters();
 
@@ -1891,6 +1910,9 @@ public class ChunkBlazerPanel extends PluginPanel
 			activeTasksScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, height));
 			activeTasksScrollPane.revalidate();
 		}
+
+		// Restore the viewport AFTER the layout pass — Swing resets it to (0,0) during revalidate.
+		SwingUtilities.invokeLater(() -> activeTasksScrollPane.getViewport().setViewPosition(savedActiveViewPos));
 	}
 
 	private void updateActiveTasksSectionTitle(int totalCount, int filteredCount)
@@ -1934,9 +1956,11 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Allow dynamic height based on content
 		itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, Integer.MAX_VALUE));
 
-		// Make clickable with cursor change
-		itemPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-		itemPanel.addMouseListener(new java.awt.event.MouseAdapter()
+		// Click + hover behaviour. Attached recursively at the bottom of this method so the
+		// entire row is clickable, not just bare itemPanel space — child labels and the
+		// progress bar were eating clicks before because Swing routes events to the deepest
+		// component and they had no listener of their own.
+		final java.awt.event.MouseAdapter rowAdapter = new java.awt.event.MouseAdapter()
 		{
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e)
@@ -1956,12 +1980,20 @@ public class ChunkBlazerPanel extends PluginPanel
 			@Override
 			public void mouseExited(java.awt.event.MouseEvent e)
 			{
-				if (!isSelected)
+				if (isSelected)
+				{
+					return;
+				}
+				// Only revert if the mouse genuinely left the row, not just moved to a child
+				// component within the row. Without this check, hovering a label inside the
+				// row makes the highlight flicker.
+				java.awt.Point local = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), itemPanel);
+				if (!itemPanel.contains(local))
 				{
 					itemPanel.setBackground(bgColor);
 				}
 			}
-		});
+		};
 
 		// Task number + Selection indicator + Task name (wrapped via WrappingTextLabel).
 		String taskName = task.getName();
@@ -2025,7 +2057,34 @@ public class ChunkBlazerPanel extends PluginPanel
 		itemPanel.add(Box.createVerticalStrut(2));
 		itemPanel.add(progressRow);
 
+		// Attach the click/hover listener and HAND cursor to itemPanel and every descendant.
+		// Must run AFTER all children are added so nothing gets missed.
+		attachRowMouseHandling(itemPanel, rowAdapter, new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
 		return itemPanel;
+	}
+
+	/**
+	 * Walk a container tree and attach the same MouseListener + cursor to every component.
+	 * Swing only delivers a click to the deepest component under the cursor; without this,
+	 * clicks on child labels/panels inside a "clickable row" silently do nothing.
+	 */
+	private static void attachRowMouseHandling(java.awt.Container container, java.awt.event.MouseListener listener, java.awt.Cursor cursor)
+	{
+		container.setCursor(cursor);
+		container.addMouseListener(listener);
+		for (java.awt.Component child : container.getComponents())
+		{
+			if (child instanceof java.awt.Container)
+			{
+				attachRowMouseHandling((java.awt.Container) child, listener, cursor);
+			}
+			else
+			{
+				child.setCursor(cursor);
+				child.addMouseListener(listener);
+			}
+		}
 	}
 
 	public void updateCompletedTasks()
@@ -2071,6 +2130,9 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private void updateCompletedTasksContent()
 	{
+		// Capture viewport so a rebuild (e.g. on completion) doesn't snap the user back to top.
+		final java.awt.Point savedCompletedViewPos = completedTasksScrollPane.getViewport().getViewPosition();
+
 		completedTasksContentPanel.removeAll();
 
 		List<CompletedTaskInfo> allTasks = plugin.getCompletedTasksWithInfo();
@@ -2159,6 +2221,9 @@ public class ChunkBlazerPanel extends PluginPanel
 			completedTasksScrollPane.revalidate();
 			completedTasksScrollPane.repaint();
 		}
+
+		// Restore viewport AFTER the layout pass; revalidate resets it to (0,0) otherwise.
+		SwingUtilities.invokeLater(() -> completedTasksScrollPane.getViewport().setViewPosition(savedCompletedViewPos));
 	}
 
 	private JPanel createEnhancedCompletedTaskItem(CompletedTaskInfo info)
@@ -2272,6 +2337,16 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private void updateTaskListContent()
 	{
+		// Only preserve viewport when staying within the same region. On a region change
+		// the list shows a totally different set of tasks, so any saved Y just clamps
+		// into a meaningless "specific spot" (the ladder-click bug).
+		final int currentRegionId = plugin.getCurrentRegionId();
+		final boolean sameRegion = currentRegionId == lastRenderedTaskListRegionId;
+		final java.awt.Point savedTaskListViewPos = sameRegion
+			? taskListScrollPane.getViewport().getViewPosition()
+			: new java.awt.Point(0, 0);
+		lastRenderedTaskListRegionId = currentRegionId;
+
 		taskListContentPanel.removeAll();
 
 		List<NuzlockeTask> tasks = plugin.getCurrentRegionTasks();
@@ -2327,6 +2402,9 @@ public class ChunkBlazerPanel extends PluginPanel
 			taskListScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, height));
 			taskListScrollPane.revalidate();
 		}
+
+		// Restore viewport AFTER the layout pass; revalidate resets it to (0,0) otherwise.
+		SwingUtilities.invokeLater(() -> taskListScrollPane.getViewport().setViewPosition(savedTaskListViewPos));
 	}
 
 	private JPanel createTaskListItem(NuzlockeTask task)
