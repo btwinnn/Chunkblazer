@@ -22,19 +22,40 @@ public class TargetNpc
 	@SerializedName("quantity_range")
 	private List<Integer> quantityRange;
 
+	// Cached random roll for this session so repeated callers (initializeTask,
+	// modules' addActiveTask, etc.) all see the same value. Without this every
+	// call into getRequiredQuantity() generates a fresh Math.random() result and
+	// the panel's "(1/37)" disagrees with the chatbox's "(1/18)" for the same
+	// task, and re-rolls on every chunk unlock / login.
+	private transient Integer rolledQuantity;
+
 	public int getRequiredQuantity()
 	{
 		if (quantity != null)
 		{
 			return quantity;
 		}
+		if (rolledQuantity != null)
+		{
+			return rolledQuantity;
+		}
 		if (quantityRange != null && quantityRange.size() >= 2)
 		{
 			int min = quantityRange.get(0);
 			int max = quantityRange.get(1);
-			return min + (int) (Math.random() * (max - min + 1));
+			rolledQuantity = min + (int) (Math.random() * (max - min + 1));
+			return rolledQuantity;
 		}
 		return 1;
+	}
+
+	/**
+	 * Pin the rolled quantity to a specific value. Used to restore a persisted
+	 * target across sessions so the in-memory roll matches what was saved.
+	 */
+	public void setRolledQuantity(int qty)
+	{
+		this.rolledQuantity = qty;
 	}
 
 	/**

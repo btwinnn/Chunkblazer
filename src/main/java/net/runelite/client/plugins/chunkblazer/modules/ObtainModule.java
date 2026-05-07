@@ -78,6 +78,14 @@ public class ObtainModule extends AbstractTaskModule
 	// OBTAIN tasks (no associated skill) skip this gate.
 	private final Map<String, Integer> xpDropsForTask = new ConcurrentHashMap<>();
 
+	// Raw (uncapped) inventory+bank+equipment count of all watched items at the
+	// last time we credited an XP drop to this task — i.e. the high-water mark
+	// against which "did the player just produce a NEW item for THIS task?" is
+	// judged. Without this, one Fletching XP drop credits every Fletching task
+	// in flight, which lets a single longbow-fletch satisfy a bank-stored
+	// shortbow task. See log line 11404-11405 in session_2026-05-07_10-52-10.
+	private final Map<String, Integer> lastHeldRawForTask = new ConcurrentHashMap<>();
+
 	// Last observed XP per skill, used to detect XP gains in onStatChanged.
 	// Seeded from initial StatChanged events; null for a skill we haven't seen yet.
 	private final Map<Skill, Integer> previousXp = new ConcurrentHashMap<>();
@@ -124,6 +132,7 @@ public class ObtainModule extends AbstractTaskModule
 		taskTargetItems.clear();
 		watchedItemIds.clear();
 		xpDropsForTask.clear();
+		lastHeldRawForTask.clear();
 		previousXp.clear();
 		log.info("ObtainModule stopped");
 	}
@@ -183,6 +192,11 @@ public class ObtainModule extends AbstractTaskModule
 			// Reset XP-drop counter so prior skilling activity doesn't pre-credit
 			// this task. Only XP gained from this point on counts toward it.
 			xpDropsForTask.put(task.getTaskId(), 0);
+			// Park the baseline at MAX_VALUE until the deferred client-thread block
+			// below seeds the real value. Without this guard, an XP drop that fires
+			// before the deferred init would see no entry, default to 0, and credit
+			// any bank items as a "delta" — exactly the bug we're trying to fix.
+			lastHeldRawForTask.put(task.getTaskId(), Integer.MAX_VALUE);
 			log.info("  Total items being watched for this task: {}", targetItems.size());
 			log.info("  All watched item IDs across all tasks: {}", watchedItemIds);
 			log.info("  Skill for XP gating: {}", skillForCompletionType(task.getCompletionType()));
@@ -190,8 +204,15 @@ public class ObtainModule extends AbstractTaskModule
 
 			// Run an initial progress check on the client thread. checkTaskProgress
 			// reads inv+bank+equip directly, so anything the player already holds
-			// (e.g. cowhide stockpiled in the bank) counts immediately.
-			clientThread.invokeLater(() -> checkTaskProgress(task));
+			// (e.g. cowhide stockpiled in the bank) counts immediately. Same
+			// thread-affinity reason for seeding the "held at last credit"
+			// baseline — getItemCount() asserts client thread.
+			final Map<Integer, Integer> targetItemsRef = targetItems;
+			clientThread.invokeLater(() ->
+			{
+				lastHeldRawForTask.put(task.getTaskId(), computeRawHeldCount(targetItemsRef));
+				checkTaskProgress(task);
+			});
 		}
 		catch (Exception e)
 		{
@@ -214,6 +235,7 @@ public class ObtainModule extends AbstractTaskModule
 		taskTargetItems.clear();
 		watchedItemIds.clear();
 		xpDropsForTask.clear();
+		lastHeldRawForTask.clear();
 	}
 
 	@Override
@@ -435,19 +457,42 @@ public class ObtainModule extends AbstractTaskModule
 			return;
 		}
 
-		// Increment the XP-drop counter for every active task whose relevant
-		// skill matches this XP gain, then re-check those tasks (a previously
-		// item-met-but-XP-blocked task may now unlock).
+		// Credit the XP drop to a task ONLY when its specific watched items just
+		// grew. A single Fletching XP drop should reward the longbow task that
+		// the player just fletched — not every other Fletching task whose items
+		// happen to be sitting in their bank. The "held raw" snapshot is the
+		// inv+bank+equip total across this task's items; if it's higher than
+		// the snapshot from the last credit, the player produced a new one.
 		boolean anyMatched = false;
 		for (NuzlockeTask task : activeTasks)
 		{
 			Skill taskSkill = skillForCompletionType(task.getCompletionType());
-			if (taskSkill == skill)
+			if (taskSkill != skill)
 			{
-				int newCount = xpDropsForTask.merge(task.getTaskId(), 1, Integer::sum);
-				log.debug("ObtainModule: XP drop for {} on task '{}' (count now {})",
-					skill.getName(), task.getName(), newCount);
+				continue;
+			}
+
+			Map<Integer, Integer> targetItems = taskTargetItems.get(task.getTaskId());
+			if (targetItems == null)
+			{
+				continue;
+			}
+			int currentHeldRaw = computeRawHeldCount(targetItems);
+			int lastHeldRaw = lastHeldRawForTask.getOrDefault(task.getTaskId(), 0);
+
+			if (currentHeldRaw > lastHeldRaw)
+			{
+				int delta = currentHeldRaw - lastHeldRaw;
+				int newCount = xpDropsForTask.merge(task.getTaskId(), delta, Integer::sum);
+				lastHeldRawForTask.put(task.getTaskId(), currentHeldRaw);
+				log.debug("ObtainModule: XP drop credited to '{}' (held {} > prev {}, drops now {})",
+					task.getName(), currentHeldRaw, lastHeldRaw, newCount);
 				anyMatched = true;
+			}
+			else
+			{
+				log.debug("ObtainModule: {} XP drop NOT credited to '{}' — held {} unchanged from {}",
+					skill.getName(), task.getName(), currentHeldRaw, lastHeldRaw);
 			}
 		}
 		if (anyMatched)
@@ -457,6 +502,23 @@ public class ObtainModule extends AbstractTaskModule
 				checkTaskProgress(task);
 			}
 		}
+	}
+
+	/**
+	 * Sum the inv+bank+equip count of every watched item for a task, uncapped.
+	 * Used as the high-water mark for "did the player produce a new item for
+	 * THIS task" — uncapped so a player who already holds the required quantity
+	 * still observes a delta when they produce one more (otherwise the cap
+	 * would freeze the baseline and starve the XP-drop credit forever).
+	 */
+	private int computeRawHeldCount(Map<Integer, Integer> targetItems)
+	{
+		int total = 0;
+		for (Integer itemId : targetItems.keySet())
+		{
+			total += getItemCount(itemId);
+		}
+		return total;
 	}
 
 	@Subscribe

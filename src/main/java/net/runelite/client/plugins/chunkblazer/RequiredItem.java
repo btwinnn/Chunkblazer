@@ -23,20 +23,40 @@ public class RequiredItem
 	@SerializedName("quantity_range")
 	private List<Integer> quantityRange;
 
+	// Cached random roll for this session. See TargetNpc#rolledQuantity for the
+	// full rationale — short version: every getRequiredQuantity() call would
+	// otherwise generate a fresh Math.random() result, causing the panel and
+	// the chatbox to display different totals for the same task.
+	private transient Integer rolledQuantity;
+
 	public int getRequiredQuantity()
 	{
 		if (quantity != null)
 		{
 			return quantity;
 		}
+		if (rolledQuantity != null)
+		{
+			return rolledQuantity;
+		}
 		if (quantityRange != null && quantityRange.size() >= 2)
 		{
 			// Return a random value in range for assignment
 			int min = quantityRange.get(0);
 			int max = quantityRange.get(1);
-			return min + (int) (Math.random() * (max - min + 1));
+			rolledQuantity = min + (int) (Math.random() * (max - min + 1));
+			return rolledQuantity;
 		}
 		return 1;
+	}
+
+	/**
+	 * Pin the rolled quantity to a specific value. Used to restore a persisted
+	 * target across sessions so the in-memory roll matches what was saved.
+	 */
+	public void setRolledQuantity(int qty)
+	{
+		this.rolledQuantity = qty;
 	}
 
 	/**

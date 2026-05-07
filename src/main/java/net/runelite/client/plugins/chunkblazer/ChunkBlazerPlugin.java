@@ -1105,10 +1105,28 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			// Use saved target quantity to prevent re-rolling
 			targetQty = savedTargetQty;
+			// Pin the persisted value into the per-instance roll cache so any
+			// subsequent caller (e.g. ObtainModule.addActiveTask) reading
+			// getRequiredQuantity() sees the same number we just restored.
+			// Otherwise modules re-roll, the panel says (1/37) and the chatbox
+			// says (1/18) for the same task. For multi-item tasks the saved
+			// value is the SUM, which we can't split across items, so we only
+			// pin the first item (matches initializeTask's first-item roll on
+			// the fresh path below).
+			if (task.getTargetNpc() != null)
+			{
+				task.getTargetNpc().setRolledQuantity(savedTargetQty);
+			}
+			else if (task.getRequiredItems() != null && !task.getRequiredItems().isEmpty())
+			{
+				task.getRequiredItems().get(0).setRolledQuantity(savedTargetQty);
+			}
 		}
 		else
 		{
-			// First time - roll the target quantity
+			// First time - roll the target quantity. The roll caches itself on
+			// the TargetNpc / RequiredItem so module code that calls
+			// getRequiredQuantity() later in this session gets the same value.
 			targetQty = 1;
 			if (task.getTargetNpc() != null)
 			{
@@ -1116,7 +1134,15 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 			else if (task.getRequiredItems() != null && !task.getRequiredItems().isEmpty())
 			{
-				targetQty = task.getRequiredItems().get(0).getRequiredQuantity();
+				// Sum across all required items so a multi-item task (e.g. the
+				// Forestry Set, 4 items × qty 1) shows 1/4 in the panel — same
+				// total the modules use when summing per-item required.
+				int sum = 0;
+				for (RequiredItem item : task.getRequiredItems())
+				{
+					sum += item.getRequiredQuantity();
+				}
+				targetQty = sum > 0 ? sum : 1;
 			}
 			// Save the rolled target quantity
 			saveTaskProgress(task.getTaskId(), savedProgress, targetQty);
@@ -2042,6 +2068,22 @@ public class ChunkBlazerPlugin extends Plugin
 						// Skip invalid entries
 					}
 				}
+			}
+		}
+
+		// Guard: if the caller is trying to write target=0 but we already have a
+		// real target persisted, keep the old one. Hits the case where a progress
+		// event fires with a task whose in-memory targetQuantity hasn't been set
+		// yet (e.g. findTaskById returns the singleton before initializeTask
+		// reaches it). Otherwise we corrupt the saved target and the next
+		// loadActiveTasks re-rolls a fresh random number — Mike's "Y changes
+		// after a chunk unlock" symptom.
+		if (targetQty <= 0 && progressMap.containsKey(taskId))
+		{
+			int existingTarget = progressMap.get(taskId)[1];
+			if (existingTarget > 0)
+			{
+				targetQty = existingTarget;
 			}
 		}
 
