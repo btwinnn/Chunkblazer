@@ -71,20 +71,17 @@ public class ObtainModule extends AbstractTaskModule
 	// Use thread-safe set to avoid ConcurrentModificationException
 	private final Set<Integer> watchedItemIds = ConcurrentHashMap.newKeySet();
 
-	// Count of XP drops in the task's relevant skill, observed since the task
-	// was assigned. Used to gate progress for skilling tasks: even if the player
-	// holds the required items, progress only credits up to the XP-drop count
-	// so traded/looted items don't count without actual skilling activity.
-	// OBTAIN tasks (no associated skill) skip this gate.
-	private final Map<String, Integer> xpDropsForTask = new ConcurrentHashMap<>();
-
-	// Raw (uncapped) inventory+bank+equipment count of all watched items at the
-	// last time we credited an XP drop to this task — i.e. the high-water mark
-	// against which "did the player just produce a NEW item for THIS task?" is
-	// judged. Without this, one Fletching XP drop credits every Fletching task
-	// in flight, which lets a single longbow-fletch satisfy a bank-stored
-	// shortbow task. See log line 11404-11405 in session_2026-05-07_10-52-10.
-	private final Map<String, Integer> lastHeldRawForTask = new ConcurrentHashMap<>();
+	// Per-task per-item snapshot of the current INVENTORY-only count of each
+	// watched item. Used by skilling tasks: when a matching-skill XP drop fires
+	// and a watched item count in inventory has increased since the snapshot,
+	// the +delta is credited directly to task progress. The snapshot then moves
+	// to current. Inventory changes that DON'T coincide with a matching XP drop
+	// (banking, dropping, GE buys, ground pickups) just slide the snapshot to
+	// current — no progress credit. This is the "you mined an ore = +1" model:
+	// the only way to get an XP drop in Mining is to actually mine.
+	// OBTAIN tasks (no associated skill) ignore this map and use the
+	// inv+bank+equip held count via checkTaskProgress instead.
+	private final Map<String, Map<Integer, Integer>> inventoryHeldSnapshot = new ConcurrentHashMap<>();
 
 	// Last observed XP per skill, used to detect XP gains in onStatChanged.
 	// Seeded from initial StatChanged events; null for a skill we haven't seen yet.
@@ -131,8 +128,7 @@ public class ObtainModule extends AbstractTaskModule
 		eventBus.unregister(this);
 		taskTargetItems.clear();
 		watchedItemIds.clear();
-		xpDropsForTask.clear();
-		lastHeldRawForTask.clear();
+		inventoryHeldSnapshot.clear();
 		previousXp.clear();
 		log.info("ObtainModule stopped");
 	}
@@ -189,36 +185,32 @@ public class ObtainModule extends AbstractTaskModule
 			}
 
 			taskTargetItems.put(task.getTaskId(), targetItems);
-			// Floor the XP-drop counter at the task's already-saved progress. That
-			// progress was credited under a previously-valid XP gate, so it represents
-			// past legitimate skilling activity — we just need to remember it across
-			// region transitions / logins where this map gets cleared. Without the
-			// floor, the gate resets to 0 and Mike has to mine ~progress-many ores
-			// before progress ticks again, which looks like an "invisible reset".
-			// Anti-cheat invariant is preserved: any bank stock beyond progress still
-			// requires fresh XP drops to credit.
-			int existingProgress = Math.max(0, task.getCurrentProgress());
-			xpDropsForTask.put(task.getTaskId(), existingProgress);
-			// Park the baseline at MAX_VALUE until the deferred client-thread block
-			// below seeds the real value. Without this guard, an XP drop that fires
-			// before the deferred init would see no entry, default to 0, and credit
-			// any bank items as a "delta" — exactly the bug we're trying to fix.
-			lastHeldRawForTask.put(task.getTaskId(), Integer.MAX_VALUE);
+			// Skilling tasks: track inventory-only counts of watched items so we
+			// can detect "you produced one" deltas in onStatChanged. Seeded by
+			// the deferred client-thread block below — getItemCount() / countIn()
+			// require the client thread. Until the seed runs, an empty snapshot
+			// means any XP drop that fires would see "no prior count" and skip
+			// crediting (safe default).
 			log.info("  Total items being watched for this task: {}", targetItems.size());
 			log.info("  All watched item IDs across all tasks: {}", watchedItemIds);
 			log.info("  Skill for XP gating: {}", skillForCompletionType(task.getCompletionType()));
 			log.info("=== END ADDING TASK ===");
 
-			// Run an initial progress check on the client thread. checkTaskProgress
-			// reads inv+bank+equip directly, so anything the player already holds
-			// (e.g. cowhide stockpiled in the bank) counts immediately. Same
-			// thread-affinity reason for seeding the "held at last credit"
-			// baseline — getItemCount() asserts client thread.
+			// Run initial setup on the client thread. countIn() asserts the client
+			// thread. Seed the inventory-only snapshot so future XP drops compare
+			// against today's starting state — a watched item already in inventory
+			// at task-load time is NOT credited (no XP drop produced it now).
+			// For OBTAIN (no-skill) tasks, also run checkTaskProgress so anything
+			// the player already holds in inv+bank+equip (e.g. a forestry kit
+			// stockpiled in the bank) counts immediately.
 			final Map<Integer, Integer> targetItemsRef = targetItems;
 			clientThread.invokeLater(() ->
 			{
-				lastHeldRawForTask.put(task.getTaskId(), computeRawHeldCount(targetItemsRef));
-				checkTaskProgress(task);
+				inventoryHeldSnapshot.put(task.getTaskId(), snapshotInventoryCounts(targetItemsRef));
+				if (skillForCompletionType(task.getCompletionType()) == null)
+				{
+					checkTaskProgress(task);
+				}
 			});
 		}
 		catch (Exception e)
@@ -241,8 +233,7 @@ public class ObtainModule extends AbstractTaskModule
 		super.onTaskCleared();
 		taskTargetItems.clear();
 		watchedItemIds.clear();
-		xpDropsForTask.clear();
-		lastHeldRawForTask.clear();
+		inventoryHeldSnapshot.clear();
 	}
 
 	@Override
@@ -256,11 +247,25 @@ public class ObtainModule extends AbstractTaskModule
 	}
 
 	/**
-	 * Check progress for a specific task.
+	 * Check progress for an OBTAIN (no-skill) task. Held = inv+bank+equip; the
+	 * player either has the item or not. Skilling tasks are routed through
+	 * onStatChanged instead — see creditSkillingDelta — so this method early-exits
+	 * for them.
 	 */
 	private void checkTaskProgress(NuzlockeTask task)
 	{
 		if (task == null)
+		{
+			return;
+		}
+
+		// Skilling tasks credit only when an item appears in inventory in the
+		// same tick as a matching-skill XP drop (see onStatChanged). Held-based
+		// progress is not used — bank stockpiles, GE buys, ground pickups, etc.
+		// don't count for "Mine 5 mithril ore". Bail here; their state is owned
+		// by the inventoryHeldSnapshot path.
+		Skill taskSkill = skillForCompletionType(task.getCompletionType());
+		if (taskSkill != null)
 		{
 			return;
 		}
@@ -273,16 +278,6 @@ public class ObtainModule extends AbstractTaskModule
 
 		int totalRequired = 0;
 		int totalObtained = 0;
-
-		// XP-drop gate: for skilling tasks (MINING, COOKING, SMITHING, ...),
-		// progress is also capped by the count of XP drops in the relevant
-		// skill since the task was assigned. This stops a player satisfying
-		// e.g. "Smelt 5 Gold Bars" by buying bars off the GE — they need to
-		// have produced the XP drops too. OBTAIN tasks have null skill and
-		// skip this gate entirely.
-		Skill taskSkill = skillForCompletionType(task.getCompletionType());
-		int xpGate = (taskSkill == null) ? Integer.MAX_VALUE
-			: xpDropsForTask.getOrDefault(task.getTaskId(), 0);
 
 		// Build details about each item for logging
 		StringBuilder itemDetails = new StringBuilder();
@@ -308,15 +303,6 @@ public class ObtainModule extends AbstractTaskModule
 			itemDetails.append(getItemName(itemId)).append(" ").append(held).append("/").append(required);
 
 			log.debug("ObtainModule: Item {} - held {}/{} (inv+bank+equip)", getItemName(itemId), held, required);
-		}
-
-		// Apply the XP-drop cap across the task as a whole (not per-item; some
-		// tasks list multiple item IDs that share a single produced-action).
-		if (taskSkill != null)
-		{
-			totalObtained = Math.min(totalObtained, xpGate);
-			log.debug("ObtainModule: Task '{}' XP-gated to {} (skill {} drops: {})",
-				task.getName(), totalObtained, taskSkill.getName(), xpGate);
 		}
 
 		// Floor progress at the previously-saved value so we never regress across sessions
@@ -356,7 +342,7 @@ public class ObtainModule extends AbstractTaskModule
 
 			// Clean up task tracking
 			taskTargetItems.remove(task.getTaskId());
-			xpDropsForTask.remove(task.getTaskId());
+			inventoryHeldSnapshot.remove(task.getTaskId());
 			activeTasks.remove(task);
 			rebuildWatchedItems();
 		}
@@ -464,68 +450,127 @@ public class ObtainModule extends AbstractTaskModule
 			return;
 		}
 
-		// Credit the XP drop to a task ONLY when its specific watched items just
-		// grew. A single Fletching XP drop should reward the longbow task that
-		// the player just fletched — not every other Fletching task whose items
-		// happen to be sitting in their bank. The "held raw" snapshot is the
-		// inv+bank+equip total across this task's items; if it's higher than
-		// the snapshot from the last credit, the player produced a new one.
-		boolean anyMatched = false;
-		for (NuzlockeTask task : activeTasks)
+		// For every active task whose skill matches this XP drop, look at each
+		// watched item: if its INVENTORY count went up since the last snapshot,
+		// the player just produced one — credit +delta to task progress. The
+		// snapshot then moves to current. Inventory items already in the bank
+		// or equipment, or that arrived without a matching XP drop (banking,
+		// GE buys, pickups), don't count. This is the "+1 progress when an
+		// ore lands in your inventory at the same time a Mining XP drop fires"
+		// model — the only way an XP drop in skill X reaches you is by doing
+		// skill X.
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			Skill taskSkill = skillForCompletionType(task.getCompletionType());
 			if (taskSkill != skill)
 			{
 				continue;
 			}
-
-			Map<Integer, Integer> targetItems = taskTargetItems.get(task.getTaskId());
-			if (targetItems == null)
-			{
-				continue;
-			}
-			int currentHeldRaw = computeRawHeldCount(targetItems);
-			int lastHeldRaw = lastHeldRawForTask.getOrDefault(task.getTaskId(), 0);
-
-			if (currentHeldRaw > lastHeldRaw)
-			{
-				int delta = currentHeldRaw - lastHeldRaw;
-				int newCount = xpDropsForTask.merge(task.getTaskId(), delta, Integer::sum);
-				lastHeldRawForTask.put(task.getTaskId(), currentHeldRaw);
-				log.debug("ObtainModule: XP drop credited to '{}' (held {} > prev {}, drops now {})",
-					task.getName(), currentHeldRaw, lastHeldRaw, newCount);
-				anyMatched = true;
-			}
-			else
-			{
-				log.debug("ObtainModule: {} XP drop NOT credited to '{}' — held {} unchanged from {}",
-					skill.getName(), task.getName(), currentHeldRaw, lastHeldRaw);
-			}
-		}
-		if (anyMatched)
-		{
-			for (NuzlockeTask task : new HashSet<>(activeTasks))
-			{
-				checkTaskProgress(task);
-			}
+			creditSkillingDelta(task, skill);
 		}
 	}
 
 	/**
-	 * Sum the inv+bank+equip count of every watched item for a task, uncapped.
-	 * Used as the high-water mark for "did the player produce a new item for
-	 * THIS task" — uncapped so a player who already holds the required quantity
-	 * still observes a delta when they produce one more (otherwise the cap
-	 * would freeze the baseline and starve the XP-drop credit forever).
+	 * Compute per-item inventory delta vs the stored snapshot for this task,
+	 * credit any positive delta to the task's progress, fire chat + completion,
+	 * and roll the snapshot forward.
 	 */
-	private int computeRawHeldCount(Map<Integer, Integer> targetItems)
+	private void creditSkillingDelta(NuzlockeTask task, Skill skill)
 	{
-		int total = 0;
+		Map<Integer, Integer> targetItems = taskTargetItems.get(task.getTaskId());
+		if (targetItems == null || targetItems.isEmpty())
+		{
+			return;
+		}
+		Map<Integer, Integer> snapshot = inventoryHeldSnapshot.get(task.getTaskId());
+		if (snapshot == null)
+		{
+			// Deferred init in addActiveTask hasn't run yet — skip this drop
+			// rather than risk crediting bank-stocked items as a "delta from 0".
+			log.debug("ObtainModule: {} XP drop for '{}' arrived before snapshot seed — deferring",
+				skill.getName(), task.getName());
+			return;
+		}
+
+		int totalDelta = 0;
+		int totalRequired = 0;
+		StringBuilder details = new StringBuilder();
+		Map<Integer, Integer> nextSnapshot = new HashMap<>();
+		for (Map.Entry<Integer, Integer> entry : targetItems.entrySet())
+		{
+			int itemId = entry.getKey();
+			int required = entry.getValue();
+			totalRequired += required;
+			int currentInv = countIn(InventoryID.INVENTORY, itemId);
+			int prevInv = snapshot.getOrDefault(itemId, 0);
+			nextSnapshot.put(itemId, currentInv);
+			if (currentInv > prevInv)
+			{
+				int delta = currentInv - prevInv;
+				totalDelta += delta;
+				if (details.length() > 0)
+				{
+					details.append(", ");
+				}
+				details.append("+").append(delta).append(" ").append(getItemName(itemId));
+			}
+		}
+		// Always slide the snapshot forward, even on no delta — keeps the gate
+		// honest if inventory dropped between drops (e.g. banked ores).
+		inventoryHeldSnapshot.put(task.getTaskId(), nextSnapshot);
+
+		if (totalDelta == 0)
+		{
+			log.debug("ObtainModule: {} XP drop for '{}' had no inventory delta — not credited",
+				skill.getName(), task.getName());
+			return;
+		}
+
+		int previousProgress = task.getCurrentProgress();
+		int newProgress = Math.min(totalRequired, previousProgress + totalDelta);
+		if (newProgress <= previousProgress)
+		{
+			return;
+		}
+		task.setCurrentProgress(newProgress);
+		log.debug("ObtainModule: '{}' credited {} (now {}/{})",
+			task.getName(), details, newProgress, totalRequired);
+		sendTaskProgress(task, details.toString(), newProgress, totalRequired);
+		if (completionCallback != null)
+		{
+			completionCallback.onProgressUpdated(task, newProgress);
+		}
+
+		if (newProgress >= totalRequired && !task.isCompleted())
+		{
+			log.info("ObtainModule: Task '{}' COMPLETED! ({}/{})",
+				task.getName(), newProgress, totalRequired);
+			task.setCompleted(true);
+			sendTaskSuccess(task, "Task complete!");
+			if (completionCallback != null)
+			{
+				completionCallback.onTaskCompleted(task, newProgress);
+			}
+			taskTargetItems.remove(task.getTaskId());
+			inventoryHeldSnapshot.remove(task.getTaskId());
+			activeTasks.remove(task);
+			rebuildWatchedItems();
+		}
+	}
+
+	/**
+	 * Snapshot the current INVENTORY-only count of every watched item for a
+	 * task. Used as the baseline against which onStatChanged credits a delta.
+	 * Must run on the client thread — countIn() asserts it.
+	 */
+	private Map<Integer, Integer> snapshotInventoryCounts(Map<Integer, Integer> targetItems)
+	{
+		Map<Integer, Integer> snap = new HashMap<>();
 		for (Integer itemId : targetItems.keySet())
 		{
-			total += getItemCount(itemId);
+			snap.put(itemId, countIn(InventoryID.INVENTORY, itemId));
 		}
-		return total;
+		return snap;
 	}
 
 	@Subscribe
@@ -574,16 +619,43 @@ public class ObtainModule extends AbstractTaskModule
 			return;
 		}
 
-		// Container progress is computed directly from current inv+bank+equip
-		// counts inside checkTaskProgress. Math.max with the previously-saved
-		// progress prevents regression when items are consumed, and dropped
-		// items aren't in any container so the drop-and-pickup cheat can't
-		// inflate the count.
-		log.debug(">>> ObtainModule: container {} changed - rechecking progress for {} tasks",
+		log.debug(">>> ObtainModule: container {} changed - rechecking for {} tasks",
 			containerId, activeTasks.size());
+
+		// OBTAIN (no-skill) tasks — re-derive progress from inv+bank+equip.
+		// Skilling tasks early-exit inside checkTaskProgress, so this loop only
+		// does work for the OBTAIN ones.
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			checkTaskProgress(task);
+		}
+
+		// Skilling tasks: slide the per-item inventory snapshot to current. This
+		// catches every inventory change that ISN'T a skilling action — smelting,
+		// banking, dropping, picking up ground loot, GE buys. None of those count
+		// toward task progress, but they DO move the baseline so the next genuine
+		// XP drop sees the right "delta from now". Order in same tick:
+		// onStatChanged (which credits any production delta) fires BEFORE this
+		// handler — verified in session_2026-05-07_14-28-09 (line 5952 credit
+		// before line 6042 container change) — so legitimate mining is credited
+		// against the pre-skill snapshot, then the snapshot is rolled forward
+		// here. No double-counting.
+		if (containerId == InventoryID.INVENTORY.getId())
+		{
+			for (NuzlockeTask task : new HashSet<>(activeTasks))
+			{
+				Skill taskSkill = skillForCompletionType(task.getCompletionType());
+				if (taskSkill == null)
+				{
+					continue;
+				}
+				Map<Integer, Integer> targetItems = taskTargetItems.get(task.getTaskId());
+				if (targetItems == null)
+				{
+					continue;
+				}
+				inventoryHeldSnapshot.put(task.getTaskId(), snapshotInventoryCounts(targetItems));
+			}
 		}
 	}
 
