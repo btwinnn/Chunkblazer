@@ -189,9 +189,16 @@ public class ObtainModule extends AbstractTaskModule
 			}
 
 			taskTargetItems.put(task.getTaskId(), targetItems);
-			// Reset XP-drop counter so prior skilling activity doesn't pre-credit
-			// this task. Only XP gained from this point on counts toward it.
-			xpDropsForTask.put(task.getTaskId(), 0);
+			// Floor the XP-drop counter at the task's already-saved progress. That
+			// progress was credited under a previously-valid XP gate, so it represents
+			// past legitimate skilling activity — we just need to remember it across
+			// region transitions / logins where this map gets cleared. Without the
+			// floor, the gate resets to 0 and Mike has to mine ~progress-many ores
+			// before progress ticks again, which looks like an "invisible reset".
+			// Anti-cheat invariant is preserved: any bank stock beyond progress still
+			// requires fresh XP drops to credit.
+			int existingProgress = Math.max(0, task.getCurrentProgress());
+			xpDropsForTask.put(task.getTaskId(), existingProgress);
 			// Park the baseline at MAX_VALUE until the deferred client-thread block
 			// below seeds the real value. Without this guard, an XP drop that fires
 			// before the deferred init would see no entry, default to 0, and credit
