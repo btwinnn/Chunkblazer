@@ -5878,6 +5878,84 @@
                 }                                   
             ],
             "is_completed": false
-        }                                 
+        },
+        {
+            "region_id": [6447],
+            "Friendly_Name": "Civitas illa Fortis Fields",
+            "neighbor_ids": [6448, 6703, 6446, 6191],
+            "tasks": [
+                {
+                    "name": "Use Fairy Ring Code AJP",
+                    "taskID": "fairy_ring_AJP",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {                           
+                    "name": "Cook some Sweetcorn",
+                    "taskID": "cook_sweetcorn",
+                    "category": "Cooking",
+                    "level": 28,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Cooked Sweetcorn",
+                        "item_ids": [5988],
+                        "quantity": [1, 25]
+                        }
+                    ]       
+                },
+                {                           
+                    "name": "Bake some Bread",
+                    "taskID": "cook_bread",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Bread",
+                        "item_ids": [2309],
+                        "quantity": [1, 5]
+                        }
+                    ]       
+                },
+                {
+                    "name": "Cook Nettle Tea",
+                    "taskID": "cook_nettle_tea",
+                    "category": "Cooking",
+                    "level": 20,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Nettle Tea",
+                            "item_ids": [4239]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Sack of Onions(10)",
+                    "taskID": "obtain_sack_onions_10",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Onions#10"],
+                            "item_ids": [5458],
+                            "quantity": [1]
+                        }
+                    ]
+                }                                  
+            ],
+            "is_completed": false
+        }                                  
     ]
 }
