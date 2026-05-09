@@ -740,6 +740,11 @@ public class ChunkBlazerPanel extends PluginPanel
 		yes.setFocusPainted(false);
 		yes.addActionListener(e ->
 		{
+			// Close any open chatbox unlock-prompt for this region first. If we
+			// don't, the prompt sits there waiting for a click, and a stray Yes
+			// would fire unlockRegion a second time. The plugin also has an
+			// idempotency guard inside unlockRegion as a backstop.
+			plugin.closeChatboxPrompt();
 			plugin.unlockRegion(regionId);
 			log.info("Player unlocked region {} ({}) via panel for {} pts", regionId, regionName, cost);
 			// updateRegionUnlockSection will be called by updateRegionDisplay /
