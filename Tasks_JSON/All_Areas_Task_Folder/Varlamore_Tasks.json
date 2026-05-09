@@ -5631,192 +5631,124 @@
             "is_completed": false
         },
         {
-            "region_id": [6190],
-            "Friendly_Name": "Sunset Shores",
-            "neighbor_ids": [6191, 6446, 6189, 5934],
+            "region_id": [6449],
+            "Friendly_Name": "Kualti Headquarters",
+            "neighbor_ids": [6450, 6705, 6448, 6193],
             "tasks": [
                 {
-                    "name": "Catch a Raw Lobster",
-                    "taskID": "catch_raw_lobster",
-                    "category": "Fishing",
+                    "name": "Pickpocket a Varlamore Guard",
+                    "taskID": "pickpocket_varlamore_guard",
+                    "category": "Thieving",
                     "level": 40,
-                    "completion_type": "FISHING",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Raw Lobster",
-                        "item_ids": [377],
-                        "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Cook a Lobster",
-                    "taskID": "cook_lobster",
-                    "category": "Cooking",
-                    "level": 40,
-                    "completion_type": "COOKING",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": "Lobster",
-                            "item_ids": [379]
-                        }
-                    ]
-                },
-                {
-                    "name": "Catch a Raw Tuna",
-                    "taskID": "catch_raw_tuna",
-                    "category": "Fishing",
-                    "level": 35,
-                    "completion_type": "FISHING",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Raw Tuna",
-                        "item_ids": [359],
-                        "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Cook a Tuna",
-                    "taskID": "cook_tuna",
-                    "category": "Cooking",
-                    "level": 30,
-                    "completion_type": "COOKING",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": "Tuna",
-                            "item_ids": [361]
-                        }
-                    ]
-                },
-                {
-                    "name": "Catch a Raw Swordfish",
-                    "taskID": "catch_raw_swordfish",
-                    "category": "Fishing",
-                    "level": 50,
-                    "completion_type": "FISHING",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Raw Swordfish",
-                        "item_ids": [371],
-                        "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Catch a Big Swordfish",
-                    "taskID": "catch_raw_swordfish",
-                    "category": "Fishing",
-                    "level": 50,
-                    "completion_type": "FISHING",
+                    "completion_type": "THIEVING",
                     "base_points": 2,
                     "assignment_weight": 5,
-                    "required_items": [
-                        {
-                        "item": "Raw Swordfish",
-                        "item_ids": [7991],
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
                         "quantity": [1]
-                        }
-                    ]
+                    }
                 },
                 {
-                    "name": "Cook a Swordfish",
-                    "taskID": "cook_swordfish",
-                    "category": "Cooking",
-                    "level": 45,
-                    "completion_type": "COOKING",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": "Swordfish",
-                            "item_ids": [373]
-                        }
-                    ]
-                },
-                {
-                    "name": "Catch a Raw Bass",
-                    "taskID": "catch_raw_bass",
-                    "category": "Fishing",
-                    "level": 46,
-                    "completion_type": "FISHING",
-                    "base_points": 2,
-                    "assignment_weight": 3,
-                    "required_items": [
-                        {
-                        "item": "Raw Bass",
-                        "item_ids": [363],
-                        "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Catch a Raw Cod",
-                    "taskID": "catch_raw_cod",
-                    "category": "Fishing",
-                    "level": 23,
-                    "completion_type": "FISHING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Raw Cod",
-                        "item_ids": [341],
-                        "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Jaguar Cub in 1 Hit",
-                    "taskID": "defeat_jaguar_cub_1_hit",
+                    "name": "Defeat a Varlamore Guard",
+                    "taskID": "defeat_a_varlamore_guard",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 3,
+                    "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Jaguar Cub"],
-                        "npc_ids": [12977],
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Varlamore Guard",
+                    "taskID": "defeat_a_varlamore_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [1]
+                        "time_in_ticks": [15]
                         }
                 },
-                {                           
-                    "name": "Defeat a Jaguar",
-                    "taskID": "defeat_jaguar",
+                {
+                    "name": "Defeat a Thief in Varlamore",
+                    "taskID": "defeat_a_thief_varlamore",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Jaguar"],
-                        "npc_ids": [12976],
+                        "npc": ["Varlamore Thief Level 16"],
+                        "npc_ids": [13291, 13292, 13293, 13294, 13295, 13296],
                         "quantity": [1]
                     }
                 },
-                {                           
-                    "name": "Defeat a Jaguar Cub",
-                    "taskID": "defeat_jaguar_cub",
+                {
+                    "name": "Defeat a Thief in Varlamore in 1 Hit",
+                    "taskID": "defeat_a_thief_varlamore_1_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Jaguar Cub"],
-                        "npc_ids": [12977],
+                        "npc": ["Varlamore Thief Level 16"],
+                        "npc_ids": [13291, 13292, 13293, 13294, 13295, 13296],
+                        "quantity": [1]
+                    },                   
+                    "constraints": {
+                        "time_in_ticks": [15]
+                        }
+                },
+                {
+                    "name": "Pickpocket a Knight of Varlamore",
+                    "taskID": "pickpocket_varlamore_guard",
+                    "category": "Thieving",
+                    "level": 55,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Knight of Varlamore"],
+                        "npc_ids": [13114, 13115, 13116, 13117, 13118, 13119],
                         "quantity": [1]
                     }
+                },
+                {
+                    "name": "Defeat a Knight of Varlamore",
+                    "taskID": "defeat_knight_of_varlamore",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Knight of Varlamore"],
+                        "npc_ids": [13114, 13115, 13116, 13117, 13118, 13119],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Knight of Varlamore",
+                    "taskID": "defeat_knight_of_varlamore_12_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Knight of Varlamore"],
+                        "npc_ids": [13114, 13115, 13116, 13117, 13118, 13119],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [20]
+                        }
                 }                                   
             ],
             "is_completed": false

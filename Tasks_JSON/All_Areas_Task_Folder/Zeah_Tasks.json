@@ -4557,8 +4557,8 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Theif in the Warrens",
-                    "taskID": "defeat_theif_warrens",
+                    "name": "Defeat a Thief in the Warrens",
+                    "taskID": "defeat_Thief_warrens",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -4570,8 +4570,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Theif in the Warrens in 1 Hit",
-                    "taskID": "defeat_theif_warrens_1_hit",
+                    "name": "Defeat a Thief in the Warrens in 1 Hit",
+                    "taskID": "defeat_Thief_warrens_1_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
