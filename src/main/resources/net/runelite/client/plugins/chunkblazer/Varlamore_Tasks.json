@@ -4830,6 +4830,614 @@
                 }                                  
             ],                      
             "is_completed": false
+        },
+        {
+            "region_id": [6192],
+            "Friendly_Name": "Ortus Farm",
+            "neighbor_ids": [6193, 6448, 6191, 5936],
+            "tasks": [
+                {
+                    "name": "Plant some Sweetcorn",
+                    "taskID": "plant_sweetcorn_seed",
+                    "category": "Farming",
+                    "level": 20,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Sweetcorn Seed"],
+                            "item_ids": [5320],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Strawberries",
+                    "taskID": "plant_strawberry_seed",
+                    "category": "Farming",
+                    "level": 31,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Strawberry Seed"],
+                            "item_ids": [5323],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Watermelons",
+                    "taskID": "plant_watermelon_seed",
+                    "category": "Farming",
+                    "level": 47,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Watermelon Seed"],
+                            "item_ids": [5321],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Tomato",
+                    "taskID": "plant_tomato",
+                    "category": "Farming",
+                    "level": 12,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Tomato Seed"],
+                            "item_ids": [5322],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant Snape Grass",
+                    "taskID": "plant_snape_grass",
+                    "category": "Farming",
+                    "level": 61,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Snape Grass Seed"],
+                            "item_ids": [22879],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Harralander Seed",
+                    "taskID": "plant_harralander",
+                    "category": "Farming",
+                    "level": 26,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Harralander Seed"],
+                            "item_ids": [5294],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Ranarr Seed",
+                    "taskID": "plant_ranarr",
+                    "category": "Farming",
+                    "level": 32,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ranarr Seed"],
+                            "item_ids": [5295],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Toadflax Seed",
+                    "taskID": "plant_toadflax",
+                    "category": "Farming",
+                    "level": 38,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Toadflax Seed"],
+                            "item_ids": [5296],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Irit Seed",
+                    "taskID": "plant_irit",
+                    "category": "Farming",
+                    "level": 44,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Irit Seed"],
+                            "item_ids": [5297],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Avantoe Seed",
+                    "taskID": "plant_avantoe",
+                    "category": "Farming",
+                    "level": 50,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Avantoe Seed"],
+                            "item_ids": [5298],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Kwuarm Seed",
+                    "taskID": "plant_kwuarm",
+                    "category": "Farming",
+                    "level": 56,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Kwuarm Seed"],
+                            "item_ids": [5299],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Snapdragon Seed",
+                    "taskID": "plant_snapdragon",
+                    "category": "Farming",
+                    "level": 62,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Snapdragon Seed"],
+                            "item_ids": [5300],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Cadantine Seed",
+                    "taskID": "plant_cadantine",
+                    "category": "Farming",
+                    "level": 67,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cadantine Seed"],
+                            "item_ids": [5301],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Lantadyme Seed",
+                    "taskID": "plant_lantadyme",
+                    "category": "Farming",
+                    "level": 73,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Lantadyme Seed"],
+                            "item_ids": [5302],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Dwarf Weed Seed",
+                    "taskID": "plant_dwarf_weed",
+                    "category": "Farming",
+                    "level": 79,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Dwarf Weed Seed"],
+                            "item_ids": [5303],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Torstol Seed",
+                    "taskID": "plant_torstol",
+                    "category": "Farming",
+                    "level": 85,
+                    "completion_type": "FARMING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Torstol Seed"],
+                            "item_ids": [5304],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant some Nasturtiums",
+                    "taskID": "plant_marigold",
+                    "category": "Farming",
+                    "level": 24,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Nasturtium Seed"],
+                            "item_ids": [5098],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Woad Seed",
+                    "taskID": "plant_woad_seed",
+                    "category": "Farming",
+                    "level": 25,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Woad Seed"],
+                            "item_ids": [5099],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Limpwurt Seed",
+                    "taskID": "plant_limpwurt_seed",
+                    "category": "Farming",
+                    "level": 26,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Limpwurt Seed"],
+                            "item_ids": [5100],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a White Lily Seed",
+                    "taskID": "plant_white_lily_seed",
+                    "category": "Farming",
+                    "level": 58,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["White Lily Seed"],
+                            "item_ids": [22887],
+                            "quantity": [1]
+                        }
+                    ]
+                    
+                },
+                {                    
+                    "name": "Pickpocket a Master Farmer",
+                    "taskID": "pickpocket_master_farmer",
+                    "category": "Thieving",
+                    "level": 38,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                    "npc": "Master Farmer",
+                    "npc_ids": [5730, 14757, 5731, 11940, 11941, 13240, 13241, 13242, 13243, 13236, 13237, 13238, 13239, 14756, 14758, 14755]                    
+                    }
+                },
+                {
+                    "name": "Defeat a Buffalo",
+                    "taskID": "defeat_buffalo",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Buffalo"],
+                        "npc_ids": [13004, 13005],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat a Buffalo in 1 Hit",
+                    "taskID": "defeat_buffalo_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Buffalo"],
+                        "npc_ids": [13004, 13005],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Catch a Sunlight Moth in a Butterfly Jar",
+                    "taskID": "catch_sunlight_moth_in_butterfly_jar",
+                    "category": "Hunter",
+                    "level": 65,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                            {
+                            "item": "Sunlight Moth",
+                            "item_ids": [28890]
+                            }                   
+                        ]             
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [6191],
+            "Friendly_Name": "Hunter Guild",
+            "neighbor_ids": [6192, 6447, 6190, 5935],
+            "tasks": [
+                {
+                    "name": "Catch a Moonlight Moth in a Butterfly Jar",
+                    "taskID": "catch_moonlight_moth_in_butterfly_jar",
+                    "category": "Hunter",
+                    "level": 75,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                            {
+                            "item": "Moonlight Moth",
+                            "item_ids": [28893]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Catch a Moonlight Antelope",
+                    "taskID": "catch_moonlight_antelope",
+                    "category": "Hunter",
+                    "level": 91,
+                    "completion_type": "HUNTER",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                            "item": "Raw moonlight antelope",
+                            "item_ids": [29113]
+                            },
+                            {
+                            "item": "Big Bones",
+                            "item_ids": [532]
+                            },
+                            {
+                            "item": "Moonlight antelope antler",
+                            "item_ids": [29171]
+                            },
+                            {
+                            "item": "Moonlight antelope fur",
+                            "item_ids": [29174]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Obtain a Moonlight Antelope Hoof Shard",
+                    "taskID": "obtain_moonlight_antelope_hoof_shard",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Antelope hoof shard (moonlight)"],
+                            "item_ids": [29241],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Moonlight Moth Wing",
+                    "taskID": "obtain_moonlight_moth_wing",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Moonlight moth wing"],
+                            "item_ids": [29240],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Basic Quetzal Whistle",
+                    "taskID": "obtain_basic_quetzal_whistle",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Basic Quetzal Whistle"],
+                            "item_ids": [29271],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Tattered Request Note",
+                    "taskID": "obtain_tattered_request_note",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Tattered Request Note"],
+                            "item_ids": [29317],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Enhanced Quetzal Whistle",
+                    "taskID": "obtain_enhanced_quetzal_whistle",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Enhanced Quetzal Whistle"],
+                            "item_ids": [29273],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Perfected Quetzal Whistle",
+                    "taskID": "obtain_perfected_quetzal_whistle",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Perfected Quetzal Whistle"],
+                            "item_ids": [29275],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Guild History Excerpt",
+                    "taskID": "obtain_guild_history_excerpt",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Guild History Excerpt"],
+                            "item_ids": [29319],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Apatura's Note",
+                    "taskID": "obtain_apatura's_note",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Apatura's Note"],
+                            "item_ids": [29321],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Guild Hunter Set",
+                    "taskID": "obtain_guild_hunter_set",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Guild Hunter Boots"],
+                            "item_ids": [29269],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Guild Hunter Headwear"],
+                            "item_ids": [29263],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Guild Hunter Legs"],
+                            "item_ids": [29267],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Guild Hunter Top"],
+                            "item_ids": [29265],
+                            "quantity": [1]
+                        }
+                    ]
+                }, 
+                {                           
+                    "name": "Cook some Moonlight Antelope",
+                    "taskID": "cook_moonlight_antelope",
+                    "category": "Cooking",
+                    "level": 92,
+                    "completion_type": "COOKING",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Cooked Moonlight Antelope",
+                        "item_ids": [29143],
+                        "quantity": [1, 50]
+                        }
+                    ]       
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "At First Light",
+                    "points": 2
+                }            
+            ],
+            "is_completed": false
         }                                
     ]
 }

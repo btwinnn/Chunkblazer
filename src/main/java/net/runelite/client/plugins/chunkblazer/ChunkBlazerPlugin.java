@@ -80,6 +80,9 @@ public class ChunkBlazerPlugin extends Plugin
 	private ChunkBlazerMinimapOverlay minimapOverlay;
 
 	@Inject
+	private ChunkBlazerSceneOverlay sceneOverlay;
+
+	@Inject
 	private TaskCompletionOverlay taskCompletionOverlay;
 
 	@Inject
@@ -229,6 +232,9 @@ public class ChunkBlazerPlugin extends Plugin
 		// Register minimap overlay for chunk visualization and click-to-unlock
 		overlayManager.add(minimapOverlay);
 
+		// Register scene overlay that draws chunk borders + locked-chunk wash on the gameplay screen
+		overlayManager.add(sceneOverlay);
+
 		// Legacy task completion popup overlay disabled - using animation overlay instead
 		// overlayManager.add(taskCompletionOverlay);
 		// log.info(">>> TaskCompletionOverlay registered with OverlayManager: {}", taskCompletionOverlay != null ? "OK" : "NULL");
@@ -254,6 +260,7 @@ public class ChunkBlazerPlugin extends Plugin
 		clientToolbar.removeNavigation(navButton);
 		overlayManager.remove(worldMapOverlay);
 		overlayManager.remove(minimapOverlay);
+		overlayManager.remove(sceneOverlay);
 		// overlayManager.remove(taskCompletionOverlay); // Legacy overlay disabled
 		overlayManager.remove(taskCompletionAnimationOverlay);
 		taskModuleManager.shutDown();
@@ -439,43 +446,16 @@ public class ChunkBlazerPlugin extends Plugin
 			loadActiveTasks();
 			panel.updatePanel();
 		}
-		else
-		{
-			// Non-free mode: only unlock neighbor regions with defined tasks
-			if (chunk == null)
-			{
-				// Not a defined region, skip
-				return;
-			}
-
-			// Check if it's a neighbor of any unlocked region
-			Set<Integer> neighbors = getNeighborRegionIds();
-			if (!neighbors.contains(regionId))
-			{
-				log.debug("Region {} is not a neighbor of any unlocked region", regionId);
-				return;
-			}
-
-			// Check if player has enough points
-			int cost = getRegionUnlockCost(regionId);
-			int currentPoints = getTotalPoints();
-
-			if (currentPoints < cost)
-			{
-				log.debug("Not enough points to auto-unlock region {}. Need {} but have {}",
-					regionId, cost, currentPoints);
-				return;
-			}
-
-			// Auto-unlock the region (spends points)
-			log.info("Auto-unlocking region {} ({}) for {} points",
-				regionId, chunk.getName(), cost);
-			unlockRegion(regionId);
-
-			// Reload tasks for the newly unlocked region
-			loadActiveTasks();
-			panel.updatePanel();
-		}
+		// Non-free mode: do NOT auto-spend points when the player walks into a
+		// new region. Walking + points + autoUnlockRegions used to silently
+		// drain the wallet — confusing especially for the dev "+10 / +100"
+		// buttons, where freshly-granted points evaporated as soon as the
+		// player took a step. Spending points to unlock now requires explicit
+		// intent through the panel's "Unlock" button, the minimap right-click
+		// menu, or the world-map click. The side-panel section visible while
+		// standing in a locked region surfaces this prompt automatically.
+		// The autoUnlockFree branch above still grants free exploration unlocks
+		// for users who want that mode.
 	}
 
 	/**
@@ -542,19 +522,28 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	public void unlockRegionFree(int regionId)
 	{
+		// Snapshot before mutating so we know whether this is the first-time
+		// unlock (only the first unlock should fire the jingle).
+		boolean wasAlreadyUnlocked = getUnlockedRegionIds().contains(String.valueOf(regionId));
+
 		// Add to unlocked list without deducting points
 		String unlocked = config.unlockedChunks();
 		if (unlocked == null || unlocked.isEmpty())
 		{
 			unlocked = String.valueOf(regionId);
 		}
-		else if (!getUnlockedRegionIds().contains(String.valueOf(regionId)))
+		else if (!wasAlreadyUnlocked)
 		{
 			unlocked = unlocked + "," + regionId;
 		}
 		configManager.setConfiguration("chunkblazer", "unlockedChunks", unlocked);
 
 		log.info("Unlocked region {} for FREE", regionId);
+
+		if (!wasAlreadyUnlocked)
+		{
+			playRegionUnlockJingle(regionId);
+		}
 
 		// Roll tasks for this region if it has a chunk defined
 		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
@@ -2199,6 +2188,17 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public void unlockRegion(int regionId)
 	{
+		// Idempotency guard: if the region is already unlocked, do not deduct
+		// points or re-append the regionId. Without this, two near-simultaneous
+		// unlock paths (e.g. side-panel "Yes" + the still-open chatbox popup)
+		// double-charge the player. Mike reported "spent 2 points to unlock 1
+		// region" — that's this race.
+		if (isRegionUnlocked(regionId))
+		{
+			log.info("unlockRegion({}) — already unlocked, ignoring duplicate request", regionId);
+			return;
+		}
+
 		int cost = getRegionUnlockCost(regionId);
 		int currentPoints = getTotalPoints();
 
@@ -2208,6 +2208,12 @@ public class ChunkBlazerPlugin extends Plugin
 				regionId, cost, currentPoints);
 			return;
 		}
+
+		// Snapshot before mutating so we can tell whether THIS call is the
+		// first-time unlock (and therefore should play the jingle). Always
+		// false here given the guard above, but kept for symmetry with
+		// unlockRegionFree and the jingle-playback path that reads it.
+		boolean wasAlreadyUnlocked = false;
 
 		// Deduct points
 		configManager.setConfiguration("chunkblazer", "totalPoints", currentPoints - cost);
@@ -2236,5 +2242,57 @@ public class ChunkBlazerPlugin extends Plugin
 
 		// Update panel
 		panel.updatePanel();
+
+		if (!wasAlreadyUnlocked)
+		{
+			playRegionUnlockJingle(regionId);
+		}
+	}
+
+	/**
+	 * Play a random region-specific jingle for the chunk's area (Misthalin,
+	 * Asgarnia, Kandarin, etc.) using the same per-area sound pool that drives
+	 * task-completion sounds. Silent if the chunk has no area mapping or the
+	 * config toggle is off. Should only be called on the FIRST unlock of a
+	 * region — callers are responsible for the wasAlreadyUnlocked check.
+	 */
+	private void playRegionUnlockJingle(int regionId)
+	{
+		if (!config.playRegionUnlockSound())
+		{
+			return;
+		}
+		if (soundManager == null)
+		{
+			return;
+		}
+		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+		if (chunk == null)
+		{
+			return;
+		}
+		String area = chunk.getArea();
+		if (area == null || area.isEmpty())
+		{
+			return;
+		}
+		soundManager.playRandomSoundForArea(area);
+		log.info("Playing unlock jingle for region {} ({}, area={})", regionId, chunk.getName(), area);
+	}
+
+	/**
+	 * Dismiss any open chatbox prompt (e.g. the unlock-confirmation popup that
+	 * fires on entering an unlockable region). Called by the side-panel unlock
+	 * button so the chatbox prompt doesn't linger after the player has
+	 * already confirmed the unlock through the panel — and can't be clicked
+	 * a second time, which would otherwise re-fire unlockRegion. Safe no-op if
+	 * nothing is open.
+	 */
+	public void closeChatboxPrompt()
+	{
+		if (chatboxPanelManager != null)
+		{
+			chatboxPanelManager.close();
+		}
 	}
 }

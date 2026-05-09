@@ -244,6 +244,18 @@ public interface ChunkBlazerConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "showSceneChunks",
+		name = "Show Chunk Borders",
+		description = "Draw chunk (region) borders on the game scene. Locked chunks get a translucent grey wash.",
+		section = displaySection,
+		position = 3
+	)
+	default boolean showSceneChunks()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "showTaskCompletionPopup",
 		name = "Show Task Completion Popup",
 		description = "Display a popup notification when you complete a task",
@@ -263,6 +275,18 @@ public interface ChunkBlazerConfig extends Config
 		position = 3
 	)
 	default boolean playTaskCompletionSound()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "playRegionUnlockSound",
+		name = "Play Region Unlock Jingle",
+		description = "Play a region-specific jingle the first time you unlock a chunk",
+		section = displaySection,
+		position = 4
+	)
+	default boolean playRegionUnlockSound()
 	{
 		return true;
 	}
@@ -320,7 +344,7 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "autoUnlockRegions",
 		name = "Auto-Unlock Regions",
-		description = "Automatically unlock regions when you walk into them. Requires 'Free Auto-Unlock' OR enough points for adjacent regions.",
+		description = "Master switch for walk-in unlocks. Combine with 'Free Auto-Unlock' for free exploration mode. Walking never spends points — point-cost unlocks always require an explicit click in the side panel, minimap, or world map.",
 		section = regionSection,
 		position = 0
 	)
