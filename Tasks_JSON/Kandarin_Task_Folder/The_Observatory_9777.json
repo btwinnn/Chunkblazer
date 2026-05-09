@@ -50,7 +50,7 @@
                         {
                             "item": ["Stardust"],
                             "item_ids": [25527],
-                            "quantity": [250, 5000]
+                            "quantity": [1, 25]
                         }
                     ]
                 },
