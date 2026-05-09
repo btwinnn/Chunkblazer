@@ -5629,6 +5629,255 @@
                 }                                   
             ],
             "is_completed": false
-        }                                
+        },
+        {
+            "region_id": [6449],
+            "Friendly_Name": "Kualti Headquarters",
+            "neighbor_ids": [6450, 6705, 6448, 6193],
+            "tasks": [
+                {
+                    "name": "Pickpocket a Varlamore Guard",
+                    "taskID": "pickpocket_varlamore_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Varlamore Guard",
+                    "taskID": "defeat_a_varlamore_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Varlamore Guard",
+                    "taskID": "defeat_a_varlamore_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [15]
+                        }
+                },
+                {
+                    "name": "Defeat a Thief in Varlamore",
+                    "taskID": "defeat_a_thief_varlamore",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Varlamore Thief Level 16"],
+                        "npc_ids": [13291, 13292, 13293, 13294, 13295, 13296],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Thief in Varlamore in 1 Hit",
+                    "taskID": "defeat_a_thief_varlamore_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Varlamore Thief Level 16"],
+                        "npc_ids": [13291, 13292, 13293, 13294, 13295, 13296],
+                        "quantity": [1]
+                    },                   
+                    "constraints": {
+                        "time_in_ticks": [15]
+                        }
+                },
+                {
+                    "name": "Pickpocket a Knight of Varlamore",
+                    "taskID": "pickpocket_varlamore_guard",
+                    "category": "Thieving",
+                    "level": 55,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Knight of Varlamore"],
+                        "npc_ids": [13114, 13115, 13116, 13117, 13118, 13119],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Knight of Varlamore",
+                    "taskID": "defeat_knight_of_varlamore",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Knight of Varlamore"],
+                        "npc_ids": [13114, 13115, 13116, 13117, 13118, 13119],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Knight of Varlamore",
+                    "taskID": "defeat_knight_of_varlamore_12_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Knight of Varlamore"],
+                        "npc_ids": [13114, 13115, 13116, 13117, 13118, 13119],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [20]
+                        }
+                }                                               
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [6448],
+            "Friendly_Name": "West Civitas illa Fortis",
+            "neighbor_ids": [6449, 6704, 6447, 6192],
+            "tasks": [
+                {
+                    "name": "Equip a Pink Skirt",
+                    "taskID": "equip_pink_skirt",
+                    "category": ["Defence"],
+                    "level": [1],
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Pink Skirt"],
+                            "item_ids": [1013]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Blessed Bone Statuette",
+                    "taskID": "obtain_blessed_bone_statuette",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Blessed Bone Statuette"],
+                            "item_ids": [29342, 29338, 29340],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal some Valuables",
+                    "taskID": "steal_valuables",
+                    "category": "Thieving",
+                    "level": 50,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Wardrobe (stealing valuables)", "Jewellery case (stealing valuables)", "Chest (stealing valuables)"],
+                            "object_id": [52010, 52011, 52008],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Talk to Oriana",
+                    "taskID": "talk_to_oriana",
+                    "category": "Dialogue",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Oriana"],
+                        "npc_ids": [13416],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Pickpocket a Varlamore Guard",
+                    "taskID": "pickpocket_varlamore_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Varlamore Guard",
+                    "taskID": "defeat_a_varlamore_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Varlamore Guard",
+                    "taskID": "defeat_a_varlamore_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [15]
+                        }
+                },             
+                {
+                    "name": "Churn a Pot of Cream",
+                    "taskID": "churn_cream",
+                    "category": "Cooking",
+                    "level": 21,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Pot of Cream",
+                        "item_ids": [2130],
+                        "quantity": [1]
+                        }
+                    ]
+                }                                   
+            ],
+            "is_completed": false
+        }                                 
     ]
 }

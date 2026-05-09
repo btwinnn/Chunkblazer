@@ -5878,6 +5878,422 @@
                 }                                   
             ],
             "is_completed": false
-        }                                 
+        },
+        {
+            "region_id": [6447],
+            "Friendly_Name": "Civitas illa Fortis Fields",
+            "neighbor_ids": [6448, 6703, 6446, 6191],
+            "tasks": [
+                {
+                    "name": "Use Fairy Ring Code AJP",
+                    "taskID": "fairy_ring_AJP",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {                           
+                    "name": "Cook some Sweetcorn",
+                    "taskID": "cook_sweetcorn",
+                    "category": "Cooking",
+                    "level": 28,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Cooked Sweetcorn",
+                        "item_ids": [5988],
+                        "quantity": [1, 25]
+                        }
+                    ]       
+                },
+                {                           
+                    "name": "Bake some Bread",
+                    "taskID": "cook_bread",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Bread",
+                        "item_ids": [2309],
+                        "quantity": [1, 5]
+                        }
+                    ]       
+                },
+                {
+                    "name": "Cook Nettle Tea",
+                    "taskID": "cook_nettle_tea",
+                    "category": "Cooking",
+                    "level": 20,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Nettle Tea",
+                            "item_ids": [4239]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Sack of Onions(10)",
+                    "taskID": "obtain_sack_onions_10",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Onions#10"],
+                            "item_ids": [5458],
+                            "quantity": [1]
+                        }
+                    ]
+                }                                  
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [6446],
+            "Friendly_Name": "Civitas illa Fortis Fields",
+            "neighbor_ids": [6447, 6702, 6445, 6190],
+            "tasks": [
+                {
+                    "name": "Catch an Embertailed Jerboa",
+                    "taskID": "catch_jerboa",
+                    "category": "Hunter",
+                    "level": 39,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                            {
+                            "item": ["Jerboa Tail"], 
+                            "item_ids": [29166]
+                            }
+                           
+                        ]             
+                },
+                {
+                    "name": "Obtain a Large Jerboa Tail",
+                    "taskID": "obtain_large_jerboa_tail",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Large Jerboa Tail"],
+                            "item_ids": [29228]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Defeat an Oryx",
+                    "taskID": "defeat_oryx",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Oryx"],
+                        "npc_ids": [13006],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat an Oryx in 1 Hit",
+                    "taskID": "defeat_oryx_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Oryx"],
+                        "npc_ids": [13006],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Chop an Oak Tree",
+                    "taskID": "chop_oak_tree",
+                    "category": "Woodcutting",
+                    "level": 15,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch an Oak Shield",
+                    "taskID": "fletch_oak_shield",
+                    "category": "Fletching",
+                    "level": 27,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Oak Shield"],
+                            "item_ids": [22251],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Mixed Hide Cape",
+                    "taskID": "craft_mixed_hide_cape",
+                    "category": "Crafting",
+                    "level": 68,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Cape"],
+                            "item_ids": [29289],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mixed Hide Cape",
+                    "taskID": "equip_mixed_hide_cape",
+                    "category": ["Ranged", "Defence"],
+                    "level": [60, 50],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Cape"],
+                            "item_ids": [29289]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft Mixed Hide Legs",
+                    "taskID": "craft_mixed_hide_legs",
+                    "category": "Crafting",
+                    "level": 71,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Legs"],
+                            "item_ids": [29283],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Mixed Hide Legs",
+                    "taskID": "equip_mixed_hide_legs",
+                    "category": ["Ranged", "Defence"],
+                    "level": [60, 50],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Legs"],
+                            "item_ids": [29283]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Pyre Fox",
+                    "taskID": "catch_pyre_fox",
+                    "category": "Hunter",
+                    "level": 57,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                            "item": ["Fox Fur"], 
+                            "item_ids": [29163]
+                            },
+                            {
+                            "item": ["Raw Pyre Fox"], 
+                            "item_ids": [29110]
+                            }
+                           
+                        ]             
+                },
+                {
+                    "name": "Obtain Fox Fluff",
+                    "taskID": "obtain_fox_fluff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Fox Fluff"],
+                            "item_ids": [29233],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat a Jaguar",
+                    "taskID": "defeat_jaguar",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jaguar"],
+                        "npc_ids": [12976],
+                        "quantity": [1]
+                    }
+                },
+                {                           
+                    "name": "Defeat a Jaguar Cub",
+                    "taskID": "defeat_jaguar_cub",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jaguar Cub"],
+                        "npc_ids": [12977],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                }                              
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [6445],
+            "Friendly_Name": "Colossal Wyrm Remains",
+            "neighbor_ids": [6446, 6701, 6444, 6189],
+            "tasks": [
+                {
+                    "name": "Take the Advanced Path at the Colossal Wyrm Agility Course",
+                    "taskID": "agility_level_62_path_colossal_wyrm_course",
+                    "category": "Agility",
+                    "level": 62,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_object": [
+                        {
+                            "object": ["Ladder (Colossal Wyrm Agility Course)#2"],
+                            "object_id": [55191],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Take the Basic Path at the Colossal Wyrm Agility Course",
+                    "taskID": "agility_level_50_path_colossal_wyrm_course",
+                    "category": "Agility",
+                    "level": 50,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_object": [
+                        {
+                            "object": ["Rope (Colossal Wyrm Agility Course)#1"],
+                            "object_id": [55186],
+                            "quantity": [1]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Obtain an Amylase Pack",
+                    "taskID": "obtain_amylase_pack",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Amylase Pack"],
+                            "item_ids": [12641],
+                            "quantity": [1]
+                        }                                 
+                    ]
+                },
+                {
+                    "name": "Obtain a Graceful Crafting Kit",
+                    "taskID": "obtain_graceful_crafting_kit",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Graceful Crafting Kit"],
+                            "item_ids": [30044],
+                            "quantity": [1]
+                        }                                 
+                    ]
+                },
+                {
+                    "name": "Obtain a Calcified Acorn",
+                    "taskID": "obtain_calcified_acorn",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Calcified Acorn"],
+                            "item_ids": [30042],
+                            "quantity": [1]
+                        }                                 
+                    ]
+                },
+                {
+                    "name": "Obtain a Colossal Wyrm Teleport Scroll",
+                    "taskID": "obtain_colossal_wyrm_teleport",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Colossal Wyrm Teleport Scroll"],
+                            "item_ids": [30040],
+                            "quantity": [1]
+                        }                                 
+                    ]
+                }                              
+            ],
+            "is_completed": false
+        }                                  
     ]
 }
