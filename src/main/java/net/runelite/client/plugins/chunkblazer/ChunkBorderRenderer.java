@@ -46,11 +46,13 @@ public class ChunkBorderRenderer
 
 	private static final Color UNLOCKED_BORDER = new Color(80, 220, 120, 200);
 	private static final Color LOCKED_BORDER = new Color(60, 60, 60, 220);
-	// Translucent grey wash for locked chunks. Alpha ~120 ≈ 50% — easy to see
-	// what's underneath but obviously "off".
-	private static final Color LOCKED_FILL = new Color(40, 40, 40, 120);
 	private static final Stroke BORDER_STROKE = new BasicStroke(
 		1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+	// NOTE: the per-tile translucent grey fill for locked chunks was removed
+	// because rendering ~10k fillPolygon() calls per frame in Java2D tanked
+	// framerate (Mike's friend hit ~15 FPS). The right place for that effect
+	// is the GPU pipeline (cf. Region Locker plugin's GPU wrapper). Until
+	// that's wired up, locked chunks are distinguished by border colour only.
 
 	/**
 	 * Identifies which side of a region a polyline traces. The vertex picks
@@ -132,12 +134,8 @@ public class ChunkBorderRenderer
 		Stroke prev = graphics.getStroke();
 		graphics.setStroke(BORDER_STROKE);
 
-		// First pass: fill locked tiles. Per-tile because the grey wash needs
-		// to follow terrain. Tiles outside the scene are auto-skipped via
-		// provider returning null.
-		fillLockedTiles(graphics, sceneSize, baseX, baseY, isRegionUnlocked, provider);
-
-		// Second pass: build chained polylines and stroke each as one Path2D.
+		// Build chained polylines and stroke each as one Path2D. (No per-tile
+		// fill for locked chunks — see note on the constants above.)
 		List<BorderChain> chains = buildBorderChains(
 			sceneSize, baseX, baseY, isRegionUnlocked, provider, REGION_SIZE);
 		for (BorderChain chain : chains)
@@ -159,36 +157,6 @@ public class ChunkBorderRenderer
 		}
 
 		graphics.setStroke(prev);
-	}
-
-	private static void fillLockedTiles(Graphics2D g, int sceneSize, int baseX, int baseY,
-		IntPredicate isRegionUnlocked, TilePolygonProvider provider)
-	{
-		g.setColor(LOCKED_FILL);
-		// Production constant 64 is fine here — fillLockedTiles is only ever
-		// called with the production REGION_SIZE; it's not part of the
-		// testable static API.
-		for (int sx = 0; sx < sceneSize; sx++)
-		{
-			for (int sy = 0; sy < sceneSize; sy++)
-			{
-				int regionId = ((baseX + sx) >> 6) << 8 | ((baseY + sy) >> 6);
-				if (isRegionUnlocked.test(regionId))
-				{
-					continue;
-				}
-				int[] c = provider.cornersAt(sx, sy);
-				if (c == null)
-				{
-					continue;
-				}
-				Polygon p = new Polygon(
-					new int[] { c[0], c[2], c[4], c[6] },
-					new int[] { c[1], c[3], c[5], c[7] },
-					4);
-				g.fillPolygon(p);
-			}
-		}
 	}
 
 	/**
