@@ -84,8 +84,8 @@
                     ]
                 },
                 {
-                    "name": "Picklock the Stone Chest",
-                    "taskID": "steal_seed_stall",
+                    "name": "Picklock the Strangewood Mine Stone Chest",
+                    "taskID": "picklock_stranglewood_mine_stone_chest",
                     "category": "Thieving",
                     "level": 1,
                     "completion_type": "THIEVING",

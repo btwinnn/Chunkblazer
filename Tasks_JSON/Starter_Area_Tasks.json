@@ -1462,23 +1462,7 @@
               "quantity": [1]
             }
           ]
-        },
-        {
-          "name": "Churn a Pot of Cream into Cheese",
-          "taskID": "churn_cream_into_cheese",
-          "category": "Cooking",
-          "level": 48,
-          "completion_type": "COOKING",
-          "base_points": 2,
-          "assignment_weight": 3,
-          "required_items": [
-            {
-              "item": "Cheese",
-              "item_ids": [1985],
-              "quantity": [1]
-            }
-          ]
-        },
+        },      
         {
           "name": "Defeat a Farmer in 12 Seconds",
           "taskID": "defeat_farmer_fast",
