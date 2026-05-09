@@ -46,6 +46,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	private ChunkBlazerPlugin plugin;
 
 	// UI Components
+	private JPanel regionUnlockPanel;
 	private JPanel modeSelectionPanel;
 	private JPanel currentTaskPanel;
 	private JPanel activeTasksContentPanel; // Inner panel for active tasks
@@ -170,6 +171,13 @@ public class ChunkBlazerPanel extends PluginPanel
 		statsPanel = createStatsSection();
 		statsPanel.setAlignmentX(LEFT_ALIGNMENT);
 		mainPanel.add(statsPanel);
+		mainPanel.add(Box.createVerticalStrut(8));
+
+		// Region Unlock Section — visible only when the player is standing in a
+		// locked region. Hidden otherwise so it doesn't waste vertical space.
+		regionUnlockPanel = createRegionUnlockSection();
+		setupSectionPanel(regionUnlockPanel);
+		mainPanel.add(regionUnlockPanel);
 		mainPanel.add(Box.createVerticalStrut(8));
 
 		// Mode Selection Section (hidden when locked)
@@ -589,6 +597,170 @@ public class ChunkBlazerPanel extends PluginPanel
 		statsPanel.add(tasksPanel);
 
 		return statsPanel;
+	}
+
+	/**
+	 * Creates the region-unlock section: a small panel that appears in the side
+	 * panel when the player is standing in a locked region, showing the region
+	 * name, the unlock cost, the player's current points, and a button to spend
+	 * the points. Empty container — populated and shown/hidden by
+	 * {@link #updateRegionUnlockSection()}.
+	 */
+	private JPanel createRegionUnlockSection()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		panel.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(new Color(255, 215, 0)), // gold — matches stats border
+			new EmptyBorder(6, 6, 6, 6)
+		));
+		panel.setVisible(false); // shown by updateRegionUnlockSection() only when relevant
+		return panel;
+	}
+
+	/**
+	 * Refresh the region-unlock section based on the player's current region and
+	 * point total. Hides itself when the player is in an unlocked region (or
+	 * the current region is unknown / undefined). Safe to call from any thread —
+	 * marshals to the EDT.
+	 */
+	public void updateRegionUnlockSection()
+	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(this::updateRegionUnlockSection);
+			return;
+		}
+		if (regionUnlockPanel == null)
+		{
+			return;
+		}
+
+		int regionId = plugin.getCurrentRegionId();
+		// Hide entirely for unknown / undefined regions and any already-unlocked region.
+		// We only want this section to be a "you walked into something locked" prompt.
+		if (regionId <= 0 || plugin.isRegionUnlocked(regionId))
+		{
+			if (regionUnlockPanel.isVisible())
+			{
+				regionUnlockPanel.setVisible(false);
+				regionUnlockPanel.getParent().revalidate();
+				regionUnlockPanel.getParent().repaint();
+			}
+			return;
+		}
+
+		String regionName = plugin.getRegionName(regionId);
+		int cost = plugin.getRegionUnlockCost(regionId);
+		int points = plugin.getTotalPoints();
+		boolean canAfford = points >= cost;
+
+		regionUnlockPanel.removeAll();
+
+		JLabel title = new JLabel("🔒 Locked Region");
+		title.setFont(FontManager.getRunescapeBoldFont());
+		title.setForeground(new Color(255, 215, 0));
+		title.setAlignmentX(LEFT_ALIGNMENT);
+		regionUnlockPanel.add(title);
+		regionUnlockPanel.add(Box.createVerticalStrut(4));
+
+		WrappingTextLabel nameLabel = new WrappingTextLabel(
+			regionName + " (" + regionId + ")",
+			FontManager.getRunescapeSmallFont().deriveFont(Font.BOLD),
+			Color.WHITE,
+			TASK_TEXT_WRAP_WIDTH);
+		regionUnlockPanel.add(nameLabel);
+		regionUnlockPanel.add(Box.createVerticalStrut(4));
+
+		JLabel costLine = new JLabel("Cost: " + cost + " pts | You have: " + points);
+		costLine.setFont(FontManager.getRunescapeSmallFont());
+		costLine.setForeground(canAfford ? new Color(150, 255, 150) : new Color(255, 130, 130));
+		costLine.setAlignmentX(LEFT_ALIGNMENT);
+		regionUnlockPanel.add(costLine);
+		regionUnlockPanel.add(Box.createVerticalStrut(6));
+
+		// Two-state button: shows the cost, then on click swaps to "Confirm? Yes/No".
+		// Inline confirmation avoids a popup dialog and keeps everything in the panel.
+		final int finalRegionId = regionId;
+		final String finalRegionName = regionName;
+		final int finalCost = cost;
+		JPanel buttonRow = new JPanel(new BorderLayout(4, 0));
+		buttonRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		buttonRow.setAlignmentX(LEFT_ALIGNMENT);
+		buttonRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 28));
+
+		if (!canAfford)
+		{
+			JButton disabled = new JButton("Need " + (cost - points) + " more pts");
+			disabled.setEnabled(false);
+			disabled.setFont(FontManager.getRunescapeSmallFont());
+			disabled.setFocusPainted(false);
+			buttonRow.add(disabled, BorderLayout.CENTER);
+		}
+		else
+		{
+			JButton unlockBtn = new JButton("Unlock for " + cost + " pts");
+			unlockBtn.setFont(FontManager.getRunescapeBoldFont());
+			unlockBtn.setBackground(new Color(50, 110, 60));
+			unlockBtn.setForeground(Color.WHITE);
+			unlockBtn.setFocusPainted(false);
+			unlockBtn.addActionListener(e -> showUnlockConfirm(buttonRow, finalRegionId, finalRegionName, finalCost));
+			buttonRow.add(unlockBtn, BorderLayout.CENTER);
+		}
+		regionUnlockPanel.add(buttonRow);
+
+		regionUnlockPanel.setVisible(true);
+		regionUnlockPanel.revalidate();
+		regionUnlockPanel.repaint();
+		regionUnlockPanel.getParent().revalidate();
+		regionUnlockPanel.getParent().repaint();
+	}
+
+	/**
+	 * Replace the unlock button with an inline "Confirm? Yes / No" pair.
+	 * Yes spends the points and unlocks; No reverts to the cost button.
+	 */
+	private void showUnlockConfirm(JPanel buttonRow, int regionId, String regionName, int cost)
+	{
+		buttonRow.removeAll();
+
+		JLabel prompt = new JLabel("Spend " + cost + "?");
+		prompt.setFont(FontManager.getRunescapeSmallFont());
+		prompt.setForeground(Color.WHITE);
+		buttonRow.add(prompt, BorderLayout.WEST);
+
+		JPanel choices = new JPanel(new GridLayout(1, 2, 4, 0));
+		choices.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+
+		JButton yes = new JButton("Yes");
+		yes.setFont(FontManager.getRunescapeBoldFont());
+		yes.setBackground(new Color(50, 110, 60));
+		yes.setForeground(Color.WHITE);
+		yes.setFocusPainted(false);
+		yes.addActionListener(e ->
+		{
+			plugin.unlockRegion(regionId);
+			log.info("Player unlocked region {} ({}) via panel for {} pts", regionId, regionName, cost);
+			// updateRegionUnlockSection will be called by updateRegionDisplay /
+			// updateStats and hide the section now that the region is unlocked.
+			updateRegionUnlockSection();
+			updateStats();
+		});
+
+		JButton no = new JButton("No");
+		no.setFont(FontManager.getRunescapeBoldFont());
+		no.setBackground(new Color(110, 50, 50));
+		no.setForeground(Color.WHITE);
+		no.setFocusPainted(false);
+		no.addActionListener(e -> updateRegionUnlockSection());
+
+		choices.add(yes);
+		choices.add(no);
+		buttonRow.add(choices, BorderLayout.EAST);
+
+		buttonRow.revalidate();
+		buttonRow.repaint();
 	}
 
 	private JPanel createStatBox(String label, String value)
@@ -1731,6 +1903,10 @@ public class ChunkBlazerPanel extends PluginPanel
 		totalPointsLabel.setText(String.valueOf(points));
 		chunksUnlockedLabel.setText(String.valueOf(chunks));
 		tasksCompletedLabel.setText(String.valueOf(tasks));
+
+		// A points change can flip the unlock button between
+		// "Need N more pts" and "Unlock for N pts" — refresh it.
+		updateRegionUnlockSection();
 	}
 
 	public void updateModeDisplay()
@@ -1780,6 +1956,10 @@ public class ChunkBlazerPanel extends PluginPanel
 		{
 			regionLabel.setText("Unknown (0)");
 		}
+
+		// Crossing into a new region is the moment the unlock prompt should
+		// appear (or disappear, if the new region is already unlocked).
+		updateRegionUnlockSection();
 	}
 
 	public void updateTaskDisplay()
