@@ -4,7 +4,7 @@
             "neighbor_ids": [10287, 10542, 10285, 10030],
             "tasks": [
                 {
-                    "name": "Travel to Fairy Ring Code AKS",
+                    "name": "Use Fairy Ring Code AKS",
                     "taskID": "fairy_ring_AKS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

@@ -77,7 +77,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code DIS",
+                    "name": "Use Fairy Ring Code DIS",
                     "taskID": "fairy_ring_CLP",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

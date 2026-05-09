@@ -104,7 +104,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code AKQ",
+                    "name": "Use Fairy Ring Code AKQ",
                     "taskID": "fairy_ring_AKQ",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

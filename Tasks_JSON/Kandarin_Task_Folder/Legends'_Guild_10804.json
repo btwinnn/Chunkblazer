@@ -114,7 +114,7 @@
                     }
                 },
                 {
-                    "name": "Travel to Fairy Ring Code DKR",
+                    "name": "Use Fairy Ring Code DKR",
                     "taskID": "fairy_ring_DKR",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

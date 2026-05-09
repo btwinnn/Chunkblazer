@@ -82,7 +82,7 @@
                     }
                 },
                 {
-                    "name": "Travel to Fairy Ring Code DJP",
+                    "name": "Use Fairy Ring Code DJP",
                     "taskID": "fairy_ring_DJP",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

@@ -1117,7 +1117,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code AIS",
+                    "name": "Use Fairy Ring Code AIS",
                     "taskID": "fairy_ring_AIS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -5629,6 +5629,197 @@
                 }                                   
             ],
             "is_completed": false
-        }                                
+        },
+        {
+            "region_id": [6190],
+            "Friendly_Name": "Sunset Shores",
+            "neighbor_ids": [6191, 6446, 6189, 5934],
+            "tasks": [
+                {
+                    "name": "Catch a Raw Lobster",
+                    "taskID": "catch_raw_lobster",
+                    "category": "Fishing",
+                    "level": 40,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Lobster",
+                        "item_ids": [377],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Lobster",
+                    "taskID": "cook_lobster",
+                    "category": "Cooking",
+                    "level": 40,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Lobster",
+                            "item_ids": [379]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Tuna",
+                    "taskID": "catch_raw_tuna",
+                    "category": "Fishing",
+                    "level": 35,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Tuna",
+                        "item_ids": [359],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Tuna",
+                    "taskID": "cook_tuna",
+                    "category": "Cooking",
+                    "level": 30,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Tuna",
+                            "item_ids": [361]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Swordfish",
+                    "taskID": "catch_raw_swordfish",
+                    "category": "Fishing",
+                    "level": 50,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Swordfish",
+                        "item_ids": [371],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Big Swordfish",
+                    "taskID": "catch_raw_swordfish",
+                    "category": "Fishing",
+                    "level": 50,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Raw Swordfish",
+                        "item_ids": [7991],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Swordfish",
+                    "taskID": "cook_swordfish",
+                    "category": "Cooking",
+                    "level": 45,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Swordfish",
+                            "item_ids": [373]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Bass",
+                    "taskID": "catch_raw_bass",
+                    "category": "Fishing",
+                    "level": 46,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Raw Bass",
+                        "item_ids": [363],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Cod",
+                    "taskID": "catch_raw_cod",
+                    "category": "Fishing",
+                    "level": 23,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Cod",
+                        "item_ids": [341],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Jaguar Cub in 1 Hit",
+                    "taskID": "defeat_jaguar_cub_1_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Jaguar Cub"],
+                        "npc_ids": [12977],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                        }
+                },
+                {                           
+                    "name": "Defeat a Jaguar",
+                    "taskID": "defeat_jaguar",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jaguar"],
+                        "npc_ids": [12976],
+                        "quantity": [1]
+                    }
+                },
+                {                           
+                    "name": "Defeat a Jaguar Cub",
+                    "taskID": "defeat_jaguar_cub",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jaguar Cub"],
+                        "npc_ids": [12977],
+                        "quantity": [1]
+                    }
+                }                                   
+            ],
+            "is_completed": false
+        }                                 
     ]
 }

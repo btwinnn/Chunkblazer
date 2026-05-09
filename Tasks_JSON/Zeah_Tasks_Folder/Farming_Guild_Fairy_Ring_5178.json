@@ -4,7 +4,7 @@
             "neighbor_ids": [5179, 5434, 5177, 4922],
             "tasks": [
                 {
-                    "name": "Travel to Fairy Ring Code CIR",
+                    "name": "Use Fairy Ring Code CIR",
                     "taskID": "fairy_ring_CIR",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

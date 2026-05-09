@@ -707,7 +707,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code AKR",
+                    "name": "Use Fairy Ring Code AKR",
                     "taskID": "fairy_ring_AKR",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -8709,7 +8709,7 @@
             "neighbor_ids": [5179, 5434, 5177, 4922],
             "tasks": [
                 {
-                    "name": "Travel to Fairy Ring Code CIR",
+                    "name": "Use Fairy Ring Code CIR",
                     "taskID": "fairy_ring_CIR",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -9510,7 +9510,7 @@
                     }
                 },
                 {
-                    "name": "Travel to Fairy Ring Code BLS",
+                    "name": "Use Fairy Ring Code BLS",
                     "taskID": "fairy_ring_BLS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

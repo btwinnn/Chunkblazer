@@ -78,7 +78,7 @@
                     }
                 },
                 {
-                    "name": "Travel to Fairy Ring Code CLS",
+                    "name": "Use Fairy Ring Code CLS",
                     "taskID": "fairy_ring_CLS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

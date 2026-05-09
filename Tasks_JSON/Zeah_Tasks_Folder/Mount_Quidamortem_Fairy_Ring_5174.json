@@ -20,7 +20,7 @@
                     }
                 },
                 {
-                    "name": "Travel to Fairy Ring Code BLS",
+                    "name": "Use Fairy Ring Code BLS",
                     "taskID": "fairy_ring_BLS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

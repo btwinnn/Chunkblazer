@@ -187,7 +187,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code CIQ",
+                    "name": "Use Fairy Ring Code CIQ",
                     "taskID": "fairy_ring_CIQ",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

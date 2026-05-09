@@ -1166,7 +1166,7 @@
                     }
                 },
                 {
-                    "name": "Travel to Fairy Ring Code DKR",
+                    "name": "Use Fairy Ring Code DKR",
                     "taskID": "fairy_ring_DKR",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -2054,7 +2054,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code ALS",
+                    "name": "Use Fairy Ring Code ALS",
                     "taskID": "fairy_ring_ALS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -2373,7 +2373,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code CJR",
+                    "name": "Use Fairy Ring Code CJR",
                     "taskID": "fairy_ring_CJR",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -3330,7 +3330,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code BIS",
+                    "name": "Use Fairy Ring Code BIS",
                     "taskID": "fairy_ring_BIS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -3624,7 +3624,7 @@
                     }
                 },
                 {
-                    "name": "Travel to Fairy Ring Code DJP",
+                    "name": "Use Fairy Ring Code DJP",
                     "taskID": "fairy_ring_DJP",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -4210,7 +4210,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code CIQ",
+                    "name": "Use Fairy Ring Code CIQ",
                     "taskID": "fairy_ring_CIQ",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -4646,7 +4646,7 @@
                     }                  
                 },
                 {
-                    "name": "Travel to Fairy Ring Code CLS",
+                    "name": "Use Fairy Ring Code CLS",
                     "taskID": "fairy_ring_CLS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -4776,7 +4776,7 @@
             "neighbor_ids": [10287, 10542, 10285, 10030],
             "tasks": [
                 {
-                    "name": "Travel to Fairy Ring Code AKS",
+                    "name": "Use Fairy Ring Code AKS",
                     "taskID": "fairy_ring_AKS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -9490,7 +9490,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code AKQ",
+                    "name": "Use Fairy Ring Code AKQ",
                     "taskID": "fairy_ring_AKQ",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -9598,7 +9598,7 @@
                         ]             
                 },
                 {
-                    "name": "Travel to Fairy Ring Code AKQ",
+                    "name": "Use Fairy Ring Code AKQ",
                     "taskID": "fairy_ring_AKQ",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

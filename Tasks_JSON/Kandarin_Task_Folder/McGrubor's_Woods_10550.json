@@ -85,7 +85,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code ALS",
+                    "name": "Use Fairy Ring Code ALS",
                     "taskID": "fairy_ring_ALS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

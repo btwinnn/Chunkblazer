@@ -139,7 +139,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code CJR",
+                    "name": "Use Fairy Ring Code CJR",
                     "taskID": "fairy_ring_CJR",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

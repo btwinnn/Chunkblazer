@@ -1117,7 +1117,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code AIS",
+                    "name": "Use Fairy Ring Code AIS",
                     "taskID": "fairy_ring_AIS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

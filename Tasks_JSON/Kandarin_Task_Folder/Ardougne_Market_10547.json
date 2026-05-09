@@ -161,7 +161,7 @@
                     ]
                 },
                 {
-                    "name": "Travel to Fairy Ring Code BIS",
+                    "name": "Use Fairy Ring Code BIS",
                     "taskID": "fairy_ring_BIS",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
