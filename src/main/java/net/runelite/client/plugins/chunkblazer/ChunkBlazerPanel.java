@@ -638,9 +638,13 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 
 		int regionId = plugin.getCurrentRegionId();
-		// Hide entirely for unknown / undefined regions and any already-unlocked region.
-		// We only want this section to be a "you walked into something locked" prompt.
-		if (regionId <= 0 || plugin.isRegionUnlocked(regionId))
+		// A region is only purchasable if it's a neighbor of an already-unlocked
+		// chunk. The plugin enforces this in unlockRegion() too as a backstop —
+		// here we hide the whole prompt for non-neighbors so we don't leak a
+		// "Cost: N pts" line for chunks the player can't actually buy
+		// (e.g. an Unknown region the player teleported into).
+		boolean isNeighbor = regionId > 0 && plugin.getNeighborRegionIds().contains(regionId);
+		if (regionId <= 0 || plugin.isRegionUnlocked(regionId) || !isNeighbor)
 		{
 			if (regionUnlockPanel.isVisible())
 			{
@@ -655,11 +659,6 @@ public class ChunkBlazerPanel extends PluginPanel
 		int cost = plugin.getRegionUnlockCost(regionId);
 		int points = plugin.getTotalPoints();
 		boolean canAfford = points >= cost;
-		// A region is only purchasable if it's a neighbor of an already-unlocked
-		// chunk. The plugin enforces this in unlockRegion() too as a backstop —
-		// here we just gate the UI so the player isn't tempted to click an
-		// "Unlock" button that's going to silently refuse.
-		boolean isNeighbor = plugin.getNeighborRegionIds().contains(regionId);
 
 		regionUnlockPanel.removeAll();
 
@@ -695,19 +694,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		buttonRow.setAlignmentX(LEFT_ALIGNMENT);
 		buttonRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 28));
 
-		if (!isNeighbor)
-		{
-			// Player is standing in a locked chunk that's not adjacent to any
-			// unlocked chunk — likely got here via teleport or by walking
-			// through other locked chunks. They have to backtrack.
-			JButton disabled = new JButton("Walk to a neighbor to unlock");
-			disabled.setEnabled(false);
-			disabled.setFont(FontManager.getRunescapeSmallFont());
-			disabled.setFocusPainted(false);
-			disabled.setToolTipText("Chunks can only be unlocked from an adjacent unlocked chunk.");
-			buttonRow.add(disabled, BorderLayout.CENTER);
-		}
-		else if (!canAfford)
+		if (!canAfford)
 		{
 			JButton disabled = new JButton("Need " + (cost - points) + " more pts");
 			disabled.setEnabled(false);

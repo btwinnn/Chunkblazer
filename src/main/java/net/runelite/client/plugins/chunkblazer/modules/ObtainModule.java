@@ -1,5 +1,6 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -63,9 +64,34 @@ public class ObtainModule extends AbstractTaskModule
 	@Inject
 	private ChatMessageManager chatMessageManager;
 
-	// Track task-specific data
-	// Map: taskId -> (Map: itemId -> required quantity)
-	private final Map<String, Map<Integer, Integer>> taskTargetItems = new ConcurrentHashMap<>();
+	/**
+	 * One "slot" of a task's required items. A slot represents a single
+	 * conceptual requirement (e.g. "the helmet of the Prospector set" or
+	 * "any elemental staff"). Variants inside the slot are OR'd: holding
+	 * any one of them counts toward the slot's quantity. Slots are AND'd
+	 * across the task: a multi-piece set requires all slots filled.
+	 *
+	 * <p>Mirrors the JSON shape: each entry in {@code required_items}
+	 * becomes one slot, with {@code item_ids} → {@link #variantIds}.
+	 *
+	 * <p>Why this exists: the previous flat {@code Map<itemId, qty>}
+	 * model AND'd everything — "Obtain an Elemental Staff" with 4
+	 * variant IDs at qty 1 each demanded all 4 staves, not any one.
+	 */
+	static final class Slot
+	{
+		final Set<Integer> variantIds;
+		final int requiredQuantity;
+
+		Slot(Set<Integer> variantIds, int requiredQuantity)
+		{
+			this.variantIds = variantIds;
+			this.requiredQuantity = requiredQuantity;
+		}
+	}
+
+	// Track task-specific data: per-task ordered list of slots.
+	private final Map<String, List<Slot>> taskSlots = new ConcurrentHashMap<>();
 
 	// Items we're currently watching for (union of all task requirements)
 	// Use thread-safe set to avoid ConcurrentModificationException
@@ -126,7 +152,7 @@ public class ObtainModule extends AbstractTaskModule
 	public void shutDown()
 	{
 		eventBus.unregister(this);
-		taskTargetItems.clear();
+		taskSlots.clear();
 		watchedItemIds.clear();
 		inventoryHeldSnapshot.clear();
 		previousXp.clear();
@@ -148,11 +174,13 @@ public class ObtainModule extends AbstractTaskModule
 			log.info("  Completion Type: {}", task.getCompletionType());
 			log.info("  Category: {}", task.getCategory());
 
-			// Parse required items from task
-			Map<Integer, Integer> targetItems = new HashMap<>();
+			// Parse required items from task into one Slot per RequiredItem.
+			// Within a Slot, item_ids are OR'd (any variant counts); across
+			// Slots, the requirements are AND'd (all slots must be filled).
+			List<Slot> slots = new ArrayList<>();
 			List<RequiredItem> requiredItems = task.getRequiredItems();
 
-			log.info("  Required Items: {}", requiredItems != null ? requiredItems.size() + " items" : "NULL");
+			log.info("  Required Items: {}", requiredItems != null ? requiredItems.size() + " slots" : "NULL");
 
 			if (requiredItems != null)
 			{
@@ -160,22 +188,24 @@ public class ObtainModule extends AbstractTaskModule
 				{
 					log.info("    Processing RequiredItem: {}", item);
 					List<Integer> itemIds = item.getItemIds();
-					log.info("      Item IDs: {}", itemIds);
-					log.info("      Required Qty: {}", item.getRequiredQuantity());
+					int requiredQty = item.getRequiredQuantity();
+					log.info("      Item IDs (OR'd within slot): {}", itemIds);
+					log.info("      Slot Required Qty: {}", requiredQty);
 
-					if (itemIds != null)
+					if (itemIds != null && !itemIds.isEmpty())
 					{
-						for (Integer itemId : itemIds)
+						Set<Integer> variantIds = new HashSet<>(itemIds);
+						slots.add(new Slot(variantIds, requiredQty));
+						watchedItemIds.addAll(variantIds);
+						for (Integer itemId : variantIds)
 						{
-							targetItems.put(itemId, item.getRequiredQuantity());
-							watchedItemIds.add(itemId);
-							log.info("      >>> WATCHING: Item ID {} ({}) - qty: {} for task '{}'",
-								itemId, getItemName(itemId), item.getRequiredQuantity(), task.getName());
+							log.info("      >>> WATCHING: Item ID {} ({}) - slot qty: {} for task '{}'",
+								itemId, getItemName(itemId), requiredQty, task.getName());
 						}
 					}
 					else
 					{
-						log.warn("      >>> WARNING: itemIds is NULL for this RequiredItem!");
+						log.warn("      >>> WARNING: itemIds is NULL/empty for this RequiredItem — slot ignored!");
 					}
 				}
 			}
@@ -184,14 +214,14 @@ public class ObtainModule extends AbstractTaskModule
 				log.warn("  >>> WARNING: No required_items defined for this OBTAIN task!");
 			}
 
-			taskTargetItems.put(task.getTaskId(), targetItems);
+			taskSlots.put(task.getTaskId(), slots);
 			// Skilling tasks: track inventory-only counts of watched items so we
 			// can detect "you produced one" deltas in onStatChanged. Seeded by
 			// the deferred client-thread block below — getItemCount() / countIn()
 			// require the client thread. Until the seed runs, an empty snapshot
 			// means any XP drop that fires would see "no prior count" and skip
 			// crediting (safe default).
-			log.info("  Total items being watched for this task: {}", targetItems.size());
+			log.info("  Total slots for this task: {}", slots.size());
 			log.info("  All watched item IDs across all tasks: {}", watchedItemIds);
 			log.info("  Skill for XP gating: {}", skillForCompletionType(task.getCompletionType()));
 			log.info("=== END ADDING TASK ===");
@@ -203,10 +233,10 @@ public class ObtainModule extends AbstractTaskModule
 			// For OBTAIN (no-skill) tasks, also run checkTaskProgress so anything
 			// the player already holds in inv+bank+equip (e.g. a forestry kit
 			// stockpiled in the bank) counts immediately.
-			final Map<Integer, Integer> targetItemsRef = targetItems;
+			final List<Slot> slotsRef = slots;
 			clientThread.invokeLater(() ->
 			{
-				inventoryHeldSnapshot.put(task.getTaskId(), snapshotInventoryCounts(targetItemsRef));
+				inventoryHeldSnapshot.put(task.getTaskId(), snapshotInventoryCounts(slotsRef));
 				if (skillForCompletionType(task.getCompletionType()) == null)
 				{
 					checkTaskProgress(task);
@@ -231,7 +261,7 @@ public class ObtainModule extends AbstractTaskModule
 	public void onTaskCleared()
 	{
 		super.onTaskCleared();
-		taskTargetItems.clear();
+		taskSlots.clear();
 		watchedItemIds.clear();
 		inventoryHeldSnapshot.clear();
 	}
@@ -270,8 +300,8 @@ public class ObtainModule extends AbstractTaskModule
 			return;
 		}
 
-		Map<Integer, Integer> targetItems = taskTargetItems.get(task.getTaskId());
-		if (targetItems == null || targetItems.isEmpty())
+		List<Slot> slots = taskSlots.get(task.getTaskId());
+		if (slots == null || slots.isEmpty())
 		{
 			return;
 		}
@@ -279,30 +309,40 @@ public class ObtainModule extends AbstractTaskModule
 		int totalRequired = 0;
 		int totalObtained = 0;
 
-		// Build details about each item for logging
+		// Build details about each slot for logging.
+		// For each slot we sum the player's held count ACROSS its variant IDs
+		// (variants OR'd) and cap at the slot's required quantity. Then sum
+		// per-slot contributions for the task total. This is the OR-within-
+		// slot, AND-across-slots semantic — e.g. "Obtain Prospector Set" has
+		// 4 slots, each accepts any variant of that piece.
 		StringBuilder itemDetails = new StringBuilder();
-		for (Map.Entry<Integer, Integer> target : targetItems.entrySet())
+		for (Slot slot : slots)
 		{
-			int itemId = target.getKey();
-			int required = target.getValue();
-			totalRequired += required;
-
-			// Count what the player actually holds across inventory + bank +
-			// equipment. Dropped items are NOT counted, which defeats the
-			// drop-and-pick-up cheat. The Math.max(prev, ...) below preserves
-			// progress when items are consumed (eaten, used, etc.) so this
-			// only credits items that came in from outside the cheat path.
-			int held = getItemCount(itemId);
-			int countForTask = Math.min(held, required);
-			totalObtained += countForTask;
+			int slotHeld = 0;
+			StringBuilder variantBreakdown = new StringBuilder();
+			for (Integer variantId : slot.variantIds)
+			{
+				int held = getItemCount(variantId);
+				slotHeld += held;
+				if (variantBreakdown.length() > 0)
+				{
+					variantBreakdown.append("/");
+				}
+				variantBreakdown.append(getItemName(variantId)).append(":").append(held);
+			}
+			int countForSlot = Math.min(slotHeld, slot.requiredQuantity);
+			totalRequired += slot.requiredQuantity;
+			totalObtained += countForSlot;
 
 			if (itemDetails.length() > 0)
 			{
 				itemDetails.append(", ");
 			}
-			itemDetails.append(getItemName(itemId)).append(" ").append(held).append("/").append(required);
+			itemDetails.append("[").append(variantBreakdown).append("]")
+				.append(" ").append(slotHeld).append("/").append(slot.requiredQuantity);
 
-			log.debug("ObtainModule: Item {} - held {}/{} (inv+bank+equip)", getItemName(itemId), held, required);
+			log.debug("ObtainModule: slot {} - held {}/{} (sum across {} variants, inv+bank+equip)",
+				variantBreakdown, slotHeld, slot.requiredQuantity, slot.variantIds.size());
 		}
 
 		// Floor progress at the previously-saved value so we never regress across sessions
@@ -341,7 +381,7 @@ public class ObtainModule extends AbstractTaskModule
 			}
 
 			// Clean up task tracking
-			taskTargetItems.remove(task.getTaskId());
+			taskSlots.remove(task.getTaskId());
 			inventoryHeldSnapshot.remove(task.getTaskId());
 			activeTasks.remove(task);
 			rebuildWatchedItems();
@@ -395,9 +435,12 @@ public class ObtainModule extends AbstractTaskModule
 	private void rebuildWatchedItems()
 	{
 		watchedItemIds.clear();
-		for (Map<Integer, Integer> items : taskTargetItems.values())
+		for (List<Slot> slots : taskSlots.values())
 		{
-			watchedItemIds.addAll(items.keySet());
+			for (Slot slot : slots)
+			{
+				watchedItemIds.addAll(slot.variantIds);
+			}
 		}
 	}
 
@@ -477,8 +520,8 @@ public class ObtainModule extends AbstractTaskModule
 	 */
 	private void creditSkillingDelta(NuzlockeTask task, Skill skill)
 	{
-		Map<Integer, Integer> targetItems = taskTargetItems.get(task.getTaskId());
-		if (targetItems == null || targetItems.isEmpty())
+		List<Slot> slots = taskSlots.get(task.getTaskId());
+		if (slots == null || slots.isEmpty())
 		{
 			return;
 		}
@@ -496,23 +539,46 @@ public class ObtainModule extends AbstractTaskModule
 		int totalRequired = 0;
 		StringBuilder details = new StringBuilder();
 		Map<Integer, Integer> nextSnapshot = new HashMap<>();
-		for (Map.Entry<Integer, Integer> entry : targetItems.entrySet())
+		// Per-slot delta with cap-per-slot:
+		//   prevSlotCredit = min(prevSumOfVariants, slot.required)
+		//   newSlotCredit  = min(currSumOfVariants, slot.required)
+		//   slotDelta      = newSlotCredit - prevSlotCredit
+		// This handles "any variant counts" correctly AND caps overflow
+		// (e.g. 3a-outfit gives 2 ores in one tick when only 1 needed).
+		for (Slot slot : slots)
 		{
-			int itemId = entry.getKey();
-			int required = entry.getValue();
-			totalRequired += required;
-			int currentInv = countIn(InventoryID.INVENTORY, itemId);
-			int prevInv = snapshot.getOrDefault(itemId, 0);
-			nextSnapshot.put(itemId, currentInv);
-			if (currentInv > prevInv)
+			totalRequired += slot.requiredQuantity;
+			int prevSum = 0;
+			int currSum = 0;
+			StringBuilder slotGains = new StringBuilder();
+			for (Integer variantId : slot.variantIds)
 			{
-				int delta = currentInv - prevInv;
-				totalDelta += delta;
+				int prev = snapshot.getOrDefault(variantId, 0);
+				int curr = countIn(InventoryID.INVENTORY, variantId);
+				nextSnapshot.put(variantId, curr);
+				prevSum += prev;
+				currSum += curr;
+				if (curr > prev)
+				{
+					int variantGain = curr - prev;
+					if (slotGains.length() > 0)
+					{
+						slotGains.append(", ");
+					}
+					slotGains.append("+").append(variantGain).append(" ").append(getItemName(variantId));
+				}
+			}
+			int prevSlotCredit = Math.min(prevSum, slot.requiredQuantity);
+			int newSlotCredit = Math.min(currSum, slot.requiredQuantity);
+			int slotDelta = newSlotCredit - prevSlotCredit;
+			if (slotDelta > 0)
+			{
+				totalDelta += slotDelta;
 				if (details.length() > 0)
 				{
-					details.append(", ");
+					details.append("; ");
 				}
-				details.append("+").append(delta).append(" ").append(getItemName(itemId));
+				details.append(slotGains);
 			}
 		}
 		// Always slide the snapshot forward, even on no delta — keeps the gate
@@ -551,7 +617,7 @@ public class ObtainModule extends AbstractTaskModule
 			{
 				completionCallback.onTaskCompleted(task, newProgress);
 			}
-			taskTargetItems.remove(task.getTaskId());
+			taskSlots.remove(task.getTaskId());
 			inventoryHeldSnapshot.remove(task.getTaskId());
 			activeTasks.remove(task);
 			rebuildWatchedItems();
@@ -563,12 +629,15 @@ public class ObtainModule extends AbstractTaskModule
 	 * task. Used as the baseline against which onStatChanged credits a delta.
 	 * Must run on the client thread — countIn() asserts it.
 	 */
-	private Map<Integer, Integer> snapshotInventoryCounts(Map<Integer, Integer> targetItems)
+	private Map<Integer, Integer> snapshotInventoryCounts(List<Slot> slots)
 	{
 		Map<Integer, Integer> snap = new HashMap<>();
-		for (Integer itemId : targetItems.keySet())
+		for (Slot slot : slots)
 		{
-			snap.put(itemId, countIn(InventoryID.INVENTORY, itemId));
+			for (Integer variantId : slot.variantIds)
+			{
+				snap.put(variantId, countIn(InventoryID.INVENTORY, variantId));
+			}
 		}
 		return snap;
 	}
@@ -587,8 +656,20 @@ public class ObtainModule extends AbstractTaskModule
 			// List all active obtain tasks
 			for (NuzlockeTask task : activeTasks)
 			{
-				Map<Integer, Integer> items = taskTargetItems.get(task.getTaskId());
-				String itemInfo = items != null ? "watching " + items.size() + " item IDs: " + items.keySet() : "NO ITEMS";
+				List<Slot> slots = taskSlots.get(task.getTaskId());
+				String itemInfo;
+				if (slots == null)
+				{
+					itemInfo = "NO SLOTS";
+				}
+				else
+				{
+					itemInfo = "watching " + slots.size() + " slot(s): " +
+						slots.stream()
+							.map(s -> "{" + s.variantIds + " x" + s.requiredQuantity + "}")
+							.reduce((a, b) -> a + ", " + b)
+							.orElse("(empty)");
+				}
 				log.info(">>>   Active obtain task: {} ({}) - {}/{} - {}",
 					task.getName(), task.getTaskId(),
 					task.getCurrentProgress(), task.getTargetQuantity(), itemInfo);
@@ -649,12 +730,12 @@ public class ObtainModule extends AbstractTaskModule
 				{
 					continue;
 				}
-				Map<Integer, Integer> targetItems = taskTargetItems.get(task.getTaskId());
-				if (targetItems == null)
+				List<Slot> slots = taskSlots.get(task.getTaskId());
+				if (slots == null)
 				{
 					continue;
 				}
-				inventoryHeldSnapshot.put(task.getTaskId(), snapshotInventoryCounts(targetItems));
+				inventoryHeldSnapshot.put(task.getTaskId(), snapshotInventoryCounts(slots));
 			}
 		}
 	}
@@ -689,15 +770,25 @@ public class ObtainModule extends AbstractTaskModule
 	 */
 	private void sendItemObtainedReport(int itemId, int quantity)
 	{
-		// Find which task this item belongs to (for the report)
+		// Find which task this item belongs to (for the report). With the
+		// slot-aware structure: walk every slot of every active task and
+		// see if the itemId appears in any slot's variant set.
 		String taskId = "";
+		outer:
 		for (NuzlockeTask task : activeTasks)
 		{
-			Map<Integer, Integer> items = taskTargetItems.get(task.getTaskId());
-			if (items != null && items.containsKey(itemId))
+			List<Slot> slots = taskSlots.get(task.getTaskId());
+			if (slots == null)
 			{
-				taskId = task.getTaskId();
-				break;
+				continue;
+			}
+			for (Slot slot : slots)
+			{
+				if (slot.variantIds.contains(itemId))
+				{
+					taskId = task.getTaskId();
+					break outer;
+				}
 			}
 		}
 

@@ -1,12 +1,16 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
+import com.google.gson.Gson;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
+import net.runelite.api.Skill;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
+import net.runelite.client.plugins.chunkblazer.RequiredItem;
 import net.runelite.client.plugins.chunkblazer.api.ChunkBlazerApiClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -238,5 +243,86 @@ class ObtainModuleTest extends AbstractTaskModuleTest
 		task.setCurrentProgress(10);
 		task.setCompleted(true);
 		assertTrue(task.isCompleted());
+	}
+
+	/**
+	 * Mike's bug #27: a single-slot COOKING task with a {@code quantity} range
+	 * (Cook some Shrimp, range [5, 25]) was completing after a single cooked
+	 * shrimp landed in the inventory. After one cook the progress should be
+	 * 1/N and the task should NOT be marked complete.
+	 *
+	 * <p>This test pins the rolled quantity to 5 (the minimum of the range)
+	 * so it's deterministic, then drives ObtainModule through the
+	 * skilling-delta path: snapshot empty inventory at addActiveTask time,
+	 * one cooked shrimp shows up alongside a Cooking XP drop, expect +1
+	 * progress and not-yet-complete.
+	 */
+	@Test
+	void testCookShrimp_DoesNotCompleteAfterOneCook()
+	{
+		NuzlockeTask task = new NuzlockeTask();
+		task.setName("Cook some Shrimp");
+		task.setTaskId("cook_shrimp");
+		task.setCompletionType("COOKING");
+		task.setCurrentProgress(0);
+		task.setCompleted(false);
+
+		RequiredItem shrimp = new RequiredItem();
+		shrimp.setItemIds(Arrays.asList(315)); // cooked Shrimps
+		shrimp.setQuantityRange(Arrays.asList(5, 25));
+		shrimp.setRolledQuantity(5);
+		task.setRequiredItems(Collections.singletonList(shrimp));
+		task.setTargetQuantity(5);
+
+		// Empty inventory at task assignment time → snapshot {315: 0}.
+		when(client.getItemContainer(InventoryID.INVENTORY)).thenReturn(inventoryContainer);
+		when(inventoryContainer.getItems()).thenReturn(new Item[0]);
+		obtainModule.addActiveTask(task);
+
+		// Seed the previousXp baseline — onStatChanged ignores the first
+		// sighting per skill so it can detect a delta on subsequent fires.
+		obtainModule.onStatChanged(new StatChanged(Skill.COOKING, 0, 1, 1));
+
+		// Player cooks one Shrimp: 1 cooked shrimp now in inventory and a
+		// Cooking XP drop fires this same tick.
+		Item cooked = mock(Item.class);
+		when(cooked.getId()).thenReturn(315);
+		when(cooked.getQuantity()).thenReturn(1);
+		when(inventoryContainer.getItems()).thenReturn(new Item[]{cooked});
+
+		obtainModule.onStatChanged(new StatChanged(Skill.COOKING, 30, 1, 1));
+
+		assertEquals(1, task.getCurrentProgress(), "After 1 cook, progress should be 1/5");
+		assertFalse(task.isCompleted(), "Task should NOT be complete after only 1 of 5 shrimp");
+	}
+
+	/**
+	 * Companion for #27: prove that a JSON {@code quantity: [5, 25]} field
+	 * deserializes into a {@link RequiredItem} whose
+	 * {@link RequiredItem#getRequiredQuantity()} returns a value in [5, 25],
+	 * not the fallback default of 1. Catches the case where the deserializer
+	 * silently misses the range and the slot ends up sized at 1.
+	 */
+	@Test
+	void testRequiredItem_QuantityRangeDeserializesToRange()
+	{
+		String json = "{ \"item\": \"Shrimp\", \"item_ids\": [315], \"quantity\": [5, 25] }";
+		RequiredItem item = new Gson().fromJson(json, RequiredItem.class);
+
+		assertNotNull(item.getQuantityRange(), "quantity_range should populate from quantity:[a,b]");
+		assertEquals(2, item.getQuantityRange().size());
+		assertEquals(5, (int) item.getQuantityRange().get(0));
+		assertEquals(25, (int) item.getQuantityRange().get(1));
+		assertNull(item.getQuantity(), "quantity should be null when only a range was provided");
+
+		int rolled = item.getRequiredQuantity();
+		assertTrue(rolled >= 5 && rolled <= 25,
+			"getRequiredQuantity should roll within [5, 25] but got " + rolled);
+
+		// Subsequent calls must return the cached roll — otherwise modules
+		// reading this later (panel, chatbox, ObtainModule) see a different
+		// number than the assignment system used.
+		assertEquals(rolled, item.getRequiredQuantity(),
+			"second call to getRequiredQuantity must return the cached roll");
 	}
 }

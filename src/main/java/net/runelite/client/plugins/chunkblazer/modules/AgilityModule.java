@@ -33,8 +33,23 @@ public class AgilityModule extends AbstractTaskModule
 	private static final String COLOR_DARK_GREEN = "228b22";
 	private static final String COLOR_BLACK = "000000";
 
-	// Minimum XP gain to count as obstacle completion (filters out tiny bonuses)
-	private static final int MIN_XP_THRESHOLD = 5;
+	// Minimum XP gain to count as a LAP completion (not an obstacle).
+	//
+	// OSRS agility courses split lap progress into two distinct XP events: per-
+	// obstacle gains (typically 5–22 XP) and a per-lap completion bonus (39 XP
+	// on the smallest course, Gnome; up to ~890 XP on Pollnivneh) that fires
+	// AFTER the last obstacle. Crediting on every ≥5 XP gain — what we did
+	// before — counted each obstacle as a "lap", so a 1-lap Draynor task
+	// completed on the first Rough Wall climb (5 XP). Mike caught this as
+	// "completes on START not finish". Threshold 30 sits cleanly between the
+	// two: above the largest single-obstacle gain we know of (~22 XP on rooftop
+	// courses) and below the smallest lap bonus (39 XP on Gnome).
+	//
+	// Caveat: a few non-rooftop courses have a single obstacle whose XP
+	// straddles 30 (e.g. Wilderness Agility's Pile of Rocks at 62.5 XP) and
+	// will double-count laps until we move to per-task object-id tracking.
+	// Acceptable for now — Mike's report was Draynor.
+	private static final int MIN_XP_THRESHOLD = 30;
 
 	@Inject
 	private ChatMessageManager chatMessageManager;

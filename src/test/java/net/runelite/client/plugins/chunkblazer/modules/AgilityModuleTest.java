@@ -1,6 +1,7 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
 import net.runelite.api.Skill;
+import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
 import org.junit.jupiter.api.BeforeEach;
@@ -124,5 +125,51 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	{
 		agilityModule.shutDown();
 		verify(eventBus).unregister(agilityModule);
+	}
+
+	/**
+	 * Mike's bug #22: Draynor Agility laps "complete on START not finish".
+	 *
+	 * <p>The Draynor Rooftop course awards 5–8 XP per obstacle (7 obstacles
+	 * per lap) plus a 79 XP lap-completion bonus at the end of the lap.
+	 * Crediting +1 progress on every obstacle (the previous behaviour at
+	 * {@code MIN_XP_THRESHOLD = 5}) would tick a 1-lap task to complete on
+	 * the very first obstacle. The fix raises the threshold so only the
+	 * per-lap bonus crosses it.
+	 */
+	@Test
+	void testDraynorLap_OnlyCompletesOnLapBonusNotEachObstacle()
+	{
+		NuzlockeTask task = createTestTask("Draynor Lap", "complete_draynor_roof", "AGILITY", 1);
+
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(task);
+
+		// Seed the previousAgilityXp baseline. Without this the first event
+		// fires the early-return at line 158 and gets used as the baseline.
+		// initializeXpTracking() ran inside addActiveTask via the mocked
+		// clientThread.invokeLater, so the baseline is already 0.
+
+		// Walk through one full Draynor lap: seven obstacle XP drops, none
+		// of which is a lap completion. None should credit progress.
+		int xp = 0;
+		int[] obstacleXps = {5, 8, 8, 7, 7, 5, 5};
+		for (int gain : obstacleXps)
+		{
+			xp += gain;
+			agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, xp, 1, 1));
+			assertEquals(0, task.getCurrentProgress(),
+				"Obstacle gains (" + gain + " XP) must not credit lap progress");
+			assertFalse(task.isCompleted(),
+				"Task must not complete on intra-lap obstacle XP");
+		}
+
+		// The 79 XP lap-completion bonus arrives as a separate StatChanged
+		// event right after the last obstacle. THIS is the lap signal.
+		xp += 79;
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, xp, 1, 1));
+
+		assertEquals(1, task.getCurrentProgress(), "Lap bonus should credit +1 lap");
+		assertTrue(task.isCompleted(), "1-lap task should be complete after one lap-end bonus");
 	}
 }
