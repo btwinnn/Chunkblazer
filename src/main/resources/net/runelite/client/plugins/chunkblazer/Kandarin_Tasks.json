@@ -9761,7 +9761,7 @@
             "tasks": [
                 {
                     "name": "Chop a Teak Tree",
-                    "taskID": "Chop_willow_tree",
+                    "taskID": "Chop_teak_tree",
                     "category": "Woodcutting",
                     "level": 35,
                     "completion_type": "WOODCUTTING",

@@ -50,7 +50,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain a White Bead from an Imp",
+                    "name": "Obtain a White Bead",
                     "taskID": "obtain_white_bead",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
