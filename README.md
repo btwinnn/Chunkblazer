@@ -8,6 +8,7 @@ A Nuzlocke-style chunk-unlocking plugin for Old School RuneScape, built on top o
 
 - **Per-chunk RNG task assignment.** When a chunk is unlocked, 4–5 tasks are rolled from that chunk's pool. Tasks are tracked across many activity types: combat (NPC kills with constraint support), skilling (mining, fishing, cooking, smithing, fletching, woodcutting, crafting, herblore, runecrafting, hunter), agility, firemaking, construction, thieving, equipping items, NPC dialogue, varbit/varp checks, and pure "obtain" tasks.
 - **Chunk visualization on the gameplay viewport.** Continuous outlines around every visible chunk, green for unlocked / dark grey for locked. Drawn by `ChunkBorderRenderer` as chained polylines (one `Path2D` per region-side) with round caps and joins so terrain elevation joints stay smooth.
+- **GPU greyscale wash for locked chunks.** The optional **ChunkBlazer GPU** plugin (separate plugin in the RuneLite plugin tray, off by default) replaces the stock GPU renderer with a forked variant that desaturates pixels inside locked chunks via a fragment shader. When enabled it auto-disables RuneLite's stock GPU plugin via `@PluginDescriptor(conflicts = "GPU")`. Adapted from slaytostay's [Region Locker](https://github.com/SlayToStay/region-locker) (BSD-2-Clause) — see Acknowledgements at the bottom of this file.
 - **In-panel unlock prompt.** When you walk into a locked region, the side panel shows the region name, cost, your point total, and a one-click "Unlock for X pts" → "Confirm? Yes / No" flow. Spending points always requires explicit user input — walking never auto-spends.
 - **Region-specific jingle on first unlock.** Plays a random sound from the unlocked chunk's area pack (Misthalin / Asgarnia / Kandarin / Varlamore / Zeah). Toggle via "Play Region Unlock Jingle" in config.
 - **Region-specific task-completion sounds.** Same per-area sound pool plays on task completion; toggle via "Play Task Completion Sound".
@@ -151,7 +152,7 @@ The bottom of the side panel has a collapsible **Dev/Test Controls** section:
 
 ## Known limitations / WIP
 
-- **GPU-side locked-chunk wash is not implemented.** A semi-transparent grey "fog" effect over locked chunks was prototyped in software (Java2D `fillPolygon` per tile) and removed because it tanked framerate. The plan is to port the Region Locker plugin's GPU-shader approach next.
+- **GPU greyscale plugin is opt-in and behind a feature flag.** Enable "ChunkBlazer GPU" in the RuneLite plugin tray to activate it; it auto-disables the stock GPU plugin while running. The earlier Java2D `fillPolygon`-per-tile prototype was abandoned because it tanked framerate — the GPU shader pipeline does the same effect for free.
 - **Server-side leaderboards / cross-account state not yet live.** The `api/` package has the DTOs in place; the backend is in design.
 - **Task content is unfinished outside the starter area + a handful of regions.** New JSONs land under `Tasks_JSON/<area>/` and need to be wired into `ChunkBlazerPlugin.TASK_JSON_FILES` (and `sync-to-runelite.bat`'s `TASK_JSONS` list) before the plugin loads them.
 
@@ -165,6 +166,10 @@ mvn test
 ```
 
 These are independent of the RuneLite mirror — they use the local `pom.xml`. Expected runtime: ~5 seconds.
+
+## Acknowledgements
+
+GPU Greyscale is adapted from [Region Locker](https://github.com/SlayToStay/region-locker) by slaytostay (BSD-2-Clause).
 
 ## License
 

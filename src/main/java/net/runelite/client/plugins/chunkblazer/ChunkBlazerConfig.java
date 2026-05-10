@@ -1,9 +1,13 @@
 package net.runelite.client.plugins.chunkblazer;
 
+import java.awt.Color;
+import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
+import net.runelite.client.config.Range;
+import net.runelite.client.config.Units;
 
 @ConfigGroup("chunkblazer")
 public interface ChunkBlazerConfig extends Config
@@ -289,6 +293,75 @@ public interface ChunkBlazerConfig extends Config
 	default boolean playRegionUnlockSound()
 	{
 		return true;
+	}
+
+	// ---------------------------------------------------------------------
+	// GPU Greyscale (locked-region wash)
+	//
+	// These items only affect the "ChunkBlazer GPU" plugin. That plugin must
+	// be enabled separately in the RuneLite plugin tray — when on, it
+	// auto-disables the stock GPU plugin via @PluginDescriptor(conflicts="GPU").
+	// Adapted from slaytostay's Region Locker (BSD-2-Clause); see LICENSE-
+	// region-locker for attribution.
+	// ---------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "GPU Greyscale",
+		description = "Settings for the locked-chunk greyscale wash (requires ChunkBlazer GPU plugin)",
+		position = 5,
+		closedByDefault = true
+	)
+	String gpuGreyscaleSection = "gpuGreyscale";
+
+	@ConfigItem(
+		keyName = "useGpuGreyscale",
+		name = "Render Locked Chunks",
+		description = "Apply a greyscale wash to chunks you haven't unlocked. Requires the 'ChunkBlazer GPU' plugin to be enabled in the plugin tray.",
+		section = gpuGreyscaleSection,
+		position = 0
+	)
+	default boolean useGpuGreyscale()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "gpuHardBorder",
+		name = "Hard Border",
+		description = "Use a hard cut-off at the chunk boundary instead of a soft transition",
+		section = gpuGreyscaleSection,
+		position = 1
+	)
+	default boolean gpuHardBorder()
+	{
+		return false;
+	}
+
+	@Range(min = 0, max = 255)
+	@ConfigItem(
+		keyName = "gpuGrayAmount",
+		name = "Grey Amount",
+		description = "How desaturated locked chunks appear (0 = full color, 255 = fully grey)",
+		section = gpuGreyscaleSection,
+		position = 2
+	)
+	@Units(Units.PERCENT)
+	default int gpuGrayAmount()
+	{
+		return 150;
+	}
+
+	@Alpha
+	@ConfigItem(
+		keyName = "gpuGrayTint",
+		name = "Grey Tint",
+		description = "Soft-light tint colour blended into the desaturated pixels (alpha controls blend strength)",
+		section = gpuGreyscaleSection,
+		position = 3
+	)
+	default Color gpuGrayTint()
+	{
+		return new Color(0, 0, 0, 64);
 	}
 
 	@ConfigSection(

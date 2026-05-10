@@ -2209,6 +2209,22 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
+		// Adjacency gate: a points-purchased unlock must be a neighbor of an
+		// already-unlocked chunk. Without this, the side-panel "Unlock"
+		// button (and any future UI path that calls unlockRegion directly)
+		// lets a player pay points to unlock any locked chunk they happen to
+		// be standing in — even if they walked through other locked chunks
+		// to get there. The first-pick-anywhere path for new Casual Mode
+		// players goes through unlockRegionFree(...) which intentionally
+		// bypasses this gate.
+		Set<Integer> neighbors = getNeighborRegionIds();
+		if (!neighbors.contains(regionId))
+		{
+			log.warn("unlockRegion({}) refused — region is not adjacent to any unlocked chunk (neighbors: {})",
+				regionId, neighbors);
+			return;
+		}
+
 		// Snapshot before mutating so we can tell whether THIS call is the
 		// first-time unlock (and therefore should play the jingle). Always
 		// false here given the guard above, but kept for symmetry with

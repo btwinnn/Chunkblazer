@@ -102,15 +102,21 @@ if exist "%RUNELITE_DIR%" (
 )
 call :log "  Cloning RuneLite repository..."
 call :log "  Target: %RUNELITE_DIR%"
+call :log "  Source: ChunkBlazer's RuneLite fork (origin) + upstream RuneLite (upstream)"
 call :log "  This may take a few minutes..."
-git clone https://github.com/runelite/runelite.git "%RUNELITE_DIR%" >> "%LOG_FILE%" 2>&1
+:: Clone from the ChunkBlazer-maintained fork so testers get a baseline that
+:: matches what we're shipping. We also wire the real RuneLite repo as the
+:: "upstream" remote so future syncs against upstream (when RuneLite ships a
+:: new version) are a single `git fetch upstream && git merge upstream/master`.
+git clone https://github.com/btwinnn/runelite-chunkblazer.git "%RUNELITE_DIR%" >> "%LOG_FILE%" 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    call :log "ERROR: Failed to clone RuneLite"
+    call :log "ERROR: Failed to clone RuneLite fork"
     call :log "Check log for details: %LOG_FILE%"
     call :logfail
     pause
     exit /b 1
 )
+git -C "%RUNELITE_DIR%" remote add upstream https://github.com/runelite/runelite.git >> "%LOG_FILE%" 2>&1
 call :log "  Clone complete!"
 call :log ""
 

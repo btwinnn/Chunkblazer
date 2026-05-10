@@ -16,7 +16,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <runelite.version>1.12.2-SNAPSHOT</runelite.version>
+        <runelite.version>1.12.27-SNAPSHOT</runelite.version>
     </properties>
 
     <repositories>
