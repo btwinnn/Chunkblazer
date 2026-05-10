@@ -1794,8 +1794,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain an Air, Water, Fire, and Earth Staff",
-                    "taskID": "obtain_elemental_staffs",
+                    "name": "Obtain a Basic Elemental Staff",
+                    "taskID": "obtain_basic_elemental_staff",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
