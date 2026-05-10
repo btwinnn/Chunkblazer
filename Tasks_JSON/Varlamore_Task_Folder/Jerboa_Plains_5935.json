@@ -63,8 +63,8 @@
                     }                   
                 },
                 {
-                    "name": "Defeat an Oryx in 1 Hit",
-                    "taskID": "defeat_oryx_1_hit",
+                    "name": "Defeat an Oryx in the First Hit",
+                    "taskID": "defeat_oryx_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -79,8 +79,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Level 5 Snake in 1 Hit",
-                    "taskID": "defeat_level_5_snake_1_hit",
+                    "name": "Defeat a Level 5 Snake in the First Hit",
+                    "taskID": "defeat_level_5_snake_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

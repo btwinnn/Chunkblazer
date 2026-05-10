@@ -1927,8 +1927,8 @@
                     }
                 },
                 {
-                    "name": "Defeat Rusty in 1 Hit",
-                    "taskID": "defeat_rusty_1_hit",
+                    "name": "Defeat Rusty in the First Hit",
+                    "taskID": "defeat_rusty_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -2257,7 +2257,7 @@
                 },
                 {
                     "name": "Defeat a Level 20 Dark Wizard 1 Hit",
-                    "taskID": "defeat_level_20_dark_wizard_1_hit",
+                    "taskID": "defeat_level_20_dark_wizard_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

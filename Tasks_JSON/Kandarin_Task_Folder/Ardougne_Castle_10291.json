@@ -92,7 +92,7 @@
                     "assignment_weight": 8
                 },
                 {                           
-                    "name": "Defeat a Level 3 Monkey in 1 Hit",
+                    "name": "Defeat a Level 3 Monkey in the First Hit",
                     "taskID": "defeat_monkey_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

@@ -32,7 +32,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a Level 6 Bat in 1 Hit",
+                    "name": "Defeat a Level 6 Bat in the First Hit",
                     "taskID": "defeat_bat_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

@@ -57,8 +57,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Lynx in 1 Hit",
-                    "taskID": "defeat_lynx_1_hit",
+                    "name": "Defeat a Lynx in the First Hit",
+                    "taskID": "defeat_lynx_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

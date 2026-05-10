@@ -4,7 +4,7 @@
             "neighbor_ids": [10288, 10543, 10286, 10031],
             "tasks": [
                 {                           
-                    "name": "Defeat a Level 10 Dwarf in 1 Hit",
+                    "name": "Defeat a Level 10 Dwarf in the First Hit",
                     "taskID": "defeat_level_10_dwarf_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

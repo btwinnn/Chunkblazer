@@ -126,8 +126,8 @@
                         }
                 },
                 {
-                    "name": "Defeat a Level 9 Barbarian in 1 Hit",
-                    "taskID": "defeat_level_9_barbarian_1_hit",
+                    "name": "Defeat a Level 9 Barbarian in the First Hit",
+                    "taskID": "defeat_level_9_barbarian_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

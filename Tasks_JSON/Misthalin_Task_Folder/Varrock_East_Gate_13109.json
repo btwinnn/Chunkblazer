@@ -84,7 +84,7 @@
                     
                 },
                 {
-                    "name": "Defeat a Varrock Guard in 1 Hit",
+                    "name": "Defeat a Varrock Guard in the First Hit",
                     "taskID": "defeat_varrock_guard_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

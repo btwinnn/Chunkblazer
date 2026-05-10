@@ -4,8 +4,8 @@
             "neighbor_ids": [6195, 6450, 6193, 5938],
             "tasks": [
                 {
-                    "name": "Defeat a White Wolf in 1 Hit",
-                    "taskID": "defeat_white_wolf_1_hit",
+                    "name": "Defeat a White Wolf in the First Hit",
+                    "taskID": "defeat_white_wolf_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

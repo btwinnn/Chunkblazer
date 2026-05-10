@@ -145,8 +145,8 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Jaguar Cub in 1 Hit",
-                    "taskID": "defeat_jaguar_cub_1_hit",
+                    "name": "Defeat a Jaguar Cub in the First Hit",
+                    "taskID": "defeat_jaguar_cub_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

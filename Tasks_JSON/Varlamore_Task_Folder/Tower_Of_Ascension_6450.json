@@ -173,8 +173,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Frost Crab in 1 Hit",
-                    "taskID": "defeat_frost_crab_1_hit",
+                    "name": "Defeat a Frost Crab in the First Hit",
+                    "taskID": "defeat_frost_crab_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

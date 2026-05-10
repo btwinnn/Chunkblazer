@@ -106,8 +106,8 @@
                     }
                 },
                 {
-                    "name": "Defeat an Emissary Chosen in 1 Hit",
-                    "taskID": "defeat_emissary_chosen_1_hit",
+                    "name": "Defeat an Emissary Chosen in the First Hit",
+                    "taskID": "defeat_emissary_chosen_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 4,
@@ -123,8 +123,8 @@
                         }
                 },
                 {
-                    "name": "Defeat an Emissary Acolyte in 1 Hit",
-                    "taskID": "defeat_emissary_acolyte_1_hit",
+                    "name": "Defeat an Emissary Acolyte in the First Hit",
+                    "taskID": "defeat_emissary_acolyte_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 2,

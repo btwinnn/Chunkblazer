@@ -97,8 +97,8 @@
                     ]
                 },
                 {
-                    "name": "Defeat an Imp in 1 Hit",
-                    "taskID": "defeat_imp_1_hit",
+                    "name": "Defeat an Imp in the First Hit",
+                    "taskID": "defeat_imp_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -205,8 +205,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Man or Woman in 1 Hit",
-                    "taskID": "defeat_man_1_hit",
+                    "name": "Defeat a Man or Woman in the First Hit",
+                    "taskID": "defeat_man_first_hit",
                     "category": "Combat",
                     "level": 2,
                     "completion_type": "NPC_Kill",

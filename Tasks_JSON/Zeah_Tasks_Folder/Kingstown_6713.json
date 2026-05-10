@@ -125,8 +125,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Shayzien Guard in 1 Hit",
-                    "taskID": "defeat_shayzien_guard_1_hit",
+                    "name": "Defeat a Shayzien Guard in the First Hit",
+                    "taskID": "defeat_shayzien_guard_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

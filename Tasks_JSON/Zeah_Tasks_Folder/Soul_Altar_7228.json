@@ -62,8 +62,8 @@
                     ]
                 }, 
                 {
-                    "name": "Defeat a Level 19 Ghost in 1 Hit",
-                    "taskID": "defeat_a_ghost_1_hit",
+                    "name": "Defeat a Level 19 Ghost in the First Hit",
+                    "taskID": "defeat_a_ghost_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

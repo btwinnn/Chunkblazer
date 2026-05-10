@@ -118,8 +118,8 @@
                     }
                 },
                 {
-                    "name": "Defeat an Ice Wolf in 1 Hit",
-                    "taskID": "defeat_ice_wolf_1_hit",
+                    "name": "Defeat an Ice Wolf in the First Hit",
+                    "taskID": "defeat_ice_wolf_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,

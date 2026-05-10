@@ -4,8 +4,8 @@
             "neighbor_ids": [5175, 5430, 5173, 4918],
             "tasks": [              
                 {
-                    "name": "Defeat a Big Frog in 1 Hit",
-                    "taskID": "defeat_big_frog_1_hit",
+                    "name": "Defeat a Big Frog in the First Hit",
+                    "taskID": "defeat_big_frog_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -28,8 +28,8 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Defeat a Grizzly Bear in 1 Hit",
-                    "taskID": "defeat_grizzly_bear_1_Hit",
+                    "name": "Defeat a Grizzly Bear in the First Hit",
+                    "taskID": "defeat_grizzly_bear_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

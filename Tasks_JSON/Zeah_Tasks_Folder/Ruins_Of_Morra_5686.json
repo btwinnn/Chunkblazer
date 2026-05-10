@@ -46,8 +46,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Level 25 Skeleton in 1 Hit",
-                    "taskID": "defeat_level_25_skeleton_1_hit",
+                    "name": "Defeat a Level 25 Skeleton in the First Hit",
+                    "taskID": "defeat_level_25_skeleton_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

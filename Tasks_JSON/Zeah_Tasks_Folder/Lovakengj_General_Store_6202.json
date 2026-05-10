@@ -79,8 +79,8 @@
                     }                                      
                 },
                 {
-                    "name": "Defeat a Dark Warrior in 1 Hit",
-                    "taskID": "Defeat_dark_warrior_1_hit",
+                    "name": "Defeat a Dark Warrior in the First Hit",
+                    "taskID": "Defeat_dark_warrior_first_hit",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "category": "Combat",
@@ -94,8 +94,8 @@
                     }                                      
                 },
                 {                           
-                    "name": "Defeat a Giant Bat in 1 Hit",
-                    "taskID": "defeat_giant_bat_1_hit",
+                    "name": "Defeat a Giant Bat in the First Hit",
+                    "taskID": "defeat_giant_bat_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

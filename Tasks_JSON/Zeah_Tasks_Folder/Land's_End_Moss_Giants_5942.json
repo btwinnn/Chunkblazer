@@ -48,7 +48,7 @@
                         ]             
                 },
                 {
-                    "name": "Defeat a Chicken in 1 Hit",
+                    "name": "Defeat a Chicken in the First Hit",
                     "taskID": "defeat_chicken_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

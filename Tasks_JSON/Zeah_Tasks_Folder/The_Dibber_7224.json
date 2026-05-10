@@ -188,8 +188,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Unicorn Foal in 1 Hit",
-                    "taskID": "defeat_unicorn_foal_1_hit",
+                    "name": "Defeat a Unicorn Foal in the First Hit",
+                    "taskID": "defeat_unicorn_foal_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

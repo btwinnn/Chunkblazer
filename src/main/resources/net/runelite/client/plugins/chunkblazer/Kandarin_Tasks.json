@@ -3042,7 +3042,7 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Level 3 Monkey in 1 Hit",
+                    "name": "Defeat a Level 3 Monkey in the First Hit",
                     "taskID": "defeat_monkey_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -4427,7 +4427,7 @@
             "neighbor_ids": [10288, 10543, 10286, 10031],
             "tasks": [
                 {                           
-                    "name": "Defeat a Level 10 Dwarf in 1 Hit",
+                    "name": "Defeat a Level 10 Dwarf in the First Hit",
                     "taskID": "defeat_level_10_dwarf_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -6367,7 +6367,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Level 5 Goblin in 1 Hit",
+                    "name": "Defeat a Level 5 Goblin in the First Hit",
                     "taskID": "defeat_level_5_goblin_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -7914,7 +7914,7 @@
                     ]
                 },
                 {
-                    "name": "DESTROY a Gnome Child in 1 Hit",
+                    "name": "DESTROY a Gnome Child in the First Hit",
                     "taskID": "defeat_gnome_child_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

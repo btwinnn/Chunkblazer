@@ -81,8 +81,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Jaguar in 1 Hit",
-                    "taskID": "defeat_jaguar_1_hit",
+                    "name": "Defeat a Jaguar in the First Hit",
+                    "taskID": "defeat_jaguar_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
@@ -141,8 +141,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Black Unicorn in 1 Hit",
-                    "taskID": "defeat_black_unicorn_1_hit",
+                    "name": "Defeat a Black Unicorn in the First Hit",
+                    "taskID": "defeat_black_unicorn_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

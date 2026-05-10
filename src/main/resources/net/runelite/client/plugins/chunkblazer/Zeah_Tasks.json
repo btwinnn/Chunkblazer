@@ -172,8 +172,8 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Highwayman in 1 Hit",
-                    "taskID": "defeat_highwayman_1_hit",
+                    "name": "Defeat a Highwayman in the First Hit",
+                    "taskID": "defeat_highwayman_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -551,8 +551,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Unicorn Foal in 1 Hit",
-                    "taskID": "defeat_unicorn_foal_1_hit",
+                    "name": "Defeat a Unicorn Foal in the First Hit",
+                    "taskID": "defeat_unicorn_foal_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -1606,8 +1606,8 @@
             "neighbor_ids": [6966, 7221, 6964,6709],
             "tasks": [
                 {
-                    "name": "Defeat a Sand Crab in 1 Hit",
-                    "taskID": "defeat_sand_crab_1_hit",
+                    "name": "Defeat a Sand Crab in the First Hit",
+                    "taskID": "defeat_sand_crab_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
@@ -1770,8 +1770,8 @@
                     ]
                 },
                 {
-                    "name": "Defeat an Imp in 1 Hit",
-                    "taskID": "defeat_imp_1_hit",
+                    "name": "Defeat an Imp in the First Hit",
+                    "taskID": "defeat_imp_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -1878,8 +1878,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Man or Woman in 1 Hit",
-                    "taskID": "defeat_man_1_hit",
+                    "name": "Defeat a Man or Woman in the First Hit",
+                    "taskID": "defeat_man_first_hit",
                     "category": "Combat",
                     "level": 2,
                     "completion_type": "NPC_Kill",
@@ -2557,8 +2557,8 @@
                         ]
                 },
                 {                           
-                    "name": "Defeat a Forester in 1 Hit",
-                    "taskID": "defeat_forester_in_1_hit",
+                    "name": "Defeat a Forester in the First Hit",
+                    "taskID": "defeat_forester_in_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -2596,8 +2596,8 @@
                         ]
                 },
                 {                           
-                    "name": "Defeat a Forester in 1 Hit",
-                    "taskID": "defeat_forester_in_1_hit",
+                    "name": "Defeat a Forester in the First Hit",
+                    "taskID": "defeat_forester_in_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -2820,8 +2820,8 @@
                         }
                 },
                 {
-                    "name": "Defeat a Level 9 Barbarian in 1 Hit",
-                    "taskID": "defeat_level_9_barbarian_1_hit",
+                    "name": "Defeat a Level 9 Barbarian in the First Hit",
+                    "taskID": "defeat_level_9_barbarian_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -3177,7 +3177,7 @@
                         ]             
                 },
                 {
-                    "name": "Defeat a Chicken in 1 Hit",
+                    "name": "Defeat a Chicken in the First Hit",
                     "taskID": "defeat_chicken_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -4051,8 +4051,8 @@
                     ] 
                 },
                 {
-                    "name": "Defeat a Lizardman in 1 Hit",
-                    "taskID": "defeat_lizardman_1_hit",
+                    "name": "Defeat a Lizardman in the First Hit",
+                    "taskID": "defeat_lizardman_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
@@ -4103,8 +4103,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Boar in 1 Hit",
-                    "taskID": "defeat_boar_1_hit",
+                    "name": "Defeat a Boar in the First Hit",
+                    "taskID": "defeat_boar_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -4330,8 +4330,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Shayzien Guard in 1 Hit",
-                    "taskID": "defeat_shayzien_guard_1_hit",
+                    "name": "Defeat a Shayzien Guard in the First Hit",
+                    "taskID": "defeat_shayzien_guard_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -4570,8 +4570,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Thief in the Warrens in 1 Hit",
-                    "taskID": "defeat_Thief_warrens_1_hit",
+                    "name": "Defeat a Thief in the Warrens in the First Hit",
+                    "taskID": "defeat_Thief_warrens_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -5833,8 +5833,8 @@
                     ]
                 }, 
                 {
-                    "name": "Defeat a Level 19 Ghost in 1 Hit",
-                    "taskID": "defeat_ghost_1_hit",
+                    "name": "Defeat a Level 19 Ghost in the First Hit",
+                    "taskID": "defeat_ghost_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -5932,8 +5932,8 @@
                     }                                      
                 },
                 {
-                    "name": "Defeat a Dark Warrior in 1 Hit",
-                    "taskID": "Defeat_dark_warrior_1_hit",
+                    "name": "Defeat a Dark Warrior in the First Hit",
+                    "taskID": "Defeat_dark_warrior_first_hit",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "category": "Combat",
@@ -5947,8 +5947,8 @@
                     }                                      
                 },
                 {                           
-                    "name": "Defeat a Giant Bat in 1 Hit",
-                    "taskID": "defeat_giant_bat_1_hit",
+                    "name": "Defeat a Giant Bat in the First Hit",
+                    "taskID": "defeat_giant_bat_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -6142,8 +6142,8 @@
                     ]
                 },
                 {
-                    "name": "Kill a King Scoropion in 1 Hit",
-                    "taskID": "kill_king_scorpion_1_hit",
+                    "name": "Kill a King Scoropion in the First Hit",
+                    "taskID": "kill_king_scorpion_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -6664,8 +6664,8 @@
                     }
                 },
                 {
-                    "name": "Defeat an Ice Wolf in 1 Hit",
-                    "taskID": "defeat_ice_wolf_1_hit",
+                    "name": "Defeat an Ice Wolf in the First Hit",
+                    "taskID": "defeat_ice_wolf_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
@@ -7140,8 +7140,8 @@
                     ] 
                 },
                 {
-                    "name": "Defeat a Lizardman in 1 Hit",
-                    "taskID": "defeat_lizardman_1_hit",
+                    "name": "Defeat a Lizardman in the First Hit",
+                    "taskID": "defeat_lizardman_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
@@ -7415,8 +7415,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Lynx in 1 Hit",
-                    "taskID": "defeat_lynx_1_hit",
+                    "name": "Defeat a Lynx in the First Hit",
+                    "taskID": "defeat_lynx_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -7479,8 +7479,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Level 25 Skeleton in 1 Hit",
-                    "taskID": "defeat_level_25_skeleton_1_hit",
+                    "name": "Defeat a Level 25 Skeleton in the First Hit",
+                    "taskID": "defeat_level_25_skeleton_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -7679,8 +7679,8 @@
                     ] 
                 },
                 {
-                    "name": "Defeat a Lizardman Brute in 1 Hit",
-                    "taskID": "defeat_lizardman_brute_1_hit",
+                    "name": "Defeat a Lizardman Brute in the First Hit",
+                    "taskID": "defeat_lizardman_brute_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
@@ -7907,8 +7907,8 @@
                     ] 
                 },
                 {
-                    "name": "Defeat a Lizardman Brute in 1 Hit",
-                    "taskID": "defeat_lizardman_brute_1_hit",
+                    "name": "Defeat a Lizardman Brute in the First Hit",
+                    "taskID": "defeat_lizardman_brute_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
@@ -8312,8 +8312,8 @@
                     ] 
                 },
                 {
-                    "name": "Defeat a Lizardman Brute in 1 Hit",
-                    "taskID": "defeat_lizardman_brute_1_hit",
+                    "name": "Defeat a Lizardman Brute in the First Hit",
+                    "taskID": "defeat_lizardman_brute_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
@@ -9381,8 +9381,8 @@
                     
                 },
                 {
-                    "name": "Defeat a Swamp Frog in 1 Hit",
-                    "taskID": "defeat_swamp_frog_1_hit",
+                    "name": "Defeat a Swamp Frog in the First Hit",
+                    "taskID": "defeat_swamp_frog_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -9454,8 +9454,8 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Troll in 1 Hit",
-                    "taskID": "defeat_troll_1_hit",
+                    "name": "Defeat a Troll in the First Hit",
+                    "taskID": "defeat_troll_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
@@ -9470,8 +9470,8 @@
                     }
                 },                            
                 {
-                    "name": "Defeat a Bear Cub in 1 Hit",
-                    "taskID": "defeat_bear_cub_1_hit",
+                    "name": "Defeat a Bear Cub in the First Hit",
+                    "taskID": "defeat_bear_cub_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -9494,8 +9494,8 @@
             "neighbor_ids": [5175, 5430, 5173, 4918],
             "tasks": [              
                 {
-                    "name": "Defeat a Big Frog in 1 Hit",
-                    "taskID": "defeat_big_frog_1_hit",
+                    "name": "Defeat a Big Frog in the First Hit",
+                    "taskID": "defeat_big_frog_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -9518,8 +9518,8 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Defeat a Grizzly Bear in 1 Hit",
-                    "taskID": "defeat_grizzly_bear_1_Hit",
+                    "name": "Defeat a Grizzly Bear in the First Hit",
+                    "taskID": "defeat_grizzly_bear_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

@@ -81,8 +81,8 @@
                     }                   
                 },
                 {
-                    "name": "Defeat a Dire Wolf in 1 Hit",
-                    "taskID": "defeat_dire_wolf_1_hit",
+                    "name": "Defeat a Dire Wolf in the First Hit",
+                    "taskID": "defeat_dire_wolf_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
@@ -123,8 +123,8 @@
                     }                   
                 },
                 {
-                    "name": "Defeat an Oryx in 1 Hit",
-                    "taskID": "defeat_oryx_1_hit",
+                    "name": "Defeat an Oryx in the First Hit",
+                    "taskID": "defeat_oryx_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

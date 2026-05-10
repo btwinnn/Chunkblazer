@@ -4,7 +4,7 @@
            "mystery_tasks": [
                 {
                     "name": "A Quick Harvest",
-                    "taskID": "defeat_farmer_1_hit",
+                    "taskID": "defeat_farmer_first_hit",
                     "base_points": 1,
                     "hint": "Farmer",
                     "skill": "Combat",
@@ -41,7 +41,7 @@
                 },
                 {
                     "name": "Ground Beef",
-                    "taskID": "defeat_cow_1_hit",
+                    "taskID": "defeat_cow_first_hit",
                     "base_points": 1,
                     "hint": "Cow",
                     "category": "Combat",

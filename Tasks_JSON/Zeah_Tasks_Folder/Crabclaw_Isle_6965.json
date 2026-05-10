@@ -4,8 +4,8 @@
             "neighbor_ids": [6966, 7221, 6964,6709],
             "tasks": [
                 {
-                    "name": "Defeat a Sand Crab in 1 Hit",
-                    "taskID": "defeat_sand_crab_1_hit",
+                    "name": "Defeat a Sand Crab in the First Hit",
+                    "taskID": "defeat_sand_crab_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,

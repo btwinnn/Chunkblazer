@@ -17,8 +17,8 @@
                     }                   
                 },
                 {
-                    "name": "Defeat a Stag in 1 Hit",
-                    "taskID": "defeat_stag_1_hit",
+                    "name": "Defeat a Stag in the First Hit",
+                    "taskID": "defeat_stag_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

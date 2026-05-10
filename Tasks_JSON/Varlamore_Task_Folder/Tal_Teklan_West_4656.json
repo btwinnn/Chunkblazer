@@ -31,8 +31,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Tlati Guard in 1 Hit",
-                    "taskID": "Defeat_tlati_guard_1_hit",
+                    "name": "Defeat a Tlati Guard in the First Hit",
+                    "taskID": "Defeat_tlati_guard_first_hit",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "category": "Combat",

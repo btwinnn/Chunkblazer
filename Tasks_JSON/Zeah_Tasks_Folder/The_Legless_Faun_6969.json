@@ -170,7 +170,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Highwayman in 1 Hit",
+                    "name": "Defeat a Highwayman in the First Hit",
                     "taskID": "defeat_highwayman_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

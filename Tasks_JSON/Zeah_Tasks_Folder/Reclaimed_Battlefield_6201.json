@@ -17,8 +17,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Boar in 1 Hit",
-                    "taskID": "defeat_boar_1_hit",
+                    "name": "Defeat a Boar in the First Hit",
+                    "taskID": "defeat_boar_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

@@ -1040,7 +1040,7 @@
                 },
                 {
                     "name": "Defeat a Level 20 Dark Wizard 1 Hit",
-                    "taskID": "defeat_level_20_dark_wizard_1_hit",
+                    "taskID": "defeat_level_20_dark_wizard_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -1562,7 +1562,7 @@
                     
                 },
                 {
-                    "name": "Defeat a Varrock Guard in 1 Hit",
+                    "name": "Defeat a Varrock Guard in the First Hit",
                     "taskID": "defeat_varrock_guard_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2153,7 +2153,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Level 5 Goblin in 1 Hit",
+                    "name": "Defeat a Level 5 Goblin in the First Hit",
                     "taskID": "defeat_level_5_goblin_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2795,7 +2795,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a Level 6 Bat in 1 Hit",
+                    "name": "Defeat a Level 6 Bat in the First Hit",
                     "taskID": "defeat_bat_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

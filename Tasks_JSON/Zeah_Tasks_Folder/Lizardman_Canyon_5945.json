@@ -113,8 +113,8 @@
                     ] 
                 },
                 {
-                    "name": "Defeat a Lizardman in 1 Hit",
-                    "taskID": "defeat_lizardman_1_hit",
+                    "name": "Defeat a Lizardman in the First Hit",
+                    "taskID": "defeat_lizardman_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,

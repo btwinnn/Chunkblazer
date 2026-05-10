@@ -151,7 +151,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Level 5 Goblin in 1 Hit",
+                    "name": "Defeat a Level 5 Goblin in the First Hit",
                     "taskID": "defeat_level_5_goblin_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

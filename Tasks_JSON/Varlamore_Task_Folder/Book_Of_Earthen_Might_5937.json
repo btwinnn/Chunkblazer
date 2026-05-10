@@ -32,8 +32,8 @@
                     }                   
                 },
                 {
-                    "name": "Defeat a Varlamore Bandit in 1 Hit",
-                    "taskID": "defeat_varlamore_bandit_1_hit",
+                    "name": "Defeat a Varlamore Bandit in the First Hit",
+                    "taskID": "defeat_varlamore_bandit_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

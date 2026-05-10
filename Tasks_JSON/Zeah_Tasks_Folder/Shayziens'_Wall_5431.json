@@ -182,8 +182,8 @@
                     ] 
                 },
                 {
-                    "name": "Defeat a Lizardman Brute in 1 Hit",
-                    "taskID": "defeat_lizardman_brute_1_hit",
+                    "name": "Defeat a Lizardman Brute in the First Hit",
+                    "taskID": "defeat_lizardman_brute_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,

@@ -37,8 +37,8 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Troll in 1 Hit",
-                    "taskID": "defeat_troll_1_hit",
+                    "name": "Defeat a Troll in the First Hit",
+                    "taskID": "defeat_troll_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
@@ -53,8 +53,8 @@
                     }
                 },                            
                 {
-                    "name": "Defeat a Bear Cub in 1 Hit",
-                    "taskID": "defeat_bear_cub_1_hit",
+                    "name": "Defeat a Bear Cub in the First Hit",
+                    "taskID": "defeat_bear_cub_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

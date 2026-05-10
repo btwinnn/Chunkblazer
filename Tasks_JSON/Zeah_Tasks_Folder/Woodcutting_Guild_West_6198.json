@@ -19,8 +19,8 @@
                         ]
                 },
                 {                           
-                    "name": "Defeat a Forester in 1 Hit",
-                    "taskID": "defeat_forester_in_1_hit",
+                    "name": "Defeat a Forester in the First Hit",
+                    "taskID": "defeat_forester_in_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,

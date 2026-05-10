@@ -32,7 +32,7 @@
                     ]
                 },
                 {
-                    "name": "DESTROY a Gnome Child in 1 Hit",
+                    "name": "DESTROY a Gnome Child in the First Hit",
                     "taskID": "defeat_gnome_child_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

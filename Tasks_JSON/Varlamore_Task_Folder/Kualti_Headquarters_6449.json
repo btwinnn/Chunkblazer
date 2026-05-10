@@ -60,8 +60,8 @@
                     }
                 },
                 {
-                    "name": "Defeat a Thief in Varlamore in 1 Hit",
-                    "taskID": "defeat_a_thief_varlamore_1_hit",
+                    "name": "Defeat a Thief in Varlamore in the First Hit",
+                    "taskID": "defeat_a_thief_varlamore_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
