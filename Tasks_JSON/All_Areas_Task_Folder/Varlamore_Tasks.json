@@ -6587,7 +6587,7 @@
                         }
                     ]
                 },
-                 {
+                {
                     "name": "Obtain Eclipse Red",
                     "taskID": "obtain_eclipse_red",
                     "category": "Obtain",
@@ -6601,6 +6601,19 @@
                             "quantity": [1]
                         }
                     ]
+                },
+                {
+                    "name": "Activate Protect Item",
+                    "taskID": "pray_protect_item",
+                    "category": "Prayer",
+                    "level": 25,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "varbit_boolean": 1,
+                    "constraints": {
+                        "varbit_id": 3910
+                    }                   
                 }
             ],
             "is_completed": false

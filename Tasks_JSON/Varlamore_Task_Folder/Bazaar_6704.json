@@ -1,0 +1,175 @@
+{
+            "region_id": [6704],
+            "Friendly_Name": "Bazaar",
+            "neighbor_ids": [6705, 6960, 6703, 6448],
+            "tasks": [
+                {
+                    "name": "Steal from a Baker's Stall",
+                    "taskID": "steal_baker_stall",
+                    "category": "Thieving",
+                    "level": 5,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Bakery Stall"],
+                            "object_id": [11730, 51937, 6945, 6163],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal from a Fur Stall",
+                    "taskID": "steal_fur_stall",
+                    "category": "Thieving",
+                    "level": 35,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_object": [
+                        {
+                            "object": ["Fur Stall"],
+                            "object_id": [58102, 37405, 11732, 51934, 4278],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal from a Spice Stall",
+                    "taskID": "steal_spice_stall",
+                    "category": "Thieving",
+                    "level": 65,
+                    "completion_type": "THIEVING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_object": [
+                        {
+                            "object": ["Spice Stall"],
+                            "object_id": [58105, 11733, 51936, 36572],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal from a Gem Stall",
+                    "taskID": "steal_gem_stall",
+                    "category": "Thieving",
+                    "level": 75,
+                    "completion_type": "THIEVING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_object": [
+                        {
+                            "object": ["Gem Stall"],
+                            "object_id": [58106, 11731, 51935, 6162, 36571],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Steal from a Silk Stall",
+                    "taskID": "steal_silk_stall",
+                    "category": "Thieving",
+                    "level": 20,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Silk Stall"],
+                            "object_id": [58101, 11729, 51933, 36569],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket a Wealthy Citizen",
+                    "taskID": "pickpocket_wealthy_citizen",
+                    "category": "Thieving",
+                    "level": 50,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Wealthy Citizen"],
+                        "npc_ids": [13302, 13303, 13304, 13305],
+                        "quantity": [1, 200]
+                    }
+                },
+                {
+                    "name": "Obtain a House key",
+                    "taskID": "obtain_house_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["House Keys"],
+                            "item_ids": [29325],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Bass",
+                    "taskID": "cook_bass",
+                    "category": "Cooking",
+                    "level": 43,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Bass",
+                            "item_ids": [365]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Cod",
+                    "taskID": "cook_cod",
+                    "category": "Cooking",
+                    "level": 18,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Cod",
+                            "item_ids": [339]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Eclipse Red",
+                    "taskID": "obtain_eclipse_red",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Eclipse Red"],
+                            "item_ids": [29415],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Activate Protect Item",
+                    "taskID": "pray_protect_item",
+                    "category": "Prayer",
+                    "level": 25,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "varbit_boolean": 1,
+                    "constraints": {
+                        "varbit_id": 3910
+                    }                   
+                }
+            ],
+            "is_completed": false
+        }
