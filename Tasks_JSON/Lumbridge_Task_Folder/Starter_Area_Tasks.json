@@ -805,7 +805,7 @@
           "required_items": [
             {
               "item": "Steel Dagger",
-              "item_ids": [1223, 5672, 5690, 1207]
+              "item_ids": [1207]
             }
           ]
         }
