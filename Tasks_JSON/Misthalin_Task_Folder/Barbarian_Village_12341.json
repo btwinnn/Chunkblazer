@@ -36,7 +36,7 @@
                     ]       
                 },
                 {
-                    "name": "Obtain Stronghold of Security Boots",
+                    "name": "Obtain the Fancier Boots",
                     "taskID": "obtain_stronghold_security_boots",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -44,8 +44,8 @@
                     "assignment_weight": 8,
                     "required_items": [
                             {
-                                "item": ["Fancy Boots", "Fighting Boots", "Fancier Boots"],
-                                "item_ids": [9005, 9006, 28672],
+                                "item": ["Fancier Boots"],
+                                "item_ids": [ 28672],
                                 "quantity": [1]
                             }
                         ]
