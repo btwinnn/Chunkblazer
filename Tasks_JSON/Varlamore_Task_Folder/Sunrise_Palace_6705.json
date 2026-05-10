@@ -130,5 +130,19 @@
                     ]
                 }
             ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "The Final Dawn",
+                    "points": 4
+                },
+                {
+                    "name": "Twilight's Promise",
+                    "points": 2
+                },
+                {
+                    "name": "Ethically Acquired Antiquities",
+                    "points": 1
+                }
+            ],
             "is_completed": false
         }
