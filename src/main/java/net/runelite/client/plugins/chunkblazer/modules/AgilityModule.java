@@ -33,23 +33,29 @@ public class AgilityModule extends AbstractTaskModule
 	private static final String COLOR_DARK_GREEN = "228b22";
 	private static final String COLOR_BLACK = "000000";
 
-	// Minimum XP gain to count as a LAP completion (not an obstacle).
+	// Per-task XP threshold for a credit. AGILITY tasks come in two shapes:
 	//
-	// OSRS agility courses split lap progress into two distinct XP events: per-
-	// obstacle gains (typically 5–22 XP) and a per-lap completion bonus (39 XP
-	// on the smallest course, Gnome; up to ~890 XP on Pollnivneh) that fires
-	// AFTER the last obstacle. Crediting on every ≥5 XP gain — what we did
-	// before — counted each obstacle as a "lap", so a 1-lap Draynor task
-	// completed on the first Rough Wall climb (5 XP). Mike caught this as
-	// "completes on START not finish". Threshold 30 sits cleanly between the
-	// two: above the largest single-obstacle gain we know of (~22 XP on rooftop
-	// courses) and below the smallest lap bonus (39 XP on Gnome).
+	//   Lap tasks (have required_object in JSON, e.g. "Complete some Laps of
+	//   Draynor Rooftop"): every obstacle awards 5–22 XP, then the lap-end
+	//   bonus awards 39+ XP as a separate StatChanged event. We want to count
+	//   only the lap-end bonus, so the threshold has to sit above any single
+	//   obstacle.
 	//
-	// Caveat: a few non-rooftop courses have a single obstacle whose XP
+	//   Shortcut tasks (no required_object, e.g. "Use the Level 21 Underwall
+	//   Tunnel"): one tiny XP gain per use, want to credit on it. Threshold
+	//   has to be small.
+	//
+	// 30 sits between the largest single-obstacle XP (~22 XP on rooftop
+	// courses) and the smallest lap-end bonus (39 XP, Gnome Stronghold).
+	// 5 catches every legitimate shortcut XP gain.
+	//
+	// Caveat: a few non-rooftop lap courses have a single obstacle whose XP
 	// straddles 30 (e.g. Wilderness Agility's Pile of Rocks at 62.5 XP) and
-	// will double-count laps until we move to per-task object-id tracking.
-	// Acceptable for now — Mike's report was Draynor.
-	private static final int MIN_XP_THRESHOLD = 30;
+	// will double-count laps until AgilityModule moves to per-task
+	// required_object id tracking. Acceptable for now — Mike's report was
+	// Draynor.
+	private static final int LAP_XP_THRESHOLD = 30;
+	private static final int SHORTCUT_XP_THRESHOLD = 5;
 
 	@Inject
 	private ChatMessageManager chatMessageManager;
@@ -179,13 +185,16 @@ public class AgilityModule extends AbstractTaskModule
 		int xpGained = currentXp - previousAgilityXp;
 		previousAgilityXp = currentXp;
 
-		if (xpGained >= MIN_XP_THRESHOLD)
+		// Per-task threshold: a lap-style task (required_object present) only
+		// credits on the per-lap bonus; a shortcut credits on any obstacle XP.
+		// Both kinds can be active at the same time, so check each task.
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
-			log.info(">>> AgilityModule: Gained {} Agility XP (obstacle/lap)", xpGained);
-
-			// Credit progress to all active AGILITY tasks
-			for (NuzlockeTask task : new HashSet<>(activeTasks))
+			int threshold = task.isHasRequiredObject() ? LAP_XP_THRESHOLD : SHORTCUT_XP_THRESHOLD;
+			if (xpGained >= threshold)
 			{
+				log.info(">>> AgilityModule: '{}' credited (gained {} XP, threshold {})",
+					task.getName(), xpGained, threshold);
 				creditTaskProgress(task, 1);
 			}
 		}

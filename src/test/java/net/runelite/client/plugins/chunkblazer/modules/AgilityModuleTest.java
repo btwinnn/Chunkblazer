@@ -128,48 +128,157 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	}
 
 	/**
-	 * Mike's bug #22: Draynor Agility laps "complete on START not finish".
+	 * Walk one course through AgilityModule and assert that none of the
+	 * obstacle XP drops credits the lap-style task, but the final lap-end
+	 * bonus does (and brings the 1-lap task to completion).
 	 *
-	 * <p>The Draynor Rooftop course awards 5–8 XP per obstacle (7 obstacles
-	 * per lap) plus a 79 XP lap-completion bonus at the end of the lap.
-	 * Crediting +1 progress on every obstacle (the previous behaviour at
-	 * {@code MIN_XP_THRESHOLD = 5}) would tick a 1-lap task to complete on
-	 * the very first obstacle. The fix raises the threshold so only the
-	 * per-lap bonus crosses it.
+	 * <p>Used by every per-course test below — same shape, different XP
+	 * numbers (sourced from the OSRS Wiki). Each course's lap is "obstacles…
+	 * then a separate lap-completion bonus event."
 	 */
-	@Test
-	void testDraynorLap_OnlyCompletesOnLapBonusNotEachObstacle()
+	private void runOneLap(String taskName, String taskId, int[] obstacleXps, int lapBonus)
 	{
-		NuzlockeTask task = createTestTask("Draynor Lap", "complete_draynor_roof", "AGILITY", 1);
+		NuzlockeTask task = createTestTask(taskName, taskId, "AGILITY", 1);
+		task.setHasRequiredObject(true); // lap tasks have required_object in JSON
 
 		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
 		agilityModule.addActiveTask(task);
 
-		// Seed the previousAgilityXp baseline. Without this the first event
-		// fires the early-return at line 158 and gets used as the baseline.
-		// initializeXpTracking() ran inside addActiveTask via the mocked
-		// clientThread.invokeLater, so the baseline is already 0.
-
-		// Walk through one full Draynor lap: seven obstacle XP drops, none
-		// of which is a lap completion. None should credit progress.
 		int xp = 0;
-		int[] obstacleXps = {5, 8, 8, 7, 7, 5, 5};
 		for (int gain : obstacleXps)
 		{
 			xp += gain;
 			agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, xp, 1, 1));
 			assertEquals(0, task.getCurrentProgress(),
-				"Obstacle gains (" + gain + " XP) must not credit lap progress");
+				taskName + ": obstacle gain " + gain + " XP must not credit lap progress");
 			assertFalse(task.isCompleted(),
-				"Task must not complete on intra-lap obstacle XP");
+				taskName + ": task must not complete on intra-lap obstacle XP");
 		}
 
-		// The 79 XP lap-completion bonus arrives as a separate StatChanged
-		// event right after the last obstacle. THIS is the lap signal.
-		xp += 79;
+		xp += lapBonus;
 		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, xp, 1, 1));
 
-		assertEquals(1, task.getCurrentProgress(), "Lap bonus should credit +1 lap");
-		assertTrue(task.isCompleted(), "1-lap task should be complete after one lap-end bonus");
+		assertEquals(1, task.getCurrentProgress(),
+			taskName + ": " + lapBonus + " XP lap bonus should credit +1");
+		assertTrue(task.isCompleted(),
+			taskName + ": 1-lap task should complete on lap-end bonus");
+
+		// Clean up so the next per-course test starts with no active task.
+		agilityModule.onTaskCleared();
+	}
+
+	/**
+	 * Mike's bug #22: Draynor Agility laps "complete on START not finish".
+	 * Per-obstacle XP at this course is 5–8, lap-end bonus is 79. Threshold
+	 * 30 keeps obstacles from crediting and lets the bonus through.
+	 */
+	@Test
+	void testDraynorLap_OnlyCompletesOnLapBonusNotEachObstacle()
+	{
+		runOneLap("Draynor Lap", "complete_draynor_roof",
+			new int[]{5, 8, 8, 7, 7, 5, 5}, 79);
+	}
+
+	@Test
+	void testAlKharidLap()
+	{
+		// Al Kharid Rooftop (level 20). Obstacles 5–8 XP, lap bonus 180 XP.
+		runOneLap("Al Kharid Lap", "complete_kharid_roof",
+			new int[]{5, 5, 5, 8, 5, 5, 8}, 180);
+	}
+
+	@Test
+	void testVarrockLap()
+	{
+		// Varrock Rooftop (level 30). Obstacles 5–8 XP, lap bonus 238 XP.
+		runOneLap("Varrock Lap", "complete_varrock_roof",
+			new int[]{5, 8, 5, 8, 5, 8}, 238);
+	}
+
+	@Test
+	void testCanifisLap()
+	{
+		// Canifis Rooftop (level 40). Obstacles 8–9 XP, lap bonus 240 XP.
+		runOneLap("Canifis Lap", "complete_canifis_roof",
+			new int[]{8, 9, 8, 9, 9, 8}, 240);
+	}
+
+	@Test
+	void testFaladorLap()
+	{
+		// Falador Rooftop (level 50). Obstacles 5–12 XP, lap bonus 440 XP.
+		runOneLap("Falador Lap", "complete_falador_roof",
+			new int[]{7, 12, 12, 7, 5, 5, 12, 8, 9}, 440);
+	}
+
+	@Test
+	void testSeersLap()
+	{
+		// Seers Rooftop (level 60). Obstacles uniform 9 XP, lap bonus 570.
+		runOneLap("Seers Lap", "complete_seers_roof",
+			new int[]{9, 9, 9, 9, 9}, 570);
+	}
+
+	@Test
+	void testArdougneLap()
+	{
+		// Ardougne Rooftop (level 90). Obstacles 11–22 XP — the highest single
+		// rooftop obstacle XP we test. Lap bonus 793 XP. This is the course
+		// that justifies the 30 threshold being above ~22.
+		runOneLap("Ardougne Lap", "complete_ardougne_roof",
+			new int[]{11, 12, 12, 22, 22, 22, 12}, 793);
+	}
+
+	@Test
+	void testGnomeAgilityLap()
+	{
+		// Gnome Stronghold (level 1, non-rooftop). Obstacles 2–8 XP. Lap end
+		// gives ~39.5 XP — the smallest lap bonus across all courses, which
+		// is what determines the lower bound of the LAP_XP_THRESHOLD.
+		runOneLap("Gnome Course Lap", "complete_gnome_course",
+			new int[]{8, 6, 6, 8, 5, 3, 3}, 39);
+	}
+
+	@Test
+	void testBarbarianOutpostLap()
+	{
+		// Barbarian Outpost (level 35). Uniform 13.5 XP per obstacle (rounded
+		// down by client to 13), lap bonus 152.5 (rounded to 152 here).
+		runOneLap("Barbarian Lap", "complete_barbarian_course",
+			new int[]{13, 13, 13, 13, 13}, 152);
+	}
+
+	@Test
+	void testColossalWyrmBasicPath()
+	{
+		// Colossal Wyrm Basic Path (level 50, Varlamore). Obstacles ~7 XP,
+		// path-completion bonus 75 XP.
+		runOneLap("Colossal Wyrm Basic", "agility_level_50_path_colossal_wyrm_course",
+			new int[]{7, 7, 7, 7, 7}, 75);
+	}
+
+	/**
+	 * Shortcut path: a single small XP gain has to credit immediately. These
+	 * tasks have no required_object in JSON, so AgilityModule should fall
+	 * back to the lower SHORTCUT_XP_THRESHOLD (5).
+	 */
+	@Test
+	void testShortcut_SingleSmallXpGainCredits()
+	{
+		NuzlockeTask task = createTestTask("Use the Level 21 Underwall Tunnel",
+			"agility_level_21_underwall_tunnel", "AGILITY", 1);
+		task.setHasRequiredObject(false); // shortcut tasks have no required_object
+
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(task);
+
+		// Underwall tunnel awards a small one-shot XP gain (~8 XP). Below
+		// LAP_XP_THRESHOLD=30 but above SHORTCUT_XP_THRESHOLD=5.
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, 8, 21, 21));
+
+		assertEquals(1, task.getCurrentProgress(),
+			"Shortcut task should credit on a single small Agility XP gain");
+		assertTrue(task.isCompleted(),
+			"1-quantity shortcut task should complete on the only XP event");
 	}
 }

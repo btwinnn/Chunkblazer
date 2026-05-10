@@ -49,6 +49,11 @@ public class NuzlockeTask
 	private transient int targetQuantity;
 	private transient boolean completed;
 
+	// Set true by the deserializer when the task JSON has a required_object
+	// block. We don't model the full RequiredObject yet; AgilityModule needs
+	// only "is this a lap-style task" to pick the right XP threshold.
+	private transient boolean hasRequiredObject;
+
 	public int getLevelRequirement()
 	{
 		return level != null ? level : 1;
@@ -151,6 +156,10 @@ public class NuzlockeTask
 
 			// Handle varbit_boolean for VARBIT_CHECK tasks
 			task.setVarbitBoolean(getIntOrNull(obj, "varbit_boolean"));
+
+			// Note required_object presence (don't fully parse; AgilityModule
+			// only needs to know lap vs shortcut so it can pick a threshold).
+			task.setHasRequiredObject(obj.has("required_object"));
 
 			return task;
 		}
