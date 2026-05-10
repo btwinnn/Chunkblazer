@@ -45,7 +45,7 @@
                     "required_items": [
                             {
                                 "item": ["Fancier Boots"],
-                                "item_ids": [ 28672],
+                                "item_ids": [28672],
                                 "quantity": [1]
                             }
                         ]

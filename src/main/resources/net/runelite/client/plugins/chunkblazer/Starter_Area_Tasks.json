@@ -127,8 +127,8 @@
           ]
         },
         {
-          "name": "Equip a Wizard Hat",
-          "taskID": "equip_wizard_hat",
+          "name": "Equip a Blue Wizard Hat",
+          "taskID": "equip_blue_wizard_hat",
           "category": "Defence",
           "level": 1,
           "completion_type": "EQUIP",
@@ -136,8 +136,8 @@
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Wizard Hat",
-              "item_ids": [1017]
+              "item": "Blue Wizard Hat",
+              "item_ids": [579]
             }
           ]
         },
