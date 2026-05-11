@@ -1,6 +1,6 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
-import java.util.HashMap;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -10,23 +10,31 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
+import net.runelite.api.MenuAction;
 import net.runelite.api.NPC;
 import net.runelite.api.Skill;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.InteractingChanged;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
+import net.runelite.client.plugins.chunkblazer.RequiredObject;
 import net.runelite.client.plugins.chunkblazer.TargetNpc;
 
 /**
  * Module for handling THIEVING completion type tasks.
- * Detects successful pickpocket actions on target NPCs.
  *
- * THIEVING tasks have target_npc with npc_ids and quantity.
- * Detection: Player gains Thieving XP while having recently interacted with a watched NPC.
+ * Two detection paths run in parallel:
+ *   1. NPC pickpockets — task has target_npc; we track InteractingChanged with watched NPC IDs.
+ *   2. GameObject thefts (stalls, chests) — task has required_object; we track MenuOptionClicked
+ *      on watched object IDs.
+ * Either path gates a credit on a Thieving XP gain inside INTERACTION_TIMEOUT_TICKS of the
+ * recorded interaction. Tasks with neither requirement no longer auto-credit — the old
+ * "credit any thieving XP to no-NPC tasks" fallback caused one stall theft to complete every
+ * unrelated stall task simultaneously.
  */
 @Slf4j
 @Singleton
@@ -46,22 +54,35 @@ public class ThievingModule extends AbstractTaskModule
 	// How many ticks after interacting with an NPC we consider XP gains as pickpockets
 	private static final int INTERACTION_TIMEOUT_TICKS = 5;
 
+	// Menu actions that count as an actual interaction with a GameObject (not just hovering/examine).
+	private static final Set<MenuAction> GAME_OBJECT_ACTIONS = EnumSet.of(
+		MenuAction.GAME_OBJECT_FIRST_OPTION,
+		MenuAction.GAME_OBJECT_SECOND_OPTION,
+		MenuAction.GAME_OBJECT_THIRD_OPTION,
+		MenuAction.GAME_OBJECT_FOURTH_OPTION,
+		MenuAction.GAME_OBJECT_FIFTH_OPTION
+	);
+
 	@Inject
 	private ChatMessageManager chatMessageManager;
 
-	// Track task-specific data
-	// Map: taskId -> Set of target NPC IDs
+	// Per-task NPC IDs (pickpocket tasks).
 	private final Map<String, Set<Integer>> taskTargetNpcs = new ConcurrentHashMap<>();
 
-	// All NPC IDs we're watching (union of all task requirements)
-	private final Set<Integer> watchedNpcIds = ConcurrentHashMap.newKeySet();
+	// Per-task GameObject IDs (stall/chest tasks).
+	private final Map<String, Set<Integer>> taskRequiredObjectIds = new ConcurrentHashMap<>();
 
-	// Track Thieving XP for detecting gains
+	// Union of watched NPCs and objects across active tasks.
+	private final Set<Integer> watchedNpcIds = ConcurrentHashMap.newKeySet();
+	private final Set<Integer> watchedObjectIds = ConcurrentHashMap.newKeySet();
+
 	private int previousThievingXp = -1;
 
-	// Track recent NPC interactions
+	// Recent interactions. Whichever fires more recently wins on the next XP gain.
 	private int lastInteractionNpcId = -1;
 	private int lastInteractionTick = -1;
+	private int lastInteractionObjectId = -1;
+	private int lastInteractionObjectTick = -1;
 
 	// Debug heartbeat
 	private int tickCounter = 0;
@@ -97,10 +118,14 @@ public class ThievingModule extends AbstractTaskModule
 	{
 		eventBus.unregister(this);
 		taskTargetNpcs.clear();
+		taskRequiredObjectIds.clear();
 		watchedNpcIds.clear();
+		watchedObjectIds.clear();
 		previousThievingXp = -1;
 		lastInteractionNpcId = -1;
 		lastInteractionTick = -1;
+		lastInteractionObjectId = -1;
+		lastInteractionObjectTick = -1;
 		log.info("ThievingModule stopped");
 	}
 
@@ -134,6 +159,28 @@ public class ThievingModule extends AbstractTaskModule
 			}
 
 			taskTargetNpcs.put(task.getTaskId(), targetNpcs);
+
+			// Parse required GameObjects (stalls, chests).
+			Set<Integer> requiredObjectIds = new HashSet<>();
+			List<RequiredObject> requiredObjects = task.getRequiredObjects();
+			if (requiredObjects != null)
+			{
+				for (RequiredObject ro : requiredObjects)
+				{
+					List<Integer> ids = ro.getObjectIds();
+					if (ids != null)
+					{
+						for (Integer id : ids)
+						{
+							requiredObjectIds.add(id);
+							watchedObjectIds.add(id);
+							log.info("      >>> WATCHING OBJECT ID: {}", id);
+						}
+					}
+				}
+			}
+
+			taskRequiredObjectIds.put(task.getTaskId(), requiredObjectIds);
 			log.info("  Target quantity: {}", task.getTargetQuantity());
 
 			// Initialize XP tracking on client thread
@@ -157,7 +204,9 @@ public class ThievingModule extends AbstractTaskModule
 	{
 		super.onTaskCleared();
 		taskTargetNpcs.clear();
+		taskRequiredObjectIds.clear();
 		watchedNpcIds.clear();
+		watchedObjectIds.clear();
 		previousThievingXp = -1;
 	}
 
@@ -213,6 +262,29 @@ public class ThievingModule extends AbstractTaskModule
 	}
 
 	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked event)
+	{
+		if (activeTasks.isEmpty() || watchedObjectIds.isEmpty())
+		{
+			return;
+		}
+
+		if (!GAME_OBJECT_ACTIONS.contains(event.getMenuAction()))
+		{
+			return;
+		}
+
+		int objectId = event.getId();
+		if (watchedObjectIds.contains(objectId))
+		{
+			lastInteractionObjectId = objectId;
+			lastInteractionObjectTick = client.getTickCount();
+			log.info(">>> ThievingModule: Player acted on watched object (ID: {}, option: {})",
+				objectId, event.getMenuOption());
+		}
+	}
+
+	@Subscribe
 	public void onStatChanged(StatChanged event)
 	{
 		if (event.getSkill() != Skill.THIEVING)
@@ -239,16 +311,31 @@ public class ThievingModule extends AbstractTaskModule
 		{
 			log.info(">>> ThievingModule: Gained {} Thieving XP", xpGained);
 
-			// Check if we recently interacted with a watched NPC
 			int currentTick = client.getTickCount();
-			boolean recentInteraction = lastInteractionNpcId > 0 &&
-				(currentTick - lastInteractionTick) <= INTERACTION_TIMEOUT_TICKS;
+			boolean recentNpc = lastInteractionNpcId > 0 &&
+				(currentTick - lastInteractionTick) <= INTERACTION_TIMEOUT_TICKS &&
+				watchedNpcIds.contains(lastInteractionNpcId);
+			boolean recentObject = lastInteractionObjectId > 0 &&
+				(currentTick - lastInteractionObjectTick) <= INTERACTION_TIMEOUT_TICKS &&
+				watchedObjectIds.contains(lastInteractionObjectId);
 
-			if (recentInteraction && watchedNpcIds.contains(lastInteractionNpcId))
+			// If both fired, the more recent one wins — protects against e.g. clicking a stall
+			// while still interacting-flagged on a nearby NPC.
+			if (recentNpc && recentObject)
+			{
+				if (lastInteractionObjectTick >= lastInteractionTick)
+				{
+					recentNpc = false;
+				}
+				else
+				{
+					recentObject = false;
+				}
+			}
+
+			if (recentNpc)
 			{
 				log.info(">>> ThievingModule: Successful pickpocket of NPC ID {} detected!", lastInteractionNpcId);
-
-				// Credit progress to matching tasks
 				for (NuzlockeTask task : new HashSet<>(activeTasks))
 				{
 					Set<Integer> taskNpcs = taskTargetNpcs.get(task.getTaskId());
@@ -258,20 +345,21 @@ public class ThievingModule extends AbstractTaskModule
 					}
 				}
 			}
-			else
+			else if (recentObject)
 			{
-				// Still credit if we have tasks but no specific NPC requirement
-				// (in case some THIEVING tasks don't specify target_npc)
+				log.info(">>> ThievingModule: Successful theft from object ID {} detected!", lastInteractionObjectId);
 				for (NuzlockeTask task : new HashSet<>(activeTasks))
 				{
-					Set<Integer> taskNpcs = taskTargetNpcs.get(task.getTaskId());
-					if (taskNpcs == null || taskNpcs.isEmpty())
+					Set<Integer> taskObjects = taskRequiredObjectIds.get(task.getTaskId());
+					if (taskObjects != null && taskObjects.contains(lastInteractionObjectId))
 					{
-						// No specific NPC required, credit any thieving XP
 						creditTaskProgress(task, 1);
 					}
 				}
 			}
+			// No matching recent interaction: do nothing. Every THIEVING task in the JSON
+			// declares either target_npc or required_object; falling through and crediting
+			// "no-requirement" tasks caused unrelated stall tasks to complete in lockstep.
 		}
 	}
 
@@ -312,17 +400,23 @@ public class ThievingModule extends AbstractTaskModule
 
 			// Clean up
 			taskTargetNpcs.remove(task.getTaskId());
+			taskRequiredObjectIds.remove(task.getTaskId());
 			activeTasks.remove(task);
-			rebuildWatchedNpcs();
+			rebuildWatched();
 		}
 	}
 
-	private void rebuildWatchedNpcs()
+	private void rebuildWatched()
 	{
 		watchedNpcIds.clear();
 		for (Set<Integer> npcs : taskTargetNpcs.values())
 		{
 			watchedNpcIds.addAll(npcs);
+		}
+		watchedObjectIds.clear();
+		for (Set<Integer> objects : taskRequiredObjectIds.values())
+		{
+			watchedObjectIds.addAll(objects);
 		}
 	}
 

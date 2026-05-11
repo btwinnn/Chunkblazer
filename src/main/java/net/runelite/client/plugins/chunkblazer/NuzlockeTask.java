@@ -36,6 +36,9 @@ public class NuzlockeTask
 	@SerializedName("required_items")
 	private List<RequiredItem> requiredItems;
 
+	@SerializedName("required_object")
+	private List<RequiredObject> requiredObjects;
+
 	@SerializedName("target_npc")
 	private TargetNpc targetNpc;
 
@@ -136,6 +139,26 @@ public class NuzlockeTask
 			if (obj.has("target_npc"))
 			{
 				task.setTargetNpc(context.deserialize(obj.get("target_npc"), TargetNpc.class));
+			}
+
+			// Handle required_object - mirror required_items: accept array or single object.
+			if (obj.has("required_object"))
+			{
+				JsonElement objEl = obj.get("required_object");
+				List<RequiredObject> objects = new ArrayList<>();
+
+				if (objEl.isJsonArray())
+				{
+					for (JsonElement el : objEl.getAsJsonArray())
+					{
+						objects.add(context.deserialize(el, RequiredObject.class));
+					}
+				}
+				else if (objEl.isJsonObject())
+				{
+					objects.add(context.deserialize(objEl, RequiredObject.class));
+				}
+				task.setRequiredObjects(objects);
 			}
 
 			// Handle constraints - some JSON files use object form ({...}), others use

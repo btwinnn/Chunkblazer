@@ -8,6 +8,7 @@ import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.plugins.chunkblazer.ChunkBlazerConfig;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
 import net.runelite.client.plugins.chunkblazer.RequiredItem;
+import net.runelite.client.plugins.chunkblazer.RequiredObject;
 import net.runelite.client.plugins.chunkblazer.TargetNpc;
 import net.runelite.client.plugins.chunkblazer.TaskConstraints;
 import org.mockito.Mock;
@@ -114,6 +115,22 @@ public abstract class AbstractTaskModuleTest
 		targetNpc.setQuantity(targetQuantity);
 
 		task.setTargetNpc(targetNpc);
+		return task;
+	}
+
+	/**
+	 * Create a task with a required GameObject (e.g. a stall).
+	 */
+	protected NuzlockeTask createTaskWithRequiredObject(String name, String taskId, String completionType,
+													   int targetQuantity, List<Integer> objectIds)
+	{
+		NuzlockeTask task = createTestTask(name, taskId, completionType, targetQuantity);
+
+		RequiredObject ro = new RequiredObject();
+		ro.setObjectIds(objectIds);
+		ro.setQuantity(targetQuantity);
+
+		task.setRequiredObjects(Collections.singletonList(ro));
 		return task;
 	}
 

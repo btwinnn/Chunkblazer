@@ -1,7 +1,10 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
+import net.runelite.api.MenuAction;
 import net.runelite.api.NPC;
 import net.runelite.api.Skill;
+import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
@@ -129,5 +134,125 @@ class ThievingModuleTest extends AbstractTaskModuleTest
 	{
 		thievingModule.shutDown();
 		verify(eventBus).unregister(thievingModule);
+	}
+
+	// --- GameObject (stall/chest) tests for bug #23 -------------------------------------------
+	// Repro: user has Seed Stall (id 7053) and Fortunato's Market Stall (id 14011) tasks active,
+	// steals from an unrelated Wine merchant's stall — pre-fix, BOTH tasks completed in lockstep
+	// because XP gain with no NPC match fell through to "credit all tasks with no NPC".
+
+	private static final int SEED_STALL_ID = 7053;
+	private static final int FORTUNATO_STALL_ID = 14011;
+	private static final int WINE_STALL_ID = 14009; // arbitrary unrelated stall
+
+	private MenuOptionClicked mockObjectClick(int objectId, MenuAction action)
+	{
+		// Lenient stubs because non-object actions short-circuit before getId/getMenuOption
+		// are read, and Mockito would otherwise flag those as unnecessary.
+		MenuOptionClicked event = mock(MenuOptionClicked.class);
+		when(event.getMenuAction()).thenReturn(action);
+		lenient().when(event.getId()).thenReturn(objectId);
+		lenient().when(event.getMenuOption()).thenReturn("Steal-from");
+		return event;
+	}
+
+	private StatChanged mockThievingXp(int xp)
+	{
+		StatChanged event = mock(StatChanged.class);
+		when(event.getSkill()).thenReturn(Skill.THIEVING);
+		when(event.getXp()).thenReturn(xp);
+		return event;
+	}
+
+	@Test
+	void testStallTheft_OnlyMatchingObjectIdCredited()
+	{
+		// Both stall tasks active.
+		NuzlockeTask seedTask = createTaskWithRequiredObject(
+			"Steal from a Seed Stall", "steal_seed_stall", "THIEVING", 1, Collections.singletonList(SEED_STALL_ID));
+		NuzlockeTask fortunatoTask = createTaskWithRequiredObject(
+			"Steal from Fortunato's Market Stall", "steal_market_stall_draynor", "THIEVING", 1, Collections.singletonList(FORTUNATO_STALL_ID));
+
+		when(client.getSkillExperience(Skill.THIEVING)).thenReturn(1000);
+		thievingModule.addActiveTask(seedTask);
+		thievingModule.addActiveTask(fortunatoTask);
+
+		// Player clicks Steal-from on the Seed Stall, then gains thieving XP a tick later.
+		when(client.getTickCount()).thenReturn(100);
+		thievingModule.onMenuOptionClicked(mockObjectClick(SEED_STALL_ID, MenuAction.GAME_OBJECT_SECOND_OPTION));
+
+		when(client.getTickCount()).thenReturn(101);
+		thievingModule.onStatChanged(mockThievingXp(1010));
+
+		// Only the Seed Stall task should progress.
+		verify(completionCallback).onProgressUpdated(eq(seedTask), eq(1));
+		verify(completionCallback, never()).onProgressUpdated(eq(fortunatoTask), anyInt());
+	}
+
+	@Test
+	void testStallTheft_UnrelatedStallCreditsNothing()
+	{
+		// This is Mike's exact bug: stealing from a Wine merchant stall (no matching task)
+		// must not credit Seed Stall or Fortunato's.
+		NuzlockeTask seedTask = createTaskWithRequiredObject(
+			"Steal from a Seed Stall", "steal_seed_stall", "THIEVING", 1, Collections.singletonList(SEED_STALL_ID));
+		NuzlockeTask fortunatoTask = createTaskWithRequiredObject(
+			"Steal from Fortunato's Market Stall", "steal_market_stall_draynor", "THIEVING", 1, Collections.singletonList(FORTUNATO_STALL_ID));
+
+		when(client.getSkillExperience(Skill.THIEVING)).thenReturn(1000);
+		thievingModule.addActiveTask(seedTask);
+		thievingModule.addActiveTask(fortunatoTask);
+
+		// Wine stall is not in watchedObjectIds, so the click is ignored.
+		when(client.getTickCount()).thenReturn(100);
+		thievingModule.onMenuOptionClicked(mockObjectClick(WINE_STALL_ID, MenuAction.GAME_OBJECT_SECOND_OPTION));
+
+		when(client.getTickCount()).thenReturn(101);
+		thievingModule.onStatChanged(mockThievingXp(1010));
+
+		// Neither task should progress — the old fallback would have credited both.
+		verify(completionCallback, never()).onProgressUpdated(any(NuzlockeTask.class), anyInt());
+	}
+
+	@Test
+	void testStallTheft_NonObjectMenuActionIgnored()
+	{
+		// A non-object menu action (e.g. walking, examining) must not register as a theft
+		// even if the target ID happens to match a watched stall.
+		NuzlockeTask seedTask = createTaskWithRequiredObject(
+			"Steal from a Seed Stall", "steal_seed_stall", "THIEVING", 1, Collections.singletonList(SEED_STALL_ID));
+
+		when(client.getSkillExperience(Skill.THIEVING)).thenReturn(1000);
+		thievingModule.addActiveTask(seedTask);
+
+		when(client.getTickCount()).thenReturn(100);
+		// Examine (not an interaction) with the stall's id should be filtered out.
+		thievingModule.onMenuOptionClicked(mockObjectClick(SEED_STALL_ID, MenuAction.EXAMINE_OBJECT));
+
+		when(client.getTickCount()).thenReturn(101);
+		thievingModule.onStatChanged(mockThievingXp(1010));
+
+		verify(completionCallback, never()).onProgressUpdated(any(NuzlockeTask.class), anyInt());
+	}
+
+	@Test
+	void testStallTheft_XpGainAfterTimeoutDoesNotCredit()
+	{
+		// If the XP gain arrives more than INTERACTION_TIMEOUT_TICKS (5) after the click,
+		// it must not be associated with that click.
+		NuzlockeTask seedTask = createTaskWithRequiredObject(
+			"Steal from a Seed Stall", "steal_seed_stall", "THIEVING", 1, Collections.singletonList(SEED_STALL_ID));
+
+		when(client.getSkillExperience(Skill.THIEVING)).thenReturn(1000);
+		thievingModule.addActiveTask(seedTask);
+
+		when(client.getTickCount()).thenReturn(100);
+		thievingModule.onMenuOptionClicked(mockObjectClick(SEED_STALL_ID, MenuAction.GAME_OBJECT_SECOND_OPTION));
+
+		// 10 ticks later, well past the 5-tick timeout. XP source is some unrelated thieving activity.
+		when(client.getTickCount()).thenReturn(110);
+		thievingModule.onStatChanged(mockThievingXp(1010));
+
+		verify(completionCallback, never()).onProgressUpdated(any(NuzlockeTask.class), anyInt());
 	}
 }
