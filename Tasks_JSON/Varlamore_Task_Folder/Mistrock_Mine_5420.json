@@ -1,7 +1,7 @@
  {
-            "region_id": [5420],
+            "region_id": [5676],
             "Friendly_Name": "Mistrock Mine",
-            "neighbor_ids": [5421, 5676, 5419, 5164],
+            "neighbor_ids": [5677, 5932, 5675, 5420],
             "tasks": [
                 {
                     "name": "Chop a Maple Tree",
