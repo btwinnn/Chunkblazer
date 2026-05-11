@@ -5789,8 +5789,8 @@
                     ]
                 },
                 {
-                    "name": "Steal some Valuables",
-                    "taskID": "steal_valuables",
+                    "name": "Steal some Valuables while they Shine",
+                    "taskID": "steal_valuables_shine",
                     "category": "Thieving",
                     "level": 50,
                     "completion_type": "THIEVING",
@@ -7523,6 +7523,861 @@
                 }      
             ],
             "is_completed": false
-        }                                  
+        },
+        {
+            "region_id": [5676],
+            "Friendly_Name": "Mistrock Mine",
+            "neighbor_ids": [5677, 5932, 5675, 5420],
+            "tasks": [
+                {
+                    "name": "Chop a Maple Tree",
+                    "taskID": "chop_maple_tree",
+                    "category": "Woodcutting",
+                    "level": 45,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Maple Logs",
+                            "item_ids": [1517],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },             
+                {
+                    "name": "Mine some Gold Ore",
+                    "taskID": "mine_gold",
+                    "category": "Mining",
+                    "level": 40,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Gold Ore",
+                        "item_ids": [444],
+                        "quantity": [1, 25]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                }                      
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [5420],
+            "Friendly_Name": "Mistrock",
+            "neighbor_ids": [5421, 5676, 5419, 5164],
+            "tasks": [
+                {
+                    "name": "Chop a Maple Tree",
+                    "taskID": "chop_maple_tree",
+                    "category": "Woodcutting",
+                    "level": 45,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Maple Logs",
+                            "item_ids": [1517],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Lobster",
+                    "taskID": "catch_raw_lobster",
+                    "category": "Fishing",
+                    "level": 40,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Lobster",
+                        "item_ids": [377],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Lobster",
+                    "taskID": "cook_lobster",
+                    "category": "Cooking",
+                    "level": 40,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Lobster",
+                            "item_ids": [379]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Tuna",
+                    "taskID": "catch_raw_tuna",
+                    "category": "Fishing",
+                    "level": 35,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Tuna",
+                        "item_ids": [359],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Tuna",
+                    "taskID": "cook_tuna",
+                    "category": "Cooking",
+                    "level": 30,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Tuna",
+                            "item_ids": [361]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Swordfish",
+                    "taskID": "catch_raw_swordfish",
+                    "category": "Fishing",
+                    "level": 50,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Swordfish",
+                        "item_ids": [371],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Swordfish",
+                    "taskID": "cook_swordfish",
+                    "category": "Cooking",
+                    "level": 45,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Swordfish",
+                            "item_ids": [373]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Maple Log",
+                    "taskID": "burn_maple_log",
+                    "category": "Firemaking",
+                    "level": 45,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Maple Logs",
+                        "item_ids": [1517],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_tree",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Yew Log",
+                    "taskID": "burn_yew_log",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Nasty Surprise",
+                    "taskID": "obtain_nasty_surprise",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Nasty Surprise"],
+                            "item_ids": [30122],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith an Iron Platebody",
+                    "taskID": "smith_iron_platebody",
+                    "category": "Smithing",
+                    "level": 33,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iron Platebody"],
+                            "item_ids": [1115],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [5421],
+            "Friendly_Name": "Mastering Mixology",
+            "neighbor_ids": [5422, 5677, 5420, 5165],
+            "tasks": [
+                {
+                    "name": "Use Fairy Ring Code CKQ",
+                    "taskID": "fairy_ring_CKQ",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }, 
+                {
+                    "name": "Obtain an Apprentice Potion Pack",
+                    "taskID": "obtain_apprentice_potion_pack",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Apprentice Potion Pack"],
+                            "item_ids": [29971],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Adept Potion Pack",
+                    "taskID": "obtain_adept_potion_pack",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adept Potion Pack"],
+                            "item_ids": [29972],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Expert Potion Pack",
+                    "taskID": "obtain_expert_potion_pack",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Expert Potion Pack"],
+                            "item_ids": [29973],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Prescription Goggles",
+                    "taskID": "obtain_prescription_goggles",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Prescription Goggles"],
+                            "item_ids": [29976],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Alchemist Set",
+                    "taskID": "obtain_Alchemist_set",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Alchemist labcoat"],
+                            "item_ids": [29980, 29978],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Alchemist pants"],
+                            "item_ids": [29982, 29984],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Alchemist gloves"],
+                            "item_ids": [29986],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Reagent Pouch",
+                    "taskID": "obtain_reagent_pouch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Reagent Pouch"],
+                            "item_ids": [29996],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Chugging Barrel",
+                    "taskID": "obtain_chugging_barrel",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Chugging Barrel"],
+                            "item_ids": [30002],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Alchemist's Amulet",
+                    "taskID": "obtain_alchemist's_amulet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Alchemist's Amulet"],
+                            "item_ids": [29988],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix a Goading Potion",
+                    "taskID": "mix_goading_potion",
+                    "category": "Obtain_Set",
+                    "level": 54,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                     "required_items": [
+                        {
+                            "item": ["Goading Potion(3)", "Goading Potion(4)", "Goading Potion(2)", "Goading Potion(1)"],
+                            "item_ids": [30146, 30143, 30140, 30137]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix a Prayer Regeneration Potion",
+                    "taskID": "mix_prayer_regeneration_potion",
+                    "category": "Obtain_Set",
+                    "level": 58,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                     "required_items": [
+                        {
+                            "item": ["Prayer Regeneration Potion(3)", "Prayer Regeneration Potion(4)", "Prayer Regeneration Potion(2)", "Prayer Regeneration Potion(1)"],
+                            "item_ids": [30134, 30131, 30128, 30125]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [5422],
+            "Friendly_Name": "North Aldarin",
+            "neighbor_ids": [5423, 5678, 5421, 5166],
+            "tasks": [
+                {
+                    "name": "Defeat a Porcupine",
+                    "taskID": "defeat_porcupine",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Porcupine"],
+                        "npc_ids": [13968],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat a Porcupine in the First Hit",
+                    "taskID": "defeat_porcupine",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Porcupine"],
+                        "npc_ids": [13968],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },             
+                {
+                    "name": "Defeat a White Unicorn",
+                    "taskID": "defeat_white_unicorn",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Unicorn"],
+                        "npc_ids": [2837, 14043],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Mix an Anti-Poison Potion",
+                    "taskID": "mix_anti-poison",
+                    "category": "Obtain_Set",
+                    "level": 5,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                     "required_items": [
+                        {
+                            "item": ["Antipoison(3)", "Antipoison(4)"],
+                            "item_ids": [175, 2446]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Copper Longtail",
+                    "taskID": "catch_copper_longtail",
+                    "category": "Hunter",
+                    "level": 9,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Orange Feather",
+                            "item_ids": [10091]
+                            },
+                            {
+                            "item": "Raw Bird Meat",
+                            "item_ids": [9978]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Chop an Oak Tree",
+                    "taskID": "chop_oak_tree",
+                    "category": "Woodcutting",
+                    "level": 15,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch an Oak Shield",
+                    "taskID": "fletch_oak_shield",
+                    "category": "Fletching",
+                    "level": 27,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Oak Shield"],
+                            "item_ids": [22251],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch some Raw Shrimp",
+                    "taskID": "catch_some_raw_shrimp",
+                    "category": "Fishing",
+                    "level": 1,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Shrimp",
+                        "item_ids": [317],
+                        "quantity": [5, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch Raw Anchovies",
+                    "taskID": "catch_anchovies",
+                    "category": "Fishing",
+                    "level": 15,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Anchovies",
+                        "item_ids": [321],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook some Shrimp",
+                    "taskID": "cook_shrimp",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Shrimp",
+                        "item_ids": [315],
+                        "quantity": [5, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook Anchovies",
+                    "taskID": "cook_anchovies",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Anchovies",
+                        "item_ids": [319],
+                        "quantity": [1]
+                        }
+                    ]
+                }                      
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [5166],
+            "Friendly_Name": "Dusk's Shores",
+            "neighbor_ids": [5167, 5422, 5165, 4910],
+            "tasks": [
+                {
+                    "name": "Chop a Magic Tree",
+                    "taskID": "chop_magic_tree",
+                    "category": "Woodcutting",
+                    "level": 75,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Magic Log",
+                    "taskID": "burn_magic_log",
+                    "category": "Firemaking",
+                    "level": 75,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1]            
+                        }
+                    ]
+                },             
+                {
+                    "name": "Chop an Oak Tree",
+                    "taskID": "chop_oak_tree",
+                    "category": "Woodcutting",
+                    "level": 15,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Oak Logs",
+                            "item_ids": [1521],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn an Oak Log",
+                    "taskID": "burn_oak_log",
+                    "category": "Firemaking",
+                    "level": 15,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Oak Logs",
+                            "item_ids": [1521],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Willow Tree",
+                    "taskID": "Chop_willow_tree",
+                    "category": "Woodcutting",
+                    "level": 30,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Willow Log",
+                    "taskID": "burn_willow_log",
+                    "category": "Firemaking",
+                    "level": 30,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Willow Shortbow(u)",
+                    "taskID": "fletch_willow_shortbow(u)",
+                    "category": "Fletching",
+                    "level": 35,
+                    "completion_type": "FLETCHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Willow Shortbow(u)",
+                            "item_ids": [60],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch an Oak Longbow(u)",
+                    "taskID": "fletch_oak_longbow(u)",
+                    "category": "Fletching",
+                    "level": 25,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Oak Longbow (u)"],
+                            "item_ids": [56],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch Raw Anchovies",
+                    "taskID": "catch_anchovies",
+                    "category": "Fishing",
+                    "level": 15,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Anchovies",
+                        "item_ids": [321],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook some Shrimp",
+                    "taskID": "cook_shrimp",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Shrimp",
+                        "item_ids": [315],
+                        "quantity": [5, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook Anchovies",
+                    "taskID": "cook_anchovies",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Anchovies",
+                        "item_ids": [319],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Grizzly Bear in 12 Seconds",
+                    "taskID": "defeat_grizzly_bear_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Grizzly Bear"],
+                        "npc_ids": [2838, 3423],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [20]                     
+                    }
+                },
+                {
+                    "name": "Defeat some Grizzly Bears",
+                    "taskID": "defeat_grizzly_bears",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Grizzly Bear"],
+                        "npc_ids": [2838, 3423],
+                        "quantity": [1, 25]
+                    }                 
+                },
+                {
+                    "name": "Defeat a Grizzly Bear with nothing Equipped",
+                    "taskID": "defeat_grizzly_bear_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Grizzly Bear"],
+                        "npc_ids": [2838, 3423],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {                       
+                        "equip_nothing": "TRUE"
+                    }                                    
+                }                      
+            ],
+            "is_completed": false
+        }                                   
     ]
 }

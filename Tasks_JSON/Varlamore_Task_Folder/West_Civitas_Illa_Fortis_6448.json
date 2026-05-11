@@ -34,8 +34,8 @@
                     ]
                 },
                 {
-                    "name": "Steal some Valuables",
-                    "taskID": "steal_valuables",
+                    "name": "Steal some Valuables while they Shine",
+                    "taskID": "steal_valuables_shine",
                     "category": "Thieving",
                     "level": 50,
                     "completion_type": "THIEVING",
