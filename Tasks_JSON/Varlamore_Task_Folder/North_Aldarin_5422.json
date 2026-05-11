@@ -1,0 +1,180 @@
+{
+            "region_id": [5422],
+            "Friendly_Name": "North Aldarin",
+            "neighbor_ids": [5423, 5678, 5421, 5166],
+            "tasks": [
+                {
+                    "name": "Defeat a Porcupine",
+                    "taskID": "defeat_porcupine",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Porcupine"],
+                        "npc_ids": [13968],
+                        "quantity": [1]
+                    }                   
+                },
+                {
+                    "name": "Defeat a Porcupine in the First Hit",
+                    "taskID": "defeat_porcupine",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Porcupine"],
+                        "npc_ids": [13968],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },             
+                {
+                    "name": "Defeat a White Unicorn",
+                    "taskID": "defeat_white_unicorn",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Unicorn"],
+                        "npc_ids": [2837, 14043],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Mix an Anti-Poison Potion",
+                    "taskID": "mix_anti-poison",
+                    "category": "Obtain_Set",
+                    "level": 5,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                     "required_items": [
+                        {
+                            "item": ["Antipoison(3)", "Antipoison(4)"],
+                            "item_ids": [175, 2446]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Copper Longtail",
+                    "taskID": "catch_copper_longtail",
+                    "category": "Hunter",
+                    "level": 9,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Orange Feather",
+                            "item_ids": [10091]
+                            },
+                            {
+                            "item": "Raw Bird Meat",
+                            "item_ids": [9978]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Chop an Oak Tree",
+                    "taskID": "chop_oak_tree",
+                    "category": "Woodcutting",
+                    "level": 15,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch an Oak Shield",
+                    "taskID": "fletch_oak_shield",
+                    "category": "Fletching",
+                    "level": 27,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Oak Shield"],
+                            "item_ids": [22251],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch some Raw Shrimp",
+                    "taskID": "catch_some_raw_shrimp",
+                    "category": "Fishing",
+                    "level": 1,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Shrimp",
+                        "item_ids": [317],
+                        "quantity": [5, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch Raw Anchovies",
+                    "taskID": "catch_anchovies",
+                    "category": "Fishing",
+                    "level": 15,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Anchovies",
+                        "item_ids": [321],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook some Shrimp",
+                    "taskID": "cook_shrimp",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Shrimp",
+                        "item_ids": [315],
+                        "quantity": [5, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook Anchovies",
+                    "taskID": "cook_anchovies",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Anchovies",
+                        "item_ids": [319],
+                        "quantity": [1]
+                        }
+                    ]
+                }                      
+            ],
+            "is_completed": false
+        } 
