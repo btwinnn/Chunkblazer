@@ -1430,6 +1430,37 @@ public class ChunkBlazerPanel extends PluginPanel
 		devControlsContentPanel.add(resetPanel);
 		devControlsContentPanel.add(Box.createVerticalStrut(4));
 
+		// Chunk button row — force-unlock the current region with no adjacency check
+		// or point cost. unlockRegionFree() also rolls tasks for the region so the dev
+		// can immediately test task assignment on the newly-unlocked chunk.
+		JPanel chunkPanel = new JPanel(new GridLayout(1, 1, 4, 0));
+		chunkPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		chunkPanel.setAlignmentX(LEFT_ALIGNMENT);
+		chunkPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+		chunkPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
+
+		JButton forceUnlockButton = new JButton("Force Unlock Chunk");
+		forceUnlockButton.setFont(FontManager.getRunescapeSmallFont());
+		forceUnlockButton.setForeground(new Color(255, 200, 100));
+		forceUnlockButton.setToolTipText("Unlock the chunk you're standing on with no adjacency check or point cost. Rolls tasks for the region.");
+		forceUnlockButton.addActionListener(e ->
+		{
+			int regionId = plugin.getCurrentRegionId();
+			if (regionId <= 0)
+			{
+				log.info("Dev: Force Unlock pressed but current region is unknown (id={})", regionId);
+				return;
+			}
+			log.info("Dev: Force-unlocking region {} (no adjacency check)", regionId);
+			plugin.unlockRegionFree(regionId);
+			updateStats();
+			updateRegionDisplay();
+		});
+		chunkPanel.add(forceUnlockButton);
+
+		devControlsContentPanel.add(chunkPanel);
+		devControlsContentPanel.add(Box.createVerticalStrut(4));
+
 		// Debug button row
 		JPanel debugPanel = new JPanel(new GridLayout(1, 2, 4, 0));
 		debugPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
