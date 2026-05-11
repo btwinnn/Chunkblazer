@@ -7335,7 +7335,7 @@
                     "level": [30],
                     "completion_type": "EQUIP",
                     "base_points": 2,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
                             "item": ["Adamant Mace"],
@@ -7434,7 +7434,7 @@
                     "level": 33,
                     "completion_type": "SMITHING",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
                             "item": ["Steel Med Helm"],
@@ -7442,7 +7442,85 @@
                             "quantity": [1]
                         }
                     ]
-                }
+                },
+                {
+                    "name": "Craft Mixed Hide Boots",
+                    "taskID": "craft_mixed_hide_boots",
+                    "category": "Crafting",
+                    "level": 69,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Boots"],
+                            "item_ids": [29286],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Mixed Hide Top",
+                    "taskID": "craft_mixed_hide_top",
+                    "category": "Crafting",
+                    "level": 72,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Top"],
+                            "item_ids": [29280],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Mixed Hide Boots",
+                    "taskID": "equip_mixed_hide_boots",
+                    "category": ["Ranged", "Defence"],
+                    "level": [60, 50],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Boots"],
+                            "item_ids": [29286]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mixed Hide Top",
+                    "taskID": "equip_mixed_hide_top",
+                    "category": ["Ranged", "Defence"],
+                    "level": [60, 50],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mixed Hide Top"],
+                            "item_ids": [29280]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Large Meat Pouch",
+                    "taskID": "craft_large_meat_pouch",
+                    "category": "Crafting",
+                    "level": 65,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Large Meat Pouch"],
+                            "item_ids": [29297],
+                            "quantity": [1]
+                        }
+                    ]
+                }      
             ],
             "is_completed": false
         }                                  
