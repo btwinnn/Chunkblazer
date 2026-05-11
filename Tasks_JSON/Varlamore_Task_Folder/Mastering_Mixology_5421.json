@@ -1,0 +1,176 @@
+{
+            "region_id": [5421],
+            "Friendly_Name": "Mastering Mixology",
+            "neighbor_ids": [5422, 5677, 5420, 5165],
+            "tasks": [
+                {
+                    "name": "Use Fairy Ring Code CKQ",
+                    "taskID": "fairy_ring_CKQ",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }, 
+                {
+                    "name": "Obtain an Apprentice Potion Pack",
+                    "taskID": "obtain_apprentice_potion_pack",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Apprentice Potion Pack"],
+                            "item_ids": [29971],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Adept Potion Pack",
+                    "taskID": "obtain_adept_potion_pack",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adept Potion Pack"],
+                            "item_ids": [29972],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Expert Potion Pack",
+                    "taskID": "obtain_expert_potion_pack",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Expert Potion Pack"],
+                            "item_ids": [29973],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Prescription Goggles",
+                    "taskID": "obtain_prescription_goggles",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Prescription Goggles"],
+                            "item_ids": [29976],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Alchemist Set",
+                    "taskID": "obtain_Alchemist_set",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Alchemist labcoat"],
+                            "item_ids": [29980, 29978],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Alchemist pants"],
+                            "item_ids": [29982, 29984],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Alchemist gloves"],
+                            "item_ids": [29986],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Reagent Pouch",
+                    "taskID": "obtain_reagent_pouch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Reagent Pouch"],
+                            "item_ids": [29996],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Chugging Barrel",
+                    "taskID": "obtain_chugging_barrel",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Chugging Barrel"],
+                            "item_ids": [30002],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Alchemist's Amulet",
+                    "taskID": "obtain_alchemist's_amulet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Alchemist's Amulet"],
+                            "item_ids": [29988],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix a Goading Potion",
+                    "taskID": "mix_goading_potion",
+                    "category": "Obtain_Set",
+                    "level": 54,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                     "required_items": [
+                        {
+                            "item": ["Goading Potion(3)", "Goading Potion(4)", "Goading Potion(2)", "Goading Potion(1)"],
+                            "item_ids": [30146, 30143, 30140, 30137]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix a Prayer Regeneration Potion",
+                    "taskID": "mix_prayer_regeneration_potion",
+                    "category": "Obtain_Set",
+                    "level": 58,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                     "required_items": [
+                        {
+                            "item": ["Prayer Regeneration Potion(3)", "Prayer Regeneration Potion(4)", "Prayer Regeneration Potion(2)", "Prayer Regeneration Potion(1)"],
+                            "item_ids": [30134, 30131, 30128, 30125]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        } 
