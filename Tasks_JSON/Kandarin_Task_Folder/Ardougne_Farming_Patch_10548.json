@@ -52,7 +52,7 @@
                     ]
                 },
                 {
-                    "name": "Plant some Tomato",
+                    "name": "Plant some Tomatoes",
                     "taskID": "plant_tomato",
                     "category": "Farming",
                     "level": 12,
