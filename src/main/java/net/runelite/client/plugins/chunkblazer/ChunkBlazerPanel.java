@@ -1244,11 +1244,34 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Rebuild the selected task panel with full details
 		selectedTaskPanel.removeAll();
 
+		// Header row: title on the left, \u00d7 dismiss on the right.
+		JPanel headerRow = new JPanel(new BorderLayout(5, 0));
+		headerRow.setBackground(selectedTaskPanel.getBackground());
+		headerRow.setAlignmentX(LEFT_ALIGNMENT);
+		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 22));
+
 		JLabel selectedTitle = new JLabel("\u2605 SELECTED TASK \u2605");
 		selectedTitle.setFont(FontManager.getRunescapeBoldFont());
 		selectedTitle.setForeground(new Color(255, 215, 0));
-		selectedTitle.setAlignmentX(LEFT_ALIGNMENT);
-		selectedTaskPanel.add(selectedTitle);
+		headerRow.add(selectedTitle, BorderLayout.WEST);
+
+		JButton dismissButton = new JButton("\u2715");
+		dismissButton.setFont(new Font("Arial", Font.BOLD, 11));
+		dismissButton.setForeground(new Color(220, 220, 220));
+		dismissButton.setBackground(new Color(80, 60, 60));
+		dismissButton.setFocusPainted(false);
+		dismissButton.setBorder(BorderFactory.createEmptyBorder(0, 6, 0, 6));
+		dismissButton.setPreferredSize(new Dimension(20, 18));
+		dismissButton.setMaximumSize(new Dimension(20, 18));
+		dismissButton.setToolTipText("Un-highlight this task");
+		dismissButton.addActionListener(e ->
+		{
+			clearSelectedTask();
+			updateActiveTasksDisplay();
+		});
+		headerRow.add(dismissButton, BorderLayout.EAST);
+
+		selectedTaskPanel.add(headerRow);
 		selectedTaskPanel.add(Box.createVerticalStrut(4));
 
 		// Task name (wrapped via WrappingTextLabel).
@@ -2185,7 +2208,16 @@ public class ChunkBlazerPanel extends PluginPanel
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e)
 			{
-				selectTask(task);
+				// Toggle: clicking the already-selected row clears the selection.
+				if (isSelected)
+				{
+					clearSelectedTask();
+					updateActiveTasksDisplay();
+				}
+				else
+				{
+					selectTask(task);
+				}
 			}
 
 			@Override
