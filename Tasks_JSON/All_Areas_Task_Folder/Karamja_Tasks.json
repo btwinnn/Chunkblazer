@@ -236,161 +236,166 @@
             "is_completed": false
         },
         {
-            "region_id": [12340],
-            "Friendly_Name": "Draynor Manor",
-            "neighbor_ids": [12339, 12084, 12341, 12596],
+            "region_id": [11314],
+            "Friendly_Name": "South Crandor",
+            "neighbor_ids": [11315, 11570, 11313, 11058],
             "tasks": [
                 {
-                    "name": "Plant some Belladonna Seeds",
-                    "taskID": "plant_belladonna",
-                    "category": "Farming",
-                    "level": 63,
-                    "completion_type": "FARMING",
+                    "name": "Mine some Mithril Ore",
+                    "taskID": "mine_mithril",
+                    "category": "Mining",
+                    "level": 55,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Mithril Ore",
+                            "item_ids": [447],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
                     "base_points": 3,
                     "assignment_weight": 1,
                     "required_items": [
                         {
-                            "item": ["Belladonna seed"],
-                            "item_ids": [5281],
-                            "quantity": [1]
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Level 19 Ghost",
-                    "taskID": "defeat_a_ghost",
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Use the Level 84 Agility Crandor Rock Climb",
+                    "taskID": "agility_crandor_level_84_rock_climb",
+                    "category": "Agility",
+                    "level": 13,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_object": {
+                        "object": ["Rocks (Crandor)#1", "Rocks (Crandor)#2"],
+                        "object_id": [53234, 53236], 
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Moss Giant",
+                    "taskID": "defeat_moss_giant",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Ghost"],
-                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Defeat a Killerwatt on Task",
-                    "taskID": "defeat_killerwatt_on_task",
+                    "name": "Defeat a Moss Giant on Task",
+                    "taskID": "defeat_moss_giant_on_task",
                     "category": "Slayer",
-                    "level": 37,
-                    "completion_type": "SLAYER",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 3,
                     "target_npc": {
-                        "npc": ["Killerwatt"],
-                        "npc_ids": [469],
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Defeat some Level 1 Rats",
-                    "taskID": "defeat_rats",
-                    "category": "Combat",
-                    "level": 1,
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Rat"],
-                        "npc_ids": [2854, 2855, 2492, 2513],
-                        "quantity": [1, 20]
-                    }
-                },
-                {
-                    "name": "Defeat the Draynor Manor Skeleton",
-                    "taskID": "defeat_draynor_manor_skeleton",
+                    "name": "Defeat a Level 82 Lesser Demon",
+                    "taskID": "defeat_level_82_lesser_demon",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Skeleton"],
-                        "npc_ids": [3565],
+                        "npc": ["Lesser Demon"],
+                        "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Defeat Count Draynor",
-                    "taskID": "defeat_count_draynor",
+                    "name": "Defeat Elvarg",
+                    "taskID": "defeat_elvarg",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Elvarg"],
+                        "npc_ids": [817],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 25 Skeleton",
+                    "taskID": "defeat_level_25_skeleton",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Count Draynor"],
-                        "npc_ids": [3481, 3482],
+                        "npc": ["Level 25 Skeleton"],
+                        "npc_ids": [77, 78, 79, 80, 81],
                         "quantity": [1]
                     }
-                },
+                }, 
                 {
-                    "name": "Obtain a Skull",
-                    "taskID": "obtain_skull",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
+                    "name": "Defeat a Level 25 Skeleton with your Bare Fists",
+                    "taskID": "defeat_level_25_skeleton_no_weapon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Skull"],
-                            "item_ids": [964],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Plant Cure",
-                    "taskID": "obtain_a_plant_cure",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Plant Cure"],
-                            "item_ids": [6036],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Magic Whistle",
-                    "taskID": "obtain_magic_whistle",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Magic whistle"],
-                            "item_ids": [16],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Talk to Bob the Cat",
-                    "taskID": "talk_to_bob_the_cat",
-                    "category": "Dialogue",
-                    "completion_type": "NPC_DIALOGUE",
-                    "base_points": 2,
-                    "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Bob the Cat"],
-                        "npc_ids": [2635, 2636, 4231, 8034, 8055, 8111, 8112, 8113, 8114, 8115, 8159],
+                        "npc": ["Level 25 Skeleton"],
+                        "npc_ids": [77, 78, 79, 80, 81],
                         "quantity": [1]
+                    },
+                    "constraints": {
+                        "must_be_empty_slots": ["WEAPON"]
                     }
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Ernest the Chicken",
-                    "points": 1
                 },
                 {
-                    "name": "Animal Magnetism",
-                    "point": 2
-                }
+                    "name": "Defeat the Spawn from Dragon Slayer II",
+                    "taskID": "defeat_spawn_dragon_slayer_II",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Spawn (Dragon Slayer II)"],
+                        "npc_ids": [8056],
+                        "quantity": [1]
+                    }
+                }         
             ],
             "is_completed": false
         },
