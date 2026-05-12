@@ -38,6 +38,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.util.ImageUtil;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.chunkblazer.modules.TaskModuleManager;
 import net.runelite.client.plugins.chunkblazer.starter.StarterArea;
@@ -214,8 +215,8 @@ public class ChunkBlazerPlugin extends Plugin
 		panel = new ChunkBlazerPanel();
 		panel.init(this);
 
-		// Create fire icon for navigation button
-		BufferedImage icon = ChunkBlazerIcons.createFireIcon(16);
+		// Load the ChunkBlazer icon from resources (icon.png lives alongside this class).
+		BufferedImage icon = ImageUtil.loadImageResource(getClass(), "icon.png");
 
 		navButton = NavigationButton.builder()
 			.tooltip("ChunkBlazer")

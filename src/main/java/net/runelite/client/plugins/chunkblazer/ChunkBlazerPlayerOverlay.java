@@ -15,6 +15,7 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
+import net.runelite.client.util.ImageUtil;
 
 /**
  * Overlay that renders ChunkBlazer icons and info above other players who are also using the plugin.
@@ -56,8 +57,11 @@ public class ChunkBlazerPlayerOverlay extends Overlay
 
 	private void loadIcons()
 	{
-		// Generate fire icons programmatically
-		chunkBlazerIcon = ChunkBlazerIcons.createFireIcon(ICON_SIZE);
+		// Main ChunkBlazer icon comes from icon.png; mode indicators stay procedural.
+		BufferedImage loaded = ImageUtil.loadImageResource(ChunkBlazerPlugin.class, "icon.png");
+		chunkBlazerIcon = loaded != null
+			? ImageUtil.resizeImage(loaded, ICON_SIZE, ICON_SIZE)
+			: ChunkBlazerIcons.createFireIcon(ICON_SIZE);
 		nuzlockeIcon = ChunkBlazerIcons.createNuzlockeIcon(ICON_SIZE);
 		casualIcon = ChunkBlazerIcons.createCasualIcon(ICON_SIZE);
 	}
