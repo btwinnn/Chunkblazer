@@ -72,7 +72,7 @@
                         "quantity": [1]
                     },                   
                     "constraints": {
-                        "time_in_ticks": [15]
+                        "time_in_ticks": [1]
                         }
                 },
                 {
