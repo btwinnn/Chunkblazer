@@ -1255,15 +1255,35 @@ public class ChunkBlazerPanel extends PluginPanel
 		selectedTitle.setForeground(new Color(255, 215, 0));
 		headerRow.add(selectedTitle, BorderLayout.WEST);
 
+		// Icon-style X: no button chrome, just a clickable glyph that lights up on hover.
+		final Color dismissIdleColor = new Color(180, 180, 180);
+		final Color dismissHoverColor = new Color(255, 120, 120);
 		JButton dismissButton = new JButton("\u2715");
-		dismissButton.setFont(new Font("Arial", Font.BOLD, 11));
-		dismissButton.setForeground(new Color(220, 220, 220));
-		dismissButton.setBackground(new Color(80, 60, 60));
+		dismissButton.setFont(new Font("Arial", Font.BOLD, 13));
+		dismissButton.setForeground(dismissIdleColor);
+		dismissButton.setContentAreaFilled(false);
+		dismissButton.setBorderPainted(false);
 		dismissButton.setFocusPainted(false);
-		dismissButton.setBorder(BorderFactory.createEmptyBorder(0, 6, 0, 6));
-		dismissButton.setPreferredSize(new Dimension(20, 18));
-		dismissButton.setMaximumSize(new Dimension(20, 18));
-		dismissButton.setToolTipText("Un-highlight this task");
+		dismissButton.setOpaque(false);
+		dismissButton.setMargin(new Insets(0, 0, 0, 0));
+		dismissButton.setPreferredSize(new Dimension(18, 18));
+		dismissButton.setMaximumSize(new Dimension(18, 18));
+		dismissButton.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+		dismissButton.setToolTipText("Deselect this task");
+		dismissButton.addMouseListener(new java.awt.event.MouseAdapter()
+		{
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e)
+			{
+				dismissButton.setForeground(dismissHoverColor);
+			}
+
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e)
+			{
+				dismissButton.setForeground(dismissIdleColor);
+			}
+		});
 		dismissButton.addActionListener(e ->
 		{
 			clearSelectedTask();
