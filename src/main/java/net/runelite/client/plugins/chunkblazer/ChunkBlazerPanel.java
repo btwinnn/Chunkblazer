@@ -1418,11 +1418,11 @@ public class ChunkBlazerPanel extends PluginPanel
 		String regionRow;
 		if (selRegionName != null && !selRegionName.isEmpty() && selRegionId > 0)
 		{
-			regionRow = "Region: " + selRegionName + " (id " + selRegionId + ")";
+			regionRow = "Region: " + selRegionName + " (" + selRegionId + ")";
 		}
 		else if (selRegionId > 0)
 		{
-			regionRow = "Region: id " + selRegionId;
+			regionRow = "Region: " + selRegionId;
 		}
 		else
 		{
