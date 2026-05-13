@@ -1,0 +1,164 @@
+{
+            "region_id": [11314],
+            "Friendly_Name": "South Crandor",
+            "neighbor_ids": [11315, 11570, 11313, 11058],
+            "tasks": [
+                {
+                    "name": "Mine some Mithril Ore",
+                    "taskID": "mine_mithril",
+                    "category": "Mining",
+                    "level": 55,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Mithril Ore",
+                            "item_ids": [447],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Use the Level 84 Agility Crandor Rock Climb",
+                    "taskID": "agility_crandor_level_84_rock_climb",
+                    "category": "Agility",
+                    "level": 13,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_object": {
+                        "object": ["Rocks (Crandor)#1", "Rocks (Crandor)#2"],
+                        "object_id": [53234, 53236], 
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Moss Giant",
+                    "taskID": "defeat_moss_giant",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Moss Giant on Task",
+                    "taskID": "defeat_moss_giant_on_task",
+                    "category": "Slayer",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 82 Lesser Demon",
+                    "taskID": "defeat_level_82_lesser_demon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Lesser Demon"],
+                        "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat Elvarg",
+                    "taskID": "defeat_elvarg",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Elvarg"],
+                        "npc_ids": [817],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 25 Skeleton",
+                    "taskID": "defeat_level_25_skeleton",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 25 Skeleton"],
+                        "npc_ids": [77, 78, 79, 80, 81],
+                        "quantity": [1]
+                    }
+                }, 
+                {
+                    "name": "Defeat a Level 25 Skeleton with your Bare Fists",
+                    "taskID": "defeat_level_25_skeleton_no_weapon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 25 Skeleton"],
+                        "npc_ids": [77, 78, 79, 80, 81],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "must_be_empty_slots": ["WEAPON"]
+                    }
+                },
+                {
+                    "name": "Defeat the Spawn from Dragon Slayer II",
+                    "taskID": "defeat_spawn_dragon_slayer_II",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Spawn (Dragon Slayer II)"],
+                        "npc_ids": [8056],
+                        "quantity": [1]
+                    }
+                }         
+            ],
+            "is_completed": false
+        }
