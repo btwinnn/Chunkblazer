@@ -938,8 +938,8 @@ public class ChunkBlazerPanel extends PluginPanel
 			new EmptyBorder(6, 6, 6, 6)
 		));
 		selectedTaskPanel.setAlignmentX(LEFT_ALIGNMENT);
-		selectedTaskPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 100));
-		selectedTaskPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 100));
+		selectedTaskPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 135));
+		selectedTaskPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 135));
 
 		JLabel selectedTitle = new JLabel("\u2605 SELECTED TASK \u2605"); // Star symbols
 		selectedTitle.setFont(FontManager.getRunescapeBoldFont());
@@ -1411,6 +1411,38 @@ public class ChunkBlazerPanel extends PluginPanel
 		infoLabel.setForeground(new Color(255, 200, 100));
 		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
 		selectedTaskPanel.add(infoLabel);
+
+		// Region + Area rows — gives the player full context for the highlighted task.
+		String selRegionName = plugin.getTaskRegionName(selectedTask);
+		int selRegionId = plugin.findRegionForTask(selectedTask.getTaskId());
+		String regionRow;
+		if (selRegionName != null && !selRegionName.isEmpty() && selRegionId > 0)
+		{
+			regionRow = "Region: " + selRegionName + " (id " + selRegionId + ")";
+		}
+		else if (selRegionId > 0)
+		{
+			regionRow = "Region: id " + selRegionId;
+		}
+		else
+		{
+			regionRow = "Region: unknown";
+		}
+		JLabel selRegionLabel = new JLabel(regionRow);
+		selRegionLabel.setFont(FontManager.getRunescapeSmallFont());
+		selRegionLabel.setForeground(new Color(140, 200, 230));
+		selRegionLabel.setAlignmentX(LEFT_ALIGNMENT);
+		selectedTaskPanel.add(selRegionLabel);
+
+		String selArea = plugin.getTaskArea(selectedTask);
+		if (selArea != null && !selArea.isEmpty())
+		{
+			JLabel selAreaLabel = new JLabel("Area: " + selArea);
+			selAreaLabel.setFont(FontManager.getRunescapeSmallFont());
+			selAreaLabel.setForeground(new Color(180, 180, 220));
+			selAreaLabel.setAlignmentX(LEFT_ALIGNMENT);
+			selectedTaskPanel.add(selAreaLabel);
+		}
 
 		// Progress
 		int progress = selectedTask.getCurrentProgress();
@@ -2400,6 +2432,29 @@ public class ChunkBlazerPanel extends PluginPanel
 		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
 		itemPanel.add(infoLabel);
 
+		// Region subtitle: friendly name + numeric region ID, so a glance tells the
+		// player which chunk rolled the task.
+		String activeRegionName = plugin.getTaskRegionName(task);
+		int activeRegionId = plugin.findRegionForTask(task.getTaskId());
+		String regionText;
+		if (activeRegionName != null && !activeRegionName.isEmpty() && activeRegionId > 0)
+		{
+			regionText = "Region: " + activeRegionName + " (" + activeRegionId + ")";
+		}
+		else if (activeRegionId > 0)
+		{
+			regionText = "Region: " + activeRegionId;
+		}
+		else
+		{
+			regionText = "Region: unknown";
+		}
+		JLabel activeRegionLabel = new JLabel(regionText);
+		activeRegionLabel.setFont(FontManager.getRunescapeSmallFont());
+		activeRegionLabel.setForeground(new Color(140, 200, 230));
+		activeRegionLabel.setAlignmentX(LEFT_ALIGNMENT);
+		itemPanel.add(activeRegionLabel);
+
 		// Progress bar row
 		int progress = task.getCurrentProgress();
 		int target = task.getTargetQuantity();
@@ -2645,10 +2700,25 @@ public class ChunkBlazerPanel extends PluginPanel
 		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
 		itemPanel.add(infoLabel);
 
-		// Region on separate line (wrapped via WrappingTextLabel).
+		// Region on separate line (wrapped via WrappingTextLabel). Include the
+		// numeric region ID so a glance tells the player which chunk credited it.
 		String regionName = info.getRegionName();
+		int regionId = info.getRegionId();
+		String regionText;
+		if (regionName != null && !regionName.isEmpty() && regionId > 0)
+		{
+			regionText = regionName + " (" + regionId + ")";
+		}
+		else if (regionId > 0)
+		{
+			regionText = "Region " + regionId;
+		}
+		else
+		{
+			regionText = regionName != null ? regionName : "Unknown";
+		}
 		WrappingTextLabel regionLabel = new WrappingTextLabel(
-			regionName != null ? regionName : "Unknown",
+			regionText,
 			FontManager.getRunescapeSmallFont(),
 			Color.CYAN,
 			TASK_TEXT_WRAP_WIDTH);
