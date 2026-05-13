@@ -519,197 +519,194 @@
             "is_completed": false
         },
         {
-            "region_id": [12338],
-            "Friendly_Name": "Draynor South",
-            "neighbor_ids": [12082, 12339, 12594, 12337],
+            "region_id": [11057],
+            "Friendly_Name": "Brimhaven",
+            "neighbor_ids": [11058, 11313, 11056, 10801],
             "tasks": [
                 {
-                    "name": "Obtain Red Dye",
-                    "taskID": "obtain_red_dye",
+                    "name": "Obtain a Toadflax",
+                    "taskID": "obtain_toadflax",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Red Dye"],
-                            "item_ids": [1763],
+                            "item": ["Toadflax"],
+                            "item_ids": [2998],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain Yellow Dye",
-                    "taskID": "obtain_yellow_dye",
+                    "name": "Obtain a Snapdragon",
+                    "taskID": "obtain_snapdragon",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Yellow Dye"],
-                            "item_ids": [1765],
+                            "item": ["Snapdragon"],
+                            "item_ids": [3000],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain Blue Dye",
-                    "taskID": "obtain_blue_dye",
+                    "name": "Obtain a Pirate's Hook",
+                    "taskID": "obtain_pirate's_hook",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
+                    "base_points": 5,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Blue Dye"],
-                            "item_ids": [1767],
+                            "item": ["Pirate's Hook"],
+                            "item_ids": [2997],
                             "quantity": [1]
                         }
                     ]
-                },
+                },              
                 {
-                    "name": "Defeat a Jail Guard",
-                    "taskID": "defeat_jail_guard",
+                    "name": "Defeat a Pirate",
+                    "taskID": "defeat_pirate",
                     "category": "Combat",
-                    "level": 26,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Jail Guard"],
-                        "npc_ids": [4276, 4277, 4278, 4279],
-                        "quantity": [1, 10]
+                        "npc": ["Pirate"],
+                        "npc_ids": [4926, 522, 6994, 4043, 4044, 4045, 4046, 4047, 4048, 4049, 4050, 4051, 4052, 521, 6993, 524, 6995, 1447],
+                        "quantity": 1
                     }
                 },
                 {
-                    "name": "Obtain a Forestry Kit",
-                    "taskID": "obtain_forestry_kit",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Forestry Kit"],
-                            "item_ids": [28136]
-                        }
-                    ]
-                },
-                {
-                    "name": "Use Fairy Ring Code CLP",
-                    "taskID": "fairy_ring_CLP",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
-                {
-                    "name": "Obtain a Secateurs Blade",
-                    "taskID": "obtain_secateurs_blade",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Secateurs Blade"],
-                            "item_ids": [28159],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Steal from a Seed Stall",
-                    "taskID": "steal_seed_stall",
-                    "category": "Thieving",
-                    "level": 27,
-                    "completion_type": "THIEVING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": [
-                        {
-                            "object": ["Seed Stall"],
-                            "object_id": [7053],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Log Basket",
-                    "taskID": "obtain_log_basket",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Log Basket"],
-                            "item_ids": [28140],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Level 7 Dark Wizard",
-                    "taskID": "defeat_level_7_dark_wizard",
+                    "name": "Defeat a Pirate in 15 Seconds",
+                    "taskID": "defeat_pirate_15_seconds",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Dark Wizard"],
-                        "npc_ids": [512, 5086, 5087],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat a Level 7 Dark Wizard in 10 Seconds",
-                    "taskID": "defeat_level_7_dark_wizard_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Dark Wizard"],
-                        "npc_ids": [512, 5086, 5087],
-                        "quantity": [1]
+                        "npc": ["Pirate"],
+                        "npc_ids": [4926, 522, 6994, 4043, 4044, 4045, 4046, 4047, 4048, 4049, 4050, 4051, 4052, 521, 6993, 524, 6995, 1447],
+                        "quantity": 1
                     },
-                    
                     "constraints": {
-                        "time_in_ticks": [16]
+                        "time_in_ticks": [25]                       
                     }
                 },
                 {
-                    "name": "Steal from Fortunato's Market Stall",
-                    "taskID": "steal_market_stall_draynor",
-                    "category": "Thieving",
-                    "level": 22,
-                    "completion_type": "THIEVING",
+                    "name": "Defeat a Guard Dog",
+                    "taskID": "defeat_guard_dog",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": [
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Guard Dog"],
+                        "npc_ids": [7209, 114, 4228],
+                        "quantity": [1]
+                    }                   
+                 
+                },
+                {
+                    "name": "Defeat a Guard Dog on Task",
+                    "taskID": "defeat_guard_dog_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Guard Dog"],
+                        "npc_ids": [7209, 114, 4228],
+                        "quantity": [1]
+                    }                   
+                 
+                },
+                {
+                "name": "Build a Pond",
+                "taskID": "build_pond",
+                "category": "Construction",
+                "level": 10,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 1,
+                "assignment_weight": 5,
+                "required_items": [
                         {
-                            "object": ["Market Stall"],
-                            "object_id": [14011],
-                            "quantity": [1]
+                        "item": "Soft Clay",
+                        "item_ids": [1761]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Pond",
+                        "object_id": [4527],
+                        "interaction_type": "use_item_on"
                         }
                     ]
-                }
+                },
+                {
+                "name": "Build a Wooden Larder",
+                "taskID": "build_wooden_larder",
+                "category": "Construction",
+                "level": 9,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 1,
+                "assignment_weight": 5,
+                "required_items": [
+                        {
+                        "item": "Plank",
+                        "item_ids": [1761]
+                        },
+                        {
+                        "item": "Nails",
+                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
+                        }
+                    ],
+
+                "required_object": [
+                        {
+                        "object": "Wooden Larder",
+                        "object_id": [13565],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Firepit with Hook",
+                "taskID": "build_firepit_with_hook",
+                "category": "Construction",
+                "level": 11,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 1,
+                "assignment_weight": 5,
+                 "required_items": [
+                        {
+                        "item": "Soft Clay",
+                        "item_ids": [1761]
+                        },                 
+                        {
+                            "item": "Steel Bar",
+                            "item_ids": [2353]           
+                        }
+                    ],
+                "required_object": [
+                        {
+                        "object": "Firepit with Hook",
+                        "object_id": [13529],
+                        "interaction_type": "use_item_on"
+                        }
+                    ]
+                } 
             ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Fairytale I - Growing Pains",
-                    "points": 2
-                },
-                {
-                    "name": "Fairytale II - Cure a Queen",
-                    "points": 3
-                },
-                {
-                    "name": "A Porcine of Interest",
-                    "points": 1
-                }
+                        "optional_quests_unlocked": [
+                            {
+                                "name": "Tribal Totem",
+                                "points": 2
+                            }       
             ],
             "is_completed": false
         },
