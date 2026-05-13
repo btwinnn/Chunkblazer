@@ -96,7 +96,7 @@
                     ]
                 },
                 {
-                    "name": "Complete some Laps of the Shayzien Basic Agility Course",
+                    "name": "Use the Shayzien Basic Agility Course",
                     "taskID": "complete_basic_shayzien_course",
                     "category": "Agility",
                     "level": 1,
@@ -124,7 +124,7 @@
                     }
                 },
                 {
-                    "name": "Complete some Laps of the Shayzien Advanced Agility Course",
+                    "name": "Use the Shayzien Advanced Agility Course",
                     "taskID": "complete_advanced_shayzien_course",
                     "category": "Agility",
                     "level": 45,

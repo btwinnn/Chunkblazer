@@ -4,7 +4,7 @@
             "neighbor_ids": [10040, 10295, 10038, 9783],
             "tasks": [
                 {
-                    "name": "Complete some Laps of the Barbarian Outpost Course",
+                    "name": "Use the Barbarian Outpost Course",
                     "taskID": "complete_barbarian_outpost_course",
                     "category": "Agility",
                     "level": 35,

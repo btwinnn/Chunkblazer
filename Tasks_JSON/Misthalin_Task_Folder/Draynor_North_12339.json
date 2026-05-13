@@ -36,7 +36,7 @@
                     }
                 },
                 {
-                    "name": "Complete some Laps of the Draynor Village Rooftop Course",
+                    "name": "Use the Draynor Village Rooftop Course",
                     "taskID": "complete_draynor_roof",
                     "category": "Agility",
                     "level": 1,

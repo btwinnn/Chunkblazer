@@ -1795,7 +1795,7 @@
                     ]
                 },
                 {
-                    "name": "Complete some Laps of the Varrock Rooftop Course",
+                    "name": "Use the Varrock Rooftop Course",
                     "taskID": "complete_varrock_roof",
                     "category": "Agility",
                     "level": 30,

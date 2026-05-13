@@ -602,7 +602,7 @@
             "neighbor_ids": [10807, 11062, 10805, 10550],
             "tasks": [
                 {
-                    "name": "Complete some Laps of the Seers' Rooftop Course",
+                    "name": "Use the Seers' Rooftop Course",
                     "taskID": "complete_seers'_roof",
                     "category": "Agility",
                     "level": 60,
@@ -3252,7 +3252,7 @@
                     ]
                 },
                 {
-                    "name": "Complete some Laps of the Ardougne Rooftop Course",
+                    "name": "Use the Ardougne Rooftop Course",
                     "taskID": "complete_ardougne_roof",
                     "category": "Agility",
                     "level": 90,
@@ -7352,7 +7352,7 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Complete some Laps of the Gnome Agility Course",
+                    "name": "Use the Gnome Agility Course",
                     "taskID": "complete_gnome_agility",
                     "category": "Agility",
                     "level": 1,
@@ -8770,7 +8770,7 @@
             "neighbor_ids": [10040, 10295, 10038, 9783],
             "tasks": [
                 {
-                    "name": "Complete some Laps of the Barbarian Outpost Course",
+                    "name": "Use the Barbarian Outpost Course",
                     "taskID": "complete_barbarian_outpost_course",
                     "category": "Agility",
                     "level": 35,

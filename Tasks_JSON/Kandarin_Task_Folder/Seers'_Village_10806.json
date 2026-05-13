@@ -4,7 +4,7 @@
             "neighbor_ids": [10807, 11062, 10805, 10550],
             "tasks": [
                 {
-                    "name": "Complete some Laps of the Seers' Rooftop Course",
+                    "name": "Use the Seers' Rooftop Course",
                     "taskID": "complete_falador_roof",
                     "category": "Agility",
                     "level": 60,
