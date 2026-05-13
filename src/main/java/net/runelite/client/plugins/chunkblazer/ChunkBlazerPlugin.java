@@ -1983,7 +1983,7 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Resolve a region ID to its overarching area name (e.g. 12850 -> "Misthalin").
+	 * Resolve a region ID to its overarching area name (e.g. 12850 → "Misthalin").
 	 * Returns null if the region isn't mapped to any known chunk.
 	 */
 	public String getAreaForRegionId(int regionId)

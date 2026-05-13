@@ -26,7 +26,7 @@ import net.runelite.client.plugins.chunkblazer.RequiredObject;
  *
  * Two task shapes:
  *   Lap tasks  — JSON has required_object pointing at the course's lap-end obstacle
- *                 (e.g. Ardougne -> Gap #4, id 15612). Credit only when the player
+ *                 (e.g. Ardougne → Gap #4, id 15612). Credit only when the player
  *                 clicks THAT specific object and an Agility XP gain ≥ LAP_XP_THRESHOLD
  *                 fires shortly after. This prevents a single high-XP obstacle from
  *                 crediting every active lap task at once.
