@@ -1421,7 +1421,7 @@
         {
             "region_id": [10548],
             "Friendly_Name": "Ardougne Farming Patch",
-            "neighbor_ids": [10549, 10804, 10547, 10291],
+            "neighbor_ids": [10549, 10804, 10547, 10292],
             "tasks": [
                 {
                     "name": "Plant some Sweetcorn",
