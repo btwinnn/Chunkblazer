@@ -1931,6 +1931,23 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
+	 * Areas (Misthalin, Asgarnia, Zeah, ...) that have at least one completed task.
+	 */
+	public Set<String> getCompletedTaskAreas()
+	{
+		Set<String> areas = new java.util.TreeSet<>();
+		for (CompletedTaskInfo info : getCompletedTasksWithInfo())
+		{
+			String area = getAreaForRegionId(info.getRegionId());
+			if (area != null && !area.isEmpty())
+			{
+				areas.add(area);
+			}
+		}
+		return areas;
+	}
+
+	/**
 	 * Get all unique region names that have active tasks.
 	 */
 	public Set<String> getActiveTaskRegions()
@@ -1945,6 +1962,34 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 		return regions;
+	}
+
+	/**
+	 * Areas (Misthalin, Asgarnia, Zeah, ...) that have at least one active task.
+	 * Used by the Active Tasks panel to populate its Area filter dropdown.
+	 */
+	public Set<String> getActiveTaskAreas()
+	{
+		Set<String> areas = new java.util.TreeSet<>();
+		for (NuzlockeTask task : activeTasks)
+		{
+			String area = getTaskArea(task);
+			if (area != null && !area.isEmpty())
+			{
+				areas.add(area);
+			}
+		}
+		return areas;
+	}
+
+	/**
+	 * Resolve a region ID to its overarching area name (e.g. 12850 -> "Misthalin").
+	 * Returns null if the region isn't mapped to any known chunk.
+	 */
+	public String getAreaForRegionId(int regionId)
+	{
+		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+		return chunk != null ? chunk.getArea() : null;
 	}
 
 	/**

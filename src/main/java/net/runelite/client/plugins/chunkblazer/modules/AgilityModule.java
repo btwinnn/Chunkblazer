@@ -1,25 +1,39 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
+import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
+import net.runelite.api.MenuAction;
 import net.runelite.api.Skill;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
+import net.runelite.client.plugins.chunkblazer.RequiredObject;
 
 /**
  * Module for handling AGILITY completion type tasks.
- * Detects agility course lap completions via XP gains.
  *
- * AGILITY tasks are typically "Complete X laps of Y course".
- * Detection: When Agility XP is gained, credit progress.
- * For lap-based tasks, significant XP gains (20+ XP) indicate obstacle completion.
+ * Two task shapes:
+ *   Lap tasks  — JSON has required_object pointing at the course's lap-end obstacle
+ *                 (e.g. Ardougne -> Gap #4, id 15612). Credit only when the player
+ *                 clicks THAT specific object and an Agility XP gain ≥ LAP_XP_THRESHOLD
+ *                 fires shortly after. This prevents a single high-XP obstacle from
+ *                 crediting every active lap task at once.
+ *   Shortcut tasks — no required_object, e.g. "Use the Level 21 Underwall Tunnel".
+ *                 Credit on any small Agility XP gain. Known cross-credit limitation
+ *                 when multiple shortcut tasks are active simultaneously; out of scope
+ *                 for this pass.
  */
 @Slf4j
 @Singleton
@@ -57,11 +71,34 @@ public class AgilityModule extends AbstractTaskModule
 	private static final int LAP_XP_THRESHOLD = 30;
 	private static final int SHORTCUT_XP_THRESHOLD = 5;
 
+	// How many ticks after clicking the lap-end obstacle the XP event is still
+	// considered "from that click". Matches ThievingModule's window.
+	private static final int INTERACTION_TIMEOUT_TICKS = 5;
+
+	// GameObject menu actions — same set used in ThievingModule. Anything else
+	// (examine, walk, cancel) is ignored.
+	private static final Set<MenuAction> GAME_OBJECT_ACTIONS = EnumSet.of(
+		MenuAction.GAME_OBJECT_FIRST_OPTION,
+		MenuAction.GAME_OBJECT_SECOND_OPTION,
+		MenuAction.GAME_OBJECT_THIRD_OPTION,
+		MenuAction.GAME_OBJECT_FOURTH_OPTION,
+		MenuAction.GAME_OBJECT_FIFTH_OPTION
+	);
+
 	@Inject
 	private ChatMessageManager chatMessageManager;
 
 	// Track Agility XP for detecting gains
 	private int previousAgilityXp = -1;
+
+	// Per-task lap-end GameObject IDs (parsed from required_object in JSON).
+	private final Map<String, Set<Integer>> taskRequiredObjectIds = new ConcurrentHashMap<>();
+	// Union of all lap-end object IDs across active lap tasks.
+	private final Set<Integer> watchedObjectIds = ConcurrentHashMap.newKeySet();
+
+	// Most recent watched-object interaction.
+	private int lastInteractionObjectId = -1;
+	private int lastInteractionObjectTick = -1;
 
 	// Debug heartbeat
 	private int tickCounter = 0;
@@ -97,6 +134,10 @@ public class AgilityModule extends AbstractTaskModule
 	{
 		eventBus.unregister(this);
 		previousAgilityXp = -1;
+		taskRequiredObjectIds.clear();
+		watchedObjectIds.clear();
+		lastInteractionObjectId = -1;
+		lastInteractionObjectTick = -1;
 		log.info("AgilityModule stopped");
 	}
 
@@ -111,6 +152,27 @@ public class AgilityModule extends AbstractTaskModule
 			log.info("  Task Name: {}", task.getName());
 			log.info("  Task ID: {}", task.getTaskId());
 			log.info("  Target Quantity: {}", task.getTargetQuantity());
+
+			// Capture lap-end object IDs for lap tasks.
+			Set<Integer> requiredObjectIds = new HashSet<>();
+			List<RequiredObject> requiredObjects = task.getRequiredObjects();
+			if (requiredObjects != null)
+			{
+				for (RequiredObject ro : requiredObjects)
+				{
+					List<Integer> ids = ro.getObjectIds();
+					if (ids != null)
+					{
+						for (Integer id : ids)
+						{
+							requiredObjectIds.add(id);
+							watchedObjectIds.add(id);
+							log.info("      >>> WATCHING LAP-END OBJECT ID: {}", id);
+						}
+					}
+				}
+			}
+			taskRequiredObjectIds.put(task.getTaskId(), requiredObjectIds);
 
 			// Initialize XP tracking on client thread
 			clientThread.invokeLater(this::initializeXpTracking);
@@ -133,6 +195,10 @@ public class AgilityModule extends AbstractTaskModule
 	{
 		super.onTaskCleared();
 		previousAgilityXp = -1;
+		taskRequiredObjectIds.clear();
+		watchedObjectIds.clear();
+		lastInteractionObjectId = -1;
+		lastInteractionObjectTick = -1;
 	}
 
 	@Override
@@ -163,6 +229,27 @@ public class AgilityModule extends AbstractTaskModule
 	}
 
 	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked event)
+	{
+		if (activeTasks.isEmpty() || watchedObjectIds.isEmpty())
+		{
+			return;
+		}
+		if (!GAME_OBJECT_ACTIONS.contains(event.getMenuAction()))
+		{
+			return;
+		}
+		int objectId = event.getId();
+		if (watchedObjectIds.contains(objectId))
+		{
+			lastInteractionObjectId = objectId;
+			lastInteractionObjectTick = client.getTickCount();
+			log.info(">>> AgilityModule: Player acted on watched lap-end object (ID: {}, option: {})",
+				objectId, event.getMenuOption());
+		}
+	}
+
+	@Subscribe
 	public void onStatChanged(StatChanged event)
 	{
 		if (event.getSkill() != Skill.AGILITY)
@@ -185,18 +272,57 @@ public class AgilityModule extends AbstractTaskModule
 		int xpGained = currentXp - previousAgilityXp;
 		previousAgilityXp = currentXp;
 
-		// Per-task threshold: a lap-style task (required_object present) only
-		// credits on the per-lap bonus; a shortcut credits on any obstacle XP.
-		// Both kinds can be active at the same time, so check each task.
+		int currentTick = client.getTickCount();
+		boolean recentObjectInteraction = lastInteractionObjectId > 0
+			&& (currentTick - lastInteractionObjectTick) <= INTERACTION_TIMEOUT_TICKS;
+
+		// Two paths:
+		//   Lap task  -> require recent click on THIS task's lap-end object AND XP ≥ threshold.
+		//   Shortcut  -> any XP ≥ threshold credits (existing loose behaviour, cross-credit risk).
+		boolean creditedLapThisEvent = false;
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
-			int threshold = task.isHasRequiredObject() ? LAP_XP_THRESHOLD : SHORTCUT_XP_THRESHOLD;
-			if (xpGained >= threshold)
+			Set<Integer> taskObjects = taskRequiredObjectIds.get(task.getTaskId());
+			boolean isLapTask = taskObjects != null && !taskObjects.isEmpty();
+
+			if (isLapTask)
 			{
-				log.info(">>> AgilityModule: '{}' credited (gained {} XP, threshold {})",
-					task.getName(), xpGained, threshold);
+				if (!recentObjectInteraction || !taskObjects.contains(lastInteractionObjectId))
+				{
+					continue;
+				}
+				if (xpGained < LAP_XP_THRESHOLD)
+				{
+					// Click matched but the XP gain is too small to be a lap-end bonus —
+					// this is the obstacle XP that fires alongside the bonus. Skip it
+					// so we don't double-credit one lap.
+					continue;
+				}
+				log.info(">>> AgilityModule: '{}' credited (lap-end object {} clicked, gained {} XP)",
+					task.getName(), lastInteractionObjectId, xpGained);
 				creditTaskProgress(task, 1);
+				creditedLapThisEvent = true;
 			}
+			else
+			{
+				if (xpGained >= SHORTCUT_XP_THRESHOLD)
+				{
+					log.info(">>> AgilityModule: '{}' credited (shortcut, gained {} XP, threshold {})",
+						task.getName(), xpGained, SHORTCUT_XP_THRESHOLD);
+					creditTaskProgress(task, 1);
+				}
+			}
+		}
+
+		// Consume the click after a successful lap credit. Some courses (Ardougne) fire
+		// both the final obstacle XP and the dismount-bonus XP within the same window,
+		// and both would credit otherwise — double-counting one lap on multi-lap tasks.
+		// Clear the ID (the gate uses `lastInteractionObjectId > 0`) so the next XP
+		// event in this window can't satisfy the recent-interaction check.
+		if (creditedLapThisEvent)
+		{
+			lastInteractionObjectId = -1;
+			lastInteractionObjectTick = -1;
 		}
 	}
 
@@ -235,8 +361,20 @@ public class AgilityModule extends AbstractTaskModule
 				completionCallback.onTaskCompleted(task, newProgress);
 			}
 
-			// Clean up
+			// Clean up — drop the per-task object IDs and rebuild the watched union so
+			// other tasks' lap-end objects keep firing but this task's no longer do.
 			activeTasks.remove(task);
+			taskRequiredObjectIds.remove(task.getTaskId());
+			rebuildWatchedObjects();
+		}
+	}
+
+	private void rebuildWatchedObjects()
+	{
+		watchedObjectIds.clear();
+		for (Set<Integer> ids : taskRequiredObjectIds.values())
+		{
+			watchedObjectIds.addAll(ids);
 		}
 	}
 

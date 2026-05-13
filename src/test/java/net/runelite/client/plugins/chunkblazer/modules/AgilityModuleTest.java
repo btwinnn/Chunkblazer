@@ -1,6 +1,8 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
+import net.runelite.api.MenuAction;
 import net.runelite.api.Skill;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
@@ -12,8 +14,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
@@ -127,19 +132,41 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 		verify(eventBus).unregister(agilityModule);
 	}
 
+	// Lap-end object IDs (from each course's required_object in JSON).
+	private static final int DRAYNOR_LAP_END = 11632;        // Draynor Rooftop Crate
+	private static final int VARROCK_LAP_END = 14841;        // Edge (Varrock Rooftop Course)
+	private static final int FALADOR_LAP_END = 14925;        // Falador Rooftop Edge
+	private static final int SEERS_LAP_END = 14931;          // Seers' Rooftop Edge
+	private static final int ARDOUGNE_LAP_END = 15612;       // Gap (Ardougne Rooftop Course)#4
+	private static final int AL_KHARID_LAP_END = 14847;      // Al Kharid Roof-top Beams (placeholder if not in JSON)
+	private static final int CANIFIS_LAP_END = 14922;        // Canifis Pole-vault (placeholder)
+	private static final int GNOME_LAP_END = 4059;           // Gnome end Pipe (placeholder)
+	private static final int BARBARIAN_LAP_END = 20210;      // Barbarian Crumbling wall (placeholder)
+	private static final int COLOSSAL_BASIC_LAP_END = 51354; // Colossal Wyrm Anti-toxin Vine (placeholder)
+
+	private MenuOptionClicked mockObjectClick(int objectId, MenuAction action)
+	{
+		MenuOptionClicked event = mock(MenuOptionClicked.class);
+		when(event.getMenuAction()).thenReturn(action);
+		lenient().when(event.getId()).thenReturn(objectId);
+		lenient().when(event.getMenuOption()).thenReturn("Climb");
+		return event;
+	}
+
 	/**
 	 * Walk one course through AgilityModule and assert that none of the
 	 * obstacle XP drops credits the lap-style task, but the final lap-end
-	 * bonus does (and brings the 1-lap task to completion).
+	 * bonus does — gated on the player having clicked the course's specific
+	 * lap-end obstacle (the required_object in JSON).
 	 *
 	 * <p>Used by every per-course test below — same shape, different XP
-	 * numbers (sourced from the OSRS Wiki). Each course's lap is "obstacles…
-	 * then a separate lap-completion bonus event."
+	 * numbers (sourced from the OSRS Wiki) and different lap-end object IDs.
 	 */
-	private void runOneLap(String taskName, String taskId, int[] obstacleXps, int lapBonus)
+	private void runOneLap(String taskName, String taskId, int[] obstacleXps, int lapBonus, int lapEndObjectId)
 	{
-		NuzlockeTask task = createTestTask(taskName, taskId, "AGILITY", 1);
-		task.setHasRequiredObject(true); // lap tasks have required_object in JSON
+		NuzlockeTask task = createTaskWithRequiredObject(taskName, taskId, "AGILITY", 1,
+			Collections.singletonList(lapEndObjectId));
+		task.setHasRequiredObject(true);
 
 		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
 		agilityModule.addActiveTask(task);
@@ -155,6 +182,8 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 				taskName + ": task must not complete on intra-lap obstacle XP");
 		}
 
+		// Now the player clicks the lap-end obstacle, then the lap-bonus XP fires.
+		agilityModule.onMenuOptionClicked(mockObjectClick(lapEndObjectId, MenuAction.GAME_OBJECT_FIRST_OPTION));
 		xp += lapBonus;
 		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, xp, 1, 1));
 
@@ -176,7 +205,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	void testDraynorLap_OnlyCompletesOnLapBonusNotEachObstacle()
 	{
 		runOneLap("Draynor Lap", "complete_draynor_roof",
-			new int[]{5, 8, 8, 7, 7, 5, 5}, 79);
+			new int[]{5, 8, 8, 7, 7, 5, 5}, 79, DRAYNOR_LAP_END);
 	}
 
 	@Test
@@ -184,7 +213,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	{
 		// Al Kharid Rooftop (level 20). Obstacles 5–8 XP, lap bonus 180 XP.
 		runOneLap("Al Kharid Lap", "complete_kharid_roof",
-			new int[]{5, 5, 5, 8, 5, 5, 8}, 180);
+			new int[]{5, 5, 5, 8, 5, 5, 8}, 180, AL_KHARID_LAP_END);
 	}
 
 	@Test
@@ -192,7 +221,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	{
 		// Varrock Rooftop (level 30). Obstacles 5–8 XP, lap bonus 238 XP.
 		runOneLap("Varrock Lap", "complete_varrock_roof",
-			new int[]{5, 8, 5, 8, 5, 8}, 238);
+			new int[]{5, 8, 5, 8, 5, 8}, 238, VARROCK_LAP_END);
 	}
 
 	@Test
@@ -200,7 +229,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	{
 		// Canifis Rooftop (level 40). Obstacles 8–9 XP, lap bonus 240 XP.
 		runOneLap("Canifis Lap", "complete_canifis_roof",
-			new int[]{8, 9, 8, 9, 9, 8}, 240);
+			new int[]{8, 9, 8, 9, 9, 8}, 240, CANIFIS_LAP_END);
 	}
 
 	@Test
@@ -208,15 +237,16 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	{
 		// Falador Rooftop (level 50). Obstacles 5–12 XP, lap bonus 440 XP.
 		runOneLap("Falador Lap", "complete_falador_roof",
-			new int[]{7, 12, 12, 7, 5, 5, 12, 8, 9}, 440);
+			new int[]{7, 12, 12, 7, 5, 5, 12, 8, 9}, 440, FALADOR_LAP_END);
 	}
 
 	@Test
 	void testSeersLap()
 	{
 		// Seers Rooftop (level 60). Obstacles uniform 9 XP, lap bonus 570.
+		// Real-world Seers' first obstacle is ~45 XP, well above the old 30 threshold.
 		runOneLap("Seers Lap", "complete_seers_roof",
-			new int[]{9, 9, 9, 9, 9}, 570);
+			new int[]{45, 9, 9, 9, 9}, 570, SEERS_LAP_END);
 	}
 
 	@Test
@@ -225,8 +255,10 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 		// Ardougne Rooftop (level 90). Obstacles 11–22 XP — the highest single
 		// rooftop obstacle XP we test. Lap bonus 793 XP. This is the course
 		// that justifies the 30 threshold being above ~22.
+		// Real-world Ardougne XPs (Mike's measurements): 43 climb, 65 first jump,
+		// 50 plank, 21 second jump, 28 hop, 57 shimmy, 625 dismount.
 		runOneLap("Ardougne Lap", "complete_ardougne_roof",
-			new int[]{11, 12, 12, 22, 22, 22, 12}, 793);
+			new int[]{43, 65, 50, 21, 28, 57}, 625, ARDOUGNE_LAP_END);
 	}
 
 	@Test
@@ -236,7 +268,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 		// gives ~39.5 XP — the smallest lap bonus across all courses, which
 		// is what determines the lower bound of the LAP_XP_THRESHOLD.
 		runOneLap("Gnome Course Lap", "complete_gnome_course",
-			new int[]{8, 6, 6, 8, 5, 3, 3}, 39);
+			new int[]{8, 6, 6, 8, 5, 3, 3}, 39, GNOME_LAP_END);
 	}
 
 	@Test
@@ -245,7 +277,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 		// Barbarian Outpost (level 35). Uniform 13.5 XP per obstacle (rounded
 		// down by client to 13), lap bonus 152.5 (rounded to 152 here).
 		runOneLap("Barbarian Lap", "complete_barbarian_course",
-			new int[]{13, 13, 13, 13, 13}, 152);
+			new int[]{13, 13, 13, 13, 13}, 152, BARBARIAN_LAP_END);
 	}
 
 	@Test
@@ -254,7 +286,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 		// Colossal Wyrm Basic Path (level 50, Varlamore). Obstacles ~7 XP,
 		// path-completion bonus 75 XP.
 		runOneLap("Colossal Wyrm Basic", "agility_level_50_path_colossal_wyrm_course",
-			new int[]{7, 7, 7, 7, 7}, 75);
+			new int[]{7, 7, 7, 7, 7}, 75, COLOSSAL_BASIC_LAP_END);
 	}
 
 	/**
@@ -280,5 +312,119 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 			"Shortcut task should credit on a single small Agility XP gain");
 		assertTrue(task.isCompleted(),
 			"1-quantity shortcut task should complete on the only XP event");
+	}
+
+	// --- Cross-contamination tests (Mike's bug) -------------------------------------------------
+
+	/**
+	 * Mike's repro: Ardougne and Seers lap tasks both active. He clicked the FIRST
+	 * Ardougne obstacle (Wooden Beams, 52 XP — above the old 30 threshold). The
+	 * pre-fix code credited both Ardougne AND Seers because neither knew which
+	 * course the XP came from.
+	 */
+	@Test
+	void testArdougneFirstObstacle_DoesNotCreditAnyLap()
+	{
+		NuzlockeTask ardougne = createTaskWithRequiredObject(
+			"Ardougne Lap", "complete_ardougne_roof", "AGILITY", 1,
+			Collections.singletonList(ARDOUGNE_LAP_END));
+		ardougne.setHasRequiredObject(true);
+		NuzlockeTask seers = createTaskWithRequiredObject(
+			"Seers Lap", "complete_seers_roof", "AGILITY", 1,
+			Collections.singletonList(SEERS_LAP_END));
+		seers.setHasRequiredObject(true);
+
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(ardougne);
+		agilityModule.addActiveTask(seers);
+
+		// Player clicks the first Ardougne obstacle (NOT a watched lap-end object).
+		// Real-world XP for the first obstacle is 43 (Mike's measurement).
+		final int FIRST_OBSTACLE = 15609;
+		agilityModule.onMenuOptionClicked(mockObjectClick(FIRST_OBSTACLE, MenuAction.GAME_OBJECT_FIRST_OPTION));
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, 43, 1, 1));
+
+		verify(completionCallback, never()).onProgressUpdated(eq(ardougne), anyInt());
+		verify(completionCallback, never()).onProgressUpdated(eq(seers), anyInt());
+	}
+
+	/**
+	 * Ardougne and Seers both active, player completes an Ardougne lap.
+	 * Only Ardougne should credit.
+	 */
+	@Test
+	void testArdougneLapCompletion_DoesNotCreditSeers()
+	{
+		NuzlockeTask ardougne = createTaskWithRequiredObject(
+			"Ardougne Lap", "complete_ardougne_roof", "AGILITY", 1,
+			Collections.singletonList(ARDOUGNE_LAP_END));
+		ardougne.setHasRequiredObject(true);
+		NuzlockeTask seers = createTaskWithRequiredObject(
+			"Seers Lap", "complete_seers_roof", "AGILITY", 1,
+			Collections.singletonList(SEERS_LAP_END));
+		seers.setHasRequiredObject(true);
+
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(ardougne);
+		agilityModule.addActiveTask(seers);
+
+		agilityModule.onMenuOptionClicked(mockObjectClick(ARDOUGNE_LAP_END, MenuAction.GAME_OBJECT_FIRST_OPTION));
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, 625, 1, 1));
+
+		verify(completionCallback).onProgressUpdated(eq(ardougne), eq(1));
+		verify(completionCallback, never()).onProgressUpdated(eq(seers), anyInt());
+	}
+
+	/**
+	 * Real Ardougne mechanics: clicking Gap #4 fires BOTH a shimmy/jump XP event
+	 * (57) AND the dismount bonus (625) within the same tick window. A multi-lap
+	 * task must credit exactly once per click, not twice.
+	 */
+	@Test
+	void testMultiLapTask_OneClickCreditsOnce()
+	{
+		NuzlockeTask ardougne = createTaskWithRequiredObject(
+			"Run 5 Ardougne Laps", "ardougne_5_laps", "AGILITY", 5,
+			Collections.singletonList(ARDOUGNE_LAP_END));
+		ardougne.setHasRequiredObject(true);
+
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(ardougne);
+
+		// One click of the lap-end, then BOTH lap-end XP events fire (shimmy + dismount).
+		agilityModule.onMenuOptionClicked(mockObjectClick(ARDOUGNE_LAP_END, MenuAction.GAME_OBJECT_FIRST_OPTION));
+		int xp = 0;
+		xp += 57;
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, xp, 1, 1));
+		xp += 625;
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, xp, 1, 1));
+
+		assertEquals(1, ardougne.getCurrentProgress(),
+			"One lap-end click should credit +1, not +2, even though two ≥30-XP events fired");
+		assertFalse(ardougne.isCompleted(),
+			"5-lap task should still need 4 more laps after one click");
+	}
+
+	/**
+	 * Even with a recent lap-end click, only XP gains at or above LAP_XP_THRESHOLD
+	 * credit — otherwise the obstacle's own small XP gain would double-credit
+	 * alongside the lap bonus.
+	 */
+	@Test
+	void testLapEndClick_LowXpDoesNotCredit()
+	{
+		NuzlockeTask seers = createTaskWithRequiredObject(
+			"Seers Lap", "complete_seers_roof", "AGILITY", 1,
+			Collections.singletonList(SEERS_LAP_END));
+		seers.setHasRequiredObject(true);
+
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(seers);
+
+		agilityModule.onMenuOptionClicked(mockObjectClick(SEERS_LAP_END, MenuAction.GAME_OBJECT_FIRST_OPTION));
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, 12, 1, 1));
+
+		verify(completionCallback, never()).onProgressUpdated(eq(seers), anyInt());
+		assertEquals(0, seers.getCurrentProgress());
 	}
 }

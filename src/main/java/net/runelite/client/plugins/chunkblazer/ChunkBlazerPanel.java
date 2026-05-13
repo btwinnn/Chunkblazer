@@ -92,9 +92,11 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JTextField completedTasksSearchField;
 	private JComboBox<String> categoryFilterCombo;
 	private JComboBox<String> regionFilterCombo;
+	private JComboBox<String> areaFilterCombo;
 	private String completedTasksSearchText = "";
 	private String selectedCategory = "All";
 	private String selectedRegion = "All";
+	private String selectedArea = "All";
 	private JPanel completedTasksFilterPanel;
 	private JLabel completedCollapsedLabel;
 	private boolean isRefreshingFilters = false; // Prevent event loops during filter refresh
@@ -105,9 +107,11 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JTextField activeTasksSearchField;
 	private JComboBox<String> activeTasksCategoryCombo;
 	private JComboBox<String> activeTasksRegionCombo;
+	private JComboBox<String> activeTasksAreaCombo;
 	private String activeTasksSearchText = "";
 	private String activeTasksSelectedCategory = "All";
 	private String activeTasksSelectedRegion = "All";
+	private String activeTasksSelectedArea = "All";
 	private boolean isRefreshingActiveFilters = false;
 	private NuzlockeTask selectedTask = null;
 	// Tracks the region ID the bottom task list was last rendered for. When the player
@@ -287,8 +291,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		completedTasksFilterPanel.setLayout(new BoxLayout(completedTasksFilterPanel, BoxLayout.Y_AXIS));
 		completedTasksFilterPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		completedTasksFilterPanel.setAlignmentX(LEFT_ALIGNMENT);
-		completedTasksFilterPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 80));
-		completedTasksFilterPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 80));
+		completedTasksFilterPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 135));
+		completedTasksFilterPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 135));
 		completedTasksFilterPanel.setVisible(false);
 
 		// Search text field
@@ -326,6 +330,34 @@ public class ChunkBlazerPanel extends PluginPanel
 		searchRow.add(completedTasksSearchField, BorderLayout.CENTER);
 
 		completedTasksFilterPanel.add(searchRow);
+		completedTasksFilterPanel.add(Box.createVerticalStrut(5));
+
+		// Area filter — broadest cut (Misthalin / Asgarnia / Zeah / ...).
+		JPanel areaRow = new JPanel(new BorderLayout(2, 0));
+		areaRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		areaRow.setAlignmentX(LEFT_ALIGNMENT);
+		areaRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 45));
+		areaRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 45));
+
+		JLabel areaLabel = new JLabel("Area:");
+		areaLabel.setFont(FontManager.getRunescapeSmallFont());
+		areaLabel.setForeground(Color.LIGHT_GRAY);
+		areaRow.add(areaLabel, BorderLayout.NORTH);
+
+		areaFilterCombo = new JComboBox<>(new String[]{"All"});
+		areaFilterCombo.setFont(FontManager.getRunescapeSmallFont());
+		areaFilterCombo.addActionListener(e ->
+		{
+			if (!isRefreshingFilters)
+			{
+				selectedArea = (String) areaFilterCombo.getSelectedItem();
+				if (selectedArea == null) selectedArea = "All";
+				updateCompletedTasksContent();
+			}
+		});
+		areaRow.add(areaFilterCombo, BorderLayout.CENTER);
+
+		completedTasksFilterPanel.add(areaRow);
 		completedTasksFilterPanel.add(Box.createVerticalStrut(5));
 
 		// Category and Region filter row
@@ -499,6 +531,24 @@ public class ChunkBlazerPanel extends PluginPanel
 			{
 				regionFilterCombo.setSelectedItem("All");
 				selectedRegion = "All";
+			}
+
+			Set<String> areas = plugin.getCompletedTaskAreas();
+			String currentArea = selectedArea;
+			areaFilterCombo.removeAllItems();
+			areaFilterCombo.addItem("All");
+			for (String a : areas)
+			{
+				areaFilterCombo.addItem(a);
+			}
+			if (currentArea != null && areas.contains(currentArea))
+			{
+				areaFilterCombo.setSelectedItem(currentArea);
+			}
+			else
+			{
+				areaFilterCombo.setSelectedItem("All");
+				selectedArea = "All";
 			}
 		}
 		finally
@@ -980,6 +1030,35 @@ public class ChunkBlazerPanel extends PluginPanel
 		activeTasksFilterPanel.add(searchRow);
 		activeTasksFilterPanel.add(Box.createVerticalStrut(4));
 
+		// Area filter (broadest cut — Misthalin / Asgarnia / Zeah / ...).
+		// On its own row above Category+Region so the dropdown has room for full area names.
+		JPanel areaRow = new JPanel(new BorderLayout(2, 0));
+		areaRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		areaRow.setAlignmentX(LEFT_ALIGNMENT);
+		areaRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 40));
+		areaRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 40));
+
+		JLabel areaLabel = new JLabel("Area:");
+		areaLabel.setFont(FontManager.getRunescapeSmallFont());
+		areaLabel.setForeground(Color.LIGHT_GRAY);
+		areaRow.add(areaLabel, BorderLayout.NORTH);
+
+		activeTasksAreaCombo = new JComboBox<>(new String[]{"All"});
+		activeTasksAreaCombo.setFont(FontManager.getRunescapeSmallFont());
+		activeTasksAreaCombo.addActionListener(e ->
+		{
+			if (!isRefreshingActiveFilters)
+			{
+				activeTasksSelectedArea = (String) activeTasksAreaCombo.getSelectedItem();
+				if (activeTasksSelectedArea == null) activeTasksSelectedArea = "All";
+				updateActiveTasksDisplay();
+			}
+		});
+		areaRow.add(activeTasksAreaCombo, BorderLayout.CENTER);
+
+		activeTasksFilterPanel.add(areaRow);
+		activeTasksFilterPanel.add(Box.createVerticalStrut(4));
+
 		// Category and Region filters
 		JPanel filterRow = new JPanel(new GridLayout(1, 2, 4, 0));
 		filterRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
@@ -1168,6 +1247,25 @@ public class ChunkBlazerPanel extends PluginPanel
 			{
 				activeTasksRegionCombo.setSelectedItem("All");
 				activeTasksSelectedRegion = "All";
+			}
+
+			// Populate areas from active tasks
+			Set<String> areas = plugin.getActiveTaskAreas();
+			String currentArea = activeTasksSelectedArea;
+			activeTasksAreaCombo.removeAllItems();
+			activeTasksAreaCombo.addItem("All");
+			for (String a : areas)
+			{
+				activeTasksAreaCombo.addItem(a);
+			}
+			if (currentArea != null && areas.contains(currentArea))
+			{
+				activeTasksAreaCombo.setSelectedItem(currentArea);
+			}
+			else
+			{
+				activeTasksAreaCombo.setSelectedItem("All");
+				activeTasksSelectedArea = "All";
 			}
 		}
 		finally
@@ -2098,8 +2196,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		final String filterText = activeTasksSearchText != null ? activeTasksSearchText : "";
 		final String filterCategory = activeTasksSelectedCategory != null ? activeTasksSelectedCategory : "All";
 		final String filterRegion = activeTasksSelectedRegion != null ? activeTasksSelectedRegion : "All";
+		final String filterArea = activeTasksSelectedArea != null ? activeTasksSelectedArea : "All";
 
-		// Filter tasks based on search text, category, and region
+		// Filter tasks based on search text, category, region, and area
 		List<NuzlockeTask> filteredTasks = allTasks.stream()
 			.filter(task ->
 			{
@@ -2122,11 +2221,20 @@ public class ChunkBlazerPanel extends PluginPanel
 						return false;
 					}
 				}
-				// Region filter
+				// Region filter (chunk-level)
 				if (!"All".equals(filterRegion))
 				{
 					String taskRegion = plugin.getTaskRegionName(task);
 					if (taskRegion == null || !filterRegion.equals(taskRegion))
+					{
+						return false;
+					}
+				}
+				// Area filter (overarching: Misthalin / Asgarnia / ...)
+				if (!"All".equals(filterArea))
+				{
+					String taskArea = plugin.getTaskArea(task);
+					if (taskArea == null || !filterArea.equals(taskArea))
 					{
 						return false;
 					}
@@ -2412,6 +2520,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Cache filter values to avoid null issues during combo box updates
 		final String filterCategory = selectedCategory != null ? selectedCategory : "All";
 		final String filterRegion = selectedRegion != null ? selectedRegion : "All";
+		final String filterArea = selectedArea != null ? selectedArea : "All";
 		final String filterText = completedTasksSearchText != null ? completedTasksSearchText : "";
 
 		List<CompletedTaskInfo> filteredTasks = allTasks.stream()
@@ -2442,6 +2551,14 @@ public class ChunkBlazerPanel extends PluginPanel
 				{
 					String reg = info.getRegionName() != null ? info.getRegionName() : "";
 					if (!filterRegion.equals(reg))
+					{
+						return false;
+					}
+				}
+				if (!"All".equals(filterArea))
+				{
+					String area = plugin.getAreaForRegionId(info.getRegionId());
+					if (area == null || !filterArea.equals(area))
 					{
 						return false;
 					}
