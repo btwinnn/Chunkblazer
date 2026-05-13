@@ -395,7 +395,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		JPanel regionPanel = new JPanel(new BorderLayout(2, 0));
 		regionPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 
-		JLabel regLabel = new JLabel("Region:");
+		JLabel regLabel = new JLabel("Chunk:");
 		regLabel.setFont(FontManager.getRunescapeSmallFont());
 		regLabel.setForeground(Color.LIGHT_GRAY);
 		regionPanel.add(regLabel, BorderLayout.NORTH);
@@ -1094,7 +1094,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		JPanel regionPanel = new JPanel(new BorderLayout(2, 0));
 		regionPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 
-		JLabel regLabel = new JLabel("Region:");
+		JLabel regLabel = new JLabel("Chunk:");
 		regLabel.setFont(FontManager.getRunescapeSmallFont());
 		regLabel.setForeground(Color.LIGHT_GRAY);
 		regionPanel.add(regLabel, BorderLayout.NORTH);
@@ -1416,8 +1416,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		// getTaskRegionName already includes the numeric ID in "ChunkName (id)" form.
 		String selRegionName = plugin.getTaskRegionName(selectedTask);
 		String regionRow = (selRegionName != null && !selRegionName.isEmpty())
-			? "Region: " + selRegionName
-			: "Region: unknown";
+			? "Chunk: " + selRegionName
+			: "Chunk: unknown";
 		JLabel selRegionLabel = new JLabel(regionRow);
 		selRegionLabel.setFont(FontManager.getRunescapeSmallFont());
 		selRegionLabel.setForeground(new Color(140, 200, 230));
@@ -1757,7 +1757,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
 		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
 
-		JLabel sectionTitle = new JLabel("Region Tasks");
+		JLabel sectionTitle = new JLabel("Chunk Tasks");
 		sectionTitle.setFont(FontManager.getRunescapeBoldFont());
 		sectionTitle.setForeground(Color.WHITE);
 		headerRow.add(sectionTitle, BorderLayout.WEST);
@@ -2427,8 +2427,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		// composed "ChunkName (regionId)" string — don't append the ID again.
 		String activeRegionName = plugin.getTaskRegionName(task);
 		String regionText = (activeRegionName != null && !activeRegionName.isEmpty())
-			? "Region: " + activeRegionName
-			: "Region: unknown";
+			? "Chunk: " + activeRegionName
+			: "Chunk: unknown";
 		JLabel activeRegionLabel = new JLabel(regionText);
 		activeRegionLabel.setFont(FontManager.getRunescapeSmallFont());
 		activeRegionLabel.setForeground(new Color(140, 200, 230));
@@ -2741,7 +2741,7 @@ public class ChunkBlazerPanel extends PluginPanel
 				{
 					if (comp instanceof JLabel)
 					{
-						String titleText = "Region Tasks";
+						String titleText = "Chunk Tasks";
 						if (totalCount > 0)
 						{
 							titleText += " (" + availableCount + "/" + totalCount + ")";
