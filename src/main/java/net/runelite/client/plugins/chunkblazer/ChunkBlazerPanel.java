@@ -1413,21 +1413,11 @@ public class ChunkBlazerPanel extends PluginPanel
 		selectedTaskPanel.add(infoLabel);
 
 		// Region + Area rows — gives the player full context for the highlighted task.
+		// getTaskRegionName already includes the numeric ID in "ChunkName (id)" form.
 		String selRegionName = plugin.getTaskRegionName(selectedTask);
-		int selRegionId = plugin.findRegionForTask(selectedTask.getTaskId());
-		String regionRow;
-		if (selRegionName != null && !selRegionName.isEmpty() && selRegionId > 0)
-		{
-			regionRow = "Region: " + selRegionName + " (" + selRegionId + ")";
-		}
-		else if (selRegionId > 0)
-		{
-			regionRow = "Region: " + selRegionId;
-		}
-		else
-		{
-			regionRow = "Region: unknown";
-		}
+		String regionRow = (selRegionName != null && !selRegionName.isEmpty())
+			? "Region: " + selRegionName
+			: "Region: unknown";
 		JLabel selRegionLabel = new JLabel(regionRow);
 		selRegionLabel.setFont(FontManager.getRunescapeSmallFont());
 		selRegionLabel.setForeground(new Color(140, 200, 230));
@@ -2433,22 +2423,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		itemPanel.add(infoLabel);
 
 		// Region subtitle: friendly name + numeric region ID, so a glance tells the
-		// player which chunk rolled the task.
+		// player which chunk rolled the task. getTaskRegionName already returns the
+		// composed "ChunkName (regionId)" string — don't append the ID again.
 		String activeRegionName = plugin.getTaskRegionName(task);
-		int activeRegionId = plugin.findRegionForTask(task.getTaskId());
-		String regionText;
-		if (activeRegionName != null && !activeRegionName.isEmpty() && activeRegionId > 0)
-		{
-			regionText = "Region: " + activeRegionName + " (" + activeRegionId + ")";
-		}
-		else if (activeRegionId > 0)
-		{
-			regionText = "Region: " + activeRegionId;
-		}
-		else
-		{
-			regionText = "Region: unknown";
-		}
+		String regionText = (activeRegionName != null && !activeRegionName.isEmpty())
+			? "Region: " + activeRegionName
+			: "Region: unknown";
 		JLabel activeRegionLabel = new JLabel(regionText);
 		activeRegionLabel.setFont(FontManager.getRunescapeSmallFont());
 		activeRegionLabel.setForeground(new Color(140, 200, 230));
@@ -2700,25 +2680,11 @@ public class ChunkBlazerPanel extends PluginPanel
 		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
 		itemPanel.add(infoLabel);
 
-		// Region on separate line (wrapped via WrappingTextLabel). Include the
-		// numeric region ID so a glance tells the player which chunk credited it.
+		// Region line. info.getRegionName() is already the composed
+		// "ChunkName (regionId)" string from getRegionName(int) — display as-is.
 		String regionName = info.getRegionName();
-		int regionId = info.getRegionId();
-		String regionText;
-		if (regionName != null && !regionName.isEmpty() && regionId > 0)
-		{
-			regionText = regionName + " (" + regionId + ")";
-		}
-		else if (regionId > 0)
-		{
-			regionText = "Region " + regionId;
-		}
-		else
-		{
-			regionText = regionName != null ? regionName : "Unknown";
-		}
 		WrappingTextLabel regionLabel = new WrappingTextLabel(
-			regionText,
+			regionName != null && !regionName.isEmpty() ? regionName : "Unknown",
 			FontManager.getRunescapeSmallFont(),
 			Color.CYAN,
 			TASK_TEXT_WRAP_WIDTH);
