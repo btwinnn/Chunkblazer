@@ -712,7 +712,7 @@
         },
         {
             "region_id": [12337],
-            "Friendly_Name": "Wizards' Tower",
+            "Friendly_Name": "Brimhaven Dungeon",
             "neighbor_ids": [12081, 12338, 12593, 12336],
             "tasks": [
                 {
