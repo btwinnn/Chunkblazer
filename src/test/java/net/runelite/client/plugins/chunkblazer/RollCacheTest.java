@@ -1,5 +1,6 @@
 package net.runelite.client.plugins.chunkblazer;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -7,6 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -126,5 +129,175 @@ class RollCacheTest
 		// is overwhelmingly likely. If we always got the same number, the
 		// cache leaked across instances.
 		assertTrue(rolls.size() > 1, "cache appears to be shared across instances");
+	}
+
+	// --- RequiredObject (parallel to RequiredItem / TargetNpc) ----------------------------------
+
+	@Test
+	void requiredObjectWithFixedQuantityIsStable()
+	{
+		RequiredObject ro = new RequiredObject();
+		ro.setQuantity(7);
+		assertEquals(7, ro.getRequiredQuantity());
+		assertEquals(7, ro.getRequiredQuantity());
+	}
+
+	@Test
+	void requiredObjectWithRangeRollsOnceAndCaches()
+	{
+		RequiredObject ro = new RequiredObject();
+		ro.setQuantityRange(Arrays.asList(1, 20));
+
+		int first = ro.getRequiredQuantity();
+		assertTrue(first >= 1 && first <= 20, "rolled value out of range: " + first);
+
+		for (int i = 0; i < 100; i++)
+		{
+			assertEquals(first, ro.getRequiredQuantity());
+		}
+	}
+
+	@Test
+	void requiredObjectSetRolledQuantityPinsValue()
+	{
+		RequiredObject ro = new RequiredObject();
+		ro.setQuantityRange(Arrays.asList(1, 20));
+
+		ro.setRolledQuantity(13);
+
+		assertEquals(13, ro.getRequiredQuantity());
+		assertEquals(13, ro.getRequiredQuantity());
+	}
+
+	@Test
+	void requiredObjectRollSpreadsAcrossInstances()
+	{
+		// Same independence guarantee as the TargetNpc case — every freshly-
+		// constructed RequiredObject must roll on its own; the cache cannot
+		// leak across instances.
+		Set<Integer> rolls = new HashSet<>();
+		for (int i = 0; i < 50; i++)
+		{
+			RequiredObject ro = new RequiredObject();
+			ro.setQuantityRange(Arrays.asList(1, 1000));
+			rolls.add(ro.getRequiredQuantity());
+		}
+		assertTrue(rolls.size() > 1, "cache appears to be shared across instances");
+	}
+
+	// --- Deserializer round-trip tests ----------------------------------------------------------
+	// Verify that JSON like "quantity": [1, 20] actually lands in quantityRange
+	// (so the roll happens), and "quantity": 5 or [5] lands in quantity (so
+	// nothing rolls and the value is fixed). The end-to-end story is:
+	//   JSON "[min, max]" -> deserializer -> quantityRange -> getRequiredQuantity rolls.
+
+	private static final Gson GSON = new Gson();
+
+	@Test
+	void requiredItemDeserializer_RangeArrayParsesToQuantityRange()
+	{
+		String json = "{\"item\": \"Cowhide\", \"item_ids\": [1739], \"quantity\": [1, 36]}";
+		RequiredItem item = GSON.fromJson(json, RequiredItem.class);
+
+		assertNull(item.getQuantity(), "fixed quantity must be null when JSON gives a range");
+		assertNotNull(item.getQuantityRange(), "quantityRange must be populated from [min, max]");
+		assertEquals(Arrays.asList(1, 36), item.getQuantityRange());
+
+		int rolled = item.getRequiredQuantity();
+		assertTrue(rolled >= 1 && rolled <= 36, "rolled out of range: " + rolled);
+	}
+
+	@Test
+	void requiredItemDeserializer_SingleElementArrayParsesToFixedQuantity()
+	{
+		String json = "{\"item\": \"Cowhide\", \"item_ids\": [1739], \"quantity\": [5]}";
+		RequiredItem item = GSON.fromJson(json, RequiredItem.class);
+
+		assertEquals(Integer.valueOf(5), item.getQuantity(), "single-element array must be fixed quantity");
+		assertNull(item.getQuantityRange(), "quantityRange must NOT be populated for [n]");
+		assertEquals(5, item.getRequiredQuantity());
+		assertEquals(5, item.getRequiredQuantity()); // stable
+	}
+
+	@Test
+	void requiredItemDeserializer_IntParsesToFixedQuantity()
+	{
+		String json = "{\"item\": \"Cowhide\", \"item_ids\": [1739], \"quantity\": 5}";
+		RequiredItem item = GSON.fromJson(json, RequiredItem.class);
+
+		assertEquals(Integer.valueOf(5), item.getQuantity());
+		assertNull(item.getQuantityRange());
+	}
+
+	@Test
+	void requiredObjectDeserializer_RangeArrayParsesToQuantityRange()
+	{
+		String json = "{\"object\": [\"Falador Rooftop Edge\"], \"object_id\": [14925], \"quantity\": [1, 20]}";
+		RequiredObject ro = GSON.fromJson(json, RequiredObject.class);
+
+		assertNull(ro.getQuantity());
+		assertNotNull(ro.getQuantityRange());
+		assertEquals(Arrays.asList(1, 20), ro.getQuantityRange());
+
+		int rolled = ro.getRequiredQuantity();
+		assertTrue(rolled >= 1 && rolled <= 20, "rolled out of range: " + rolled);
+	}
+
+	@Test
+	void requiredObjectDeserializer_SingleElementArrayParsesToFixedQuantity()
+	{
+		String json = "{\"object\": [\"Seed Stall\"], \"object_id\": [7053], \"quantity\": [1]}";
+		RequiredObject ro = GSON.fromJson(json, RequiredObject.class);
+
+		assertEquals(Integer.valueOf(1), ro.getQuantity());
+		assertNull(ro.getQuantityRange());
+	}
+
+	@Test
+	void targetNpcDeserializer_RangeArrayParsesToQuantityRange()
+	{
+		String json = "{\"npc\": [\"Man\"], \"npc_ids\": [3106], \"quantity\": [1, 28]}";
+		TargetNpc npc = GSON.fromJson(json, TargetNpc.class);
+
+		assertNull(npc.getQuantity());
+		assertNotNull(npc.getQuantityRange());
+		assertEquals(Arrays.asList(1, 28), npc.getQuantityRange());
+
+		int rolled = npc.getRequiredQuantity();
+		assertTrue(rolled >= 1 && rolled <= 28, "rolled out of range: " + rolled);
+	}
+
+	@Test
+	void targetNpcDeserializer_IntParsesToFixedQuantity()
+	{
+		String json = "{\"npc\": [\"Man\"], \"npc_ids\": [3106], \"quantity\": 1}";
+		TargetNpc npc = GSON.fromJson(json, TargetNpc.class);
+
+		assertEquals(Integer.valueOf(1), npc.getQuantity());
+		assertNull(npc.getQuantityRange());
+	}
+
+	// --- End-to-end: deserialize a real-shape rooftop task and roll the quantity ---------------
+
+	@Test
+	void requiredObject_EndToEnd_RooftopTaskRollsInRange()
+	{
+		// Same shape as Asgarnia_Tasks.json's "complete_falador_roof":
+		// "required_object": { "object": [...], "object_id": [...], "quantity": [1, 20] }
+		String json = "{"
+			+ "\"object\": [\"Falador Rooftop Edge\"],"
+			+ "\"object_id\": [14925],"
+			+ "\"quantity\": [1, 20]"
+			+ "}";
+		RequiredObject ro = GSON.fromJson(json, RequiredObject.class);
+
+		// First call rolls and caches; later calls must return the same value
+		// (matches how initializeTask + module addActiveTask both call this).
+		int target = ro.getRequiredQuantity();
+		assertTrue(target >= 1 && target <= 20);
+		for (int i = 0; i < 25; i++)
+		{
+			assertEquals(target, ro.getRequiredQuantity(), "subsequent calls must hit the cache");
+		}
 	}
 }
