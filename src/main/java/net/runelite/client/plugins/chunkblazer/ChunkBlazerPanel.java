@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.List;
@@ -1446,18 +1447,14 @@ public class ChunkBlazerPanel extends PluginPanel
 		progressRow.setPreferredSize(new Dimension(CONTENT_WIDTH - 30, 14));
 		progressRow.setMaximumSize(new Dimension(CONTENT_WIDTH - 30, 14));
 
-		final int BAR_WIDTH = 100;
-		JPanel progressBar = new JPanel(new BorderLayout());
-		progressBar.setBackground(new Color(30, 30, 30));
-		progressBar.setBorder(BorderFactory.createLineBorder(new Color(255, 215, 0)));
-		progressBar.setPreferredSize(new Dimension(BAR_WIDTH + 2, 12));
-
-		int fillWidth = Math.round(BAR_WIDTH * pct);
-		JPanel progressFill = new JPanel();
-		progressFill.setBackground(new Color(255, 215, 0)); // Gold fill
-		progressFill.setPreferredSize(new Dimension(fillWidth, 10));
-		progressBar.add(progressFill, BorderLayout.WEST);
-
+		// Paints fill against its actual width — see createPercentageProgressBar
+		// for the long story on why we don't use BorderLayout.WEST + a fixed-size
+		// child for this anymore.
+		JPanel progressBar = createPercentageProgressBar(
+			pct,
+			new Color(255, 215, 0),                // gold fill
+			new Color(255, 215, 0),                // gold border
+			12);
 		progressRow.add(progressBar, BorderLayout.CENTER);
 
 		JLabel progressText = new JLabel(progress + "/" + target);
@@ -2447,21 +2444,14 @@ public class ChunkBlazerPanel extends PluginPanel
 		progressRow.setPreferredSize(new Dimension(CONTENT_WIDTH - 20, 16));
 		progressRow.setMaximumSize(new Dimension(CONTENT_WIDTH - 20, 16));
 
-		// Progress bar - use exact width calculation
-		final int BAR_WIDTH = 78; // Inner width (excluding border)
-		JPanel progressBar = new JPanel();
-		progressBar.setLayout(new BorderLayout());
-		progressBar.setBackground(new Color(30, 30, 30));
-		progressBar.setBorder(BorderFactory.createLineBorder(isSelected ? new Color(255, 215, 0) : new Color(60, 60, 60)));
-		progressBar.setPreferredSize(new Dimension(BAR_WIDTH + 2, 10)); // +2 for border
-
-		// Calculate fill width with rounding for accuracy
-		int fillWidth = Math.round(BAR_WIDTH * pct);
-		JPanel progressFill = new JPanel();
-		progressFill.setBackground(isSelected ? new Color(255, 215, 0) : new Color(80, 180, 80));
-		progressFill.setPreferredSize(new Dimension(fillWidth, 8)); // 8 = 10 - 2 for border
-		progressBar.add(progressFill, BorderLayout.WEST);
-
+		// Progress bar paints its fill against its actual rendered width — so the
+		// bar always visually matches `pct`, even when the parent layout stretches
+		// it wider than the preferred 80 px.
+		JPanel progressBar = createPercentageProgressBar(
+			pct,
+			isSelected ? new Color(255, 215, 0) : new Color(80, 180, 80),
+			isSelected ? new Color(255, 215, 0) : new Color(60, 60, 60),
+			10);
 		progressRow.add(progressBar, BorderLayout.CENTER);
 
 		JLabel progressText = new JLabel(progress + "/" + target);
@@ -2477,6 +2467,52 @@ public class ChunkBlazerPanel extends PluginPanel
 		attachRowMouseHandling(itemPanel, rowAdapter, new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
 		return itemPanel;
+	}
+
+	/**
+	 * Return a progress-bar JPanel that paints its fill against its OWN rendered
+	 * width every paint, instead of relying on a hardcoded inner-width constant
+	 * and a fixed-size child JPanel.
+	 *
+	 * <p>Why this exists: the previous implementation added a {@code progressFill}
+	 * child via {@code BorderLayout.WEST} inside a bar that lived at the parent
+	 * row's {@code BorderLayout.CENTER}. CENTER stretches its child to fill all
+	 * leftover horizontal space, so the bar's actual width was much larger
+	 * (~140 px) than the hardcoded BAR_WIDTH (78) the fill was sized against —
+	 * meaning a 97% complete task only painted ~54% of the visible bar.
+	 *
+	 * <p>By overriding {@code paintComponent} we always paint {@code pct} of the
+	 * actual {@code getWidth()}, regardless of how layout sizes the bar.
+	 */
+	private static JPanel createPercentageProgressBar(float pct, Color fillColor, Color borderColor, int height)
+	{
+		final float clamped = Math.max(0f, Math.min(1f, pct));
+		JPanel bar = new JPanel()
+		{
+			@Override
+			protected void paintComponent(Graphics g)
+			{
+				super.paintComponent(g);
+				int innerWidth = getWidth() - 2;   // minus 1px border on each side
+				int innerHeight = getHeight() - 2;
+				if (innerWidth <= 0 || innerHeight <= 0)
+				{
+					return;
+				}
+				int fillWidth = Math.round(innerWidth * clamped);
+				if (fillWidth > 0)
+				{
+					g.setColor(fillColor);
+					g.fillRect(1, 1, fillWidth, innerHeight);
+				}
+			}
+		};
+		bar.setBackground(new Color(30, 30, 30));
+		bar.setBorder(BorderFactory.createLineBorder(borderColor));
+		// Preferred size is a hint — actual width is set by the parent layout,
+		// and the paint code adapts to whatever final width is assigned.
+		bar.setPreferredSize(new Dimension(80, height));
+		return bar;
 	}
 
 	/**

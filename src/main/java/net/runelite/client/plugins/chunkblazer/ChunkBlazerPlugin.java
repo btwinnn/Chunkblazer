@@ -1111,12 +1111,19 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				task.getRequiredItems().get(0).setRolledQuantity(savedTargetQty);
 			}
+			else if (task.getRequiredObjects() != null && !task.getRequiredObjects().isEmpty())
+			{
+				// Mirror the RequiredItem pin-back: keep the cached roll on the
+				// first required_object so modules calling getRequiredQuantity()
+				// see the persisted value, not a fresh random one.
+				task.getRequiredObjects().get(0).setRolledQuantity(savedTargetQty);
+			}
 		}
 		else
 		{
 			// First time - roll the target quantity. The roll caches itself on
-			// the TargetNpc / RequiredItem so module code that calls
-			// getRequiredQuantity() later in this session gets the same value.
+			// the TargetNpc / RequiredItem / RequiredObject so module code that
+			// calls getRequiredQuantity() later in this session gets the same value.
 			targetQty = 1;
 			if (task.getTargetNpc() != null)
 			{
@@ -1133,6 +1140,14 @@ public class ChunkBlazerPlugin extends Plugin
 					sum += item.getRequiredQuantity();
 				}
 				targetQty = sum > 0 ? sum : 1;
+			}
+			else if (task.getRequiredObjects() != null && !task.getRequiredObjects().isEmpty())
+			{
+				// Rooftop laps / chest steals: quantity comes from the
+				// required_object block (e.g. [1, 20] rolls a random target).
+				// Use the first object's roll — matches the first-item pattern
+				// above. RequiredObject.getRequiredQuantity caches the roll.
+				targetQty = task.getRequiredObjects().get(0).getRequiredQuantity();
 			}
 			// Save the rolled target quantity
 			saveTaskProgress(task.getTaskId(), savedProgress, targetQty);

@@ -406,25 +406,27 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	}
 
 	/**
-	 * Even with a recent lap-end click, only XP gains at or above LAP_XP_THRESHOLD
-	 * credit — otherwise the obstacle's own small XP gain would double-credit
-	 * alongside the lap bonus.
+	 * "Hop on the course" semantics: clicking the watched obstacle and getting
+	 * ANY positive Agility XP within the window credits the lap, even small
+	 * obstacle XPs like Draynor's 5-8 per obstacle. Multi-XP-event protection
+	 * is now handled by consume-after-credit, not by a high XP threshold.
 	 */
 	@Test
-	void testLapEndClick_LowXpDoesNotCredit()
+	void testHopOnCourse_SmallXpCredits()
 	{
-		NuzlockeTask seers = createTaskWithRequiredObject(
-			"Seers Lap", "complete_seers_roof", "AGILITY", 1,
-			Collections.singletonList(SEERS_LAP_END));
-		seers.setHasRequiredObject(true);
+		NuzlockeTask draynor = createTaskWithRequiredObject(
+			"Draynor Lap", "complete_draynor_roof", "AGILITY", 1,
+			Collections.singletonList(DRAYNOR_LAP_END));
+		draynor.setHasRequiredObject(true);
 
 		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
-		agilityModule.addActiveTask(seers);
+		agilityModule.addActiveTask(draynor);
 
-		agilityModule.onMenuOptionClicked(mockObjectClick(SEERS_LAP_END, MenuAction.GAME_OBJECT_FIRST_OPTION));
-		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, 12, 1, 1));
+		// Click the start crate, get the small obstacle XP for climbing on (~5 XP).
+		agilityModule.onMenuOptionClicked(mockObjectClick(DRAYNOR_LAP_END, MenuAction.GAME_OBJECT_FIRST_OPTION));
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, 5, 1, 1));
 
-		verify(completionCallback, never()).onProgressUpdated(eq(seers), anyInt());
-		assertEquals(0, seers.getCurrentProgress());
+		verify(completionCallback).onProgressUpdated(eq(draynor), eq(1));
+		assertEquals(1, draynor.getCurrentProgress());
 	}
 }

@@ -68,7 +68,13 @@ public class AgilityModule extends AbstractTaskModule
 	// will double-count laps until AgilityModule moves to per-task
 	// required_object id tracking. Acceptable for now — Mike's report was
 	// Draynor.
-	private static final int LAP_XP_THRESHOLD = 30;
+	// Lap tasks credit on any positive Agility XP gain that fires within
+	// INTERACTION_TIMEOUT_TICKS of clicking the watched object — supports
+	// "hop on the course = 1 lap" semantics where the first obstacle's XP
+	// may be as low as 5 (Draynor). The discriminator is the object click,
+	// not the XP magnitude. Consume-after-credit prevents double-counting
+	// when multiple XP events fire from one click.
+	private static final int LAP_XP_THRESHOLD = 1;
 	private static final int SHORTCUT_XP_THRESHOLD = 5;
 
 	// How many ticks after clicking the lap-end obstacle the XP event is still
@@ -293,9 +299,8 @@ public class AgilityModule extends AbstractTaskModule
 				}
 				if (xpGained < LAP_XP_THRESHOLD)
 				{
-					// Click matched but the XP gain is too small to be a lap-end bonus —
-					// this is the obstacle XP that fires alongside the bonus. Skip it
-					// so we don't double-credit one lap.
+					// Sanity check — ignore zero/negative XP deltas. The actual
+					// double-credit protection is the consume-after-credit below.
 					continue;
 				}
 				log.info(">>> AgilityModule: '{}' credited (lap-end object {} clicked, gained {} XP)",
