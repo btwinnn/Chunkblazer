@@ -1260,7 +1260,7 @@
                 "completion_type": "CONSTRUCTION",
                 "base_points": 2,
                 "assignment_weight": 8,
-                "required_items": [
+                "required_finished_obect": [
                         {
                         "item": "Teak Plank",
                         "item_ids": [8780]

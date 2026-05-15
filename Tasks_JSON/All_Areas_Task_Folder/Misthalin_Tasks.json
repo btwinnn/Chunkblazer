@@ -1260,22 +1260,10 @@
                 "completion_type": "CONSTRUCTION",
                 "base_points": 2,
                 "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Teak Plank",
-                        "item_ids": [8780]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
+                "required_finished_object": [
                         {
                         "object": "Hard STASH Unit (crate)",
-                        "object_id": [29018],
-                        "interaction_type": "use_item_on"
+                        "object_id": [29018]
                         }
                     ]
                 },
@@ -1430,23 +1418,11 @@
                 "level": 27,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 1,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Plank",
-                        "item_ids": [960]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
+                "assignment_weight": 8,            
+                "required_finished_object": [
                         {
                         "object": "Easy STASH Unit (inconspicuous bush)",
-                        "object_id": [28980],
-                        "interaction_type": "use_item_on"
+                        "object_id": [28980]
                         }
                     ]
                 },
@@ -2581,23 +2557,11 @@
                 "level": 27,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 1,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Plank",
-                        "item_ids": [960]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
+                "assignment_weight": 8,                
+                "required_finished_object": [
                         {
                         "object": "Easy STASH Unit (inconspicuous bush)",
-                        "object_id": [28981],
-                        "interaction_type": "use_item_on"
+                        "object_id": [28981]
                         }
                     ]
                 },
@@ -2833,23 +2797,11 @@
                 "level": 27,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 1,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Plank",
-                        "item_ids": [960]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
+                "assignment_weight": 8,                
+                "required_finished_object": [
                         {
                         "object": "Easy STASH Unit (inconspicuous rocks)",
-                        "object_id": [28961],
-                        "interaction_type": "use_item_on"
+                        "object_id": [28961]
                         }
                     ]
                 },

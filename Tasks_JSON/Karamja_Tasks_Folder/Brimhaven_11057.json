@@ -112,19 +112,11 @@
                 "level": 10,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 1,
-                "assignment_weight": 5,
-                "required_items": [
-                        {
-                        "item": "Soft Clay",
-                        "item_ids": [1761]
-                        }
-                    ],
-
-                "required_object": [
+                "assignment_weight": 5,               
+                "required_finished_object": [
                         {
                         "object": "Pond",
-                        "object_id": [4527],
-                        "interaction_type": "use_item_on"
+                        "object_id": [4527]
                         }
                     ]
                 },
@@ -135,23 +127,11 @@
                 "level": 9,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 1,
-                "assignment_weight": 5,
-                "required_items": [
-                        {
-                        "item": "Plank",
-                        "item_ids": [1761]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
+                "assignment_weight": 5,                
+                "required_finished_object": [
                         {
                         "object": "Wooden Larder",
-                        "object_id": [13565],
-                        "interaction_type": "use_item_on"
+                        "object_id": [13565]
                         }
                     ]
                 },
@@ -162,22 +142,11 @@
                 "level": 11,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 1,
-                "assignment_weight": 5,
-                 "required_items": [
-                        {
-                        "item": "Soft Clay",
-                        "item_ids": [1761]
-                        },                 
-                        {
-                            "item": "Steel Bar",
-                            "item_ids": [2353]           
-                        }
-                    ],
-                "required_object": [
+                "assignment_weight": 5,                 
+                "required_finished_object": [
                         {
                         "object": "Firepit with Hook",
-                        "object_id": [13529],
-                        "interaction_type": "use_item_on"
+                        "object_id": [13529]
                         }
                     ]
                 } 

@@ -10,23 +10,11 @@
                 "level": 35,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 2,
-                "assignment_weight": 5,
-                "required_items": [
-                        {
-                        "item": "Oak Plank",
-                        "item_ids": [8778]
-                        },
-                        {
-                        "item": "Limestone Brick",
-                        "item_ids": [3420]
-                        }
-                    ],
-
-                "required_object": [
+                "assignment_weight": 5,                
+                "required_finished_object": [
                         {
                         "object": "Whetstone",
-                        "object_id": [6801],
-                        "interaction_type": "use_item_on"
+                        "object_id": [6801]
                         }
                     ]
                 },
@@ -37,19 +25,11 @@
                 "level": 32,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 2,
-                "assignment_weight": 5,
-                "required_items": [
-                        {
-                        "item": "Oak Plank",
-                        "item_ids": [8778]
-                        }                    
-                    ],
-
-                "required_object": [
+                "assignment_weight": 5,                
+                "required_finished_object": [
                         {
                         "object": "Oak Workbench",
-                        "object_id": [6792],
-                        "interaction_type": "use_item_on"
+                        "object_id": [6792]
                         }
                     ]
                 },
@@ -60,19 +40,11 @@
                 "level": 41,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 2,
-                "assignment_weight": 5,
-                "required_items": [
-                        {
-                        "item": "Oak Plank",
-                        "item_ids": [8778]
-                        }                    
-                    ],
-
-                "required_object": [
+                "assignment_weight": 5,                
+                "required_finished_object": [
                         {
                         "object": "Shield Easel",
-                        "object_id": [6804],
-                        "interaction_type": "use_item_on"
+                        "object_id": [6804]
                         }
                     ]
                 },
@@ -83,23 +55,11 @@
                 "level": 26,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 1,
-                "assignment_weight": 5,
-                "required_items": [
-                        {
-                        "item": "Oak Plank",
-                        "item_ids": [8778]
-                        },
-                        {
-                        "item": "Rope",
-                        "item_ids": [954]
-                        }                    
-                    ],
-
-                "required_object": [
+                "assignment_weight": 5,                
+                "required_finished_object": [
                         {
                         "object": "Rope Bell Pull",
-                        "object_id": [13307],
-                        "interaction_type": "use_item_on"
+                        "object_id": [13307]
                         }
                     ]
                 },
@@ -110,23 +70,11 @@
                     "level": 67,
                     "completion_type": "CONSTRUCTION",
                     "base_points": 3,
-                    "assignment_weight": 3,
-                    "required_items": [
-                            {
-                            "item": "Mahogany Plank",
-                            "item_ids": [8778]
-                            },
-                            {
-                            "item": "Gold Leaf",
-                            "item_ids": [8784]
-                            }
-                        ],
-
-                    "required_object": [
+                    "assignment_weight": 3,                    
+                    "required_finished_object": [
                             {
                             "object": "Mahogany Demon Lectern",
-                            "object_id": [13648],
-                            "interaction_type": "use_item_on"
+                            "object_id": [13648]
                             }
                         ]
                 },
@@ -137,23 +85,11 @@
                     "level": 67,
                     "completion_type": "CONSTRUCTION",
                     "base_points": 3,
-                    "assignment_weight": 3,
-                    "required_items": [
-                            {
-                            "item": "Mahogany Plank",
-                            "item_ids": [8778]
-                            },
-                            {
-                            "item": "Gold Leaf",
-                            "item_ids": [8784]
-                            }
-                        ],
-
-                    "required_object": [
+                    "assignment_weight": 3,                    
+                    "required_finished_object": [
                             {
                             "object": "Mahogany Eagle Lectern",
-                            "object_id": [13647],
-                            "interaction_type": "use_item_on"
+                            "object_id": [13647]
                             }
                         ]
                 },
