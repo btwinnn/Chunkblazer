@@ -1262,7 +1262,7 @@
                     ]
                 },
                 {                           
-                    "name": "Defeat the Gaint Mole",
+                    "name": "Defeat the Giant Mole",
                     "taskID": "defeat_giant_mole",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
