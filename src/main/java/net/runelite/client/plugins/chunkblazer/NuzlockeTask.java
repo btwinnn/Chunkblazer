@@ -141,22 +141,35 @@ public class NuzlockeTask
 				task.setTargetNpc(context.deserialize(obj.get("target_npc"), TargetNpc.class));
 			}
 
-			// Handle required_object - mirror required_items: accept array or single object.
-			if (obj.has("required_object"))
+			// Handle required_object / required_finished_object — both populate the
+			// same requiredObjects list. CONSTRUCTION tasks were renamed from
+			// required_object to required_finished_object for clarity ("the finished
+			// furniture's object_id"), but the data shape is identical so we just
+			// accept either field name. Mirror required_items: accept array or
+			// single object.
+			JsonElement reqObjEl = null;
+			if (obj.has("required_finished_object"))
 			{
-				JsonElement objEl = obj.get("required_object");
+				reqObjEl = obj.get("required_finished_object");
+			}
+			else if (obj.has("required_object"))
+			{
+				reqObjEl = obj.get("required_object");
+			}
+			if (reqObjEl != null)
+			{
 				List<RequiredObject> objects = new ArrayList<>();
 
-				if (objEl.isJsonArray())
+				if (reqObjEl.isJsonArray())
 				{
-					for (JsonElement el : objEl.getAsJsonArray())
+					for (JsonElement el : reqObjEl.getAsJsonArray())
 					{
 						objects.add(context.deserialize(el, RequiredObject.class));
 					}
 				}
-				else if (objEl.isJsonObject())
+				else if (reqObjEl.isJsonObject())
 				{
-					objects.add(context.deserialize(objEl, RequiredObject.class));
+					objects.add(context.deserialize(reqObjEl, RequiredObject.class));
 				}
 				task.setRequiredObjects(objects);
 			}
@@ -182,7 +195,7 @@ public class NuzlockeTask
 
 			// Note required_object presence (don't fully parse; AgilityModule
 			// only needs to know lap vs shortcut so it can pick a threshold).
-			task.setHasRequiredObject(obj.has("required_object"));
+			task.setHasRequiredObject(obj.has("required_object") || obj.has("required_finished_object"));
 
 			return task;
 		}

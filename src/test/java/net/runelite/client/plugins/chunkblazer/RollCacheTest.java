@@ -300,4 +300,50 @@ class RollCacheTest
 			assertEquals(target, ro.getRequiredQuantity(), "subsequent calls must hit the cache");
 		}
 	}
+
+	@Test
+	void nuzlockeTask_AcceptsRequiredFinishedObjectAlias()
+	{
+		// CONSTRUCTION tasks in the canonical Tasks_JSON tree use the field name
+		// `required_finished_object` instead of `required_object`. The data shape
+		// is identical — only the name changed. The deserializer must populate
+		// the same requiredObjects list either way, otherwise the precise build-
+		// confirmation check in ConstructionModule silently fails to fire for
+		// every renamed construction task (≈133 of them).
+		String json = "{"
+			+ "\"name\": \"Build a Medium STASH\","
+			+ "\"taskID\": \"build_medium_stash\","
+			+ "\"completion_type\": \"CONSTRUCTION\","
+			+ "\"required_finished_object\": ["
+			+ "  { \"object\": \"Medium STASH Unit (inconspicuous bush)\", \"object_id\": [29003] }"
+			+ "]"
+			+ "}";
+		NuzlockeTask task = GSON.fromJson(json, NuzlockeTask.class);
+
+		assertNotNull(task.getRequiredObjects(), "required_finished_object must populate requiredObjects");
+		assertEquals(1, task.getRequiredObjects().size());
+		RequiredObject ro = task.getRequiredObjects().get(0);
+		assertEquals(Arrays.asList(29003), ro.getObjectIds());
+		assertTrue(task.isHasRequiredObject(), "hasRequiredObject flag must be set");
+	}
+
+	@Test
+	void nuzlockeTask_RequiredObjectAndFinishedObjectBehaveIdentically()
+	{
+		// Same data shape, two field-name aliases — both should produce the same
+		// parsed task. This locks in the alias contract so a future refactor
+		// can't silently break one path.
+		String shared = "\"completion_type\":\"CONSTRUCTION\","
+			+ "\"name\":\"t\",\"taskID\":\"t\","
+			+ "_FIELD_:[{\"object\":\"X\",\"object_id\":[42]}]";
+		String jsonOld = "{" + shared.replace("_FIELD_", "\"required_object\"") + "}";
+		String jsonNew = "{" + shared.replace("_FIELD_", "\"required_finished_object\"") + "}";
+
+		NuzlockeTask oldTask = GSON.fromJson(jsonOld, NuzlockeTask.class);
+		NuzlockeTask newTask = GSON.fromJson(jsonNew, NuzlockeTask.class);
+
+		assertEquals(oldTask.getRequiredObjects().get(0).getObjectIds(),
+			newTask.getRequiredObjects().get(0).getObjectIds());
+		assertEquals(oldTask.isHasRequiredObject(), newTask.isHasRequiredObject());
+	}
 }

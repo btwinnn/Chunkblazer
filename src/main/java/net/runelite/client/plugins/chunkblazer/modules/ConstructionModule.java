@@ -10,10 +10,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
+import net.runelite.api.GameObject;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.Skill;
+import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.StatChanged;
@@ -23,13 +25,20 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
 import net.runelite.client.plugins.chunkblazer.RequiredItem;
+import net.runelite.client.plugins.chunkblazer.RequiredObject;
 
 /**
  * Module for handling CONSTRUCTION completion type tasks.
- * Detects furniture building via Construction XP gain and item consumption.
  *
- * CONSTRUCTION tasks have required_items (planks, nails, etc.) and required_object (hotspot).
- * Detection: When Construction XP increases AND required items are consumed from inventory.
+ * Two detection paths:
+ *   Object-gated (preferred) — task has required_object with the built furniture's
+ *     object_id (e.g. Hard STASH Unit 29018, an Oak Larder, etc). We subscribe to
+ *     GameObjectSpawned and credit only when the watched object_id spawns within
+ *     INTERACTION_TIMEOUT_TICKS of a Construction XP gain. This is the precise
+ *     check: the player built THIS specific furniture, not just "any" furniture.
+ *   Item-consumption fallback — for tasks without required_object, fall back to
+ *     the legacy "any Construction XP after a tracked plank/nail consumption"
+ *     logic. Less precise but preserves behavior for older task definitions.
  */
 @Slf4j
 @Singleton
@@ -64,6 +73,19 @@ public class ConstructionModule extends AbstractTaskModule
 
 	// Track items consumed since last XP gain (to match XP with consumption)
 	private final Map<Integer, Integer> itemsConsumedSinceLastXp = new ConcurrentHashMap<>();
+
+	// Per-task required GameObject IDs (the built furniture: e.g. STASH, Oak Larder).
+	private final Map<String, Set<Integer>> taskRequiredObjectIds = new ConcurrentHashMap<>();
+	// Union of all required object IDs across active tasks.
+	private final Set<Integer> watchedObjectIds = ConcurrentHashMap.newKeySet();
+
+	// Most recent spawn of a watched built-furniture object. Cleared after credit.
+	private int lastSpawnedObjectId = -1;
+	private int lastSpawnedObjectTick = -1;
+
+	// How many ticks after a watched GameObject spawns the XP gain still counts
+	// as "from that build". Matches the window used in Thieving/Agility.
+	private static final int INTERACTION_TIMEOUT_TICKS = 5;
 
 	// Debug heartbeat
 	private int tickCounter = 0;
@@ -102,6 +124,10 @@ public class ConstructionModule extends AbstractTaskModule
 		taskTargetItems.clear();
 		watchedItemIds.clear();
 		itemsConsumedSinceLastXp.clear();
+		taskRequiredObjectIds.clear();
+		watchedObjectIds.clear();
+		lastSpawnedObjectId = -1;
+		lastSpawnedObjectTick = -1;
 		previousConstructionXp = -1;
 		log.info("ConstructionModule stopped");
 	}
@@ -141,6 +167,27 @@ public class ConstructionModule extends AbstractTaskModule
 
 			taskTargetItems.put(task.getTaskId(), targetItems);
 
+			// Parse required built-furniture object IDs (the precise discriminator).
+			Set<Integer> requiredObjectIds = new HashSet<>();
+			List<RequiredObject> requiredObjects = task.getRequiredObjects();
+			if (requiredObjects != null)
+			{
+				for (RequiredObject ro : requiredObjects)
+				{
+					List<Integer> ids = ro.getObjectIds();
+					if (ids != null)
+					{
+						for (Integer id : ids)
+						{
+							requiredObjectIds.add(id);
+							watchedObjectIds.add(id);
+							log.info("      >>> WATCHING BUILT OBJECT ID: {}", id);
+						}
+					}
+				}
+			}
+			taskRequiredObjectIds.put(task.getTaskId(), requiredObjectIds);
+
 			// Initialize tracking on client thread
 			clientThread.invokeLater(() -> {
 				initializeInventoryTracking();
@@ -168,6 +215,10 @@ public class ConstructionModule extends AbstractTaskModule
 		watchedItemIds.clear();
 		previousInventory.clear();
 		itemsConsumedSinceLastXp.clear();
+		taskRequiredObjectIds.clear();
+		watchedObjectIds.clear();
+		lastSpawnedObjectId = -1;
+		lastSpawnedObjectTick = -1;
 	}
 
 	@Override
@@ -270,6 +321,28 @@ public class ConstructionModule extends AbstractTaskModule
 	}
 
 	@Subscribe
+	public void onGameObjectSpawned(GameObjectSpawned event)
+	{
+		if (activeTasks.isEmpty() || watchedObjectIds.isEmpty())
+		{
+			return;
+		}
+		GameObject obj = event.getGameObject();
+		if (obj == null)
+		{
+			return;
+		}
+		int objectId = obj.getId();
+		if (watchedObjectIds.contains(objectId))
+		{
+			lastSpawnedObjectId = objectId;
+			lastSpawnedObjectTick = client.getTickCount();
+			log.info(">>> ConstructionModule: Watched built object {} spawned at tick {}",
+				objectId, lastSpawnedObjectTick);
+		}
+	}
+
+	@Subscribe
 	public void onStatChanged(StatChanged event)
 	{
 		if (event.getSkill() != Skill.CONSTRUCTION)
@@ -292,30 +365,59 @@ public class ConstructionModule extends AbstractTaskModule
 		int xpGained = currentXp - previousConstructionXp;
 		previousConstructionXp = currentXp;
 
-		if (xpGained > 0)
+		if (xpGained <= 0)
 		{
-			log.info(">>> ConstructionModule: Gained {} Construction XP", xpGained);
+			return;
+		}
 
-			// Check if we consumed any watched items
-			if (!itemsConsumedSinceLastXp.isEmpty())
+		log.info(">>> ConstructionModule: Gained {} Construction XP", xpGained);
+
+		int currentTick = client.getTickCount();
+		boolean recentSpawn = lastSpawnedObjectId > 0
+			&& (currentTick - lastSpawnedObjectTick) <= INTERACTION_TIMEOUT_TICKS;
+
+		boolean creditedFromObject = false;
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
+		{
+			Set<Integer> taskObjects = taskRequiredObjectIds.get(task.getTaskId());
+			boolean isObjectGated = taskObjects != null && !taskObjects.isEmpty();
+			if (!isObjectGated)
 			{
-				log.info(">>> Items consumed since last XP: {}", itemsConsumedSinceLastXp);
+				// Object-less tasks handled by the item-consumption fallback below.
+				continue;
+			}
+			if (recentSpawn && taskObjects.contains(lastSpawnedObjectId))
+			{
+				log.info(">>> ConstructionModule: '{}' credited (built object {} confirmed)",
+					task.getName(), lastSpawnedObjectId);
+				creditTaskProgress(task, 1, "Built object " + lastSpawnedObjectId + " confirmed");
+				creditedFromObject = true;
+			}
+		}
 
-				// Credit progress for tasks
-				for (NuzlockeTask task : new HashSet<>(activeTasks))
+		// Consume the spawn after crediting so a second XP event in the same window
+		// (rare for construction, but matches the Agility pattern) can't double-credit.
+		if (creditedFromObject)
+		{
+			lastSpawnedObjectId = -1;
+			lastSpawnedObjectTick = -1;
+		}
+
+		// Fallback path: for tasks WITHOUT a required_object, fall back to the
+		// legacy item-consumption check. Skips object-gated tasks (already handled).
+		if (!itemsConsumedSinceLastXp.isEmpty())
+		{
+			log.info(">>> Items consumed since last XP: {}", itemsConsumedSinceLastXp);
+			for (NuzlockeTask task : new HashSet<>(activeTasks))
+			{
+				Set<Integer> taskObjects = taskRequiredObjectIds.get(task.getTaskId());
+				if (taskObjects != null && !taskObjects.isEmpty())
 				{
-					checkTaskProgressFromBuild(task, itemsConsumedSinceLastXp);
+					continue; // handled above by the object-gated path
 				}
-
-				// Clear consumed tracking
-				itemsConsumedSinceLastXp.clear();
+				checkTaskProgressFromBuild(task, itemsConsumedSinceLastXp);
 			}
-			else
-			{
-				// XP gained without tracked item consumption - still might be valid
-				// (e.g., items we're not watching or flatpacked furniture)
-				log.info(">>> Construction XP gained but no watched items consumed");
-			}
+			itemsConsumedSinceLastXp.clear();
 		}
 	}
 
@@ -390,17 +492,23 @@ public class ConstructionModule extends AbstractTaskModule
 
 			// Clean up
 			taskTargetItems.remove(task.getTaskId());
+			taskRequiredObjectIds.remove(task.getTaskId());
 			activeTasks.remove(task);
-			rebuildWatchedItems();
+			rebuildWatched();
 		}
 	}
 
-	private void rebuildWatchedItems()
+	private void rebuildWatched()
 	{
 		watchedItemIds.clear();
 		for (Map<Integer, Integer> items : taskTargetItems.values())
 		{
 			watchedItemIds.addAll(items.keySet());
+		}
+		watchedObjectIds.clear();
+		for (Set<Integer> ids : taskRequiredObjectIds.values())
+		{
+			watchedObjectIds.addAll(ids);
 		}
 	}
 

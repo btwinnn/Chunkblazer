@@ -1622,23 +1622,11 @@
                 "level": 88,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 4,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Mahogany Plank",
-                        "item_ids": [8782]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
+                "assignment_weight": 8,                
+                "required_finished_object": [
                         {
                         "object": "Master STASH Unit (inconspicuous hole)",
-                        "object_id": [54275],
-                        "interaction_type": "use_item_on"
+                        "object_id": [54275]
                         }
                     ]
                 }, 
@@ -1848,23 +1836,11 @@
                 "level": 42,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 2,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Oak Plank",
-                        "item_ids": [8778]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
+                "assignment_weight": 8,                
+                "required_finished_object": [
                         {
                         "object": "Medium STASH Unit (inconspicuous hole)",
-                        "object_id": [55403],
-                        "interaction_type": "use_item_on"
+                        "object_id": [55403]
                         }
                     ]
                 },
@@ -6406,23 +6382,11 @@
                 "level": 27,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 1,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Plank",
-                        "item_ids": [960]
-                        },
-                        {
-                        "item": "Nails",
-                        "item_ids": [4819, 4820, 1539, 4821, 4822, 4823, 4824]
-                        }
-                    ],
-
-                "required_object": [
+                "assignment_weight": 8,                
+                "required_finished_object": [
                         {
                         "object": "Easy STASH Unit (inconspicuous hole)",
-                        "object_id": [50738],
-                        "interaction_type": "use_item_on"
+                        "object_id": [50738]
                         }
                     ]
                 }
