@@ -31,19 +31,11 @@
                     "level": 57,
                     "completion_type": "CONSTRUCTION",
                     "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                            {
-                            "item": "Teak Plank",
-                            "item_ids": [8780]
-                            }
-                        ],
-
-                    "required_object": [
+                    "assignment_weight": 8,      
+                    "required_finished_object": [
                             {
                             "object": "Teak Demon Lectern",
-                            "object_id": [13646],
-                            "interaction_type": "use_item_on"
+                            "object_id": [13646]
                             }
                         ]
                 },
@@ -54,19 +46,11 @@
                     "level": 57,
                     "completion_type": "CONSTRUCTION",
                     "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                            {
-                            "item": "Teak Plank",
-                            "item_ids": [8780]
-                            }
-                        ],
-
-                    "required_object": [
+                    "assignment_weight": 8,                    
+                    "required_finished_object": [
                             {
                             "object": "Teak Eagle Lectern",
-                            "object_id": [13645],
-                            "interaction_type": "use_item_on"
+                            "object_id": [13645]
                             }
                         ]
                 }, 
@@ -77,19 +61,11 @@
                 "level": 42,
                 "completion_type": "CONSTRUCTION",
                 "base_points": 2,
-                "assignment_weight": 8,
-                "required_items": [
-                        {
-                        "item": "Oak Plank",
-                        "item_ids": [8778]
-                        }
-                    ],
-
-                "required_object": [
+                "assignment_weight": 8,               
+                "required_finished_object": [
                         {
                         "object": "Crafting Table 4",
-                        "object_id": [6799],
-                        "interaction_type": "use_item_on"
+                        "object_id": [6799]
                         }
                     ]
                 },
