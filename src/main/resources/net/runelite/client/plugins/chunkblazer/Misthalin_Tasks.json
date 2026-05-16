@@ -263,7 +263,7 @@
                     }
                 },
                 {
-                    "name": "Obtain a Skull",
+                    "name": "Obtain the Manor Skull",
                     "taskID": "obtain_skull",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -272,7 +272,7 @@
                     "required_items": [
                         {
                             "item": ["Skull"],
-                            "item_ids": [964],
+                            "item_ids": [7408],
                             "quantity": [1]
                         }
                     ]
