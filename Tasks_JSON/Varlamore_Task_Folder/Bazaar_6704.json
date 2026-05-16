@@ -165,9 +165,10 @@
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 1,
                     "assignment_weight": 5,
-                    "varbit_boolean": 1,
                     "constraints": {
-                        "varbit_id": 3910
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 8
                     }                   
                 }
             ],

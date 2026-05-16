@@ -261,9 +261,10 @@
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 5,
                     "assignment_weight": 10,
-                    "varbit_boolean": 1,
                     "constraints": {
-                        "varbit_id": 4129
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 26
                     }                   
                 },                            
                 {

@@ -50,6 +50,13 @@ public class VarbitCheckModule extends AbstractTaskModule
 	// Map: taskId -> is this a varp (true) or varbit (false)?
 	private final Map<String, Boolean> taskIsVarp = new ConcurrentHashMap<>();
 
+	// Map: taskId -> bit position to test inside a bitmap varbit (e.g. varbit
+	// 4101 ACTIVE_PRAYERS uses 29 separate bit positions for the 29 prayers).
+	// When present, the completion check is `(value & (1 << bit)) != 0`
+	// instead of `value == expectedValue`. Lets a prayer task fire even when
+	// other prayers are also on (other bits set in the same bitmap).
+	private final Map<String, Integer> taskBitPositions = new ConcurrentHashMap<>();
+
 	// All varbit IDs we're watching
 	private final Set<Integer> watchedVarbitIds = ConcurrentHashMap.newKeySet();
 	private final Set<Integer> watchedVarpIds = ConcurrentHashMap.newKeySet();
@@ -95,6 +102,7 @@ public class VarbitCheckModule extends AbstractTaskModule
 		taskVarbitIds.clear();
 		taskExpectedValues.clear();
 		taskIsVarp.clear();
+		taskBitPositions.clear();
 		watchedVarbitIds.clear();
 		watchedVarpIds.clear();
 		previousVarbitValues.clear();
@@ -130,8 +138,19 @@ public class VarbitCheckModule extends AbstractTaskModule
 				}
 			}
 
-			// Also check for varbit_boolean field on task
-			Integer varbitBoolean = task.getVarbitBoolean();
+			// varbit_boolean now lives inside `constraints` for schema uniformity
+			// with varbit_id. Fall back to the deprecated top-level field for
+			// any JSON that hasn't been migrated yet (constraints version wins
+			// when both are present, since that's the new canonical home).
+			Integer varbitBoolean = null;
+			if (constraints != null)
+			{
+				varbitBoolean = constraints.getVarbitBoolean();
+			}
+			if (varbitBoolean == null)
+			{
+				varbitBoolean = task.getVarbitBoolean();
+			}
 			if (varbitBoolean != null)
 			{
 				expectedValue = varbitBoolean;
@@ -143,6 +162,22 @@ public class VarbitCheckModule extends AbstractTaskModule
 				taskExpectedValues.put(task.getTaskId(), expectedValue);
 				taskIsVarp.put(task.getTaskId(), isVarp);
 
+				// Optional: bit-position check (bitmap varbits like 4101 ACTIVE_PRAYERS).
+				// Same constraints-first / top-level-fallback chain as varbit_boolean.
+				Integer bit = null;
+				if (constraints != null)
+				{
+					bit = constraints.getVarbitBit();
+				}
+				if (bit == null)
+				{
+					bit = task.getVarbitBit();
+				}
+				if (bit != null && bit >= 0)
+				{
+					taskBitPositions.put(task.getTaskId(), bit);
+				}
+
 				if (isVarp)
 				{
 					watchedVarpIds.add(varbitId);
@@ -151,7 +186,14 @@ public class VarbitCheckModule extends AbstractTaskModule
 				else
 				{
 					watchedVarbitIds.add(varbitId);
-					log.info("      >>> WATCHING VARBIT ID: {} (expected value: {})", varbitId, expectedValue);
+					if (bit != null && bit >= 0)
+					{
+						log.info("      >>> WATCHING VARBIT ID: {} (bit {} of bitmap)", varbitId, bit);
+					}
+					else
+					{
+						log.info("      >>> WATCHING VARBIT ID: {} (expected value: {})", varbitId, expectedValue);
+					}
 				}
 
 				// Initialize tracking on client thread
@@ -184,6 +226,7 @@ public class VarbitCheckModule extends AbstractTaskModule
 		taskVarbitIds.clear();
 		taskExpectedValues.clear();
 		taskIsVarp.clear();
+		taskBitPositions.clear();
 		watchedVarbitIds.clear();
 		watchedVarpIds.clear();
 	}
@@ -308,11 +351,33 @@ public class VarbitCheckModule extends AbstractTaskModule
 			currentValue = client.getVarbitValue(varId);
 		}
 
-		// Check if current value matches expected
-		if (currentValue == expectedValue && !task.isCompleted())
+		// Two completion-check modes. Bit-position mode wins if the task supplied
+		// varbit_bit (used for bitmap varbits like 4101 ACTIVE_PRAYERS, where one
+		// varbit packs 29 independent prayer flags). Otherwise fall back to the
+		// legacy exact-value match.
+		Integer bit = taskBitPositions.get(task.getTaskId());
+		boolean matched;
+		if (bit != null)
 		{
-			log.info(">>> VarbitCheckModule: {} {} = {} (expected {}), task COMPLETED!",
-				isVarp ? "VARP" : "VARBIT", varId, currentValue, expectedValue);
+			matched = (currentValue & (1 << bit)) != 0;
+		}
+		else
+		{
+			matched = currentValue == expectedValue;
+		}
+
+		if (matched && !task.isCompleted())
+		{
+			if (bit != null)
+			{
+				log.info(">>> VarbitCheckModule: {} {} bit {} is set (raw value {}), task COMPLETED!",
+					isVarp ? "VARP" : "VARBIT", varId, bit, currentValue);
+			}
+			else
+			{
+				log.info(">>> VarbitCheckModule: {} {} = {} (expected {}), task COMPLETED!",
+					isVarp ? "VARP" : "VARBIT", varId, currentValue, expectedValue);
+			}
 
 			task.setCurrentProgress(1);
 			task.setCompleted(true);
@@ -328,6 +393,7 @@ public class VarbitCheckModule extends AbstractTaskModule
 			taskVarbitIds.remove(task.getTaskId());
 			taskExpectedValues.remove(task.getTaskId());
 			taskIsVarp.remove(task.getTaskId());
+			taskBitPositions.remove(task.getTaskId());
 			activeTasks.remove(task);
 			rebuildWatchedIds();
 		}

@@ -90,6 +90,18 @@ public class TaskConstraints
 	@SerializedName("varp_id")
 	private Integer varpId;
 
+	// Expected value for VARBIT_CHECK / VARP_CHECK exact-match tasks.
+	// Moved into constraints from a top-level NuzlockeTask field so all
+	// varbit-related schema lives in one place. NuzlockeTask still exposes
+	// a deprecated top-level mirror for legacy JSON that hasn't been migrated.
+	@SerializedName("varbit_boolean")
+	private Integer varbitBoolean;
+
+	// Bit position to test inside a bitmap varbit (e.g. ACTIVE_PRAYERS 4101).
+	// Same provenance / fallback story as varbitBoolean above.
+	@SerializedName("varbit_bit")
+	private Integer varbitBit;
+
 	/**
 	 * Represents a varbit constraint that must be checked during task verification.
 	 */
@@ -270,6 +282,9 @@ public class TaskConstraints
 			// Handle direct varbit_id and varp_id for VARBIT_CHECK/VARP_CHECK tasks
 			constraints.setVarbitId(readFlexibleInt(obj, "varbit_id"));
 			constraints.setVarpId(readFlexibleInt(obj, "varp_id"));
+			// Expected value + optional bit position for VARBIT_CHECK tasks.
+			constraints.setVarbitBoolean(readFlexibleInt(obj, "varbit_boolean"));
+			constraints.setVarbitBit(readFlexibleInt(obj, "varbit_bit"));
 
 			// Handle prohibited_active_varbits constraints
 			if (obj.has("prohibited_active_varbits"))

@@ -11,9 +11,10 @@
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 2,
                     "assignment_weight": 5,
-                    "varbit_boolean": 1,
                     "constraints": {
-                        "varbit_id": 4106
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 10
                     }                   
                 },
                 {
@@ -24,9 +25,10 @@
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 1,
                     "assignment_weight": 5,
-                    "varbit_boolean": 1,
                     "constraints": {
-                        "varbit_id": 2
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 1
                     }                   
                 },              
                 {
@@ -37,9 +39,10 @@
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 2,
                     "assignment_weight": 5,
-                    "varbit_boolean": 1,
                     "constraints": {
-                        "varbit_id": 4111
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 23
                     }                   
                 },  
                 {
@@ -50,9 +53,10 @@
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 2,
                     "assignment_weight": 5,
-                    "varbit_boolean": 1,
                     "constraints": {
-                        "varbit_id": 4112
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 22
                     }                   
                 },
                 {
@@ -63,9 +67,10 @@
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 2,
                     "assignment_weight": 5,
-                    "varbit_boolean": 1,
                     "constraints": {
-                        "varbit_id": 4116
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 13
                     }                   
                 },
                 {
@@ -76,9 +81,10 @@
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 2,
                     "assignment_weight": 5,
-                    "varbit_boolean": 1,
                     "constraints": {
-                        "varbit_id": 4118
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 16
                     }                   
                 },
                 {
@@ -89,9 +95,10 @@
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 5,
                     "assignment_weight": 3,
-                    "varbit_boolean": 1,
                     "constraints": {
-                        "varbit_id": 4129
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 26
                     }                   
                 },
                 {
@@ -102,9 +109,10 @@
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 1,
                     "assignment_weight": 5,
-                    "varbit_boolean": 1,
                     "constraints": {
-                        "varbit_id": 3910
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 8
                     }                   
                 },
                 {
@@ -115,9 +123,10 @@
                     "completion_type": "VARBIT_CHECK",
                     "base_points": 3,
                     "assignment_weight": 5,
-                    "varbit_boolean": 1,
                     "constraints": {
-                        "varbit_id": 4122
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 25
                     }                   
                 }
             ],

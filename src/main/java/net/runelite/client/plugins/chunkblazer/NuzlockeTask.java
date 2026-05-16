@@ -44,8 +44,20 @@ public class NuzlockeTask
 
 	private TaskConstraints constraints;
 
+	// DEPRECATED top-level mirrors of varbit_boolean and varbit_bit. The
+	// canonical home is now inside `constraints` (alongside varbit_id) so all
+	// varbit-related schema lives in one place. The fields are kept here so
+	// any pre-migration JSON that still puts them at the top level continues
+	// to work — VarbitCheckModule falls back to these when the constraints
+	// version is null. Remove after one release cycle once all task JSON has
+	// been migrated.
+	@Deprecated
 	@SerializedName("varbit_boolean")
 	private Integer varbitBoolean;
+
+	@Deprecated
+	@SerializedName("varbit_bit")
+	private Integer varbitBit;
 
 	// Runtime tracking fields (not from JSON)
 	private transient int currentProgress;
@@ -192,6 +204,7 @@ public class NuzlockeTask
 
 			// Handle varbit_boolean for VARBIT_CHECK tasks
 			task.setVarbitBoolean(getIntOrNull(obj, "varbit_boolean"));
+			task.setVarbitBit(getIntOrNull(obj, "varbit_bit"));
 
 			// Note required_object presence (don't fully parse; AgilityModule
 			// only needs to know lap vs shortcut so it can pick a threshold).
