@@ -1643,6 +1643,41 @@ public class ChunkBlazerPanel extends PluginPanel
 		debugPanel.add(logButton);
 
 		devControlsContentPanel.add(debugPanel);
+		devControlsContentPanel.add(Box.createVerticalStrut(4));
+
+		// Varbit/VarPlayer dump buttons — each appends a labelled snapshot to
+		// C:\Chunkblazer\VarBit_VarPlayer.txt with a timestamped header. Used
+		// to reverse-engineer which varbit/varplayer holds a given prayer/spell
+		// state when authoring new VARBIT_CHECK tasks. Two buttons share a row.
+		JPanel varDumpPanel = new JPanel(new GridLayout(1, 2, 4, 0));
+		varDumpPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		varDumpPanel.setAlignmentX(LEFT_ALIGNMENT);
+		varDumpPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+		varDumpPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
+
+		JButton prayerDumpButton = new JButton("Prayer Vars");
+		prayerDumpButton.setFont(FontManager.getRunescapeSmallFont());
+		prayerDumpButton.setForeground(new Color(100, 220, 200));
+		prayerDumpButton.setToolTipText("Append current PRAYER-related VarBit/VarPlayer values to C:\\Chunkblazer\\VarBit_VarPlayer.txt");
+		prayerDumpButton.addActionListener(e ->
+		{
+			log.info("Dev: Prayer Vars button pressed — dumping prayer vars");
+			plugin.dumpPrayerVars();
+		});
+		varDumpPanel.add(prayerDumpButton);
+
+		JButton magicDumpButton = new JButton("Magic Vars");
+		magicDumpButton.setFont(FontManager.getRunescapeSmallFont());
+		magicDumpButton.setForeground(new Color(180, 140, 240));
+		magicDumpButton.setToolTipText("Append current SPELL/MAGIC/AUTOCAST/SPELLBOOK VarBit/VarPlayer values to C:\\Chunkblazer\\VarBit_VarPlayer.txt (excludes PRAYER_*)");
+		magicDumpButton.addActionListener(e ->
+		{
+			log.info("Dev: Magic Vars button pressed — dumping magic vars");
+			plugin.dumpMagicVars();
+		});
+		varDumpPanel.add(magicDumpButton);
+
+		devControlsContentPanel.add(varDumpPanel);
 
 		controlsPanel.add(devControlsContentPanel);
 

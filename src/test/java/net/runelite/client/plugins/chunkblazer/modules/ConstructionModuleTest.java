@@ -9,6 +9,7 @@ import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.game.ItemManager;
+import net.runelite.client.plugins.chunkblazer.ChunkBlazerPlugin;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.inject.Provider;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +26,7 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -39,6 +42,9 @@ class ConstructionModuleTest extends AbstractTaskModuleTest
 
 	@Mock
 	private ChatMessageManager chatMessageManager;
+
+	@Mock
+	private ChunkBlazerPlugin chunkBlazerPlugin;
 
 	@InjectMocks
 	private ConstructionModule constructionModule;
@@ -56,10 +62,15 @@ class ConstructionModuleTest extends AbstractTaskModuleTest
 		injectField(constructionModule, "eventBus", eventBus);
 		injectField(constructionModule, "config", config);
 		injectField(constructionModule, "itemManager", itemManager);
+		injectField(constructionModule, "pluginProvider", (Provider<ChunkBlazerPlugin>) () -> chunkBlazerPlugin);
 
 		constructionModule.setCompletionCallback(completionCallback);
 
 		lenient().when(itemManager.canonicalize(anyInt())).thenAnswer(inv -> inv.getArgument(0));
+		// Default: tests opt out of the region gate by returning -1 ("unknown"),
+		// which the module treats as a non-enforced check. Tests that exercise
+		// the gate stub a real region per-test.
+		lenient().when(chunkBlazerPlugin.findRegionForTask(anyString())).thenReturn(-1);
 	}
 
 	private void injectField(Object target, String fieldName, Object value) throws Exception
@@ -301,5 +312,98 @@ class ConstructionModuleTest extends AbstractTaskModuleTest
 
 		verify(completionCallback).onProgressUpdated(eq(hardStash), eq(1));
 		verify(completionCallback, never()).onProgressUpdated(eq(easyStash), anyInt());
+	}
+
+	// --- Region gate + clearTask sensor regression -------------------------------------------
+
+	/**
+	 * Many built-furniture object_ids are reused across locations (e.g. the
+	 * Easy STASH "inconspicuous hole" 50738 exists at the Grand Museum, Sunrise
+	 * Palace, and many other spots). Without a region check, building at any
+	 * location would credit a task expecting a specific one.
+	 *
+	 * <p>This test: player is in region 99999, task is for region 12345. Even
+	 * though the watched object spawns and Construction XP fires, the task must
+	 * NOT credit because the player is in the wrong region.
+	 */
+	@Test
+	void testBuildCorrectObjectInWrongRegion_DoesNotCredit()
+	{
+		NuzlockeTask task = buildConstructionTaskWithObject(
+			"Build an Easy STASH at the Grand Museum", "build_easy_stash_grand_museum", HARD_STASH_UNIT);
+
+		when(client.getItemContainer(InventoryID.INVENTORY)).thenReturn(inventoryContainer);
+		when(inventoryContainer.getItems()).thenReturn(new Item[0]);
+		when(client.getSkillExperience(Skill.CONSTRUCTION)).thenReturn(0);
+		when(chunkBlazerPlugin.findRegionForTask("build_easy_stash_grand_museum")).thenReturn(12345);
+		// The shared playerLocation mock returns regionID 12345 by default
+		// (AbstractTaskModuleTest setup). Override to a different region.
+		when(playerLocation.getRegionID()).thenReturn(99999);
+		constructionModule.addActiveTask(task);
+
+		when(client.getTickCount()).thenReturn(100);
+		constructionModule.onGameObjectSpawned(mockSpawn(HARD_STASH_UNIT));
+		constructionModule.onStatChanged(new StatChanged(Skill.CONSTRUCTION, 90, 1, 1));
+
+		verify(completionCallback, never()).onProgressUpdated(any(NuzlockeTask.class), anyInt());
+	}
+
+	/**
+	 * Companion to the wrong-region test: same shape, but with the player IN the
+	 * task's region — credit must fire.
+	 */
+	@Test
+	void testBuildCorrectObjectInRightRegion_Credits()
+	{
+		NuzlockeTask task = buildConstructionTaskWithObject(
+			"Build an Easy STASH at the Grand Museum", "build_easy_stash_grand_museum", HARD_STASH_UNIT);
+
+		when(client.getItemContainer(InventoryID.INVENTORY)).thenReturn(inventoryContainer);
+		when(inventoryContainer.getItems()).thenReturn(new Item[0]);
+		when(client.getSkillExperience(Skill.CONSTRUCTION)).thenReturn(0);
+		when(chunkBlazerPlugin.findRegionForTask("build_easy_stash_grand_museum")).thenReturn(12345);
+		// Default mock setup has playerLocation.getRegionID() = 12345 — match.
+		constructionModule.addActiveTask(task);
+
+		when(client.getTickCount()).thenReturn(100);
+		constructionModule.onGameObjectSpawned(mockSpawn(HARD_STASH_UNIT));
+		constructionModule.onStatChanged(new StatChanged(Skill.CONSTRUCTION, 90, 1, 1));
+
+		verify(completionCallback).onProgressUpdated(eq(task), eq(1));
+	}
+
+	/**
+	 * Mike's bug repro from session_2026-05-15_16-49-04: a GameObjectSpawned
+	 * fires (e.g. on scene load OR the actual build), then a clearTask() runs
+	 * (panel/active-task refresh), THEN the Construction XP fires. Before this
+	 * fix, onTaskCleared() wiped lastSpawnedObjectId — so by the time the XP
+	 * arrived there was no recent-spawn signal, and the build silently failed
+	 * to credit. After the fix, onTaskCleared no longer touches the sensor
+	 * state, and the spawn signal survives long enough for the XP to match it.
+	 */
+	@Test
+	void testTaskClearedBetweenSpawnAndXp_StillCredits()
+	{
+		NuzlockeTask task = buildConstructionTaskWithObject(
+			"Build a Hard STASH", "build_hard_stash", HARD_STASH_UNIT);
+
+		when(client.getItemContainer(InventoryID.INVENTORY)).thenReturn(inventoryContainer);
+		when(inventoryContainer.getItems()).thenReturn(new Item[0]);
+		when(client.getSkillExperience(Skill.CONSTRUCTION)).thenReturn(0);
+		constructionModule.addActiveTask(task);
+
+		when(client.getTickCount()).thenReturn(100);
+		constructionModule.onGameObjectSpawned(mockSpawn(HARD_STASH_UNIT));
+
+		// Simulate the panel/active-task refresh that happens mid-build.
+		// onTaskCleared() is called, then the task is re-added.
+		constructionModule.onTaskCleared();
+		constructionModule.addActiveTask(task);
+
+		// XP fires shortly after — must still credit, sensor must have survived.
+		when(client.getTickCount()).thenReturn(102);
+		constructionModule.onStatChanged(new StatChanged(Skill.CONSTRUCTION, 90, 1, 1));
+
+		verify(completionCallback).onProgressUpdated(eq(task), eq(1));
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
@@ -23,6 +24,7 @@ import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
+import net.runelite.client.plugins.chunkblazer.ChunkBlazerPlugin;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
 import net.runelite.client.plugins.chunkblazer.RequiredItem;
 import net.runelite.client.plugins.chunkblazer.RequiredObject;
@@ -57,6 +59,12 @@ public class ConstructionModule extends AbstractTaskModule
 
 	@Inject
 	private ChatMessageManager chatMessageManager;
+
+	// Provider (not direct injection) to break the plugin <-> module cycle —
+	// ChunkBlazerPlugin instantiates this module via Guice, so we can't depend
+	// on it eagerly. Lazy fetch via Provider.get() at use time.
+	@Inject
+	private Provider<ChunkBlazerPlugin> pluginProvider;
 
 	// Track task-specific data
 	// Map: taskId -> (Map: itemId -> required quantity)
@@ -217,8 +225,16 @@ public class ConstructionModule extends AbstractTaskModule
 		itemsConsumedSinceLastXp.clear();
 		taskRequiredObjectIds.clear();
 		watchedObjectIds.clear();
-		lastSpawnedObjectId = -1;
-		lastSpawnedObjectTick = -1;
+		// IMPORTANT: do NOT reset lastSpawnedObjectId / lastSpawnedObjectTick here.
+		// onTaskCleared() is called on routine panel/active-task refreshes (e.g.
+		// region change), and a refresh can fire between a GameObjectSpawned
+		// event and the matching Construction XP event. If we wiped the spawn
+		// sensor, the XP event would arrive with no recent-spawn signal and the
+		// build would silently fail to credit — that's exactly what Mike hit
+		// (session_2026-05-15_16-49-04: spawn at tick 400, clearTask at tick
+		// ~400, XP at tick ~403, no credit). The sensor ages out on its own via
+		// INTERACTION_TIMEOUT_TICKS in onStatChanged. Hard-reset still happens
+		// in shutDown() below.
 	}
 
 	@Override
@@ -376,6 +392,13 @@ public class ConstructionModule extends AbstractTaskModule
 		boolean recentSpawn = lastSpawnedObjectId > 0
 			&& (currentTick - lastSpawnedObjectTick) <= INTERACTION_TIMEOUT_TICKS;
 
+		// Region check inputs. Many built-furniture object_ids are shared across
+		// locations (e.g. "Easy STASH Unit (inconspicuous hole)" 50738 exists at
+		// dozens of spots), so an object_id match alone can't distinguish "built
+		// at the Grand Museum" from "built at Sunrise Palace". Require the
+		// player's current region to match the task's defined region.
+		int playerRegionId = getCurrentRegionId();
+
 		boolean creditedFromObject = false;
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
@@ -386,13 +409,36 @@ public class ConstructionModule extends AbstractTaskModule
 				// Object-less tasks handled by the item-consumption fallback below.
 				continue;
 			}
-			if (recentSpawn && taskObjects.contains(lastSpawnedObjectId))
+			if (!recentSpawn || !taskObjects.contains(lastSpawnedObjectId))
 			{
-				log.info(">>> ConstructionModule: '{}' credited (built object {} confirmed)",
-					task.getName(), lastSpawnedObjectId);
-				creditTaskProgress(task, 1, "Built object " + lastSpawnedObjectId + " confirmed");
-				creditedFromObject = true;
+				continue;
 			}
+
+			// Region gate. Resolved lazily through the Provider to break the
+			// plugin-module DI cycle. If the lookup fails (-1) we don't enforce
+			// the gate — that preserves behavior for any task whose chunk we
+			// can't resolve and keeps unit tests, which don't populate the
+			// chunk map, working unchanged.
+			int taskRegionId = -1;
+			try
+			{
+				taskRegionId = pluginProvider.get().findRegionForTask(task.getTaskId());
+			}
+			catch (Exception e)
+			{
+				log.warn("ConstructionModule: failed to resolve region for task '{}'", task.getTaskId(), e);
+			}
+			if (taskRegionId > 0 && playerRegionId > 0 && taskRegionId != playerRegionId)
+			{
+				log.info(">>> ConstructionModule: '{}' NOT credited — built in region {} but task is in region {}",
+					task.getName(), playerRegionId, taskRegionId);
+				continue;
+			}
+
+			log.info(">>> ConstructionModule: '{}' credited (built object {} confirmed in region {})",
+				task.getName(), lastSpawnedObjectId, playerRegionId);
+			creditTaskProgress(task, 1, "Built object " + lastSpawnedObjectId + " confirmed");
+			creditedFromObject = true;
 		}
 
 		// Consume the spawn after crediting so a second XP event in the same window
