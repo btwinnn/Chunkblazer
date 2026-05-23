@@ -40,6 +40,8 @@ import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
+import net.runelite.client.plugins.chunkblazer.api.ChunkBlazerApiClient;
+import net.runelite.client.plugins.chunkblazer.api.PlayerLoginResponse;
 import net.runelite.client.plugins.chunkblazer.modules.TaskModuleManager;
 import net.runelite.client.plugins.chunkblazer.starter.StarterArea;
 import net.runelite.client.plugins.chunkblazer.verification.VarPlayerVerificationService;
@@ -100,6 +102,9 @@ public class ChunkBlazerPlugin extends Plugin
 
 	@Inject
 	private ChatboxPanelManager chatboxPanelManager;
+
+	@Inject
+	private ChunkBlazerApiClient apiClient;
 
 	// --- Plugin State ---
 	@Getter
@@ -291,6 +296,7 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				loadOrAssignTask();
 				panel.updatePanel();
+				loginToServer();
 			});
 		}
 		else if (event.getGameState() == GameState.LOGIN_SCREEN)
@@ -863,6 +869,34 @@ public class ChunkBlazerPlugin extends Plugin
 
 		log.info("Game mode locked to {} for account hash {}", mode, rsnHash);
 
+		// Mirror the lock to the server. Fire-and-forget — local config is the
+		// immediate source of truth; the server call backs it up so the choice
+		// survives across installs / machines.
+		if (config.apiEnabled())
+		{
+			apiClient.lockGameMode(mode)
+				.thenAccept(response ->
+				{
+					if (response == null)
+					{
+						return;
+					}
+					if (response.isSuccess())
+					{
+						log.info("Server confirmed mode lock: {}", mode);
+					}
+					else if (response.isAlreadyLocked())
+					{
+						log.warn("Server already had a locked mode: {}", response.getGameModeEnum());
+					}
+					else
+					{
+						log.warn("Server lock-mode response: status={} message={}",
+							response.getStatus(), response.getMessage());
+					}
+				});
+		}
+
 		// For Casual mode, unlock the current chunk the player is standing in
 		if (mode == GameMode.CASUAL)
 		{
@@ -897,6 +931,73 @@ public class ChunkBlazerPlugin extends Plugin
 			.hashString(rsn.toLowerCase().trim(), StandardCharsets.UTF_8)
 			.toString()
 			.substring(0, 16);
+	}
+
+	/**
+	 * Full 64-char SHA-256 of the lowercase RSN. Used as the server-side
+	 * stable identity (rsn_hash) when calling /api/player/login. The truncated
+	 * 16-char form from hashRsn() is for in-game/local audit fields only.
+	 */
+	private String fullHashRsn(String rsn)
+	{
+		return Hashing.sha256()
+			.hashString(rsn.toLowerCase().trim(), StandardCharsets.UTF_8)
+			.toString();
+	}
+
+	/**
+	 * POST /api/player/login on game-login. Server upserts the player and
+	 * returns an api_key plus persisted state (game mode, points, etc).
+	 * We use the response to hydrate locally-cached config so the mode lock
+	 * survives wiping the RuneLite profile.
+	 */
+	private void loginToServer()
+	{
+		if (!config.apiEnabled())
+		{
+			return;
+		}
+		String rsn = getPlayerName();
+		if (rsn == null)
+		{
+			return;
+		}
+		apiClient.login(rsn, fullHashRsn(rsn))
+			.thenAccept(this::hydrateFromLoginResponse);
+	}
+
+	/**
+	 * If the server says this player already has a locked mode, mirror that
+	 * into the local RuneLite config so the picker is skipped.
+	 */
+	private void hydrateFromLoginResponse(PlayerLoginResponse response)
+	{
+		if (response == null || !response.isSuccess() || !response.isModeLocked())
+		{
+			return;
+		}
+		GameMode serverMode = response.getGameMode();
+		if (serverMode == null)
+		{
+			return;
+		}
+		clientThread.invokeLater(() ->
+		{
+			String rsn = getPlayerName();
+			if (rsn == null)
+			{
+				return;
+			}
+			String modeKey = hashRsn(rsn) + ":" + serverMode.name();
+			configManager.setConfiguration("chunkblazer", "accountModeHash", modeKey);
+			configManager.setConfiguration("chunkblazer", "gameMode", serverMode);
+			log.info("Game mode hydrated from server: {}", serverMode);
+			if (panel != null)
+			{
+				panel.updateModeDisplay();
+				panel.updatePanel();
+			}
+		});
 	}
 
 	// --- Region Methods ---
