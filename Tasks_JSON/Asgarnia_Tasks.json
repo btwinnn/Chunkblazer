@@ -397,21 +397,7 @@
                         "quantity": [1]
                     }
                 },
-                {
-                    "name": "Obtain some Adamant Arrows",
-                    "taskID": "obtain_adamant_arrows",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Adamant Arrow"],
-                            "item_ids": [890],
-                            "quantity": [1, 800]
-                        }
-                    ]
-                },
+                
                 {
                 "name": "Build an Oak Larder",
                 "taskID": "build_oak_larder",
@@ -1131,7 +1117,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Uncut Dragonstones",
+                    "name": "Obtain an Uncut Dragonstone",
                     "taskID": "obtain_uncut_dragonstone",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -1141,7 +1127,7 @@
                             {
                                 "item": ["Uncut Dragonstone"],
                                 "item_ids": [1631],
-                                "quantity": [1, 5]
+                                "quantity": [1]
                             }
                         ]
                 }
@@ -1292,36 +1278,8 @@
                             "quantity": [1]
                         } 
                 }, 
-                {
-                    "name": "Obtain some Mole Claws",
-                    "taskID": "obtain_mole_claw",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Mole Claw"],
-                            "item_ids": [7416],
-                            "quantity": [1, 50]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Mole Skins",
-                    "taskID": "obtain_mole_skins",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Mole Skin"],
-                            "item_ids": [7418],
-                            "quantity": [1, 50]
-                        }
-                    ]
-                },
+                
+               
                 {
                     "name": "Equip a White 2H Sword",
                     "taskID": "equip_white_2h",
@@ -1501,7 +1459,7 @@
                         {
                             "item": ["Stardust"],
                             "item_ids": [25527],
-                            "quantity": [1, 25]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -2124,66 +2082,10 @@
                         }
                     ]
                 },
-                {
-                    "name": "Obtain some Earth Runes",
-                    "taskID": "Obtain_earth_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Earth Rune",
-                        "item_ids": [557],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Fire Runes",
-                    "taskID": "Obtain_Fire_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Fire Rune",
-                        "item_ids": [554],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Air Runes",
-                    "taskID": "Obtain_air_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Air Rune",
-                        "item_ids": [556],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Water Runes",
-                    "taskID": "Obtain_water_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Water Rune",
-                        "item_ids": [555],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
+                
+                
+                
+                
                 {
                     "name": "Defeat a some Dark Wizards",
                     "taskID": "defeat_some_dark_wizards",
@@ -2790,8 +2692,8 @@
                     }                  
                 },
                 {
-                    "name": "Obtain some Warrior Guild Tokens",
-                    "taskID": "obtain_warrior_guild_tokens",
+                    "name": "Obtain a Warrior Guild Token",
+                    "taskID": "obtain_warrior_guild_token",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -2800,7 +2702,7 @@
                             {
                                 "item": ["Warrior Guild Token"],
                                 "item_ids": [8851],
-                                "quantity": [1000, 5000]
+                                "quantity": [1]
                             }
                         ]
                 },
@@ -2820,7 +2722,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Black Knives",
+                    "name": "Obtain a Black Knife",
                     "taskID": "obtain_black_knife",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -2830,7 +2732,7 @@
                         {
                             "item": ["Black Knife"],
                             "item_ids": [869],
-                            "quantity": [100, 1000]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -3176,7 +3078,7 @@
                     }
                 },
                 {
-                    "name": "Obtain some Goutweed",
+                    "name": "Obtain Goutweed",
                     "taskID": "obtain_goutweed",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -3186,7 +3088,7 @@
                         {
                         "item": "Goutweed",
                         "item_ids": [3261],
-                        "quantity": [1, 3]
+                        "quantity": [1]
                         }
                     ]
                 },
@@ -3403,7 +3305,7 @@
                     }
                 },
                 {
-                    "name": "Obtain some Goutweed",
+                    "name": "Obtain Goutweed",
                     "taskID": "obtain_goutweed",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -3413,7 +3315,7 @@
                         {
                         "item": "Goutweed",
                         "item_ids": [3261],
-                        "quantity": [1, 3]
+                        "quantity": [1]
                         }
                     ]
                 }              
@@ -3499,7 +3401,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Goutweed",
+                    "name": "Obtain Goutweed",
                     "taskID": "obtain_goutweed",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -3509,7 +3411,7 @@
                         {
                         "item": "Goutweed",
                         "item_ids": [3261],
-                        "quantity": [1, 3]
+                        "quantity": [1]
                         }
                     ]
                 }              

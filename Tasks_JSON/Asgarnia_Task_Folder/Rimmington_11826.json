@@ -63,21 +63,7 @@
                         "quantity": [1]
                     }
                 },
-                {
-                    "name": "Obtain some Adamant Arrows",
-                    "taskID": "obtain_adamant_arrows",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Adamant Arrow"],
-                            "item_ids": [890],
-                            "quantity": [1, 800]
-                        }
-                    ]
-                },
+                
                 {
                 "name": "Build an Oak Larder",
                 "taskID": "build_oak_larder",

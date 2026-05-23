@@ -155,22 +155,8 @@
                             "item_ids": [849]
                         }
                     ]
-                }, 
-                {
-                    "name": "Obtain some Adamant Arrows",
-                    "taskID": "obtain_adamant_arrows",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Adamant Arrow"],
-                            "item_ids": [890],
-                            "quantity": [1, 200]
-                        }
-                    ]
-                }
+                } 
+                
             ],             
             "is_completed": false
         }

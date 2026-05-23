@@ -129,7 +129,7 @@
                     }
                 },
                 {
-                    "name": "Obtain some Lizardman Fangs",
+                    "name": "Obtain a Lizardman Fang",
                     "taskID": "obtain_lizardman_fangs",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -139,7 +139,7 @@
                         {
                             "item": ["Lizardman Fang"],
                             "item_ids": [13391],
-                            "quantity": [1, 500]
+                            "quantity": [1]
                         }
                     ]
                 }

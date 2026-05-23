@@ -163,7 +163,7 @@
                     }
                 },
                 {
-                    "name": "Obtain some Goutweed",
+                    "name": "Obtain Goutweed",
                     "taskID": "obtain_goutweed",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -173,7 +173,7 @@
                         {
                         "item": "Goutweed",
                         "item_ids": [3261],
-                        "quantity": [1, 3]
+                        "quantity": [1]
                         }
                     ]
                 }              

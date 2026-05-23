@@ -189,7 +189,7 @@
                         }
                 },
                 {
-                    "name": "Obtain some Sunfire Splinters",
+                    "name": "Obtain Sunfire Splinters",
                     "taskID": "obtain_sunfire_splinters",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -199,7 +199,7 @@
                         {
                             "item": ["Sunfire Splinters"],
                             "item_ids": [31084],
-                            "quantity": [250]
+                            "quantity": [1]
                         }
                     ]
                 }          

@@ -137,8 +137,8 @@
                     
                 },
                 {
-                    "name": "Obtain some Unicorn Horns",
-                    "taskID": "obtain_unicorn_horns",
+                    "name": "Obtain a Unicorn Horn",
+                    "taskID": "obtain_unicorn_horn",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -147,7 +147,7 @@
                         {
                             "item": ["Unicorn Horn"],
                             "item_ids": [237],
-                            "quantity": [1,25]
+                            "quantity": [1]
                         }
                     ]
                 },

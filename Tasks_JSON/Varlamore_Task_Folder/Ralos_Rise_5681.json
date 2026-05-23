@@ -34,7 +34,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Blessed Bone Shards",
+                    "name": "Obtain Blessed Bone Shards",
                     "taskID": "obtain_blessed_bone_shards",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -44,7 +44,7 @@
                         {
                             "item": ["Bone Shards"],
                             "item_ids": [29381],
-                            "quantity": [10000, 100000]
+                            "quantity": [1]
                         }
                     ]
                 },

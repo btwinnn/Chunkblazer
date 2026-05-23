@@ -856,7 +856,7 @@
           ]
         },
         {
-          "name": "Obtain some Silk",
+          "name": "Obtain Silk",
           "taskID": "obtain_silk",
           "category": "Obtain",
           "completion_type": "OBTAIN",
@@ -866,7 +866,7 @@
             {
               "item": "Silk",
               "item_ids": [950],
-              "quantity": [25, 100]
+              "quantity": [1]
             }
           ]
         },

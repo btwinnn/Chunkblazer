@@ -206,7 +206,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Uncut Dragonstones",
+                    "name": "Obtain an Uncut Dragonstone",
                     "taskID": "obtain_uncut_dragonstone",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -216,7 +216,7 @@
                             {
                                 "item": ["Uncut Dragonstone"],
                                 "item_ids": [1631],
-                                "quantity": [1, 5]
+                                "quantity": [1]
                             }
                         ]
                 }

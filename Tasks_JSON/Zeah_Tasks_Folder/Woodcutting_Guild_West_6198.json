@@ -14,7 +14,7 @@
                             {
                                 "item": ["Bird nest (Wyson)", "Bird nest (egg)#Blue egg", "Bird nest (egg)#Green egg", "Bird nest (egg)#Red egg", "Bird nest (empty)", "Bird nest (ring)", "Bird nest (seeds)"],
                                 "item_ids": [22800, 5072, 5071, 5070, 5075, 5074, 22798],
-                                "quantity": [50, 500]
+                                "quantity": [1]
                             }
                         ]
                 },

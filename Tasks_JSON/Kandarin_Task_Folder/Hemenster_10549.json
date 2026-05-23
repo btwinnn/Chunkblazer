@@ -4,8 +4,8 @@
             "neighbor_ids": [10550, 10805, 10548, 10293],
             "tasks": [
                 {
-                    "name": "Obtain some Archery Tickets",
-                    "taskID": "obtain_archery_tickets",
+                    "name": "Obtain an Archery Ticket",
+                    "taskID": "obtain_archery_ticket",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 2,
@@ -14,7 +14,7 @@
                         {
                             "item": ["Archery Ticket"],
                             "item_ids": [1464],
-                            "quantity": [1, 5000]
+                            "quantity": [1]
                         }
                     ]
                 },

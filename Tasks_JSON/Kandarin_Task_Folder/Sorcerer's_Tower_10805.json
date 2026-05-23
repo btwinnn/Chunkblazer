@@ -162,7 +162,7 @@
                     ]
                 },              
                 {
-                    "name": "Obtain some Flax",
+                    "name": "Obtain Flax",
                     "taskID": "obtain_flax",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -172,7 +172,7 @@
                         {
                             "item": ["Flax"],
                             "item_ids": [1779],
-                            "quantity": [250, 2500]
+                            "quantity": [1]
                         }
                     ]
                 }

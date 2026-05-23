@@ -73,8 +73,8 @@
                     }                  
                 },
                 {
-                    "name": "Obtain some Warrior Guild Tokens",
-                    "taskID": "obtain_warrior_guild_tokens",
+                    "name": "Obtain a Warrior Guild Token",
+                    "taskID": "obtain_warrior_guild_token",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -83,7 +83,7 @@
                             {
                                 "item": ["Warrior Guild Token"],
                                 "item_ids": [8851],
-                                "quantity": [1000, 5000]
+                                "quantity": [1]
                             }
                         ]
                 },
@@ -103,7 +103,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Black Knives",
+                    "name": "Obtain a Black Knife",
                     "taskID": "obtain_black_knife",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -113,7 +113,7 @@
                         {
                             "item": ["Black Knife"],
                             "item_ids": [869],
-                            "quantity": [100, 1000]
+                            "quantity": [1]
                         }
                     ]
                 },

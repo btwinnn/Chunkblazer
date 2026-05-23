@@ -162,7 +162,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Saltpetre",
+                    "name": "Obtain Saltpetre",
                     "taskID": "obtain_saltpetre",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -172,7 +172,7 @@
                         {
                             "item": ["Saltpetre"],
                             "item_ids": [13421],
-                            "quantity": [1, 100]
+                            "quantity": [1]
                         }
                     ]
                 },
