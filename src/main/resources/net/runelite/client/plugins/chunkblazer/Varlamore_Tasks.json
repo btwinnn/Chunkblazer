@@ -2433,7 +2433,7 @@
                         }
                 },
                 {
-                    "name": "Obtain some Sunfire Splinters",
+                    "name": "Obtain Sunfire Splinters",
                     "taskID": "obtain_sunfire_splinters",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -2443,7 +2443,7 @@
                         {
                             "item": ["Sunfire Splinters"],
                             "item_ids": [31084],
-                            "quantity": [250]
+                            "quantity": [1]
                         }
                     ]
                 }          
@@ -4424,7 +4424,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Bone Shards",
+                    "name": "Obtain Bone Shards",
                     "taskID": "obtain_bone_shards",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -4434,7 +4434,7 @@
                         {
                             "item": ["Bone Shards"],
                             "item_ids": [29386],
-                            "quantity": [10000, 100000]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -4461,8 +4461,8 @@
             "neighbor_ids": [5938, 6193, 5936, 5681],
             "tasks": [
                 {
-                    "name": "Obtain some Soiled Pages",
-                    "taskID": "obtain_some_soiled_pages",
+                    "name": "Obtain a Soiled Page",
+                    "taskID": "obtain_a_soiled_page",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -4471,7 +4471,7 @@
                         {
                             "item": ["Soiled Page"],
                             "item_ids": [30068],
-                            "quantity": [1, 1000]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -5786,7 +5786,7 @@
                     "name": "Talk to Oriana",
                     "taskID": "talk_to_oriana",
                     "category": "Dialogue",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "completion_type": "NPC_DIALOGUE",
                     "target_npc": {

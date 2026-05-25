@@ -36,52 +36,52 @@
           ]
         },
         {
-          "name": "Equip a Bronze Square Shield",
-          "taskID": "Equip_bronze_sq",
+          "name": "Obtain Goblin Mail",
+          "taskID": "obtain_goblin_mail",
           "base_points": 1,
           "assignment_weight": 8,
-          "category": "Defence",
+          "category": "Obtain",
           "level": 1,
-          "completion_type": "EQUIP",
+          "completion_type": "OBTAIN",
           "required_items": [
             {
-              "item": "Bronze Sq Shield",
-              "item_ids": [1173]
+              "item": "Goblin Mail",
+              "item_ids": [288]
             }
           ]
         },
         {
-          "name": "Chop a Yew Tree",
-          "taskID": "chop_yew_tree",
+          "name": "Chop a Tree",
+          "taskID": "chop_tree",
           "category": "Woodcutting",
-          "level": 60,
+          "level": 1,
           "completion_type": "WOODCUTTING",
-          "base_points": 3,
-          "assignment_weight": 3,
+          "base_points": 1,
+          "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Yew Logs",
-              "item_ids": [1515],
-              "quantity": [1]
+              "item": "Logs",
+              "item_ids": [1511],
+              "quantity": [25, 75]
             }
           ]
         },
         {
-          "name": "Burn a Yew Log",
-          "taskID": "burn_yew_log",
-          "category": "Firemaking",
-          "level": 60,
-          "completion_type": "FIREMAKING",
-          "base_points": 3,
-          "assignment_weight": 3,
-          "required_items": [
-            {
-              "item": "Yew Logs",
-              "item_ids": [1515],
-              "quantity": [1]            
-            }
-          ]
-        },
+                    "name": "Burn a Log",
+                    "taskID": "burn_log",
+                    "category": "Firemaking",
+                    "level": 1,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Logs",
+                        "item_ids": [1511],
+                        "quantity": [25, 60]
+                        }
+                    ]
+                },
         {
           "name": "Pickpocket a Man or Woman",
           "taskID": "pickpocket_man",
@@ -96,17 +96,17 @@
           }
         },
         {
-          "name": "Equip a Mithril Battleaxe",
-          "taskID": "equip_mithril_battleaxe",
+          "name": "Equip a Steel Battleaxe",
+          "taskID": "equip_steel_battleaxe",
           "category": "Attack",
-          "level": 20,
+          "level": 5,
           "completion_type": "EQUIP",
           "base_points": 1,
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Mithril Battleaxe",
-              "item_ids": [1369]
+              "item": "Steel Battleaxe",
+              "item_ids": [1365]
             }
           ]
         },
@@ -142,21 +142,21 @@
           ]
         },
         {
-          "name": "Fletch a Oak Shortbow(u)",
-          "taskID": "fletch_oak_shortbow(u)",
-          "category": "Fletching",
-          "level": 20,
-          "completion_type": "FLETCHING",
-          "base_points": 1,
-          "assignment_weight": 8,
-          "required_items": [
-            {
-              "item": "Oak shortbow (u)",
-              "item_ids": [54],
-              "quantity": [1]
-            }
-          ]
-        },
+                    "name": "Fletch a Shortbow(u)",
+                    "taskID": "fletch_shortbow(u)",
+                    "category": "Fletching",
+                    "level": 5,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["shortbow(u)"],
+                            "item_ids": [50],
+                            "quantity": [1]
+                        }
+                    ]
+                },
         {
           "name": "Kill some Spiders",
           "taskID": "kill_some_spiders",
@@ -171,25 +171,17 @@
           }
         },
         {
-          "name": "Defeat a Level 2 Goblin and obtain bones",
-          "taskID": "Defeat_level_2_Goblin_and_obtain_bones",
-          "base_points": 1,
-          "assignment_weight": 8,
-          "category": "Combat",
-          "completion_type": "NPC_Kill",
-          "target_npc": {
-            "npc": ["Goblin"],
-            "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
-            "quantity": 1
-          },
-          "constraints": [
-            {
-              "dropped_item": "Bones",
-              "dropped_item_id": [526],
-              "quantity": [1]
-            }
-          ] 
-        }
+                    "name": "Talk to Bob at his Axe Shop",
+                    "taskID": "talk_to_bob_lumbridge",
+                    "category": "Dialogue",
+                    "completion_type": "NPC_DIALOGUE",
+                    "base_points": 1,
+                    "assignment_weight": 8,                  
+                    "target_npc": {
+                        "npc": ["Bob"],
+                        "npc_ids": [10619]
+                    }
+                }
       ],
       "optional_quests_unlocked": [
         {
@@ -623,7 +615,7 @@
             {
               "item": "Logs",
               "item_ids": [1511],
-              "quantity": [1]
+              "quantity": [25, 75]
             }
           ]
         }
@@ -856,7 +848,7 @@
           ]
         },
         {
-          "name": "Obtain some Silk",
+          "name": "Obtain Silk",
           "taskID": "obtain_silk",
           "category": "Obtain",
           "completion_type": "OBTAIN",
@@ -866,7 +858,7 @@
             {
               "item": "Silk",
               "item_ids": [950],
-              "quantity": [25, 100]
+              "quantity": [1]
             }
           ]
         },
@@ -1262,7 +1254,7 @@
           "assignment_weight": 8,
           "target_npc": {
             "npc": ["Cave Bug"],
-            "npc_ids": [8701, 478],
+            "npc_ids": [481, 483],
             "quantity": [1]
           }
         },

@@ -1004,7 +1004,7 @@
                     ]
                 },              
                 {
-                    "name": "Obtain some Flax",
+                    "name": "Obtain Flax",
                     "taskID": "obtain_flax",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -1014,7 +1014,7 @@
                         {
                             "item": ["Flax"],
                             "item_ids": [1779],
-                            "quantity": [250, 2500]
+                            "quantity": [1]
                         }
                     ]
                 }
@@ -1742,8 +1742,8 @@
             "neighbor_ids": [10550, 10805, 10548, 10293],
             "tasks": [
                 {
-                    "name": "Obtain some Archery Tickets",
-                    "taskID": "obtain_archery_tickets",
+                    "name": "Obtain an Archery Ticket",
+                    "taskID": "obtain_archery_ticket",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 2,
@@ -1752,7 +1752,7 @@
                         {
                             "item": ["Archery Ticket"],
                             "item_ids": [1464],
-                            "quantity": [1, 5000]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -4382,8 +4382,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Unicorn Horns",
-                    "taskID": "obtain_unicorn_horns",
+                    "name": "Obtain a Unicorn Horn",
+                    "taskID": "obtain_unicorn_horn",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -4392,7 +4392,7 @@
                         {
                             "item": ["Unicorn Horn"],
                             "item_ids": [237],
-                            "quantity": [1,25]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -5907,8 +5907,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Ourg Bones",
-                    "taskID": "obtain_ourg_bones",
+                    "name": "Obtain an Ourg Bone",
+                    "taskID": "obtain_ourg_bone",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -5917,12 +5917,12 @@
                         {
                             "item": ["Ourg Bones"],
                             "item_ids": [4834],
-                            "quantity": [1, 5]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain some Raurg Bones",
+                    "name": "Obtain a Raurg Bone",
                     "taskID": "obtain_raurg_bones",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -5932,12 +5932,12 @@
                         {
                             "item": ["Raurg Bones"],
                             "item_ids": [4832],
-                            "quantity": [1, 5]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain some Fayrg Bones",
+                    "name": "Obtain a Fayrg Bone",
                     "taskID": "obtain_fayrg_bones",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -5947,7 +5947,7 @@
                         {
                             "item": ["Fayrg Bones"],
                             "item_ids": [4830],
-                            "quantity": [1, 5]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -6149,7 +6149,7 @@
                         {
                             "item": ["Stardust"],
                             "item_ids": [25527],
-                            "quantity": [1, 25]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -8182,8 +8182,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Zenyte Shards",
-                    "taskID": "obtain_zenyte_shards",
+                    "name": "Obtain a Zenyte Shard",
+                    "taskID": "obtain_zenyte_shard",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
@@ -8192,7 +8192,7 @@
                         {
                             "item": ["Zenyte Shard"],
                             "item_ids": [19529],
-                            "quantity": [1, 4]
+                            "quantity": [1]
                         }
                     ]
                 },

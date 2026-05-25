@@ -90,8 +90,9 @@
           "completion_type": "THIEVING",
           "base_points": 1,
           "assignment_weight": 8,
-          "target_npc": {
-            "npc_ids": [3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
+         "target_npc": {
+            "npc": ["Man, Woman"],
+            "npc_ids": [3261, 3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992, 3110, 14920, 3264, 3265, 3652, 11057, 11058, 3014, 3112, 6991, 14921, 11053, 11054, 3015],
             "quantity": [1, 28]
           }
         },
@@ -466,7 +467,7 @@
             {
               "item": "Bronze Bar",
               "item_ids": [2349],
-              "quantity": [5, 50]
+              "quantity": [5, 75]
             }
           ]
         },
@@ -498,7 +499,7 @@
             {
               "item": "Raw Anchovies",
               "item_ids": [321],
-              "quantity": [1]
+              "quantity": [1, 50]
             }
           ]
         },
@@ -514,7 +515,7 @@
             {
               "item": "Shrimp",
               "item_ids": [315],
-              "quantity": [5, 25]
+              "quantity": [5, 50]
             }
           ]
         },
@@ -530,12 +531,12 @@
             {
               "item": "Anchovies",
               "item_ids": [319],
-              "quantity": [1]
+              "quantity": [1, 25]
             }
           ]
         },
         {
-          "name": "Defeat a Level 5 Frog in 7 Seconds",
+          "name": "Defeat a Level 5 Frog in 21 Seconds",
           "taskID": "defeat_frog_fast",
           "category": "Combat",
           "level": 5,
@@ -548,14 +549,7 @@
             "quantity": 1
           },
           "constraints": {
-            "time_in_ticks": [12],
-            "prohibited_active_varbits": [
-                {
-                "varbit_id": 57,
-                "must_be_value": 0,
-                "fail_message": "Cannon use is prohibited for timed combat tasks."
-              }
-            ]
+            "time_in_ticks": [35]
           }
         },
         {
@@ -588,8 +582,8 @@
           ]
         },
         {
-          "name": "Cook some Raw Rat Meat",
-          "taskID": "Cook_raw_rat_meat",
+          "name": "Cook some Meat",
+          "taskID": "Cook_meat",
           "category": "Cooking",
           "level": 1,
           "completion_type": "COOKING",
@@ -649,33 +643,19 @@
             }
           ]
         },
+             
         {
-          "name": "Plant an Oak Sapling",
-          "taskID": "plant_oak_sapling",
-          "category": "Farming",
-          "level": 15,
-          "completion_type": "FARMING",
-          "base_points": 1,
-          "assignment_weight": 5,
-          "required_items":
-            {
-              "item": "Oak Sapling",
-              "item_ids": [5370],
-              "quantity": [1]
-            } 
-        },     
-        {
-          "name": "Equip a Brass Necklace",
-          "taskID": "equip_brass_necklace",
-          "category": "Defence",
+          "name": "Obtain an Ensouled Goblin Head",
+          "taskID": "obtain_ensouled_goblin_head",
+          "category": "obtain",
           "level": 1,
-          "completion_type": "EQUIP",
+          "completion_type": "OBTAIN",
           "base_points": 1,
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Brass Necklace",
-              "item_ids": [1009]
+              "item": "Ensouled Goblin Head",
+              "item_ids": [13447]
             }
           ]
         },
@@ -696,20 +676,21 @@
           ]
         },
         {
-          "name": "Obtain a H.A.M. Logo",
-          "taskID": "steal_HAM_logo",
-          "category": "Obtain",
-          "level": 15,
-          "completion_type": "OBTAIN",
+          "name": "Defeat a Level 2 Goblin in 15 Seconds",
+          "taskID": "defeat_frog_fast",
+          "category": "Combat",
+          "level": 5,
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
-          "required_items": [
-            {
-              "item": "Ham Logo",
-              "item_ids": [4306],
-              "quantity": [1]
-            }
-          ]
+          "target_npc": {
+            "npc": ["Goblin"],
+            "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
+            "quantity": 1
+          },
+          "constraints": {
+            "time_in_ticks": [25]
+          }
         },
         {
           "name": "Obtain a Rusty Sword",
@@ -783,7 +764,7 @@
           "target_npc": {
             "npc": ["HAM Guard"],
             "npc_ids": [2536, 2537, 2538],
-            "quantity": [1, 25]
+            "quantity": [1, 10]
           }
         },
         {
@@ -838,7 +819,7 @@
           "level": 27,
           "completion_type": "CRAFTING",
           "base_points": 1,
-          "assignment_weight": 5,
+          "assignment_weight": 3,
           "required_items": [
             {
               "item": "Emerald",
@@ -865,7 +846,6 @@
         {
           "name": "Runecraft a Fire Rune",
           "taskID": "runecraft_fire_rune",
-          "is_unlocked": false,
           "category": "Runecrafting",
           "level": 14,
           "completion_type": "RUNECRAFTING",
@@ -882,7 +862,6 @@
         {
           "name": "Runecraft a Lava Rune",
           "taskID": "runecraft_lava_rune",
-          "is_unlocked": false,
           "category": "Runecrafting",
           "level": 23,
           "completion_type": "RUNECRAFTING",
@@ -913,7 +892,7 @@
           ]
         },
         {
-          "name": "Defeat a Man or Woman in 5 Seconds",
+          "name": "Defeat a Man or Woman in 21 Seconds",
           "taskID": "defeat_man_fast",
           "category": "Combat",
           "level": 2,
@@ -922,18 +901,11 @@
           "assignment_weight": 8,
           "target_npc": {
             "npc": ["Man, Woman"],
-            "npc_ids": [3261, 3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
-            "quantity": 1
+            "npc_ids": [3261, 3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992, 3110, 14920, 3264, 3265, 3652, 11057, 11058, 3014, 3112, 6991, 14921, 11053, 11054, 3015],
+            "quantity": [1]
           },
           "constraints": {
-            "time_in_ticks": [8],
-            "prohibited_active_varbits": [
-                {
-                "varbit_id": 57,
-                "must_be_value": 0,
-                "fail_message": "Cannon use is prohibited for timed combat tasks."
-              }
-            ]
+            "time_in_ticks": [35]
           }
         },
         {
@@ -952,7 +924,7 @@
           ]
         },
         {
-          "name": "Use the Glider to Travel to Al Kharid",
+          "name": "Use the Glider in Al Kharid",
           "taskID": "glider_al_kharid",
           "category": "Travel",
           "completion_type": "TRAVEL",
@@ -960,19 +932,17 @@
           "assignment_weight": 5
         },
         {
-          "name": "Pickpocket a Man 10 times in 12 Seconds",
-          "taskID": "pickpocket_man_fast",
+          "name": "Pickpocket a Man or Woman",
+          "taskID": "pickpocket_man",
           "category": "Thieving",
           "level": 1,
           "completion_type": "THIEVING",
           "base_points": 1,
           "assignment_weight": 8,
-          "target_npc": {
-            "npc_ids": [3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
-            "quantity": 10
-          },
-          "constraints": {
-            "time_in_ticks": 20
+         "target_npc": {
+            "npc": ["Man, Woman"],
+            "npc_ids": [3261, 3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992, 3110, 14920, 3264, 3265, 3652, 11057, 11058, 3014, 3112, 6991, 14921, 11053, 11054, 3015],
+            "quantity": [1, 28]
           }
         },
         {

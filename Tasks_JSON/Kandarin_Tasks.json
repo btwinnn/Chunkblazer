@@ -5255,7 +5255,7 @@
                         {
                         "item": "Raw Anchovies",
                         "item_ids": [321],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },             
@@ -5271,7 +5271,7 @@
                         {
                         "item": "Anchovies",
                         "item_ids": [319],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },

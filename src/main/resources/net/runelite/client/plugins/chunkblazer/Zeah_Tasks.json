@@ -22,7 +22,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Flax",
+                    "name": "Obtain Flax",
                     "taskID": "obtain_flax",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -32,7 +32,7 @@
                         {
                             "item": ["Flax"],
                             "item_ids": [1779],
-                            "quantity": [50, 250]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1772,7 +1772,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Saltpetre",
+                    "name": "Obtain Saltpetre",
                     "taskID": "obtain_saltpetre",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -1782,7 +1782,7 @@
                         {
                             "item": ["Saltpetre"],
                             "item_ids": [13421],
-                            "quantity": [1, 100]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -2431,7 +2431,7 @@
                             {
                                 "item": ["Bird nest (Wyson)", "Bird nest (egg)#Blue egg", "Bird nest (egg)#Green egg", "Bird nest (egg)#Red egg", "Bird nest (empty)", "Bird nest (ring)", "Bird nest (seeds)"],
                                 "item_ids": [22800, 5072, 5071, 5070, 5075, 5074, 22798],
-                                "quantity": [50, 500]
+                                "quantity": [1]
                             }
                         ]
                 },               
@@ -2528,7 +2528,7 @@
                             {
                                 "item": ["Bird nest (Wyson)", "Bird nest (egg)#Blue egg", "Bird nest (egg)#Green egg", "Bird nest (egg)#Red egg", "Bird nest (empty)", "Bird nest (ring)", "Bird nest (seeds)"],
                                 "item_ids": [22800, 5072, 5071, 5070, 5075, 5074, 22798],
-                                "quantity": [50, 500]
+                                "quantity": [1]
                             }
                         ]
                 },
@@ -3583,22 +3583,8 @@
                             "item_ids": [849]
                         }
                     ]
-                }, 
-                {
-                    "name": "Obtain some Adamant Arrows",
-                    "taskID": "obtain_adamant_arrows",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Adamant Arrow"],
-                            "item_ids": [890],
-                            "quantity": [1, 200]
-                        }
-                    ]
-                }
+                } 
+                
             ],
                 "optional_quests_unlocked": [
                     {
@@ -3806,7 +3792,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Intelligence",
+                    "name": "Obtain Intelligence",
                     "taskID": "obtain_intelligence",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -3816,7 +3802,7 @@
                         {
                             "item": ["Intelligence"],
                             "item_ids": [13395],
-                            "quantity": [1, 25]
+                            "quantity": [1]
                         }
                     ]
                 }, 
@@ -3982,7 +3968,7 @@
                     }
                 },
                 {
-                    "name": "Obtain some Lizardman Fangs",
+                    "name": "Obtain a Lizardman Fang",
                     "taskID": "obtain_lizardman_fangs",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -3992,7 +3978,7 @@
                         {
                             "item": ["Lizardman Fang"],
                             "item_ids": [13391],
-                            "quantity": [1, 500]
+                            "quantity": [1]
                         }
                     ]
                 }
@@ -4061,7 +4047,7 @@
                         {
                         "item": "Logs",
                         "item_ids": [1511],
-                        "quantity": [1]
+                        "quantity": [25, 60]
                         }
                     ]
                 },
@@ -5036,8 +5022,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Books of Arcane Knowledge",
-                    "taskID": "obtain_books_arcane_knowledge",
+                    "name": "Obtain a Book of Arcane Knowledge",
+                    "taskID": "obtain_book_arcane_knowledge",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -5046,7 +5032,7 @@
                         {
                             "item": ["Book of Arcane Knowledge"],
                             "item_ids": [13513],
-                            "quantity": [1, 25]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -7049,7 +7035,7 @@
                     }
                 },
                 {
-                    "name": "Obtain some Lizardman Fangs",
+                    "name": "Obtain a Lizardman Fang",
                     "taskID": "obtain_lizardman_fangs",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -7059,7 +7045,7 @@
                         {
                             "item": ["Lizardman Fang"],
                             "item_ids": [13391],
-                            "quantity": [1, 500]
+                            "quantity": [1]
                         }
                     ]
                 }
