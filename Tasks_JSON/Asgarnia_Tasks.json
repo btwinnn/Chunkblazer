@@ -704,8 +704,8 @@
             "neighbor_ids": [11570, 11827, 11315, 11572],
             "tasks": [
                 {
-                    "name": "Mix a Prayer Potion",
-                    "taskID": "mix_prayer_potion",
+                    "name": "Mix some Prayer Potions",
+                    "taskID": "mix_prayer_potions",
                     "category": "Obtain_Set",
                     "level": 38,
                     "completion_type": "HERBLORE",
@@ -714,7 +714,8 @@
                      "required_items": [
                         {
                             "item": ["Prayer Potion(3)", "Prayer Potion(4)"],
-                            "item_ids": [139, 2434]
+                            "item_ids": [139, 2434],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -775,8 +776,8 @@
                     ]
                 },
                 {
-                    "name": "Mix a Strength Potion",
-                    "taskID": "mix_strength_potion",
+                    "name": "Mix some Strength Potions",
+                    "taskID": "mix_strength_potions",
                     "category": "Obtain_Set",
                     "level": 12,
                     "completion_type": "HERBLORE",
@@ -785,7 +786,8 @@
                      "required_items": [
                         {
                             "item": ["Strength Potion(3)", "Strength Potion(4)"],
-                            "item_ids": [115, 113]
+                            "item_ids": [115, 113],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -2248,8 +2250,8 @@
             "neighbor_ids": [11575, 11830, 11573, 11318],
             "tasks": [
                 {
-                    "name": "Mix a Saradomin Brew",
-                    "taskID": "mix_saradomin_brew",
+                    "name": "Mix some Saradomin Brews",
+                    "taskID": "mix_saradomin_brews",
                     "category": "Obtain_Set",
                     "level": 81,
                     "completion_type": "HERBLORE",
@@ -2258,13 +2260,14 @@
                      "required_items": [
                         {
                             "item": ["Saradomin Brew(3)", "Saradomin Brew(4)"],
-                            "item_ids": [6687, 6685]
+                            "item_ids": [6687, 6685],
+                            "quantity": [25, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Super Combat Potion",
-                    "taskID": "mix_super_combat_potion",
+                    "name": "Mix some Super Combat Potions",
+                    "taskID": "mix_super_combat_potions",
                     "category": "Obtain_Set",
                     "level": 90,
                     "completion_type": "HERBLORE",
@@ -2273,13 +2276,14 @@
                      "required_items": [
                         {
                             "item": ["Super Combat Potion(3)", "Super Combat Potion(4)"],
-                            "item_ids": [12697, 12695]
+                            "item_ids": [12697, 12695],
+                            "quantity": [25, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Super Attack Potion",
-                    "taskID": "mix_super_attack_potion",
+                    "name": "Mix some Super Attack Potions",
+                    "taskID": "mix_super_attack_potions",
                     "category": "Obtain_Set",
                     "level": 45,
                     "completion_type": "HERBLORE",
@@ -2288,13 +2292,14 @@
                      "required_items": [
                         {
                             "item": ["Super Attack Potion(3)", "Super Attack Potion(4)"],
-                            "item_ids": [145, 2436]
+                            "item_ids": [145, 2436],
+                            "quantity": [50, 150]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Super Strength Potion",
-                    "taskID": "mix_super_strength_potion",
+                    "name": "Mix some Super Strength Potions",
+                    "taskID": "mix_super_strength_potions",
                     "category": "Obtain_Set",
                     "level": 55,
                     "completion_type": "HERBLORE",
@@ -2303,13 +2308,14 @@
                      "required_items": [
                         {
                             "item": ["Super Strength Potion(3)", "Super Strength Potion(4)"],
-                            "item_ids": [157, 2440]
+                            "item_ids": [157, 2440],
+                            "quantity": [50, 150]
                         }
                     ]
                 }, 
                 {
-                    "name": "Mix a Super Defence Potion",
-                    "taskID": "mix_super_defence_potion",
+                    "name": "Mix some Super Defence Potions",
+                    "taskID": "mix_super_defence_potions",
                     "category": "Obtain_Set",
                     "level": 66,
                     "completion_type": "HERBLORE",
@@ -2318,13 +2324,14 @@
                      "required_items": [
                         {
                             "item": ["Super Defence Potion(3)", "Super Defence Potion(4)"],
-                            "item_ids": [163, 2442]
+                            "item_ids": [163, 2442],
+                            "quantity": [50, 150]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Ranging Potion",
-                    "taskID": "mix_ranging_potion",
+                    "name": "Mix some Ranging Potions",
+                    "taskID": "mix_ranging_potions",
                     "category": "Obtain_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
@@ -2333,7 +2340,8 @@
                      "required_items": [
                         {
                             "item": ["Ranging Potion(3)", "Ranging Potion(4)"],
-                            "item_ids": [169, 2444]
+                            "item_ids": [169, 2444],
+                            "quantity": [50, 150]
                         }
                     ]
                 },
@@ -2570,7 +2578,7 @@
                     ]
                 },
                 {
-                    "name": "Mix a Stamina Potion",
+                    "name": "Mix some Stamina Potions",
                     "taskID": "mix_stamina_potion",
                     "category": "Obtain_Set",
                     "level": 77,
@@ -2580,7 +2588,8 @@
                      "required_items": [
                         {
                             "item": ["Stamina Potion(3)", "Stamina Potion(4)"],
-                            "item_ids": [12627, 12625]
+                            "item_ids": [12627, 12625],
+                            "quantity": [50, 150]
                         }
                     ]
                 }           

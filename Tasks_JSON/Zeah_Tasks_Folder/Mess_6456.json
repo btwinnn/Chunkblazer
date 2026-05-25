@@ -4,8 +4,8 @@
             "neighbor_ids": [6457, 6712, 6455, 6200],
             "tasks": [
                 {
-                    "name": "Chop a Maple Tree",
-                    "taskID": "chop_maple_tree",
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
                     "category": "Woodcutting",
                     "level": 45,
                     "completion_type": "WOODCUTTING",
@@ -15,13 +15,13 @@
                         {
                             "item": "Maple Logs",
                             "item_ids": [1517],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Maple Log",
-                    "taskID": "burn_maple_log",
+                    "name": "Burn some Maple Logs",
+                    "taskID": "burn_maple_logs",
                     "category": "Firemaking",
                     "level": 45,
                     "completion_type": "FIREMAKING",
@@ -31,7 +31,7 @@
                         {
                         "item": "Maple Logs",
                         "item_ids": [1517],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },

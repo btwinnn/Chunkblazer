@@ -39,8 +39,8 @@
                     ]
                 },
                 {
-                    "name": "Burn an Oak Log",
-                    "taskID": "burn_oak_log",
+                    "name": "Burn some Oak Logs",
+                    "taskID": "burn_oak_logs",
                     "category": "Firemaking",
                     "level": 15,
                     "completion_type": "FIREMAKING",
@@ -50,7 +50,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },

@@ -161,8 +161,8 @@
                     ]
                 }, 
                 {
-                    "name": "Mix an Attack Potion",
-                    "taskID": "mix_attack_potion",
+                    "name": "Mix some Attack Potions",
+                    "taskID": "mix_attack_potions",
                     "category": "Obtain_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
@@ -171,7 +171,8 @@
                      "required_items": [
                         {
                             "item": ["Attack Potion(3)", "Attack Potion(4)"],
-                            "item_ids": [121, 2428]
+                            "item_ids": [121, 2428],
+                            "quantity": [1, 25]
                         }
                     ]
                 }

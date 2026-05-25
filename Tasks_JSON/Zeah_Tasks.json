@@ -156,8 +156,8 @@
                     ]
                 },
                 {
-                    "name": "Burn a Willow Log",
-                    "taskID": "burn_willow_log",
+                    "name": "Burn some Willow Logs",
+                    "taskID": "burn_willow_logs",
                     "category": "Firemaking",
                     "level": 30,
                     "completion_type": "FIREMAKING",
@@ -167,7 +167,7 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -398,8 +398,8 @@
                     ]
                 },
                 {
-                    "name": "Mix a Prayer Potion",
-                    "taskID": "mix_prayer_potion",
+                    "name": "Mix some Prayer Potions",
+                    "taskID": "mix_prayer_potions",
                     "category": "Obtain_Set",
                     "level": 38,
                     "completion_type": "HERBLORE",
@@ -408,7 +408,8 @@
                      "required_items": [
                         {
                             "item": ["Prayer Potion(3)", "Prayer Potion(4)"],
-                            "item_ids": [139, 2434]
+                            "item_ids": [139, 2434],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -506,8 +507,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -517,13 +518,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -533,7 +534,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -584,8 +585,8 @@
                     ]
                 },
                 {
-                    "name": "Burn a Willow Log",
-                    "taskID": "burn_willow_log",
+                    "name": "Burn some Willow Logs",
+                    "taskID": "burn_willow_logs",
                     "category": "Firemaking",
                     "level": 30,
                     "completion_type": "FIREMAKING",
@@ -595,7 +596,7 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -804,8 +805,8 @@
                     }                  
                 },
                 {
-                    "name": "Mix a Ranging Potion",
-                    "taskID": "mix_ranging_potion",
+                    "name": "Mix some Ranging Potions",
+                    "taskID": "mix_ranging_potions",
                     "category": "Obtain_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
@@ -814,7 +815,8 @@
                      "required_items": [
                         {
                             "item": ["Ranging Potion(3)", "Ranging Potion(4)"],
-                            "item_ids": [169, 2444]
+                            "item_ids": [169, 2444],
+                            "quantity": [50, 150]
                         }
                     ]
                 }                        
@@ -1460,8 +1462,8 @@
                     
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -1471,13 +1473,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -1487,7 +1489,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -1997,8 +1999,8 @@
             "neighbor_ids": [6457, 6712, 6455, 6200],
             "tasks": [
                 {
-                    "name": "Chop a Maple Tree",
-                    "taskID": "chop_maple_tree",
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
                     "category": "Woodcutting",
                     "level": 45,
                     "completion_type": "WOODCUTTING",
@@ -2008,13 +2010,13 @@
                         {
                             "item": "Maple Logs",
                             "item_ids": [1517],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Maple Log",
-                    "taskID": "burn_maple_log",
+                    "name": "Burn some Maple Logs",
+                    "taskID": "burn_maple_logs",
                     "category": "Firemaking",
                     "level": 45,
                     "completion_type": "FIREMAKING",
@@ -2024,7 +2026,7 @@
                         {
                         "item": "Maple Logs",
                         "item_ids": [1517],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -2671,8 +2673,8 @@
                     ]
                 },
                 {
-                    "name": "Burn an Oak Log",
-                    "taskID": "burn_oak_log",
+                    "name": "Burn some Oak Logs",
+                    "taskID": "burn_oak_logs",
                     "category": "Firemaking",
                     "level": 15,
                     "completion_type": "FIREMAKING",
@@ -2682,7 +2684,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -2837,8 +2839,8 @@
             "neighbor_ids": [6454, 6709, 6452, 6197],
             "tasks": [
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -2848,13 +2850,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -2864,7 +2866,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -3049,8 +3051,8 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Mix an Anti-Poison Potion",
-                    "taskID": "mix_anti-poison",
+                    "name": "Mix some Anti-Poison Potions",
+                    "taskID": "mix_anti-poisons",
                     "category": "Obtain_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
@@ -3059,7 +3061,8 @@
                      "required_items": [
                         {
                             "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446]
+                            "item_ids": [175, 2446],
+                            "quantity": [1, 25]
                         }
                     ]
                 }          
@@ -3168,8 +3171,8 @@
                     ]
                 },
                 {
-                    "name": "Burn an Oak Log",
-                    "taskID": "burn_oak_log",
+                    "name": "Burn some Oak Logs",
+                    "taskID": "burn_oak_logs",
                     "category": "Firemaking",
                     "level": 15,
                     "completion_type": "FIREMAKING",
@@ -3179,7 +3182,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -3410,8 +3413,8 @@
                     ]
                 }, 
                 {
-                    "name": "Mix an Attack Potion",
-                    "taskID": "mix_attack_potion",
+                    "name": "Mix some Attack Potions",
+                    "taskID": "mix_attack_potions",
                     "category": "Obtain_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
@@ -3420,7 +3423,8 @@
                      "required_items": [
                         {
                             "item": ["Attack Potion(3)", "Attack Potion(4)"],
-                            "item_ids": [121, 2428]
+                            "item_ids": [121, 2428],
+                            "quantity": [1, 25]
                         }
                     ]
                 }
@@ -3540,8 +3544,8 @@
                     }
                 },
                 {
-                    "name": "Burn a Yew Log",
-                    "taskID": "burn_yew_log",
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
                     "category": "Firemaking",
                     "level": 60,
                     "completion_type": "FIREMAKING",
@@ -3551,7 +3555,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -3723,8 +3727,8 @@
                     }
                 },
                 {
-                    "name": "Chop a Maple Tree",
-                    "taskID": "chop_maple_tree",
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
                     "category": "Woodcutting",
                     "level": 45,
                     "completion_type": "WOODCUTTING",
@@ -3734,13 +3738,13 @@
                         {
                             "item": "Maple Logs",
                             "item_ids": [1517],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Maple Log",
-                    "taskID": "burn_maple_log",
+                    "name": "Burn some Maple Logs",
+                    "taskID": "burn_maple_logs",
                     "category": "Firemaking",
                     "level": 45,
                     "completion_type": "FIREMAKING",
@@ -3750,7 +3754,7 @@
                         {
                         "item": "Maple Logs",
                         "item_ids": [1517],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 }, 
@@ -4021,8 +4025,8 @@
                     }
                 }, 
                 {
-                    "name": "Burn an Oak Log",
-                    "taskID": "burn_oak_log",
+                    "name": "Burn some Oak Logs",
+                    "taskID": "burn_oak_logs",
                     "category": "Firemaking",
                     "level": 15,
                     "completion_type": "FIREMAKING",
@@ -4032,7 +4036,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -4187,8 +4191,8 @@
                     }
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -4198,13 +4202,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -4214,7 +4218,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -4884,8 +4888,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -4895,7 +4899,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 }
@@ -9046,8 +9050,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Maple Tree",
-                    "taskID": "chop_maple_tree",
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
                     "category": "Woodcutting",
                     "level": 45,
                     "completion_type": "WOODCUTTING",
@@ -9057,13 +9061,13 @@
                         {
                             "item": "Maple Logs",
                             "item_ids": [1517],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Maple Log",
-                    "taskID": "burn_maple_log",
+                    "name": "Burn some Maple Logs",
+                    "taskID": "burn_maple_logs",
                     "category": "Firemaking",
                     "level": 45,
                     "completion_type": "FIREMAKING",
@@ -9073,7 +9077,7 @@
                         {
                         "item": "Maple Logs",
                         "item_ids": [1517],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },                            
@@ -9094,8 +9098,8 @@
                     ]
                 },               
                 {
-                    "name": "Burn a Yew Log",
-                    "taskID": "burn_yew_log",
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
                     "category": "Firemaking",
                     "level": 60,
                     "completion_type": "FIREMAKING",
@@ -9105,7 +9109,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },

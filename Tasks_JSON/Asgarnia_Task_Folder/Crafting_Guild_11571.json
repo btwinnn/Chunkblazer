@@ -4,8 +4,8 @@
             "neighbor_ids": [11570, 11827, 11315, 11572],
             "tasks": [
                 {
-                    "name": "Mix a Prayer Potion",
-                    "taskID": "mix_prayer_potion",
+                    "name": "Mix some Prayer Potions",
+                    "taskID": "mix_prayer_potions",
                     "category": "Obtain_Set",
                     "level": 38,
                     "completion_type": "HERBLORE",
@@ -14,7 +14,8 @@
                      "required_items": [
                         {
                             "item": ["Prayer Potion(3)", "Prayer Potion(4)"],
-                            "item_ids": [139, 2434]
+                            "item_ids": [139, 2434],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -75,8 +76,8 @@
                     ]
                 },
                 {
-                    "name": "Mix a Strength Potion",
-                    "taskID": "mix_strength_potion",
+                    "name": "Mix some Strength Potions",
+                    "taskID": "mix_strength_potions",
                     "category": "Obtain_Set",
                     "level": 12,
                     "completion_type": "HERBLORE",
@@ -85,7 +86,8 @@
                      "required_items": [
                         {
                             "item": ["Strength Potion(3)", "Strength Potion(4)"],
-                            "item_ids": [115, 113]
+                            "item_ids": [115, 113],
+                            "quantity": [1, 50]
                         }
                     ]
                 },

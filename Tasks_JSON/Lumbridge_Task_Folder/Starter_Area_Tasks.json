@@ -112,8 +112,8 @@
           ]
         },
         {
-          "name": "Burn an Oak Log",
-          "taskID": "burn_oak_log",
+          "name": "Burn some Oak Logs",
+          "taskID": "burn_oak_logs",
           "category": "Firemaking",
           "level": 15,
           "completion_type": "FIREMAKING",
@@ -123,7 +123,7 @@
             {
               "item": "Oak Logs",
               "item_ids": [1521],
-              "quantity": [1, 25]
+              "quantity": [1, 50]
             }
           ]
         },
@@ -264,8 +264,8 @@
                     ]
                 },
         {
-          "name": "Burn a Willow Log",
-          "taskID": "burn_willow_log",
+          "name": "Burn some Willow Logs",
+          "taskID": "burn_willow_logs",
           "category": "Firemaking",
           "level": 30,
           "completion_type": "FIREMAKING",
@@ -275,7 +275,7 @@
             {
               "item": "Willow Logs",
               "item_ids": [1519],
-              "quantity": [1]
+              "quantity": [1, 50]
             }
           ]
         },

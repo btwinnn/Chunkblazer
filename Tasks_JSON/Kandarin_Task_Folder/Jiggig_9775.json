@@ -19,8 +19,8 @@
                     ]
                 },
                 {
-                    "name": "Mix a Sanfew Serum",
-                    "taskID": "mix_sanfew_serum",
+                    "name": "Mix some Sanfew Serums",
+                    "taskID": "mix_sanfew_serums",
                     "category": "Obtain_Set",
                     "level": 65,
                     "completion_type": "HERBLORE",
@@ -29,7 +29,8 @@
                      "required_items": [
                         {
                             "item": ["Sanfew serum(3)", "Sanfew serum(4)"],
-                            "item_ids": [10927, 10925]
+                            "item_ids": [10927, 10925],
+                            "quantity": [1, 25]
                         }
                     ]
                 },             

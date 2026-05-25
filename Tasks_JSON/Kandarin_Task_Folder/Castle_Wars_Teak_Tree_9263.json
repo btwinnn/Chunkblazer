@@ -4,8 +4,8 @@
             "neighbor_ids": [9264, 9519, 9262, 9007],
             "tasks": [
                 {
-                    "name": "Chop a Teak Tree",
-                    "taskID": "Chop_teak_tree",
+                    "name": "Chop some Teak Trees",
+                    "taskID": "Chop_teak_trees",
                     "category": "Woodcutting",
                     "level": 35,
                     "completion_type": "WOODCUTTING",
@@ -15,7 +15,7 @@
                         {
                         "item": "Teak Logs",
                         "item_ids": [6333],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
