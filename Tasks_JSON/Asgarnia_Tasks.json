@@ -364,7 +364,7 @@
                         {
                             "item": ["Iron Ore"],
                             "item_ids": [440],
-                            "quantity": [1, 50]
+                            "quantity": [25, 200]
                         }
                     ]
                 },
@@ -1663,7 +1663,7 @@
                         {
                             "item": ["Iron Ore"],
                             "item_ids": [440],
-                            "quantity": [1, 50]
+                            "quantity": [25, 200]
                         }
                     ]
                 },

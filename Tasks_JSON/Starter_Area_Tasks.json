@@ -909,20 +909,20 @@
           }
         },
         {
-          "name": "Obtain a Grimy Ranarr Weed",
-          "taskID": "obtain_grimy_ranarr",
-          "category": "Obtain",
-          "completion_type": "OBTAIN",
-          "base_points": 1,
-          "assignment_weight": 5,
-          "required_items": [
-            {
-              "item": "Grimy Ranarr Weed",
-              "item_ids": [207],
-              "quantity": [1]
-            }
-          ]
-        },
+                    "name": "Obtain a Grimy Guam Leaf",
+                    "taskID": "obtain_grimy_guam",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Grimy Guam Leaf"],
+                            "item_ids": [199],
+                            "quantity": [1]
+                        }
+                    ]
+                },
         {
           "name": "Use the Glider in Al Kharid",
           "taskID": "glider_al_kharid",
@@ -952,7 +952,7 @@
           "level": 55,
           "completion_type": "FARMING",
           "base_points": 2,
-          "assignment_weight": 3,
+          "assignment_weight": 1,
           "required_items": [
             {
               "item": "Cactus Seed",
@@ -994,17 +994,17 @@
       "Friendly_Name": "Al Kharid",
       "tasks": [
         {
-          "name": "Equip some Adamant Platelegs",
-          "taskID": "equip_adamant_platelegs",
+          "name": "Equip Iron Platelegs",
+          "taskID": "equip_iron_platelegs",
           "category": "Defence",
-          "level": 30,
+          "level": 1,
           "completion_type": "EQUIP",
-          "base_points": 2,
+          "base_points": 1,
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Adamant Platelegs",
-              "item_ids": [1073]
+              "item": "Iron Platelegs",
+              "item_ids": [1067]
             }
           ]
         },
@@ -1038,23 +1038,23 @@
           ]
         },
         {
-          "name": "Equip a Mithril Scimitar",
-          "taskID": "equip_mithril_scimitar",
+          "name": "Equip a Steel Scimitar",
+          "taskID": "equip_steel_scimitar",
           "category": "Attack",
-          "level": 20,
+          "level": 5,
           "completion_type": "EQUIP",
           "base_points": 1,
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Mithril Scimitar",
-              "item_ids": [1329]
+              "item": "Steel Scimitar",
+              "item_ids": [1325]
             }
           ]
         },
         {
-          "name": "Smelt an Iron Bar",
-          "taskID": "smith_iron_bar",
+          "name": "Smelt some Iron Bars",
+          "taskID": "smith_iron_bars",
           "category": "Smithing",
           "level": 15,
           "completion_type": "SMITHING",
@@ -1064,7 +1064,7 @@
             {
               "item": "Iron Bar",
               "item_ids": [2351],
-              "quantity": [1]
+              "quantity": [1, 50]
             }
           ]
         },
@@ -1082,15 +1082,7 @@
             "quantity": [5, 25]
           }
         },
-        {
-          "name": "Complete a Lap of the Al Kharid Rooftop Agility Course",
-          "taskID": "complete_ak_kharid_rooftop",
-          "category": "Agility",
-          "level": 20,
-          "completion_type": "AGILITY",
-          "base_points": 1,
-          "assignment_weight": 8
-        },
+        
         {
           "name": "Obtain Winter Sq'irk Fruit",
           "taskID": "obtain_winter_sq'irk_fruit",
@@ -1108,17 +1100,17 @@
           ]
         },
         {
-          "name": "Smelt a Silver Bar",
-          "taskID": "smith_silver_bar",
-          "category": "Smithing",
-          "level": 20,
-          "completion_type": "SMITHING",
+          "name": "Craft Leather Boots",
+          "taskID": "craft_leahter_boots",
+          "category": "Crafting",
+          "level": 7,
+          "completion_type": "CRAFTING",
           "base_points": 1,
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Silver Bar",
-              "item_ids": [2355],
+              "item": "Leather Boots",
+              "item_ids": [1061],
               "quantity": [1]
             }
           ]
@@ -1194,8 +1186,8 @@
           "taskID": "defeat_wall_beast",
           "category": "Combat",
           "completion_type": "NPC_Kill",
-          "base_points": 1,
-          "assignment_weight": 5,
+          "base_points": 2,
+          "assignment_weight": 1,
           "target_npc": {
             "npc": ["Wall Beast"],
             "npc_ids": [476, 475],
@@ -1404,7 +1396,7 @@
           "level": 21,
           "completion_type": "COOKING",
           "base_points": 1,
-          "assignment_weight": 8,
+          "assignment_weight": 3,
           "required_items": [
             {
               "item": "Pot of Cream",
@@ -1414,7 +1406,7 @@
           ]
         },      
         {
-          "name": "Defeat a Farmer in 12 Seconds",
+          "name": "Defeat a Farmer in 24 Seconds",
           "taskID": "defeat_farmer_fast",
           "category": "Combat",
           "completion_type": "NPC_Kill",
@@ -1426,14 +1418,7 @@
             "quantity": 1
           },
           "constraints": {
-            "time_in_ticks": [20],
-            "prohibited_active_varbits": [
-                {
-                "varbit_id": 57,
-                "must_be_value": 0,
-                "fail_message": "Cannon use is prohibited for timed combat tasks."
-              }
-            ]
+            "time_in_ticks": [40]
           }
         },
         {
@@ -1535,7 +1520,7 @@
           }
         },
         {
-          "name": "Kill a Scorpion in 17 Seconds",
+          "name": "Kill a Scorpion in 27 Seconds",
           "taskID": "defeat_scorpion_fast",
           "category": "Combat",
           "completion_type": "NPC_Kill",
@@ -1547,14 +1532,7 @@
             "quantity": [1]
           },
           "constraints": {
-            "time_in_ticks": [28],
-            "prohibited_active_varbits": [
-                {
-                "varbit_id": 57,
-                "must_be_value": 0,
-                "fail_message": "Cannon use is prohibited for timed combat tasks."
-              }
-            ]
+            "time_in_ticks": [45]
           }
         },
         {
@@ -1569,7 +1547,7 @@
             {
               "item": "Silver Ore",
               "item_ids": [442],
-              "quantity": [1]
+              "quantity": [1, 50]
             }
           ]
         },
@@ -1579,7 +1557,7 @@
           "category": "Obtain",
           "completion_type": "OBTAIN",
           "base_points": 3,
-          "assignment_weight": 3,
+          "assignment_weight": 1,
           "required_items": [
             {
               "item": "Goldsmith Gauntlets",

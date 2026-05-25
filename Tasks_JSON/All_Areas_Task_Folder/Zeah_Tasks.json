@@ -1797,7 +1797,8 @@
                      "required_items": [
                         {
                             "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446]
+                            "item_ids": [175, 2446],
+                            "quantity": [1, 25]
                         }
                     ]
                 },

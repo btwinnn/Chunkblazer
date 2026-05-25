@@ -121,7 +121,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Log Basket"],
@@ -144,7 +144,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a Level 7 Dark Wizard in 10 Seconds",
+                    "name": "Defeat a Level 7 Dark Wizard in 18 Seconds",
                     "taskID": "defeat_level_7_dark_wizard_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -157,7 +157,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [16]
+                        "time_in_ticks": [30]
                     }
                 },
                 {

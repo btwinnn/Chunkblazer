@@ -686,65 +686,22 @@
                     }
                 },
                 {
-                    "name": "Defeat The Leviathan",
-                    "taskID": "defeat_leviathan",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Leviathan",
-                    "target_npc": {
-                        "npc": ["Leviathan"],
-                        "npc_ids": [12215, 12219],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat the Awakened Leviathan",
-                    "taskID": "defeat_awakened_leviathan",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 1,
-                    "boss": "The Leviathan",
-                    "target_npc": {
-                        "npc": ["Awakened Leviathan"],
-                        "npc_ids": [12214],
-                        "quantity": [1]
-                    }
-                },
-                {
                     "name": "Runecraft some Chaos Runes",
                     "taskID": "Runecraft_chaos_runes",
                     "category": "Runecrafting",
                     "level": 35,
                     "completion_type": "RUNECRAFTING",
                     "base_points": 2,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
                         "item": "Chaos Rune",
                         "item_ids": [562],
-                        "action": "obtain",
                         "quantity": [1]
                         }
                     ]
                 },
-                {
-                    "name": "Obtain a Venator Vestige",
-                    "taskID": "obtain_venator_vestige",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Leviathan",
-                    "required_items": [
-                        {
-                            "item": ["Venator Vestige"],
-                            "item_ids": [28283]
-                        }
-                    ]
-                },
+                
                 {
                     "name": "Use Fairy Ring Code DIS",
                     "taskID": "fairy_ring_CLP",
@@ -784,7 +741,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Level 9 Wizard in 6 Seconds",
+                    "name": "Defeat a Level 9 Wizard in 24 Seconds",
                     "taskID": "defeat_level_9_wizard_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -797,37 +754,22 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [10]
+                        "time_in_ticks": [40]
                     }
                 },
+                
                 {
-                    "name": "Obtain a Leviathan's Lure",
-                    "taskID": "obtain_leviathan's_lure",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Leviathan",
-                    "required_items": [
-                        {
-                            "item": ["Leviathan's Lure"],
-                            "item_ids": [28325],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain Rune Essence",
-                    "taskID": "obtain_rune_essence",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
+                    "name": "Mine some Rune Essence",
+                    "taskID": "mine_rune_essence",
+                    "category": "Mining",
+                    "completion_type": "MINING",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
                             "item": ["Rune Essence"],
                             "item_ids": [1436],
-                            "quantity": [1]
+                            "quantity": [1, 150]
                         }
                     ]
                 },
@@ -837,7 +779,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 3,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
                             "item": ["Abyssal Lantern Unlit"],
@@ -849,11 +791,11 @@
                 {
                     "name": "Equip the Raiments of the Eye Set",
                     "taskID": "equip_raiments_of_eye_set",
-                    "category": "Runecrafting",
+                    "category": "Obtain_Set",
                     "level": 1,
                     "completion_type": "EQUIP",
                     "base_points": 5,
-                    "assignment_weight": 10,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
                             "item": ["Hat of the Eye"],
@@ -902,7 +844,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a Level 20 Dark Wizard in 19 Seconds",
+                    "name": "Defeat a Level 20 Dark Wizard in 30 Seconds",
                     "taskID": "defeat_level_20_dark_wizard_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -915,7 +857,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [32]
+                        "time_in_ticks": [50]
                     }
                 },
                 {
@@ -1019,7 +961,7 @@
                         {
                             "item": ["Iron Ore"],
                             "item_ids": [440],
-                            "quantity": [1, 50]
+                            "quantity": [25, 200]
                         }
                     ]
                 },
@@ -1047,7 +989,8 @@
                      "required_items": [
                         {
                             "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446]
+                            "item_ids": [175, 2446],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
