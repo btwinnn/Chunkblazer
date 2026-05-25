@@ -123,7 +123,7 @@
             {
               "item": "Oak Logs",
               "item_ids": [1521],
-              "quantity": [1]
+              "quantity": [1, 25]
             }
           ]
         },
@@ -248,21 +248,21 @@
           ]
         },
         {
-          "name": "Chop a Willow Tree",
-          "taskID": "Chop_willow_tree",
-          "category": "Woodcutting",
-          "level": 30,
-          "completion_type": "WOODCUTTING",
-          "base_points": 2,
-          "assignment_weight": 5,
-          "required_items": [
-            {
-              "item": "Willow Logs",
-              "item_ids": [1519],
-              "quantity": [1]
-            }
-          ]
-        },
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
+                    "category": "Woodcutting",
+                    "level": 30,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },
         {
           "name": "Burn a Willow Log",
           "taskID": "burn_willow_log",

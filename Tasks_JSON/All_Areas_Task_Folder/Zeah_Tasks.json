@@ -140,8 +140,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Willow Tree",
-                    "taskID": "Chop_willow_tree",
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
                     "category": "Woodcutting",
                     "level": 30,
                     "completion_type": "WOODCUTTING",
@@ -151,7 +151,7 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -568,8 +568,8 @@
                     }
                 },
                 {
-                    "name": "Chop a Willow Tree",
-                    "taskID": "Chop_willow_tree",
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
                     "category": "Woodcutting",
                     "level": 30,
                     "completion_type": "WOODCUTTING",
@@ -579,7 +579,7 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -2121,8 +2121,8 @@
                     ]
                 },
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
+                    "name": "Chop some Oak Trees",
+                    "taskID": "chop_oak_trees",
                     "category": "Woodcutting",
                     "level": 15,
                     "completion_type": "WOODCUTTING",
@@ -2132,7 +2132,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -2655,8 +2655,8 @@
                         ]             
                 },
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
+                    "name": "Chop some Oak Trees",
+                    "taskID": "chop_oak_trees",
                     "category": "Woodcutting",
                     "level": 15,
                     "completion_type": "WOODCUTTING",
@@ -2666,7 +2666,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -2901,8 +2901,8 @@
                     ]
                 },
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
+                    "name": "Chop some Oak Trees",
+                    "taskID": "chop_oak_trees",
                     "category": "Woodcutting",
                     "level": 15,
                     "completion_type": "WOODCUTTING",
@@ -2912,7 +2912,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -3152,8 +3152,8 @@
                     }                    
                 },
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
+                    "name": "Chop some Oak Trees",
+                    "taskID": "chop_oak_trees",
                     "category": "Woodcutting",
                     "level": 15,
                     "completion_type": "WOODCUTTING",
@@ -3163,7 +3163,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
