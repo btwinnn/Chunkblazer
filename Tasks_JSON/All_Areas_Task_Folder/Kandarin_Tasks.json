@@ -4351,7 +4351,7 @@
                         }
                 },
                 {
-                    "name": "Defeat a Unicorn in 13 Seconds",
+                    "name": "Defeat a Unicorn in 22 Seconds",
                     "taskID": "defeat_white_unicorn_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -4364,7 +4364,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [20]
+                        "time_in_ticks": [37]
                     }
                 },
                 {
@@ -8317,7 +8317,7 @@
                         {
                         "item": "Raw Trout",
                         "item_ids": [335],
-                        "quantity": [1, 100]
+                        "quantity": [1, 250]
                         }
                     ]       
                 },

@@ -33,7 +33,7 @@
                         {
                             "item": ["Iron Ore"],
                             "item_ids": [440],
-                            "quantity": [1, 50]
+                            "quantity": [25, 200]
                         }
                     ]
                 },
@@ -1721,7 +1721,7 @@
                         {
                             "item": ["Iron Ore"],
                             "item_ids": [440],
-                            "quantity": [1, 50]
+                            "quantity": [25, 200]
                         }
                     ]
                 },
@@ -8011,7 +8011,8 @@
                      "required_items": [
                         {
                             "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446]
+                            "item_ids": [175, 2446],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -8094,7 +8095,7 @@
                         {
                         "item": "Raw Anchovies",
                         "item_ids": [321],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -8110,7 +8111,7 @@
                         {
                         "item": "Shrimp",
                         "item_ids": [315],
-                        "quantity": [5, 25]
+                        "quantity": [5, 50]
                         }
                     ]
                 },
@@ -8126,7 +8127,7 @@
                         {
                         "item": "Anchovies",
                         "item_ids": [319],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 }                      
@@ -8278,7 +8279,7 @@
                         {
                         "item": "Raw Anchovies",
                         "item_ids": [321],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -8294,7 +8295,7 @@
                         {
                         "item": "Shrimp",
                         "item_ids": [315],
-                        "quantity": [5, 25]
+                        "quantity": [5, 50]
                         }
                     ]
                 },
@@ -8310,7 +8311,7 @@
                         {
                         "item": "Anchovies",
                         "item_ids": [319],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },

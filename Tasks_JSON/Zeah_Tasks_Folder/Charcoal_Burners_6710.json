@@ -177,7 +177,7 @@
                     ]
                 },
                 {
-                    "name": "Mix an Anti-Poison Potion",
+                    "name": "Mix some Anti-Poison Potions",
                     "taskID": "mix_anti-poison",
                     "category": "Obtain_Set",
                     "level": 5,

@@ -33,7 +33,7 @@
                     }
                 },
                 {
-                    "name": "Mix an Anti-Poison Potion",
+                    "name": "Mix some Anti-Poison Potions",
                     "taskID": "mix_anti-poison",
                     "category": "Obtain_Set",
                     "level": 5,
@@ -94,7 +94,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
                             "item": ["Ensouled Bear Head"],
@@ -103,7 +103,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Unicorn in 13 Seconds",
+                    "name": "Defeat a Unicorn in 22 Seconds",
                     "taskID": "defeat_white_unicorn_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -116,7 +116,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [20]
+                        "time_in_ticks": [37]
                     }
                 }, 
                 {

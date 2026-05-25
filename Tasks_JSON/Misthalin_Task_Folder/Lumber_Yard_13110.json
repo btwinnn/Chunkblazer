@@ -34,22 +34,22 @@
                         ]
                 },
                 {
-                    "name": "Obtain a Teak Plank",
-                    "taskID": "obtain_teak_plank",
+                    "name": "Obtain a Plank",
+                    "taskID": "obtain_plank",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 2,
                     "assignment_weight": 5,
                     "required_items": [
                             {
-                                "item": ["Teak Plank"],
-                                "item_ids": [8778],
+                                "item": ["Plank"],
+                                "item_ids": [960],
                                 "quantity": [1]
                             }
                         ]
                 },
                 {
-                    "name": "Travel to the Lumber Yard using the Hot Air Balloon",
+                    "name": "Use the Lumber Yard Hot Air Balloon",
                     "taskID": "travel_lumber_yard_hot_air_balloon",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -57,18 +57,18 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Fletch a Yew Shortbow(u)",
-                    "taskID": "fletch_yew_shortbow(u)",
+                    "name": "Fletch an Oak Shortbow(u)",
+                    "taskID": "fletch_oak_shortbow(u)",
                     "category": "Fletching",
-                    "level": 65,
+                    "level": 20,
                     "completion_type": "FLETCHING",
-                    "base_points": 3,
-                    "assignment_weight": 3,
+                    "base_points": 1,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Yew Longbow(u)"],
-                            "item_ids": [68],
-                            "quantity": [1]
+                        "item": "Oak shortbow (u)",
+                        "item_ids": [54],
+                        "quantity": [1]
                         }
                     ]
                 },

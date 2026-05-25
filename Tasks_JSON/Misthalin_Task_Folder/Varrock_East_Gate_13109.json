@@ -88,7 +88,7 @@
                     "taskID": "defeat_varrock_guard_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Varrock Guard Level 21"],
@@ -156,26 +156,6 @@
                             "item": ["Spottier Cape"],
                             "item_ids": [10074],
                             "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Varrock Guard for some Bones",
-                    "taskID": "defeat_a_varrock_guard_for_bones",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Varrock Guard Level 21"],
-                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
-                        "quantity": [1, 25]
-                    },
-                    "constraints": [
-                        {
-                        "dropped_item": "Bones",
-                        "dropped_item_id": [526],
-                        "quantity": [1]
                         }
                     ]
                 }

@@ -647,7 +647,7 @@
         {
           "name": "Obtain an Ensouled Goblin Head",
           "taskID": "obtain_ensouled_goblin_head",
-          "category": "obtain",
+          "category": "Obtain",
           "level": 1,
           "completion_type": "OBTAIN",
           "base_points": 1,

@@ -4,17 +4,17 @@
             "neighbor_ids": [12853, 12596, 12341, 12598],
             "tasks": [
                 {
-                    "name": "Smith a Steel Dagger",
-                    "taskID": "smith_steel_dagger",
+                    "name": "Smith an Iron Dagger",
+                    "taskID": "smith_iron_dagger",
                     "category": "Smithing",
-                    "level": 30,
+                    "level": 15,
                     "completion_type": "SMITHING",
-                    "base_points": 2,
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                             {
-                                "item": ["Steel Dagger"],
-                                "item_ids": [1207],
+                                "item": ["Iron Dagger"],
+                                "item_ids": [1203],
                                 "quantity": [1]
                             }
                         ]
@@ -36,35 +36,33 @@
                         ]
                 },
                 {
-                    "name": "Obtain a Ruby Ring",
-                    "taskID": "obtain_ruby_ring",
+                    "name": "Obtain a Kitten",
+                    "taskID": "obtain_kitten",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Kitten#Black", "Kitten#Brown", "Kitten#Grey and black", "Kitten#Grey and blue", "Kitten#Grey and brown", "Kitten#White"],
+                            "item_ids": [1558, 1557, 1555, 1560, 1559, 1556]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Brass Necklace",
+                    "taskID": "obtain_brass_necklace",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
-                            {
-                                "item": ["Ruby Ring"],
-                                "item_ids": [1641],
-                                "quantity": [1]
-                            }
-                        ]
-                },
-                {
-                    "name": "Obtain a Ring of Forging",
-                    "taskID": "obtain_ring_of_forging",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                            {
-                                "item": ["Ring of Forging"],
-                                "item_ids": [2568],
-                                "quantity": [1]
-                            }
-                        ]
-                },
+                        {
+                            "item": ["Brass Necklace"],
+                            "item_ids": [1009]
+                        }
+                    ]
+                },               
                 {
                     "name": "Obtain a Gold Bar",
                     "taskID": "obtain_gold_bar",

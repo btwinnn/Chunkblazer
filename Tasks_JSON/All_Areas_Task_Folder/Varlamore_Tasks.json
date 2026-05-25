@@ -17,7 +17,7 @@
                         {
                         "item": "Coal",
                         "item_ids": [453],
-                        "quantity": [1, 50]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -3931,7 +3931,7 @@
                         {
                         "item": "Coal",
                         "item_ids": [453],
-                        "quantity": [1, 50]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -7542,7 +7542,7 @@
                         {
                         "item": "Coal",
                         "item_ids": [453],
-                        "quantity": [1, 50]
+                        "quantity": [1, 100]
                         }
                     ]
                 },             
@@ -8001,7 +8001,7 @@
                     }
                 },
                 {
-                    "name": "Mix an Anti-Poison Potion",
+                    "name": "Mix some Anti-Poison Potions",
                     "taskID": "mix_anti-poison",
                     "category": "Obtain_Set",
                     "level": 5,
