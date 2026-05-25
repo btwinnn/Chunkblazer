@@ -6394,7 +6394,7 @@
                 {
                     "name": "Equip a Dragon Plateskirt or Platelegs",
                     "taskID": "equip_dragon_plateskirt_or_platelegs",
-                    "category": ["Defence"],
+                    "category": "Obtain_Set",
                     "level": [60],
                     "completion_type": "EQUIP",
                     "base_points": 3,

@@ -105,9 +105,8 @@
                 },
                 {
                     "name": "Defeat a Hosidius Guard in 12 Seconds",
-                    "taskID": "defeat_highwayman_fast",
+                    "taskID": "defeat_hosidius_guard_fast",
                     "category": "Combat",
-                    "level": 5,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,

@@ -59,7 +59,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Highwayman"],
-                        "npc_ids": [518],
+                        "npc_ids": [518, 519],
                         "quantity": 1
                     }
                 },
@@ -72,7 +72,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Highwayman"],
-                        "npc_ids": [518],
+                        "npc_ids": [518, 519],
                         "quantity": 1
                     },
 
@@ -180,7 +180,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Highwayman"],
-                        "npc_ids": [518],
+                        "npc_ids": [518, 519],
                         "quantity": 1
                     },
                     "constraints": {
@@ -286,7 +286,6 @@
                     "name": "Defeat a Hosidius Guard in 12 Seconds",
                     "taskID": "defeat_hosidius_guard_fast",
                     "category": "Combat",
-                    "level": 5,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
@@ -6396,17 +6395,17 @@
                     ]
                 },
                 {
-                    "name": "Equip a Dragon Plateskirt or Platelegs",
-                    "taskID": "equip_dragon_plateskirt_or_platelegs",
-                    "category": ["Defence"],
+                    "name": "Equip Dragon Platelegs",
+                    "taskID": "equip_dragon_platelegs",
+                    "category": "Defence",
                     "level": [60],
                     "completion_type": "EQUIP",
                     "base_points": 3,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Dragon Plateskirt", "Dragon Platelegs"],
-                            "item_ids": [4585, 28063, 12416, 4087, 28061, 12415]
+                            "item": ["Dragon Platelegs"],
+                            "item_ids": [4087]
                         }
                     ]
                 },
