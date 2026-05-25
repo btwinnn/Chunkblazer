@@ -123,23 +123,7 @@
                             "quantity": [1, 250]
                         }
                     ]
-                },
-                {
-                    "name": "Burn a Yew Log",
-                    "taskID": "burn_yew_log",
-                    "category": "Firemaking",
-                    "level": 60,
-                    "completion_type": "FIREMAKING",
-                    "base_points": 3,
-                    "assignment_weight": 3,
-                    "required_items": [
-                        {
-                            "item": "Yew Logs",
-                            "item_ids": [1515],
-                            "quantity": [1]            
-                        }
-                    ]
-                },
+                },              
                 {
                     "name": "Fletch an Oak Shield",
                     "taskID": "fletch_oak_shield",
