@@ -57,7 +57,7 @@
                         }
                 },
                 {
-                    "name": "Defeat some Blue Dragons",
+                    "name": "Defeat a Blue Dragon",
                     "taskID": "defeat_blue_dragons",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

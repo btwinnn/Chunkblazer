@@ -45,7 +45,7 @@
                     "target_npc": {
                         "npc": ["Guard Dog"],
                         "npc_ids": [7209, 114, 4228],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                   
                  
                 },
@@ -73,7 +73,7 @@
                     "target_npc": {
                         "npc": ["Hosidius Guard"],
                         "npc_ids": [397, 398, 399, 400],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -100,7 +100,7 @@
                     "target_npc": {
                         "npc": ["Hosidius Guard"],
                         "npc_ids": [397, 398, 399, 400],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {

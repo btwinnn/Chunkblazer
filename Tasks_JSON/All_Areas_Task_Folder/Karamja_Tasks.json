@@ -300,7 +300,7 @@
                     "target_npc": {
                         "npc": ["Moss Giant"],
                         "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -326,7 +326,7 @@
                     "target_npc": {
                         "npc": ["Lesser Demon"],
                         "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -450,7 +450,7 @@
                     "target_npc": {
                         "npc": ["Lesser Demon"],
                         "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -566,7 +566,7 @@
                     "target_npc": {
                         "npc": ["Pirate"],
                         "npc_ids": [4926, 522, 6994, 4043, 4044, 4045, 4046, 4047, 4048, 4049, 4050, 4051, 4052, 521, 6993, 524, 6995, 1447],
-                        "quantity": 1
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -595,7 +595,7 @@
                     "target_npc": {
                         "npc": ["Guard Dog"],
                         "npc_ids": [7209, 114, 4228],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                   
                  
                 },
@@ -682,7 +682,7 @@
                     "target_npc": {
                         "npc": ["Lesser Demon"],
                         "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -975,7 +975,7 @@
                     "target_npc": {
                         "npc": ["Unicorn"],
                         "npc_ids": [2837, 14043],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -1425,20 +1425,16 @@
                     
                 },
                 {
-                    "name": "Defeat a Varrock Guard in the First Hit",
-                    "taskID": "defeat_varrock_guard_fast",
+                    "name": "Defeat a Varrock Guard",
+                    "taskID": "defeat_varrock_guard",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 2,
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Varrock Guard Level 21"],
                         "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
                         "quantity": [1]
-                    },
-
-                    "constraints": {
-                        "time_in_ticks": [1]
                     }
                 },
                 {

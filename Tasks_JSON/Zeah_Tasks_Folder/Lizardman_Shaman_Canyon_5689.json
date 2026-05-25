@@ -86,7 +86,7 @@
                     "target_npc": {
                         "npc": ["Lizardman Shaman"],
                         "npc_ids": [7573, 7574, 7573, 7574, 8565, 6766, 6767, 7744, 7745],
-                        "quantity": 1
+                        "quantity": [1, 500]
                     }
                 },
                 {

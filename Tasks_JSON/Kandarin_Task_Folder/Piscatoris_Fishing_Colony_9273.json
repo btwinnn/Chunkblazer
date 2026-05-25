@@ -91,7 +91,7 @@
                     "target_npc": {
                         "npc": ["Level 83 Skeleton Mage"],
                         "npc_ids": [4319],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {

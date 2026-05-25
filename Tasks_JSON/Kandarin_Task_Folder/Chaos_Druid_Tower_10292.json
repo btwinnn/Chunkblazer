@@ -45,7 +45,7 @@
                     "target_npc": {
                         "npc": ["Ogre"],
                         "npc_ids": [136, 2095, 2096, 2233, 1153],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -113,7 +113,7 @@
                     "target_npc": {
                         "npc": ["Giant Bat"],
                         "npc_ids": [4504, 6824, 2834],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                  
                 },
                 {                           
@@ -126,7 +126,7 @@
                     "target_npc": {                        
                         "npc": "Level 24 Warrior",
                         "npc_ids": [11926, 11929, 3260, 11927, 11928, 11925], 
-                        "quantity": [1]                  
+                        "quantity": [1, 25]                  
                     }                                    
                 },
                 {                           

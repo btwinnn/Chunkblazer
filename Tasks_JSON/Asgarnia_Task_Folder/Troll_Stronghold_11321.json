@@ -77,7 +77,7 @@
                     "target_npc": {
                         "npc": ["Troll General"],
                         "npc_ids": [4122, 4121, 4120],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 }, 
                 {

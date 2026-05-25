@@ -60,7 +60,7 @@
                     "target_npc": {
                         "npc": ["Highwayman"],
                         "npc_ids": [518, 519],
-                        "quantity": 1
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -91,7 +91,7 @@
                     "target_npc": {
                         "npc": ["Shayzien Guard Level 21", "Level 84 Head Guard"],
                         "npc_ids": [11092, 11094, 11096, 11098, 11100, 11102, 11104, 11106, 11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -104,7 +104,7 @@
                     "target_npc": {
                         "npc": ["Level 84 Head Guard"],
                         "npc_ids": [11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
-                        "quantity": [1]
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -237,7 +237,7 @@
                     "target_npc": {
                         "npc": ["Guard Dog"],
                         "npc_ids": [7209, 114, 4228],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                   
                  
                 },
@@ -265,7 +265,7 @@
                     "target_npc": {
                         "npc": ["Hosidius Guard"],
                         "npc_ids": [397, 398, 399, 400],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -800,7 +800,7 @@
                     "target_npc": {
                         "npc": ["Mugger"],
                         "npc_ids": [513, 1461, 6996],
-                        "quantity": [1]
+                        "quantity": [1, 5]
                     }                  
                 },
                 {
@@ -1502,7 +1502,7 @@
                     "target_npc": {
                         "npc": ["Hosidius Guard"],
                         "npc_ids": [397, 398, 399, 400],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -3004,7 +3004,7 @@
                     "target_npc": {
                         "npc": ["King Sand Crab"],
                         "npc_ids": [7266],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }                   
                 },
                 {
@@ -3195,7 +3195,7 @@
                     "target_npc": {
                         "npc": ["Moss Giant"],
                         "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -3265,7 +3265,7 @@
                     "target_npc": {
                         "npc": ["Necromancer"],
                         "npc_ids": [11088, 1025],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }                    
                 },
                 {
@@ -3856,7 +3856,7 @@
                     "target_npc": {
                         "npc": ["Lizardman"],
                         "npc_ids": [6914, 6915, 6916, 6917, 8563],
-                        "quantity": 1
+                        "quantity": [1, 50]
                     }
                 },
                 {
@@ -3869,7 +3869,7 @@
                     "target_npc": {
                         "npc": ["Lizardman Brute"],
                         "npc_ids": [8564, 10947, 6918, 6919],
-                        "quantity": 1
+                        "quantity": [1, 25]
                     }
                 }, 
                 {
@@ -4004,7 +4004,7 @@
                     "target_npc": {
                         "npc": ["Boar"],
                         "npc_ids": [11066, 11067],
-                        "quantity": 1
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -4231,7 +4231,7 @@
                     "target_npc": {
                         "npc": ["Lesser Demon"],
                         "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -4430,7 +4430,7 @@
                     "target_npc": {
                         "npc": ["Pirate"],
                         "npc_ids": [4926, 522, 6994, 4043, 4044, 4045, 4046, 4047, 4048, 4049, 4050, 4051, 4052, 521, 6993, 524, 6995, 1447],
-                        "quantity": 1
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -5733,7 +5733,7 @@
                     "target_npc": {
                         "npc": ["Necromancer"],
                         "npc_ids": [11088, 1025],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }                    
                 },
                 {
@@ -5795,7 +5795,8 @@
                     "completion_type": "NPC_Kill",
                     "target_npc": {
                         "npc": ["Dark Warrior"],
-                        "npc_ids": [11111, 11110, 11109]                     
+                        "npc_ids": [11111, 11110, 11109],
+                        "quantity": [1, 10]                     
                     }                                      
                 },
                 {
@@ -6274,7 +6275,7 @@
                     "target_npc": {
                         "npc": ["Brutal Black Dragon"],
                         "npc_ids": [7275, 8092, 8093],
-                        "quantity": 1
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -6302,7 +6303,7 @@
                     "target_npc": {
                         "npc": ["Brutal Blue Dragon"],
                         "npc_ids": [7273, 13795],
-                        "quantity": 1
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -6315,7 +6316,7 @@
                     "target_npc": {
                         "npc": ["Brutal Red Dragon"],
                         "npc_ids": [7274, 8087],
-                        "quantity": 1
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -6427,7 +6428,7 @@
                     "target_npc": {
                         "npc": ["Ice Spider"],
                         "npc_ids": [3022, 13798, 10722],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -6466,7 +6467,7 @@
                     "target_npc": {
                         "npc": ["Ice Giant"],
                         "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -6764,7 +6765,7 @@
                     "target_npc": {
                         "npc": ["Lizardman Shaman"],
                         "npc_ids": [7573, 7574, 7573, 7574, 8565, 6766, 6767, 7744, 7745],
-                        "quantity": 1
+                        "quantity": [1, 500]
                     }
                 },
                 {
@@ -6908,7 +6909,7 @@
                     "target_npc": {
                         "npc": ["Lizardman"],
                         "npc_ids": [6914, 6915, 6916, 6917, 8563],
-                        "quantity": 1
+                        "quantity": [1, 50]
                     }
                 },
                 {
@@ -6921,7 +6922,7 @@
                     "target_npc": {
                         "npc": ["Lizardman Brute"],
                         "npc_ids": [8564, 10947, 6918, 6919],
-                        "quantity": 1
+                        "quantity": [1, 25]
                     }
                 }, 
                 {
@@ -7056,7 +7057,7 @@
                     "target_npc": {
                         "npc": ["Hill Giant"],
                         "npc_ids": [7261, 2098, 13502, 2099, 13503, 2100, 13504, 2101, 2102, 2103, 10374, 12849, 10375, 12850, 10376, 12848],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -7069,7 +7070,7 @@
                     "target_npc": {
                         "npc": ["Moss Giant"],
                         "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                     }
                 }, 
                 {
@@ -7082,7 +7083,7 @@
                     "target_npc": {
                         "npc": ["Fire Giant"],
                         "npc_ids": [7252, 7251, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083, 2084],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -7224,81 +7225,7 @@
             ],             
             "is_completed": false
         },
-        {
-            "region_id": [5687],
-            "Friendly_Name": "East Shayzien Entrance",
-            "neighbor_ids": [5688, 5943, 5686, 5431],
-            "tasks": [
-                {
-                    "name": "Defeat a Head Guard or Shayzien Sergeant for a Rune Scimitar",
-                    "taskID": "defeat_head_guard_for_rune_scimitar",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 3,
-                    "target_npc": {
-                        "npc": ["Level 84 Head Guard", "Sergeant"],
-                        "npc_ids": [11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107, 11073, 11075, 11077, 11079, 11081, 11083, 11085, 11087, 11198, 8600, 10505, 10725],
-                        "quantity": [1]
-                    },
-                    "constraints": [
-                        {
-                        "dropped_item": "Rune Scimitar",
-                        "dropped_item_id": [1333],
-                        "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Head Guard or Shayzien Sergeant for a Rune Kiteshield",
-                    "taskID": "defeat_head_guard_for_rune_kiteshield",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 3,
-                    "target_npc": {
-                        "npc": ["Level 84 Head Guard", "Sergeant"],
-                        "npc_ids": [11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107, 11073, 11075, 11077, 11079, 11081, 11083, 11085, 11087, 11198, 8600, 10505, 10725],
-                        "quantity": [1]
-                    },
-                    "constraints": [
-                        {
-                        "dropped_item": "Rune Kiteshield",
-                        "dropped_item_id": [1201],
-                        "quantity": [1]
-                        }
-                    ]
-                }, 
-                {
-                    "name": "Defeat a Lynx",
-                    "taskID": "defeat_lynx",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Lynx"],
-                        "npc_ids": [11069, 11068],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat a Lynx in the First Hit",
-                    "taskID": "defeat_lynx_first_hit",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Lynx"],
-                        "npc_ids": [11069, 11068],
-                        "quantity": [1]
-                    }
-                }
-                
-            ],             
-            "is_completed": false
-        },
+        
         {
             "region_id": [5686],
             "Friendly_Name": "Ruins of Morra",
@@ -7907,7 +7834,7 @@
                     "target_npc": {
                         "npc": ["Lizardman Shaman"],
                         "npc_ids": [7573, 7574, 7573, 7574, 8565, 6766, 6767, 7744, 7745],
-                        "quantity": 1
+                        "quantity": [1, 500]
                     }
                 },
                 {
@@ -9229,7 +9156,7 @@
                     "target_npc": {
                         "npc": ["Swamp Frog"],
                         "npc_ids": [8578],
-                        "quantity": 1
+                        "quantity": [1, 10]
                     }
                 },
                 {

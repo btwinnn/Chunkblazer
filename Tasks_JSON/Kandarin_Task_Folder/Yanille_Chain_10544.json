@@ -30,7 +30,7 @@
                     "target_npc": {
                         "npc": ["Jungle Spider"],
                         "npc_ids": [5243, 3020, 6267, 6271],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {

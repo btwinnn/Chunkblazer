@@ -910,7 +910,7 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Defeat some Blue Dragons",
+                    "name": "Defeat a Blue Dragon",
                     "taskID": "defeat_blue_dragons",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2073,7 +2073,7 @@
                 
                 
                 {
-                    "name": "Defeat a some Dark Wizards",
+                    "name": "Defeat some Dark Wizards",
                     "taskID": "defeat_some_dark_wizards",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2139,7 +2139,7 @@
                     ]
                 },
                 {                           
-                    "name": "Defeat a Monk",
+                    "name": "Defeat some Monks",
                     "taskID": "defeat_monk",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2148,7 +2148,7 @@
                     "target_npc": {
                         "npc": ["Monk"],
                         "npc_ids": [4246, 2579, 4068, 6956],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     } 
                 },
                 {
@@ -2195,7 +2195,7 @@
                         ]
                 },
                 {
-                    "name": "Defeat a Black Knight",
+                    "name": "Defeat some Black Knights",
                     "taskID": "defeat_black_knight",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2204,7 +2204,7 @@
                     "target_npc": {
                         "npc": ["Black Knight"],
                         "npc_ids": [11953, 517, 4331, 11952, 516],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },               
                 {                           
@@ -2668,7 +2668,7 @@
                     "target_npc": {
                         "npc": ["Animated Adamant Armour"],
                         "npc_ids": [2455],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }                  
                 },
                 {
@@ -2681,7 +2681,7 @@
                     "target_npc": {
                         "npc": ["Animated Mithril Armour"],
                         "npc_ids": [2454],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                  
                 },
                 {
@@ -2829,7 +2829,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a White Wolf in 5 Seconds",
+                    "name": "Defeat a White Wolf in 12 Seconds",
                     "taskID": "defeat_white_wolf_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2841,7 +2841,7 @@
                         "quantity": [1]
                     },               
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [20]
                     }
                 }, 
                 {
@@ -3212,7 +3212,7 @@
                     "target_npc": {
                         "npc": ["Troll General"],
                         "npc_ids": [4122, 4121, 4120],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 }, 
                 {

@@ -56,7 +56,7 @@
                     "target_npc": {
                         "npc": ["Animated Adamant Armour"],
                         "npc_ids": [2455],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }                  
                 },
                 {
@@ -69,7 +69,7 @@
                     "target_npc": {
                         "npc": ["Animated Mithril Armour"],
                         "npc_ids": [2454],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                  
                 },
                 {

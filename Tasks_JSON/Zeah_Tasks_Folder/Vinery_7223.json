@@ -128,7 +128,7 @@
                     "target_npc": {
                         "npc": ["Mugger"],
                         "npc_ids": [513, 1461, 6996],
-                        "quantity": [1]
+                        "quantity": [1, 5]
                     }                  
                 },
                 {

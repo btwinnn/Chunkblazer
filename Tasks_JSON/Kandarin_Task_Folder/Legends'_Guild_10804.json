@@ -86,7 +86,7 @@
                     "target_npc": {
                         "npc": ["Shadow Warrior"],
                         "npc_ids": [2853],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {

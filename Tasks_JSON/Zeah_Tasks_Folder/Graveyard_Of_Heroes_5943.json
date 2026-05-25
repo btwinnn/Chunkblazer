@@ -13,7 +13,7 @@
                     "target_npc": {
                         "npc": ["Necromancer"],
                         "npc_ids": [11088, 1025],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }                    
                 },
                 {

@@ -121,7 +121,7 @@
                     "target_npc": {
                         "npc": ["Lesser Demon"],
                         "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {

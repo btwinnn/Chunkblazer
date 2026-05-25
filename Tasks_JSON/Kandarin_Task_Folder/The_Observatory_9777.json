@@ -140,7 +140,7 @@
                 },
                 {
                     "name": "Defeat a Level 5 Goblin in the First Hit",
-                    "taskID": "defeat_level_5_goblin_fast",
+                    "taskID": "defeat_level_5_goblin_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -152,14 +152,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [1],
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                        "time_in_ticks": [1]
                     }
                 },
                 {

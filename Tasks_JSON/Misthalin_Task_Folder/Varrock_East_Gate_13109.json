@@ -84,20 +84,16 @@
                     
                 },
                 {
-                    "name": "Defeat a Varrock Guard in the First Hit",
-                    "taskID": "defeat_varrock_guard_fast",
+                    "name": "Defeat a Varrock Guard",
+                    "taskID": "defeat_varrock_guard",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 2,
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Varrock Guard Level 21"],
                         "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
                         "quantity": [1]
-                    },
-
-                    "constraints": {
-                        "time_in_ticks": [1]
                     }
                 },
                 {

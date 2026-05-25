@@ -37,7 +37,7 @@
                     "target_npc": {
                         "npc": ["Level 92 Tortoise"],
                         "npc_ids": [6076],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -58,7 +58,7 @@
                     "target_npc": {
                         "npc": ["Mounted Terrorbird Gnome"],
                         "npc_ids": [2067, 2068, 5971, 5972, 5973],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                   
                 },
                 {

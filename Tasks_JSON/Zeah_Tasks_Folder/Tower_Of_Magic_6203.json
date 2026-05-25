@@ -42,7 +42,7 @@
                     "target_npc": {
                         "npc": ["Brutal Black Dragon"],
                         "npc_ids": [7275, 8092, 8093],
-                        "quantity": 1
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -70,7 +70,7 @@
                     "target_npc": {
                         "npc": ["Brutal Blue Dragon"],
                         "npc_ids": [7273, 13795],
-                        "quantity": 1
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -83,7 +83,7 @@
                     "target_npc": {
                         "npc": ["Brutal Red Dragon"],
                         "npc_ids": [7274, 8087],
-                        "quantity": 1
+                        "quantity": [1, 25]
                     }
                 },
                 {

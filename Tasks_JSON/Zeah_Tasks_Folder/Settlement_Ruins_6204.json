@@ -13,7 +13,7 @@
                     "target_npc": {
                         "npc": ["Ice Spider"],
                         "npc_ids": [3022, 13798, 10722],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -52,7 +52,7 @@
                     "target_npc": {
                         "npc": ["Ice Giant"],
                         "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {

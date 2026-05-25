@@ -224,7 +224,7 @@
                     "target_npc": {
                         "npc": ["Ghost"],
                         "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -414,7 +414,7 @@
                     "target_npc": {
                         "npc": ["Zombie"],
                         "npc_ids": [49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -743,7 +743,7 @@
                     "target_npc": {
                         "npc": ["Lesser Demon"],
                         "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -1036,7 +1036,7 @@
                     "target_npc": {
                         "npc": ["Unicorn"],
                         "npc_ids": [2837, 14043],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -1486,20 +1486,16 @@
                     
                 },
                 {
-                    "name": "Defeat a Varrock Guard in the First Hit",
-                    "taskID": "defeat_varrock_guard_fast",
+                    "name": "Defeat a Varrock Guard",
+                    "taskID": "defeat_varrock_guard",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 2,
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Varrock Guard Level 21"],
                         "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
                         "quantity": [1]
-                    },
-
-                    "constraints": {
-                        "time_in_ticks": [1]
                     }
                 },
                 {

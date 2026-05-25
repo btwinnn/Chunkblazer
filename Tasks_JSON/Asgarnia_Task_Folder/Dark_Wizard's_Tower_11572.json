@@ -37,7 +37,7 @@
                 
                 
                 {
-                    "name": "Defeat a some Dark Wizards",
+                    "name": "Defeat some Dark Wizards",
                     "taskID": "defeat_some_dark_wizards",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

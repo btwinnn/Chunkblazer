@@ -170,7 +170,7 @@
                     "target_npc": {
                         "npc": ["King Sand Crab"],
                         "npc_ids": [7266],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }                   
                 },
                 {

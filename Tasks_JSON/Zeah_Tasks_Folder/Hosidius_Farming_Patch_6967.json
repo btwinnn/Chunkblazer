@@ -366,7 +366,7 @@
                     "target_npc": {
                         "npc": ["Hosidius Guard"],
                         "npc_ids": [397, 398, 399, 400],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {

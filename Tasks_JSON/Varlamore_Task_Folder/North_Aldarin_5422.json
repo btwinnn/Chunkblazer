@@ -42,7 +42,7 @@
                     "target_npc": {
                         "npc": ["Unicorn"],
                         "npc_ids": [2837, 14043],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {

@@ -61,7 +61,7 @@
                     "target_npc": {
                         "npc": ["Zombie"],
                         "npc_ids": [49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {

@@ -58,7 +58,7 @@
                     "target_npc": {
                         "npc": ["Highwayman"],
                         "npc_ids": [518, 519],
-                        "quantity": 1
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -89,7 +89,7 @@
                     "target_npc": {
                         "npc": ["Shayzien Guard Level 21", "Level 84 Head Guard"],
                         "npc_ids": [11092, 11094, 11096, 11098, 11100, 11102, 11104, 11106, 11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -102,7 +102,7 @@
                     "target_npc": {
                         "npc": ["Level 84 Head Guard"],
                         "npc_ids": [11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
-                        "quantity": [1]
+                        "quantity": [1, 5]
                     }
                 },
                 {

@@ -91,7 +91,7 @@
                         ]
                 },
                 {
-                    "name": "Defeat a Black Knight",
+                    "name": "Defeat some Black Knights",
                     "taskID": "defeat_black_knight",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -100,7 +100,7 @@
                     "target_npc": {
                         "npc": ["Black Knight"],
                         "npc_ids": [11953, 517, 4331, 11952, 516],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },               
                 {                           

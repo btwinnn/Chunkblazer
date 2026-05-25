@@ -79,7 +79,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a White Wolf in 5 Seconds",
+                    "name": "Defeat a White Wolf in 12 Seconds",
                     "taskID": "defeat_white_wolf_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -91,7 +91,7 @@
                         "quantity": [1]
                     },               
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [20]
                     }
                 }, 
                 {

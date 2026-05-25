@@ -16,7 +16,7 @@
           "target_npc": {
             "npc": ["Goblin"],
             "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
-            "quantity": 1
+            "quantity": [1, 10]
           }
         },
         {
@@ -1204,7 +1204,7 @@
           "target_npc": {
             "npc": ["Big Frog"],
             "npc_ids": [8701, 478],
-            "quantity": [1]
+            "quantity": [1, 5]
           }
         },
         {
@@ -1217,7 +1217,7 @@
           "target_npc": {
             "npc": ["Cave Bug"],
             "npc_ids": [481, 483],
-            "quantity": [1]
+            "quantity": [1, 25]
           }
         },
         {
@@ -1244,7 +1244,7 @@
           "target_npc": {
             "npc": ["Cave Slime"],
             "npc_ids": [480],
-            "quantity": [1]
+            "quantity": [1, 5]
           }
         },
         {
@@ -1304,7 +1304,7 @@
           "target_npc": {
             "npc": ["Cave Goblin"],
             "npc_ids": [6437, 6435, 6436, 6434],
-            "quantity": [1]
+            "quantity": [1, 10]
           }
         }
       ],
@@ -1341,7 +1341,7 @@
           "target_npc": {
             "npc": ["Duck"],
             "npc_ids": [1839, 1838],
-            "quantity": [1]
+            "quantity": [1, 5]
           }
         },
         {

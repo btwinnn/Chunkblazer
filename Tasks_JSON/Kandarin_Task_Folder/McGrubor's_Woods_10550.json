@@ -41,7 +41,7 @@
                     "target_npc": {
                         "npc": ["Guard Dog"],
                         "npc_ids": [7209, 114, 4228],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                   
                  
                 },

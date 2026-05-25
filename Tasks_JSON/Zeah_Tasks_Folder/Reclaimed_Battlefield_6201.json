@@ -13,7 +13,7 @@
                     "target_npc": {
                         "npc": ["Boar"],
                         "npc_ids": [11066, 11067],
-                        "quantity": 1
+                        "quantity": [1, 10]
                     }
                 },
                 {
