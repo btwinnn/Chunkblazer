@@ -4658,7 +4658,7 @@
                     "category": "Runecrafting",
                     "level": 1,
                     "completion_type": "RUNECRAFTING",
-                    "base_points": 1,
+                    "base_points": 3,
                     "assignment_weight": 5,
                     "required_items": [
                             {
@@ -4668,22 +4668,7 @@
                             }
                         ]
                 },
-                {
-                    "name": "Craft many Blood Runes",
-                    "taskID": "craft_many_blood_runes",
-                    "category": "Runecrafting",
-                    "level": 77,
-                    "completion_type": "RUNECRAFTING",
-                    "base_points": 3,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                        "item": "Blood Rune",
-                        "item_ids": [565],
-                        "quantity": [2500, 25000]
-                        }
-                    ]
-                }, 
+                
                 {
                     "name": "Obtain a Blood Essence",
                     "taskID": "obtain_blood_essence",
