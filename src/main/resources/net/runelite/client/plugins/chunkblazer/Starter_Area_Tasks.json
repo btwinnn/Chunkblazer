@@ -1216,8 +1216,8 @@
           "assignment_weight": 8,
           "target_npc": {
             "npc": ["Cave Bug"],
-            "npc_ids": [8701, 478],
-            "quantity": [1]
+            "npc_ids": [481, 483],
+            "quantity": [1, 25]
           }
         },
         {
