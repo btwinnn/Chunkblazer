@@ -4,8 +4,8 @@
             "neighbor_ids": [5938, 6193, 5936, 5681],
             "tasks": [
                 {
-                    "name": "Obtain some Soiled Pages",
-                    "taskID": "obtain_some_soiled_pages",
+                    "name": "Obtain a Soiled Page",
+                    "taskID": "obtain_a_soiled_page",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -14,7 +14,7 @@
                         {
                             "item": ["Soiled Page"],
                             "item_ids": [30068],
-                            "quantity": [1, 1000]
+                            "quantity": [1]
                         }
                     ]
                 },

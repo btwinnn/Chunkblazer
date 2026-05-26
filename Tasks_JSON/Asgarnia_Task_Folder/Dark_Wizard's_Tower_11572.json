@@ -32,68 +32,12 @@
                         }
                     ]
                 },
+                
+                
+                
+                
                 {
-                    "name": "Obtain some Earth Runes",
-                    "taskID": "Obtain_earth_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Earth Rune",
-                        "item_ids": [557],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Fire Runes",
-                    "taskID": "Obtain_Fire_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Fire Rune",
-                        "item_ids": [554],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Air Runes",
-                    "taskID": "Obtain_air_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Air Rune",
-                        "item_ids": [556],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Water Runes",
-                    "taskID": "Obtain_water_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Water Rune",
-                        "item_ids": [555],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a some Dark Wizards",
+                    "name": "Defeat some Dark Wizards",
                     "taskID": "defeat_some_dark_wizards",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

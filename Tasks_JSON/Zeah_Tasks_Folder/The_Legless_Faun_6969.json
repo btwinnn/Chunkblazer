@@ -20,7 +20,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Flax",
+                    "name": "Obtain Flax",
                     "taskID": "obtain_flax",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -30,7 +30,7 @@
                         {
                             "item": ["Flax"],
                             "item_ids": [1779],
-                            "quantity": [50, 250]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -57,8 +57,8 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Highwayman"],
-                        "npc_ids": [518],
-                        "quantity": 1
+                        "npc_ids": [518, 519],
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -70,7 +70,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Highwayman"],
-                        "npc_ids": [518],
+                        "npc_ids": [518, 519],
                         "quantity": 1
                     },
 
@@ -89,7 +89,7 @@
                     "target_npc": {
                         "npc": ["Shayzien Guard Level 21", "Level 84 Head Guard"],
                         "npc_ids": [11092, 11094, 11096, 11098, 11100, 11102, 11104, 11106, 11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -102,7 +102,7 @@
                     "target_npc": {
                         "npc": ["Level 84 Head Guard"],
                         "npc_ids": [11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107],
-                        "quantity": [1]
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -138,8 +138,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Willow Tree",
-                    "taskID": "Chop_willow_tree",
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
                     "category": "Woodcutting",
                     "level": 30,
                     "completion_type": "WOODCUTTING",
@@ -149,13 +149,13 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Willow Log",
-                    "taskID": "burn_willow_log",
+                    "name": "Burn some Willow Logs",
+                    "taskID": "burn_willow_logs",
                     "category": "Firemaking",
                     "level": 30,
                     "completion_type": "FIREMAKING",
@@ -165,7 +165,7 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },

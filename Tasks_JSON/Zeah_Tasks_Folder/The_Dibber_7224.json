@@ -15,7 +15,7 @@
                         {
                         "item": "Raw Shark",
                         "item_ids": [383],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 }, 
@@ -30,13 +30,14 @@
                     "required_items": [
                         {
                             "item": "Shark",
-                            "item_ids": [385]
+                            "item_ids": [385],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Prayer Potion",
-                    "taskID": "mix_prayer_potion",
+                    "name": "Mix some Prayer Potions",
+                    "taskID": "mix_prayer_potions",
                     "category": "Obtain_Set",
                     "level": 38,
                     "completion_type": "HERBLORE",
@@ -45,7 +46,8 @@
                      "required_items": [
                         {
                             "item": ["Prayer Potion(3)", "Prayer Potion(4)"],
-                            "item_ids": [139, 2434]
+                            "item_ids": [139, 2434],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -61,7 +63,7 @@
                         {
                         "item": "Raw Bass",
                         "item_ids": [363],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },
@@ -77,7 +79,7 @@
                         {
                         "item": "Raw Cod",
                         "item_ids": [341],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -92,7 +94,8 @@
                     "required_items": [
                         {
                             "item": "Cod",
-                            "item_ids": [339]
+                            "item_ids": [339],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -107,7 +110,8 @@
                     "required_items": [
                         {
                             "item": "Bass",
-                            "item_ids": [365]
+                            "item_ids": [365],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -123,7 +127,7 @@
                         {
                         "item": "Raw Herring",
                         "item_ids": [345],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },
@@ -138,13 +142,14 @@
                     "required_items": [
                         {
                             "item": "Herring",
-                            "item_ids": [347]
+                            "item_ids": [347],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -154,13 +159,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -170,7 +175,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -205,8 +210,8 @@
                     }
                 },
                 {
-                    "name": "Chop a Willow Tree",
-                    "taskID": "Chop_willow_tree",
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
                     "category": "Woodcutting",
                     "level": 30,
                     "completion_type": "WOODCUTTING",
@@ -216,13 +221,13 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Willow Log",
-                    "taskID": "burn_willow_log",
+                    "name": "Burn some Willow Logs",
+                    "taskID": "burn_willow_logs",
                     "category": "Firemaking",
                     "level": 30,
                     "completion_type": "FIREMAKING",
@@ -232,7 +237,7 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },

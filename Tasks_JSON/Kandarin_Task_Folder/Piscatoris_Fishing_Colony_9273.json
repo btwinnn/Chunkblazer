@@ -45,7 +45,8 @@
                     "required_items": [
                         {
                             "item": "Monkfish",
-                            "item_ids": [7946]
+                            "item_ids": [7946],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -91,7 +92,7 @@
                     "target_npc": {
                         "npc": ["Level 83 Skeleton Mage"],
                         "npc_ids": [4319],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {

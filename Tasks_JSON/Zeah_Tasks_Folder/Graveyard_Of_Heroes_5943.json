@@ -13,7 +13,7 @@
                     "target_npc": {
                         "npc": ["Necromancer"],
                         "npc_ids": [11088, 1025],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }                    
                 },
                 {
@@ -117,8 +117,8 @@
                     }
                 },
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -128,7 +128,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 250]
                         }
                     ]
                 },
@@ -161,8 +161,8 @@
                     ]
                 }, 
                 {
-                    "name": "Mix an Attack Potion",
-                    "taskID": "mix_attack_potion",
+                    "name": "Mix some Attack Potions",
+                    "taskID": "mix_attack_potions",
                     "category": "Obtain_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
@@ -171,7 +171,8 @@
                      "required_items": [
                         {
                             "item": ["Attack Potion(3)", "Attack Potion(4)"],
-                            "item_ids": [121, 2428]
+                            "item_ids": [121, 2428],
+                            "quantity": [1, 25]
                         }
                     ]
                 }

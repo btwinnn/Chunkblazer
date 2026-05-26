@@ -19,8 +19,8 @@
                     ]
                 },
                 {
-                    "name": "Mix a Sanfew Serum",
-                    "taskID": "mix_sanfew_serum",
+                    "name": "Mix some Sanfew Serums",
+                    "taskID": "mix_sanfew_serums",
                     "category": "Obtain_Set",
                     "level": 65,
                     "completion_type": "HERBLORE",
@@ -29,7 +29,8 @@
                      "required_items": [
                         {
                             "item": ["Sanfew serum(3)", "Sanfew serum(4)"],
-                            "item_ids": [10927, 10925]
+                            "item_ids": [10927, 10925],
+                            "quantity": [1, 25]
                         }
                     ]
                 },             
@@ -91,8 +92,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Ourg Bones",
-                    "taskID": "obtain_ourg_bones",
+                    "name": "Obtain an Ourg Bone",
+                    "taskID": "obtain_ourg_bone",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -101,12 +102,12 @@
                         {
                             "item": ["Ourg Bones"],
                             "item_ids": [4834],
-                            "quantity": [1, 5]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain some Raurg Bones",
+                    "name": "Obtain a Raurg Bone",
                     "taskID": "obtain_raurg_bones",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -116,12 +117,12 @@
                         {
                             "item": ["Raurg Bones"],
                             "item_ids": [4832],
-                            "quantity": [1, 5]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain some Fayrg Bones",
+                    "name": "Obtain a Fayrg Bone",
                     "taskID": "obtain_fayrg_bones",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -131,7 +132,7 @@
                         {
                             "item": ["Fayrg Bones"],
                             "item_ids": [4830],
-                            "quantity": [1, 5]
+                            "quantity": [1]
                         }
                     ]
                 },

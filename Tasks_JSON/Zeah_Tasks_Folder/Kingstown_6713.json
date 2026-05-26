@@ -15,7 +15,7 @@
                         {
                         "item": "Raw Pike",
                         "item_ids": [349],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 }, 
@@ -30,7 +30,8 @@
                     "required_items": [
                         {
                             "item": "Pike",
-                            "item_ids": [351]
+                            "item_ids": [351],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -80,8 +81,8 @@
                     }
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -91,13 +92,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -107,7 +108,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -121,7 +122,7 @@
                     "target_npc": {
                         "npc": ["Lesser Demon"],
                         "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {

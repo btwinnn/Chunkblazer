@@ -63,7 +63,7 @@
                     "target_npc": {
                         "npc": ["Ogre"],
                         "npc_ids": [136, 2095, 2096, 2233, 1153],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },               
                 {

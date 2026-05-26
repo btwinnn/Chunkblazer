@@ -4,8 +4,8 @@
             "neighbor_ids": [6454, 6709, 6452, 6197],
             "tasks": [
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -15,13 +15,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -31,7 +31,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -68,8 +68,8 @@
                     ]
                 },
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
+                    "name": "Chop some Oak Trees",
+                    "taskID": "chop_oak_trees",
                     "category": "Woodcutting",
                     "level": 15,
                     "completion_type": "WOODCUTTING",
@@ -79,12 +79,12 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Fletch a Oak Shortbow(u)",
+                    "name": "Fletch an Oak Shortbow(u)",
                     "taskID": "fletch_oak_shortbow(u)",
                     "category": "Fletching",
                     "level": 20,
@@ -170,7 +170,7 @@
                     "target_npc": {
                         "npc": ["King Sand Crab"],
                         "npc_ids": [7266],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }                   
                 },
                 {
@@ -216,8 +216,8 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Mix an Anti-Poison Potion",
-                    "taskID": "mix_anti-poison",
+                    "name": "Mix some Anti-Poison Potions",
+                    "taskID": "mix_anti-poisons",
                     "category": "Obtain_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
@@ -226,7 +226,8 @@
                      "required_items": [
                         {
                             "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446]
+                            "item_ids": [175, 2446],
+                            "quantity": [1, 25]
                         }
                     ]
                 }          

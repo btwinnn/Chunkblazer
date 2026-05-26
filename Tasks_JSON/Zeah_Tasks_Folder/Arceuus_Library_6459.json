@@ -19,8 +19,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Books of Arcane Knowledge",
-                    "taskID": "obtain_books_arcane_knowledge",
+                    "name": "Obtain a Book of Arcane Knowledge",
+                    "taskID": "obtain_book_arcane_knowledge",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -29,7 +29,7 @@
                         {
                             "item": ["Book of Arcane Knowledge"],
                             "item_ids": [13513],
-                            "quantity": [1, 25]
+                            "quantity": [1]
                         }
                     ]
                 },

@@ -17,7 +17,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a Level 20 Dark Wizard in 19 Seconds",
+                    "name": "Defeat a Level 20 Dark Wizard in 30 Seconds",
                     "taskID": "defeat_level_20_dark_wizard_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -30,7 +30,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [32]
+                        "time_in_ticks": [50]
                     }
                 },
                 {

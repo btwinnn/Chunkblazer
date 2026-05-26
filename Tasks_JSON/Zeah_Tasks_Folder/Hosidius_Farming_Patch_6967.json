@@ -325,8 +325,8 @@
                     
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -336,13 +336,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -352,7 +352,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -366,7 +366,7 @@
                     "target_npc": {
                         "npc": ["Hosidius Guard"],
                         "npc_ids": [397, 398, 399, 400],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -385,9 +385,8 @@
                 },             
                 {
                     "name": "Defeat a Hosidius Guard in 12 Seconds",
-                    "taskID": "defeat_highwayman_fast",
+                    "taskID": "defeat_hosidius_guard_fast",
                     "category": "Combat",
-                    "level": 5,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,

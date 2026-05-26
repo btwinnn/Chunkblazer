@@ -42,12 +42,12 @@
                     "target_npc": {
                         "npc": ["Unicorn"],
                         "npc_ids": [2837, 14043],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
-                    "name": "Mix an Anti-Poison Potion",
-                    "taskID": "mix_anti-poison",
+                    "name": "Mix some Anti-Poison Potions",
+                    "taskID": "mix_anti-poisons",
                     "category": "Obtain_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
@@ -56,7 +56,8 @@
                      "required_items": [
                         {
                             "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446]
+                            "item_ids": [175, 2446],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -80,8 +81,8 @@
                         ]             
                 },
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
+                    "name": "Chop some Oak Trees",
+                    "taskID": "chop_oak_trees",
                     "category": "Woodcutting",
                     "level": 15,
                     "completion_type": "WOODCUTTING",
@@ -91,7 +92,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -139,7 +140,7 @@
                         {
                         "item": "Raw Anchovies",
                         "item_ids": [321],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -155,7 +156,7 @@
                         {
                         "item": "Shrimp",
                         "item_ids": [315],
-                        "quantity": [5, 25]
+                        "quantity": [5, 50]
                         }
                     ]
                 },
@@ -171,7 +172,7 @@
                         {
                         "item": "Anchovies",
                         "item_ids": [319],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 }                      

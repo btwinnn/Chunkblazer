@@ -81,8 +81,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -92,7 +92,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 250]
                         }
                     ]
                 },
@@ -111,8 +111,8 @@
                     }
                 },
                 {
-                    "name": "Burn a Yew Log",
-                    "taskID": "burn_yew_log",
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
                     "category": "Firemaking",
                     "level": 60,
                     "completion_type": "FIREMAKING",
@@ -122,7 +122,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -155,22 +155,8 @@
                             "item_ids": [849]
                         }
                     ]
-                }, 
-                {
-                    "name": "Obtain some Adamant Arrows",
-                    "taskID": "obtain_adamant_arrows",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Adamant Arrow"],
-                            "item_ids": [890],
-                            "quantity": [1, 200]
-                        }
-                    ]
-                }
+                } 
+                
             ],             
             "is_completed": false
         }

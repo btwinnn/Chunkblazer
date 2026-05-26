@@ -16,7 +16,7 @@
           "target_npc": {
             "npc": ["Goblin"],
             "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
-            "quantity": 1
+            "quantity": [1, 10]
           }
         },
         {
@@ -36,52 +36,52 @@
           ]
         },
         {
-          "name": "Equip a Bronze Square Shield",
-          "taskID": "Equip_bronze_sq",
+          "name": "Obtain Goblin Mail",
+          "taskID": "obtain_goblin_mail",
           "base_points": 1,
           "assignment_weight": 8,
-          "category": "Defence",
+          "category": "Obtain",
           "level": 1,
-          "completion_type": "EQUIP",
+          "completion_type": "OBTAIN",
           "required_items": [
             {
-              "item": "Bronze Sq Shield",
-              "item_ids": [1173]
+              "item": "Goblin Mail",
+              "item_ids": [288]
             }
           ]
         },
         {
-          "name": "Chop a Yew Tree",
-          "taskID": "chop_yew_tree",
+          "name": "Chop a Tree",
+          "taskID": "chop_tree",
           "category": "Woodcutting",
-          "level": 60,
+          "level": 1,
           "completion_type": "WOODCUTTING",
-          "base_points": 3,
-          "assignment_weight": 3,
+          "base_points": 1,
+          "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Yew Logs",
-              "item_ids": [1515],
-              "quantity": [1]
+              "item": "Logs",
+              "item_ids": [1511],
+              "quantity": [25, 75]
             }
           ]
         },
         {
-          "name": "Burn a Yew Log",
-          "taskID": "burn_yew_log",
-          "category": "Firemaking",
-          "level": 60,
-          "completion_type": "FIREMAKING",
-          "base_points": 3,
-          "assignment_weight": 3,
-          "required_items": [
-            {
-              "item": "Yew Logs",
-              "item_ids": [1515],
-              "quantity": [1]            
-            }
-          ]
-        },
+                    "name": "Burn a Log",
+                    "taskID": "burn_log",
+                    "category": "Firemaking",
+                    "level": 1,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Logs",
+                        "item_ids": [1511],
+                        "quantity": [25, 60]
+                        }
+                    ]
+                },
         {
           "name": "Pickpocket a Man or Woman",
           "taskID": "pickpocket_man",
@@ -90,29 +90,30 @@
           "completion_type": "THIEVING",
           "base_points": 1,
           "assignment_weight": 8,
-          "target_npc": {
-            "npc_ids": [3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
+         "target_npc": {
+            "npc": ["Man, Woman"],
+            "npc_ids": [3261, 3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992, 3110, 14920, 3264, 3265, 3652, 11057, 11058, 3014, 3112, 6991, 14921, 11053, 11054, 3015],
             "quantity": [1, 28]
           }
         },
         {
-          "name": "Equip a Mithril Battleaxe",
-          "taskID": "equip_mithril_battleaxe",
+          "name": "Equip a Steel Battleaxe",
+          "taskID": "equip_steel_battleaxe",
           "category": "Attack",
-          "level": 20,
+          "level": 5,
           "completion_type": "EQUIP",
           "base_points": 1,
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Mithril Battleaxe",
-              "item_ids": [1369]
+              "item": "Steel Battleaxe",
+              "item_ids": [1365]
             }
           ]
         },
         {
-          "name": "Burn an Oak Log",
-          "taskID": "burn_oak_log",
+          "name": "Burn some Oak Logs",
+          "taskID": "burn_oak_logs",
           "category": "Firemaking",
           "level": 15,
           "completion_type": "FIREMAKING",
@@ -122,7 +123,7 @@
             {
               "item": "Oak Logs",
               "item_ids": [1521],
-              "quantity": [1]
+              "quantity": [1, 50]
             }
           ]
         },
@@ -142,21 +143,21 @@
           ]
         },
         {
-          "name": "Fletch a Oak Shortbow(u)",
-          "taskID": "fletch_oak_shortbow(u)",
-          "category": "Fletching",
-          "level": 20,
-          "completion_type": "FLETCHING",
-          "base_points": 1,
-          "assignment_weight": 8,
-          "required_items": [
-            {
-              "item": "Oak shortbow (u)",
-              "item_ids": [54],
-              "quantity": [1]
-            }
-          ]
-        },
+                    "name": "Fletch a Shortbow(u)",
+                    "taskID": "fletch_shortbow(u)",
+                    "category": "Fletching",
+                    "level": 5,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["shortbow(u)"],
+                            "item_ids": [50],
+                            "quantity": [1]
+                        }
+                    ]
+                },
         {
           "name": "Kill some Spiders",
           "taskID": "kill_some_spiders",
@@ -171,25 +172,17 @@
           }
         },
         {
-          "name": "Defeat a Level 2 Goblin and obtain bones",
-          "taskID": "Defeat_level_2_Goblin_and_obtain_bones",
-          "base_points": 1,
-          "assignment_weight": 8,
-          "category": "Combat",
-          "completion_type": "NPC_Kill",
-          "target_npc": {
-            "npc": ["Goblin"],
-            "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
-            "quantity": 1
-          },
-          "constraints": [
-            {
-              "dropped_item": "Bones",
-              "dropped_item_id": [526],
-              "quantity": [1]
-            }
-          ] 
-        }
+                    "name": "Talk to Bob at his Axe Shop",
+                    "taskID": "talk_to_bob_lumbridge",
+                    "category": "Dialogue",
+                    "completion_type": "NPC_DIALOGUE",
+                    "base_points": 1,
+                    "assignment_weight": 8,                  
+                    "target_npc": {
+                        "npc": ["Bob"],
+                        "npc_ids": [10619]
+                    }
+                }
       ],
       "optional_quests_unlocked": [
         {
@@ -255,24 +248,24 @@
           ]
         },
         {
-          "name": "Chop a Willow Tree",
-          "taskID": "Chop_willow_tree",
-          "category": "Woodcutting",
-          "level": 30,
-          "completion_type": "WOODCUTTING",
-          "base_points": 2,
-          "assignment_weight": 5,
-          "required_items": [
-            {
-              "item": "Willow Logs",
-              "item_ids": [1519],
-              "quantity": [1]
-            }
-          ]
-        },
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
+                    "category": "Woodcutting",
+                    "level": 30,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },
         {
-          "name": "Burn a Willow Log",
-          "taskID": "burn_willow_log",
+          "name": "Burn some Willow Logs",
+          "taskID": "burn_willow_logs",
           "category": "Firemaking",
           "level": 30,
           "completion_type": "FIREMAKING",
@@ -282,7 +275,7 @@
             {
               "item": "Willow Logs",
               "item_ids": [1519],
-              "quantity": [1]
+              "quantity": [1, 50]
             }
           ]
         },
@@ -474,7 +467,7 @@
             {
               "item": "Bronze Bar",
               "item_ids": [2349],
-              "quantity": [5, 50]
+              "quantity": [5, 75]
             }
           ]
         },
@@ -506,7 +499,7 @@
             {
               "item": "Raw Anchovies",
               "item_ids": [321],
-              "quantity": [1]
+              "quantity": [1, 50]
             }
           ]
         },
@@ -522,7 +515,7 @@
             {
               "item": "Shrimp",
               "item_ids": [315],
-              "quantity": [5, 25]
+              "quantity": [5, 50]
             }
           ]
         },
@@ -538,12 +531,12 @@
             {
               "item": "Anchovies",
               "item_ids": [319],
-              "quantity": [1]
+              "quantity": [1, 25]
             }
           ]
         },
         {
-          "name": "Defeat a Level 5 Frog in 7 Seconds",
+          "name": "Defeat a Level 5 Frog in 21 Seconds",
           "taskID": "defeat_frog_fast",
           "category": "Combat",
           "level": 5,
@@ -556,14 +549,7 @@
             "quantity": 1
           },
           "constraints": {
-            "time_in_ticks": [12],
-            "prohibited_active_varbits": [
-                {
-                "varbit_id": 57,
-                "must_be_value": 0,
-                "fail_message": "Cannon use is prohibited for timed combat tasks."
-              }
-            ]
+            "time_in_ticks": [35]
           }
         },
         {
@@ -596,8 +582,8 @@
           ]
         },
         {
-          "name": "Cook some Raw Rat Meat",
-          "taskID": "Cook_raw_rat_meat",
+          "name": "Cook some Meat",
+          "taskID": "Cook_meat",
           "category": "Cooking",
           "level": 1,
           "completion_type": "COOKING",
@@ -623,7 +609,7 @@
             {
               "item": "Logs",
               "item_ids": [1511],
-              "quantity": [1]
+              "quantity": [25, 75]
             }
           ]
         }
@@ -657,33 +643,19 @@
             }
           ]
         },
+             
         {
-          "name": "Plant an Oak Sapling",
-          "taskID": "plant_oak_sapling",
-          "category": "Farming",
-          "level": 15,
-          "completion_type": "FARMING",
-          "base_points": 1,
-          "assignment_weight": 5,
-          "required_items":
-            {
-              "item": "Oak Sapling",
-              "item_ids": [5370],
-              "quantity": [1]
-            } 
-        },     
-        {
-          "name": "Equip a Brass Necklace",
-          "taskID": "equip_brass_necklace",
-          "category": "Defence",
+          "name": "Obtain an Ensouled Goblin Head",
+          "taskID": "obtain_ensouled_goblin_head",
+          "category": "Obtain",
           "level": 1,
-          "completion_type": "EQUIP",
+          "completion_type": "OBTAIN",
           "base_points": 1,
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Brass Necklace",
-              "item_ids": [1009]
+              "item": "Ensouled Goblin Head",
+              "item_ids": [13447]
             }
           ]
         },
@@ -704,20 +676,21 @@
           ]
         },
         {
-          "name": "Obtain a H.A.M. Logo",
-          "taskID": "steal_HAM_logo",
-          "category": "Obtain",
-          "level": 15,
-          "completion_type": "OBTAIN",
+          "name": "Defeat a Level 2 Goblin in 15 Seconds",
+          "taskID": "defeat_frog_fast",
+          "category": "Combat",
+          "level": 5,
+          "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
-          "required_items": [
-            {
-              "item": "Ham Logo",
-              "item_ids": [4306],
-              "quantity": [1]
-            }
-          ]
+          "target_npc": {
+            "npc": ["Goblin"],
+            "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
+            "quantity": 1
+          },
+          "constraints": {
+            "time_in_ticks": [25]
+          }
         },
         {
           "name": "Obtain a Rusty Sword",
@@ -791,7 +764,7 @@
           "target_npc": {
             "npc": ["HAM Guard"],
             "npc_ids": [2536, 2537, 2538],
-            "quantity": [1, 25]
+            "quantity": [1, 10]
           }
         },
         {
@@ -846,7 +819,7 @@
           "level": 27,
           "completion_type": "CRAFTING",
           "base_points": 1,
-          "assignment_weight": 5,
+          "assignment_weight": 3,
           "required_items": [
             {
               "item": "Emerald",
@@ -856,7 +829,7 @@
           ]
         },
         {
-          "name": "Obtain some Silk",
+          "name": "Obtain Silk",
           "taskID": "obtain_silk",
           "category": "Obtain",
           "completion_type": "OBTAIN",
@@ -866,14 +839,13 @@
             {
               "item": "Silk",
               "item_ids": [950],
-              "quantity": [25, 100]
+              "quantity": [1]
             }
           ]
         },
         {
           "name": "Runecraft a Fire Rune",
           "taskID": "runecraft_fire_rune",
-          "is_unlocked": false,
           "category": "Runecrafting",
           "level": 14,
           "completion_type": "RUNECRAFTING",
@@ -890,7 +862,6 @@
         {
           "name": "Runecraft a Lava Rune",
           "taskID": "runecraft_lava_rune",
-          "is_unlocked": false,
           "category": "Runecrafting",
           "level": 23,
           "completion_type": "RUNECRAFTING",
@@ -921,7 +892,7 @@
           ]
         },
         {
-          "name": "Defeat a Man or Woman in 5 Seconds",
+          "name": "Defeat a Man or Woman in 21 Seconds",
           "taskID": "defeat_man_fast",
           "category": "Combat",
           "level": 2,
@@ -930,37 +901,30 @@
           "assignment_weight": 8,
           "target_npc": {
             "npc": ["Man, Woman"],
-            "npc_ids": [3261, 3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
-            "quantity": 1
+            "npc_ids": [3261, 3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992, 3110, 14920, 3264, 3265, 3652, 11057, 11058, 3014, 3112, 6991, 14921, 11053, 11054, 3015],
+            "quantity": [1]
           },
           "constraints": {
-            "time_in_ticks": [8],
-            "prohibited_active_varbits": [
-                {
-                "varbit_id": 57,
-                "must_be_value": 0,
-                "fail_message": "Cannon use is prohibited for timed combat tasks."
-              }
-            ]
+            "time_in_ticks": [35]
           }
         },
         {
-          "name": "Obtain a Grimy Ranarr Weed",
-          "taskID": "obtain_grimy_ranarr",
-          "category": "Obtain",
-          "completion_type": "OBTAIN",
-          "base_points": 1,
-          "assignment_weight": 5,
-          "required_items": [
-            {
-              "item": "Grimy Ranarr Weed",
-              "item_ids": [207],
-              "quantity": [1]
-            }
-          ]
-        },
+                    "name": "Obtain a Grimy Guam Leaf",
+                    "taskID": "obtain_grimy_guam",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Grimy Guam Leaf"],
+                            "item_ids": [199],
+                            "quantity": [1]
+                        }
+                    ]
+                },
         {
-          "name": "Use the Glider to Travel to Al Kharid",
+          "name": "Use the Glider in Al Kharid",
           "taskID": "glider_al_kharid",
           "category": "Travel",
           "completion_type": "TRAVEL",
@@ -968,19 +932,17 @@
           "assignment_weight": 5
         },
         {
-          "name": "Pickpocket a Man 10 times in 12 Seconds",
-          "taskID": "pickpocket_man_fast",
+          "name": "Pickpocket a Man or Woman",
+          "taskID": "pickpocket_man",
           "category": "Thieving",
           "level": 1,
           "completion_type": "THIEVING",
           "base_points": 1,
           "assignment_weight": 8,
-          "target_npc": {
-            "npc_ids": [3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992],
-            "quantity": 10
-          },
-          "constraints": {
-            "time_in_ticks": 20
+         "target_npc": {
+            "npc": ["Man, Woman"],
+            "npc_ids": [3261, 3106, 6818, 6987, 8858, 3109, 6815, 3108, 6989, 3107, 6988, 3112, 6991, 3111, 6990, 10728, 3113, 6992, 3110, 14920, 3264, 3265, 3652, 11057, 11058, 3014, 3112, 6991, 14921, 11053, 11054, 3015],
+            "quantity": [1, 28]
           }
         },
         {
@@ -990,7 +952,7 @@
           "level": 55,
           "completion_type": "FARMING",
           "base_points": 2,
-          "assignment_weight": 3,
+          "assignment_weight": 1,
           "required_items": [
             {
               "item": "Cactus Seed",
@@ -1032,17 +994,17 @@
       "Friendly_Name": "Al Kharid",
       "tasks": [
         {
-          "name": "Equip some Adamant Platelegs",
-          "taskID": "equip_adamant_platelegs",
+          "name": "Equip Iron Platelegs",
+          "taskID": "equip_iron_platelegs",
           "category": "Defence",
-          "level": 30,
+          "level": 1,
           "completion_type": "EQUIP",
-          "base_points": 2,
+          "base_points": 1,
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Adamant Platelegs",
-              "item_ids": [1073]
+              "item": "Iron Platelegs",
+              "item_ids": [1067]
             }
           ]
         },
@@ -1076,23 +1038,23 @@
           ]
         },
         {
-          "name": "Equip a Mithril Scimitar",
-          "taskID": "equip_mithril_scimitar",
+          "name": "Equip a Steel Scimitar",
+          "taskID": "equip_steel_scimitar",
           "category": "Attack",
-          "level": 20,
+          "level": 5,
           "completion_type": "EQUIP",
           "base_points": 1,
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Mithril Scimitar",
-              "item_ids": [1329]
+              "item": "Steel Scimitar",
+              "item_ids": [1325]
             }
           ]
         },
         {
-          "name": "Smelt an Iron Bar",
-          "taskID": "smith_iron_bar",
+          "name": "Smelt some Iron Bars",
+          "taskID": "smith_iron_bars",
           "category": "Smithing",
           "level": 15,
           "completion_type": "SMITHING",
@@ -1102,7 +1064,7 @@
             {
               "item": "Iron Bar",
               "item_ids": [2351],
-              "quantity": [1]
+              "quantity": [1, 50]
             }
           ]
         },
@@ -1120,15 +1082,7 @@
             "quantity": [5, 25]
           }
         },
-        {
-          "name": "Complete a Lap of the Al Kharid Rooftop Agility Course",
-          "taskID": "complete_ak_kharid_rooftop",
-          "category": "Agility",
-          "level": 20,
-          "completion_type": "AGILITY",
-          "base_points": 1,
-          "assignment_weight": 8
-        },
+        
         {
           "name": "Obtain Winter Sq'irk Fruit",
           "taskID": "obtain_winter_sq'irk_fruit",
@@ -1146,17 +1100,17 @@
           ]
         },
         {
-          "name": "Smelt a Silver Bar",
-          "taskID": "smith_silver_bar",
-          "category": "Smithing",
-          "level": 20,
-          "completion_type": "SMITHING",
+          "name": "Craft Leather Boots",
+          "taskID": "craft_leahter_boots",
+          "category": "Crafting",
+          "level": 7,
+          "completion_type": "CRAFTING",
           "base_points": 1,
           "assignment_weight": 8,
           "required_items": [
             {
-              "item": "Silver Bar",
-              "item_ids": [2355],
+              "item": "Leather Boots",
+              "item_ids": [1061],
               "quantity": [1]
             }
           ]
@@ -1232,8 +1186,8 @@
           "taskID": "defeat_wall_beast",
           "category": "Combat",
           "completion_type": "NPC_Kill",
-          "base_points": 1,
-          "assignment_weight": 5,
+          "base_points": 2,
+          "assignment_weight": 1,
           "target_npc": {
             "npc": ["Wall Beast"],
             "npc_ids": [476, 475],
@@ -1250,7 +1204,7 @@
           "target_npc": {
             "npc": ["Big Frog"],
             "npc_ids": [8701, 478],
-            "quantity": [1]
+            "quantity": [1, 5]
           }
         },
         {
@@ -1263,7 +1217,7 @@
           "target_npc": {
             "npc": ["Cave Bug"],
             "npc_ids": [481, 483],
-            "quantity": [1]
+            "quantity": [1, 25]
           }
         },
         {
@@ -1290,7 +1244,7 @@
           "target_npc": {
             "npc": ["Cave Slime"],
             "npc_ids": [480],
-            "quantity": [1]
+            "quantity": [1, 5]
           }
         },
         {
@@ -1350,7 +1304,7 @@
           "target_npc": {
             "npc": ["Cave Goblin"],
             "npc_ids": [6437, 6435, 6436, 6434],
-            "quantity": [1]
+            "quantity": [1, 10]
           }
         }
       ],
@@ -1387,7 +1341,7 @@
           "target_npc": {
             "npc": ["Duck"],
             "npc_ids": [1839, 1838],
-            "quantity": [1]
+            "quantity": [1, 5]
           }
         },
         {
@@ -1442,7 +1396,7 @@
           "level": 21,
           "completion_type": "COOKING",
           "base_points": 1,
-          "assignment_weight": 8,
+          "assignment_weight": 3,
           "required_items": [
             {
               "item": "Pot of Cream",
@@ -1452,7 +1406,7 @@
           ]
         },
         {
-          "name": "Defeat a Farmer in 12 Seconds",
+          "name": "Defeat a Farmer in 24 Seconds",
           "taskID": "defeat_farmer_fast",
           "category": "Combat",
           "completion_type": "NPC_Kill",
@@ -1464,14 +1418,7 @@
             "quantity": 1
           },
           "constraints": {
-            "time_in_ticks": [20],
-            "prohibited_active_varbits": [
-                {
-                "varbit_id": 57,
-                "must_be_value": 0,
-                "fail_message": "Cannon use is prohibited for timed combat tasks."
-              }
-            ]
+            "time_in_ticks": [40]           
           }
         },
         {
@@ -1573,7 +1520,7 @@
           }
         },
         {
-          "name": "Kill a Scorpion in 17 Seconds",
+          "name": "Kill a Scorpion in 27 Seconds",
           "taskID": "defeat_scorpion_fast",
           "category": "Combat",
           "completion_type": "NPC_Kill",
@@ -1585,14 +1532,7 @@
             "quantity": [1]
           },
           "constraints": {
-            "time_in_ticks": [28],
-            "prohibited_active_varbits": [
-                {
-                "varbit_id": 57,
-                "must_be_value": 0,
-                "fail_message": "Cannon use is prohibited for timed combat tasks."
-              }
-            ]
+            "time_in_ticks": [45]
           }
         },
         {
@@ -1607,7 +1547,7 @@
             {
               "item": "Silver Ore",
               "item_ids": [442],
-              "quantity": [1]
+              "quantity": [1, 50]
             }
           ]
         },
@@ -1617,7 +1557,7 @@
           "category": "Obtain",
           "completion_type": "OBTAIN",
           "base_points": 3,
-          "assignment_weight": 3,
+          "assignment_weight": 1,
           "required_items": [
             {
               "item": "Goldsmith Gauntlets",

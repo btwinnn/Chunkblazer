@@ -19,8 +19,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Mahogany Tree",
-                    "taskID": "chop_mahogany_tree",
+                    "name": "Chop some Mahogany Trees",
+                    "taskID": "chop_mahogany_trees",
                     "category": "Woodcutting",
                     "level": 50,
                     "completion_type": "WOODCUTTING",
@@ -30,7 +30,7 @@
                         {
                             "item": "Mahogany Logs",
                             "item_ids": [6332],
-                            "quantity": [1]
+                            "quantity": [1, 50]
                         }
                     ]
                 },

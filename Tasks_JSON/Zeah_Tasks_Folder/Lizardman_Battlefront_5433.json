@@ -13,7 +13,7 @@
                     "target_npc": {
                         "npc": ["Lizardman"],
                         "npc_ids": [6914, 6915, 6916, 6917, 8563],
-                        "quantity": 1
+                        "quantity": [1, 50]
                     }
                 },
                 {
@@ -26,7 +26,7 @@
                     "target_npc": {
                         "npc": ["Lizardman Brute"],
                         "npc_ids": [8564, 10947, 6918, 6919],
-                        "quantity": 1
+                        "quantity": [1, 25]
                     }
                 }, 
                 {
@@ -129,7 +129,7 @@
                     }
                 },
                 {
-                    "name": "Obtain some Lizardman Fangs",
+                    "name": "Obtain a Lizardman Fang",
                     "taskID": "obtain_lizardman_fangs",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -139,7 +139,7 @@
                         {
                             "item": ["Lizardman Fang"],
                             "item_ids": [13391],
-                            "quantity": [1, 500]
+                            "quantity": [1]
                         }
                     ]
                 }

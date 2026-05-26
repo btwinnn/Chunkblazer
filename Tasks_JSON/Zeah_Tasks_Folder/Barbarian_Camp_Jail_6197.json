@@ -23,8 +23,8 @@
                         ]             
                 },
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
+                    "name": "Chop some Oak Trees",
+                    "taskID": "chop_oak_trees",
                     "category": "Woodcutting",
                     "level": 15,
                     "completion_type": "WOODCUTTING",
@@ -34,13 +34,13 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Burn an Oak Log",
-                    "taskID": "burn_oak_log",
+                    "name": "Burn some Oak Logs",
+                    "taskID": "burn_oak_logs",
                     "category": "Firemaking",
                     "level": 15,
                     "completion_type": "FIREMAKING",
@@ -50,7 +50,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -87,8 +87,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -98,7 +98,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 250]
                         }
                     ]
                 },
@@ -178,7 +178,7 @@
                         {
                         "item": "Raw Anchovies",
                         "item_ids": [321],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },

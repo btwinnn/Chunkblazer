@@ -17,7 +17,7 @@
                         {
                         "item": "Raw Bass",
                         "item_ids": [363],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },
@@ -33,7 +33,7 @@
                         {
                         "item": "Raw Swordfish",
                         "item_ids": [371],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -49,7 +49,7 @@
                         {
                         "item": "Raw Herring",
                         "item_ids": [345],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },
@@ -605,8 +605,8 @@
                     }
                 },
                 {
-                    "name": "Chop a Willow Tree",
-                    "taskID": "Chop_willow_tree",
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
                     "category": "Woodcutting",
                     "level": 30,
                     "completion_type": "WOODCUTTING",
@@ -616,13 +616,13 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -632,13 +632,13 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Chop a Maple Tree",
-                    "taskID": "chop_maple_tree",
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
                     "category": "Woodcutting",
                     "level": 45,
                     "completion_type": "WOODCUTTING",
@@ -648,7 +648,7 @@
                         {
                             "item": "Maple Logs",
                             "item_ids": [1517],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
@@ -684,8 +684,8 @@
                     ]
                 },
                 {
-                    "name": "Burn a Yew Log",
-                    "taskID": "burn_yew_log",
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
                     "category": "Firemaking",
                     "level": 60,
                     "completion_type": "FIREMAKING",
@@ -695,13 +695,13 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Willow Log",
-                    "taskID": "burn_willow_log",
+                    "name": "Burn some Willow Logs",
+                    "taskID": "burn_willow_logs",
                     "category": "Firemaking",
                     "level": 30,
                     "completion_type": "FIREMAKING",
@@ -711,13 +711,13 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Maple Log",
-                    "taskID": "burn_maple_log",
+                    "name": "Burn some Maple Logs",
+                    "taskID": "burn_maple_logs",
                     "category": "Firemaking",
                     "level": 45,
                     "completion_type": "FIREMAKING",
@@ -727,7 +727,7 @@
                         {
                         "item": "Maple Logs",
                         "item_ids": [1517],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -956,8 +956,8 @@
                     ]
                 },               
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -967,13 +967,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -983,7 +983,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -1004,7 +1004,7 @@
                     ]
                 },              
                 {
-                    "name": "Obtain some Flax",
+                    "name": "Obtain Flax",
                     "taskID": "obtain_flax",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -1014,7 +1014,7 @@
                         {
                             "item": ["Flax"],
                             "item_ids": [1779],
-                            "quantity": [250, 2500]
+                            "quantity": [1]
                         }
                     ]
                 }
@@ -1115,7 +1115,7 @@
                     "target_npc": {
                         "npc": ["Shadow Warrior"],
                         "npc_ids": [2853],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -1222,7 +1222,7 @@
                     "target_npc": {
                         "npc": ["Hellhound"],
                         "npc_ids": [104, 105, 7256, 3133, 7877],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -1248,7 +1248,7 @@
                     "target_npc": {
                         "npc": ["Ogre"],
                         "npc_ids": [136, 2095, 2096, 2233, 1153],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },               
                 {
@@ -1742,8 +1742,8 @@
             "neighbor_ids": [10550, 10805, 10548, 10293],
             "tasks": [
                 {
-                    "name": "Obtain some Archery Tickets",
-                    "taskID": "obtain_archery_tickets",
+                    "name": "Obtain an Archery Ticket",
+                    "taskID": "obtain_archery_ticket",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 2,
@@ -1752,7 +1752,7 @@
                         {
                             "item": ["Archery Ticket"],
                             "item_ids": [1464],
-                            "quantity": [1, 5000]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1811,7 +1811,7 @@
                     "target_npc": {
                         "npc": ["Ice Spider"],
                         "npc_ids": [3022, 13798, 10722],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -1987,7 +1987,7 @@
                     "target_npc": {
                         "npc": ["Guard Dog"],
                         "npc_ids": [7209, 114, 4228],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                   
                  
                 },
@@ -2541,7 +2541,7 @@
                         {
                         "item": "Raw Swordfish",
                         "item_ids": [371],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -2588,7 +2588,7 @@
                         {
                         "item": "Raw Shark",
                         "item_ids": [383],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 }, 
@@ -2635,7 +2635,7 @@
                         {
                         "item": "Raw Tuna",
                         "item_ids": [359],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -2735,7 +2735,7 @@
                     "target_npc": {
                         "npc": ["Ogre"],
                         "npc_ids": [136, 2095, 2096, 2233, 1153],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -2803,7 +2803,7 @@
                     "target_npc": {
                         "npc": ["Giant Bat"],
                         "npc_ids": [4504, 6824, 2834],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                  
                 },
                 {                           
@@ -2816,7 +2816,7 @@
                     "target_npc": {                        
                         "npc": "Level 24 Warrior",
                         "npc_ids": [11926, 11929, 3260, 11927, 11928, 11925], 
-                        "quantity": [1]                  
+                        "quantity": [1, 25]                  
                     }                                    
                 },
                 {                           
@@ -3055,7 +3055,7 @@
                     "target_npc": {
                         "npc": ["Cyclops"],
                         "npc_ids": [2097, 7271, 7270, 2236, 2235, 2137, 2138, 2139, 2140, 2141, 2142, 2463, 2465, 2467, 2464, 2466, 2468],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                     }
                 },
                 {
@@ -3310,7 +3310,7 @@
                     "target_npc": {
                         "npc": ["Ogre"],
                         "npc_ids": [136, 2095, 2096, 2233, 1153],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -3710,7 +3710,7 @@
                     "target_npc": {
                         "npc": ["Khazard Guard"],
                         "npc_ids": [13531, 13532, 13533, 13534, 1211, 12021, 12022, 12024, 1208, 12019, 12023, 12020],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -4196,7 +4196,7 @@
                         }
                 },
                 {
-                    "name": "Defeat some Blue Dragons",
+                    "name": "Defeat a Blue Dragon",
                     "taskID": "defeat_blue_dragons",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -4351,7 +4351,7 @@
                         }
                 },
                 {
-                    "name": "Defeat a Unicorn in 13 Seconds",
+                    "name": "Defeat a Unicorn in 22 Seconds",
                     "taskID": "defeat_white_unicorn_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -4364,7 +4364,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [20]
+                        "time_in_ticks": [37]
                     }
                 },
                 {
@@ -4382,8 +4382,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Unicorn Horns",
-                    "taskID": "obtain_unicorn_horns",
+                    "name": "Obtain a Unicorn Horn",
+                    "taskID": "obtain_unicorn_horn",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -4392,13 +4392,13 @@
                         {
                             "item": ["Unicorn Horn"],
                             "item_ids": [237],
-                            "quantity": [1,25]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Chop a Willow Tree",
-                    "taskID": "Chop_willow_tree",
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
                     "category": "Woodcutting",
                     "level": 30,
                     "completion_type": "WOODCUTTING",
@@ -4408,7 +4408,7 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -4468,7 +4468,7 @@
                     "target_npc": {
                         "npc": ["Level 10 Dwarf"],
                         "npc_ids": [290, 296, 1405],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 }               
             ],                          
@@ -4506,7 +4506,7 @@
                     "target_npc": {
                         "npc": ["Jungle Spider"],
                         "npc_ids": [5243, 3020, 6267, 6271],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -4620,7 +4620,7 @@
                     "target_npc": {
                         "npc": ["Ogre"],
                         "npc_ids": [136, 2095, 2096, 2233, 1153],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },               
                 {
@@ -4745,7 +4745,7 @@
                     "target_npc": {
                         "npc": ["Ogre"],
                         "npc_ids": [136, 2095, 2096, 2233, 1153],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },               
                 {
@@ -5255,7 +5255,7 @@
                         {
                         "item": "Raw Anchovies",
                         "item_ids": [321],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },             
@@ -5271,7 +5271,7 @@
                         {
                         "item": "Anchovies",
                         "item_ids": [319],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },
@@ -5433,8 +5433,8 @@
             "neighbor_ids": [9774, 10029, 9772, 9517],
             "tasks": [
                 {
-                    "name": "Chop a Maple Tree",
-                    "taskID": "chop_maple_tree",
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
                     "category": "Woodcutting",
                     "level": 45,
                     "completion_type": "WOODCUTTING",
@@ -5444,13 +5444,13 @@
                         {
                             "item": "Maple Logs",
                             "item_ids": [1517],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -5460,7 +5460,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 250]
                         }
                     ]
                 },             
@@ -5476,7 +5476,7 @@
                         {
                         "item": "Raw Lobster",
                         "item_ids": [377],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -5663,8 +5663,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -5674,13 +5674,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Mix an Anti-firebreath Potion",
-                    "taskID": "mix_anti-firebreath_potion",
+                    "name": "Mix some Anti-firebreath Potions",
+                    "taskID": "mix_anti-firebreath_potions",
                     "category": "Obtain_Set",
                     "level": 69,
                     "completion_type": "HERBLORE",
@@ -5689,13 +5689,14 @@
                      "required_items": [
                         {
                             "item": ["Antifire Potion(3)", "Antifire Potion(4)"],
-                            "item_ids": [2454, 2452]
+                            "item_ids": [2454, 2452],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Super Antifire Potion",
-                    "taskID": "mix_super_antifire_potion",
+                    "name": "Mix some Super Antifire Potions",
+                    "taskID": "mix_super_antifire_potions",
                     "category": "Obtain_Set",
                     "level": 92,
                     "completion_type": "HERBLORE",
@@ -5704,7 +5705,8 @@
                      "required_items": [
                         {
                             "item": ["Super Antifire Potion(3)", "Super Antifire Potion(4)"],
-                            "item_ids": [21981, 21978]
+                            "item_ids": [21981, 21978],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -5765,7 +5767,7 @@
                     "target_npc": {
                         "npc": ["Black Dragon"],
                         "npc_ids": [252, 253, 254, 255, 256, 257, 258, 259, 8084, 8085, 7861, 7862, 7863, 7275, 8092, 8093, 239],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -5835,8 +5837,8 @@
                     ]
                 },
                 {
-                    "name": "Mix a Sanfew Serum",
-                    "taskID": "mix_sanfew_serum",
+                    "name": "Mix some Sanfew Serums",
+                    "taskID": "mix_sanfew_serums",
                     "category": "Obtain_Set",
                     "level": 65,
                     "completion_type": "HERBLORE",
@@ -5845,7 +5847,8 @@
                      "required_items": [
                         {
                             "item": ["Sanfew serum(3)", "Sanfew serum(4)"],
-                            "item_ids": [10927, 10925]
+                            "item_ids": [10927, 10925],
+                            "quantity": [1, 25]
                         }
                     ]
                 },             
@@ -5907,8 +5910,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Ourg Bones",
-                    "taskID": "obtain_ourg_bones",
+                    "name": "Obtain an Ourg Bone",
+                    "taskID": "obtain_ourg_bone",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -5917,12 +5920,12 @@
                         {
                             "item": ["Ourg Bones"],
                             "item_ids": [4834],
-                            "quantity": [1, 5]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain some Raurg Bones",
+                    "name": "Obtain a Raurg Bone",
                     "taskID": "obtain_raurg_bones",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -5932,12 +5935,12 @@
                         {
                             "item": ["Raurg Bones"],
                             "item_ids": [4832],
-                            "quantity": [1, 5]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain some Fayrg Bones",
+                    "name": "Obtain a Fayrg Bone",
                     "taskID": "obtain_fayrg_bones",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -5947,7 +5950,7 @@
                         {
                             "item": ["Fayrg Bones"],
                             "item_ids": [4830],
-                            "quantity": [1, 5]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -6149,7 +6152,7 @@
                         {
                             "item": ["Stardust"],
                             "item_ids": [25527],
-                            "quantity": [1, 25]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -6251,7 +6254,7 @@
                 },
                 {
                     "name": "Defeat a Level 5 Goblin in the First Hit",
-                    "taskID": "defeat_level_5_goblin_fast",
+                    "taskID": "defeat_level_5_goblin_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -6263,14 +6266,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [1],
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                        "time_in_ticks": [1]
                     }
                 },
                 {
@@ -6553,7 +6549,7 @@
                     "target_npc": {
                         "npc": ["Level 92 Tortoise"],
                         "npc_ids": [6076],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -6574,7 +6570,7 @@
                     "target_npc": {
                         "npc": ["Mounted Terrorbird Gnome"],
                         "npc_ids": [2067, 2068, 5971, 5972, 5973],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                   
                 },
                 {
@@ -6709,8 +6705,8 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Zamorak Warrior or Ranger or Mage", 
-                    "taskID": "defeat_zamorak_warrior",
+                    "name": "Defeat some Zamorak Warriors or Rangers or Mages", 
+                    "taskID": "defeat_zamorak_warrior_ranger_mage",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
@@ -6718,7 +6714,7 @@
                     "target_npc": {
                         "npc": ["Zamorak Mage", "Zamorak Warrior", "Zamorak Ranger"],
                         "npc_ids": [7423, 7422, 7419, 7418, 7420, 7421],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                     }                               
                 },              
                 {
@@ -7366,8 +7362,8 @@
                         } 
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -7377,13 +7373,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -7393,13 +7389,13 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Chop a Willow Tree",
-                    "taskID": "Chop_willow_tree",
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
                     "category": "Woodcutting",
                     "level": 30,
                     "completion_type": "WOODCUTTING",
@@ -7409,13 +7405,13 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Yew Log",
-                    "taskID": "burn_yew_log",
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
                     "category": "Firemaking",
                     "level": 60,
                     "completion_type": "FIREMAKING",
@@ -7425,13 +7421,13 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Willow Log",
-                    "taskID": "burn_willow_log",
+                    "name": "Burn some Willow Logs",
+                    "taskID": "burn_willow_logs",
                     "category": "Firemaking",
                     "level": 30,
                     "completion_type": "FIREMAKING",
@@ -7441,13 +7437,13 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -7457,7 +7453,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -8182,8 +8178,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Zenyte Shards",
-                    "taskID": "obtain_zenyte_shards",
+                    "name": "Obtain a Zenyte Shard",
+                    "taskID": "obtain_zenyte_shard",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
@@ -8192,7 +8188,7 @@
                         {
                             "item": ["Zenyte Shard"],
                             "item_ids": [19529],
-                            "quantity": [1, 4]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -8317,7 +8313,7 @@
                         {
                         "item": "Raw Trout",
                         "item_ids": [335],
-                        "quantity": [1, 100]
+                        "quantity": [1, 250]
                         }
                     ]       
                 },
@@ -8347,7 +8343,7 @@
                     "target_npc": {
                         "npc": ["Moss Giant"],
                         "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -8443,7 +8439,7 @@
                         {
                         "item": "Leaping Trout",
                         "item_ids": [11328],
-                        "quantity": [1]
+                        "quantity": [1, 250]
                         }
                     ]       
                 },
@@ -8459,7 +8455,7 @@
                         {
                         "item": "Leaping Salmon",
                         "item_ids": [11330],
-                        "quantity": [1]
+                        "quantity": [1, 250]
                         }
                     ]       
                 },
@@ -8475,7 +8471,7 @@
                         {
                         "item": "Leaping Sturgeon",
                         "item_ids": [11332],
-                        "quantity": [1]
+                        "quantity": [1, 250]
                         }
                     ]       
                 },
@@ -8549,7 +8545,7 @@
                     "target_npc": {
                         "npc": ["Mithril Dragon"],
                         "npc_ids": [2919, 8088, 8089],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -8562,7 +8558,7 @@
                     "target_npc": {
                         "npc": ["Brutal Green Dragon"],
                         "npc_ids": [2918],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
@@ -8581,7 +8577,7 @@
                         {
                         "dropped_item": "Chewed Bones",
                         "dropped_item_id": [11338],
-                        "quantity": [1, 3]
+                        "quantity": [1]
                         }
                     ] 
                 },
@@ -8831,8 +8827,8 @@
             "neighbor_ids": [9271, 9526, 9269, 9014],
             "tasks": [
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -8842,13 +8838,13 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Yew Log",
-                    "taskID": "burn_yew_log",
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
                     "category": "Firemaking",
                     "level": 60,
                     "completion_type": "FIREMAKING",
@@ -8858,7 +8854,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -9549,7 +9545,7 @@
                     "target_npc": {
                         "npc": ["Level 83 Skeleton Mage"],
                         "npc_ids": [4319],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -9608,8 +9604,8 @@
             "neighbor_ids": [9264, 9519, 9262, 9007],
             "tasks": [
                 {
-                    "name": "Chop a Teak Tree",
-                    "taskID": "Chop_teak_tree",
+                    "name": "Chop some Teak Trees",
+                    "taskID": "Chop_teak_trees",
                     "category": "Woodcutting",
                     "level": 35,
                     "completion_type": "WOODCUTTING",
@@ -9619,7 +9615,7 @@
                         {
                         "item": "Teak Logs",
                         "item_ids": [6333],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },

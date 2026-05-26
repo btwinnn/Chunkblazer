@@ -17,7 +17,7 @@
                         {
                         "item": "Coal",
                         "item_ids": [453],
-                        "quantity": [1, 50]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -33,7 +33,7 @@
                         {
                             "item": ["Iron Ore"],
                             "item_ids": [440],
-                            "quantity": [1, 50]
+                            "quantity": [25, 200]
                         }
                     ]
                 },
@@ -222,8 +222,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -233,13 +233,13 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 250]
                         }
                     ]
                 },               
                 {
-                    "name": "Burn a Yew Log",
-                    "taskID": "burn_yew_log",
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
                     "category": "Firemaking",
                     "level": 60,
                     "completion_type": "FIREMAKING",
@@ -249,7 +249,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -749,8 +749,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Maple Tree",
-                    "taskID": "chop_maple_tree",
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
                     "category": "Woodcutting",
                     "level": 45,
                     "completion_type": "WOODCUTTING",
@@ -760,7 +760,7 @@
                         {
                             "item": "Maple Logs",
                             "item_ids": [1517],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
@@ -1149,8 +1149,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Willow Tree",
-                    "taskID": "Chop_willow_tree",
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
                     "category": "Woodcutting",
                     "level": 30,
                     "completion_type": "WOODCUTTING",
@@ -1160,13 +1160,13 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -1176,13 +1176,13 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Chop a Maple Tree",
-                    "taskID": "chop_maple_tree",
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
                     "category": "Woodcutting",
                     "level": 45,
                     "completion_type": "WOODCUTTING",
@@ -1192,7 +1192,7 @@
                         {
                             "item": "Maple Logs",
                             "item_ids": [1517],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
@@ -1325,8 +1325,8 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -1336,7 +1336,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 }                   
@@ -1507,7 +1507,7 @@
                         {
                         "item": "Raw Shark",
                         "item_ids": [383],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -1523,7 +1523,7 @@
                         {
                         "item": "Raw Bass",
                         "item_ids": [363],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -1539,7 +1539,7 @@
                         {
                         "item": "Raw Mackerel",
                         "item_ids": [353],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 }
@@ -1649,7 +1649,8 @@
                     "required_items": [
                         {
                             "item": "Mackerel",
-                            "item_ids": [355]
+                            "item_ids": [355],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -1721,7 +1722,7 @@
                         {
                             "item": ["Iron Ore"],
                             "item_ids": [440],
-                            "quantity": [1, 50]
+                            "quantity": [25, 200]
                         }
                     ]
                 },
@@ -2011,8 +2012,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -2022,13 +2023,13 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 250]
                         }
                     ]
                 },               
                 {
-                    "name": "Burn a Yew Log",
-                    "taskID": "burn_yew_log",
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
                     "category": "Firemaking",
                     "level": 60,
                     "completion_type": "FIREMAKING",
@@ -2038,7 +2039,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -2433,7 +2434,7 @@
                         }
                 },
                 {
-                    "name": "Obtain some Sunfire Splinters",
+                    "name": "Obtain Sunfire Splinters",
                     "taskID": "obtain_sunfire_splinters",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -2443,7 +2444,7 @@
                         {
                             "item": ["Sunfire Splinters"],
                             "item_ids": [31084],
-                            "quantity": [250]
+                            "quantity": [1]
                         }
                     ]
                 }          
@@ -2570,8 +2571,8 @@
             "neighbor_ids": [5426, 5681, 5424, 5169],
             "tasks": [
                 {
-                    "name": "Chop a Teak Tree",
-                    "taskID": "Chop_teak_tree",
+                    "name": "Chop some Teak Trees",
+                    "taskID": "Chop_teak_trees",
                     "category": "Woodcutting",
                     "level": 35,
                     "completion_type": "WOODCUTTING",
@@ -2581,7 +2582,7 @@
                         {
                         "item": "Teak Logs",
                         "item_ids": [6333],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -2602,8 +2603,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -2613,13 +2614,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -2629,7 +2630,7 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -2731,8 +2732,8 @@
             "neighbor_ids": [5426, 5681, 5424, 5169],
             "tasks": [
                 {
-                    "name": "Chop a Teak Tree",
-                    "taskID": "Chop_teak_tree",
+                    "name": "Chop some Teak Trees",
+                    "taskID": "Chop_teak_trees",
                     "category": "Woodcutting",
                     "level": 35,
                     "completion_type": "WOODCUTTING",
@@ -2742,7 +2743,7 @@
                         {
                         "item": "Teak Logs",
                         "item_ids": [6333],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -3158,8 +3159,8 @@
                     }                  
                 },
                 {
-                    "name": "Chop a Mahogany Tree",
-                    "taskID": "chop_mahogany_tree",
+                    "name": "Chop some Mahogany Trees",
+                    "taskID": "chop_mahogany_trees",
                     "category": "Woodcutting",
                     "level": 50,
                     "completion_type": "WOODCUTTING",
@@ -3169,7 +3170,7 @@
                         {
                             "item": "Mahogany Logs",
                             "item_ids": [6332],
-                            "quantity": [1]
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -3931,7 +3932,7 @@
                         {
                         "item": "Coal",
                         "item_ids": [453],
-                        "quantity": [1, 50]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -4279,8 +4280,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Mahogany Tree",
-                    "taskID": "chop_mahogany_tree",
+                    "name": "Chop some Mahogany Trees",
+                    "taskID": "chop_mahogany_trees",
                     "category": "Woodcutting",
                     "level": 50,
                     "completion_type": "WOODCUTTING",
@@ -4290,7 +4291,7 @@
                         {
                             "item": "Mahogany Logs",
                             "item_ids": [6332],
-                            "quantity": [1]
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -4424,7 +4425,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Bone Shards",
+                    "name": "Obtain Bone Shards",
                     "taskID": "obtain_bone_shards",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -4434,7 +4435,7 @@
                         {
                             "item": ["Bone Shards"],
                             "item_ids": [29386],
-                            "quantity": [10000, 100000]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -4461,8 +4462,8 @@
             "neighbor_ids": [5938, 6193, 5936, 5681],
             "tasks": [
                 {
-                    "name": "Obtain some Soiled Pages",
-                    "taskID": "obtain_some_soiled_pages",
+                    "name": "Obtain a Soiled Page",
+                    "taskID": "obtain_a_soiled_page",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -4471,7 +4472,7 @@
                         {
                             "item": ["Soiled Page"],
                             "item_ids": [30068],
-                            "quantity": [1, 1000]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -4746,8 +4747,8 @@
                     ]
                 },
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
+                    "name": "Chop some Oak Trees",
+                    "taskID": "chop_oak_trees",
                     "category": "Woodcutting",
                     "level": 15,
                     "completion_type": "WOODCUTTING",
@@ -4757,7 +4758,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 }, 
@@ -5434,7 +5435,7 @@
                         {
                         "item": "Raw Lobster",
                         "item_ids": [377],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -5449,7 +5450,8 @@
                     "required_items": [
                         {
                             "item": "Lobster",
-                            "item_ids": [379]
+                            "item_ids": [379],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -5465,7 +5467,7 @@
                         {
                         "item": "Raw Tuna",
                         "item_ids": [359],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -5480,7 +5482,8 @@
                     "required_items": [
                         {
                             "item": "Tuna",
-                            "item_ids": [361]
+                            "item_ids": [361],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -5496,7 +5499,7 @@
                         {
                         "item": "Raw Swordfish",
                         "item_ids": [371],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -5527,7 +5530,8 @@
                     "required_items": [
                         {
                             "item": "Swordfish",
-                            "item_ids": [373]
+                            "item_ids": [373],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -5543,7 +5547,7 @@
                         {
                         "item": "Raw Bass",
                         "item_ids": [363],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -5559,7 +5563,7 @@
                         {
                         "item": "Raw Cod",
                         "item_ids": [341],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -6000,8 +6004,8 @@
                     }
                 },
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
+                    "name": "Chop some Oak Trees",
+                    "taskID": "chop_oak_trees",
                     "category": "Woodcutting",
                     "level": 15,
                     "completion_type": "WOODCUTTING",
@@ -6011,7 +6015,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -6534,7 +6538,8 @@
                     "required_items": [
                         {
                             "item": "Bass",
-                            "item_ids": [365]
+                            "item_ids": [365],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -6549,7 +6554,8 @@
                     "required_items": [
                         {
                             "item": "Cod",
-                            "item_ids": [339]
+                            "item_ids": [339],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -6591,8 +6597,8 @@
             "neighbor_ids": [6703, 6958, 6701, 6446],
             "tasks": [
                 {
-                    "name": "Chop a Teak Tree",
-                    "taskID": "Chop_teak_tree",
+                    "name": "Chop some Teak Trees",
+                    "taskID": "Chop_teak_trees",
                     "category": "Woodcutting",
                     "level": 35,
                     "completion_type": "WOODCUTTING",
@@ -6602,7 +6608,7 @@
                         {
                         "item": "Teak Logs",
                         "item_ids": [6333],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -7515,8 +7521,8 @@
             "neighbor_ids": [5677, 5932, 5675, 5420],
             "tasks": [
                 {
-                    "name": "Chop a Maple Tree",
-                    "taskID": "chop_maple_tree",
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
                     "category": "Woodcutting",
                     "level": 45,
                     "completion_type": "WOODCUTTING",
@@ -7526,7 +7532,7 @@
                         {
                             "item": "Maple Logs",
                             "item_ids": [1517],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
@@ -7542,7 +7548,7 @@
                         {
                         "item": "Coal",
                         "item_ids": [453],
-                        "quantity": [1, 50]
+                        "quantity": [1, 100]
                         }
                     ]
                 },             
@@ -7587,8 +7593,8 @@
             "neighbor_ids": [5421, 5676, 5419, 5164],
             "tasks": [
                 {
-                    "name": "Chop a Maple Tree",
-                    "taskID": "chop_maple_tree",
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
                     "category": "Woodcutting",
                     "level": 45,
                     "completion_type": "WOODCUTTING",
@@ -7598,7 +7604,7 @@
                         {
                             "item": "Maple Logs",
                             "item_ids": [1517],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
@@ -7614,7 +7620,7 @@
                         {
                         "item": "Raw Lobster",
                         "item_ids": [377],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -7629,7 +7635,8 @@
                     "required_items": [
                         {
                             "item": "Lobster",
-                            "item_ids": [379]
+                            "item_ids": [379],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -7645,7 +7652,7 @@
                         {
                         "item": "Raw Tuna",
                         "item_ids": [359],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -7660,7 +7667,8 @@
                     "required_items": [
                         {
                             "item": "Tuna",
-                            "item_ids": [361]
+                            "item_ids": [361],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -7676,7 +7684,7 @@
                         {
                         "item": "Raw Swordfish",
                         "item_ids": [371],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -7691,13 +7699,14 @@
                     "required_items": [
                         {
                             "item": "Swordfish",
-                            "item_ids": [373]
+                            "item_ids": [373],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Maple Log",
-                    "taskID": "burn_maple_log",
+                    "name": "Burn some Maple Logs",
+                    "taskID": "burn_maple_logs",
                     "category": "Firemaking",
                     "level": 45,
                     "completion_type": "FIREMAKING",
@@ -7707,13 +7716,13 @@
                         {
                         "item": "Maple Logs",
                         "item_ids": [1517],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -7723,13 +7732,13 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Yew Log",
-                    "taskID": "burn_yew_log",
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
                     "category": "Firemaking",
                     "level": 60,
                     "completion_type": "FIREMAKING",
@@ -7739,7 +7748,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -7997,12 +8006,12 @@
                     "target_npc": {
                         "npc": ["Unicorn"],
                         "npc_ids": [2837, 14043],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
-                    "name": "Mix an Anti-Poison Potion",
-                    "taskID": "mix_anti-poison",
+                    "name": "Mix some Anti-Poison Potions",
+                    "taskID": "mix_anti-poisons",
                     "category": "Obtain_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
@@ -8011,7 +8020,8 @@
                      "required_items": [
                         {
                             "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446]
+                            "item_ids": [175, 2446],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -8035,8 +8045,8 @@
                         ]             
                 },
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
+                    "name": "Chop some Oak Trees",
+                    "taskID": "chop_oak_trees",
                     "category": "Woodcutting",
                     "level": 15,
                     "completion_type": "WOODCUTTING",
@@ -8046,7 +8056,7 @@
                         {
                         "item": "Oak Logs",
                         "item_ids": [1521],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -8094,7 +8104,7 @@
                         {
                         "item": "Raw Anchovies",
                         "item_ids": [321],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -8110,7 +8120,7 @@
                         {
                         "item": "Shrimp",
                         "item_ids": [315],
-                        "quantity": [5, 25]
+                        "quantity": [5, 50]
                         }
                     ]
                 },
@@ -8126,7 +8136,7 @@
                         {
                         "item": "Anchovies",
                         "item_ids": [319],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 }                      
@@ -8139,8 +8149,8 @@
             "neighbor_ids": [5167, 5422, 5165, 4910],
             "tasks": [
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -8150,13 +8160,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Magic Log",
-                    "taskID": "burn_magic_log",
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
                     "category": "Firemaking",
                     "level": 75,
                     "completion_type": "FIREMAKING",
@@ -8166,13 +8176,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },             
                 {
-                    "name": "Chop an Oak Tree",
-                    "taskID": "chop_oak_tree",
+                    "name": "Chop some Oak Trees",
+                    "taskID": "chop_oak_trees",
                     "category": "Woodcutting",
                     "level": 15,
                     "completion_type": "WOODCUTTING",
@@ -8182,7 +8192,7 @@
                         {
                             "item": "Oak Logs",
                             "item_ids": [1521],
-                            "quantity": [1]
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -8203,8 +8213,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Willow Tree",
-                    "taskID": "Chop_willow_tree",
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
                     "category": "Woodcutting",
                     "level": 30,
                     "completion_type": "WOODCUTTING",
@@ -8214,13 +8224,13 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Willow Log",
-                    "taskID": "burn_willow_log",
+                    "name": "Burn some Willow Logs",
+                    "taskID": "burn_willow_logs",
                     "category": "Firemaking",
                     "level": 30,
                     "completion_type": "FIREMAKING",
@@ -8230,7 +8240,7 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -8278,7 +8288,7 @@
                         {
                         "item": "Raw Anchovies",
                         "item_ids": [321],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -8294,7 +8304,7 @@
                         {
                         "item": "Shrimp",
                         "item_ids": [315],
-                        "quantity": [5, 25]
+                        "quantity": [5, 50]
                         }
                     ]
                 },
@@ -8310,7 +8320,7 @@
                         {
                         "item": "Anchovies",
                         "item_ids": [319],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },

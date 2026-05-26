@@ -50,17 +50,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -110,17 +115,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -168,7 +172,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -180,7 +184,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -274,17 +278,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -334,17 +343,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -392,7 +400,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -404,7 +412,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -510,17 +518,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -570,17 +583,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -628,7 +640,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -640,7 +652,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -746,17 +758,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -806,17 +823,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -864,7 +880,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -876,7 +892,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -990,17 +1006,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -1050,17 +1071,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -1108,7 +1128,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1120,7 +1140,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -1178,17 +1198,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -1238,17 +1263,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -1296,7 +1320,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1308,7 +1332,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -1362,17 +1386,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -1422,17 +1451,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -1480,7 +1508,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1492,7 +1520,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -1542,17 +1570,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -1602,17 +1635,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -1660,7 +1692,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1672,7 +1704,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -1778,17 +1810,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -1838,17 +1875,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -1896,7 +1932,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1908,7 +1944,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -2014,17 +2050,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -2074,17 +2115,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -2132,7 +2172,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2144,7 +2184,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -2250,17 +2290,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -2310,17 +2355,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -2368,7 +2412,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2380,7 +2424,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -2486,17 +2530,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -2546,17 +2595,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -2604,7 +2652,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2616,7 +2664,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -2722,17 +2770,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -2782,17 +2835,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -2840,7 +2892,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2852,7 +2904,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -2958,17 +3010,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -3018,17 +3075,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -3076,7 +3132,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3088,7 +3144,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -3138,17 +3194,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -3198,17 +3259,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -3256,7 +3316,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3268,7 +3328,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -3374,17 +3434,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -3434,17 +3499,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -3492,7 +3556,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3504,7 +3568,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -3610,17 +3674,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -3670,17 +3739,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -3728,7 +3796,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3740,7 +3808,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -3846,17 +3914,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -3906,17 +3979,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -3964,7 +4036,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3976,7 +4048,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -4482,17 +4554,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -4542,17 +4619,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -4600,7 +4676,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -4612,7 +4688,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -4718,17 +4794,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -4778,17 +4859,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -4836,7 +4916,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -4848,7 +4928,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -4950,17 +5030,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -5010,17 +5095,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -5068,7 +5152,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -5080,7 +5164,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -5182,17 +5266,22 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -5242,17 +5331,16 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "COMBAT",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Sourhog"],
                         "npc_ids": [10435],
-                        "quantity": 1
+                        "quantity": [1, 5]
                     }
                 },
                 {
@@ -5300,7 +5388,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -5312,7 +5400,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],

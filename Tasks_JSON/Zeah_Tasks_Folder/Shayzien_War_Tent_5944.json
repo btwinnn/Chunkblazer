@@ -19,7 +19,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Intelligence",
+                    "name": "Obtain Intelligence",
                     "taskID": "obtain_intelligence",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -29,7 +29,7 @@
                         {
                             "item": ["Intelligence"],
                             "item_ids": [13395],
-                            "quantity": [1, 25]
+                            "quantity": [1]
                         }
                     ]
                 }, 

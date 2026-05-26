@@ -135,20 +135,7 @@
                         }
                     ]
                 },
-                {
-                    "name": "Use the Varrock Rooftop Course",
-                    "taskID": "complete_varrock_roof",
-                    "category": "Agility",
-                    "level": 30,
-                    "completion_type": "AGILITY",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_object": {
-                        "object": ["Edge (Varrock Rooftop Course)"],
-                        "object_id": [14841], 
-                        "quantity": [1, 20]
-                    }
-                },
+                
                 {
                     "name": "Mine some Pure Essence",
                     "taskID": "mine_pure_essence",
@@ -161,7 +148,7 @@
                         {
                             "item": ["Pure Essence"],
                             "item_ids": [7936],
-                            "quantity": [1, 100]
+                            "quantity": [1, 250]
                         }
                     ]
                 }              

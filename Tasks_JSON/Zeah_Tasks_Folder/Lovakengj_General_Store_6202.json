@@ -13,7 +13,7 @@
                     "target_npc": {
                         "npc": ["Necromancer"],
                         "npc_ids": [11088, 1025],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }                    
                 },
                 {
@@ -75,7 +75,8 @@
                     "completion_type": "NPC_Kill",
                     "target_npc": {
                         "npc": ["Dark Warrior"],
-                        "npc_ids": [11111, 11110, 11109]                     
+                        "npc_ids": [11111, 11110, 11109],
+                        "quantity": [1, 10]                     
                     }                                      
                 },
                 {

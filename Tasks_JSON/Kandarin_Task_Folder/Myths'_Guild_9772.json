@@ -50,8 +50,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Magic Tree",
-                    "taskID": "chop_magic_tree",
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
                     "category": "Woodcutting",
                     "level": 75,
                     "completion_type": "WOODCUTTING",
@@ -61,13 +61,13 @@
                         {
                             "item": "Magic Logs",
                             "item_ids": [1513],
-                            "quantity": [1]
+                            "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Mix an Anti-firebreath Potion",
-                    "taskID": "mix_anti-firebreath_potion",
+                    "name": "Mix some Anti-firebreath Potions",
+                    "taskID": "mix_anti-firebreath_potions",
                     "category": "Obtain_Set",
                     "level": 69,
                     "completion_type": "HERBLORE",
@@ -76,13 +76,14 @@
                      "required_items": [
                         {
                             "item": ["Antifire Potion(3)", "Antifire Potion(4)"],
-                            "item_ids": [2454, 2452]
+                            "item_ids": [2454, 2452],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Super Antifire Potion",
-                    "taskID": "mix_super_antifire_potion",
+                    "name": "Mix some Super Antifire Potions",
+                    "taskID": "mix_super_antifire_potions",
                     "category": "Obtain_Set",
                     "level": 92,
                     "completion_type": "HERBLORE",
@@ -91,7 +92,8 @@
                      "required_items": [
                         {
                             "item": ["Super Antifire Potion(3)", "Super Antifire Potion(4)"],
-                            "item_ids": [21981, 21978]
+                            "item_ids": [21981, 21978],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -152,7 +154,7 @@
                     "target_npc": {
                         "npc": ["Black Dragon"],
                         "npc_ids": [252, 253, 254, 255, 256, 257, 258, 259, 8084, 8085, 7861, 7862, 7863, 7275, 8092, 8093, 239],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {

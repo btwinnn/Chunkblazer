@@ -13,7 +13,7 @@
                     "target_npc": {
                         "npc": ["Swamp Frog"],
                         "npc_ids": [8578],
-                        "quantity": 1
+                        "quantity": [1, 10]
                     }
                 },
                 {

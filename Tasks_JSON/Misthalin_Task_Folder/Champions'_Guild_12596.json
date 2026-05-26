@@ -10,7 +10,7 @@
                     "level": 22,
                     "completion_type": "FARMING",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Cadavaberry Seeds"],
@@ -30,17 +30,37 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
+                    "name": "Equip a Coif",
+                    "taskID": "equip_coif",
+                    "category": ["Ranged", "Defence"],
+                    "level": [20, 1],
+                    "completion_type": "EQUIP",
                     "base_points": 1,
-                    "assignment_weight": 10
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Coif"],
+                            "item_ids": [1169]
+                        }
+                    ]
+                },
+                {
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -67,17 +87,17 @@
                     ]
                 },
                 {
-                    "name": "Equip a Rune Mace",
-                    "taskID": "equip_rune_mace",
+                    "name": "Equip Black Platelegs",
+                    "taskID": "equip_black_platelegs",
                     "base_points": 1,
-                    "assignment_weight": 5,
-                    "category": "Attack",
-                    "level": 40,
+                    "assignment_weight": 8,
+                    "category": "Defence",
+                    "level": 10,
                     "completion_type": "EQUIP",
                     "required_items": [
                         {
-                            "item": ["Rune Mace"],
-                            "item_ids": [1432]
+                            "item": ["Black Platelegs"],
+                            "item_ids": [1077]
                         }
                     ]
                 },
@@ -90,11 +110,10 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
@@ -121,8 +140,8 @@
                 {
                     "name": "Equip Green D'Hide Chaps",
                     "taskID": "equip_green_d'hide_chaps",
-                    "category": "Ranged",
-                    "level": 40,
+                    "category": ["Ranged", "Defence"],
+                    "level": [40, 1],
                     "completion_type": "EQUIP",
                     "base_points": 1,
                     "assignment_weight": 5,
@@ -148,7 +167,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -160,7 +179,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],

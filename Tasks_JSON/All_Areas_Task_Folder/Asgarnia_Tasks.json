@@ -282,8 +282,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Yew Tree",
-                    "taskID": "chop_yew_tree",
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
                     "category": "Woodcutting",
                     "level": 60,
                     "completion_type": "WOODCUTTING",
@@ -293,13 +293,13 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]
+                            "quantity": [1, 250]
                         }
                     ]
                 },
                 {
-                    "name": "Burn a Yew Log",
-                    "taskID": "burn_yew_log",
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
                     "category": "Firemaking",
                     "level": 60,
                     "completion_type": "FIREMAKING",
@@ -309,7 +309,7 @@
                         {
                             "item": "Yew Logs",
                             "item_ids": [1515],
-                            "quantity": [1]            
+                            "quantity": [1, 50]            
                         }
                     ]
                 },
@@ -364,7 +364,7 @@
                         {
                             "item": ["Iron Ore"],
                             "item_ids": [440],
-                            "quantity": [1, 50]
+                            "quantity": [25, 200]
                         }
                     ]
                 },
@@ -397,21 +397,7 @@
                         "quantity": [1]
                     }
                 },
-                {
-                    "name": "Obtain some Adamant Arrows",
-                    "taskID": "obtain_adamant_arrows",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Adamant Arrow"],
-                            "item_ids": [890],
-                            "quantity": [1, 800]
-                        }
-                    ]
-                },
+                
                 {
                 "name": "Build an Oak Larder",
                 "taskID": "build_oak_larder",
@@ -459,8 +445,8 @@
                     ]
                 },
                 {
-                    "name": "Chop a Willow Tree",
-                    "taskID": "Chop_willow_tree",
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
                     "category": "Woodcutting",
                     "level": 30,
                     "completion_type": "WOODCUTTING",
@@ -470,7 +456,7 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -734,8 +720,8 @@
             "neighbor_ids": [11570, 11827, 11315, 11572],
             "tasks": [
                 {
-                    "name": "Mix a Prayer Potion",
-                    "taskID": "mix_prayer_potion",
+                    "name": "Mix some Prayer Potions",
+                    "taskID": "mix_prayer_potions",
                     "category": "Obtain_Set",
                     "level": 38,
                     "completion_type": "HERBLORE",
@@ -744,7 +730,8 @@
                      "required_items": [
                         {
                             "item": ["Prayer Potion(3)", "Prayer Potion(4)"],
-                            "item_ids": [139, 2434]
+                            "item_ids": [139, 2434],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -805,8 +792,8 @@
                     ]
                 },
                 {
-                    "name": "Mix a Strength Potion",
-                    "taskID": "mix_strength_potion",
+                    "name": "Mix some Strength Potions",
+                    "taskID": "mix_strength_potions",
                     "category": "Obtain_Set",
                     "level": 12,
                     "completion_type": "HERBLORE",
@@ -815,7 +802,8 @@
                      "required_items": [
                         {
                             "item": ["Strength Potion(3)", "Strength Potion(4)"],
-                            "item_ids": [115, 113]
+                            "item_ids": [115, 113],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -938,7 +926,7 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Defeat some Blue Dragons",
+                    "name": "Defeat a Blue Dragon",
                     "taskID": "defeat_blue_dragons",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1131,7 +1119,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Uncut Dragonstones",
+                    "name": "Obtain an Uncut Dragonstone",
                     "taskID": "obtain_uncut_dragonstone",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -1141,7 +1129,7 @@
                             {
                                 "item": ["Uncut Dragonstone"],
                                 "item_ids": [1631],
-                                "quantity": [1, 5]
+                                "quantity": [1]
                             }
                         ]
                 }
@@ -1292,36 +1280,8 @@
                             "quantity": [1]
                         } 
                 }, 
-                {
-                    "name": "Obtain some Mole Claws",
-                    "taskID": "obtain_mole_claw",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Mole Claw"],
-                            "item_ids": [7416],
-                            "quantity": [1, 50]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Mole Skins",
-                    "taskID": "obtain_mole_skins",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Mole Skin"],
-                            "item_ids": [7418],
-                            "quantity": [1, 50]
-                        }
-                    ]
-                },
+                
+               
                 {
                     "name": "Equip a White 2H Sword",
                     "taskID": "equip_white_2h",
@@ -1501,7 +1461,7 @@
                         {
                             "item": ["Stardust"],
                             "item_ids": [25527],
-                            "quantity": [1, 25]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1705,7 +1665,7 @@
                         {
                             "item": ["Iron Ore"],
                             "item_ids": [440],
-                            "quantity": [1, 50]
+                            "quantity": [25, 200]
                         }
                     ]
                 },
@@ -1721,7 +1681,7 @@
                         {
                         "item": "Coal",
                         "item_ids": [453],
-                        "quantity": [1, 50]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -1891,7 +1851,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
                             "item": ["Ensouled Bear Head"],
@@ -2124,68 +2084,12 @@
                         }
                     ]
                 },
+                
+                
+                
+                
                 {
-                    "name": "Obtain some Earth Runes",
-                    "taskID": "Obtain_earth_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Earth Rune",
-                        "item_ids": [557],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Fire Runes",
-                    "taskID": "Obtain_Fire_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Fire Rune",
-                        "item_ids": [554],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Air Runes",
-                    "taskID": "Obtain_air_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Air Rune",
-                        "item_ids": [556],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Water Runes",
-                    "taskID": "Obtain_water_runes",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                        "item": "Water Rune",
-                        "item_ids": [555],
-                        "quantity": [500, 5000]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a some Dark Wizards",
+                    "name": "Defeat some Dark Wizards",
                     "taskID": "defeat_some_dark_wizards",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2251,7 +2155,7 @@
                     ]
                 },
                 {                           
-                    "name": "Defeat a Monk",
+                    "name": "Defeat some Monks",
                     "taskID": "defeat_monk",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2260,7 +2164,7 @@
                     "target_npc": {
                         "npc": ["Monk"],
                         "npc_ids": [4246, 2579, 4068, 6956],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     } 
                 },
                 {
@@ -2307,7 +2211,7 @@
                         ]
                 },
                 {
-                    "name": "Defeat a Black Knight",
+                    "name": "Defeat some Black Knights",
                     "taskID": "defeat_black_knight",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2316,7 +2220,7 @@
                     "target_npc": {
                         "npc": ["Black Knight"],
                         "npc_ids": [11953, 517, 4331, 11952, 516],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },               
                 {                           
@@ -2362,8 +2266,8 @@
             "neighbor_ids": [11575, 11830, 11573, 11318],
             "tasks": [
                 {
-                    "name": "Mix a Saradomin Brew",
-                    "taskID": "mix_saradomin_brew",
+                    "name": "Mix some Saradomin Brews",
+                    "taskID": "mix_saradomin_brews",
                     "category": "Obtain_Set",
                     "level": 81,
                     "completion_type": "HERBLORE",
@@ -2372,13 +2276,14 @@
                      "required_items": [
                         {
                             "item": ["Saradomin Brew(3)", "Saradomin Brew(4)"],
-                            "item_ids": [6687, 6685]
+                            "item_ids": [6687, 6685],
+                            "quantity": [25, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Super Combat Potion",
-                    "taskID": "mix_super_combat_potion",
+                    "name": "Mix some Super Combat Potions",
+                    "taskID": "mix_super_combat_potions",
                     "category": "Obtain_Set",
                     "level": 90,
                     "completion_type": "HERBLORE",
@@ -2387,13 +2292,14 @@
                      "required_items": [
                         {
                             "item": ["Super Combat Potion(3)", "Super Combat Potion(4)"],
-                            "item_ids": [12697, 12695]
+                            "item_ids": [12697, 12695],
+                            "quantity": [25, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Super Attack Potion",
-                    "taskID": "mix_super_attack_potion",
+                    "name": "Mix some Super Attack Potions",
+                    "taskID": "mix_super_attack_potions",
                     "category": "Obtain_Set",
                     "level": 45,
                     "completion_type": "HERBLORE",
@@ -2402,13 +2308,14 @@
                      "required_items": [
                         {
                             "item": ["Super Attack Potion(3)", "Super Attack Potion(4)"],
-                            "item_ids": [145, 2436]
+                            "item_ids": [145, 2436],
+                            "quantity": [50, 150]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Super Strength Potion",
-                    "taskID": "mix_super_strength_potion",
+                    "name": "Mix some Super Strength Potions",
+                    "taskID": "mix_super_strength_potions",
                     "category": "Obtain_Set",
                     "level": 55,
                     "completion_type": "HERBLORE",
@@ -2417,13 +2324,14 @@
                      "required_items": [
                         {
                             "item": ["Super Strength Potion(3)", "Super Strength Potion(4)"],
-                            "item_ids": [157, 2440]
+                            "item_ids": [157, 2440],
+                            "quantity": [50, 150]
                         }
                     ]
                 }, 
                 {
-                    "name": "Mix a Super Defence Potion",
-                    "taskID": "mix_super_defence_potion",
+                    "name": "Mix some Super Defence Potions",
+                    "taskID": "mix_super_defence_potions",
                     "category": "Obtain_Set",
                     "level": 66,
                     "completion_type": "HERBLORE",
@@ -2432,13 +2340,14 @@
                      "required_items": [
                         {
                             "item": ["Super Defence Potion(3)", "Super Defence Potion(4)"],
-                            "item_ids": [163, 2442]
+                            "item_ids": [163, 2442],
+                            "quantity": [50, 150]
                         }
                     ]
                 },
                 {
-                    "name": "Mix a Ranging Potion",
-                    "taskID": "mix_ranging_potion",
+                    "name": "Mix some Ranging Potions",
+                    "taskID": "mix_ranging_potions",
                     "category": "Obtain_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
@@ -2447,7 +2356,8 @@
                      "required_items": [
                         {
                             "item": ["Ranging Potion(3)", "Ranging Potion(4)"],
-                            "item_ids": [169, 2444]
+                            "item_ids": [169, 2444],
+                            "quantity": [50, 150]
                         }
                     ]
                 },
@@ -2684,7 +2594,7 @@
                     ]
                 },
                 {
-                    "name": "Mix a Stamina Potion",
+                    "name": "Mix some Stamina Potions",
                     "taskID": "mix_stamina_potion",
                     "category": "Obtain_Set",
                     "level": 77,
@@ -2694,7 +2604,8 @@
                      "required_items": [
                         {
                             "item": ["Stamina Potion(3)", "Stamina Potion(4)"],
-                            "item_ids": [12627, 12625]
+                            "item_ids": [12627, 12625],
+                            "quantity": [50, 150]
                         }
                     ]
                 }           
@@ -2773,7 +2684,7 @@
                     "target_npc": {
                         "npc": ["Animated Adamant Armour"],
                         "npc_ids": [2455],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }                  
                 },
                 {
@@ -2786,12 +2697,12 @@
                     "target_npc": {
                         "npc": ["Animated Mithril Armour"],
                         "npc_ids": [2454],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                  
                 },
                 {
-                    "name": "Obtain some Warrior Guild Tokens",
-                    "taskID": "obtain_warrior_guild_tokens",
+                    "name": "Obtain a Warrior Guild Token",
+                    "taskID": "obtain_warrior_guild_token",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -2800,7 +2711,7 @@
                             {
                                 "item": ["Warrior Guild Token"],
                                 "item_ids": [8851],
-                                "quantity": [1000, 5000]
+                                "quantity": [1]
                             }
                         ]
                 },
@@ -2820,7 +2731,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Black Knives",
+                    "name": "Obtain a Black Knife",
                     "taskID": "obtain_black_knife",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -2830,7 +2741,7 @@
                         {
                             "item": ["Black Knife"],
                             "item_ids": [869],
-                            "quantity": [100, 1000]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -2934,7 +2845,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a White Wolf in 5 Seconds",
+                    "name": "Defeat a White Wolf in 12 Seconds",
                     "taskID": "defeat_white_wolf_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2946,7 +2857,7 @@
                         "quantity": [1]
                     },               
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [20]
                     }
                 }, 
                 {
@@ -3176,7 +3087,7 @@
                     }
                 },
                 {
-                    "name": "Obtain some Goutweed",
+                    "name": "Obtain Goutweed",
                     "taskID": "obtain_goutweed",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -3186,7 +3097,7 @@
                         {
                         "item": "Goutweed",
                         "item_ids": [3261],
-                        "quantity": [1, 3]
+                        "quantity": [1]
                         }
                     ]
                 },
@@ -3317,7 +3228,7 @@
                     "target_npc": {
                         "npc": ["Troll General"],
                         "npc_ids": [4122, 4121, 4120],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 }, 
                 {
@@ -3403,7 +3314,7 @@
                     }
                 },
                 {
-                    "name": "Obtain some Goutweed",
+                    "name": "Obtain Goutweed",
                     "taskID": "obtain_goutweed",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -3413,7 +3324,7 @@
                         {
                         "item": "Goutweed",
                         "item_ids": [3261],
-                        "quantity": [1, 3]
+                        "quantity": [1]
                         }
                     ]
                 }              
@@ -3499,7 +3410,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Goutweed",
+                    "name": "Obtain Goutweed",
                     "taskID": "obtain_goutweed",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -3509,7 +3420,7 @@
                         {
                         "item": "Goutweed",
                         "item_ids": [3261],
-                        "quantity": [1, 3]
+                        "quantity": [1]
                         }
                     ]
                 }              

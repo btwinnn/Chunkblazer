@@ -45,7 +45,7 @@
                     "target_npc": {
                         "npc": ["Guard Dog"],
                         "npc_ids": [7209, 114, 4228],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }                   
                  
                 },
@@ -73,7 +73,7 @@
                     "target_npc": {
                         "npc": ["Hosidius Guard"],
                         "npc_ids": [397, 398, 399, 400],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -100,14 +100,13 @@
                     "target_npc": {
                         "npc": ["Hosidius Guard"],
                         "npc_ids": [397, 398, 399, 400],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
                     "name": "Defeat a Hosidius Guard in 12 Seconds",
-                    "taskID": "defeat_highwayman_fast",
+                    "taskID": "defeat_hosidius_guard_fast",
                     "category": "Combat",
-                    "level": 5,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,

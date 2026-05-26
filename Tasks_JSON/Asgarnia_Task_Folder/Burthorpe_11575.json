@@ -124,7 +124,7 @@
                     ]
                 },
                 {
-                    "name": "Mix a Stamina Potion",
+                    "name": "Mix some Stamina Potions",
                     "taskID": "mix_stamina_potion",
                     "category": "Obtain_Set",
                     "level": 77,
@@ -134,7 +134,8 @@
                      "required_items": [
                         {
                             "item": ["Stamina Potion(3)", "Stamina Potion(4)"],
-                            "item_ids": [12627, 12625]
+                            "item_ids": [12627, 12625],
+                            "quantity": [50, 150]
                         }
                     ]
                 }           

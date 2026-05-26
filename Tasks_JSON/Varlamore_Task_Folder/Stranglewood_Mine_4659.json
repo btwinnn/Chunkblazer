@@ -15,7 +15,7 @@
                         {
                         "item": "Coal",
                         "item_ids": [453],
-                        "quantity": [1, 50]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -31,7 +31,7 @@
                         {
                             "item": ["Iron Ore"],
                             "item_ids": [440],
-                            "quantity": [1, 50]
+                            "quantity": [25, 200]
                         }
                     ]
                 },

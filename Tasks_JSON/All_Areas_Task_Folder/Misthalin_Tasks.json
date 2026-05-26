@@ -12,7 +12,7 @@
                     "level": 22,
                     "completion_type": "FARMING",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Cadavaberry Seeds"],
@@ -32,17 +32,37 @@
                         {
                             "item": ["Soft Clay"],
                             "item_ids": [1761],
-                            "quantity": [1, 50]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Champions' Guild",
-                    "taskID": "enter_champions_guild",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
+                    "name": "Equip a Coif",
+                    "taskID": "equip_coif",
+                    "category": ["Ranged", "Defence"],
+                    "level": [20, 1],
+                    "completion_type": "EQUIP",
                     "base_points": 1,
-                    "assignment_weight": 10
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Coif"],
+                            "item_ids": [1169]
+                        }
+                    ]
+                },
+                {
+                    "name": "Talk to the Champions' Guildmaster",
+                    "taskID": "talk_to_champions_guildmaster",
+                    "category": "Dialogue",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Guildmaster"],
+                        "npc_ids": [814],
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Agility Stepping Stones",
@@ -69,17 +89,17 @@
                     ]
                 },
                 {
-                    "name": "Equip a Rune Mace",
-                    "taskID": "equip_rune_mace",
+                    "name": "Equip Black Platelegs",
+                    "taskID": "equip_black_platelegs",
                     "base_points": 1,
-                    "assignment_weight": 5,
-                    "category": "Attack",
-                    "level": 40,
+                    "assignment_weight": 8,
+                    "category": "Defence",
+                    "level": 10,
                     "completion_type": "EQUIP",
                     "required_items": [
                         {
-                            "item": ["Rune Mace"],
-                            "item_ids": [1432]
+                            "item": ["Black Platelegs"],
+                            "item_ids": [1077]
                         }
                     ]
                 },
@@ -92,11 +112,10 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Defeat a Sourhog on task",
-                    "taskID": "defeat_sourhog_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat a Sourhog",
+                    "taskID": "defeat_sourhog",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
@@ -150,7 +169,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Mugger in 5 Seconds",
+                    "name": "Defeat a Mugger in 16 Seconds",
                     "taskID": "defeat_mugger_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -162,7 +181,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [8]
+                        "time_in_ticks": [28]
                     }
                 }
             ],
@@ -205,22 +224,21 @@
                     "target_npc": {
                         "npc": ["Ghost"],
                         "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
-                    "name": "Defeat a Killerwatt on Task",
-                    "taskID": "defeat_killerwatt_on_task",
-                    "category": "Slayer",
-                    "level": 37,
-                    "completion_type": "SLAYER",
-                    "base_points": 1,
+                    "name": "Defeat a Killerwatt",
+                    "taskID": "defeat_killerwatt",
+                    "category": "Combat",
+                    "completion_type": "NPC_KILL",
+                    "base_points": 2,
                     "assignment_weight": 5,
                     "target_npc": {
                         "npc": ["Killerwatt"],
                         "npc_ids": [469],
                         "quantity": [1]
-                    }
+                    }          
                 },
                 {
                     "name": "Defeat some Level 1 Rats",
@@ -298,7 +316,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 2,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Magic whistle"],
@@ -354,7 +372,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Highwayman in 7 Seconds",
+                    "name": "Defeat a Highwayman in 24 Seconds",
                     "taskID": "defeat_highwayman_fast",
                     "category": "Combat",
                     "level": 5,
@@ -367,23 +385,10 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [12]
+                        "time_in_ticks": [40]
                     }
                 },
-                {
-                    "name": "Use the Draynor Village Rooftop Course",
-                    "taskID": "complete_draynor_roof",
-                    "category": "Agility",
-                    "level": 1,
-                    "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": {
-                        "object": ["Draynor Rooftop Crate"],
-                        "object_id": [11632, 11358], 
-                        "quantity": [1, 20]
-                    }
-                },
+                
                 {
                     "name": "Defeat a Goblin on Task",
                     "taskID": "defeat_goblin_on_task",
@@ -409,21 +414,21 @@
                     "target_npc": {
                         "npc": ["Zombie"],
                         "npc_ids": [49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
-                    "name": "Smith Iron Arrowtips",
-                    "taskID": "smith_iron_arrowtips",
+                    "name": "Smith Bronze Arrowtips",
+                    "taskID": "smith_bronze_arrowtips",
                     "category": "Smithing",
-                    "level": 20,
+                    "level": 5,
                     "completion_type": "SMITHING",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Iron Arrowtips"],
-                            "item_ids": [40],
+                            "item": ["Bronze Arrowtips"],
+                            "item_ids": [39],
                             "quantity": [1]
                         }
                     ]
@@ -651,7 +656,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Log Basket"],
@@ -674,7 +679,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a Level 7 Dark Wizard in 10 Seconds",
+                    "name": "Defeat a Level 7 Dark Wizard in 18 Seconds",
                     "taskID": "defeat_level_7_dark_wizard_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -687,7 +692,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [16]
+                        "time_in_ticks": [30]
                     }
                 },
                 {
@@ -738,35 +743,7 @@
                     "target_npc": {
                         "npc": ["Lesser Demon"],
                         "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat The Leviathan",
-                    "taskID": "defeat_leviathan",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Leviathan",
-                    "target_npc": {
-                        "npc": ["Leviathan"],
-                        "npc_ids": [12215, 12219],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat the Awakened Leviathan",
-                    "taskID": "defeat_awakened_leviathan",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 1,
-                    "boss": "The Leviathan",
-                    "target_npc": {
-                        "npc": ["Awakened Leviathan"],
-                        "npc_ids": [12214],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -776,31 +753,16 @@
                     "level": 35,
                     "completion_type": "RUNECRAFTING",
                     "base_points": 2,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
                         "item": "Chaos Rune",
                         "item_ids": [562],
-                        "action": "obtain",
                         "quantity": [1]
                         }
                     ]
                 },
-                {
-                    "name": "Obtain a Venator Vestige",
-                    "taskID": "obtain_venator_vestige",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Leviathan",
-                    "required_items": [
-                        {
-                            "item": ["Venator Vestige"],
-                            "item_ids": [28283]
-                        }
-                    ]
-                },
+                
                 {
                     "name": "Use Fairy Ring Code DIS",
                     "taskID": "fairy_ring_CLP",
@@ -840,7 +802,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Level 9 Wizard in 6 Seconds",
+                    "name": "Defeat a Level 9 Wizard in 24 Seconds",
                     "taskID": "defeat_level_9_wizard_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -853,37 +815,22 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [10]
+                        "time_in_ticks": [40]
                     }
                 },
+                
                 {
-                    "name": "Obtain a Leviathan's Lure",
-                    "taskID": "obtain_leviathan's_lure",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Leviathan",
-                    "required_items": [
-                        {
-                            "item": ["Leviathan's Lure"],
-                            "item_ids": [28325],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain Rune Essence",
-                    "taskID": "obtain_rune_essence",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
+                    "name": "Mine some Rune Essence",
+                    "taskID": "mine_rune_essence",
+                    "category": "Mining",
+                    "completion_type": "MINING",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
                             "item": ["Rune Essence"],
                             "item_ids": [1436],
-                            "quantity": [1]
+                            "quantity": [1, 150]
                         }
                     ]
                 },
@@ -893,7 +840,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 3,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
                             "item": ["Abyssal Lantern Unlit"],
@@ -905,11 +852,11 @@
                 {
                     "name": "Equip the Raiments of the Eye Set",
                     "taskID": "equip_raiments_of_eye_set",
-                    "category": "Runecrafting",
+                    "category": "Obtain_Set",
                     "level": 1,
                     "completion_type": "EQUIP",
                     "base_points": 5,
-                    "assignment_weight": 10,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
                             "item": ["Hat of the Eye"],
@@ -958,7 +905,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a Level 20 Dark Wizard in 19 Seconds",
+                    "name": "Defeat a Level 20 Dark Wizard in 30 Seconds",
                     "taskID": "defeat_level_20_dark_wizard_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -971,7 +918,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [32]
+                        "time_in_ticks": [50]
                     }
                 },
                 {
@@ -1075,7 +1022,7 @@
                         {
                             "item": ["Iron Ore"],
                             "item_ids": [440],
-                            "quantity": [1, 50]
+                            "quantity": [25, 200]
                         }
                     ]
                 },
@@ -1089,12 +1036,12 @@
                     "target_npc": {
                         "npc": ["Unicorn"],
                         "npc_ids": [2837, 14043],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
-                    "name": "Mix an Anti-Poison Potion",
-                    "taskID": "mix_anti-poison",
+                    "name": "Mix some Anti-Poison Potions",
+                    "taskID": "mix_anti-poisons",
                     "category": "Obtain_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
@@ -1103,7 +1050,8 @@
                      "required_items": [
                         {
                             "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446]
+                            "item_ids": [175, 2446],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -1153,7 +1101,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
                             "item": ["Ensouled Bear Head"],
@@ -1162,7 +1110,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Unicorn in 13 Seconds",
+                    "name": "Defeat a Unicorn in 22 Seconds",
                     "taskID": "defeat_white_unicorn_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1175,7 +1123,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [20]
+                        "time_in_ticks": [37]
                     }
                 }, 
                 {
@@ -1197,8 +1145,8 @@
                     
                 },
                 {
-                    "name": "Obtain some Unicorn Horns",
-                    "taskID": "obtain_unicorn_horns",
+                    "name": "Obtain a Unicorn Horn",
+                    "taskID": "obtain_unicorn_horn",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -1207,7 +1155,7 @@
                         {
                             "item": ["Unicorn Horn"],
                             "item_ids": [237],
-                            "quantity": [1,25]
+                            "quantity": [1]
                         }
                     ]
                 },
@@ -1538,20 +1486,16 @@
                     
                 },
                 {
-                    "name": "Defeat a Varrock Guard in the First Hit",
-                    "taskID": "defeat_varrock_guard_fast",
+                    "name": "Defeat a Varrock Guard",
+                    "taskID": "defeat_varrock_guard",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Varrock Guard Level 21"],
                         "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
                         "quantity": [1]
-                    },
-
-                    "constraints": {
-                        "time_in_ticks": [1]
                     }
                 },
                 {
@@ -1612,26 +1556,6 @@
                             "quantity": [1]
                         }
                     ]
-                },
-                {
-                    "name": "Defeat a Varrock Guard for some Bones",
-                    "taskID": "defeat_a_varrock_guard_for_bones",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Varrock Guard Level 21"],
-                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
-                        "quantity": [1, 25]
-                    },
-                    "constraints": [
-                        {
-                        "dropped_item": "Bones",
-                        "dropped_item_id": [526],
-                        "quantity": [1]
-                        }
-                    ]
                 }
            ],
                     "optional_quests_unlocked": [
@@ -1651,19 +1575,7 @@
             "Friendly_Name": "Varrock Fountain",
             "neighbor_ids": [13109, 12852, 12597, 12854],
             "tasks": [
-                {
-                "name": "Complete the Varrock Museum Quiz",
-                "taskID": "complete_varrock_museum_quiz",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 1,
-                "assignment_weight": 8,                   
-                "constraints": {                       
-                    "varbit_id": 699,        
-                    "varbit_boolean": 1,      
-                    "description": "Complete the Varrock Museum Quiz"
-                    }
-                },               
+                              
                 {
                 "name": "Obtain an Antique Lamp from Historian Minas",
                 "taskID": "obtain_antique_lamp_historian_minas",
@@ -1783,20 +1695,7 @@
                         }
                     ]
                 },
-                {
-                    "name": "Use the Varrock Rooftop Course",
-                    "taskID": "complete_varrock_roof",
-                    "category": "Agility",
-                    "level": 30,
-                    "completion_type": "AGILITY",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_object": {
-                        "object": ["Edge (Varrock Rooftop Course)"],
-                        "object_id": [14841], 
-                        "quantity": [1, 20]
-                    }
-                },
+                
                 {
                     "name": "Mine some Pure Essence",
                     "taskID": "mine_pure_essence",
@@ -1809,7 +1708,7 @@
                         {
                             "item": ["Pure Essence"],
                             "item_ids": [7936],
-                            "quantity": [1, 100]
+                            "quantity": [1, 250]
                         }
                     ]
                 }              
@@ -1840,17 +1739,17 @@
             "neighbor_ids": [12853, 12596, 12341, 12598],
             "tasks": [
                 {
-                    "name": "Smith a Steel Dagger",
-                    "taskID": "smith_steel_dagger",
+                    "name": "Smith an Iron Dagger",
+                    "taskID": "smith_iron_dagger",
                     "category": "Smithing",
-                    "level": 30,
+                    "level": 15,
                     "completion_type": "SMITHING",
-                    "base_points": 2,
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                             {
-                                "item": ["Steel Dagger"],
-                                "item_ids": [1207],
+                                "item": ["Iron Dagger"],
+                                "item_ids": [1203],
                                 "quantity": [1]
                             }
                         ]
@@ -1871,36 +1770,8 @@
                             }
                         ]
                 },
-                {
-                    "name": "Obtain a Ruby Ring",
-                    "taskID": "obtain_ruby_ring",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                            {
-                                "item": ["Ruby Ring"],
-                                "item_ids": [1641],
-                                "quantity": [1]
-                            }
-                        ]
-                },
-                {
-                    "name": "Obtain a Ring of Forging",
-                    "taskID": "obtain_ring_of_forging",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                            {
-                                "item": ["Ring of Forging"],
-                                "item_ids": [2568],
-                                "quantity": [1]
-                            }
-                        ]
-                },
+                
+                
                 {
                     "name": "Obtain a Gold Bar",
                     "taskID": "obtain_gold_bar",
@@ -2018,7 +1889,7 @@
                         {
                         "item": "Raw Trout",
                         "item_ids": [335],
-                        "quantity": [1, 100]
+                        "quantity": [1, 250]
                         }
                     ]       
                 },
@@ -2095,22 +1966,21 @@
                         {
                         "item": "Coal",
                         "item_ids": [453],
-                        "quantity": [1, 50]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Minotaur on Task",
-                    "taskID": "defeat_minotaur_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat some Minotaurs",
+                    "taskID": "defeat_minotaurs",
+                    "category": "Combat",
+                    "completion_type": "NPC_KILL",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Minotaur"],
                         "npc_ids": [2481, 2483],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
@@ -2317,7 +2187,7 @@
                     "assignment_weight": 8
                 },
                 {
-                    "name": "Use the Spirit Tree to Teleport to the Grand Exchange",
+                    "name": "Use the Spirit Tree at the Grand Exchange",
                     "taskID": "spirit_tree_teleport_to_GE",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
@@ -2367,26 +2237,6 @@
                         "npc_ids": [7222],
                         "quantity": [1, 10]
                     }
-                },
-                {
-                    "name": "Defeat a Varrock Guard for some Bones",
-                    "taskID": "defeat_a_varrock_guard_for_bones",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Varrock Guard Level 21"],
-                        "npc_ids": [11911, 11912, 11913, 11914, 11915, 11916, 11917],
-                        "quantity": [1, 25]
-                    },
-                    "constraints": [
-                        {
-                        "dropped_item": "Bones",
-                        "dropped_item_id": [526],
-                        "quantity": [1]
-                        }
-                    ]
                 },
                 {                           
                     "name": "Defeat Scurrius in 2:25 in a Solo Instance",
@@ -2596,7 +2446,7 @@
                         ]
                 },
                 {
-                    "name": "Travel to the Lumber Yard using the Hot Air Balloon",
+                    "name": "Use the Lumber Yard Hot Air Balloon",
                     "taskID": "travel_lumber_yard_hot_air_balloon",
                     "category": "Travel",
                     "completion_type": "TRAVEL",

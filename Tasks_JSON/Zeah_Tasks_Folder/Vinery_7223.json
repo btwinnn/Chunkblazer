@@ -128,12 +128,12 @@
                     "target_npc": {
                         "npc": ["Mugger"],
                         "npc_ids": [513, 1461, 6996],
-                        "quantity": [1]
+                        "quantity": [1, 5]
                     }                  
                 },
                 {
-                    "name": "Mix a Ranging Potion",
-                    "taskID": "mix_ranging_potion",
+                    "name": "Mix some Ranging Potions",
+                    "taskID": "mix_ranging_potions",
                     "category": "Obtain_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
@@ -142,7 +142,8 @@
                      "required_items": [
                         {
                             "item": ["Ranging Potion(3)", "Ranging Potion(4)"],
-                            "item_ids": [169, 2444]
+                            "item_ids": [169, 2444],
+                            "quantity": [50, 150]
                         }
                     ]
                 }                        

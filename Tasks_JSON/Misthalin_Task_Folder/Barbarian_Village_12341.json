@@ -15,7 +15,7 @@
                         {
                         "item": "Raw Trout",
                         "item_ids": [335],
-                        "quantity": [1, 100]
+                        "quantity": [1, 250]
                         }
                     ]       
                 },
@@ -92,41 +92,40 @@
                         {
                         "item": "Coal",
                         "item_ids": [453],
-                        "quantity": [1, 50]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Minotaur on Task",
-                    "taskID": "defeat_minotaur_on_task",
-                    "category": "Slayer",
-                    "level": 1,
-                    "completion_type": "SLAYER",
+                    "name": "Defeat some Minotaurs",
+                    "taskID": "defeat_minotaurs",
+                    "category": "Combat",
+                    "completion_type": "NPC_KILL",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Minotaur"],
                         "npc_ids": [2481, 2483],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
-                    "name": "Equip an Adamant Full Helm",
-                    "taskID": "equip_adamant_full_helm",
+                    "name": "Equip a Mithril Full Helm",
+                    "taskID": "equip_mithril_full_helm",
                     "category": "Defence",
-                    "level": 30,
+                    "level": 20,
                     "completion_type": "EQUIP",
                     "base_points": 1,
                     "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": "Adamant Full Helm",
-                            "item_ids": [1161]
+                            "item": "Mithril Full Helm",
+                            "item_ids": [1159]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Level 5 Goblin in the First Hit",
+                    "name": "Defeat a Level 5 Goblin in 12 Seconds",
                     "taskID": "defeat_level_5_goblin_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -139,22 +138,22 @@
                         },
                     
                     "constraints": {
-                        "time_in_ticks": [1]
+                        "time_in_ticks": [20]
                         }
                 },
                 {
-                    "name": "Defeat an Ankou",
-                    "taskID": "defeat_ankou",
+                    "name": "Defeat a Flesh Crawler",
+                    "taskID": "defeat_flesh_crawler",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Ankou"],
-                        "npc_ids": [2514, 2517, 2515, 2518, 2516, 2519, 6608, 7257, 7864],
-                        "quantity": [1]
+                        "npc": ["Flesh Crawler"],
+                        "npc_ids": [2498, 2499, 2500],
+                        "quantity": [1, 25]
                     }
-                }                            
+                }                           
             ],                 
                 "is_completed": false
         }

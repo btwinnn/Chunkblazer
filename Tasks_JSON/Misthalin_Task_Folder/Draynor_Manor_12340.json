@@ -29,22 +29,21 @@
                     "target_npc": {
                         "npc": ["Ghost"],
                         "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
-                    "name": "Defeat a Killerwatt on Task",
-                    "taskID": "defeat_killerwatt_on_task",
-                    "category": "Slayer",
-                    "level": 37,
-                    "completion_type": "SLAYER",
-                    "base_points": 1,
+                    "name": "Defeat a Killerwatt",
+                    "taskID": "defeat_killerwatt",
+                    "category": "Combat",
+                    "completion_type": "NPC_KILL",
+                    "base_points": 2,
                     "assignment_weight": 5,
                     "target_npc": {
                         "npc": ["Killerwatt"],
                         "npc_ids": [469],
                         "quantity": [1]
-                    }
+                    }          
                 },
                 {
                     "name": "Defeat some Level 1 Rats",
@@ -123,7 +122,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 2,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Magic whistle"],

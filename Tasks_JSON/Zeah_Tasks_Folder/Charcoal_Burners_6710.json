@@ -30,7 +30,7 @@
                         {
                         "item": "Raw Lobster",
                         "item_ids": [377],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -45,7 +45,8 @@
                     "required_items": [
                         {
                             "item": "Lobster",
-                            "item_ids": [379]
+                            "item_ids": [379],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -61,7 +62,7 @@
                         {
                         "item": "Raw Shark",
                         "item_ids": [383],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 }, 
@@ -76,7 +77,8 @@
                     "required_items": [
                         {
                             "item": "Shark",
-                            "item_ids": [385]
+                            "item_ids": [385],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -92,7 +94,7 @@
                         {
                         "item": "Raw Anchovies",
                         "item_ids": [321],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -162,7 +164,7 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Saltpetre",
+                    "name": "Obtain Saltpetre",
                     "taskID": "obtain_saltpetre",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
@@ -172,13 +174,13 @@
                         {
                             "item": ["Saltpetre"],
                             "item_ids": [13421],
-                            "quantity": [1, 100]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Mix an Anti-Poison Potion",
-                    "taskID": "mix_anti-poison",
+                    "name": "Mix some Anti-Poison Potions",
+                    "taskID": "mix_anti-poisons",
                     "category": "Obtain_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
@@ -187,7 +189,8 @@
                      "required_items": [
                         {
                             "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446]
+                            "item_ids": [175, 2446],
+                            "quantity": [1, 25]
                         }
                     ]
                 },

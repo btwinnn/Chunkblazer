@@ -21,7 +21,7 @@
                         }
                 },
                 {
-                    "name": "Defeat a Unicorn in 13 Seconds",
+                    "name": "Defeat a Unicorn in 22 Seconds",
                     "taskID": "defeat_white_unicorn_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -34,7 +34,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [20]
+                        "time_in_ticks": [37]
                     }
                 },
                 {
@@ -52,8 +52,8 @@
                     ]
                 },
                 {
-                    "name": "Obtain some Unicorn Horns",
-                    "taskID": "obtain_unicorn_horns",
+                    "name": "Obtain a Unicorn Horn",
+                    "taskID": "obtain_unicorn_horn",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
@@ -62,13 +62,13 @@
                         {
                             "item": ["Unicorn Horn"],
                             "item_ids": [237],
-                            "quantity": [1,25]
+                            "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Chop a Willow Tree",
-                    "taskID": "Chop_willow_tree",
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
                     "category": "Woodcutting",
                     "level": 30,
                     "completion_type": "WOODCUTTING",
@@ -78,7 +78,7 @@
                         {
                         "item": "Willow Logs",
                         "item_ids": [1519],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -138,7 +138,7 @@
                     "target_npc": {
                         "npc": ["Level 10 Dwarf"],
                         "npc_ids": [290, 296, 1405],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 }               
             ],                          

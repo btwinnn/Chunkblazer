@@ -128,36 +128,8 @@
                             "quantity": [1]
                         } 
                 }, 
-                {
-                    "name": "Obtain some Mole Claws",
-                    "taskID": "obtain_mole_claw",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Mole Claw"],
-                            "item_ids": [7416],
-                            "quantity": [1, 50]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain some Mole Skins",
-                    "taskID": "obtain_mole_skins",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Mole Skin"],
-                            "item_ids": [7418],
-                            "quantity": [1, 50]
-                        }
-                    ]
-                },
+                
+               
                 {
                     "name": "Equip a White 2H Sword",
                     "taskID": "equip_white_2h",

@@ -19,7 +19,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Highwayman in 7 Seconds",
+                    "name": "Defeat a Highwayman in 24 Seconds",
                     "taskID": "defeat_highwayman_fast",
                     "category": "Combat",
                     "level": 5,
@@ -32,23 +32,10 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [12]
+                        "time_in_ticks": [40]
                     }
                 },
-                {
-                    "name": "Use the Draynor Village Rooftop Course",
-                    "taskID": "complete_draynor_roof",
-                    "category": "Agility",
-                    "level": 1,
-                    "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": {
-                        "object": ["Draynor Rooftop Crate"],
-                        "object_id": [11632, 11358], 
-                        "quantity": [1, 20]
-                    }
-                },
+                
                 {
                     "name": "Defeat a Goblin on Task",
                     "taskID": "defeat_goblin_on_task",
@@ -74,21 +61,21 @@
                     "target_npc": {
                         "npc": ["Zombie"],
                         "npc_ids": [49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
-                        "quantity": [1]
+                        "quantity": [1, 10]
                     }
                 },
                 {
-                    "name": "Smith Iron Arrowtips",
-                    "taskID": "smith_iron_arrowtips",
+                    "name": "Smith Bronze Arrowtips",
+                    "taskID": "smith_bronze_arrowtips",
                     "category": "Smithing",
-                    "level": 20,
+                    "level": 5,
                     "completion_type": "SMITHING",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Iron Arrowtips"],
-                            "item_ids": [40],
+                            "item": ["Bronze Arrowtips"],
+                            "item_ids": [39],
                             "quantity": [1]
                         }
                     ]
