@@ -392,7 +392,8 @@
                     "required_items": [
                         {
                             "item": "Shark",
-                            "item_ids": [385]
+                            "item_ids": [385],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -455,7 +456,8 @@
                     "required_items": [
                         {
                             "item": "Cod",
-                            "item_ids": [339]
+                            "item_ids": [339],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -470,7 +472,8 @@
                     "required_items": [
                         {
                             "item": "Bass",
-                            "item_ids": [365]
+                            "item_ids": [365],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -501,7 +504,8 @@
                     "required_items": [
                         {
                             "item": "Herring",
-                            "item_ids": [347]
+                            "item_ids": [347],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -1656,7 +1660,8 @@
                     "required_items": [
                         {
                             "item": "Lobster",
-                            "item_ids": [379]
+                            "item_ids": [379],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -1687,7 +1692,8 @@
                     "required_items": [
                         {
                             "item": "Shark",
-                            "item_ids": [385]
+                            "item_ids": [385],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -4140,7 +4146,8 @@
                     "required_items": [
                         {
                             "item": "Pike",
-                            "item_ids": [351]
+                            "item_ids": [351],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -4518,7 +4525,8 @@
                     "required_items": [
                         {
                             "item": "Anglerfish",
-                            "item_ids": [13441]
+                            "item_ids": [13441],
+                            "quantity": [1, 250]
                         }
                     ]
                 }                
@@ -4587,7 +4595,8 @@
                     "required_items": [
                         {
                             "item": "Anglerfish",
-                            "item_ids": [13441]
+                            "item_ids": [13441],
+                            "quantity": [1, 250]
                         }
                     ]
                 },

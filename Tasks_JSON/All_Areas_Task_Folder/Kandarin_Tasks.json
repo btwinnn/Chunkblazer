@@ -6725,7 +6725,7 @@
                 {
                     "name": "Equip a Zamorak Monk Robe Bottom",
                     "taskID": "equip_zamorak_monk_robe_bottom",
-                    "category": "DEFENCE",
+                    "category": "Defence",
                     "level": 1,
                     "completion_type": "EQUIP",
                     "base_points": 1,
@@ -6740,7 +6740,7 @@
                 {
                     "name": "Equip a Zamorak Monk Robe Top",
                     "taskID": "equip_zamorak_monk_robe_top",
-                    "category": "DEFENCE",
+                    "category": "Defence",
                     "level": 1,
                     "completion_type": "EQUIP",
                     "base_points": 1,
