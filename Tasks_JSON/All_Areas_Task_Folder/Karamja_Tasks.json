@@ -17,7 +17,7 @@
                         {
                         "item": "Raw Lobster",
                         "item_ids": [377],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -48,7 +48,7 @@
                         {
                         "item": "Raw Tuna",
                         "item_ids": [359],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -79,7 +79,7 @@
                         {
                         "item": "Raw Swordfish",
                         "item_ids": [371],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -95,7 +95,7 @@
                         {
                         "item": "Raw Herring",
                         "item_ids": [345],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },
@@ -126,7 +126,7 @@
                         {
                         "item": "Raw Sardine",
                         "item_ids": [327],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },

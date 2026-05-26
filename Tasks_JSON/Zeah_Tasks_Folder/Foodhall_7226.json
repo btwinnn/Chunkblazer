@@ -85,7 +85,7 @@
                         {
                         "item": "Raw Anglerfish",
                         "item_ids": [13439],
-                        "quantity": [1]
+                        "quantity": [1, 500]
                         }
                     ]
                 }, 

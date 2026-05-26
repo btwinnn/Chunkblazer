@@ -47,7 +47,7 @@
                         {
                         "item": "Raw Lobster",
                         "item_ids": [377],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },

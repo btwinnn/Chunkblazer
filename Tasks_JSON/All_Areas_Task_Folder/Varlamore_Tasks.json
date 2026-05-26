@@ -1507,7 +1507,7 @@
                         {
                         "item": "Raw Shark",
                         "item_ids": [383],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -1523,7 +1523,7 @@
                         {
                         "item": "Raw Bass",
                         "item_ids": [363],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -1539,7 +1539,7 @@
                         {
                         "item": "Raw Mackerel",
                         "item_ids": [353],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 }
@@ -5434,7 +5434,7 @@
                         {
                         "item": "Raw Lobster",
                         "item_ids": [377],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -5465,7 +5465,7 @@
                         {
                         "item": "Raw Tuna",
                         "item_ids": [359],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -5496,7 +5496,7 @@
                         {
                         "item": "Raw Swordfish",
                         "item_ids": [371],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -5543,7 +5543,7 @@
                         {
                         "item": "Raw Bass",
                         "item_ids": [363],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -5559,7 +5559,7 @@
                         {
                         "item": "Raw Cod",
                         "item_ids": [341],
-                        "quantity": [1]
+                        "quantity": [1, 50]
                         }
                     ]
                 },
@@ -7614,7 +7614,7 @@
                         {
                         "item": "Raw Lobster",
                         "item_ids": [377],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -7645,7 +7645,7 @@
                         {
                         "item": "Raw Tuna",
                         "item_ids": [359],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -7676,7 +7676,7 @@
                         {
                         "item": "Raw Swordfish",
                         "item_ids": [371],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },

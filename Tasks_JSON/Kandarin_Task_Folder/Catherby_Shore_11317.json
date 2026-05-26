@@ -15,7 +15,7 @@
                         {
                         "item": "Raw Bass",
                         "item_ids": [363],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },
@@ -31,7 +31,7 @@
                         {
                         "item": "Raw Swordfish",
                         "item_ids": [371],
-                        "quantity": [1]
+                        "quantity": [1, 100]
                         }
                     ]
                 },
@@ -47,7 +47,7 @@
                         {
                         "item": "Raw Herring",
                         "item_ids": [345],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                         }
                     ]
                 },
