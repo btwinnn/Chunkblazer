@@ -52,6 +52,9 @@ public class PlayerSyncRequest
 	/** Client-side points (for verification) */
 	private int clientPoints;
 
+	/** All task IDs the player has completed (overwrite-sync on server). */
+	private List<String> completedTasks;
+
 	/** Client timestamp */
 	private long timestamp;
 

@@ -147,9 +147,10 @@ public class ChunkBlazerApiClient
 			return CompletableFuture.completedFuture(LockModeResponse.offline(mode));
 		}
 
-		if (playerApiKey == null || playerApiKey.isEmpty())
+		String apiKey = playerApiKey != null && !playerApiKey.isEmpty() ? playerApiKey : config.apiKey();
+		if (apiKey == null || apiKey.isEmpty())
 		{
-			log.warn("Cannot lock mode: no API key (player not logged in via API)");
+			log.warn("Cannot lock mode: no API key (neither login-issued nor configured)");
 			return CompletableFuture.completedFuture(
 				LockModeResponse.error("Not logged in to server"));
 		}
@@ -166,7 +167,7 @@ public class ChunkBlazerApiClient
 		Request httpRequest = new Request.Builder()
 			.url(url)
 			.addHeader("Content-Type", "application/json")
-			.addHeader("X-API-Key", playerApiKey)
+			.addHeader("X-API-Key", apiKey)
 			.post(RequestBody.create(JSON, json))
 			.build();
 

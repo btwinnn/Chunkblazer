@@ -11,6 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +45,7 @@ import net.runelite.client.util.ImageUtil;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.chunkblazer.api.ChunkBlazerApiClient;
 import net.runelite.client.plugins.chunkblazer.api.PlayerLoginResponse;
+import net.runelite.client.plugins.chunkblazer.api.PlayerSyncRequest;
 import net.runelite.client.plugins.chunkblazer.modules.TaskModuleManager;
 import net.runelite.client.plugins.chunkblazer.starter.StarterArea;
 import net.runelite.client.plugins.chunkblazer.verification.VarPlayerVerificationService;
@@ -106,6 +110,9 @@ public class ChunkBlazerPlugin extends Plugin
 	@Inject
 	private ChunkBlazerApiClient apiClient;
 
+	@Inject
+	private ScheduledExecutorService executorService;
+
 	// --- Plugin State ---
 	@Getter
 	private NuzlockeTask activeTask; // Legacy single task for backward compatibility
@@ -120,6 +127,14 @@ public class ChunkBlazerPlugin extends Plugin
 	private NavigationButton navButton;
 	private volatile int lastRegionId = -1;
 	private final Random random = new Random();
+
+	/** Handle for the periodic save-state sync; cancelled on shutDown(). */
+	private ScheduledFuture<?> syncFuture;
+	private static final long SYNC_INTERVAL_SECONDS = 30;
+
+	/** Handle for the periodic presence heartbeat; cancelled on shutDown(). */
+	private ScheduledFuture<?> heartbeatFuture;
+	private static final long HEARTBEAT_INTERVAL_SECONDS = 30;
 
 	// --- Constants ---
 	private static final String DEV_MENU_OPTION = "DEBUG: Complete Task";
@@ -204,8 +219,13 @@ public class ChunkBlazerPlugin extends Plugin
 			@Override
 			public void onProgressUpdated(NuzlockeTask task, int newProgress)
 			{
-				// Save progress to config
-				saveTaskProgress(task.getTaskId(), newProgress);
+				// Pass the live task's target directly. The 2-arg overload re-looks
+				// up the task via findTaskById, which scans allChunks and can return
+				// a different instance for taskIDs that appear in multiple chunks
+				// (e.g. cook_tuna lives in both Mistrock and Fishing Guild) — that
+				// stale instance has the default targetQuantity=1 and corrupts the
+				// saved rolled value.
+				saveTaskProgress(task.getTaskId(), newProgress, task.getTargetQuantity());
 
 				// Progress updated - refresh UI on Swing thread
 				javax.swing.SwingUtilities.invokeLater(() ->
@@ -215,6 +235,16 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		});
 		taskModuleManager.startUp();
+
+		// Schedule periodic server save-state sync. First run is delayed by one
+		// interval so we don't race the login flow on plugin startup.
+		syncFuture = executorService.scheduleAtFixedRate(
+			this::syncToServer, SYNC_INTERVAL_SECONDS, SYNC_INTERVAL_SECONDS, TimeUnit.SECONDS);
+
+		// Presence heartbeat — updates players.last_heartbeat_at + current
+		// world/region so the server knows who's currently online and where.
+		heartbeatFuture = executorService.scheduleAtFixedRate(
+			this::sendHeartbeatToServer, HEARTBEAT_INTERVAL_SECONDS, HEARTBEAT_INTERVAL_SECONDS, TimeUnit.SECONDS);
 
 		// Create and register the sidebar panel
 		panel = new ChunkBlazerPanel();
@@ -263,6 +293,16 @@ public class ChunkBlazerPlugin extends Plugin
 	protected void shutDown()
 	{
 		log.info("ChunkBlazer shutting down...");
+		if (syncFuture != null)
+		{
+			syncFuture.cancel(false);
+			syncFuture = null;
+		}
+		if (heartbeatFuture != null)
+		{
+			heartbeatFuture.cancel(false);
+			heartbeatFuture = null;
+		}
 		clientToolbar.removeNavigation(navButton);
 		overlayManager.remove(worldMapOverlay);
 		overlayManager.remove(minimapOverlay);
@@ -286,6 +326,8 @@ public class ChunkBlazerPlugin extends Plugin
 
 	// --- Event Handlers ---
 
+	private volatile boolean pendingServerLogin = false;
+
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged event)
 	{
@@ -296,13 +338,26 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				loadOrAssignTask();
 				panel.updatePanel();
-				loginToServer();
 			});
+			// Defer the server login until onGameTick sees a non-null player name;
+			// at LOGGED_IN time getLocalPlayer().getName() can still be null.
+			pendingServerLogin = true;
 		}
 		else if (event.getGameState() == GameState.LOGIN_SCREEN)
 		{
+			// Last-chance sync before localPlayer becomes inaccessible. Build the
+			// request right here (still on the event-bus thread, client state
+			// still readable) and fire-and-forget the HTTP call.
+			PlayerSyncRequest finalSync = buildSyncRequest();
+			if (finalSync != null && config.apiEnabled())
+			{
+				apiClient.syncPlayerState(finalSync)
+					.thenAccept(resp -> log.info("Logout sync: success={}",
+						resp != null && resp.isSuccess()));
+			}
 			activeTask = null;
 			lastRegionId = -1;
+			pendingServerLogin = false;
 		}
 	}
 
@@ -313,6 +368,12 @@ public class ChunkBlazerPlugin extends Plugin
 		if (player == null)
 		{
 			return;
+		}
+
+		if (pendingServerLogin && player.getName() != null)
+		{
+			pendingServerLogin = false;
+			loginToServer();
 		}
 
 		WorldPoint wp = player.getWorldLocation();
@@ -872,7 +933,9 @@ public class ChunkBlazerPlugin extends Plugin
 		// Mirror the lock to the server. Fire-and-forget — local config is the
 		// immediate source of truth; the server call backs it up so the choice
 		// survives across installs / machines.
-		if (config.apiEnabled())
+		log.info("[CB-DIAG] lockGameMode server-call apiEnabled={} apiClient={} mode={}",
+			config.apiEnabled(), apiClient, mode);
+		if (config.apiEnabled() && apiClient != null)
 		{
 			apiClient.lockGameMode(mode)
 				.thenAccept(response ->
@@ -953,6 +1016,8 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void loginToServer()
 	{
+		log.info("[CB-DIAG] loginToServer entered apiEnabled={} rsn={} apiClient={}",
+			config.apiEnabled(), getPlayerName(), apiClient);
 		if (!config.apiEnabled())
 		{
 			return;
@@ -962,25 +1027,44 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return;
 		}
+		if (apiClient == null)
+		{
+			log.warn("[CB-DIAG] apiClient is NULL — Guice injection failed for plugin class");
+			return;
+		}
+		log.info("[CB-DIAG] loginToServer calling apiClient.login url={}/api/player/login",
+			config.apiBaseUrl());
 		apiClient.login(rsn, fullHashRsn(rsn))
-			.thenAccept(this::hydrateFromLoginResponse);
+			.thenAccept(resp ->
+			{
+				log.info("[CB-DIAG] login response received: status={} apiKey={}",
+					resp == null ? "null" : resp.getStatus(),
+					resp == null ? "null" : (resp.getApiKey() != null ? "set" : "null"));
+				hydrateFromLoginResponse(resp);
+			})
+			.exceptionally(e ->
+			{
+				log.warn("[CB-DIAG] login failed: {}", e.toString());
+				return null;
+			});
 	}
 
 	/**
-	 * If the server says this player already has a locked mode, mirror that
-	 * into the local RuneLite config so the picker is skipped.
+	 * Mirror server-side state into local RuneLite config when local is empty
+	 * (fresh install / new machine). Does not overwrite existing local state —
+	 * the active machine wins until the user explicitly resets.
+	 *
+	 * Mode lock: written if server says locked and local has no hash for this RSN.
+	 * Unlocked regions: written if server has any and local is empty.
+	 * Completed tasks: same rule.
 	 */
 	private void hydrateFromLoginResponse(PlayerLoginResponse response)
 	{
-		if (response == null || !response.isSuccess() || !response.isModeLocked())
+		if (response == null || !response.isSuccess())
 		{
 			return;
 		}
-		GameMode serverMode = response.getGameMode();
-		if (serverMode == null)
-		{
-			return;
-		}
+		PlayerLoginResponse.PlayerData pdata = response.getPlayer();
 		clientThread.invokeLater(() ->
 		{
 			String rsn = getPlayerName();
@@ -988,16 +1072,156 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				return;
 			}
-			String modeKey = hashRsn(rsn) + ":" + serverMode.name();
-			configManager.setConfiguration("chunkblazer", "accountModeHash", modeKey);
-			configManager.setConfiguration("chunkblazer", "gameMode", serverMode);
-			log.info("Game mode hydrated from server: {}", serverMode);
+
+			// 1. Mode lock (only if not already locked locally for this RSN)
+			if (response.isModeLocked() && response.getGameMode() != null && !isModeLocked())
+			{
+				GameMode serverMode = response.getGameMode();
+				String modeKey = hashRsn(rsn) + ":" + serverMode.name();
+				configManager.setConfiguration("chunkblazer", "accountModeHash", modeKey);
+				configManager.setConfiguration("chunkblazer", "gameMode", serverMode);
+				log.info("Game mode hydrated from server: {}", serverMode);
+			}
+
+			// 2. Unlocked regions — hydrate only when local is empty
+			if (pdata != null && pdata.getUnlockedRegions() != null && !pdata.getUnlockedRegions().isEmpty())
+			{
+				String localChunks = config.unlockedChunks();
+				if (localChunks == null || localChunks.trim().isEmpty())
+				{
+					String csv = pdata.getUnlockedRegions().stream()
+						.map(String::valueOf)
+						.collect(Collectors.joining(","));
+					configManager.setConfiguration("chunkblazer", "unlockedChunks", csv);
+					log.info("Unlocked regions hydrated from server: {} regions", pdata.getUnlockedRegions().size());
+				}
+			}
+
+			// 3. Completed tasks — hydrate only when local is empty
+			if (pdata != null && pdata.getCompletedTasks() != null && !pdata.getCompletedTasks().isEmpty())
+			{
+				String localTasks = config.completedTasks();
+				if (localTasks == null || localTasks.trim().isEmpty())
+				{
+					String csv = String.join(",", pdata.getCompletedTasks());
+					configManager.setConfiguration("chunkblazer", "completedTasks", csv);
+					log.info("Completed tasks hydrated from server: {} tasks", pdata.getCompletedTasks().size());
+				}
+			}
+
 			if (panel != null)
 			{
 				panel.updateModeDisplay();
 				panel.updatePanel();
 			}
 		});
+	}
+
+	/**
+	 * Presence heartbeat. Reads world + lastRegionId on the client thread,
+	 * then fires apiClient.sendHeartbeat which itself short-circuits if
+	 * playerApiKey hasn't been set by login yet. Safe to fire blindly.
+	 */
+	private void sendHeartbeatToServer()
+	{
+		if (!config.apiEnabled())
+		{
+			return;
+		}
+		if (client.getGameState() != GameState.LOGGED_IN)
+		{
+			return;
+		}
+		clientThread.invoke(() ->
+		{
+			int world = client.getWorld();
+			int region = lastRegionId;
+			apiClient.sendHeartbeat(world, region, true);
+		});
+	}
+
+	/**
+	 * Periodic save-state sync. Runs on the executor thread; client state is
+	 * read by hopping to the client thread first.
+	 */
+	private void syncToServer()
+	{
+		if (!config.apiEnabled())
+		{
+			return;
+		}
+		if (client.getGameState() != GameState.LOGGED_IN)
+		{
+			return;
+		}
+		clientThread.invoke(() ->
+		{
+			PlayerSyncRequest req = buildSyncRequest();
+			if (req == null)
+			{
+				return;
+			}
+			apiClient.syncPlayerState(req)
+				.thenAccept(resp ->
+				{
+					if (resp != null && resp.isSuccess())
+					{
+						log.debug("Sync ok: points={} regions={} tasks={}",
+							resp.getServerPoints(),
+							resp.getServerUnlockedRegions() != null ? resp.getServerUnlockedRegions().size() : 0,
+							resp.getServerCompletedTasks() != null ? resp.getServerCompletedTasks().size() : 0);
+					}
+				});
+		});
+	}
+
+	/**
+	 * Snapshot current local plugin/client state into a sync request.
+	 * Must run on the client thread (reads client.getLocalPlayer()).
+	 * Returns null if the snapshot can't be built (e.g. no local player yet).
+	 */
+	private PlayerSyncRequest buildSyncRequest()
+	{
+		String rsn = getPlayerName();
+		if (rsn == null)
+		{
+			return null;
+		}
+		Player local = client.getLocalPlayer();
+
+		List<Integer> unlocked = new ArrayList<>();
+		for (String id : getUnlockedRegionIds())
+		{
+			try
+			{
+				unlocked.add(Integer.parseInt(id.trim()));
+			}
+			catch (NumberFormatException ignored)
+			{
+			}
+		}
+
+		List<String> completed = new ArrayList<>(getCompletedTaskIds());
+
+		GameMode mode = config.gameMode();
+		String modeName = (mode != null && isModeLocked()) ? mode.name() : null;
+
+		return PlayerSyncRequest.builder()
+			.playerHash(hashRsn(rsn))
+			.displayName(rsn)
+			.accountType("NORMAL")
+			.gameMode(modeName)
+			.combatLevel(local != null ? local.getCombatLevel() : 0)
+			.totalLevel(client.getTotalLevel())
+			.currentRegionId(lastRegionId)
+			.unlockedRegions(unlocked)
+			.activeTaskId(activeTask != null ? activeTask.getTaskId() : null)
+			.activeTaskProgress(0)
+			.clientPoints(config.totalPoints())
+			.completedTasks(completed)
+			.timestamp(System.currentTimeMillis())
+			.clientVersion("1.0.0")
+			.build();
 	}
 
 	// --- Region Methods ---
@@ -2182,19 +2406,14 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Save task progress only (gets current target from task).
-	 */
-	public void saveTaskProgress(String taskId, int progress)
-	{
-		// Find the task to get its target quantity
-		NuzlockeTask task = findTaskById(taskId);
-		int targetQty = task != null ? task.getTargetQuantity() : 0;
-		saveTaskProgress(taskId, progress, targetQty);
-	}
-
-	/**
 	 * Save task progress and target quantity.
 	 * Format: "taskId:progress:targetQty,taskId2:progress2:targetQty2"
+	 *
+	 * Callers MUST pass targetQty from the live activeTasks instance — looking
+	 * the task up via findTaskById is unsafe because taskIDs can appear in
+	 * multiple chunk JSONs (cook_tuna lives in Mistrock and Fishing Guild) and
+	 * the lookup returns whichever instance allChunks iterates first, often
+	 * with the default targetQuantity=1 that wipes the rolled value.
 	 */
 	public void saveTaskProgress(String taskId, int progress, int targetQty)
 	{
@@ -2251,10 +2470,15 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private void saveActiveTasks()
 	{
-		// Save progress for all active tasks
+		// Save progress for all active tasks. Pass each task's live target
+		// directly — the 2-arg saveTaskProgress would re-look up via
+		// findTaskById, which returns whichever instance appears first in
+		// allChunks. For taskIDs defined in multiple chunks (cook_tuna lives in
+		// Mistrock with quantityRange and in Fishing Guild with a fixed qty=1)
+		// the wrong instance gets returned and overwrites the rolled target.
 		for (NuzlockeTask task : activeTasks)
 		{
-			saveTaskProgress(task.getTaskId(), task.getCurrentProgress());
+			saveTaskProgress(task.getTaskId(), task.getCurrentProgress(), task.getTargetQuantity());
 		}
 	}
 
