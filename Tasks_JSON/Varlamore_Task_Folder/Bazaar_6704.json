@@ -123,7 +123,8 @@
                     "required_items": [
                         {
                             "item": "Bass",
-                            "item_ids": [365]
+                            "item_ids": [365],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -138,7 +139,8 @@
                     "required_items": [
                         {
                             "item": "Cod",
-                            "item_ids": [339]
+                            "item_ids": [339],
+                            "quantity": [1, 25]
                         }
                     ]
                 },

@@ -30,7 +30,8 @@
                     "required_items": [
                         {
                             "item": "Shark",
-                            "item_ids": [385]
+                            "item_ids": [385],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -93,7 +94,8 @@
                     "required_items": [
                         {
                             "item": "Cod",
-                            "item_ids": [339]
+                            "item_ids": [339],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -108,7 +110,8 @@
                     "required_items": [
                         {
                             "item": "Bass",
-                            "item_ids": [365]
+                            "item_ids": [365],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -139,7 +142,8 @@
                     "required_items": [
                         {
                             "item": "Herring",
-                            "item_ids": [347]
+                            "item_ids": [347],
+                            "quantity": [1, 25]
                         }
                     ]
                 },

@@ -30,7 +30,8 @@
                     "required_items": [
                         {
                             "item": "Lobster",
-                            "item_ids": [379]
+                            "item_ids": [379],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -61,7 +62,8 @@
                     "required_items": [
                         {
                             "item": "Tuna",
-                            "item_ids": [361]
+                            "item_ids": [361],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
@@ -108,7 +110,8 @@
                     "required_items": [
                         {
                             "item": "Swordfish",
-                            "item_ids": [373]
+                            "item_ids": [373],
+                            "quantity": [1, 25]
                         }
                     ]
                 },

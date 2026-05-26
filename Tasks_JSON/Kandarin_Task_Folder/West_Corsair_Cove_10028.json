@@ -143,7 +143,8 @@
                     "required_items": [
                         {
                             "item": "Tuna",
-                            "item_ids": [361]
+                            "item_ids": [361],
+                            "quantity": [1, 25]
                         }
                     ]
                 },

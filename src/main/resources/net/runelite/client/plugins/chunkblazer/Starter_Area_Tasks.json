@@ -16,7 +16,7 @@
           "target_npc": {
             "npc": ["Goblin"],
             "npc_ids": [5192, 5193, 5204, 5205, 5206, 5207, 5208, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3051, 3052, 3053, 3054, 5195, 5196, 5197, 5198, 5199, 5200, 5201, 5202, 5203],
-            "quantity": 1
+            "quantity": [1, 10]
           }
         },
         {
@@ -112,8 +112,8 @@
           ]
         },
         {
-          "name": "Burn an Oak Log",
-          "taskID": "burn_oak_log",
+          "name": "Burn some Oak Logs",
+          "taskID": "burn_oak_logs",
           "category": "Firemaking",
           "level": 15,
           "completion_type": "FIREMAKING",
@@ -123,7 +123,7 @@
             {
               "item": "Oak Logs",
               "item_ids": [1521],
-              "quantity": [1]
+              "quantity": [1, 50]
             }
           ]
         },
@@ -248,24 +248,24 @@
           ]
         },
         {
-          "name": "Chop a Willow Tree",
-          "taskID": "Chop_willow_tree",
-          "category": "Woodcutting",
-          "level": 30,
-          "completion_type": "WOODCUTTING",
-          "base_points": 2,
-          "assignment_weight": 5,
-          "required_items": [
-            {
-              "item": "Willow Logs",
-              "item_ids": [1519],
-              "quantity": [1]
-            }
-          ]
-        },
+                    "name": "Chop some Willow Trees",
+                    "taskID": "Chop_willow_trees",
+                    "category": "Woodcutting",
+                    "level": 30,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },
         {
-          "name": "Burn a Willow Log",
-          "taskID": "burn_willow_log",
+          "name": "Burn some Willow Logs",
+          "taskID": "burn_willow_logs",
           "category": "Firemaking",
           "level": 30,
           "completion_type": "FIREMAKING",
@@ -275,7 +275,7 @@
             {
               "item": "Willow Logs",
               "item_ids": [1519],
-              "quantity": [1]
+              "quantity": [1, 50]
             }
           ]
         },
@@ -647,7 +647,7 @@
         {
           "name": "Obtain an Ensouled Goblin Head",
           "taskID": "obtain_ensouled_goblin_head",
-          "category": "obtain",
+          "category": "Obtain",
           "level": 1,
           "completion_type": "OBTAIN",
           "base_points": 1,
@@ -1204,7 +1204,7 @@
           "target_npc": {
             "npc": ["Big Frog"],
             "npc_ids": [8701, 478],
-            "quantity": [1]
+            "quantity": [1, 5]
           }
         },
         {
@@ -1217,7 +1217,7 @@
           "target_npc": {
             "npc": ["Cave Bug"],
             "npc_ids": [481, 483],
-            "quantity": [1]
+            "quantity": [1, 25]
           }
         },
         {
@@ -1244,7 +1244,7 @@
           "target_npc": {
             "npc": ["Cave Slime"],
             "npc_ids": [480],
-            "quantity": [1]
+            "quantity": [1, 5]
           }
         },
         {
@@ -1304,7 +1304,7 @@
           "target_npc": {
             "npc": ["Cave Goblin"],
             "npc_ids": [6437, 6435, 6436, 6434],
-            "quantity": [1]
+            "quantity": [1, 10]
           }
         }
       ],
@@ -1341,7 +1341,7 @@
           "target_npc": {
             "npc": ["Duck"],
             "npc_ids": [1839, 1838],
-            "quantity": [1]
+            "quantity": [1, 5]
           }
         },
         {

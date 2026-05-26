@@ -45,7 +45,8 @@
                     "required_items": [
                         {
                             "item": "Lobster",
-                            "item_ids": [379]
+                            "item_ids": [379],
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -76,7 +77,8 @@
                     "required_items": [
                         {
                             "item": "Shark",
-                            "item_ids": [385]
+                            "item_ids": [385],
+                            "quantity": [1, 50]
                         }
                     ]
                 },

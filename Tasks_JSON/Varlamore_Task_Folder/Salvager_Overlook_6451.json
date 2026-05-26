@@ -101,7 +101,8 @@
                     "required_items": [
                         {
                             "item": "Mackerel",
-                            "item_ids": [355]
+                            "item_ids": [355],
+                            "quantity": [1, 25]
                         }
                     ]
                 },
