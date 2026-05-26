@@ -60,6 +60,18 @@ public class RequiredItem
 	}
 
 	/**
+	 * Drop the cached roll so the next getRequiredQuantity() call rolls fresh.
+	 * Called from initializeTask's no-saved-target branch — without it, an
+	 * in-memory roll left over from an earlier load (e.g. a value pinned from
+	 * a now-cleared config entry) gets reused instead of a real fresh roll,
+	 * which made devResetAll a no-op for any task with stale state.
+	 */
+	public void clearRolledQuantity()
+	{
+		this.rolledQuantity = null;
+	}
+
+	/**
 	 * Check if the given item ID matches this required item.
 	 */
 	public boolean matchesItemId(int itemId)

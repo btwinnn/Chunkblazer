@@ -54,6 +54,11 @@ public class RequiredObject
 		this.rolledQuantity = qty;
 	}
 
+	public void clearRolledQuantity()
+	{
+		this.rolledQuantity = null;
+	}
+
 	public boolean matchesObjectId(int objectId)
 	{
 		return objectIds != null && objectIds.contains(objectId);

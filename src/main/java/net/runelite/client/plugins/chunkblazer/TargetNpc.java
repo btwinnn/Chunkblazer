@@ -58,6 +58,11 @@ public class TargetNpc
 		this.rolledQuantity = qty;
 	}
 
+	public void clearRolledQuantity()
+	{
+		this.rolledQuantity = null;
+	}
+
 	/**
 	 * Check if the given NPC ID matches this target.
 	 */

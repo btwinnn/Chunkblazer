@@ -1446,22 +1446,36 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		else
 		{
-			// First time - roll the target quantity. The roll caches itself on
-			// the TargetNpc / RequiredItem / RequiredObject so module code that
-			// calls getRequiredQuantity() later in this session gets the same value.
+			// First time - roll the target quantity. Clear any stale cached
+			// rolledQuantity first: devResetAll / devResetTasks / rerollTask
+			// wipe the config but don't touch the in-memory cache on
+			// NuzlockeTask instances in allChunks, so a value pinned from a
+			// previous (possibly corrupted) saved target would survive the
+			// reset and be reused here as if it were a fresh roll. Without
+			// this, devResetAll was a no-op for any task whose saved target
+			// had been corrupted to 1 — the user pressed Reset, the config
+			// cleared, and the same 1 got rolled and re-saved.
+			//
+			// The roll then caches itself on the TargetNpc / RequiredItem /
+			// RequiredObject so module code that calls getRequiredQuantity()
+			// later in this session gets the same value.
 			targetQty = 1;
 			if (task.getTargetNpc() != null)
 			{
+				task.getTargetNpc().clearRolledQuantity();
 				targetQty = task.getTargetNpc().getRequiredQuantity();
 			}
 			else if (task.getRequiredItems() != null && !task.getRequiredItems().isEmpty())
 			{
 				// Sum across all required items so a multi-item task (e.g. the
 				// Forestry Set, 4 items × qty 1) shows 1/4 in the panel — same
-				// total the modules use when summing per-item required.
+				// total the modules use when summing per-item required. Clear
+				// every item's cache, not just the first — the sum uses all of
+				// them.
 				int sum = 0;
 				for (RequiredItem item : task.getRequiredItems())
 				{
+					item.clearRolledQuantity();
 					sum += item.getRequiredQuantity();
 				}
 				targetQty = sum > 0 ? sum : 1;
@@ -1472,6 +1486,7 @@ public class ChunkBlazerPlugin extends Plugin
 				// required_object block (e.g. [1, 20] rolls a random target).
 				// Use the first object's roll — matches the first-item pattern
 				// above. RequiredObject.getRequiredQuantity caches the roll.
+				task.getRequiredObjects().get(0).clearRolledQuantity();
 				targetQty = task.getRequiredObjects().get(0).getRequiredQuantity();
 			}
 			// Save the rolled target quantity
