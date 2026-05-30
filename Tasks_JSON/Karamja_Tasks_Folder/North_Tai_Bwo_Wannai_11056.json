@@ -1,0 +1,203 @@
+{
+            "region_id": [11056],
+            "Friendly_Name": "North Tai Bwo Wannai",
+            "neighbor_ids": [11057, 11312, 11055, 10800],
+            "tasks": [
+                {
+                    "name": "Plant a Calquat Sapling",
+                    "taskID": "plant_calquat_sapling",
+                    "category": "Farming",
+                    "level": 72,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Calquat Sapling"],
+                            "item_ids": [5503],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat a Jungle Spider",
+                    "taskID": "defeat_jungle_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Obtain Trading Sticks",
+                    "taskID": "obtain_trading_sticks",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Trading Sticks"],
+                            "item_ids": [6306],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Hack some Dense Jungle for Thatch",
+                    "taskID": "hack_dense_jungle",
+                    "category": "Woodcutting",
+                    "level": 35,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Thatch spar dense",
+                            "item_ids": [6285],
+                            "quantity": [1, 10]
+                        }
+                    ]
+                },
+                {
+                    "name": "Hack some Medium Jungle for Thatch",
+                    "taskID": "hack_medium_jungle",
+                    "category": "Woodcutting",
+                    "level": 20,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Thatch spar med",
+                            "item_ids": [6283],
+                            "quantity": [1, 20]
+                        }
+                    ]
+                },
+                {
+                    "name": "Hack some Light Jungle for Thatch",
+                    "taskID": "hack_light_jungle",
+                    "category": "Woodcutting",
+                    "level": 10,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Thatch spar light",
+                            "item_ids": [6281],
+                            "quantity": [1, 30]
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Medium STASH Unit at Tai Bwo Wannai",
+                "taskID": "build_medium_stash_castle_wars",
+                "category": "Construction",
+                "level": 42,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 5,               
+                "required_finished_object": [
+                        {
+                        "object": "Medium STASH Unit (crate)",
+                        "object_id": [28990]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Combat Broodoo Shield",
+                    "taskID": "craft_combat_broodoo_shield",
+                    "category": "Crafting",
+                    "level": 35,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Broodoo shield (combat)#(10)"],
+                            "item_ids": [6259],
+                            "quantity": [1]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Craft a Disease Broodoo Shield",
+                    "taskID": "craft_disease_broodoo_shield",
+                    "category": "Crafting",
+                    "level": 35,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Broodoo shield (disease)#(10)"],
+                            "item_ids": [6237],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Poison Broodoo Shield",
+                    "taskID": "craft_poison_broodoo_shield",
+                    "category": "Crafting",
+                    "level": 35,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Broodoo shield (poison)#(10)"],
+                            "item_ids": [6215],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Proboscis",
+                    "taskID": "obtain_proboscis",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Proboscis"],
+                            "item_ids": [6319],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Gout Tuber",
+                    "taskID": "obtain_gout_tuber",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Gout tuber"],
+                            "item_ids": [6311],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+                    ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Tai Bwo Wannai Trio",
+                    "points": 2
+                },
+                {
+                    "name": "Jungle Potion",
+                    "points": 1
+                }
+            ],                 
+            "is_completed": false
+        }
