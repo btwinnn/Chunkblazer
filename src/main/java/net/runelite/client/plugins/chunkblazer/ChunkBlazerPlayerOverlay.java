@@ -5,8 +5,8 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
@@ -15,245 +15,180 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
+import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 import net.runelite.client.util.ImageUtil;
 
 /**
- * Overlay that renders ChunkBlazer icons and info above other players who are also using the plugin.
+ * Draws ChunkBlazer recognition decorations on other plugin users who are in
+ * the scene: an overhead info tag (account type, game mode, leaderboard rank,
+ * points) and a glowing model outline. Each surface is independently togglable
+ * via config; the recognized-player set comes from {@link ChunkBlazerRoster}.
  */
 public class ChunkBlazerPlayerOverlay extends Overlay
 {
 	private static final int ICON_SIZE = 16;
-	private static final int VERTICAL_OFFSET = 40; // Pixels above player's head
-	private static final Color NUZLOCKE_COLOR = new Color(255, 100, 100); // Red-ish
-	private static final Color CASUAL_COLOR = new Color(100, 200, 100);   // Green-ish
-	private static final Color TEXT_BACKGROUND = new Color(0, 0, 0, 150); // Semi-transparent black
+	private static final int VERTICAL_OFFSET = 40; // pixels above the player's head
+	private static final Color NUZLOCKE_COLOR = new Color(255, 100, 100);
+	private static final Color CASUAL_COLOR = new Color(120, 220, 120);
+	private static final Color TEXT_BACKGROUND = new Color(0, 0, 0, 150);
+	private static final int OUTLINE_WIDTH = 2;
+	private static final int OUTLINE_FEATHER = 4;
+	private static final String SEP = " · "; // middle dot
 
 	private final Client client;
-	private final ChunkBlazerPlugin plugin;
 	private final ChunkBlazerConfig config;
+	private final ChunkBlazerRoster roster;
+	private final ModelOutlineRenderer modelOutlineRenderer;
 
-	// Cache of known ChunkBlazer players on the current world
-	// Key: RSN (lowercase), Value: player info from server
-	private final Map<String, OnlineChunkBlazerPlayer> knownPlayers = new ConcurrentHashMap<>();
-
-	// ChunkBlazer icon (loaded from resources)
 	private BufferedImage chunkBlazerIcon;
-	private BufferedImage nuzlockeIcon;
-	private BufferedImage casualIcon;
 
 	@Inject
-	public ChunkBlazerPlayerOverlay(Client client, ChunkBlazerPlugin plugin, ChunkBlazerConfig config)
+	public ChunkBlazerPlayerOverlay(Client client, ChunkBlazerConfig config, ChunkBlazerRoster roster,
+		ModelOutlineRenderer modelOutlineRenderer)
 	{
 		this.client = client;
-		this.plugin = plugin;
 		this.config = config;
+		this.roster = roster;
+		this.modelOutlineRenderer = modelOutlineRenderer;
 
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 		setPriority(OverlayPriority.HIGH);
 
-		loadIcons();
+		loadIcon();
 	}
 
-	private void loadIcons()
+	private void loadIcon()
 	{
-		// Main ChunkBlazer icon comes from icon.png; mode indicators stay procedural.
 		BufferedImage loaded = ImageUtil.loadImageResource(ChunkBlazerPlugin.class, "icon.png");
 		chunkBlazerIcon = loaded != null
 			? ImageUtil.resizeImage(loaded, ICON_SIZE, ICON_SIZE)
 			: ChunkBlazerIcons.createFireIcon(ICON_SIZE);
-		nuzlockeIcon = ChunkBlazerIcons.createNuzlockeIcon(ICON_SIZE);
-		casualIcon = ChunkBlazerIcons.createCasualIcon(ICON_SIZE);
 	}
 
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (!config.showOtherPlayers())
+		boolean wantTag = config.showOtherPlayers();
+		boolean wantOutline = config.showPlayerOutline();
+		if ((!wantTag && !wantOutline) || roster.isEmpty())
 		{
 			return null;
 		}
 
-		if (knownPlayers.isEmpty())
-		{
-			return null;
-		}
-
-		// Iterate through all visible players
+		Player local = client.getLocalPlayer();
 		for (Player player : client.getPlayers())
 		{
-			// Skip the local player
-			if (player == client.getLocalPlayer())
+			if (player == null || player == local)
+			{
+				continue;
+			}
+			String name = player.getName();
+			if (name == null)
+			{
+				continue;
+			}
+			ChunkBlazerRoster.Entry entry = roster.get(name);
+			if (entry == null)
 			{
 				continue;
 			}
 
-			String playerName = player.getName();
-			if (playerName == null)
+			if (wantOutline)
 			{
-				continue;
+				modelOutlineRenderer.drawOutline(player, OUTLINE_WIDTH, config.recognitionColor(), OUTLINE_FEATHER);
 			}
-
-			// Check if this player is a known ChunkBlazer player
-			OnlineChunkBlazerPlayer cbPlayer = knownPlayers.get(playerName.toLowerCase());
-			if (cbPlayer == null)
+			if (wantTag)
 			{
-				continue;
+				renderTag(graphics, player, entry);
 			}
-
-			// Render the overlay above this player
-			renderPlayerOverlay(graphics, player, cbPlayer);
 		}
 
 		return null;
 	}
 
-	private void renderPlayerOverlay(Graphics2D graphics, Player player, OnlineChunkBlazerPlayer cbPlayer)
+	private void renderTag(Graphics2D graphics, Player player, ChunkBlazerRoster.Entry entry)
 	{
-		// Get position above player's head
-		Point textLocation = player.getCanvasTextLocation(graphics, cbPlayer.getRsn(), VERTICAL_OFFSET);
-		if (textLocation == null)
+		// Top line: account type, plus game mode when one is locked.
+		StringBuilder top = new StringBuilder(entry.getAccountLabel());
+		if (entry.getGameMode() != null)
+		{
+			if (top.length() > 0)
+			{
+				top.append(SEP);
+			}
+			top.append(entry.getGameMode().getName());
+		}
+		String topLine = top.length() > 0 ? top.toString() : "ChunkBlazer";
+
+		// Bottom line: rank + points, each gated by its own toggle.
+		List<String> parts = new ArrayList<>(2);
+		if (config.showPlayerRank() && entry.getRank() > 0)
+		{
+			parts.add("#" + entry.getRank());
+		}
+		if (config.showPlayerPoints())
+		{
+			parts.add(String.format("%,d pts", entry.getTotalPoints()));
+		}
+		String bottomLine = String.join(SEP, parts);
+		boolean hasBottom = !bottomLine.isEmpty();
+
+		// Empty anchor string => point.x is the player's horizontal centre.
+		Point anchor = player.getCanvasTextLocation(graphics, "", VERTICAL_OFFSET);
+		if (anchor == null)
 		{
 			return;
 		}
 
-		// Determine colors based on game mode
-		Color modeColor = cbPlayer.getGameMode() == GameMode.NUZLOCKE ? NUZLOCKE_COLOR : CASUAL_COLOR;
-
-		// Build the display text
-		String pointsText = formatPoints(cbPlayer.getTotalPoints()) + " pts";
-		String modeText = cbPlayer.getGameMode().getName();
-
 		FontMetrics fm = graphics.getFontMetrics();
-		int textWidth = Math.max(fm.stringWidth(pointsText), fm.stringWidth(modeText));
+		int lineHeight = fm.getHeight();
+		int textWidth = fm.stringWidth(topLine);
+		if (hasBottom)
+		{
+			textWidth = Math.max(textWidth, fm.stringWidth(bottomLine));
+		}
 		int totalWidth = ICON_SIZE + 4 + textWidth;
+		int totalHeight = hasBottom ? lineHeight * 2 : lineHeight;
 
-		int x = textLocation.getX() - totalWidth / 2;
-		int y = textLocation.getY();
+		int x = anchor.getX() - totalWidth / 2;
+		int topBaseline = anchor.getY();
+		int boxTop = topBaseline - fm.getAscent();
 
-		// Draw background box
-		int boxHeight = fm.getHeight() * 2 + 4;
+		// Background box.
 		graphics.setColor(TEXT_BACKGROUND);
-		graphics.fillRoundRect(x - 2, y - fm.getHeight(), totalWidth + 4, boxHeight, 4, 4);
+		graphics.fillRoundRect(x - 3, boxTop - 2, totalWidth + 6, totalHeight + 4, 6, 6);
 
-		// Draw mode-specific icon
-		BufferedImage iconToDraw = chunkBlazerIcon;
-		if (cbPlayer.getGameMode() == GameMode.NUZLOCKE && nuzlockeIcon != null)
+		// Icon, aligned with the first line.
+		if (chunkBlazerIcon != null)
 		{
-			iconToDraw = nuzlockeIcon;
-		}
-		else if (cbPlayer.getGameMode() == GameMode.CASUAL && casualIcon != null)
-		{
-			iconToDraw = casualIcon;
+			graphics.drawImage(chunkBlazerIcon, x, boxTop, null);
 		}
 
-		if (iconToDraw != null)
-		{
-			graphics.drawImage(iconToDraw, x, y - fm.getHeight() + 2, null);
-		}
-		else
-		{
-			// Fallback: draw a colored square
-			graphics.setColor(modeColor);
-			graphics.fillRect(x, y - fm.getHeight() + 2, ICON_SIZE, ICON_SIZE);
-		}
-
-		// Draw mode text (e.g., "Nuzlocke")
 		int textX = x + ICON_SIZE + 4;
-		graphics.setColor(modeColor);
-		graphics.drawString(modeText, textX, y);
 
-		// Draw points text
-		graphics.setColor(Color.WHITE);
-		graphics.drawString(pointsText, textX, y + fm.getHeight());
+		// Top line in the mode colour.
+		graphics.setColor(modeColor(entry.getGameMode()));
+		graphics.drawString(topLine, textX, topBaseline);
 
-		// Optionally draw rank if available
-		if (cbPlayer.getRank() > 0)
+		// Bottom line in white.
+		if (hasBottom)
 		{
-			String rankText = "#" + cbPlayer.getRank();
-			graphics.setColor(Color.YELLOW);
-			graphics.drawString(rankText, x + totalWidth - fm.stringWidth(rankText), y);
+			graphics.setColor(Color.WHITE);
+			graphics.drawString(bottomLine, textX, topBaseline + lineHeight);
 		}
 	}
 
-	/**
-	 * Format points with K/M suffix for large numbers.
-	 */
-	private String formatPoints(int points)
+	private Color modeColor(GameMode mode)
 	{
-		if (points >= 1_000_000)
+		if (mode == GameMode.NUZLOCKE)
 		{
-			return String.format("%.1fM", points / 1_000_000.0);
+			return NUZLOCKE_COLOR;
 		}
-		else if (points >= 1_000)
+		if (mode == GameMode.CASUAL)
 		{
-			return String.format("%.1fK", points / 1_000.0);
+			return CASUAL_COLOR;
 		}
-		return String.valueOf(points);
-	}
-
-	/**
-	 * Update the list of known ChunkBlazer players on this world.
-	 * Called periodically by the plugin after fetching from the API.
-	 */
-	public void updateKnownPlayers(Map<String, OnlineChunkBlazerPlayer> players)
-	{
-		knownPlayers.clear();
-		knownPlayers.putAll(players);
-	}
-
-	/**
-	 * Add a single player to the known list.
-	 */
-	public void addKnownPlayer(OnlineChunkBlazerPlayer player)
-	{
-		knownPlayers.put(player.getRsn().toLowerCase(), player);
-	}
-
-	/**
-	 * Remove a player from the known list.
-	 */
-	public void removeKnownPlayer(String rsn)
-	{
-		knownPlayers.remove(rsn.toLowerCase());
-	}
-
-	/**
-	 * Clear all known players.
-	 */
-	public void clearKnownPlayers()
-	{
-		knownPlayers.clear();
-	}
-
-	/**
-	 * Check if a player is a known ChunkBlazer player.
-	 */
-	public boolean isKnownPlayer(String rsn)
-	{
-		return knownPlayers.containsKey(rsn.toLowerCase());
-	}
-
-	/**
-	 * Get info for a known player.
-	 */
-	public OnlineChunkBlazerPlayer getKnownPlayer(String rsn)
-	{
-		return knownPlayers.get(rsn.toLowerCase());
-	}
-
-	/**
-	 * Data class representing an online ChunkBlazer player.
-	 */
-	@lombok.Data
-	public static class OnlineChunkBlazerPlayer
-	{
-		private String rsn;
-		private GameMode gameMode;
-		private int totalPoints;
-		private int rank;
-		private int world;
-		private int regionId;
-		private String currentTask;
+		return config.recognitionColor();
 	}
 }

@@ -119,5 +119,15 @@ public class PlayerLoginResponse
 
 		@SerializedName("completed_tasks")
 		private List<String> completedTasks = new ArrayList<>();
+
+		/**
+		 * Whether this player has completed RSN ownership verification via the
+		 * in-game chat handshake. If false, the plugin should kick off the
+		 * verification flow on first login.
+		 */
+		private boolean verified;
+
+		@SerializedName("verified_at")
+		private String verifiedAt;
 	}
 }

@@ -76,6 +76,11 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JRadioButton casualRadio;
 	private JRadioButton nuzlockeRadio;
 
+	// Verification banner — shown at the top of the panel until the account is
+	// verified via the in-game chat handshake. Hidden otherwise.
+	private JPanel verificationPanel;
+	private JLabel verificationCodeLabel;
+
 	// Completed Tasks Filter Components
 	private JToggleButton completedTasksToggle;
 	private boolean completedTasksExpanded = false;
@@ -172,6 +177,15 @@ public class ChunkBlazerPanel extends PluginPanel
 		mainPanel.add(header);
 		mainPanel.add(Box.createVerticalStrut(8));
 
+		// Verification Banner — sits directly under the header so it's the first
+		// thing an unverified player sees. Hidden by default; the plugin calls
+		// showVerificationPrompt() once the server issues a code.
+		verificationPanel = createVerificationSection();
+		setupSectionPanel(verificationPanel);
+		verificationPanel.setVisible(false);
+		mainPanel.add(verificationPanel);
+		mainPanel.add(Box.createVerticalStrut(8));
+
 		// Stats Section (fixed size - don't use setupSectionPanel)
 		statsPanel = createStatsSection();
 		statsPanel.setAlignmentX(LEFT_ALIGNMENT);
@@ -230,6 +244,80 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Fixed width, but let height be determined by content (don't set preferredSize height)
 		panel.setMaximumSize(new Dimension(PANEL_WIDTH - 10, Integer.MAX_VALUE));
 		panel.setMinimumSize(new Dimension(PANEL_WIDTH - 10, 0));
+	}
+
+	/**
+	 * Build the "Verify Your Account" banner. The big code label is filled in
+	 * at runtime by {@link #showVerificationPrompt(String)}.
+	 */
+	private JPanel createVerificationSection()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBackground(new Color(60, 45, 18)); // dark amber
+		panel.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(new Color(230, 170, 50), 2),
+			new EmptyBorder(8, 8, 8, 8)
+		));
+
+		JLabel title = new JLabel("Verify Your Account");
+		title.setFont(FontManager.getRunescapeBoldFont());
+		title.setForeground(new Color(255, 190, 60));
+		title.setAlignmentX(LEFT_ALIGNMENT);
+		panel.add(title);
+		panel.add(Box.createVerticalStrut(5));
+
+		WrappingTextLabel body = new WrappingTextLabel(
+			"Type this code in public chat and hit Enter to verify your ChunkBlazer account:",
+			FontManager.getRunescapeSmallFont(),
+			Color.WHITE,
+			CONTENT_WIDTH - 4);
+		panel.add(body);
+		panel.add(Box.createVerticalStrut(6));
+
+		verificationCodeLabel = new JLabel(" ");
+		verificationCodeLabel.setFont(FontManager.getRunescapeBoldFont().deriveFont(24f));
+		verificationCodeLabel.setForeground(new Color(120, 230, 120));
+		verificationCodeLabel.setAlignmentX(LEFT_ALIGNMENT);
+		panel.add(verificationCodeLabel);
+
+		return panel;
+	}
+
+	/**
+	 * Show the verification banner with the given code. Safe to call from any
+	 * thread — API callbacks run off the EDT.
+	 */
+	public void showVerificationPrompt(String code)
+	{
+		SwingUtilities.invokeLater(() ->
+		{
+			if (verificationPanel == null)
+			{
+				return;
+			}
+			verificationCodeLabel.setText(code);
+			verificationPanel.setVisible(true);
+			revalidate();
+			repaint();
+		});
+	}
+
+	/**
+	 * Hide the verification banner once the account is verified. Thread-safe.
+	 */
+	public void hideVerificationPrompt()
+	{
+		SwingUtilities.invokeLater(() ->
+		{
+			if (verificationPanel == null)
+			{
+				return;
+			}
+			verificationPanel.setVisible(false);
+			revalidate();
+			repaint();
+		});
 	}
 
 	private void openLink(String url)

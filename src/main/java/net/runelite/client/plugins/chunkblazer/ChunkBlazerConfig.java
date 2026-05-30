@@ -516,4 +516,41 @@ public interface ChunkBlazerConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+		keyName = "showMinimapHighlight",
+		name = "Highlight on Minimap",
+		description = "Mark nearby ChunkBlazer players with a coloured dot on the minimap",
+		section = playerDiscoverySection,
+		position = 5
+	)
+	default boolean showMinimapHighlight()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showPlayerOutline",
+		name = "Outline Players",
+		description = "Draw a glowing outline around nearby ChunkBlazer players' models",
+		section = playerDiscoverySection,
+		position = 6
+	)
+	default boolean showPlayerOutline()
+	{
+		return true;
+	}
+
+	@Alpha
+	@ConfigItem(
+		keyName = "recognitionColor",
+		name = "Highlight Colour",
+		description = "Colour used for the minimap dot and model outline on other ChunkBlazer players",
+		section = playerDiscoverySection,
+		position = 7
+	)
+	default Color recognitionColor()
+	{
+		return new Color(255, 140, 0); // orange
+	}
 }

@@ -1,31 +1,31 @@
 package net.runelite.client.plugins.chunkblazer.api;
 
-import com.google.gson.annotations.SerializedName;
-import lombok.Data;
-import net.runelite.client.plugins.chunkblazer.GameMode;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Data;
 
 /**
- * Response containing a list of online ChunkBlazer players.
+ * Response from GET /api/players/online — the live roster of ChunkBlazer
+ * players whose heartbeat is fresh (within the server's window).
+ *
+ * Field names match the server's camelCase JSON exactly so Gson binds them
+ * with no @SerializedName gymnastics. Unknown server fields (limit, offset,
+ * fetchedAt) are simply ignored by Gson.
  */
 @Data
 public class OnlinePlayersResponse
 {
-	/**
-	 * List of online players
-	 */
+	/** Players currently online (heartbeat within {@link #windowSeconds}). */
 	private List<OnlinePlayer> players = new ArrayList<>();
 
-	/**
-	 * Total number of players online across all worlds
-	 */
-	@SerializedName("total_online")
-	private int totalOnline;
+	/** Total online count (may exceed players.size() when paginated). */
+	private int total;
+
+	/** Server-reported freshness window, in seconds. */
+	private int windowSeconds;
 
 	/**
-	 * Create an empty response for offline mode.
+	 * Empty response used for offline mode / failed requests.
 	 */
 	public static OnlinePlayersResponse empty()
 	{
@@ -33,46 +33,19 @@ public class OnlinePlayersResponse
 	}
 
 	/**
-	 * Represents a single online player.
+	 * A single online player as returned by the server. {@code gameMode} and
+	 * {@code rank} are nullable — a player with no locked game mode is unranked.
 	 */
 	@Data
 	public static class OnlinePlayer
 	{
 		private String rsn;
-
-		@SerializedName("game_mode")
+		private String accountType;
 		private String gameMode;
-
-		@SerializedName("total_points")
+		private Integer currentWorld;
+		private Integer currentRegionId;
+		private String lastHeartbeatAt;
 		private int totalPoints;
-
-		private int rank;
-
-		private int world;
-
-		@SerializedName("region_id")
-		private int regionId;
-
-		@SerializedName("current_task")
-		private String currentTask;
-
-		/**
-		 * Get the GameMode enum value.
-		 */
-		public GameMode getGameModeEnum()
-		{
-			if (gameMode == null)
-			{
-				return GameMode.CASUAL;
-			}
-			try
-			{
-				return GameMode.valueOf(gameMode);
-			}
-			catch (IllegalArgumentException e)
-			{
-				return GameMode.CASUAL;
-			}
-		}
+		private Integer rank;
 	}
 }

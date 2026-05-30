@@ -133,6 +133,130 @@ public class ChunkBlazerApiClient
 	}
 
 	/**
+	 * Start an RSN-ownership verification handshake. Server either says the
+	 * player is already verified, or issues a 6-char nonce + the exact chat
+	 * phrase the player needs to type in-game.
+	 */
+	public CompletableFuture<VerifyStartResponse> verifyStart()
+	{
+		if (!config.apiEnabled())
+		{
+			return CompletableFuture.completedFuture(VerifyStartResponse.offline());
+		}
+		String apiKey = playerApiKey != null && !playerApiKey.isEmpty() ? playerApiKey : config.apiKey();
+		if (apiKey == null || apiKey.isEmpty())
+		{
+			return CompletableFuture.completedFuture(VerifyStartResponse.offline());
+		}
+
+		CompletableFuture<VerifyStartResponse> future = new CompletableFuture<>();
+		String url = config.apiBaseUrl() + "/api/player/verify/start";
+		Request httpRequest = new Request.Builder()
+			.url(url)
+			.addHeader("X-API-Key", apiKey)
+			.post(RequestBody.create(JSON, "{}"))
+			.build();
+
+		httpClient.newCall(httpRequest).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				log.warn("verify/start request failed: {}", e.getMessage());
+				future.complete(VerifyStartResponse.offline());
+			}
+
+			@Override
+			public void onResponse(Call call, Response response) throws IOException
+			{
+				try (response)
+				{
+					String body = response.body() != null ? response.body().string() : "";
+					if (response.isSuccessful())
+					{
+						future.complete(gson.fromJson(body, VerifyStartResponse.class));
+					}
+					else
+					{
+						log.warn("verify/start returned {}: {}", response.code(), body);
+						future.complete(VerifyStartResponse.offline());
+					}
+				}
+			}
+		});
+
+		return future;
+	}
+
+	/**
+	 * Submit the nonce we witnessed the local player typing in chat. On
+	 * success the server flips players.verified=true and we get
+	 * verified=true back.
+	 */
+	public CompletableFuture<VerifyResponse> verify(String nonce)
+	{
+		if (!config.apiEnabled())
+		{
+			return CompletableFuture.completedFuture(VerifyResponse.offline());
+		}
+		String apiKey = playerApiKey != null && !playerApiKey.isEmpty() ? playerApiKey : config.apiKey();
+		if (apiKey == null || apiKey.isEmpty())
+		{
+			return CompletableFuture.completedFuture(VerifyResponse.offline());
+		}
+
+		CompletableFuture<VerifyResponse> future = new CompletableFuture<>();
+		String url = config.apiBaseUrl() + "/api/player/verify";
+		String json = gson.toJson(new VerifyRequestBody(nonce));
+
+		Request httpRequest = new Request.Builder()
+			.url(url)
+			.addHeader("Content-Type", "application/json")
+			.addHeader("X-API-Key", apiKey)
+			.post(RequestBody.create(JSON, json))
+			.build();
+
+		httpClient.newCall(httpRequest).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				log.warn("verify request failed: {}", e.getMessage());
+				future.complete(VerifyResponse.offline());
+			}
+
+			@Override
+			public void onResponse(Call call, Response response) throws IOException
+			{
+				try (response)
+				{
+					String body = response.body() != null ? response.body().string() : "";
+					if (response.isSuccessful())
+					{
+						future.complete(gson.fromJson(body, VerifyResponse.class));
+					}
+					else
+					{
+						log.warn("verify returned {}: {}", response.code(), body);
+						VerifyResponse r = new VerifyResponse();
+						r.setVerified(false);
+						r.setMessage("server rejected: " + response.code());
+						future.complete(r);
+					}
+				}
+			}
+		});
+
+		return future;
+	}
+
+	private static class VerifyRequestBody
+	{
+		final String nonce;
+		VerifyRequestBody(String nonce) { this.nonce = nonce; }
+	}
+
+	/**
 	 * Permanently lock the player's game mode.
 	 * This cannot be undone (except by server admin).
 	 *
@@ -341,7 +465,12 @@ public class ChunkBlazerApiClient
 	 */
 	public CompletableFuture<Void> sendHeartbeat(int world, int regionId, boolean isVisible)
 	{
-		if (!config.apiEnabled() || playerApiKey == null)
+		if (!config.apiEnabled())
+		{
+			return CompletableFuture.completedFuture(null);
+		}
+		String apiKey = playerApiKey != null && !playerApiKey.isEmpty() ? playerApiKey : config.apiKey();
+		if (apiKey == null || apiKey.isEmpty())
 		{
 			return CompletableFuture.completedFuture(null);
 		}
@@ -360,7 +489,7 @@ public class ChunkBlazerApiClient
 		Request httpRequest = new Request.Builder()
 			.url(url)
 			.addHeader("Content-Type", "application/json")
-			.addHeader("X-API-Key", playerApiKey)
+			.addHeader("X-API-Key", apiKey)
 			.post(RequestBody.create(JSON, json))
 			.build();
 
@@ -460,7 +589,12 @@ public class ChunkBlazerApiClient
 	 */
 	public CompletableFuture<Void> goOffline()
 	{
-		if (!config.apiEnabled() || playerApiKey == null)
+		if (!config.apiEnabled())
+		{
+			return CompletableFuture.completedFuture(null);
+		}
+		String apiKey = playerApiKey != null && !playerApiKey.isEmpty() ? playerApiKey : config.apiKey();
+		if (apiKey == null || apiKey.isEmpty())
 		{
 			return CompletableFuture.completedFuture(null);
 		}
@@ -471,7 +605,7 @@ public class ChunkBlazerApiClient
 
 		Request httpRequest = new Request.Builder()
 			.url(url)
-			.addHeader("X-API-Key", playerApiKey)
+			.addHeader("X-API-Key", apiKey)
 			.post(RequestBody.create(JSON, "{}"))
 			.build();
 

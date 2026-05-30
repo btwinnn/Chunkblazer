@@ -27,8 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.MenuAction;
+import net.runelite.api.MessageNode;
 import net.runelite.api.Player;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.ChatMessageType;
+import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuEntryAdded;
@@ -42,10 +45,13 @@ import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ImageUtil;
+import net.runelite.client.util.Text;
+import net.runelite.client.game.ChatIconManager;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.chunkblazer.api.ChunkBlazerApiClient;
 import net.runelite.client.plugins.chunkblazer.api.PlayerLoginResponse;
 import net.runelite.client.plugins.chunkblazer.api.PlayerSyncRequest;
+import net.runelite.client.plugins.chunkblazer.api.VerifyStartResponse;
 import net.runelite.client.plugins.chunkblazer.modules.TaskModuleManager;
 import net.runelite.client.plugins.chunkblazer.starter.StarterArea;
 import net.runelite.client.plugins.chunkblazer.verification.VarPlayerVerificationService;
@@ -88,6 +94,18 @@ public class ChunkBlazerPlugin extends Plugin
 
 	@Inject
 	private ChunkBlazerSceneOverlay sceneOverlay;
+
+	@Inject
+	private ChunkBlazerPlayerOverlay playerOverlay;
+
+	@Inject
+	private ChunkBlazerMinimapPlayerOverlay minimapPlayerOverlay;
+
+	@Inject
+	private ChunkBlazerRoster roster;
+
+	@Inject
+	private ChatIconManager chatIconManager;
 
 	@Inject
 	private TaskCompletionOverlay taskCompletionOverlay;
@@ -135,6 +153,26 @@ public class ChunkBlazerPlugin extends Plugin
 	/** Handle for the periodic presence heartbeat; cancelled on shutDown(). */
 	private ScheduledFuture<?> heartbeatFuture;
 	private static final long HEARTBEAT_INTERVAL_SECONDS = 30;
+
+	/** Handle for the periodic online-roster refresh; cancelled on shutDown(). */
+	private ScheduledFuture<?> rosterFuture;
+	private static final long ROSTER_INTERVAL_SECONDS = 30;
+
+	/**
+	 * ChatIconManager handle for the ChunkBlazer chat icon. -1 until registered.
+	 * The renderable index ({@code <img=N>}) is resolved lazily per message via
+	 * {@link ChatIconManager#chatIconIndex(int)} since it isn't valid until the
+	 * client has loaded mod icons after login.
+	 */
+	private int chatIconId = -1;
+
+	/**
+	 * Verification handshake state. Non-null when we have an outstanding nonce
+	 * waiting to be typed in public chat. Cleared on success, on logout, or
+	 * implicitly via 5-min server-side expiry. The chat listener checks if
+	 * the message *contains* this digit nonce (no prefix required).
+	 */
+	private volatile String pendingVerificationNonce;
 
 	// --- Constants ---
 	private static final String DEV_MENU_OPTION = "DEBUG: Complete Task";
@@ -246,6 +284,12 @@ public class ChunkBlazerPlugin extends Plugin
 		heartbeatFuture = executorService.scheduleAtFixedRate(
 			this::sendHeartbeatToServer, HEARTBEAT_INTERVAL_SECONDS, HEARTBEAT_INTERVAL_SECONDS, TimeUnit.SECONDS);
 
+		// Online-roster refresh — pulls the live list of ChunkBlazer players so
+		// the recognition surfaces (chat icon, minimap dot, overhead tag,
+		// outline) know who to decorate. First run delayed one interval.
+		rosterFuture = executorService.scheduleAtFixedRate(
+			this::refreshRoster, ROSTER_INTERVAL_SECONDS, ROSTER_INTERVAL_SECONDS, TimeUnit.SECONDS);
+
 		// Create and register the sidebar panel
 		panel = new ChunkBlazerPanel();
 		panel.init(this);
@@ -279,6 +323,19 @@ public class ChunkBlazerPlugin extends Plugin
 		overlayManager.add(taskCompletionAnimationOverlay);
 		log.info(">>> TaskCompletionAnimationOverlay registered with OverlayManager: {}", taskCompletionAnimationOverlay != null ? "OK" : "NULL");
 
+		// Player recognition surfaces: overhead tag + model outline (scene) and
+		// minimap dots. Each render path is individually config-gated.
+		overlayManager.add(playerOverlay);
+		overlayManager.add(minimapPlayerOverlay);
+
+		// Register the ChunkBlazer chat icon shown next to other plugin users'
+		// names in public chat. icon.png is a real (synchronous) BufferedImage,
+		// resized small to sit inline with chat text.
+		if (icon != null && chatIconId < 0)
+		{
+			chatIconId = chatIconManager.registerChatIcon(ImageUtil.resizeImage(icon, 14, 14));
+		}
+
 		// Load or assign a task if player is logged in
 		if (client.getGameState() == GameState.LOGGED_IN)
 		{
@@ -303,10 +360,18 @@ public class ChunkBlazerPlugin extends Plugin
 			heartbeatFuture.cancel(false);
 			heartbeatFuture = null;
 		}
+		if (rosterFuture != null)
+		{
+			rosterFuture.cancel(false);
+			rosterFuture = null;
+		}
+		roster.clear();
 		clientToolbar.removeNavigation(navButton);
 		overlayManager.remove(worldMapOverlay);
 		overlayManager.remove(minimapOverlay);
 		overlayManager.remove(sceneOverlay);
+		overlayManager.remove(playerOverlay);
+		overlayManager.remove(minimapPlayerOverlay);
 		// overlayManager.remove(taskCompletionOverlay); // Legacy overlay disabled
 		overlayManager.remove(taskCompletionAnimationOverlay);
 		taskModuleManager.shutDown();
@@ -328,6 +393,15 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private volatile boolean pendingServerLogin = false;
 
+	/**
+	 * Set to true once a server login response comes back successfully, reset on
+	 * LOGIN_SCREEN. Guards against world hops / fairy rings / brief connection
+	 * blips that re-fire GameState.LOGGED_IN — we don't want to re-call
+	 * /api/player/login for the same session, both to be a polite client and to
+	 * stay well under the server's per-IP rate cap on /login.
+	 */
+	private volatile boolean serverLoginDone = false;
+
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged event)
 	{
@@ -341,7 +415,12 @@ public class ChunkBlazerPlugin extends Plugin
 			});
 			// Defer the server login until onGameTick sees a non-null player name;
 			// at LOGGED_IN time getLocalPlayer().getName() can still be null.
-			pendingServerLogin = true;
+			// Skip if we've already logged in this session — world hops and
+			// brief reconnects re-fire LOGGED_IN but the same api_key is fine.
+			if (!serverLoginDone)
+			{
+				pendingServerLogin = true;
+			}
 		}
 		else if (event.getGameState() == GameState.LOGIN_SCREEN)
 		{
@@ -358,6 +437,15 @@ public class ChunkBlazerPlugin extends Plugin
 			activeTask = null;
 			lastRegionId = -1;
 			pendingServerLogin = false;
+			// Real logout — reset the dedupe flag so the NEXT LOGGED_IN
+			// (which is a fresh game session) re-runs loginToServer.
+			serverLoginDone = false;
+			// And clear any pending verification — the nonce is tied to the
+			// pre-logout session.
+			pendingVerificationNonce = null;
+			panel.hideVerificationPrompt();
+			// Drop the recognition roster; it'll repopulate after next login.
+			roster.clear();
 		}
 	}
 
@@ -1040,13 +1128,196 @@ public class ChunkBlazerPlugin extends Plugin
 				log.info("[CB-DIAG] login response received: status={} apiKey={}",
 					resp == null ? "null" : resp.getStatus(),
 					resp == null ? "null" : (resp.getApiKey() != null ? "set" : "null"));
+				// Only mark complete on a real OK / created response. Offline
+				// or error responses leave the flag false so we retry next
+				// LOGGED_IN tick instead of pretending we're done.
+				if (resp != null && resp.isSuccess())
+				{
+					serverLoginDone = true;
+				}
 				hydrateFromLoginResponse(resp);
+				maybeStartVerification(resp);
 			})
 			.exceptionally(e ->
 			{
 				log.warn("[CB-DIAG] login failed: {}", e.toString());
 				return null;
 			});
+	}
+
+	/**
+	 * Chat hook with two jobs: tag fellow ChunkBlazer players' names with our
+	 * chat icon, and watch for the local player typing the verification phrase.
+	 */
+	@Subscribe
+	public void onChatMessage(ChatMessage event)
+	{
+		// Decorate other ChunkBlazer players' names with our chat icon, then
+		// run the verification handshake check (which no-ops unless a nonce is
+		// outstanding).
+		maybeAddChatIcon(event);
+		handleVerificationChat(event);
+	}
+
+	/**
+	 * If the message's sender is an online ChunkBlazer player, prepend our chat
+	 * icon to their name so plugin users recognize each other in chat. Runs on
+	 * the client thread (event-bus), so mutating the message node is safe.
+	 */
+	private void maybeAddChatIcon(ChatMessage event)
+	{
+		if (!config.showChatIcons() || chatIconId < 0)
+		{
+			return;
+		}
+		ChatMessageType type = event.getType();
+		if (type != ChatMessageType.PUBLICCHAT && type != ChatMessageType.MODCHAT
+			&& type != ChatMessageType.FRIENDSCHAT && type != ChatMessageType.CLAN_CHAT
+			&& type != ChatMessageType.CLAN_GUEST_CHAT)
+		{
+			return;
+		}
+		String name = event.getName();
+		if (name == null || !roster.isMember(name))
+		{
+			return;
+		}
+		int index = chatIconManager.chatIconIndex(chatIconId);
+		if (index < 0)
+		{
+			return; // icons not loaded into the client yet
+		}
+		MessageNode node = event.getMessageNode();
+		if (node == null)
+		{
+			return;
+		}
+		String imgTag = "<img=" + index + ">";
+		String currentName = node.getName();
+		if (currentName == null || currentName.contains(imgTag))
+		{
+			return; // already tagged this message
+		}
+		node.setName(imgTag + currentName);
+	}
+
+	/**
+	 * Watch for the local player typing the verification phrase in public chat.
+	 * When matched, POST verify to consume the nonce and flip verified=true.
+	 */
+	private void handleVerificationChat(ChatMessage event)
+	{
+		String pending = pendingVerificationNonce;
+		if (pending == null)
+		{
+			return;
+		}
+		// Only public chat — that's what carries Jagex-attributed messages.
+		if (event.getType() != ChatMessageType.PUBLICCHAT && event.getType() != ChatMessageType.MODCHAT)
+		{
+			return;
+		}
+		// Chat-event names can carry icon tags and use non-breaking spaces;
+		// the local-player name does not. Normalize both with Text.standardize
+		// (strips tags, swaps  ->space, lowercases) before comparing.
+		String localName = getPlayerName();
+		String eventName = event.getName();
+		if (localName == null || eventName == null
+			|| !Text.standardize(localName).equals(Text.standardize(eventName)))
+		{
+			return;
+		}
+		// Just look for the nonce anywhere in the message. The nonce is 8
+		// digits (~100M keyspace) so casual chat won't false-positive, and
+		// it sidesteps the entire "OSRS auto-capitalizes the first letter"
+		// + "font lowercase-n vs uppercase-N" mess we had with a word prefix.
+		String msg = event.getMessage();
+		if (msg == null || !msg.contains(pending))
+		{
+			return;
+		}
+
+		// Consume locally first so we don't double-fire if the server is slow.
+		pendingVerificationNonce = null;
+		apiClient.verify(pending)
+			.thenAccept(resp ->
+			{
+				if (resp != null && resp.isVerified())
+				{
+					log.info("Account verified via chat handshake");
+					addPluginChatMessage("Account verified! You're all set.");
+					panel.hideVerificationPrompt();
+				}
+				else
+				{
+					log.warn("Verification POST rejected: {}",
+						resp != null ? resp.getMessage() : "null response");
+					addPluginChatMessage("That code didn't work - it may have expired. Issuing a fresh one...");
+					// Likely an expired code. Issue a new one so the player can retry.
+					requestAndShowVerification();
+				}
+			});
+	}
+
+	/**
+	 * If the server's login response says the player isn't verified yet, kick
+	 * off the chat-handshake flow and tell them what to type in chat.
+	 */
+	private void maybeStartVerification(PlayerLoginResponse response)
+	{
+		if (response == null || !response.isSuccess())
+		{
+			return;
+		}
+		PlayerLoginResponse.PlayerData pdata = response.getPlayer();
+		if (pdata == null || pdata.isVerified())
+		{
+			// Already verified — make sure no stale prompt lingers in the panel.
+			panel.hideVerificationPrompt();
+			return;
+		}
+		requestAndShowVerification();
+	}
+
+	/**
+	 * Ask the server for a verification code, then surface it in both the chat
+	 * box and a persistent banner in the side panel. Called on login when the
+	 * account is unverified, and again if a verify attempt fails (expired code)
+	 * so the player always has a live code to type.
+	 */
+	private void requestAndShowVerification()
+	{
+		apiClient.verifyStart()
+			.thenAccept(start ->
+			{
+				if (start == null || start.isAlreadyVerified())
+				{
+					return; // race: server says we got verified between calls
+				}
+				if (start.getNonce() == null || start.getChatPhrase() == null)
+				{
+					return; // offline / failed response
+				}
+				String nonce = start.getNonce();
+				pendingVerificationNonce = nonce;
+				log.info("Verification nonce issued: {}", nonce);
+				addPluginChatMessage("Type " + nonce
+					+ " in public chat and hit Enter to verify your ChunkBlazer account.");
+				panel.showVerificationPrompt(nonce);
+			});
+	}
+
+	/**
+	 * Post a chat-box message in the player's UI so they don't have to alt-tab
+	 * to the side panel to see verification prompts.
+	 */
+	private void addPluginChatMessage(String message)
+	{
+		clientThread.invoke(() ->
+		{
+			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "",
+				"[ChunkBlazer] " + message, null);
+		});
 	}
 
 	/**
@@ -1138,6 +1409,31 @@ public class ChunkBlazerPlugin extends Plugin
 			int region = lastRegionId;
 			apiClient.sendHeartbeat(world, region, true);
 		});
+	}
+
+	/**
+	 * Refresh the online-player roster that powers the recognition surfaces.
+	 * Skips the network call entirely when every recognition toggle is off, or
+	 * when we're not in-game, so we stay polite to the server's rate caps.
+	 */
+	private void refreshRoster()
+	{
+		if (!config.apiEnabled() || client.getGameState() != GameState.LOGGED_IN)
+		{
+			return;
+		}
+		if (!config.showOtherPlayers() && !config.showChatIcons()
+			&& !config.showMinimapHighlight() && !config.showPlayerOutline())
+		{
+			return;
+		}
+		apiClient.getOnlinePlayers(-1)
+			.thenAccept(roster::update)
+			.exceptionally(e ->
+			{
+				log.debug("Roster refresh failed: {}", e.toString());
+				return null;
+			});
 	}
 
 	/**
