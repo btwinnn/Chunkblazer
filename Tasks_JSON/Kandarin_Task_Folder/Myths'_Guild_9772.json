@@ -34,21 +34,7 @@
                         }
                     ]
                 },             
-                {
-                    "name": "Equip an Amulet of Glory(4)",
-                    "taskID": "equip_amulet_of_glory(4)",
-                    "category": "Defence",
-                    "level": 1,
-                    "completion_type": "EQUIP",
-                    "base_points": 4,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": ["Amulet of Glory(4)"],
-                            "item_ids": [1712]
-                        }
-                    ]
-                },
+                
                 {
                     "name": "Chop some Magic Trees",
                     "taskID": "chop_magic_trees",
