@@ -974,66 +974,67 @@
             "is_completed": false
         },
         {
-            "region_id": [13108],
-            "Friendly_Name": "Varrock East Mine",
-            "neighbor_ids": [13364, 13107, 12852, 13109],
+            "region_id": [11056],
+            "Friendly_Name": "North Tai Bwo Wannai",
+            "neighbor_ids": [11057, 11312, 11055, 10800],
             "tasks": [
                 {
-                    "name": "Mine some Iron Ore",
-                    "taskID": "mine_iron_ore",
-                    "category": "Mining",
-                    "level": 15,
-                    "completion_type": "MINING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
+                    "name": "Plant a Calquat Sapling",
+                    "taskID": "plant_calquat_sapling",
+                    "category": "Farming",
+                    "level": 72,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": ["Iron Ore"],
-                            "item_ids": [440],
-                            "quantity": [25, 200]
+                            "item": ["Calquat Sapling"],
+                            "item_ids": [5503],
+                            "quantity": [1]
                         }
                     ]
                 },
-                {
-                    "name": "Defeat a White Unicorn",
-                    "taskID": "defeat_white_unicorn",
+                {                           
+                    "name": "Defeat a Jungle Spider",
+                    "taskID": "defeat_jungle_spider",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Unicorn"],
-                        "npc_ids": [2837, 14043],
-                        "quantity": [1, 25]
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1, 10]
                     }
                 },
                 {
-                    "name": "Mix some Anti-Poison Potions",
-                    "taskID": "mix_anti-poisons",
-                    "category": "Obtain_Set",
-                    "level": 5,
-                    "completion_type": "HERBLORE",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                     "required_items": [
-                        {
-                            "item": ["Antipoison(3)", "Antipoison(4)"],
-                            "item_ids": [175, 2446],
-                            "quantity": [1, 25]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Ensouled Unicorn Head",
-                    "taskID": "obtain_ensouled_unicorn_head",
+                    "name": "Obtain Trading Sticks",
+                    "taskID": "obtain_trading_sticks",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Ensouled Unicorn Head"],
-                            "item_ids": [13465, 13466]
+                            "item": ["Trading Sticks"],
+                            "item_ids": [6306],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Hack some Dense Jungle for Thatch",
+                    "taskID": "hack_dense_jungle",
+                    "category": "Woodcutting",
+                    "level": 35,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Thatch spar dense",
+                            "item_ids": [6285],
+                            "quantity": [1, 10]
                         }
                     ]
                 },
