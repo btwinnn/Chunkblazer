@@ -839,121 +839,137 @@
             "is_completed": false
         },
         {
-            "region_id": [12852],
-            "Friendly_Name": "Dark Wizards' Stone Table",
-            "neighbor_ids": [12853, 13108, 12851, 12596],
+            "region_id": [10802],
+            "Friendly_Name": "Golden Peninsula",
+            "neighbor_ids": [10803, 11058, 10801, 10546],
             "tasks": [
                 {
-                    "name": "Defeat a Level 20 Dark Wizard",
-                    "taskID": "defeat_level_20_dark_wizard",
+                    "name": "Mine some Gold Ore",
+                    "taskID": "mine_gold",
+                    "category": "Mining",
+                    "level": 40,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Gold Ore",
+                            "item_ids": [444],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt a Gold Bar",
+                    "taskID": "smith_gold_bar",
+                    "category": "Smithing",
+                    "level": 40,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Gold Bar",
+                            "item_ids": [2357],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Moss Giant",
+                    "taskID": "defeat_moss_giant",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Dark Wizard Level 20"],
-                        "npc_ids": [510, 5088, 5089],
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Moss Giant on Task",
+                    "taskID": "defeat_moss_giant_on_task",
+                    "category": "Slayer",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Defeat a Level 20 Dark Wizard in 30 Seconds",
-                    "taskID": "defeat_level_20_dark_wizard_fast",
+                    "name": "Defeat a Moss Giant in 24 Seconds",
+                    "taskID": "defeat_moss_giant_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Dark Wizard Level 20"],
-                        "npc_ids": [510, 5088, 5089],
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
                         "quantity": [1]
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [50]
+                        "time_in_ticks": [40]
                     }
                 },
                 {
-                    "name": "Use the Agility Fence Jump Shortcut",
-                    "taskID": "agility_fence_jump",
+                    "name": "Use the Level 10 Agility Moss Giant Island Rope Swing",
+                    "taskID": "agility_level_10_rope_swing",
                     "category": "Agility",
-                    "level": 13,
+                    "level": 10,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
-                },
-                {
-                    "name": "Obtain a Fire Talisman",
-                    "taskID": "obtain_fire_talisman",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
+                    "assignment_weight": 5,
+                    "required_object": [
                         {
-                            "item": ["Fire Talisman"],
-                            "item_ids": [1442]
+                            "item": ["Ropeswing (Brimhaven)"],
+                            "item_ids": [23568, 23569]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain a Black Robe",
-                    "taskID": "obtain_black_robe",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Black Robe"],
-                            "item_ids": [581]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat some Dark Wizards",
-                    "taskID": "defeat_some_dark_wizards",
+                    "name": "Defeat some Scorpions",
+                    "taskID": "defeat_scorpions",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Dark Wizard"],
-                        "npc_ids": [512, 5086, 5087, 2058, 2059, 510, 5088, 5089, 2057, 2056],
-                        "quantity": [1, 50]
+                        "npc": ["Scorpion"],
+                        "npc_ids": [14940, 3024, 13001, 2480, 5242, 2479, 9044, 9030, 5372, 1226, 3027, 3026, 3025, 7022, 13967],
+                        "quantity": [1, 25]
                     }
                 },
                 {
-                    "name": "Obtain a Yellow Bead",
-                    "taskID": "obtain_yellow_bead",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Yellow Bead"],
-                            "item_ids": [1472]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Level 20 Dark Wizard 1 Hit",
-                    "taskID": "defeat_level_20_dark_wizard_first_hit",
+                    "name": "Kill a Scorpion in 27 Seconds",
+                    "taskID": "defeat_scorpion_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Wizard"],
-                        "npc_ids": [510, 5088, 5089],
+                        "npc": ["Scorpion"],
+                        "npc_ids": [14940, 3024, 13001, 2480, 5242, 2479, 9044, 9030, 5372, 1226, 3027, 3026, 3025, 7022, 13967],
                         "quantity": [1]
                     },
-                    
                     "constraints": {
-                        "time_in_ticks": [1]
+                        "time_in_ticks": [45]
                     }
-                }         
+                },
+                {
+                    "name": "Use Fairy Ring Code AIR",
+                    "taskID": "fairy_ring_AIR",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }       
             ],
             "is_completed": false
         },
