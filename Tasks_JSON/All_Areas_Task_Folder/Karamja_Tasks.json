@@ -1909,6 +1909,215 @@
                 }
                     ],                 
                     "is_completed": false      
+        },
+        {
+            "region_id": [11311],
+            "Friendly_Name": "Nature Altar",
+            "neighbor_ids": [11312, 11567, 11310, 11055],
+            "tasks": [
+                {
+                    "name": "Defeat a Level 5 Snake in the First Hit",
+                    "taskID": "defeat_level_5_snake_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Level 5 Snake"],
+                        "npc_ids": [2845, 13002, 14916],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Runecraft a Nature Rune",
+                    "taskID": "runecraft_nature_rune",                   
+                    "category": "Runecrafting",
+                    "level": 44,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Nature Rune",
+                        "item_ids": [561],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Mithril Ore",
+                    "taskID": "mine_mithril",
+                    "category": "Mining",
+                    "level": 55,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mithril Ore",
+                            "item_ids": [447],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Silver Ore",
+                    "taskID": "mine_silver",
+                    "category": "Mining",
+                    "level": 20,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Silver Ore",
+                        "item_ids": [442],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [25, 200]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat a Jungle Spider in 12 Seconds",
+                    "taskID": "defeat_jungle_spider_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [20]                       
+                        }
+                },
+                {                           
+                    "name": "Defeat a Jungle Spider",
+                    "taskID": "defeat_jungle_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Jungle Spider on Task",
+                    "taskID": "defeat_jungle_spider_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1]
+                    }
+                },
+                {                           
+                    "name": "Defeat a Jungle Spider with nothing Equipped",
+                    "taskID": "defeat_jungler_spider_with_nothing",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {                       
+                    "equip_nothing": "TRUE"
+                    }                  
+                },
+                {
+                    "name": "Defeat a Tribesman or Tribeswoman in 27 Seconds",
+                    "taskID": "defeat_tribesman_tribeswoman_27_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Tribesman", "Tribeswoman"],
+                        "npc_ids": [6406, 6407, 530, 11954, 11955, 11956],
+                        "quantity": 1
+                    },
+                    "constraints": {
+                        "time_in_ticks": [45]                       
+                    }
+                },
+                {
+                    "name": "Defeat a Tribesman or Tribeswoman",
+                    "taskID": "defeat_tribesman_tribeswoman",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Tribesman", "Tribeswoman"],
+                        "npc_ids": [6406, 6407, 530, 11954, 11955, 11956],
+                        "quantity": [1, 25]                                         
+                    }
+                }           
+                    ],                 
+                    "is_completed": false      
         }              
     ]
 }
