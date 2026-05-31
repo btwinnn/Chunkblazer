@@ -1,0 +1,112 @@
+{
+            "region_id": [11567],
+            "Friendly_Name": "River Amja",
+            "neighbor_ids": [11568, 11823, 11566, 11311],
+            "tasks": [
+                {
+                    "name": "Use the Level 1 Agility River Amja Log",
+                    "taskID": "agility_level_1_log_amja_river",
+                    "category": "Agility",
+                    "level": 1,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_object": {
+                        "object": ["A wooden log"],
+                        "object_id": [23644], 
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Jogre",
+                    "taskID": "defeat_jogre",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jogre"],
+                        "npc_ids": [2094, 2234, 3356],
+                        "quantity": [1, 25]                                         
+                    }
+                },
+                {
+                    "name": "Defeat a Jogre in 36 Seconds",
+                    "taskID": "defeat_jogre_36_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jogre"],
+                        "npc_ids": [2094, 2234, 3356],
+                        "quantity": [1]                                         
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [60]                       
+                        }
+                }, 
+                {                           
+                    "name": "Defeat a Jungle Spider in 12 Seconds",
+                    "taskID": "defeat_jungle_spider_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [20]                       
+                        }
+                },
+                {                           
+                    "name": "Defeat a Jungle Spider",
+                    "taskID": "defeat_jungle_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Jungle Spider on Task",
+                    "taskID": "defeat_jungle_spider_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1]
+                    }
+                },
+                {                           
+                    "name": "Defeat a Jungle Spider with nothing Equipped",
+                    "taskID": "defeat_jungler_spider_with_nothing",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {                       
+                    "equip_nothing": "TRUE"
+                    }                  
+                }           
+                    ],                 
+                    "is_completed": false      
+        } 

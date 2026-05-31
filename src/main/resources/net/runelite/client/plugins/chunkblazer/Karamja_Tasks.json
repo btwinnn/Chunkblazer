@@ -1492,7 +1492,7 @@
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "target_npc": {
                         "npc": ["Undead one#Level 61", "Undead one#Level 68 (Skeletal)", "Undead one#Level 68 (Zombie)", "Undead one#Level 73"],
                         "npc_ids": [5344, 5345, 5342, 5343, 5346, 5347, 5348, 5349, 5350, 5351],
@@ -1505,7 +1505,7 @@
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "target_npc": {
                         "npc": ["Undead one#Level 61", "Undead one#Level 68 (Skeletal)", "Undead one#Level 68 (Zombie)", "Undead one#Level 73"],
                         "npc_ids": [5344, 5345, 5342, 5343, 5346, 5347, 5348, 5349, 5350, 5351],
@@ -1522,7 +1522,7 @@
                     "level": 40,
                     "completion_type": "MINING",
                     "base_points": 2,
-                    "assignment_weight": 8,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
                             "item": ["Uncut opal", "Uncut jade", "Uncut red topaz", "Uncut ruby", "Uncut emerald", "Uncut diamond", "Uncut sapphire"],
@@ -1532,75 +1532,269 @@
                     ]
                 }, 
                 {
-                    "name": "Obtain a Graahk Horn Spur",
-                    "taskID": "obtain_graahk_horn_spur",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
+                    "name": "Catch some Raw Salmon",
+                    "taskID": "catch_raw_salmon",
+                    "category": "Fishing",
+                    "level": 30,
+                    "completion_type": "FISHING",
                     "base_points": 2,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
-                            "item": ["Graahk Horn Spur"],
-                            "item_ids": [29229],
-                            "quantity": [1]
+                        "item": "Raw Salmon",
+                        "item_ids": [331],
+                        "quantity": [1, 100]
                         }
                     ]
                 },
-                {
-                    "name": "Equip a Graahk Headdress",
-                    "taskID": "equip_graahk_headdress",
-                    "category": "Hunter",
-                    "completion_type": "EQUIP",
-                    "level": 38,
-                    "base_points": 2,
-                    "assignment_weight": 8,
+                {                           
+                    "name": "Cook some Salmon",
+                    "taskID": "cook_raw_salmon",
+                    "category": "Cooking",
+                    "level": 25,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
-                            "item": ["Graahk Headdress"],
-                            "item_ids": [10051]
+                        "item": "Salmon",
+                        "item_ids": [329],
+                        "quantity": [1, 100]
                         }
-                    ]
+                    ]       
+                }, 
+                {                           
+                    "name": "Catch some Raw Trout",
+                    "taskID": "catch_raw_trout",
+                    "category": "Fishing",
+                    "level": 20,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Raw Trout",
+                        "item_ids": [335],
+                        "quantity": [1, 250]
+                        }
+                    ]       
+                },
+                {                           
+                    "name": "Cook some Trout",
+                    "taskID": "cook_raw_trout",
+                    "category": "Cooking",
+                    "level": 15,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Trout",
+                        "item_ids": [333],
+                        "quantity": [1, 100]
+                        }
+                    ]       
                 },
                 {
-                    "name": "Use Fairy Ring Code CKR",
-                    "taskID": "fairy_ring_CKR",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
+                    "name": "Use the Level 32 Agility Shilo Village Stepping Stones",
+                    "taskID": "agility_level_32_shilo_village_stepping_stones",
+                    "category": "Agility",
+                    "level": 32,
+                    "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Stepping stone (Shilo Village)"],
+                        "object_id": [16466], 
+                        "quantity": [1]
+                    }
                 },
                 {
-                    "name": "Defeat a Level 3 Monkey in the First Hit",
-                    "taskID": "defeat_monkey_fast",
+                    "name": "Use the Level 79 Agility Shilo Village Rock Shortcut",
+                    "taskID": "agility_level_79_shilo_village_rock",
+                    "category": "Agility",
+                    "level": 79,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_object": {
+                        "object": ["Rocks (Shilo Village)#1", "Rocks (Shilo Village)#2"],
+                        "object_id": [53238, 53240], 
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Unlock Gargoyle Smasher",
+                    "taskID": "unlock_gargoyle_smasher",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 10,                   
+                    "constraints": {                       
+                        "varbit_id": 4027,        
+                        "varbit_boolean": 1,      
+                        "description": "Unlock status of Gargoyle Smasher"
+                    }
+                },
+                {
+                    "name": "Unlock Broader Fletching",
+                    "taskID": "unlock_broader_fletching",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 3,
+                    "assignment_weight": 5,                   
+                    "constraints": {                       
+                        "varbit_id": 3208,        
+                        "varbit_boolean": 1,      
+                        "description": "Unlock status of Broader Fletching"
+                    }
+                },
+                {
+                    "name": "Unlock Actual Vampyre Slayer",
+                    "taskID": "unlock_vampyre_slayer",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 10388,        
+                        "varbit_boolean": 1,      
+                        "description": "Unlock status of Actual Vampyre Slayer"
+                    }
+                },
+                {
+                    "name": "Unlock Stop the Wyvern",
+                    "taskID": "unlock_stop_the_wyvern",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 5,
+                    "assignment_weight": 8,                   
+                    "constraints": {                       
+                        "varbit_id": 240,        
+                        "varbit_boolean": 1,      
+                        "description": "Unlock status of Stop the Wyvern"
+                    }
+                }
+                ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "One Small favour",
+                    "points": 3
+                }
+                    ],                 
+                    "is_completed": false      
+        },
+        {
+            "region_id": [11567],
+            "Friendly_Name": "River Amja",
+            "neighbor_ids": [11568, 11823, 11566, 11311],
+            "tasks": [
+                {
+                    "name": "Use the Level 1 Agility River Amja Log",
+                    "taskID": "agility_level_1_log_amja_river",
+                    "category": "Agility",
+                    "level": 1,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_object": {
+                        "object": ["A wooden log"],
+                        "object_id": [23644], 
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Jogre",
+                    "taskID": "defeat_jogre",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jogre"],
+                        "npc_ids": [2094, 2234, 3356],
+                        "quantity": [1, 25]                                         
+                    }
+                },
+                {
+                    "name": "Defeat a Jogre in 36 Seconds",
+                    "taskID": "defeat_jogre_36_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jogre"],
+                        "npc_ids": [2094, 2234, 3356],
+                        "quantity": [1]                                         
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [60]                       
+                        }
+                }, 
+                {                           
+                    "name": "Defeat a Jungle Spider in 12 Seconds",
+                    "taskID": "defeat_jungle_spider_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Level 3 Monkey"],
-                        "npc_ids": [2848],
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
                         "quantity": [1]
-                    },
+                    }, 
+                    
                     "constraints": {
-                        "time_in_ticks": [1]
-                    }                  
+                        "time_in_ticks": [20]                       
+                        }
                 },
-                {
-                    "name": "Use the Level 15 Agility Cairn Isle Rockslide",
-                    "taskID": "agility_level_15_cairn_isle_rockslide",
-                    "category": "Agility",
-                    "level": 15,
-                    "completion_type": "AGILITY",
+                {                           
+                    "name": "Defeat a Jungle Spider",
+                    "taskID": "defeat_jungle_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
-                    "required_object": {
-                        "object": ["Rock slide (Cairn Isle)"],
-                        "object_id": [2231], 
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Jungle Spider on Task",
+                    "taskID": "defeat_jungle_spider_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
                         "quantity": [1]
                     }
-                }
+                },
+                {                           
+                    "name": "Defeat a Jungle Spider with nothing Equipped",
+                    "taskID": "defeat_jungler_spider_with_nothing",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {                       
+                    "equip_nothing": "TRUE"
+                    }                  
+                }           
                     ],                 
                     "is_completed": false      
-        }           
+        }             
     ]
 }
