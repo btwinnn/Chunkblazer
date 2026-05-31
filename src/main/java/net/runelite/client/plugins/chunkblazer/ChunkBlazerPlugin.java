@@ -1135,6 +1135,11 @@ public class ChunkBlazerPlugin extends Plugin
 				if (resp != null && resp.isSuccess())
 				{
 					serverLoginDone = true;
+					// Recognition is roster-driven; don't make the player wait for
+					// the next 30s poll. Announce presence now and, once the
+					// heartbeat is committed, refresh the roster so our own chat
+					// icon — and anyone already online — lights up within ~a second.
+					kickPresence();
 				}
 				hydrateFromLoginResponse(resp);
 				maybeStartVerification(resp);
@@ -1408,7 +1413,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			int world = client.getWorld();
 			int region = lastRegionId;
-			apiClient.sendHeartbeat(world, region, true);
+			apiClient.sendHeartbeat(world, region, config.visibleToOthers());
 		});
 	}
 
@@ -1435,6 +1440,32 @@ public class ChunkBlazerPlugin extends Plugin
 				log.debug("Roster refresh failed: {}", e.toString());
 				return null;
 			});
+	}
+
+	/**
+	 * Immediate presence kick, fired once on login instead of waiting for the
+	 * 30s scheduled heartbeat. Announces this player to the server now, and once
+	 * the heartbeat is committed (we chain on the returned future) refreshes the
+	 * roster so the player's own chat icon and anyone already online light up
+	 * within roughly a second of logging in.
+	 */
+	private void kickPresence()
+	{
+		if (!config.apiEnabled() || apiClient == null)
+		{
+			return;
+		}
+		clientThread.invoke(() ->
+		{
+			if (client.getGameState() != GameState.LOGGED_IN)
+			{
+				return;
+			}
+			int world = client.getWorld();
+			int region = lastRegionId;
+			apiClient.sendHeartbeat(world, region, config.visibleToOthers())
+				.whenComplete((v, t) -> refreshRoster());
+		});
 	}
 
 	/**

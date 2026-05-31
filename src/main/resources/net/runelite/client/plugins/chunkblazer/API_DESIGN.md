@@ -105,8 +105,8 @@ Called when player logs into game. Creates account if new, returns existing data
 Request:
 ```json
 {
-    "rsn": "SeaShantyBoy",
-    "rsn_hash": "3f6294cc5e62a8a6..."
+    "rsn": "ExamplePlayer",
+    "rsn_hash": "<sha256-of-lowercase-rsn>"
 }
 ```
 
@@ -115,7 +115,7 @@ Response (new player):
 {
     "status": "created",
     "player": {
-        "rsn": "SeaShantyBoy",
+        "rsn": "ExamplePlayer",
         "game_mode": null,
         "mode_locked": false,
         "total_points": 0,
@@ -131,7 +131,7 @@ Response (existing player):
 {
     "status": "ok",
     "player": {
-        "rsn": "SeaShantyBoy",
+        "rsn": "ExamplePlayer",
         "game_mode": "CASUAL",
         "mode_locked": true,
         "locked_at": "2026-01-11T08:46:10Z",
@@ -285,7 +285,7 @@ Response:
 ```json
 {
     "player": {
-        "rsn": "SeaShantyBoy",
+        "rsn": "ExamplePlayer",
         "rank": 142,
         "total_points": 1251,
         "percentile": 97.3
@@ -293,7 +293,7 @@ Response:
     "nearby": [
         {"rank": 140, "rsn": "ChunkFan99", "total_points": 1260},
         {"rank": 141, "rsn": "BlazerBob", "total_points": 1255},
-        {"rank": 142, "rsn": "SeaShantyBoy", "total_points": 1251},
+        {"rank": 142, "rsn": "ExamplePlayer", "total_points": 1251},
         {"rank": 143, "rsn": "TaskMaster", "total_points": 1248},
         {"rank": 144, "rsn": "RegionRunner", "total_points": 1245}
     ]
@@ -312,7 +312,7 @@ Response:
 ```json
 {
     "player": {
-        "rsn": "SeaShantyBoy",
+        "rsn": "ExamplePlayer",
         "game_mode": "CASUAL",
         "mode_locked": true,
         "total_points": 1251
