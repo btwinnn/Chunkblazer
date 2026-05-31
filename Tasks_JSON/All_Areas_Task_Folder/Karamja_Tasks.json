@@ -1670,7 +1670,7 @@
                     "base_points": 5,
                     "assignment_weight": 8,                   
                     "constraints": {                       
-                        "varbit_id": 14824,        
+                        "varbit_id": 240,        
                         "varbit_boolean": 1,      
                         "description": "Unlock status of Stop the Wyvern"
                     }
@@ -1685,9 +1685,9 @@
                     "is_completed": false      
         },
         {
-            "region_id": [11566],
-            "Friendly_Name": "Shilo Village Entrance",
-            "neighbor_ids": [11567, 11822, 11565, 11310],
+            "region_id": [11567],
+            "Friendly_Name": "River Amja",
+            "neighbor_ids": [11568, 11823, 11566, 11311],
             "tasks": [
                 {
                     "name": "Defeat a Tribesman or Tribeswoman",
