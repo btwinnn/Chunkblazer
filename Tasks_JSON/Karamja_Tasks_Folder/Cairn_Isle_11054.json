@@ -17,7 +17,7 @@
                     }
                 },
                 {
-                    "name": "Kill a Scorpion in 27 Seconds",
+                    "name": "Defeat a Scorpion in 27 Seconds",
                     "taskID": "defeat_scorpion_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

@@ -489,7 +489,7 @@
                     "base_points": 1,
                     "assignment_weight": 5,                   
                     "constraints": {                       
-                        "varbit_id": 2061,        
+                        "varbit_id": 4029,        
                         "varbit_boolean": 1,      
                         "description": "Unlock status of Reptile Freezer"
                     }

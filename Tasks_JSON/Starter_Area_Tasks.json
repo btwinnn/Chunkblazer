@@ -755,8 +755,8 @@
           }
         },
         {
-          "name": "Kill a H.A.M. Guard",
-          "taskID": "kill_ham_guard",
+          "name": "Defeat a H.A.M. Guard",
+          "taskID": "defeat_ham_guard",
           "category": "Combat",
           "completion_type": "NPC_Kill",
           "base_points": 1,
@@ -1520,7 +1520,7 @@
           }
         },
         {
-          "name": "Kill a Scorpion in 27 Seconds",
+          "name": "Defeat a Scorpion in 27 Seconds",
           "taskID": "defeat_scorpion_fast",
           "category": "Combat",
           "completion_type": "NPC_Kill",

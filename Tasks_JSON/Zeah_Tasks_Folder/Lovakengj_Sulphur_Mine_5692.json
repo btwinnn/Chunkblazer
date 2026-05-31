@@ -49,8 +49,8 @@
                     ]
                 },
                 {
-                    "name": "Kill a King Scoropion in the First Hit",
-                    "taskID": "kill_king_scorpion_first_hit",
+                    "name": "Defeat a King Scoropion in the First Hit",
+                    "taskID": "defeat_king_scorpion_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
