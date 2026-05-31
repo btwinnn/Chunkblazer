@@ -1690,16 +1690,17 @@
             "neighbor_ids": [11568, 11823, 11566, 11311],
             "tasks": [
                 {
-                    "name": "Defeat a Tribesman or Tribeswoman",
-                    "taskID": "defeat_tribesman_tribeswoman",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
+                    "name": "Use the Level 1 Agility River Amja Log",
+                    "taskID": "agility_level_1_log_amja_river",
+                    "category": "Agility",
+                    "level": 1,
+                    "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 5,
-                    "target_npc": {
-                        "npc": ["Tribesman", "Tribeswoman"],
-                        "npc_ids": [6406, 6407, 530, 11954, 11955, 11956],
-                        "quantity": [1, 25]                                         
+                    "assignment_weight": 1,
+                    "required_object": {
+                        "object": ["A wooden log"],
+                        "object_id": [23644], 
+                        "quantity": [1]
                     }
                 },
                 {
@@ -1716,18 +1717,21 @@
                     }
                 },
                 {
-                    "name": "Use the Level 30 Agility Shilo Village Waterfall Stepping Stones",
-                    "taskID": "agility_level_30_shilo_village_waterfall_stepping_stones",
-                    "category": "Agility",
-                    "level": 30,
-                    "completion_type": "AGILITY",
+                    "name": "Defeat a Jogre in 36 Seconds",
+                    "taskID": "defeat_jogre_36_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": {
-                        "object": ["Stepping stones (Karamja)"],
-                        "object_id": [23645, 23646, 23647], 
-                        "quantity": [1]
-                    }
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jogre"],
+                        "npc_ids": [2094, 2234, 3356],
+                        "quantity": [1]                                         
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [60]                       
+                        }
                 }, 
                 {                           
                     "name": "Defeat a Jungle Spider in 12 Seconds",
@@ -1788,16 +1792,10 @@
                     "constraints": {                       
                     "equip_nothing": "TRUE"
                     }                  
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Shilo Village",
-                    "points": 2
-                }
+                }           
                     ],                 
                     "is_completed": false      
-        },
+        }, 
         {
             "region_id": [11566],
             "Friendly_Name": "Shilo Village Entrance",
