@@ -159,16 +159,16 @@
                     ]
                 },
         {
-          "name": "Kill a Level 2 Giant Spider",
-          "taskID": "kill_level_2_giant_spider",
+          "name": "Kill some Spiders",
+          "taskID": "kill_some_spiders",
           "category": "Combat",
           "completion_type": "NPC_Kill",
           "base_points": 1,
           "assignment_weight": 8,
           "target_npc": {
-            "npc": ["Giant Spider"],
-            "npc_ids": [3017],
-            "quantity": [1, 10]
+            "npc": ["Spider, Big Spider"],
+            "npc_ids": [3017, 3019],
+            "quantity": [1, 25]
           }
         },
         {
