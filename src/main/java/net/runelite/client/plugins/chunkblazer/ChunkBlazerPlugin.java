@@ -781,6 +781,7 @@ public class ChunkBlazerPlugin extends Plugin
 		"Misthalin_Tasks.json",
 		"Asgarnia_Tasks.json",
 		"Kandarin_Tasks.json",
+		"Karamja_Tasks.json",
 		"Varlamore_Tasks.json",
 		"Zeah_Tasks.json"
 	};
