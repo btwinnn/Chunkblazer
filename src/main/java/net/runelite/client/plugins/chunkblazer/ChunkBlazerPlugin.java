@@ -329,11 +329,14 @@ public class ChunkBlazerPlugin extends Plugin
 		overlayManager.add(minimapPlayerOverlay);
 
 		// Register the ChunkBlazer chat icon shown next to other plugin users'
-		// names in public chat. icon.png is a real (synchronous) BufferedImage,
-		// resized small to sit inline with chat text.
-		if (icon != null && chatIconId < 0)
+		// names in public chat. chat_icon.png is a purpose-built 16x16
+		// ChunkBlazer glyph drawn to read crisply at chat size. Register it at
+		// its native size — resizing here was anti-aliasing the edges into
+		// faint, washed-out pixels.
+		BufferedImage chatIcon = ImageUtil.loadImageResource(getClass(), "chat_icon.png");
+		if (chatIcon != null && chatIconId < 0)
 		{
-			chatIconId = chatIconManager.registerChatIcon(ImageUtil.resizeImage(icon, 14, 14));
+			chatIconId = chatIconManager.registerChatIcon(chatIcon);
 		}
 
 		// Load or assign a task if player is logged in
