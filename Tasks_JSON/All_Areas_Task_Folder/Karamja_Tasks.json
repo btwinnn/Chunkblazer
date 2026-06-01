@@ -2460,6 +2460,378 @@
                 }         
             ],                 
                     "is_completed": false      
-        }               
+        },
+        {
+            "region_id": [11565],
+            "Friendly_Name": "Khazari Jungle Vine Shortcut",
+            "neighbor_ids": [11566, 11821, 11564, 11309],
+            "tasks": [
+                {
+                    "name": "Defeat a Tormented Warrior",
+                    "taskID": "defeat_tormented_warrior",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Tormented Warrior"],
+                        "npc_ids": [3959],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Tormented Warrior in 60 Seconds",
+                    "taskID": "defeat_tormented_warrior_60_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Tormented Warrior"],
+                        "npc_ids": [3959],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [100]
+                    }
+                },
+                {
+                    "name": "Chop some Teak Trees",
+                    "taskID": "Chop_teak_trees",
+                    "category": "Woodcutting",
+                    "level": 35,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Teak Log",
+                    "taskID": "burn_teak_log",
+                    "category": "Firemaking",
+                    "level": 35,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Stone Guardian",
+                    "taskID": "defeat_stone_guardian",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Stone Guardian"],
+                        "npc_ids": [8066, 8064, 8065],
+                        "quantity": [1, 5]
+                    }
+                },
+                {
+                    "name": "Obtain the Karamja Dragon Key Piece",
+                    "taskID": "obtain_karamjan_dragon_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon key piece#Karamja piece"],
+                            "item_ids": [22091],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Oomlie Bird",
+                    "taskID": "defeat_oomlie_bird",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Oomlie Bird"],
+                        "npc_ids": [2062],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat an Oomlie Bird in 7 Seconds",
+                    "taskID": "defeat_oomlie_7_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Oomlie Bird"],
+                        "npc_ids": [2062],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [12]
+                    }
+                },
+                {
+                    "name": "Cook a Wrapped Oomlie",
+                    "taskID": "cook_wrapped_oomlie",
+                    "category": "Cooking",
+                    "level": 50,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Wrapped Oomlie",
+                            "item_ids": [2341],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Jungle Wolf",
+                    "taskID": "defeat_jungle_wolf",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Wolf"],
+                        "npc_ids": [232],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Jungle Wolf in 15 Seconds",
+                    "taskID": "defeat_jungle_wolf_15_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Wolf"],
+                        "npc_ids": [232],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [25]
+                    }
+                },
+                {
+                    "name": "Obtain a Bullroarer",
+                    "taskID": "obtain_bullroarer",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Bullroarer"],
+                            "item_ids": [716],
+                            "quantity": [1]
+                        }
+                    ]
+                }        
+            ],                 
+                    "is_completed": false      
+        },
+        {
+            "region_id": [11309],
+            "Friendly_Name": "Center Khazari Jungle",
+            "neighbor_ids": [11310, 11565, 11308, 11053],
+            "tasks": [
+                {
+                    "name": "Defeat a Tormented Warrior",
+                    "taskID": "defeat_tormented_warrior",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Tormented Warrior"],
+                        "npc_ids": [3959],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Tormented Warrior in 60 Seconds",
+                    "taskID": "defeat_tormented_warrior_60_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Tormented Warrior"],
+                        "npc_ids": [3959],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [100]
+                    }
+                },
+                {
+                    "name": "Chop some Teak Trees",
+                    "taskID": "Chop_teak_trees",
+                    "category": "Woodcutting",
+                    "level": 35,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Teak Log",
+                    "taskID": "burn_teak_log",
+                    "category": "Firemaking",
+                    "level": 35,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Stone Guardian",
+                    "taskID": "defeat_stone_guardian",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Stone Guardian"],
+                        "npc_ids": [8066, 8064, 8065],
+                        "quantity": [1, 5]
+                    }
+                },
+                {
+                    "name": "Obtain the Karamja Dragon Key Piece",
+                    "taskID": "obtain_karamjan_dragon_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon key piece#Karamja piece"],
+                            "item_ids": [22091],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Oomlie Bird",
+                    "taskID": "defeat_oomlie_bird",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Oomlie Bird"],
+                        "npc_ids": [2062],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat an Oomlie Bird in 7 Seconds",
+                    "taskID": "defeat_oomlie_7_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Oomlie Bird"],
+                        "npc_ids": [2062],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [12]
+                    }
+                },
+                {
+                    "name": "Cook a Wrapped Oomlie",
+                    "taskID": "cook_wrapped_oomlie",
+                    "category": "Cooking",
+                    "level": 50,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Wrapped Oomlie",
+                            "item_ids": [2341],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Jungle Wolf",
+                    "taskID": "defeat_jungle_wolf",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Wolf"],
+                        "npc_ids": [232],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Jungle Wolf in 15 Seconds",
+                    "taskID": "defeat_jungle_wolf_15_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Wolf"],
+                        "npc_ids": [232],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [25]
+                    }
+                },
+                {
+                    "name": "Obtain a Vanilla Pod",
+                    "taskID": "obtain_vanilla_pod",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Vanilla Pod"],
+                            "item_ids": [7465],
+                            "quantity": [1]
+                        }
+                    ]
+                }        
+            ],                 
+                    "is_completed": false      
+        }                 
     ]
 }
