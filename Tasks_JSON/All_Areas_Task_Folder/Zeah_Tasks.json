@@ -3437,9 +3437,9 @@
             "is_completed": false
         },
         {
-            "region_id": [5943],
+            "region_id": [6199],
             "Friendly_Name": "Xeric's Lookout",
-            "neighbor_ids": [5944, 6199, 5942, 5687],
+            "neighbor_ids": [6200, 6455, 6198, 5943],
             "tasks": [
                 {
                     "name": "Equip a Steel Med Helm",
