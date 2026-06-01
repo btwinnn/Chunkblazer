@@ -1292,22 +1292,6 @@
                     ]
                 },
                 {
-                    "name": "Cook a Karambwan",
-                    "taskID": "cook_karambwan",
-                    "category": "Cooking",
-                    "level": 1,
-                    "completion_type": "COOKING",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": "Cooked Karambwan",
-                            "item_ids": [3144],
-                            "quantity": [1, 100]
-                        }
-                    ]
-                },
-                {
                     "name": "Defeat a Tribesman or Tribeswoman in 27 Seconds",
                     "taskID": "defeat_tribesman_tribeswoman_27_seconds",
                     "category": "Combat",
@@ -2289,6 +2273,80 @@
                     }
                 }           
                     ],                 
+                    "is_completed": false      
+        },
+        {
+            "region_id": [11568],
+            "Friendly_Name": "Karambwan Paradise",
+            "neighbor_ids": [11569, 11824, 11567, 11312],
+            "tasks": [
+                {
+                    "name": "Catch a Raw Karambwan",
+                    "taskID": "catch_raw_karambwan",
+                    "category": "Fishing",
+                    "level": 65,
+                    "completion_type": "FISHING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Raw Karambwan",
+                        "item_ids": [3142],
+                        "quantity": [250, 1000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Karambwan",
+                    "taskID": "cook_karambwan",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": "Cooked Karambwan",
+                            "item_ids": [3144],
+                            "quantity": [100, 500]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use Fairy Ring Code DKP",
+                    "taskID": "fairy_ring_DKP",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }, 
+                {                           
+                    "name": "Defeat Rashiliyia",
+                    "taskID": "defeat_Rashiliyia",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Rashiliyia"],
+                        "npc_ids": [5352],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Undead One",
+                    "taskID": "defeat_undead_one",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Undead one#Level 61", "Undead one#Level 68 (Skeletal)", "Undead one#Level 68 (Zombie)", "Undead one#Level 73"],
+                        "npc_ids": [5344, 5345, 5342, 5343, 5346, 5347, 5348, 5349, 5350, 5351],
+                        "quantity": [1, 25]
+                    }
+                }         
+            ],                 
                     "is_completed": false      
         }               
     ]
