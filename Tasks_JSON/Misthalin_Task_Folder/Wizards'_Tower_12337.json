@@ -15,7 +15,7 @@
                         "npc_ids": [2005, 2006, 2007, 2008, 2018, 7656, 7657, 7664],
                         "quantity": [1]
                     }
-                }
+                },
                 {
                     "name": "Runecraft some Chaos Runes",
                     "taskID": "Runecraft_chaos_runes",

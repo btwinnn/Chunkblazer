@@ -10,7 +10,7 @@
                     "level": 63,
                     "completion_type": "FARMING",
                     "base_points": 3,
-                    "assignment_weight": 3,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Belladonna seed"],
@@ -63,7 +63,6 @@
                     "name": "Defeat the Draynor Manor Skeleton",
                     "taskID": "defeat_draynor_manor_skeleton",
                     "category": "Combat",
-                    "level": 22,
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,

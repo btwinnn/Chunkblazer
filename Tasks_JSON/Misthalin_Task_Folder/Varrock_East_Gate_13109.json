@@ -4,20 +4,20 @@
             "neighbor_ids": [12853, 13108, 13365, 13110],
             "tasks": [
                 {
-                "name": "Travel to Varlamore",
-                "taskID": "travel_varlamore",
-                "category": "Travel",
-                "completion_type": "TRAVEL",
-                "base_points": 1,
-                "assignment_weight": 10
+                    "name": "Travel to Varlamore",
+                    "taskID": "travel_varlamore",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 1,
+                    "assignment_weight": 10
                 },
                 {
-                "name": "Travel through the Varrock Museum 153 Kudos Gate",
-                "taskID": "travel_varrock_kudos_gate",
-                "category": "Travel",
-                "completion_type": "TRAVEL",
-                "base_points": 1,
-                "assignment_weight": 8
+                    "name": "Travel through the Varrock Museum 153 Kudos Gate",
+                    "taskID": "travel_varrock_kudos_gate",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 1,
+                    "assignment_weight": 8
                 },
                 {
                     "name": "Steal from a Tea Stall",
@@ -130,7 +130,7 @@
                     "level": 40,
                     "completion_type": "HUNTER",
                     "base_points": 2,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Spotted Cape"],
@@ -146,7 +146,7 @@
                     "level": 66,
                     "completion_type": "HUNTER",
                     "base_points": 3,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Spottier Cape"],

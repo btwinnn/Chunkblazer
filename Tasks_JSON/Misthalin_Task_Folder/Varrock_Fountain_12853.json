@@ -2,20 +2,7 @@
             "region_id": [12853],
             "Friendly_Name": "Varrock Fountain",
             "neighbor_ids": [13109, 12852, 12597, 12854],
-            "tasks": [               
-                {
-                "name": "Obtain 100 Varrock Museum Kudos",
-                "taskID": "obtain_100_kudos",
-                "category": "Unlock",
-                "completion_type": "VARP_CHECK",
-                "base_points": 1,
-                "assignment_weight": 8,
-                "constraints": {                       
-                    "varp_id": 1438,        
-                    "varp_value": 100,      
-                    "description": "Obtain 100 Varrock Museum Kudos"
-                    }
-                },
+            "tasks": [                           
                 {
                 "name": "Obtain an Antique Lamp from Historian Minas",
                 "taskID": "obtain_antique_lamp_historian_minas",
@@ -92,17 +79,17 @@
                     ]
                 },
                 {
-                    "name": "Equip a Maple ShortBow",
-                    "taskID": "equip_maple_shortbow",
+                    "name": "Equip a Willow Shortbow",
+                    "taskID": "equip_willow_shortbow",
                     "category": "Ranged",
-                    "level": 30,
+                    "level": 20,
                     "completion_type": "EQUIP",
-                    "base_points": 2,
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Maple Shortbow"],
-                            "item_ids": [853]
+                            "item": ["Willow Shortbow"],
+                            "item_ids": [849]
                         }
                     ]
                 },
@@ -118,6 +105,21 @@
                         {
                             "item": ["Adamant Longsword"],
                             "item_ids": [1301]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mithril Longsword",
+                    "taskID": "equip_mithril_longsword",
+                    "category": "Attack",
+                    "level": 20,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mithril sword"],
+                            "item_ids": [1299]
                         }
                     ]
                 },
