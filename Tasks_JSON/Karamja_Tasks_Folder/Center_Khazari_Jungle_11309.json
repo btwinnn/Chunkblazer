@@ -39,7 +39,7 @@
                     "level": 35,
                     "completion_type": "WOODCUTTING",
                     "base_points": 2,
-                    "assignment_weight": 10,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                         "item": "Teak Logs",
@@ -55,7 +55,7 @@
                     "level": 35,
                     "completion_type": "FIREMAKING",
                     "base_points": 2,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                         "item": "Teak Logs",
@@ -63,35 +63,7 @@
                         "quantity": [1]
                         }
                     ]
-                },
-                {
-                    "name": "Defeat a Stone Guardian",
-                    "taskID": "defeat_stone_guardian",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Stone Guardian"],
-                        "npc_ids": [8066, 8064, 8065],
-                        "quantity": [1, 5]
-                    }
-                },
-                {
-                    "name": "Obtain the Karamja Dragon Key Piece",
-                    "taskID": "obtain_karamjan_dragon_key",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": ["Dragon key piece#Karamja piece"],
-                            "item_ids": [22091],
-                            "quantity": [1]
-                        }
-                    ]
-                },
+                },               
                 {
                     "name": "Defeat an Oomlie Bird",
                     "taskID": "defeat_oomlie_bird",
