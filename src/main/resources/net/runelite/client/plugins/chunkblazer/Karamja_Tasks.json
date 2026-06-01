@@ -1292,22 +1292,6 @@
                     ]
                 },
                 {
-                    "name": "Cook a Karambwan",
-                    "taskID": "cook_karambwan",
-                    "category": "Cooking",
-                    "level": 1,
-                    "completion_type": "COOKING",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": "Cooked Karambwan",
-                            "item_ids": [3144],
-                            "quantity": [1, 100]
-                        }
-                    ]
-                },
-                {
                     "name": "Defeat a Tribesman or Tribeswoman in 27 Seconds",
                     "taskID": "defeat_tribesman_tribeswoman_27_seconds",
                     "category": "Combat",
@@ -1909,7 +1893,573 @@
                 }
                     ],                 
                     "is_completed": false      
-        }
-                      
+        },
+        {
+            "region_id": [11311],
+            "Friendly_Name": "Nature Altar",
+            "neighbor_ids": [11312, 11567, 11310, 11055],
+            "tasks": [
+                {
+                    "name": "Defeat a Level 5 Snake in the First Hit",
+                    "taskID": "defeat_level_5_snake_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Level 5 Snake"],
+                        "npc_ids": [2845, 13002, 14916],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Runecraft a Nature Rune",
+                    "taskID": "runecraft_nature_rune",                   
+                    "category": "Runecrafting",
+                    "level": 44,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Nature Rune",
+                        "item_ids": [561],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Mithril Ore",
+                    "taskID": "mine_mithril",
+                    "category": "Mining",
+                    "level": 55,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mithril Ore",
+                            "item_ids": [447],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Silver Ore",
+                    "taskID": "mine_silver",
+                    "category": "Mining",
+                    "level": 20,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Silver Ore",
+                        "item_ids": [442],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [25, 200]
+                        }
+                    ]
+                },
+                {                           
+                    "name": "Defeat a Jungle Spider in 12 Seconds",
+                    "taskID": "defeat_jungle_spider_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [20]                       
+                        }
+                },
+                {                           
+                    "name": "Defeat a Jungle Spider",
+                    "taskID": "defeat_jungle_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Jungle Spider on Task",
+                    "taskID": "defeat_jungle_spider_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1]
+                    }
+                },
+                {                           
+                    "name": "Defeat a Jungle Spider with nothing Equipped",
+                    "taskID": "defeat_jungler_spider_with_nothing",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {                       
+                    "equip_nothing": "TRUE"
+                    }                  
+                },
+                {
+                    "name": "Defeat a Tribesman or Tribeswoman in 27 Seconds",
+                    "taskID": "defeat_tribesman_tribeswoman_27_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Tribesman", "Tribeswoman"],
+                        "npc_ids": [6406, 6407, 530, 11954, 11955, 11956],
+                        "quantity": 1
+                    },
+                    "constraints": {
+                        "time_in_ticks": [45]                       
+                    }
+                },
+                {
+                    "name": "Defeat a Tribesman or Tribeswoman",
+                    "taskID": "defeat_tribesman_tribeswoman",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Tribesman", "Tribeswoman"],
+                        "npc_ids": [6406, 6407, 530, 11954, 11955, 11956],
+                        "quantity": [1, 25]                                         
+                    }
+                }           
+                    ],                 
+                    "is_completed": false      
+        },
+        {
+            "region_id": [11312],
+            "Friendly_Name": "Jogre Dungeon",
+            "neighbor_ids": [11313, 11568, 11311, 11056],
+            "tasks": [
+                {
+                    "name": "Chop some Teak Trees",
+                    "taskID": "Chop_teak_trees",
+                    "category": "Woodcutting",
+                    "level": 35,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Teak Log",
+                    "taskID": "burn_teak_log",
+                    "category": "Firemaking",
+                    "level": 35,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop some Mahogany Trees",
+                    "taskID": "chop_mahogany_trees",
+                    "category": "Woodcutting",
+                    "level": 50,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Mahogany Logs",
+                            "item_ids": [6332],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Mahogany Log",
+                    "taskID": "burn_mahogany_log",
+                    "category": "Firemaking",
+                    "level": 50,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Mahogany Logs",
+                            "item_ids": [6332],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Jogre",
+                    "taskID": "defeat_jogre",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jogre"],
+                        "npc_ids": [2094, 2234, 3356],
+                        "quantity": [1, 25]                                         
+                    }
+                },
+                {
+                    "name": "Defeat a Jogre in 36 Seconds",
+                    "taskID": "defeat_jogre_36_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jogre"],
+                        "npc_ids": [2094, 2234, 3356],
+                        "quantity": [1]                                         
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [60]                       
+                        }
+                },
+                {
+                    "name": "Defeat a Harpie Bug Swarm in 9 Seconds",
+                    "taskID": "defeat_harpie_bug_swarm_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Harpie Bug Swarm"],
+                        "npc_ids": [464],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [12]
+                    }
+                }, 
+                {
+                    "name": "Defeat a Harpie Bug Swarm on Task",
+                    "taskID": "defeat_harpie_bug_swarm_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "level": 33,
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Harpie Bug Swarm"],
+                        "npc_ids": [464],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Harpie Bug Swarm",
+                    "taskID": "defeat_harpie_bug_swarm",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Harpie Bug Swarm"],
+                        "npc_ids": [464],
+                        "quantity": [1, 25]
+                    }
+                },
+                {                           
+                    "name": "Defeat a Jungle Spider",
+                    "taskID": "defeat_jungle_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Use the Level 53 Agility Musa Passage Grapple",
+                    "taskID": "agility_level_53_musa_passage_grapple",
+                    "category": "Agility",
+                    "level": 53,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Strong Tree (Karamja)"],
+                        "object_id": [17074, 17475, 17476], 
+                        "quantity": [1]
+                    }
+                }           
+                    ],                 
+                    "is_completed": false      
+        },
+        {
+            "region_id": [11568],
+            "Friendly_Name": "Karambwan Paradise",
+            "neighbor_ids": [11569, 11824, 11567, 11312],
+            "tasks": [
+                {
+                    "name": "Catch a Raw Karambwan",
+                    "taskID": "catch_raw_karambwan",
+                    "category": "Fishing",
+                    "level": 65,
+                    "completion_type": "FISHING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Raw Karambwan",
+                        "item_ids": [3142],
+                        "quantity": [250, 1000]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Karambwan",
+                    "taskID": "cook_karambwan",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": "Cooked Karambwan",
+                            "item_ids": [3144],
+                            "quantity": [100, 500]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use Fairy Ring Code DKP",
+                    "taskID": "fairy_ring_DKP",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }, 
+                {                           
+                    "name": "Defeat Rashiliyia",
+                    "taskID": "defeat_Rashiliyia",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Rashiliyia"],
+                        "npc_ids": [5352],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Undead One",
+                    "taskID": "defeat_undead_one",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Undead one#Level 61", "Undead one#Level 68 (Skeletal)", "Undead one#Level 68 (Zombie)", "Undead one#Level 73"],
+                        "npc_ids": [5344, 5345, 5342, 5343, 5346, 5347, 5348, 5349, 5350, 5351],
+                        "quantity": [1, 25]
+                    }
+                }         
+            ],                 
+                    "is_completed": false      
+        },
+        {
+            "region_id": [11821],
+            "Friendly_Name": "East Khazari Jungle",
+            "neighbor_ids": [11822, 12077, 11820, 11565],
+            "tasks": [
+                {
+                    "name": "Defeat a Tormented Warrior",
+                    "taskID": "defeat_tormented_warrior",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Tormented Warrior"],
+                        "npc_ids": [3959],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Tormented Warrior in 60 Seconds",
+                    "taskID": "defeat_tormented_warrior_60_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Tormented Warrior"],
+                        "npc_ids": [3959],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [100]
+                    }
+                },
+                {
+                "name": "Build a Hard STASH Unit in the Khazari Jungle",
+                "taskID": "build_hard_stash_khazari_jungle",
+                "category": "Construction",
+                "level": 55,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,                
+                "required_finished_object": [
+                        {
+                        "object": "Hard STASH Unit (inconspicuous hole)",
+                        "object_id": [29019]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop some Mahogany Trees",
+                    "taskID": "chop_mahogany_trees",
+                    "category": "Woodcutting",
+                    "level": 50,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Mahogany Logs",
+                            "item_ids": [6332],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Mahogany Log",
+                    "taskID": "burn_mahogany_log",
+                    "category": "Firemaking",
+                    "level": 50,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Mahogany Logs",
+                            "item_ids": [6332],
+                            "quantity": [1]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Stone Guardian",
+                    "taskID": "defeat_stone_guardian",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Stone Guardian"],
+                        "npc_ids": [8066, 8064, 8065],
+                        "quantity": [1, 5]
+                    }
+                },
+                {
+                    "name": "Obtain the Karamja Dragon Key Piece",
+                    "taskID": "obtain_karamjan_dragon_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon key piece#Karamja piece"],
+                            "item_ids": [22091],
+                            "quantity": [1]
+                        }
+                    ]
+                }         
+            ],                 
+                    "is_completed": false      
+        }               
     ]
 }
