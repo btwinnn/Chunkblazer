@@ -142,8 +142,8 @@
                 {
                     "name": "Equip Green D'Hide Chaps",
                     "taskID": "equip_green_d'hide_chaps",
-                    "category": "Ranged",
-                    "level": 40,
+                    "category": ["Ranged", "Defence"],
+                    "level": [40, 1],
                     "completion_type": "EQUIP",
                     "base_points": 1,
                     "assignment_weight": 5,
@@ -1574,8 +1574,7 @@
             "region_id": [12853],
             "Friendly_Name": "Varrock Fountain",
             "neighbor_ids": [13109, 12852, 12597, 12854],
-            "tasks": [
-                              
+            "tasks": [                           
                 {
                 "name": "Obtain an Antique Lamp from Historian Minas",
                 "taskID": "obtain_antique_lamp_historian_minas",
@@ -1652,17 +1651,17 @@
                     ]
                 },
                 {
-                    "name": "Equip a Maple Shortbow",
-                    "taskID": "equip_maple_shortbow",
+                    "name": "Equip a Willow Shortbow",
+                    "taskID": "equip_willow_shortbow",
                     "category": "Ranged",
-                    "level": 30,
+                    "level": 20,
                     "completion_type": "EQUIP",
-                    "base_points": 2,
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Maple Shortbow"],
-                            "item_ids": [853]
+                            "item": ["Willow Shortbow"],
+                            "item_ids": [849]
                         }
                     ]
                 },
@@ -1678,6 +1677,21 @@
                         {
                             "item": ["Adamant Longsword"],
                             "item_ids": [1301]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Mithril Longsword",
+                    "taskID": "equip_mithril_longsword",
+                    "category": "Attack",
+                    "level": 20,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mithril sword"],
+                            "item_ids": [1299]
                         }
                     ]
                 },
@@ -1770,8 +1784,34 @@
                             }
                         ]
                 },
-                
-                
+                {
+                    "name": "Obtain a Kitten",
+                    "taskID": "obtain_kitten",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Kitten#Black", "Kitten#Brown", "Kitten#Grey and black", "Kitten#Grey and blue", "Kitten#Grey and brown", "Kitten#White"],
+                            "item_ids": [1558, 1557, 1555, 1560, 1559, 1556]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Brass Necklace",
+                    "taskID": "obtain_brass_necklace",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Brass Necklace"],
+                            "item_ids": [1009]
+                        }
+                    ]
+                },               
                 {
                     "name": "Obtain a Gold Bar",
                     "taskID": "obtain_gold_bar",
@@ -1984,22 +2024,22 @@
                     }
                 },
                 {
-                    "name": "Equip an Adamant Full Helm",
-                    "taskID": "equip_adamant_full_helm",
+                    "name": "Equip a Mithril Full Helm",
+                    "taskID": "equip_mithril_full_helm",
                     "category": "Defence",
-                    "level": 30,
+                    "level": 20,
                     "completion_type": "EQUIP",
                     "base_points": 1,
                     "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": "Adamant Full Helm",
-                            "item_ids": [1161]
+                            "item": "Mithril Full Helm",
+                            "item_ids": [1159]
                         }
                     ]
                 },
                 {
-                    "name": "Defeat a Level 5 Goblin in the First Hit",
+                    "name": "Defeat a Level 5 Goblin in 12 Seconds",
                     "taskID": "defeat_level_5_goblin_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2012,22 +2052,22 @@
                         },
                     
                     "constraints": {
-                        "time_in_ticks": [1]
+                        "time_in_ticks": [20]
                         }
                 },
                 {
-                    "name": "Defeat an Ankou",
-                    "taskID": "defeat_ankou",
+                    "name": "Defeat a Flesh Crawler",
+                    "taskID": "defeat_flesh_crawler",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Ankou"],
-                        "npc_ids": [2514, 2517, 2515, 2518, 2516, 2519, 6608, 7257, 7864],
-                        "quantity": [1]
+                        "npc": ["Flesh Crawler"],
+                        "npc_ids": [2498, 2499, 2500],
+                        "quantity": [1, 25]
                     }
-                }                            
+                }                           
             ],                 
                 "is_completed": false
         },
@@ -2431,16 +2471,16 @@
                         ]
                 },
                 {
-                    "name": "Obtain a Teak Plank",
-                    "taskID": "obtain_teak_plank",
+                    "name": "Obtain a Plank",
+                    "taskID": "obtain_plank",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 2,
                     "assignment_weight": 5,
                     "required_items": [
                             {
-                                "item": ["Teak Plank"],
-                                "item_ids": [8780],
+                                "item": ["Plank"],
+                                "item_ids": [960],
                                 "quantity": [1]
                             }
                         ]
@@ -2454,18 +2494,18 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Fletch a Yew Shortbow(u)",
-                    "taskID": "fletch_yew_shortbow(u)",
+                    "name": "Fletch an Oak Shortbow(u)",
+                    "taskID": "fletch_oak_shortbow(u)",
                     "category": "Fletching",
-                    "level": 65,
+                    "level": 20,
                     "completion_type": "FLETCHING",
-                    "base_points": 3,
-                    "assignment_weight": 3,
+                    "base_points": 1,
+                    "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Yew Shortbow(u)"],
-                            "item_ids": [68],
-                            "quantity": [1]
+                        "item": "Oak shortbow (u)",
+                        "item_ids": [54],
+                        "quantity": [1]
                         }
                     ]
                 },
