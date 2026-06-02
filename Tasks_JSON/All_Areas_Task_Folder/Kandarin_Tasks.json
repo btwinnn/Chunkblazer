@@ -3831,11 +3831,10 @@
                     }
                 },
                 {
-                    "name": "Equip a Full Blue Mystic Set",
-                    "taskID": "equip_full_blue_mystic_set",
-                    "category": "Defence",
-                    "level": 20,
-                    "completion_type": "EQUIP",
+                    "name": "Obtain a Full Blue Mystic Robe Set",
+                    "taskID": "Obtain_full_blue_mystic_set",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
                     "base_points": 2,
                     "assignment_weight": 10,
                     "required_items": [
