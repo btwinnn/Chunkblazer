@@ -1,6 +1,4 @@
 {
-    "Desert_Tasks": [
-        {
             "region_id": [13363],
             "Friendly_Name": "Mage Training Arena",
             "neighbor_ids": [13364, 13619, 13362, 13107],
@@ -140,6 +138,4 @@
                            
             ],
             "is_completed": false
-        }                
-    ]
-}
+        }
