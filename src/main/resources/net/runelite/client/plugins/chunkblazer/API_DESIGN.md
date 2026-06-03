@@ -1,750 +1,420 @@
 # ChunkBlazer API Design
 
-## Overview
-Simple REST API for player data persistence and leaderboard tracking.
+REST API for player data persistence, anti-cheat verification, hi-score tracking,
+and leaderboards.
+
+> **Status:** This document describes the **real implemented server** — a Go service
+> backed by PostgreSQL. (An earlier draft of this file described a Cloudflare
+> Workers + D1 prototype that was never shipped; it has been replaced.)
+
+---
+
+## Stack & Architecture
+
+| Layer        | Technology |
+|--------------|------------|
+| Language     | Go (`net/http` + [chi](https://github.com/go-chi/chi) router) |
+| Database     | PostgreSQL (via [pgx](https://github.com/jackc/pgx) connection pool) |
+| Query layer  | [sqlc](https://sqlc.dev) — type-safe Go generated from `queries/*.sql` |
+| Migrations   | [golang-migrate](https://github.com/golang-migrate/migrate) — `migrations/NNNNNN_*.up.sql` |
+| Logging      | `slog` (structured) |
+| Packaging    | Multi-stage Docker build → static binary on `alpine` |
+| Edge/ingress | Cloudflare Tunnel → Caddy (internal reverse proxy) → Go app → Postgres |
+
+Source layout (`C:\Chunkblazer-Server`):
+
+```
+cmd/server/            entrypoint
+internal/httpapi/      HTTP handlers + middleware (rate limiting, RealIP, max-body)
+internal/db/           sqlc-generated query code (do not edit by hand)
+internal/hiscores/     Jagex hi-scores fetcher + background refresh scheduler
+internal/eventsmaint/  cb_events partition maintenance + retention
+queries/*.sql          sqlc source queries
+migrations/*.sql       schema migrations
+```
+
+### Background workers
+- **Hi-score scheduler** (`internal/hiscores/scheduler.go`): single-threaded loop,
+  one player per 2s tick. Refreshes on the **logout signal** (Jagex hi-scores only
+  recalculate when a player logs out), inferred from the `is_online` flag /
+  heartbeat staleness — see `queries/refresh.sql`. Re-detects account type on a 404
+  (HCIM death → IRONMAN, de-iron, name change) and on a 7-day TTL.
+- **Events maintenance** (`internal/eventsmaint`): pre-creates monthly `cb_events`
+  partitions and drops ones past the 90-day retention window.
+
+---
+
+## Authentication
+
+- **Registration** (`POST /api/player/login`) is unauthenticated. It returns an
+  `api_key` (a UUID) tied to that player.
+- **All authenticated endpoints** require the header `X-API-Key: <uuid>`. A missing
+  key → `401 no_api_key`; a non-UUID key → `401 bad_api_key`; an unrecognized key →
+  `401 unknown_api_key`.
+- **Public read endpoints** (leaderboards, online players, healthz) need no key.
+
+### Standard error envelope
+Every error response uses:
+```json
+{ "status": "error", "error": "<machine_code>", "message": "<human readable>" }
+```
+The `error` code strings are stable and listed per-endpoint below.
+
+---
+
+## Endpoint Summary
+
+| # | Method | Path | Auth | Purpose |
+|---|--------|------|------|---------|
+| 1 | GET  | `/healthz` | – | Liveness + DB ping |
+| 2 | POST | `/api/player/login` | – | Register / login, issues api_key |
+| 3 | POST | `/api/player/heartbeat` | ✓ | Keep-online + presence |
+| 4 | POST | `/api/player/offline` | ✓ | Logout beacon |
+| 5 | POST | `/api/player/lock-mode` | ✓ | Permanently lock game mode |
+| 6 | POST | `/api/player/verify/start` | ✓ | Begin RSN-ownership verification |
+| 7 | POST | `/api/player/verify` | ✓ | Complete verification with nonce |
+| 8–11 | POST | `/api/v1/events/{npc-kill,skill-change,item-obtained,item-equipped}` | ✓ | Gameplay event reports |
+| 12 | POST | `/api/v1/player/sync` | ✓ | Full client-state sync |
+| 13 | POST | `/api/v1/hiscores/refresh` | ✓ | On-demand Jagex hi-score fetch |
+| 14 | GET  | `/api/leaderboards/{mode}/{accountType}/{metric}` | – | Leaderboard page |
+| 15 | GET  | `/api/players/online` | – | Live presence list |
+| 16 | GET  | `/api/player/rank` | ✓ | Authed player's own rank |
+
+**Rate limits** (per IP unless noted): default 200/min IP + 200/min api_key;
+`/login` 60/min; `/verify/start` 10/min; `/verify` 30/min; `/hiscores/refresh`
+10/min; leaderboards & online 120/min. Request bodies are capped (login 4 KB,
+heartbeat/offline/lock-mode 1 KB, verify 256 B, events 64 KB, sync 32 KB).
+
+---
+
+## 1. Health Check
+
+**GET /healthz** — no auth, no rate limit.
+
+`200` → `{ "status": "ok" }`
+`503` → `{ "status": "db_down" }` (Postgres ping failed)
+
+---
+
+## 2. Login / Registration
+
+**POST /api/player/login** — no auth. Creates the account if new (subject to
+`REGISTRATION_MODE`), else returns existing state.
+
+Request:
+```json
+{ "rsn": "ExamplePlayer", "rsn_hash": "<hash>", "client_version": "0.x.y" }
+```
+
+Response (`status` is `"created"` for a new player, `"ok"` for an existing one):
+```json
+{
+  "status": "ok",
+  "player": {
+    "rsn": "ExamplePlayer",
+    "game_mode": "CASUAL",
+    "mode_locked": true,
+    "locked_at": "2026-01-11T08:46:10Z",
+    "total_points": 1250,
+    "unlocked_regions": [12850, 12851],
+    "completed_tasks": ["defeat_mugger_fast"],
+    "verified": true,
+    "verified_at": "2026-01-11T09:00:00Z"
+  },
+  "api_key": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+`game_mode`/`locked_at`/`verified_at` may be null. Error codes: `bad_request`,
+`registration_closed` (403), `internal`.
+
+---
+
+## 3. Heartbeat
+
+**POST /api/player/heartbeat** — auth. Sent every ~30s while logged in. Refreshes
+`last_heartbeat_at`, sets `is_online = TRUE`, and updates world/region/visibility.
+
+Request:
+```json
+{ "world": 420, "region_id": 12850, "is_visible": true }
+```
+Response: `{ "status": "ok" }`. Errors: `no_api_key`, `bad_api_key`,
+`unknown_api_key`, `bad_request`, `internal`.
+
+---
+
+## 4. Logout Beacon
+
+**POST /api/player/offline** — auth. Sent when the player leaves to the login
+screen. Sets `is_online = FALSE` so the hi-score scheduler can snapshot the
+just-ended session immediately (instead of waiting ~3 min for heartbeats to go
+stale) and the presence list drops them at once. Best-effort: if it's lost, the
+heartbeat-staleness fallback still catches the logout.
+
+Request: `{}` (empty). Response: `{ "status": "ok" }`. Errors: `no_api_key`,
+`bad_api_key`, `unknown_api_key`, `internal`.
+
+---
+
+## 5. Lock Game Mode
+
+**POST /api/player/lock-mode** — auth. One-shot, irreversible.
+
+Request: `{ "game_mode": "NUZLOCKE" }`
+
+Success:
+```json
+{ "status": "ok", "message": "...", "game_mode": "NUZLOCKE",
+  "mode_locked": true, "locked_at": "2026-01-11T08:46:10Z" }
+```
+Already locked → `200` with `status: "error"`, `error: "MODE_ALREADY_LOCKED"`.
+Other errors: `no_api_key`, `bad_api_key`, `unknown_api_key`, `bad_request`,
+`invalid_mode`, `internal`.
+
+---
+
+## 6 & 7. RSN Verification
+
+Proves the player controls the RSN by typing a one-time code in public chat.
+
+**POST /api/player/verify/start** — auth. Issues an 8-digit nonce (5-min TTL).
+```json
+{ "alreadyVerified": false, "nonce": "12345678",
+  "expiresAt": "2026-01-11T08:51:10Z", "chatPhrase": "12345678" }
+```
+If already verified → `{ "alreadyVerified": true }`.
+
+**POST /api/player/verify** — auth. Request: `{ "nonce": "12345678" }`.
+Success: `{ "verified": true, "message": "..." }`. Bad/expired/used nonce →
+`400 invalid_nonce`. Other errors: `bad_request` + the standard auth codes.
+
+---
+
+## 8–11. Gameplay Event Reports
+
+**POST /api/v1/events/npc-kill**
+**POST /api/v1/events/skill-change**
+**POST /api/v1/events/item-obtained**
+**POST /api/v1/events/item-equipped**
+
+Auth. High-volume PvM/skilling telemetry used for task verification and the audit
+log. The body is the event report JSON (server extracts `taskId` and stores the
+full payload as JSONB in `cb_events`).
+
+Response (shared shape):
+```json
+{
+  "success": true,
+  "taskCompleted": false,
+  "verifiedProgress": 0,
+  "pointsAwarded": 0,
+  "serverTaskId": "...",
+  "offlineMode": false,
+  "serverTimestamp": 1736610370000
+}
+```
+`errorMessage` / `rejectionReason` appear when relevant. Errors: the standard auth
+codes plus `body_too_large`, `empty_body`, `bad_json`, `internal`.
+
+---
+
+## 12. Full State Sync
+
+**POST /api/v1/player/sync** — auth. Reconciles the client's full state with the
+server (anti-cheat + recovery). Body (32 KB cap):
+```json
+{
+  "playerHash": "...", "displayName": "ExamplePlayer",
+  "accountType": "IRONMAN", "gameMode": "NUZLOCKE",
+  "combatLevel": 80, "totalLevel": 1500,
+  "skillLevels": { "attack": 70 }, "skillXp": { "attack": 737627 },
+  "currentRegionId": 12850, "unlockedRegions": [12850, 12851],
+  "activeTaskId": "kill_goblins", "activeTaskProgress": 3,
+  "clientPoints": 1250, "timestamp": 1736610370000,
+  "clientVersion": "0.x.y", "completedTasks": ["..."]
+}
+```
+Response:
+```json
+{
+  "success": true, "serverPoints": 1250,
+  "serverUnlockedRegions": [12850, 12851], "serverCompletedTasks": ["..."],
+  "messages": ["..."], "flagged": false, "flagReason": "",
+  "serverTimestamp": 1736610370000
+}
+```
+Errors: the standard auth codes plus `bad_request`, `internal`.
+
+---
+
+## 13. On-Demand Hi-score Refresh
+
+**POST /api/v1/hiscores/refresh** — auth, 10/min. Forces an immediate Jagex fetch
+for the authed player (the scheduler normally handles this automatically).
+```json
+{
+  "success": true, "snapshotId": 9001, "fetchedAt": "2026-01-11T08:46:10Z",
+  "accountType": "IRONMAN", "rsn": "ExamplePlayer",
+  "overallRank": 123456, "overallLevel": 1500, "overallXP": 123456789,
+  "activitiesCount": 40
+}
+```
+Jagex unreachable → `502 jagex_fetch_failed`. Other errors: the standard auth
+codes plus `internal`.
+
+---
+
+## 14. Leaderboard
+
+**GET /api/leaderboards/{mode}/{accountType}/{metric}** — no auth, 120/min.
+
+Each `(mode, accountType, metric)` triple is its own board, so HCIM, IRONMAN, and
+UIM rank **separately** (mirroring Jagex). A dead HCIM is auto-moved to the IRONMAN
+board by the scheduler's account-type re-detection.
+
+- `mode`: `CASUAL` | `NUZLOCKE` (case-insensitive)
+- `accountType`: `STANDARD` | `IRONMAN` | `HCIM` | `UIM` | `SKILLER_3`
+- `metric`: one of the 24 skill XPs (`attack_xp` … `sailing_xp`), `overall_xp`,
+  `overall_level`, or the ChunkBlazer metrics `total_points`, `chunks_unlocked`,
+  `tasks_completed`
+- Query: `limit` (1–200, default 50), `offset` (≥0, default 0)
+
+Response:
+```json
+{
+  "mode": "NUZLOCKE", "accountType": "HCIM", "metric": "total_points",
+  "limit": 50, "offset": 0, "total": 5432,
+  "entries": [
+    {
+      "rank": 1, "rsn": "ChunkGod", "value": 15420,
+      "overallLevel": 2277, "overallXP": 4600000000,
+      "totalPoints": 15420, "chunksUnlocked": 87, "tasksCompleted": 312,
+      "snapshotAt": "2026-01-11T08:00:00Z"
+    }
+  ],
+  "fetchedAt": "2026-01-11T08:46:10Z"
+}
+```
+`value`/`overallLevel`/`overallXP`/`snapshotAt` are null when the player has no
+hi-score snapshot yet (sorted NULLS LAST). Errors: `invalid_mode`,
+`invalid_account_type`, `invalid_metric`, `internal`.
+
+---
+
+## 15. Online Players
+
+**GET /api/players/online** — no auth, 120/min. Query: `limit` (1–200, default 50),
+`offset`. Returns players who are `is_online`, visible, and heartbeated within the
+last 2 minutes.
+```json
+{
+  "total": 142, "limit": 50, "offset": 0,
+  "players": [
+    {
+      "rsn": "ChunkGod", "accountType": "HCIM", "gameMode": "NUZLOCKE",
+      "currentWorld": 420, "currentRegionId": 12850,
+      "lastHeartbeatAt": "2026-01-11T08:46:00Z",
+      "totalPoints": 15420, "rank": 1
+    }
+  ],
+  "fetchedAt": "2026-01-11T08:46:10Z", "windowSeconds": 120
+}
+```
+`gameMode`/`currentWorld`/`currentRegionId`/`rank` may be null. Error: `internal`.
+
+---
+
+## 16. Player Rank
+
+**GET /api/player/rank** — auth. Optional query `metric` (default `overall_xp`).
+Returns the authed player's rank within their own `(mode, accountType)` bucket.
+```json
+{
+  "rsn": "ExamplePlayer", "mode": "NUZLOCKE", "accountType": "IRONMAN",
+  "metric": "overall_xp", "rank": 142, "total": 5432,
+  "percentile": 97.3, "value": 123456789,
+  "fetchedAt": "2026-01-11T08:46:10Z", "note": ""
+}
+```
+If the player hasn't locked a mode, `mode` is `""`, `rank`/`value` are null, and
+`note` explains why. Errors: the standard auth codes plus `invalid_metric`,
+`internal`.
 
 ---
 
 ## Database Schema
 
-### Players Table
-```sql
-CREATE TABLE players (
-    id            INTEGER PRIMARY KEY AUTOINCREMENT,
-    rsn           TEXT NOT NULL UNIQUE,
-    rsn_hash      TEXT NOT NULL UNIQUE,  -- SHA256 of lowercase RSN
-    game_mode     TEXT NOT NULL DEFAULT 'CASUAL',  -- CASUAL or NUZLOCKE
-    mode_locked   BOOLEAN DEFAULT FALSE,
-    locked_at     TIMESTAMP,
-    total_points  INTEGER DEFAULT 0,
-    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_seen     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+PostgreSQL. Defined in `migrations/` and queried via sqlc.
 
-CREATE INDEX idx_players_rsn_hash ON players(rsn_hash);
-CREATE INDEX idx_players_points ON players(total_points DESC);
-```
+### `players`
+| Column | Type | Notes |
+|--------|------|-------|
+| player_id | BIGSERIAL PK | |
+| rsn | TEXT NOT NULL | in-game name |
+| rsn_hash | TEXT NOT NULL UNIQUE | dedupe key |
+| api_key | UUID NOT NULL UNIQUE | default `gen_random_uuid()` |
+| account_type | TEXT NOT NULL | default `STANDARD`; CHECK in (STANDARD, IRONMAN, HCIM, UIM, SKILLER_3) |
+| game_mode | TEXT | null \| CASUAL \| NUZLOCKE (CHECK) |
+| mode_locked | BOOLEAN NOT NULL | default FALSE |
+| locked_at | TIMESTAMPTZ | |
+| current_world / current_region_id | INTEGER | |
+| is_visible | BOOLEAN NOT NULL | default TRUE |
+| created_at | TIMESTAMPTZ NOT NULL | default NOW() |
+| last_heartbeat_at | TIMESTAMPTZ | |
+| last_hiscore_refresh_at | TIMESTAMPTZ | drives the refresh scheduler |
+| account_type_detected_at | TIMESTAMPTZ | detection TTL anchor |
+| verified / verified_at | BOOLEAN / TIMESTAMPTZ | RSN ownership |
+| is_online | BOOLEAN NOT NULL | default TRUE; set FALSE by the logout beacon |
 
-### Unlocked Regions Table
-```sql
-CREATE TABLE unlocked_regions (
-    player_id   INTEGER REFERENCES players(id),
-    region_id   INTEGER NOT NULL,
-    unlocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (player_id, region_id)
-);
-```
+Indexes: `last_heartbeat_at DESC`, `last_hiscore_refresh_at NULLS FIRST`.
 
-### Completed Tasks Table
-```sql
-CREATE TABLE completed_tasks (
-    id           INTEGER PRIMARY KEY AUTOINCREMENT,
-    player_id    INTEGER REFERENCES players(id),
-    task_id      TEXT NOT NULL,
-    region_id    INTEGER,
-    points       INTEGER DEFAULT 0,
-    completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    verification TEXT,  -- JSON blob with kill data, timestamps, etc.
-    UNIQUE(player_id, task_id)
-);
+### `cb_player_stats`
+`player_id` PK/FK→players (CASCADE), `total_points`, `chunks_unlocked`,
+`tasks_completed`, `legendary_tasks_completed` (all INT NOT NULL default 0),
+`updated_at`.
 
-CREATE INDEX idx_completed_player ON completed_tasks(player_id);
-```
+### `cb_events` (partitioned by month on `occurred_at`)
+`event_id` BIGSERIAL, `player_id` FK→players (CASCADE), `event_type` TEXT CHECK in
+(npc_kill, skill_change, item_obtained, item_equipped), `payload` JSONB,
+`occurred_at` TIMESTAMPTZ. PK `(event_id, occurred_at)`. Indexed on
+`(player_id, occurred_at DESC)` and `(event_type, occurred_at DESC)`. Monthly
+partitions auto-managed; 90-day retention.
 
-### Kill Reports Table (for verification/anti-cheat)
-```sql
-CREATE TABLE kill_reports (
-    id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    player_id       INTEGER REFERENCES players(id),
-    task_id         TEXT NOT NULL,
-    npc_id          INTEGER NOT NULL,
-    npc_name        TEXT,
-    region_id       INTEGER,
-    game_tick       INTEGER,
-    damage_dealt    INTEGER,
-    kill_time_ticks INTEGER,
-    equipment_ids   TEXT,  -- JSON array
-    loot_received   TEXT,  -- JSON array
-    reported_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    verified        BOOLEAN DEFAULT FALSE
-);
+### `cb_unlocked_regions`
+PK `(player_id, region_id)`, `unlocked_at`. FK→players (CASCADE).
 
-CREATE INDEX idx_kills_player ON kill_reports(player_id);
-```
+### `cb_completed_tasks`
+PK `(player_id, task_id)`, `completed_at`. FK→players (CASCADE).
 
-### Player Sessions Table (for online tracking)
-```sql
-CREATE TABLE player_sessions (
-    player_id     INTEGER PRIMARY KEY REFERENCES players(id),
-    world         INTEGER,
-    region_id     INTEGER,
-    is_visible    BOOLEAN DEFAULT TRUE,  -- Player's privacy preference
-    last_heartbeat TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+### `hiscore_snapshots`
+`snapshot_id` BIGSERIAL PK, `player_id` FK→players (CASCADE), `fetched_at`,
+`account_type` (same CHECK as players), `overall_rank/level/xp`, the 24 per-skill
+`*_xp` BIGINT columns (`attack_xp` … `sailing_xp`), and `activities` JSONB
+(default `'[]'`). Indexed on `(player_id, fetched_at DESC)`.
 
-CREATE INDEX idx_sessions_heartbeat ON player_sessions(last_heartbeat);
-CREATE INDEX idx_sessions_world ON player_sessions(world);
-```
+### `verification_nonces`
+`nonce` TEXT PK (8-digit), `player_id` FK→players (CASCADE), `created_at`,
+`expires_at` (5-min TTL), `consumed_at`. Partial indexes on active (unconsumed)
+nonces by player and by expiry.
 
 ---
 
-## API Endpoints
+## Deployment
 
-### Authentication
-All requests include header: `X-API-Key: {player_api_key}`
-API key is generated per-player on first registration.
+Production runs on a Hetzner dedicated box via Docker Compose
+(`docker-compose.prod.yml`):
 
----
-
-### 1. Player Registration / Login
-
-**POST /api/player/login**
-
-Called when player logs into game. Creates account if new, returns existing data if known.
-
-Request:
-```json
-{
-    "rsn": "ExamplePlayer",
-    "rsn_hash": "<sha256-of-lowercase-rsn>"
-}
+```
+[Cloudflare edge] → [cloudflared tunnel, outbound] → [caddy :80 internal]
+    → [app :8080] → [postgres :5432]      (internal bridge network)
 ```
 
-Response (new player):
-```json
-{
-    "status": "created",
-    "player": {
-        "rsn": "ExamplePlayer",
-        "game_mode": null,
-        "mode_locked": false,
-        "total_points": 0,
-        "unlocked_regions": [12850],
-        "completed_tasks": []
-    },
-    "api_key": "cb_xxxxxxxxxxxxxxxxxxxx"
-}
-```
-
-Response (existing player):
-```json
-{
-    "status": "ok",
-    "player": {
-        "rsn": "ExamplePlayer",
-        "game_mode": "CASUAL",
-        "mode_locked": true,
-        "locked_at": "2026-01-11T08:46:10Z",
-        "total_points": 1250,
-        "unlocked_regions": [12850, 12851, 12595],
-        "completed_tasks": ["defeat_mugger_fast", "obtain_bones", ...]
-    }
-}
-```
-
----
-
-### 2. Lock Game Mode
-
-**POST /api/player/lock-mode**
-
-Permanently locks player to a game mode. Cannot be undone (except by admin).
-
-Request:
-```json
-{
-    "game_mode": "NUZLOCKE"
-}
-```
-
-Response:
-```json
-{
-    "status": "ok",
-    "game_mode": "NUZLOCKE",
-    "mode_locked": true,
-    "locked_at": "2026-01-11T08:46:10Z",
-    "message": "Game mode permanently locked to Nuzlocke"
-}
-```
-
-Error (already locked):
-```json
-{
-    "status": "error",
-    "error": "MODE_ALREADY_LOCKED",
-    "message": "Game mode is already locked to CASUAL"
-}
-```
-
----
-
-### 3. Report Task Completion
-
-**POST /api/task/complete**
-
-Called when player completes a task.
-
-Request:
-```json
-{
-    "task_id": "defeat_mugger_fast",
-    "region_id": 12596,
-    "points": 1,
-    "verification": {
-        "npc_id": 513,
-        "npc_name": "Mugger",
-        "kill_time_ticks": 6,
-        "damage_dealt": 45,
-        "equipment_ids": [1277, 1173],
-        "game_tick": 1234567,
-        "timestamp": 1736610370000
-    }
-}
-```
-
-Response:
-```json
-{
-    "status": "ok",
-    "task_id": "defeat_mugger_fast",
-    "points_earned": 1,
-    "total_points": 1251,
-    "new_rank": 142
-}
-```
-
----
-
-### 4. Unlock Region
-
-**POST /api/region/unlock**
-
-Called when player unlocks a new region.
-
-Request:
-```json
-{
-    "region_id": 12851,
-    "points_spent": 100,
-    "adjacent_to": 12850
-}
-```
-
-Response:
-```json
-{
-    "status": "ok",
-    "region_id": 12851,
-    "total_points": 1151,
-    "unlocked_regions": [12850, 12851]
-}
-```
-
----
-
-### 5. Get Leaderboard
-
-**GET /api/leaderboard?mode=NUZLOCKE&limit=100&offset=0**
-
-Returns top players for a game mode.
-
-Response:
-```json
-{
-    "mode": "NUZLOCKE",
-    "total_players": 5432,
-    "leaderboard": [
-        {
-            "rank": 1,
-            "rsn": "ChunkGod",
-            "total_points": 15420,
-            "regions_unlocked": 87,
-            "tasks_completed": 312
-        },
-        {
-            "rank": 2,
-            "rsn": "IronBlazer",
-            "total_points": 14890,
-            "regions_unlocked": 82,
-            "tasks_completed": 298
-        }
-    ]
-}
-```
-
----
-
-### 6. Get Player Rank
-
-**GET /api/player/rank**
-
-Returns current player's rank and nearby players.
-
-Response:
-```json
-{
-    "player": {
-        "rsn": "ExamplePlayer",
-        "rank": 142,
-        "total_points": 1251,
-        "percentile": 97.3
-    },
-    "nearby": [
-        {"rank": 140, "rsn": "ChunkFan99", "total_points": 1260},
-        {"rank": 141, "rsn": "BlazerBob", "total_points": 1255},
-        {"rank": 142, "rsn": "ExamplePlayer", "total_points": 1251},
-        {"rank": 143, "rsn": "TaskMaster", "total_points": 1248},
-        {"rank": 144, "rsn": "RegionRunner", "total_points": 1245}
-    ]
-}
-```
-
----
-
-### 7. Sync Full State (Recovery)
-
-**GET /api/player/sync**
-
-Returns complete player state. Used on login or to recover from corrupted local data.
-
-Response:
-```json
-{
-    "player": {
-        "rsn": "ExamplePlayer",
-        "game_mode": "CASUAL",
-        "mode_locked": true,
-        "total_points": 1251
-    },
-    "unlocked_regions": [12850, 12851, 12595, 12596],
-    "completed_tasks": [
-        {"task_id": "defeat_mugger_fast", "completed_at": "2026-01-10T..."},
-        {"task_id": "obtain_bones", "completed_at": "2026-01-10T..."}
-    ],
-    "current_task": {
-        "task_id": "kill_goblins",
-        "progress": 3,
-        "target": 10
-    }
-}
-```
-
----
-
-## Player Discovery Endpoints
-
-These endpoints enable players to see other ChunkBlazer players in-game.
-
-### 8. Send Heartbeat (Keep Online)
-
-**POST /api/player/heartbeat**
-
-Called every 30-60 seconds while player is logged in. Updates their online status.
-
-Request:
-```json
-{
-    "world": 420,
-    "region_id": 12850,
-    "is_visible": true
-}
-```
-
-Response:
-```json
-{
-    "status": "ok",
-    "online_count": 142
-}
-```
-
----
-
-### 9. Get Online Players
-
-**GET /api/players/online?world=420**
-
-Returns list of ChunkBlazer players currently online. Can filter by world.
-
-Response:
-```json
-{
-    "players": [
-        {
-            "rsn": "ChunkGod",
-            "game_mode": "NUZLOCKE",
-            "total_points": 15420,
-            "rank": 1,
-            "world": 420,
-            "region_id": 12850
-        },
-        {
-            "rsn": "IronBlazer",
-            "game_mode": "NUZLOCKE",
-            "total_points": 8320,
-            "rank": 47,
-            "world": 420,
-            "region_id": 12596
-        }
-    ],
-    "total_online": 142
-}
-```
-
----
-
-### 10. Get Players on Same World
-
-**GET /api/players/world/{worldId}**
-
-Returns only players on a specific world (more efficient for overlay rendering).
-
-Response:
-```json
-{
-    "world": 420,
-    "players": [
-        {
-            "rsn": "ChunkGod",
-            "game_mode": "NUZLOCKE",
-            "total_points": 15420,
-            "current_task": "Defeat Elvarg"
-        }
-    ]
-}
-```
-
----
-
-### 11. Set Visibility Preference
-
-**POST /api/player/visibility**
-
-Allows player to opt-out of being visible to others.
-
-Request:
-```json
-{
-    "is_visible": false
-}
-```
-
-Response:
-```json
-{
-    "status": "ok",
-    "is_visible": false,
-    "message": "You are now hidden from other players"
-}
-```
-
----
-
-### 12. Go Offline
-
-**POST /api/player/offline**
-
-Called when player logs out or closes client. Removes them from online list.
-
-Response:
-```json
-{
-    "status": "ok"
-}
-```
-
----
-
-## Cloudflare Workers Implementation (Example)
-
-```javascript
-// worker.js - Cloudflare Worker with D1 Database
-
-export default {
-    async fetch(request, env) {
-        const url = new URL(request.url);
-        const path = url.pathname;
-
-        // CORS headers
-        const headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-        };
-
-        try {
-            // Route handling
-            if (path === '/api/player/login' && request.method === 'POST') {
-                return handleLogin(request, env, headers);
-            }
-            if (path === '/api/player/lock-mode' && request.method === 'POST') {
-                return handleLockMode(request, env, headers);
-            }
-            if (path === '/api/task/complete' && request.method === 'POST') {
-                return handleTaskComplete(request, env, headers);
-            }
-            if (path === '/api/leaderboard' && request.method === 'GET') {
-                return handleLeaderboard(request, env, headers);
-            }
-
-            return new Response(JSON.stringify({error: 'Not found'}), {
-                status: 404, headers
-            });
-        } catch (err) {
-            return new Response(JSON.stringify({error: err.message}), {
-                status: 500, headers
-            });
-        }
-    }
-};
-
-async function handleLogin(request, env, headers) {
-    const body = await request.json();
-    const { rsn, rsn_hash } = body;
-
-    // Check if player exists
-    let player = await env.DB.prepare(
-        'SELECT * FROM players WHERE rsn_hash = ?'
-    ).bind(rsn_hash).first();
-
-    if (!player) {
-        // Create new player
-        const apiKey = 'cb_' + crypto.randomUUID().replace(/-/g, '');
-
-        await env.DB.prepare(`
-            INSERT INTO players (rsn, rsn_hash, api_key)
-            VALUES (?, ?, ?)
-        `).bind(rsn, rsn_hash, apiKey).run();
-
-        // Add default starting region
-        const newPlayer = await env.DB.prepare(
-            'SELECT id FROM players WHERE rsn_hash = ?'
-        ).bind(rsn_hash).first();
-
-        await env.DB.prepare(`
-            INSERT INTO unlocked_regions (player_id, region_id)
-            VALUES (?, 12850)
-        `).bind(newPlayer.id).run();
-
-        return new Response(JSON.stringify({
-            status: 'created',
-            player: {
-                rsn,
-                game_mode: null,
-                mode_locked: false,
-                total_points: 0,
-                unlocked_regions: [12850],
-                completed_tasks: []
-            },
-            api_key: apiKey
-        }), { headers });
-    }
-
-    // Existing player - fetch full state
-    const regions = await env.DB.prepare(`
-        SELECT region_id FROM unlocked_regions WHERE player_id = ?
-    `).bind(player.id).all();
-
-    const tasks = await env.DB.prepare(`
-        SELECT task_id FROM completed_tasks WHERE player_id = ?
-    `).bind(player.id).all();
-
-    // Update last seen
-    await env.DB.prepare(`
-        UPDATE players SET last_seen = CURRENT_TIMESTAMP WHERE id = ?
-    `).bind(player.id).run();
-
-    return new Response(JSON.stringify({
-        status: 'ok',
-        player: {
-            rsn: player.rsn,
-            game_mode: player.game_mode,
-            mode_locked: player.mode_locked,
-            locked_at: player.locked_at,
-            total_points: player.total_points,
-            unlocked_regions: regions.results.map(r => r.region_id),
-            completed_tasks: tasks.results.map(t => t.task_id)
-        }
-    }), { headers });
-}
-
-async function handleLockMode(request, env, headers) {
-    const apiKey = request.headers.get('X-API-Key');
-    const body = await request.json();
-    const { game_mode } = body;
-
-    // Validate API key and get player
-    const player = await env.DB.prepare(
-        'SELECT * FROM players WHERE api_key = ?'
-    ).bind(apiKey).first();
-
-    if (!player) {
-        return new Response(JSON.stringify({
-            status: 'error',
-            error: 'INVALID_API_KEY'
-        }), { status: 401, headers });
-    }
-
-    if (player.mode_locked) {
-        return new Response(JSON.stringify({
-            status: 'error',
-            error: 'MODE_ALREADY_LOCKED',
-            message: `Game mode is already locked to ${player.game_mode}`
-        }), { status: 400, headers });
-    }
-
-    // Lock the mode
-    await env.DB.prepare(`
-        UPDATE players
-        SET game_mode = ?, mode_locked = TRUE, locked_at = CURRENT_TIMESTAMP
-        WHERE id = ?
-    `).bind(game_mode, player.id).run();
-
-    return new Response(JSON.stringify({
-        status: 'ok',
-        game_mode,
-        mode_locked: true,
-        locked_at: new Date().toISOString(),
-        message: `Game mode permanently locked to ${game_mode}`
-    }), { headers });
-}
-
-async function handleTaskComplete(request, env, headers) {
-    const apiKey = request.headers.get('X-API-Key');
-    const body = await request.json();
-    const { task_id, region_id, points, verification } = body;
-
-    const player = await env.DB.prepare(
-        'SELECT * FROM players WHERE api_key = ?'
-    ).bind(apiKey).first();
-
-    if (!player) {
-        return new Response(JSON.stringify({
-            status: 'error',
-            error: 'INVALID_API_KEY'
-        }), { status: 401, headers });
-    }
-
-    // Check if already completed
-    const existing = await env.DB.prepare(
-        'SELECT id FROM completed_tasks WHERE player_id = ? AND task_id = ?'
-    ).bind(player.id, task_id).first();
-
-    if (existing) {
-        return new Response(JSON.stringify({
-            status: 'error',
-            error: 'TASK_ALREADY_COMPLETED'
-        }), { status: 400, headers });
-    }
-
-    // Record completion
-    await env.DB.prepare(`
-        INSERT INTO completed_tasks (player_id, task_id, region_id, points, verification)
-        VALUES (?, ?, ?, ?, ?)
-    `).bind(player.id, task_id, region_id, points, JSON.stringify(verification)).run();
-
-    // Update total points
-    const newPoints = player.total_points + points;
-    await env.DB.prepare(`
-        UPDATE players SET total_points = ? WHERE id = ?
-    `).bind(newPoints, player.id).run();
-
-    // Calculate new rank
-    const rankResult = await env.DB.prepare(`
-        SELECT COUNT(*) + 1 as rank FROM players
-        WHERE total_points > ? AND game_mode = ?
-    `).bind(newPoints, player.game_mode).first();
-
-    return new Response(JSON.stringify({
-        status: 'ok',
-        task_id,
-        points_earned: points,
-        total_points: newPoints,
-        new_rank: rankResult.rank
-    }), { headers });
-}
-
-async function handleLeaderboard(request, env, headers) {
-    const url = new URL(request.url);
-    const mode = url.searchParams.get('mode') || 'NUZLOCKE';
-    const limit = parseInt(url.searchParams.get('limit') || '100');
-    const offset = parseInt(url.searchParams.get('offset') || '0');
-
-    const players = await env.DB.prepare(`
-        SELECT rsn, total_points,
-            (SELECT COUNT(*) FROM unlocked_regions WHERE player_id = players.id) as regions_unlocked,
-            (SELECT COUNT(*) FROM completed_tasks WHERE player_id = players.id) as tasks_completed
-        FROM players
-        WHERE game_mode = ? AND mode_locked = TRUE
-        ORDER BY total_points DESC
-        LIMIT ? OFFSET ?
-    `).bind(mode, limit, offset).all();
-
-    const totalResult = await env.DB.prepare(`
-        SELECT COUNT(*) as total FROM players WHERE game_mode = ? AND mode_locked = TRUE
-    `).bind(mode).first();
-
-    return new Response(JSON.stringify({
-        mode,
-        total_players: totalResult.total,
-        leaderboard: players.results.map((p, i) => ({
-            rank: offset + i + 1,
-            rsn: p.rsn,
-            total_points: p.total_points,
-            regions_unlocked: p.regions_unlocked,
-            tasks_completed: p.tasks_completed
-        }))
-    }), { headers });
-}
-```
-
----
-
-## Deployment (Cloudflare Workers)
-
-1. Install Wrangler CLI:
-```bash
-npm install -g wrangler
-```
-
-2. Create project:
-```bash
-wrangler init chunkblazer-api
-```
-
-3. Create D1 database:
-```bash
-wrangler d1 create chunkblazer-db
-```
-
-4. Add to wrangler.toml:
-```toml
-[[d1_databases]]
-binding = "DB"
-database_name = "chunkblazer-db"
-database_id = "xxxxx-xxxx-xxxx-xxxx"
-```
-
-5. Run migrations:
-```bash
-wrangler d1 execute chunkblazer-db --file=./schema.sql
-```
-
-6. Deploy:
-```bash
-wrangler deploy
-```
-
-Your API will be live at: `https://chunkblazer-api.{your-subdomain}.workers.dev`
-
----
-
-## Cost Estimate
-
-| Players | Requests/month | D1 Reads | Cost |
-|---------|---------------|----------|------|
-| 1,000   | ~500k         | ~2M      | Free |
-| 10,000  | ~5M           | ~20M     | ~$5  |
-| 100,000 | ~50M          | ~200M    | ~$25 |
-
-The free tier covers up to ~100k requests/day, which handles ~5-10k active players easily.
+- **Zero public inbound ports** — the only path in is the outbound Cloudflare
+  Tunnel, so trusting `X-Forwarded-For` (via chi's `RealIP`) is structural.
+- TLS terminates at the Cloudflare edge; Caddy proxies plaintext internally.
+- Secrets (`POSTGRES_PASSWORD`, `CLOUDFLARE_TUNNEL_TOKEN`) live in
+  `.env.production` (gitignored, never committed).
+- Daily `pg_dump` backup → local + optional Hetzner Storage Box (`scripts/backup.sh`).
+
+See the repo's deploy bundle (`Dockerfile`, `docker-compose.prod.yml`,
+`deploy/Caddyfile`, `.env.production.example`) for the full setup.

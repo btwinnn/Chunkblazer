@@ -437,6 +437,11 @@ public class ChunkBlazerPlugin extends Plugin
 					.thenAccept(resp -> log.info("Logout sync: success={}",
 						resp != null && resp.isSuccess()));
 			}
+			// Logout beacon — tells the server we're offline now so it can snapshot
+			// this just-ended session's hi-scores immediately instead of waiting for
+			// heartbeats to go stale. Fire-and-forget; goOffline() no-ops when the
+			// API is disabled or no api_key is set.
+			apiClient.goOffline();
 			activeTask = null;
 			lastRegionId = -1;
 			pendingServerLogin = false;
