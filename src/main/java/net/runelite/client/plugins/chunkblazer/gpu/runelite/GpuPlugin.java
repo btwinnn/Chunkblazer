@@ -149,6 +149,15 @@ public abstract class GpuPlugin extends Plugin implements DrawCallbacks
 		.add(GL_FRAGMENT_SHADER, "fragui.glsl");
 
 	public static int glProgram;
+
+	// Hook invoked during the scene pass, immediately after the scene program is
+	// bound (see preSceneDraw). This is the only point where the GL context is
+	// guaranteed current AND glProgram is the active program, so addons that push
+	// extra per-frame uniforms (e.g. ChunkBlazer's greyscale) must do it here —
+	// NOT from a BeforeRender event, where the program/FBO state isn't set up.
+	// Set by ChunkBlazerGpuPlugin; null when no addon is attached.
+	public static Runnable sceneUniformHook;
+
 	private int glUiProgram;
 
 	private int interfaceTexture;
@@ -980,6 +989,13 @@ public abstract class GpuPlugin extends Plugin implements DrawCallbacks
 		// Bind uniforms
 		glUniformBlockBinding(glProgram, uniBlockMain, 0);
 		glUniform1i(uniTextures, 1); // texture sampler array is bound to texture1
+
+		// Let attached addons push their own uniforms onto the scene program while
+		// it is bound and the context is current (ChunkBlazer greyscale, etc.).
+		if (sceneUniformHook != null)
+		{
+			sceneUniformHook.run();
+		}
 
 		// Enable face culling
 		glEnable(GL_CULL_FACE);

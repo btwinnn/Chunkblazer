@@ -30,18 +30,16 @@ import net.runelite.client.plugins.chunkblazer.gpu.runelite.GpuPlugin;
 import net.runelite.client.plugins.chunkblazer.gpu.runelite.GpuPluginConfig;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.events.BeforeRender;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
-import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
 @Slf4j
 @PluginDescriptor(
 	name = "ChunkBlazer GPU",
-	description = "GPU rendering with greyscale wash for locked chunks",
+	description = "ChunkBlazer offers an <b>optional</b> greyscale feature for locked chunks. ChunkBlazer GPU is not compatible with 117 HD.",
 	tags = {"chunkblazer", "gpu", "chunk", "locker", "draw distance"},
 	conflicts = "GPU",
 	loadInSafeMode = false,
@@ -111,6 +109,21 @@ public class ChunkBlazerGpuPlugin extends Plugin
 		clientThread.invoke(() -> {
 			gpuPlugin.start();
 			eventBus.register(gpuPlugin);
+
+			// Push our greyscale uniforms from inside the scene pass (where the
+			// program is bound and the GL context is current) instead of from a
+			// BeforeRender event — the latter fired at the wrong point in this
+			// FBO/zone-based GPU pipeline and produced GL_INVALID_OPERATION.
+			GpuPlugin.sceneUniformHook = () -> {
+				try
+				{
+					addon.beforeRender(GpuPlugin.glProgram);
+				}
+				catch (Throwable ex)
+				{
+					log.error("Error updating ChunkBlazer greyscale uniforms", ex);
+				}
+			};
 		});
 	}
 
@@ -118,23 +131,10 @@ public class ChunkBlazerGpuPlugin extends Plugin
 	protected void shutDown()
 	{
 		clientThread.invoke(() -> {
+			GpuPlugin.sceneUniformHook = null;
 			gpuPlugin.stop();
 			eventBus.unregister(gpuPlugin);
 			addon.reset();
 		});
-	}
-
-	@Subscribe
-	public void onBeforeRender(BeforeRender beforeRender)
-	{
-		try
-		{
-			// Update region locker's uniforms
-			addon.beforeRender(GpuPlugin.glProgram);
-		}
-		catch (Throwable ex)
-		{
-			log.error("Error updating region locker uniforms", ex);
-		}
 	}
 }

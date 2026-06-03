@@ -364,6 +364,19 @@ public interface ChunkBlazerConfig extends Config
 		return new Color(0, 0, 0, 64);
 	}
 
+	@ConfigItem(
+		keyName = "gpuShadingLevel",
+		name = "Shading Style",
+		description = "How locked chunks are shaded. Light = desaturated wash, Heavy = dark desaturated, "
+			+ "Silhouette = near-black with only terrain relief (hills, cliffs, mountains) showing.",
+		section = gpuGreyscaleSection,
+		position = 4
+	)
+	default ShadingLevel gpuShadingLevel()
+	{
+		return ShadingLevel.LIGHT;
+	}
+
 	@ConfigSection(
 		name = "Chat Messages",
 		description = "Control which task messages appear in chat",

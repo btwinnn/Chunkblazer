@@ -29,7 +29,11 @@ float chunkblazer_isLocked(int x, int y) {
       result = result * (chunkblazer_lockedRegions[i] - region);
     }
   }
-  return clamp(abs(result), 0.0, 1.0);
+  // result == 0 means this vertex matched one of the locked regions (a zero
+  // factor in the product); any non-zero magnitude means "not locked". The
+  // uniform array holds the LOCKED regions (see ChunkBlazerGpuAddon), so we
+  // return 1.0 for a match and 0.0 otherwise — i.e. grey the locked tiles.
+  return 1.0 - clamp(abs(result), 0.0, 1.0);
 }
 
 void chunkblazer_vert(vec3 vertex) {

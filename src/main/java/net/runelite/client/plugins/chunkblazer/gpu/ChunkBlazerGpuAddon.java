@@ -42,6 +42,7 @@ public class ChunkBlazerGpuAddon
 	private int uniUseHardBorder;
 	private int uniGrayAmount;
 	private int uniGrayColor;
+	private int uniShadingLevel;
 	private int uniBaseX;
 	private int uniBaseY;
 	private int uniLockedRegions;
@@ -66,6 +67,7 @@ public class ChunkBlazerGpuAddon
 			uniUseHardBorder = glGetUniformLocation(glProgram, "chunkblazer_useHardBorder");
 			uniGrayAmount = glGetUniformLocation(glProgram, "chunkblazer_configGrayAmount");
 			uniGrayColor = glGetUniformLocation(glProgram, "chunkblazer_configGrayColor");
+			uniShadingLevel = glGetUniformLocation(glProgram, "chunkblazer_shadingLevel");
 			uniBaseX = glGetUniformLocation(glProgram, "chunkblazer_baseX");
 			uniBaseY = glGetUniformLocation(glProgram, "chunkblazer_baseY");
 			uniLockedRegions = glGetUniformLocation(glProgram, "chunkblazer_lockedRegions");
@@ -103,6 +105,7 @@ public class ChunkBlazerGpuAddon
 		Color tint = config.gpuGrayTint();
 		glUniform1i(uniUseHardBorder, config.gpuHardBorder() ? 1 : 0);
 		glUniform1f(uniGrayAmount, config.gpuGrayAmount() / 255f);
+		glUniform1i(uniShadingLevel, config.gpuShadingLevel().ordinal());
 		glUniform4f(uniGrayColor,
 			tint.getRed()   / 255f,
 			tint.getGreen() / 255f,

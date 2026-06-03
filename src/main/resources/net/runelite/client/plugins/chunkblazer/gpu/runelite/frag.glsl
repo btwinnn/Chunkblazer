@@ -60,7 +60,7 @@ float linear_depth(float depth) {
 }
 #endif
 
-#include "regionlocker/frag.glsl"
+#include "chunkblazer/frag.glsl"
 
 void main() {
   vec4 c;

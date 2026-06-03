@@ -8,7 +8,7 @@ A Nuzlocke-style chunk-unlocking plugin for Old School RuneScape, built on top o
 
 - **Per-chunk RNG task assignment.** When a chunk is unlocked, 4–5 tasks are rolled from that chunk's pool. Tasks are tracked across many activity types: combat (NPC kills with constraint support), skilling (mining, fishing, cooking, smithing, fletching, woodcutting, crafting, herblore, runecrafting, hunter), agility, firemaking, construction, thieving, equipping items, NPC dialogue, varbit/varp checks, and pure "obtain" tasks.
 - **Chunk visualization on the gameplay viewport.** Continuous outlines around every visible chunk, green for unlocked / dark grey for locked. Drawn by `ChunkBorderRenderer` as chained polylines (one `Path2D` per region-side) with round caps and joins so terrain elevation joints stay smooth.
-- **GPU greyscale wash for locked chunks.** The optional **ChunkBlazer GPU** plugin (separate plugin in the RuneLite plugin tray, off by default) replaces the stock GPU renderer with a forked variant that desaturates pixels inside locked chunks via a fragment shader. When enabled it auto-disables RuneLite's stock GPU plugin via `@PluginDescriptor(conflicts = "GPU")`. Adapted from slaytostay's [Region Locker](https://github.com/SlayToStay/region-locker) (BSD-2-Clause) — see Acknowledgements at the bottom of this file.
+- **GPU greyscale wash for locked chunks.** The optional **ChunkBlazer GPU** plugin (separate plugin in the RuneLite plugin tray, off by default) replaces the stock GPU renderer with a forked variant that desaturates pixels inside locked chunks via a fragment shader. When enabled it auto-disables RuneLite's stock GPU plugin via `@PluginDescriptor(conflicts = "GPU")`. Adapted from slaytostay's [Region Locker](https://github.com/SlayToStay/region-locker) — see Acknowledgements at the bottom of this file.
 - **In-panel unlock prompt.** When you walk into a locked region, the side panel shows the region name, cost, your point total, and a one-click "Unlock for X pts" → "Confirm? Yes / No" flow. Spending points always requires explicit user input — walking never auto-spends.
 - **Region-specific jingle on first unlock.** Plays a random sound from the unlocked chunk's area pack (Misthalin / Asgarnia / Kandarin / Varlamore / Zeah). Toggle via "Play Region Unlock Jingle" in config.
 - **Region-specific task-completion sounds.** Same per-area sound pool plays on task completion; toggle via "Play Task Completion Sound".
@@ -169,7 +169,7 @@ These are independent of the RuneLite mirror — they use the local `pom.xml`. E
 
 ## Acknowledgements
 
-GPU Greyscale is adapted from [Region Locker](https://github.com/SlayToStay/region-locker) by slaytostay (BSD-2-Clause).
+The ChunkBlazer GPU renderer is heavily inspired by [Region Locker GPU](https://github.com/SlayToStay/region-locker) by slaytostay and [RuneLite's GPU plugin](https://github.com/runelite/runelite/wiki/GPU).
 
 ## License
 

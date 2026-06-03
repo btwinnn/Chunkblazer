@@ -79,7 +79,7 @@ float fogFactorLinear(const float dist, const float start, const float end) {
   return 1.0 - clamp((dist - start) / (end - start), 0.0, 1.0);
 }
 
-#include "regionlocker/vert.glsl"
+#include "chunkblazer/vert.glsl"
 
 void main() {
   vec4 vert = vec4(vertf + base, 1);
