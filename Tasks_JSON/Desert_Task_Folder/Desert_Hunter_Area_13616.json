@@ -1,0 +1,71 @@
+{
+            "region_id": [13616],
+            "Friendly_Name": "Desert Hunter Area",
+            "neighbor_ids": [13617, 13872, 13615, 13360],
+            "tasks": [
+                {
+                    "name": "Catch an Orange Salamander",
+                    "taskID": "catch_barb_orange_salamander",
+                    "category": "Hunter",
+                    "level": 47,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Orange salamander",
+                            "item_ids": [10146]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Catch a Desert Devil",
+                    "taskID": "catch_desert_devil",
+                    "category": "Hunter",
+                    "level": 13,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                            {
+                            "item": "Desert devil fur",
+                            "item_ids": [10123]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Obtain an Orange Salamander Claw",
+                    "taskID": "Obtain_orange_salamander_claw",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Orange salamander claw"],
+                            "item_ids": [29231]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Golden Warbler",
+                    "taskID": "catch_golden_warbler",
+                    "category": "Hunter",
+                    "level": 5,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                            {
+                            "item": "Yellow feather",
+                            "item_ids": [10090]
+                            },
+                            {
+                            "item": "Raw bird meat",
+                            "item_ids": [9978]
+                            }
+                        ]             
+                }          
+            ],
+            "is_completed": false
+        }
