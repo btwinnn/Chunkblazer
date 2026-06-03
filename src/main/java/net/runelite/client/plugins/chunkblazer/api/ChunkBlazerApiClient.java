@@ -338,24 +338,32 @@ public class ChunkBlazerApiClient
 	}
 
 	/**
-	 * Get the leaderboard for a specific game mode.
+	 * Get a leaderboard page for a specific game mode, account-type bucket, and metric.
+	 *
+	 * <p>Each (mode, accountType, metric) triple is its own board, so Hardcore
+	 * Ironmen, regular Ironmen, and UIM rank separately. Hits the server's
+	 * {@code GET /api/leaderboards/{mode}/{accountType}/{metric}} endpoint.
 	 *
 	 * @param mode The game mode (CASUAL or NUZLOCKE)
+	 * @param accountType The account-type bucket (STANDARD, IRONMAN, HCIM, UIM, SKILLER_3)
+	 * @param metric The ranking metric (e.g. total_points, overall_xp, attack_xp)
 	 * @param limit Maximum number of entries to return
 	 * @param offset Offset for pagination
 	 * @return CompletableFuture with the leaderboard response
 	 */
-	public CompletableFuture<LeaderboardResponse> getLeaderboard(GameMode mode, int limit, int offset)
+	public CompletableFuture<LeaderboardResponse> getLeaderboard(
+		GameMode mode, String accountType, String metric, int limit, int offset)
 	{
 		if (!config.apiEnabled())
 		{
-			return CompletableFuture.completedFuture(LeaderboardResponse.empty(mode.name()));
+			return CompletableFuture.completedFuture(
+				LeaderboardResponse.empty(mode.name(), accountType, metric));
 		}
 
 		CompletableFuture<LeaderboardResponse> future = new CompletableFuture<>();
 
-		String url = String.format("%s/api/leaderboard?mode=%s&limit=%d&offset=%d",
-			config.apiBaseUrl(), mode.name(), limit, offset);
+		String url = String.format("%s/api/leaderboards/%s/%s/%s?limit=%d&offset=%d",
+			config.apiBaseUrl(), mode.name(), accountType, metric, limit, offset);
 
 		Request httpRequest = new Request.Builder()
 			.url(url)
@@ -369,7 +377,7 @@ public class ChunkBlazerApiClient
 			public void onFailure(Call call, IOException e)
 			{
 				log.error("Leaderboard request failed: {}", e.getMessage());
-				future.complete(LeaderboardResponse.empty(mode.name()));
+				future.complete(LeaderboardResponse.empty(mode.name(), accountType, metric));
 			}
 
 			@Override
@@ -387,7 +395,7 @@ public class ChunkBlazerApiClient
 					else
 					{
 						log.warn("Leaderboard returned error {}: {}", response.code(), body);
-						future.complete(LeaderboardResponse.empty(mode.name()));
+						future.complete(LeaderboardResponse.empty(mode.name(), accountType, metric));
 					}
 				}
 			}
