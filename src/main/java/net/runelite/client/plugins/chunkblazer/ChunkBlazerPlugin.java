@@ -344,6 +344,15 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			loadOrAssignTask();
 			panel.updatePanel();
+			// The plugin was enabled (or hot-reloaded) while already logged in,
+			// so there's no LOGGED_IN transition coming to kick off the server
+			// login. Queue it here; onGameTick fires it once the local player's
+			// name is readable. Without this we'd never obtain an api_key, so
+			// heartbeats no-op and recognition never lights up.
+			if (!serverLoginDone)
+			{
+				pendingServerLogin = true;
+			}
 		}
 
 		log.info("ChunkBlazer started successfully");
@@ -1420,6 +1429,19 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		clientThread.invoke(() ->
 		{
+			// Self-heal: if we're in-game but never completed the server login
+			// (plugin enabled while already logged in, or the server was down
+			// when we first tried), recover it here rather than waiting for a
+			// fresh LOGGED_IN event that may never come. Heartbeats no-op until
+			// login stores our api_key, so without this the player stays
+			// invisible — no presence, no recognition icons. On success
+			// loginToServer() calls kickPresence(), which heartbeats and
+			// refreshes the roster, so recognition lights up within ~a second.
+			if (!serverLoginDone)
+			{
+				loginToServer();
+				return;
+			}
 			int world = client.getWorld();
 			int region = lastRegionId;
 			apiClient.sendHeartbeat(world, region, config.visibleToOthers());
