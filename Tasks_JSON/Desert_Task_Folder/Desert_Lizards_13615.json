@@ -10,7 +10,7 @@
                     "completion_type": "TRAVEL",
                     "base_points": 2,
                     "assignment_weight": 5
-                }
+                },
                 {
                     "name": "Defeat a Desert Lizard",
                     "taskID": "defeat_desert_lizard",

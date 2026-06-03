@@ -49,7 +49,7 @@ set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\cli
 :: Files the plugin actually loads at runtime (must match
 :: ChunkBlazerPlugin.TASK_JSON_FILES). If you add a new task
 :: JSON to TASK_JSON_FILES, add it here too.
-set TASK_JSONS=Starter_Area_Tasks.json Misthalin_Tasks.json Asgarnia_Tasks.json Kandarin_Tasks.json Karamja_Tasks.json Varlamore_Tasks.json Zeah_Tasks.json
+set TASK_JSONS=Starter_Area_Tasks.json Misthalin_Tasks.json Asgarnia_Tasks.json Kandarin_Tasks.json Karamja_Tasks.json Desert_Tasks.json Varlamore_Tasks.json Zeah_Tasks.json
 
 :: Subfolders under Tasks_JSON\ that may contain TASK_JSONS files.
 :: Searched in priority order — first match wins. The trailing "."
