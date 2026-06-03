@@ -14,7 +14,7 @@
                         "npc": ["Agrith Narr"],
                         "npc_ids": [911, 6327, 6388],
                         "quantity": [1]
-                    },             
+                    }            
                 },
                 {
                     "name": "Defeat a Level 19 Ghost",
@@ -69,7 +69,7 @@
                             "item_ids": [4621]
                         }
                     ]
-                },
+                }
             ],
             "optional_quests_unlocked": [
                 {
