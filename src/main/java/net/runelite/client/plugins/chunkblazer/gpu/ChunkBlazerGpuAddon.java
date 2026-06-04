@@ -1,7 +1,6 @@
 package net.runelite.client.plugins.chunkblazer.gpu;
 
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import javax.inject.Inject;
@@ -33,8 +32,13 @@ public class ChunkBlazerGpuAddon
 	// which is the same thing ChunkBlazerPlugin.isRegionUnlocked does
 	// internally. Cached per-frame to avoid re-parsing.
 
-	private static final int LOCKED_REGIONS_SIZE = 16;
-	private final int[] loadedLockedRegions = new int[LOCKED_REGIONS_SIZE];
+	// The GPU plugin renders the extended 184x184 scene, which can span more
+	// regions than the old fixed 16-slot list could hold — that overflow is why
+	// far locked chunks rendered in colour until you walked closer. Instead of a
+	// capped list we upload a per-region locked/unlocked grid covering the whole
+	// rendered scene. GRID must match CHUNKBLAZER_GRID in vert.glsl.
+	private static final int GRID = 7;
+	private final int[] lockedGrid = new int[GRID * GRID];
 
 	private boolean isValid;
 	private int glProgram;
@@ -45,7 +49,7 @@ public class ChunkBlazerGpuAddon
 	private int uniShadingLevel;
 	private int uniBaseX;
 	private int uniBaseY;
-	private int uniLockedRegions;
+	private int uniLockedGrid;
 
 	public void reset()
 	{
@@ -70,7 +74,7 @@ public class ChunkBlazerGpuAddon
 			uniShadingLevel = glGetUniformLocation(glProgram, "chunkblazer_shadingLevel");
 			uniBaseX = glGetUniformLocation(glProgram, "chunkblazer_baseX");
 			uniBaseY = glGetUniformLocation(glProgram, "chunkblazer_baseY");
-			uniLockedRegions = glGetUniformLocation(glProgram, "chunkblazer_lockedRegions");
+			uniLockedGrid = glGetUniformLocation(glProgram, "chunkblazer_lockedGrid");
 			isValid = uniUseGray != -1;
 			checkGLErrors();
 		}
@@ -149,29 +153,25 @@ public class ChunkBlazerGpuAddon
 			glUniform1i(uniBaseX, vw.getBaseX() * 128);
 			glUniform1i(uniBaseY, vw.getBaseY() * 128);
 
-			// Pack visible region IDs that are NOT unlocked into the
-			// shader's fixed-size array (capacity = LOCKED_REGIONS_SIZE,
-			// matches CHUNKBLAZER_LOCKED_REGIONS_SIZE in vert.glsl). 0 is
-			// a sentinel meaning "no region" — the shader's float-multiply
-			// trick treats a zero entry as never matching.
-			Arrays.fill(loadedLockedRegions, 0);
-			if (mapRegions != null)
+			// Build a per-region locked/unlocked grid covering the whole
+			// rendered (extended) scene, straight from the unlocked-config set.
+			// Unlike the old approach this does NOT depend on getMapRegions(),
+			// so far chunks at the edge of draw distance grey correctly instead
+			// of only once you walk into them. The grid origin is one region
+			// before the scene base; the >>6 and -1 here must match the
+			// gridBase math in vert.glsl, and GRID must match CHUNKBLAZER_GRID.
+			int gridBaseRegionX = (vw.getBaseX() >> 6) - 1;
+			int gridBaseRegionY = (vw.getBaseY() >> 6) - 1;
+			for (int gx = 0; gx < GRID; ++gx)
 			{
-				int slot = 0;
-				for (int region : mapRegions)
+				for (int gy = 0; gy < GRID; ++gy)
 				{
-					if (slot >= LOCKED_REGIONS_SIZE)
-					{
-						break;
-					}
-					if (!unlocked.contains(region))
-					{
-						loadedLockedRegions[slot++] = region;
-					}
+					int regionId = ((gridBaseRegionX + gx) << 8) | (gridBaseRegionY + gy);
+					lockedGrid[gx * GRID + gy] = unlocked.contains(regionId) ? 0 : 1;
 				}
 			}
 
-			glUniform1iv(uniLockedRegions, loadedLockedRegions);
+			glUniform1iv(uniLockedGrid, lockedGrid);
 		}
 
 		// Restore the previous state
