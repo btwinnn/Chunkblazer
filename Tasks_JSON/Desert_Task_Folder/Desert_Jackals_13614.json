@@ -1,0 +1,74 @@
+{
+            "region_id": [13614],
+            "Friendly_Name": "Desert Jackals",
+            "neighbor_ids": [13615, 13870, 13613, 13358],
+            "tasks": [
+                {                    
+                    "name": "Defeat a Jackal",
+                    "taskID": "defeat_jackal",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1, 25]                  
+                        }
+                    ]
+                },
+                {                    
+                    "name": "Defeat a Jackal on Task",
+                    "taskID": "defeat_jackal_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Jackal in the First Hit",
+                    "taskID": "defeat_jackal_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc":
+                    {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Jackal with nothing Equipped",
+                    "taskID": "defeat_jackal_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": 
+                    {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                    },
+
+                    "constraints": {                       
+                        "equip_nothing": "TRUE"
+                    }                                     
+                }            
+            ],           
+            "is_completed": false
+        }

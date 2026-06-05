@@ -1521,6 +1521,186 @@
                 }            
             ],           
             "is_completed": false
+        },
+        {
+            "region_id": [13614],
+            "Friendly_Name": "Desert Jackals",
+            "neighbor_ids": [13615, 13870, 13613, 13358],
+            "tasks": [
+                {                    
+                    "name": "Defeat a Jackal",
+                    "taskID": "defeat_jackal",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1, 25]                  
+                        }
+                    ]
+                },
+                {                    
+                    "name": "Defeat a Jackal on Task",
+                    "taskID": "defeat_jackal_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Jackal in the First Hit",
+                    "taskID": "defeat_jackal_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc":
+                    {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                 {
+                    "name": "Defeat a Jackal with nothing Equipped",
+                    "taskID": "defeat_jackal_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": 
+                    {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                    },
+
+                    "constraints": {                       
+                        "equip_nothing": "TRUE"
+                    }                                     
+                }            
+            ],           
+            "is_completed": false
+        },
+        {
+            "region_id": [13870],
+            "Friendly_Name": "Ancient Vault",
+            "neighbor_ids": [13871, 14126, 13869, 13614],
+            "tasks": [
+                {
+                    "name": "Obtain a Ring of Shadows",
+                    "taskID": "Obtain_ring_of_shadows",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Ring of shadows#Charged", "Ring of shadows#Uncharged"],
+                            "item_ids": [28327, 28329]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Manta Ray",
+                    "taskID": "cook_manta_ray",
+                    "category": "Cooking",
+                    "level": 91,
+                    "completion_type": "COOKING",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Manta Ray",
+                            "item_ids": [391],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Sea Turtle",
+                    "taskID": "cook_sea_turtle",
+                    "category": "Cooking",
+                    "level": 82,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Sea Turtle",
+                            "item_ids": [397],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Plateskirt",
+                    "taskID": "equip_dragon_plateskirt",
+                    "completion_type": "EQUIP",
+                    "category": ["Defence"],
+                    "level": [60],
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Plateskirt"],
+                            "item_ids": [4585, 28063, 12416]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Dragon Platelegs",
+                    "taskID": "equip_dragon_platelegs",
+                    "category": "Defence",
+                    "level": [60],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Platelegs"],
+                            "item_ids": [4087]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch some Dragon Javelins",
+                    "taskID": "fletch_dragon_javelin",
+                    "category": "Fletching",
+                    "level": 92,
+                    "completion_type": "FLETCHING",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon javelin#Unpoisoned"],
+                            "item_ids": [19484],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+                ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Desert Treasure II",
+                    "points": 5
+                }                                         
+            ],           
+            "is_completed": false
         }                   
     ]
 }
