@@ -159,7 +159,7 @@
                     ]
                 },
         {
-          "name": "Kill some Spiders",
+          "name": "Defeat a Level 2 Spider",
           "taskID": "kill_some_spiders",
           "category": "Combat",
           "completion_type": "NPC_Kill",
@@ -167,7 +167,7 @@
           "assignment_weight": 8,
           "target_npc": {
             "npc": ["Spider, Big Spider"],
-            "npc_ids": [3017, 3019],
+            "npc_ids": [3017],
             "quantity": [1, 25]
           }
         },
