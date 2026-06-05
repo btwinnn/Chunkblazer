@@ -1113,6 +1113,72 @@
                 } 
             ],           
             "is_completed": false
+        },
+        {
+            "region_id": [12590],
+            "Friendly_Name": "Bandit Camp",
+            "neighbor_ids": [12591, 12846, 12589, 12334],
+            "tasks": [
+                {
+                    "name": "Defeat a Desert Camp Bandit",
+                    "taskID": "defeat_desert_camp_bandit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bandit (Bandit Camp)#Level 57", "Bandit (Bandit Camp)#Level 74"],
+                        "npc_ids": [695, 690],
+                        "quantity": [1, 50]
+                    }
+                },
+                {
+                    "name": "Defeat a Desert Camp Bandit in the First Hit",
+                    "taskID": "defeat_desert_camp_bandit_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bandit (Bandit Camp)#Level 57", "Bandit (Bandit Camp)#Level 74"],
+                        "npc_ids": [695, 690],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]                       
+                        }
+                },
+                {
+                    "name": "Obtain a Bandit's Brew",
+                    "taskID": "Obtain_bandit's_brew",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Bandit's Brew"],
+                            "item_ids": [4627]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Gilded Cross",
+                    "taskID": "Obtain_gilded_cross",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Gilded Cross"],
+                            "item_ids": [4674]
+                        }
+                    ]
+                }            
+            ],           
+            "is_completed": false
         }                  
     ]
 }
