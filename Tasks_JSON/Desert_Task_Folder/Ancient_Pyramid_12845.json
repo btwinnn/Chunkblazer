@@ -1,0 +1,137 @@
+{
+            "region_id": [12845],
+            "Friendly_Name": "Ancient Pyramid",
+            "neighbor_ids": [12846, 13101, 12844, 12589],
+            "tasks": [
+                {
+                    "name": "Defeat a Mummy",
+                    "taskID": "defeat_mummy",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Mummy"],
+                        "npc_ids": [717, 724, 720, 725, 721, 726, 722, 727, 723, 728, 949, 950, 951, 952, 953, 7658, 7659, 7661, 7660, 7662, 718, 719, 15558],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Equip an Ancient Staff",
+                    "taskID": "equip_ancient_staff",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "category": ["Attack", "Magic"],
+                    "level": [50, 50],
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Ancient Staff"],
+                            "item_ids": [4675]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Blood Diamond",
+                    "taskID": "obtain_blood_diamond",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Blood Diamond"],
+                            "item_ids": [4670],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Smoke Diamond",
+                    "taskID": "obtain_smoke_diamond",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Smoke Diamond"],
+                            "item_ids": [4672],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Ice Diamond",
+                    "taskID": "obtain_ice_diamond",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ice Diamond"],
+                            "item_ids": [4671],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Shadow Diamond",
+                    "taskID": "obtain_shadow_diamond",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Shadow Diamond"],
+                            "item_ids": [4673],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Talk to Azzanadra",
+                    "taskID": "talk_to_azzanadra",
+                    "category": "Dialogue",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Azzanadra"],
+                        "npc_ids": [730, 12305, 12306, 12307, 12308],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat Scarabs",
+                    "taskID": "defeat_scarabs",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Scarabs"],
+                        "npc_ids": [729],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Equip a Rune Square Shield",
+                    "taskID": "equip_rune_square_shield",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "category": ["Defence"],
+                    "level": [40],
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Rune Sq Shield"],
+                            "item_ids": [1185]
+                        }
+                    ]
+                }                                        
+            ],           
+            "is_completed": false
+        } 
