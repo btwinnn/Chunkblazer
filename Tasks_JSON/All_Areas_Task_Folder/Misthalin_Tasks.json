@@ -76,7 +76,7 @@
                 {
                     "name": "Equip Rune Platelegs",
                     "taskID": "equip_rune_platelegs",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 5,
                     "category": "Defence",
                     "level": 40,
