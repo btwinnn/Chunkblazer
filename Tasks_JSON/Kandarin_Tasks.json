@@ -5356,15 +5356,7 @@
 
                     "constraints": {                       
                         "equip_nothing": "TRUE"
-                    },
-
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for equipment combat tasks."
-                            }
-                        ]                                      
+                    }                                     
                 },
                 {
                     "name": "Cook a Tuna",
