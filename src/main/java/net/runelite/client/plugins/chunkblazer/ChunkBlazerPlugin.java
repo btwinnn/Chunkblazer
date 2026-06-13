@@ -1368,14 +1368,29 @@ public class ChunkBlazerPlugin extends Plugin
 				return;
 			}
 
-			// 1. Mode lock (only if not already locked locally for this RSN)
+			// 1. Mode lock reconciliation, both directions.
 			if (response.isModeLocked() && response.getGameMode() != null && !isModeLocked())
 			{
+				// Server has a lock we don't — adopt it (e.g. fresh install on a new machine).
 				GameMode serverMode = response.getGameMode();
 				String modeKey = hashRsn(rsn) + ":" + serverMode.name();
 				configManager.setConfiguration("chunkblazer", "accountModeHash", modeKey);
 				configManager.setConfiguration("chunkblazer", "gameMode", serverMode);
 				log.info("Game mode hydrated from server: {}", serverMode);
+			}
+			else if (isModeLocked() && !response.isModeLocked())
+			{
+				// We're locked locally but the server isn't — the original lock-mode
+				// mirror call was dropped or sent to a different server (e.g. before the
+				// API URL was corrected). Re-push so the server catches up; otherwise the
+				// account stays permanently unranked. Fire-and-forget: if it fails, the
+				// next login retries (local stays locked, server still unlocked).
+				GameMode localMode = config.gameMode();
+				if (localMode != null && config.apiEnabled() && apiClient != null)
+				{
+					log.info("Mode locked locally but not on server — re-pushing lock: {}", localMode);
+					apiClient.lockGameMode(localMode);
+				}
 			}
 
 			// 2. Unlocked regions — hydrate only when local is empty

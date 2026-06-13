@@ -172,7 +172,8 @@ public interface ChunkBlazerConfig extends Config
 		name = "API Base URL",
 		description = "Base URL for the ChunkBlazer verification server",
 		section = apiSection,
-		position = 0
+		position = 0,
+		hidden = true
 	)
 	default String apiBaseUrl()
 	{
@@ -197,7 +198,8 @@ public interface ChunkBlazerConfig extends Config
 		description = "Your ChunkBlazer API key for server verification",
 		section = apiSection,
 		position = 2,
-		secret = true
+		secret = true,
+		hidden = true
 	)
 	default String apiKey()
 	{
