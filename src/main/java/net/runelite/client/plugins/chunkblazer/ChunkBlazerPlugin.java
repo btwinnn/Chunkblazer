@@ -463,6 +463,9 @@ public class ChunkBlazerPlugin extends Plugin
 			panel.hideVerificationPrompt();
 			// Drop the recognition roster; it'll repopulate after next login.
 			roster.clear();
+			// Refresh the side panel into its logged-out state (gates the
+			// gameplay sections behind being in-game).
+			panel.updatePanel();
 		}
 	}
 
@@ -1001,6 +1004,11 @@ public class ChunkBlazerPlugin extends Plugin
 		return config.gameMode();
 	}
 
+	public boolean isLoggedIn()
+	{
+		return client.getGameState() == GameState.LOGGED_IN;
+	}
+
 	public boolean isModeLocked()
 	{
 		String hash = config.accountModeHash();
@@ -1385,7 +1393,7 @@ public class ChunkBlazerPlugin extends Plugin
 				// API URL was corrected). Re-push so the server catches up; otherwise the
 				// account stays permanently unranked. Fire-and-forget: if it fails, the
 				// next login retries (local stays locked, server still unlocked).
-				GameMode localMode = config.gameMode();
+				GameMode localMode = getGameMode(); // authoritative locked mode, not the raw dropdown
 				if (localMode != null && config.apiEnabled() && apiClient != null)
 				{
 					log.info("Mode locked locally but not on server — re-pushing lock: {}", localMode);
@@ -1577,7 +1585,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 		List<String> completed = new ArrayList<>(getCompletedTaskIds());
 
-		GameMode mode = config.gameMode();
+		GameMode mode = getGameMode(); // authoritative: locked mode wins over the raw dropdown
 		String modeName = (mode != null && isModeLocked()) ? mode.name() : null;
 
 		return PlayerSyncRequest.builder()

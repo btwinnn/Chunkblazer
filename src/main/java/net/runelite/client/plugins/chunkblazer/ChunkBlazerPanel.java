@@ -49,6 +49,9 @@ public class ChunkBlazerPanel extends PluginPanel
 	// UI Components
 	private JPanel regionUnlockPanel;
 	private JPanel modeSelectionPanel;
+	private JPanel lockedModePanel;
+	private JLabel lockedModeValueLabel;
+	private JPanel loggedOutPanel;
 	private JPanel currentTaskPanel;
 	private JPanel activeTasksContentPanel; // Inner panel for active tasks
 	private JScrollPane activeTasksScrollPane;
@@ -177,6 +180,14 @@ public class ChunkBlazerPanel extends PluginPanel
 		mainPanel.add(header);
 		mainPanel.add(Box.createVerticalStrut(8));
 
+		// Logged-out prompt — shown in place of the gameplay sections until the
+		// player is in-game (most controls are account-specific and can't act
+		// before login). Toggled by updateLoginGate().
+		loggedOutPanel = createLoggedOutSection();
+		setupSectionPanel(loggedOutPanel);
+		loggedOutPanel.setVisible(false);
+		mainPanel.add(loggedOutPanel);
+
 		// Verification Banner — sits directly under the header so it's the first
 		// thing an unverified player sees. Hidden by default; the plugin calls
 		// showVerificationPrompt() once the server issues a code.
@@ -199,10 +210,17 @@ public class ChunkBlazerPanel extends PluginPanel
 		mainPanel.add(regionUnlockPanel);
 		mainPanel.add(Box.createVerticalStrut(8));
 
-		// Mode Selection Section (hidden when locked)
+		// Mode Selection Section (hidden once the mode is locked)
 		modeSelectionPanel = createModeSelectionSection();
 		setupSectionPanel(modeSelectionPanel);
 		mainPanel.add(modeSelectionPanel);
+
+		// Locked-mode card — shown in place of the selector once the mode is locked.
+		lockedModePanel = createLockedModeSection();
+		setupSectionPanel(lockedModePanel);
+		lockedModePanel.setVisible(false);
+		mainPanel.add(lockedModePanel);
+
 		mainPanel.add(Box.createVerticalStrut(8));
 
 		// Current Task Section
@@ -1005,6 +1023,72 @@ public class ChunkBlazerPanel extends PluginPanel
 		modePanel.add(confirmButton);
 
 		return modePanel;
+	}
+
+	/**
+	 * The read-only card shown once a game mode is locked, replacing the
+	 * selector. The mode name + colour are filled in by updateModeDisplay().
+	 */
+	private JPanel createLockedModeSection()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		panel.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(ColorScheme.MEDIUM_GRAY_COLOR),
+			new EmptyBorder(10, 10, 10, 10)
+		));
+
+		JLabel title = new JLabel("Game Mode");
+		title.setFont(FontManager.getRunescapeBoldFont());
+		title.setForeground(Color.WHITE);
+		title.setAlignmentX(LEFT_ALIGNMENT);
+		panel.add(title);
+		panel.add(Box.createVerticalStrut(5));
+
+		lockedModeValueLabel = new JLabel("Casual");
+		lockedModeValueLabel.setFont(FontManager.getRunescapeBoldFont());
+		lockedModeValueLabel.setForeground(new Color(100, 200, 100));
+		lockedModeValueLabel.setAlignmentX(LEFT_ALIGNMENT);
+		panel.add(lockedModeValueLabel);
+
+		JLabel lockedNote = new JLabel("Locked for this account");
+		lockedNote.setFont(FontManager.getRunescapeSmallFont());
+		lockedNote.setForeground(Color.LIGHT_GRAY);
+		lockedNote.setAlignmentX(LEFT_ALIGNMENT);
+		panel.add(lockedNote);
+
+		return panel;
+	}
+
+	/**
+	 * Prompt shown while the player is logged out, in place of the gameplay
+	 * sections (which are account-specific and can't do anything pre-login).
+	 */
+	private JPanel createLoggedOutSection()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		panel.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(ColorScheme.MEDIUM_GRAY_COLOR),
+			new EmptyBorder(15, 10, 15, 10)
+		));
+
+		JLabel title = new JLabel("Not logged in");
+		title.setFont(FontManager.getRunescapeBoldFont());
+		title.setForeground(Color.WHITE);
+		title.setAlignmentX(LEFT_ALIGNMENT);
+		panel.add(title);
+		panel.add(Box.createVerticalStrut(5));
+
+		JLabel msg = new JLabel("<html>Log into Old School RuneScape to start playing ChunkBlazer.</html>");
+		msg.setFont(FontManager.getRunescapeSmallFont());
+		msg.setForeground(Color.LIGHT_GRAY);
+		msg.setAlignmentX(LEFT_ALIGNMENT);
+		panel.add(msg);
+
+		return panel;
 	}
 
 	private JPanel createCurrentTaskSection()
@@ -2203,6 +2287,27 @@ public class ChunkBlazerPanel extends PluginPanel
 	{
 		SwingUtilities.invokeLater(() ->
 		{
+			boolean loggedIn = plugin.isLoggedIn();
+			loggedOutPanel.setVisible(!loggedIn);
+
+			// Always-on gameplay sections simply follow login state.
+			statsPanel.setVisible(loggedIn);
+			completedTasksPanel.setVisible(loggedIn);
+			taskListPanel.setVisible(loggedIn);
+
+			if (!loggedIn)
+			{
+				// Conditionally-shown sections: hide outright while logged out so
+				// nothing interactive is reachable before there's an account.
+				regionUnlockPanel.setVisible(false);
+				modeSelectionPanel.setVisible(false);
+				lockedModePanel.setVisible(false);
+				currentTaskPanel.setVisible(false);
+				revalidate();
+				repaint();
+				return;
+			}
+
 			updateModeDisplay();
 			updateRegionDisplay();
 			updateStats();
@@ -2241,13 +2346,17 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 		boolean isLocked = plugin.isModeLocked();
 		modeSelectionPanel.setVisible(!isLocked);
+		lockedModePanel.setVisible(isLocked);
 
 		if (isLocked)
 		{
 			GameMode mode = plugin.getGameMode();
+			Color modeColor = mode == GameMode.NUZLOCKE ?
+				new Color(255, 100, 100) : new Color(100, 200, 100);
 			modeLabel.setText(" | " + mode.getName());
-			modeLabel.setForeground(mode == GameMode.NUZLOCKE ?
-				new Color(255, 100, 100) : new Color(100, 200, 100));
+			modeLabel.setForeground(modeColor);
+			lockedModeValueLabel.setText(mode.getName());
+			lockedModeValueLabel.setForeground(modeColor);
 		}
 		else
 		{

@@ -36,7 +36,8 @@ public interface ChunkBlazerConfig extends Config
 		name = "Game Mode",
 		description = "Current game mode (Casual or Nuzlocke)",
 		section = generalSection,
-		position = 1
+		position = 1,
+		hidden = true
 	)
 	default GameMode gameMode()
 	{
