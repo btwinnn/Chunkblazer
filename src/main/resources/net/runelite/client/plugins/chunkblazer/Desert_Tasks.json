@@ -801,6 +801,1453 @@
             ],
             
             "is_completed": false
-        }                  
+        },
+        {
+            "region_id": [13103],
+            "Friendly_Name": "Desert Mining Camp",
+            "neighbor_ids": [13104, 13359, 13102, 12847],
+            "tasks": [
+                {
+                    "name": "Defeat a Desert Wolf",
+                    "taskID": "defeat_desert_wolf",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Desert Wolf"],
+                        "npc_ids": [4649, 4650, 4651],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Desert Wolf in 21 Seconds",
+                    "taskID": "defeat_desert_wolf_21_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Desert Wolf"],
+                        "npc_ids": [4649, 4650, 4651],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [35]                       
+                        }
+                },
+                {
+                    "name": "Obtain the Metal Key",
+                    "taskID": "Obtain_metal_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Metal Key"],
+                            "item_ids": [1839]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Desert Mercenary",
+                    "taskID": "defeat_desert_mercenary",
+                    "category": "Combat",
+                    "completion_type": "NPC_KILL",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Mercenary#Brown beard", "Mercenary#Coif", "Mercenary#Facemask", "Mercenary#White beard"],
+                        "npc_ids": [4658, 4659, 4657, 4656],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Ugthanki Camel",
+                    "taskID": "defeat_ugthanki_camel",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ugthanki"],
+                        "npc_ids": [4652],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat an Ugthanki Camel in 21 Seconds",
+                    "taskID": "defeat_ugthanki_camel_21_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ugthanki"],
+                        "npc_ids": [4652],
+                        "quantity": [1, 10]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [35]                       
+                        }
+                },
+                {
+                    "name": "Mine some Copper Ore",
+                    "taskID": "mine_copper",
+                    "category": "Mining",
+                    "level": 1,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Copper Ore",
+                        "item_ids": [436],
+                        "quantity": [5, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Tin Ore",
+                    "taskID": "mine_tin",
+                    "category": "Mining",
+                    "level": 1,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Tin Ore",
+                        "item_ids": [438],
+                        "quantity": [5, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [25, 200]
+                        }
+                    ]
+                }
+            ],
+            
+            "is_completed": false
+        },
+        {
+            "region_id": [12847],
+            "Friendly_Name": "Desert Barrens",
+            "neighbor_ids": [12848, 13103, 12846, 12591],
+            "tasks": [
+                {
+                    "name": "Defeat a Desert Wolf",
+                    "taskID": "defeat_desert_wolf",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Desert Wolf"],
+                        "npc_ids": [4649, 4650, 4651],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Desert Wolf in 21 Seconds",
+                    "taskID": "defeat_desert_wolf_21_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Desert Wolf"],
+                        "npc_ids": [4649, 4650, 4651],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [35]                       
+                        }
+                },
+                {
+                    "name": "Defeat a Desert Wolf on Task",
+                    "taskID": "defeat_desert_wolf_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Desert Wolf"],
+                        "npc_ids": [4649, 4650, 4651],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [35]                       
+                        }
+                },
+                {
+                    "name": "Defeat an Ugthanki Camel",
+                    "taskID": "defeat_ugthanki_camel",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ugthanki"],
+                        "npc_ids": [4652],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat an Ugthanki Camel in 21 Seconds",
+                    "taskID": "defeat_ugthanki_camel_21_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ugthanki"],
+                        "npc_ids": [4652],
+                        "quantity": [1, 10]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [35]                       
+                        }
+                }
+            ],
+            
+            "is_completed": false
+        },
+        {
+            "region_id": [12591],
+            "Friendly_Name": "Bedabin Camp",
+            "neighbor_ids": [12592, 12847, 12590, 12335],
+            "tasks": [
+                {
+                    "name": "Defeat a Bedabin Nomad Fighter",
+                    "taskID": "defeat_bedabin_nomad_fighter",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bedabin Nomad Fighter"],
+                        "npc_ids": [4655],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Bedabin Nomad Fighter in 24 Seconds",
+                    "taskID": "defeat_bedabin_nomad_fighter_24_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bedabin Nomad Fighter"],
+                        "npc_ids": [4655],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [40]                       
+                        }
+                },
+                {
+                    "name": "Fletch a Bronze Dart",
+                    "taskID": "fletch_bronze_dart",
+                    "category": "Fletching",
+                    "level": 10,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Bronze Dart"],
+                            "item_ids": [806],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use Fairy Ring Code BIQ",
+                    "taskID": "fairy_ring_BIQ",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Obtain a Tenti Pineapple",
+                    "taskID": "Obtain_tenti_pineapple",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Tenti Pineapple"],
+                            "item_ids": [1851]
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Desert Treasure I",
+                    "points": 4
+                } 
+            ],           
+            "is_completed": false
+        },
+        {
+            "region_id": [12590],
+            "Friendly_Name": "Bandit Camp",
+            "neighbor_ids": [12591, 12846, 12589, 12334],
+            "tasks": [
+                {
+                    "name": "Defeat a Desert Camp Bandit",
+                    "taskID": "defeat_desert_camp_bandit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bandit (Bandit Camp)#Level 57", "Bandit (Bandit Camp)#Level 74"],
+                        "npc_ids": [695, 690],
+                        "quantity": [1, 50]
+                    }
+                },
+                {
+                    "name": "Defeat a Desert Camp Bandit in the First Hit",
+                    "taskID": "defeat_desert_camp_bandit_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bandit (Bandit Camp)#Level 57", "Bandit (Bandit Camp)#Level 74"],
+                        "npc_ids": [695, 690],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]                       
+                        }
+                },
+                {
+                    "name": "Obtain a Bandit's Brew",
+                    "taskID": "Obtain_bandit's_brew",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Bandit's Brew"],
+                            "item_ids": [4627]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Gilded Cross",
+                    "taskID": "Obtain_gilded_cross",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Gilded Cross"],
+                            "item_ids": [4674]
+                        }
+                    ]
+                }            
+            ],           
+            "is_completed": false
+        },
+        {
+            "region_id": [13102],
+            "Friendly_Name": "Smoke Dungeon",
+            "neighbor_ids": [13103, 13358, 13101, 12846],
+            "tasks": [
+                {
+                    "name": "Defeat a Dust Devil",
+                    "taskID": "defeat_dust_devil",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Dust Devil"],
+                        "npc_ids": [7249, 423, 11238],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Dust Devil on Task",
+                    "taskID": "defeat_dust_devil_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Dust Devil"],
+                        "npc_ids": [7249, 423, 11238],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Dust Devil in 21 Seconds",
+                    "taskID": "defeat_dust_devil_21_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Dust Devil"],
+                        "npc_ids": [7249, 423, 11238],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [35]
+                    }
+                },
+                {
+                    "name": "Defeat a Choke Devil",
+                    "taskID": "defeat_choke_devil",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Choke Devil"],
+                        "npc_ids": [7404],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Pyrefiend",
+                    "taskID": "defeat_pyrefiend",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Pyrefiend#Level 43", "Pyrefiend#Level 48"],
+                        "npc_ids": [433, 434, 435, 436, 3139],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Pyrelord",
+                    "taskID": "defeat_pyrelord",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Pyrelord#1", "Pyrelord#2"],
+                        "npc_ids": [6762, 6795],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Pyrefiend in 9 Seconds",
+                    "taskID": "defeat_pyrefiend_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Pyrefiend#Level 43", "Pyrefiend#Level 48"],
+                        "npc_ids": [433, 434, 435, 436, 3139],
+                        "quantity": [1, 10]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                },
+                {
+                    "name": "Equip a Dragon Chainbody",
+                    "taskID": "equip_dragon_chainbody",
+                    "completion_type": "EQUIP",
+                    "category": "Defence",
+                    "level": [60],
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Chainbody"],
+                            "item_ids": [3140, 28065, 12414]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat Fareed",
+                    "taskID": "defeat_fareed",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Fareed"],
+                        "npc_ids": [3456, 4115, 6348],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Fire Elemental",
+                    "taskID": "defeat_fire_elemental",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Fire Elemental"],
+                        "npc_ids": [1365, 14150],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Fire Elemental in the First Hit",
+                    "taskID": "defeat_fire_elemental_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Fire Elemental"],
+                        "npc_ids": [1365, 14150],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                }            
+            ],           
+            "is_completed": false
+        },
+        {
+            "region_id": [13358],
+            "Friendly_Name": "Pollnivneach",
+            "neighbor_ids": [13359, 13614, 13357,13102],
+            "tasks": [
+                {                    
+                    "name": "Pickpocket a Menaphite Thug",
+                    "taskID": "pickpocket_mentaphite_thug",
+                    "category": "Thieving",
+                    "level": 65,
+                    "completion_type": "THIEVING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Menaphite Thug"],
+                        "npc_ids": [3550, 3549], 
+                        "quantity": [1, 100]                  
+                        }
+                    ]
+                },
+                {                    
+                    "name": "Pickpocket a Pollnivneach Bandit",
+                    "taskID": "pickpocket_pollnivneach_bandit",
+                    "category": "Thieving",
+                    "level": 45,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Pollnivneach Bandit"],
+                        "npc_ids": [3550, 3549], 
+                        "quantity": [1, 100]                  
+                        }
+                    ]
+                },
+                {                    
+                    "name": "Defeat a Menaphite Thug",
+                    "taskID": "defeat_mentaphite_thug",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": [
+                        {
+                        "npc": ["Menaphite Thug"],
+                        "npc_ids": [3550, 3549], 
+                        "quantity": [1, 10]                  
+                        }
+                    ]
+                },
+                {                    
+                    "name": "Defeat a Pollnivneach Bandit",
+                    "taskID": "defeat_pollnivneach_bandit",
+                    "category": "Combat",
+                    "completion_type": "NPC_KILL",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": [
+                        {
+                        "npc": ["Pollnivneach Bandit"],
+                        "npc_ids": [3550, 3549], 
+                        "quantity": [1, 10]                  
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 71 Agility Pollnivneach Stepping Stone",
+                    "taskID": "agility_level_71_pollnivneach_stepping_stone",
+                    "category": "Agility",
+                    "level": 71,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_object": [
+                        {
+                            "object": ["Stepping stone (Pollnivneach)"],
+                            "object_id": [53241],
+                            "quantity": [1]
+                        }
+                    ]
+
+                },
+                {
+                    "name": "Build a Mahogany Demon Lectern",
+                    "taskID": "build_mahogany_demon_lectern",
+                    "category": "Construction",
+                    "level": 67,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 3,
+                    "assignment_weight": 3,                    
+                    "required_finished_object": [
+                            {
+                            "object": "Mahogany Demon Lectern",
+                            "object_id": [13648]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Mahogany Eagle Lectern",
+                    "taskID": "build_mahogany_eagle_lectern",
+                    "category": "Construction",
+                    "level": 67,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 3,
+                    "assignment_weight": 3,                    
+                    "required_finished_object": [
+                            {
+                            "object": "Mahogany Eagle Lectern",
+                            "object_id": [13647]
+                            }
+                        ]
+                }, 
+                {
+                    "name": "Build a Mahogany Dining Table",
+                    "taskID": "build_mahogany_dining_table",
+                    "category": "Construction",
+                    "level": 52,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 5,               
+                    "required_finished_object": [
+                            {
+                            "object": "Mahogany table",
+                            "object_id": [13298]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Symbol of Guthix",
+                    "taskID": "build_symbol_guthix",
+                    "category": "Construction",
+                    "level": 48,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 5,               
+                    "required_finished_object": [
+                            {
+                            "object": "Guthix symbol",
+                            "object_id": [13174]
+                            }
+                    ]
+                },
+                {
+                    "name": "Build a Marble Portal Nexus",
+                    "taskID": "build_marble_portal_nexus",
+                    "category": "Construction",
+                    "level": 72,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 3,
+                    "assignment_weight": 3,               
+                    "required_finished_object": [
+                            {
+                            "object": "Marble Portal Nexus",
+                            "object_id": [33408]
+                            }
+                    ]
+                },
+                {
+                    "name": "Build a Steel Range",
+                    "taskID": "build_steel_range",
+                    "category": "Construction",
+                    "level": 34,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 8,               
+                    "required_finished_object": [
+                            {
+                            "object": "Steel range#Empty",
+                            "object_id": [13539]
+                            }
+                    ]
+                }            
+            ],           
+            "is_completed": false
+        },
+        {
+            "region_id": [13614],
+            "Friendly_Name": "Desert Jackals",
+            "neighbor_ids": [13615, 13870, 13613, 13358],
+            "tasks": [
+                {                    
+                    "name": "Defeat a Jackal",
+                    "taskID": "defeat_jackal",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1, 25]                  
+                        }
+                    ]
+                },
+                {                    
+                    "name": "Defeat a Jackal on Task",
+                    "taskID": "defeat_jackal_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Jackal in the First Hit",
+                    "taskID": "defeat_jackal_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc":
+                    {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                 {
+                    "name": "Defeat a Jackal with nothing Equipped",
+                    "taskID": "defeat_jackal_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": 
+                    {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                    },
+
+                    "constraints": {                       
+                        "equip_nothing": "TRUE"
+                    }                                     
+                }            
+            ],           
+            "is_completed": false
+        },
+        {
+            "region_id": [13870],
+            "Friendly_Name": "Ancient Vault",
+            "neighbor_ids": [13871, 14126, 13869, 13614],
+            "tasks": [
+                {
+                    "name": "Obtain a Ring of Shadows",
+                    "taskID": "Obtain_ring_of_shadows",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Ring of shadows#Charged", "Ring of shadows#Uncharged"],
+                            "item_ids": [28327, 28329]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Manta Ray",
+                    "taskID": "cook_manta_ray",
+                    "category": "Cooking",
+                    "level": 91,
+                    "completion_type": "COOKING",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Manta Ray",
+                            "item_ids": [391],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Sea Turtle",
+                    "taskID": "cook_sea_turtle",
+                    "category": "Cooking",
+                    "level": 82,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Sea Turtle",
+                            "item_ids": [397],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Plateskirt",
+                    "taskID": "equip_dragon_plateskirt",
+                    "completion_type": "EQUIP",
+                    "category": ["Defence"],
+                    "level": [60],
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Plateskirt"],
+                            "item_ids": [4585, 28063, 12416]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Dragon Platelegs",
+                    "taskID": "equip_dragon_platelegs",
+                    "category": "Defence",
+                    "level": [60],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Platelegs"],
+                            "item_ids": [4087]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch some Dragon Javelins",
+                    "taskID": "fletch_dragon_javelin",
+                    "category": "Fletching",
+                    "level": 92,
+                    "completion_type": "FLETCHING",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon javelin#Unpoisoned"],
+                            "item_ids": [19484],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+                ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Desert Treasure II",
+                    "points": 5
+                }                                         
+            ],           
+            "is_completed": false
+        },
+        {
+            "region_id": [13613],
+            "Friendly_Name": "Nardah",
+            "neighbor_ids": [13614, 13869, 13612, 13357],
+            "tasks": [
+                {
+                    "name": "Obtain a Nardah Teleport Scroll",
+                    "taskID": "Obtain_nardah_teleport_scroll",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Nardah teleport"],
+                            "item_ids": [12402]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Toadflax",
+                    "taskID": "obtain_toadflax",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Toadflax"],
+                            "item_ids": [2998],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Snapdragon",
+                    "taskID": "obtain_snapdragon",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Snapdragon"],
+                            "item_ids": [3000],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Ranarr Weed",
+                    "taskID": "obtain_grimy_ranarr",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Grimy Ranarr Weed",
+                        "item_ids": [207],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Rune Platelegs",
+                    "taskID": "equip_rune_platelegs",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Rune Platelegs"],
+                            "item_ids": [1079]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Cadantine",
+                    "taskID": "obtain_cadantine",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Cadantine"],
+                            "item_ids": [265],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Lantadyme",
+                    "taskID": "obtain_lantadyme",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Lantadyme"],
+                            "item_ids": [2481],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Dwarf Weed",
+                    "taskID": "obtain_dwarf_weed",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Dwarf Weed"],
+                            "item_ids": [267],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Torstol",
+                    "taskID": "obtain_Torstol",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Torstol"],
+                            "item_ids": [269],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Green D'Hide Chaps",
+                    "taskID": "equip_green_d'hide_chaps",
+                    "category": "Ranged",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Green D'Hide Chaps"],
+                            "item_ids": [1099]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Chainbody",
+                    "taskID": "equip_rune_chainbody",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Rune Chainbody"],
+                            "item_ids": [1113]
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Spirits of the Elid",
+                    "points": 2
+                }                                         
+            ],           
+            "is_completed": false
+        },
+        {
+            "region_id": [12845],
+            "Friendly_Name": "Ancient Pyramid",
+            "neighbor_ids": [12846, 13101, 12844, 12589],
+            "tasks": [
+                {
+                    "name": "Defeat a Mummy",
+                    "taskID": "defeat_mummy",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Mummy"],
+                        "npc_ids": [717, 724, 720, 725, 721, 726, 722, 727, 723, 728, 949, 950, 951, 952, 953, 7658, 7659, 7661, 7660, 7662, 718, 719, 15558],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Equip an Ancient Staff",
+                    "taskID": "equip_ancient_staff",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "category": ["Attack", "Magic"],
+                    "level": [50, 50],
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Ancient Staff"],
+                            "item_ids": [4675]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Blood Diamond",
+                    "taskID": "obtain_blood_diamond",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Blood Diamond"],
+                            "item_ids": [4670],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Smoke Diamond",
+                    "taskID": "obtain_smoke_diamond",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Smoke Diamond"],
+                            "item_ids": [4672],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Ice Diamond",
+                    "taskID": "obtain_ice_diamond",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ice Diamond"],
+                            "item_ids": [4671],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Shadow Diamond",
+                    "taskID": "obtain_shadow_diamond",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Shadow Diamond"],
+                            "item_ids": [4673],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Talk to Azzanadra",
+                    "taskID": "talk_to_azzanadra",
+                    "category": "Dialogue",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Azzanadra"],
+                        "npc_ids": [730, 12305, 12306, 12307, 12308],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat Scarabs",
+                    "taskID": "defeat_scarabs",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Scarabs"],
+                        "npc_ids": [729],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Equip a Rune Square Shield",
+                    "taskID": "equip_rune_square_shield",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "category": ["Defence"],
+                    "level": [40],
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Rune Sq Shield"],
+                            "item_ids": [1185]
+                        }
+                    ]
+                }                                        
+            ],           
+            "is_completed": false
+        },
+        {
+            "region_id": [12589],
+            "Friendly_Name": "Desert Quarry",
+            "neighbor_ids": [12590, 12845, 12588, 12333],
+            "tasks": [
+                {
+                    "name": "Obtain a Circlet of Water",
+                    "taskID": "obtain_circlet_water",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Circlet of water#Charged", "Circlet of water#Uncharged"],
+                            "item_ids": [26969, 26967],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Camulet",
+                    "taskID": "obtain_camulet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Camulet"],
+                            "item_ids": [6707],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Clay",
+                    "taskID": "mine_clay",
+                    "category": "Mining",
+                    "level": 1,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Clay"],
+                            "item_ids": [434],
+                            "quantity": [1, 10]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Sandstone",
+                    "taskID": "mine_sandstone",
+                    "category": "Mining",
+                    "level": 35,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Sandstone"],
+                            "item_ids": [6977, 6971, 6973, 6975],
+                            "quantity": [50, 500]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Granite",
+                    "taskID": "mine_granite",
+                    "category": "Mining",
+                    "level": 45,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Granite"],
+                            "item_ids": [6981, 6979, 6983],
+                            "quantity": [50, 500]
+                        }
+                    ]
+                }                                        
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Spirits of the Elid",
+                    "points": 2
+                }                                         
+            ],           
+            "is_completed": false
+        },
+        {
+            "region_id": [12588],
+            "Friendly_Name": "Ruins of Unkah",
+            "neighbor_ids": [12589, 12844, 12587, 12332],
+            "tasks": [
+                {
+                    "name": "Obtain Spirit Flakes",
+                    "taskID": "obtain_spirit_flakes",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Spirit Flakes"],
+                            "item_ids": [25588],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Soaked Page",
+                    "taskID": "obtain_soaked_page",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Soaked Page"],
+                            "item_ids": [25578],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Fish Barrel",
+                    "taskID": "obtain_fish_barrel",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Fish Barrel"],
+                            "item_ids": [25582, 25584],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Tackle Box",
+                    "taskID": "obtain_tackle_box",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Tackle Box"],
+                            "item_ids": [25580],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Stuffed Big Harpoonfish",
+                    "taskID": "obtain_stuffed_big_harpoonfish",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Stuffed big harpoonfish"],
+                            "item_ids": [25561],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Tome of Water",
+                    "taskID": "obtain_tome_of_water",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Tome of water#Charged", "Tome of water#Empty"],
+                            "item_ids": [25574, 25576],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Dragon Harpoon",
+                    "taskID": "obtain_dragon_harpoon",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Dragon harpoon", "Dragon harpoon (or)#Trailblazer", "Dragon harpoon (or)#Trailblazer Reloaded"],
+                            "item_ids": [21028, 25373, 30349],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Spirit Angler Set",
+                    "taskID": "obtain_spirit_angler_set",
+                    "category": ["Fishing", "Defence"],
+                    "level": [34, 1],
+                    "completion_type": "Obtain_Set",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Spirit angler headband"],
+                            "item_ids": [25592]
+                        },
+                        {
+                            "item": ["Spirit angler top"],
+                            "item_ids": [25594]
+                        },
+                        {
+                            "item": ["Spirit angler waders"],
+                            "item_ids": [25596]
+                        },
+                        {
+                            "item": ["Spirit angler boots"],
+                            "item_ids": [25598]
+                        }
+                    ]
+                }                                          
+            ],                  
+            "is_completed": false
+        }                    
     ]
 }
