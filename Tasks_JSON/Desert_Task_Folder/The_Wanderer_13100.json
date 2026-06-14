@@ -56,7 +56,7 @@
                     "target_npc": {
                         "npc": ["Crocadile"],
                         "npc_ids": [11705, 11582, 11581, 4184],
-                        "quantity": [1, 10]
+                        "quantity": [1]
                     },
                     
                     "constraints": {
