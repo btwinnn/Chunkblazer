@@ -2316,6 +2316,189 @@
                 }                                          
             ],                  
             "is_completed": false
+        },
+        {
+            "region_id": [13100],
+            "Friendly_Name": "The Wanderer",
+            "neighbor_ids": [13101, 13356, 13099, 12844],
+            "tasks": [
+                {
+                    "name": "Defeat a Vulture",
+                    "taskID": "defeat_vulture",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Vulture"],
+                        "npc_ids": [1268, 1267],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Vulture in the First Hit",
+                    "taskID": "defeat_vulture_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Vulture"],
+                        "npc_ids": [1268, 1267],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Crocadile",
+                    "taskID": "defeat_crocadile",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Crocadile"],
+                        "npc_ids": [11705, 11582, 11581, 4184],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Crocadile in 30 Seconds",
+                    "taskID": "defeat_crocadile_30_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Crocadile"],
+                        "npc_ids": [11705, 11582, 11581, 4184],
+                        "quantity": [1, 10]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [50]
+                    }
+                },
+                {
+                    "name": "Mix some Combat Potions",
+                    "taskID": "mix_combat_potions",
+                    "category": "Obtain_Set",
+                    "completion_type": "HEBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 36,
+                    "required_items": [
+                        {
+                            "item": ["Combat potion#(3)", "Combat potion#(4)"],
+                            "item_ids": [9741, 9739]
+                        }
+                    ]             
+                },
+                {
+                    "name": "Defeat a Goat in the First Hit",
+                    "taskID": "defeat_goat_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Goat#Brown", "Goat#Tan", "Billy Goat#Brown", "Billy Goat#Tan"],
+                        "npc_ids": [1792, 1793, 1795, 1796, 1794, 1797],
+                        "quantity": [1, 25]
+                    }
+                },
+                {                    
+                    "name": "Defeat a Jackal",
+                    "taskID": "defeat_jackal",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1, 25]                  
+                        }
+                    ]
+                },
+                {                    
+                    "name": "Defeat a Jackal on Task",
+                    "taskID": "defeat_jackal_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Jackal in the First Hit",
+                    "taskID": "defeat_jackal_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc":
+                    {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Jackal with nothing Equipped",
+                    "taskID": "defeat_jackal_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": 
+                    {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                    },
+
+                    "constraints": {                       
+                        "equip_nothing": "TRUE"
+                    }                                     
+                },
+                {
+                    "name": "Mine some Gold Ore",
+                    "taskID": "mine_gold",
+                    "category": "Mining",
+                    "level": 40,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Gold Ore",
+                            "item_ids": [444],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                }                                          
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Icthlarin's Little Helper",
+                    "points": 2
+                }                                         
+            ],                  
+            "is_completed": false
         }                    
     ]
 }
