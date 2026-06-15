@@ -1,0 +1,128 @@
+{
+            "region_id": [13355],
+            "Friendly_Name": "Menaphite Akh",
+            "neighbor_ids": [13356, 13611, 13354, 13099],
+            "tasks": [
+                {
+                    "name": "Mine some Clay",
+                    "taskID": "mine_clay",
+                    "category": "Mining",
+                    "level": 1,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Clay"],
+                            "item_ids": [434],
+                            "quantity": [1, 10]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Defeat Menaphite Akh",
+                    "taskID": "defeat_menaphite_akh",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Menaphite Akh"],
+                        "npc_ids": [11492],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Desert Lizard",
+                    "taskID": "defeat_desert_lizard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Desert Lizard#Yellow", "Desert Lizard#Orange", "Desert Lizard#Green"],
+                        "npc_ids": [460, 461, 459, 12003],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Desert Lizard on Task",
+                    "taskID": "defeat_desert_lizard_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Desert Lizard#Yellow", "Desert Lizard#Orange", "Desert Lizard#Green"],
+                        "npc_ids": [460, 461, 459, 12003],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Desert Lizard in 12 Seconds",
+                    "taskID": "defeat_desert_lizard_12_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_KILL",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Desert Lizard#Yellow", "Desert Lizard#Orange", "Desert Lizard#Green"],
+                        "npc_ids": [460, 461, 459, 12003],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [20]                       
+                        }
+                }                                                      
+            ],                           
+            "is_completed": false
+        }
