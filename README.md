@@ -1,5 +1,7 @@
 # ChunkBlazer
 
+Visit the [Chunkblazer](https://chunkblazer.com) website for more info!
+
 A chunk-unlocking adventure mode for Old School RuneScape, built on [RuneLite](https://github.com/runelite/runelite).
 
 > **Coming soon July/August 2026 to the RuneLite Plugin Hub.**
