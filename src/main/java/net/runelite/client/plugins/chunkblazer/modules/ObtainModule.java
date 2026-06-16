@@ -234,12 +234,25 @@ public class ObtainModule extends AbstractTaskModule
 			// the player already holds in inv+bank+equip (e.g. a forestry kit
 			// stockpiled in the bank) counts immediately.
 			final List<Slot> slotsRef = slots;
+			final Skill xpSkill = skillForCompletionType(task.getCompletionType());
 			clientThread.invokeLater(() ->
 			{
 				inventoryHeldSnapshot.put(task.getTaskId(), snapshotInventoryCounts(slotsRef));
-				if (skillForCompletionType(task.getCompletionType()) == null)
+				if (xpSkill == null)
 				{
+					// OBTAIN (no skill gate): credit anything already held in inv+bank+equip.
 					checkTaskProgress(task);
+				}
+				else
+				{
+					// Seed the XP baseline for this skill from the player's CURRENT xp so
+					// the FIRST xp drop after a (re)load produces a real delta. previousXp
+					// is cleared on startUp and otherwise seeded lazily from StatChanged, so
+					// without this the first skilling action is swallowed as a "first
+					// sighting" baseline (onStatChanged returns at prevXp == null) — and a
+					// quantity-1 skilling task (e.g. Spin a Ball of Wool, Fletch a Shortbow(u))
+					// consumes the single action it needs and never completes.
+					previousXp.put(xpSkill, client.getSkillExperience(xpSkill));
 				}
 			});
 		}
