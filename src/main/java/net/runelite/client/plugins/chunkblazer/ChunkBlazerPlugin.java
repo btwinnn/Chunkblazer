@@ -2087,8 +2087,13 @@ public class ChunkBlazerPlugin extends Plugin
 				rolledIds.add(selected.getTaskId());
 				remainingTasks.remove(selected);
 
-				// Mark as globally assigned (cannot be assigned again in any chunk)
-				markTaskAssigned(selected.getTaskId());
+				// NOTE: do NOT mark rolled tasks as "assigned" here. In the current
+				// all-rolled-tasks-active model, "assigned" is what the panel treats as
+				// "done/unavailable" (greyed out, counted as 0 available). Marking at
+				// roll time made every freshly-rolled task render greyed with a "(0/N)"
+				// header — i.e. the player appears to get no initial tasks after a
+				// reset + mode select. Assignment is only meaningful for the legacy
+				// one-task-at-a-time flow (assignNewTask), which is no longer used.
 			}
 		}
 
