@@ -2533,6 +2533,22 @@ public class ChunkBlazerPanel extends PluginPanel
 			activeTasksScrollPane.revalidate();
 		}
 
+		// Revalidate the SECTION and its parent too — not just the inner content.
+		// On the data-refresh path (updateTaskDisplay -> here), if the section was
+		// previously laid out at 0 height (e.g. an earlier empty render before the
+		// tasks loaded), the parent BoxLayout caches that height and won't re-expand
+		// to reveal the freshly added items — so the green "Active Tasks" area looks
+		// empty/absent even though the log shows N items were added. The collapse
+		// toggle (updateActiveTasksVisibility) already does this, which is why
+		// toggling it makes the tasks appear; the refresh path must do it too.
+		currentTaskPanel.revalidate();
+		currentTaskPanel.repaint();
+		if (currentTaskPanel.getParent() != null)
+		{
+			currentTaskPanel.getParent().revalidate();
+			currentTaskPanel.getParent().repaint();
+		}
+
 		// Restore the viewport AFTER the layout pass — Swing resets it to (0,0) during revalidate.
 		SwingUtilities.invokeLater(() -> activeTasksScrollPane.getViewport().setViewPosition(savedActiveViewPos));
 	}
