@@ -1230,7 +1230,12 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return; // already tagged this message
 		}
-		node.setName(imgTag + currentName);
+		// ChunkBlazer dev/tester accounts get an orange [Dev] tag ahead of the
+		// chat icon so they're recognizable in chat. The img-tag guard above also
+		// prevents the [Dev] tag from being re-applied on message re-render.
+		ChunkBlazerRoster.Entry entry = roster.get(name);
+		String devTag = (entry != null && entry.isDev()) ? "<col=ff9d3c>[Dev]</col>" : "";
+		node.setName(devTag + imgTag + currentName);
 	}
 
 	/**

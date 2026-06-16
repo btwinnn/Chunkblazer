@@ -134,6 +134,8 @@ public class ChunkBlazerRoster
 		private final int totalPoints;
 		/** Leaderboard rank within the player's bucket; 0 == unranked. */
 		private final int rank;
+		/** True for ChunkBlazer dev/tester accounts (drives the [Dev] recognition tag). */
+		private final boolean dev;
 
 		static Entry from(OnlinePlayersResponse.OnlinePlayer p)
 		{
@@ -150,7 +152,7 @@ public class ChunkBlazerRoster
 				}
 			}
 			int rank = p.getRank() != null ? p.getRank() : 0;
-			return new Entry(p.getRsn(), p.getAccountType(), mode, p.getTotalPoints(), rank);
+			return new Entry(p.getRsn(), p.getAccountType(), mode, p.getTotalPoints(), rank, p.isDev());
 		}
 
 		/**

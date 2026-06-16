@@ -40,6 +40,8 @@ public class OnlinePlayersResponse
 	public static class OnlinePlayer
 	{
 		private String rsn;
+		/** True if this is a ChunkBlazer dev/tester account (server is_dev flag). */
+		private boolean isDev;
 		private String accountType;
 		private String gameMode;
 		private Integer currentWorld;

@@ -30,6 +30,7 @@ public class ChunkBlazerPlayerOverlay extends Overlay
 	private static final int VERTICAL_OFFSET = 40; // pixels above the player's head
 	private static final Color NUZLOCKE_COLOR = new Color(255, 100, 100);
 	private static final Color CASUAL_COLOR = new Color(120, 220, 120);
+	private static final Color DEV_COLOR = new Color(255, 157, 60); // flame orange — matches the site's Dev badge
 	private static final Color TEXT_BACKGROUND = new Color(0, 0, 0, 150);
 	private static final int OUTLINE_WIDTH = 2;
 	private static final int OUTLINE_FEATHER = 4;
@@ -109,8 +110,21 @@ public class ChunkBlazerPlayerOverlay extends Overlay
 
 	private void renderTag(Graphics2D graphics, Player player, ChunkBlazerRoster.Entry entry)
 	{
-		// Top line: account type, plus game mode when one is locked.
-		StringBuilder top = new StringBuilder(entry.getAccountLabel());
+		// Top line: a "Dev" tag for dev/tester accounts, then account type, then
+		// game mode when one is locked.
+		StringBuilder top = new StringBuilder();
+		if (entry.isDev())
+		{
+			top.append("Dev");
+		}
+		if (entry.getAccountLabel() != null && !entry.getAccountLabel().isEmpty())
+		{
+			if (top.length() > 0)
+			{
+				top.append(SEP);
+			}
+			top.append(entry.getAccountLabel());
+		}
 		if (entry.getGameMode() != null)
 		{
 			if (top.length() > 0)
@@ -167,8 +181,8 @@ public class ChunkBlazerPlayerOverlay extends Overlay
 
 		int textX = x + ICON_SIZE + 4;
 
-		// Top line in the mode colour.
-		graphics.setColor(modeColor(entry.getGameMode()));
+		// Top line: orange for dev accounts, otherwise the mode colour.
+		graphics.setColor(entry.isDev() ? DEV_COLOR : modeColor(entry.getGameMode()));
 		graphics.drawString(topLine, textX, topBaseline);
 
 		// Bottom line in white.
