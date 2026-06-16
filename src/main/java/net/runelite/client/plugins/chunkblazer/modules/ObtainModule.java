@@ -113,6 +113,14 @@ public class ObtainModule extends AbstractTaskModule
 	// Seeded from initial StatChanged events; null for a skill we haven't seen yet.
 	private final Map<Skill, Integer> previousXp = new ConcurrentHashMap<>();
 
+	// Skills that gained XP during the CURRENT game tick. This makes the skilling
+	// credit order-independent: a produced item is credited whether the matching
+	// StatChanged or the ItemContainerChanged fires first, as long as both happen
+	// on the same tick (gathering skills fire XP-then-item; production skills like
+	// crafting/fletching fire item-then-XP — the old onStatChanged-only path only
+	// caught the former). Cleared at the end of every tick in onGameTick.
+	private final Set<Skill> skillsXpGainedThisTick = ConcurrentHashMap.newKeySet();
+
 	// Debug heartbeat
 	private int tickCounter = 0;
 	private static final int DEBUG_LOG_INTERVAL = 100; // Log every 100 ticks (~60 seconds)
@@ -501,6 +509,10 @@ public class ObtainModule extends AbstractTaskModule
 		{
 			return;
 		}
+		// Mark this skill as having gained XP this tick so onItemContainerChanged
+		// can credit a production item that lands on the same tick even if its
+		// inventory event fired before this XP event.
+		skillsXpGainedThisTick.add(skill);
 		if (activeTasks.isEmpty())
 		{
 			return;
@@ -660,6 +672,29 @@ public class ObtainModule extends AbstractTaskModule
 	{
 		tickCounter++;
 
+		// End-of-tick reconciliation for skilling tasks. GameTick fires after this
+		// tick's StatChanged / ItemContainerChanged, so all production crediting for
+		// the tick has already happened. Roll each skilling task's inventory snapshot
+		// forward to "now" — this moves the baseline past any non-skilling inventory
+		// change (banking, GE, pickups) that didn't gain XP, so it can't be
+		// miscredited next tick. Then clear the per-tick XP-gain markers.
+		if (!activeTasks.isEmpty())
+		{
+			for (NuzlockeTask task : new HashSet<>(activeTasks))
+			{
+				if (skillForCompletionType(task.getCompletionType()) == null)
+				{
+					continue; // OBTAIN (no-skill) tasks don't use the snapshot.
+				}
+				List<Slot> slots = taskSlots.get(task.getTaskId());
+				if (slots != null)
+				{
+					inventoryHeldSnapshot.put(task.getTaskId(), snapshotInventoryCounts(slots));
+				}
+			}
+		}
+		skillsXpGainedThisTick.clear();
+
 		// Log heartbeat periodically to confirm module is running
 		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
 		{
@@ -724,16 +759,15 @@ public class ObtainModule extends AbstractTaskModule
 			checkTaskProgress(task);
 		}
 
-		// Skilling tasks: slide the per-item inventory snapshot to current. This
-		// catches every inventory change that ISN'T a skilling action — smelting,
-		// banking, dropping, picking up ground loot, GE buys. None of those count
-		// toward task progress, but they DO move the baseline so the next genuine
-		// XP drop sees the right "delta from now". Order in same tick:
-		// onStatChanged (which credits any production delta) fires BEFORE this
-		// handler — verified in session_2026-05-07_14-28-09 (line 5952 credit
-		// before line 6042 container change) — so legitimate mining is credited
-		// against the pre-skill snapshot, then the snapshot is rolled forward
-		// here. No double-counting.
+		// Skilling tasks: PRODUCTION skills (crafting/fletching/cooking/smithing)
+		// update the inventory BEFORE the XP event fires this tick — the opposite
+		// of gathering skills (mining/woodcutting/fishing), where the XP fires
+		// first. The onStatChanged path only catches the XP-first order. So here,
+		// if this skill ALSO gained XP this tick, the item that just landed is a
+		// genuine production — credit the delta now. If no XP has fired yet this
+		// tick, leave the snapshot alone: either onStatChanged will credit it when
+		// the XP arrives later this same tick, or it was a non-skilling change
+		// (banking/GE/pickup) that the end-of-tick slide in onGameTick rolls past.
 		if (containerId == InventoryID.INVENTORY.getId())
 		{
 			for (NuzlockeTask task : new HashSet<>(activeTasks))
@@ -743,12 +777,10 @@ public class ObtainModule extends AbstractTaskModule
 				{
 					continue;
 				}
-				List<Slot> slots = taskSlots.get(task.getTaskId());
-				if (slots == null)
+				if (skillsXpGainedThisTick.contains(taskSkill))
 				{
-					continue;
+					creditSkillingDelta(task, taskSkill);
 				}
-				inventoryHeldSnapshot.put(task.getTaskId(), snapshotInventoryCounts(slots));
 			}
 		}
 	}
