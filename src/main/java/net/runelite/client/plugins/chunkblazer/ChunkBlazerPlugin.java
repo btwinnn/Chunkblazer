@@ -1706,6 +1706,14 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void loadActiveTasks()
 	{
+		// The default starting chunk (Lumbridge / 12850) is unlocked with tasks
+		// rolled for EVERY account, no matter what — it's the universal starting
+		// point. Casual mode lets a player additionally unlock the chunk they're
+		// standing in (a one-time choice), but it never replaces this one. Enforcing
+		// it here — the single path every task (re)load goes through — guarantees the
+		// start chunk can never end up locked or task-less. Idempotent + cheap.
+		ensureStartingChunkUnlocked();
+
 		activeTasks.clear();
 		taskModuleManager.clearTask(); // Clear module state to prevent duplicates
 
