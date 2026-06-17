@@ -188,7 +188,7 @@ public class NuzlockeTask
 
 			// Handle constraints - some JSON files use object form ({...}), others use
 			// single-element array form ([{...}]). Accept both so a malformed entry doesn't
-			// tank the entire JSON file (which is what was breaking Starter_Area_Tasks.json).
+			// tank the entire JSON file.
 			if (obj.has("constraints"))
 			{
 				JsonElement constraintsEl = obj.get("constraints");

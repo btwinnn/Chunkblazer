@@ -53,7 +53,6 @@ import net.runelite.client.plugins.chunkblazer.api.PlayerLoginResponse;
 import net.runelite.client.plugins.chunkblazer.api.PlayerSyncRequest;
 import net.runelite.client.plugins.chunkblazer.api.VerifyStartResponse;
 import net.runelite.client.plugins.chunkblazer.modules.TaskModuleManager;
-import net.runelite.client.plugins.chunkblazer.starter.StarterArea;
 import net.runelite.client.plugins.chunkblazer.verification.VarPlayerVerificationService;
 
 @Slf4j
@@ -191,8 +190,8 @@ public class ChunkBlazerPlugin extends Plugin
 		// Load task data from JSON
 		loadChunkData();
 
-		// Ensure starter area regions are always unlocked
-		unlockStarterRegions();
+		// Ensure the free starting chunk is unlocked
+		ensureStartingChunkUnlocked();
 
 		// Initialize task module manager
 		taskModuleManager.initialize();
@@ -738,11 +737,13 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Unlock all starter area regions.
-	 * These are always available as the player's starting zone.
-	 * In casual mode, players can start anywhere (the chunk they're standing on becomes unlocked).
+	 * Ensure the default starting chunk is unlocked. Every new game begins with
+	 * one free chunk ({@link #DEFAULT_START_REGION}, Lumbridge); its neighbours
+	 * are visible on the world map but must be unlocked with points like any
+	 * other chunk. In casual mode players can also unlock the chunk they're
+	 * standing on. Idempotent — safe to call on every startup.
 	 */
-	public void unlockStarterRegions()
+	public void ensureStartingChunkUnlocked()
 	{
 		Set<String> currentlyUnlocked = getUnlockedRegionIds();
 		StringBuilder newUnlocked = new StringBuilder();
@@ -755,39 +756,39 @@ public class ChunkBlazerPlugin extends Plugin
 			newUnlocked.append(existing);
 		}
 
-		// Auto-unlock the starter center only. The other 8 chunks of the 3x3
-		// scope are visible on the world map but must be unlocked with points.
-		if (!currentlyUnlocked.contains(String.valueOf(StarterArea.CENTER)))
+		// Auto-unlock the free starting chunk only. Neighbouring chunks are
+		// visible on the world map but must be unlocked with points.
+		if (!currentlyUnlocked.contains(String.valueOf(DEFAULT_START_REGION)))
 		{
 			if (newUnlocked.length() > 0)
 			{
 				newUnlocked.append(",");
 			}
-			newUnlocked.append(StarterArea.CENTER);
+			newUnlocked.append(DEFAULT_START_REGION);
 			needsUpdate = true;
-			log.info("Unlocking starter center: {}", StarterArea.CENTER);
+			log.info("Unlocking starting chunk: {}", DEFAULT_START_REGION);
 		}
 
 		if (needsUpdate)
 		{
 			configManager.setConfiguration("chunkblazer", "unlockedChunks", newUnlocked.toString());
-			log.info("Unlocked starter center {} (other 8 chunks remain unlockable)", StarterArea.CENTER);
+			log.info("Unlocked starting chunk {} (neighbours remain unlockable)", DEFAULT_START_REGION);
 		}
 
-		// Pre-roll tasks for the starter center so they're ready immediately.
-		// Other starter regions get their tasks rolled lazily when unlocked.
-		if (getRolledTasksForRegion(StarterArea.CENTER).isEmpty())
+		// Pre-roll tasks for the starting chunk so they're ready immediately.
+		// Other chunks get their tasks rolled lazily when unlocked.
+		if (getRolledTasksForRegion(DEFAULT_START_REGION).isEmpty())
 		{
-			NuzlockeChunk chunk = chunksByRegionId.get(StarterArea.CENTER);
+			NuzlockeChunk chunk = chunksByRegionId.get(DEFAULT_START_REGION);
 			if (chunk != null && chunk.getTasks() != null && !chunk.getTasks().isEmpty())
 			{
-				log.info("Rolling tasks for starter center {} ({})", StarterArea.CENTER, chunk.getName());
-				Set<String> newTasks = rollTasksForRegion(StarterArea.CENTER);
-				log.info("Rolled {} tasks for starter center: {}", newTasks.size(), newTasks);
+				log.info("Rolling tasks for starting chunk {} ({})", DEFAULT_START_REGION, chunk.getName());
+				Set<String> newTasks = rollTasksForRegion(DEFAULT_START_REGION);
+				log.info("Rolled {} tasks for starting chunk: {}", newTasks.size(), newTasks);
 			}
 			else
 			{
-				log.warn("Starter center {} has no chunk or tasks defined", StarterArea.CENTER);
+				log.warn("Starting chunk {} has no chunk or tasks defined", DEFAULT_START_REGION);
 			}
 		}
 	}
@@ -795,9 +796,10 @@ public class ChunkBlazerPlugin extends Plugin
 
 	// --- Data Loading ---
 
-	// List of all task JSON files to load
+	// List of all task JSON files to load. One file per OSRS area; chunks are
+	// attributed to an area by filename. The former Lumbridge starter chunks now
+	// live at the top of Misthalin_Tasks.json like any other Misthalin chunk.
 	private static final String[] TASK_JSON_FILES = {
-		"Starter_Area_Tasks.json",
 		"Misthalin_Tasks.json",
 		"Asgarnia_Tasks.json",
 		"Kandarin_Tasks.json",
@@ -807,8 +809,9 @@ public class ChunkBlazerPlugin extends Plugin
 		"Zeah_Tasks.json"
 	};
 
-	// Starter region constants live in StarterArea (3x3 grid centered on Lumbridge).
-	// Do not re-introduce inline arrays here — read from StarterArea.REGIONS.
+	// The single free chunk every new game starts with (Lumbridge). Auto-unlocked
+	// by ensureStartingChunkUnlocked(); every other chunk costs points.
+	private static final int DEFAULT_START_REGION = 12850;
 
 
 	/**
@@ -921,12 +924,6 @@ public class ChunkBlazerPlugin extends Plugin
 									regionCount++;
 									log.debug("Mapped region {} -> {} ({})",
 										regionId, chunk.getName(), jsonFile);
-								}
-								// Log first few region mappings at INFO level for starter file
-								if (jsonFile.contains("Starter"))
-								{
-									log.info("Starter area chunk: {} -> regions {}",
-										chunk.getName(), chunk.getRegionIds());
 								}
 							}
 							else
@@ -2450,9 +2447,9 @@ public class ChunkBlazerPlugin extends Plugin
 		// Reset points
 		configManager.setConfiguration("chunkblazer", "totalPoints", 0);
 
-		// Reset unlocked chunks to the starter center only. The other 8 chunks
-		// of the 3x3 scope must be unlocked with points after reset.
-		configManager.setConfiguration("chunkblazer", "unlockedChunks", String.valueOf(StarterArea.CENTER));
+		// Reset unlocked chunks to the free starting chunk only. Every other
+		// chunk must be unlocked with points after reset.
+		configManager.setConfiguration("chunkblazer", "unlockedChunks", String.valueOf(DEFAULT_START_REGION));
 
 		// Reset game mode lock
 		configManager.setConfiguration("chunkblazer", "accountModeHash", "");
@@ -2460,7 +2457,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 		log.info("DEV: Full reset complete");
 
-		// Re-roll and load tasks for the now-only-starter region so the panel populates.
+		// Re-roll and load tasks for the now-only starting chunk so the panel populates.
 		loadActiveTasks();
 	}
 

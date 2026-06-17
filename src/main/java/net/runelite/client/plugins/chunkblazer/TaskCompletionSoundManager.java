@@ -30,8 +30,6 @@ public class TaskCompletionSoundManager
 	static
 	{
 		AREA_TO_FOLDER.put("Misthalin", "Misthalin_Sounds");
-		// The starter area (Lumbridge 3x3) reuses Misthalin's sound bank.
-		AREA_TO_FOLDER.put("Starter Area", "Misthalin_Sounds");
 		AREA_TO_FOLDER.put("Asgarnia", "Asgarnia_Sounds");
 		AREA_TO_FOLDER.put("Kandarin", "Kandarin_Sounds");
 		AREA_TO_FOLDER.put("Karamja", "Karamja_Sounds");
