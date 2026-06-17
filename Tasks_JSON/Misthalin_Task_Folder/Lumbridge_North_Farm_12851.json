@@ -1,0 +1,281 @@
+{
+  "region_id": [
+    12851
+  ],
+  "neighbor_ids": [
+    12850,
+    12852,
+    12595,
+    13107
+  ],
+  "Friendly_Name": "Lumbridge North Farm",
+  "tasks": [
+    {
+      "name": "Obtain a Bucket of Milk",
+      "taskID": "Obtain_milk",
+      "category": "Obtain",
+      "completion_type": "OBTAIN",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Bucket of Milk",
+          "item_ids": [
+            1927
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Obtain Feathers",
+      "taskID": "obtain_feathers",
+      "category": "Obtain",
+      "completion_type": "OBTAIN",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Feathers",
+          "item_ids": [
+            314
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Chop some Willow Trees",
+      "taskID": "Chop_willow_trees",
+      "category": "Woodcutting",
+      "level": 30,
+      "completion_type": "WOODCUTTING",
+      "base_points": 2,
+      "assignment_weight": 5,
+      "required_items": [
+        {
+          "item": "Willow Logs",
+          "item_ids": [
+            1519
+          ],
+          "quantity": [
+            1,
+            50
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Burn some Willow Logs",
+      "taskID": "burn_willow_logs",
+      "category": "Firemaking",
+      "level": 30,
+      "completion_type": "FIREMAKING",
+      "base_points": 2,
+      "assignment_weight": 5,
+      "required_items": [
+        {
+          "item": "Willow Logs",
+          "item_ids": [
+            1519
+          ],
+          "quantity": [
+            1,
+            50
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Obtain Cowhide",
+      "taskID": "obtain_cowhide",
+      "category": "Obtain",
+      "completion_type": "OBTAIN",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Cowhide",
+          "item_ids": [
+            1739
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Obtain Raw Beef",
+      "taskID": "obtain_raw_beef",
+      "category": "Obtain",
+      "completion_type": "OBTAIN",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Raw Beef",
+          "item_ids": [
+            2132
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Defeat a Cow 7 Seconds",
+      "taskID": "defeat_cow_fast",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "Cow"
+        ],
+        "npc_ids": [
+          2790,
+          2791,
+          2793
+        ],
+        "quantity": 1
+      },
+      "constraints": {
+        "time_in_ticks": [
+          12
+        ],
+        "prohibited_active_varbits": [
+          {
+            "varbit_id": 57,
+            "must_be_value": 0,
+            "fail_message": "Cannon use is prohibited for timed combat tasks."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Equip a Bronze Med Helm",
+      "taskID": "equip_bronze_med_helm",
+      "category": "Defence",
+      "level": 1,
+      "completion_type": "EQUIP",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Bronze Med Helm",
+          "item_ids": [
+            1139
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Defeat a Chicken in the First Hit",
+      "taskID": "defeat_chicken_fast",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "Chicken"
+        ],
+        "npc_ids": [
+          1173,
+          1174,
+          10495,
+          10496,
+          9488,
+          10494,
+          10497
+        ],
+        "quantity": [
+          1
+        ]
+      },
+      "constraints": {
+        "time_in_ticks": [
+          1
+        ],
+        "prohibited_active_varbits": [
+          {
+            "varbit_id": 57,
+            "must_be_value": 0,
+            "fail_message": "Cannon use is prohibited for timed combat tasks."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Pickpocket a Farmer",
+      "taskID": "pickpocket_farmer",
+      "category": "Thieving",
+      "level": 10,
+      "completion_type": "THIEVING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc_ids": [
+          6959,
+          6960,
+          6961,
+          14751,
+          14752,
+          14753,
+          14754,
+          3245,
+          3250,
+          3251,
+          14773,
+          13232,
+          13233,
+          13234,
+          13235,
+          13228,
+          13229,
+          13230,
+          13231,
+          11919,
+          3243,
+          3244,
+          11920,
+          11921,
+          11918,
+          3114
+        ],
+        "quantity": [
+          1,
+          25
+        ]
+      }
+    },
+    {
+      "name": "Fletch an Oak Shortbow(u)",
+      "taskID": "fletch_oak_shortbow(u)",
+      "category": "Fletching",
+      "level": 20,
+      "completion_type": "FLETCHING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Oak shortbow (u)",
+          "item_ids": [
+            54
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    }
+  ],
+  "is_completed": false
+}

@@ -1,0 +1,192 @@
+{
+  "region_id": [
+    13105
+  ],
+  "Friendly_Name": "Al Kharid",
+  "tasks": [
+    {
+      "name": "Equip Iron Platelegs",
+      "taskID": "equip_iron_platelegs",
+      "category": "Defence",
+      "level": 1,
+      "completion_type": "EQUIP",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Iron Platelegs",
+          "item_ids": [
+            1067
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pickpocket an Al Kharid Warrior",
+      "taskID": "pickpocket_al_kharid_warrior",
+      "category": "Thieving",
+      "level": 25,
+      "completion_type": "THIEVING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": "Al Kharid Warrior",
+        "npc_ids": [
+          3292
+        ],
+        "quantity": [
+          25,
+          50
+        ]
+      }
+    },
+    {
+      "name": "Obtain an Amulet Mould",
+      "taskID": "obtain_an_amulet_mould",
+      "category": "Obtain",
+      "completion_type": "OBTAIN",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Amulet Mould",
+          "item_ids": [
+            1595
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Equip a Steel Scimitar",
+      "taskID": "equip_steel_scimitar",
+      "category": "Attack",
+      "level": 5,
+      "completion_type": "EQUIP",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Steel Scimitar",
+          "item_ids": [
+            1325
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Smelt some Iron Bars",
+      "taskID": "smith_iron_bars",
+      "category": "Smithing",
+      "level": 15,
+      "completion_type": "SMITHING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Iron Bar",
+          "item_ids": [
+            2351
+          ],
+          "quantity": [
+            1,
+            50
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Defeat some Al Kharid Warriors",
+      "taskID": "defeat_al_kharid_warrior",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "Al Kharid Warrior"
+        ],
+        "npc_ids": [
+          3292
+        ],
+        "quantity": [
+          5,
+          25
+        ]
+      }
+    },
+    {
+      "name": "Obtain Winter Sq'irk Fruit",
+      "taskID": "obtain_winter_sq'irk_fruit",
+      "category": "Obtain",
+      "completion_type": "OBTAIN",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Winter Sq'irk Fruit",
+          "item_ids": [
+            10847
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Craft Leather Boots",
+      "taskID": "craft_leahter_boots",
+      "category": "Crafting",
+      "level": 7,
+      "completion_type": "CRAFTING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Leather Boots",
+          "item_ids": [
+            1061
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Craft a Tiara",
+      "taskID": "craft_tiara",
+      "category": "Crafting",
+      "level": 23,
+      "completion_type": "CRAFTING",
+      "base_points": 1,
+      "assignment_weight": 5,
+      "required_items": [
+        {
+          "item": "Tiara",
+          "item_ids": [
+            5525
+          ],
+          "action": "obtain",
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    }
+  ],
+  "optional_quests_unlocked": [
+    {
+      "name": "Prince Ali Rescue",
+      "points": 1
+    },
+    {
+      "name": "Shadow of the Storm",
+      "points": 2
+    }
+  ],
+  "is_completed": false
+}

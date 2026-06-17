@@ -16,7 +16,6 @@ color 0A
 ::         For each file in TASK_JSONS, walks JSON_SEARCH_DIRS
 ::         (in priority order) and copies the first match found.
 ::         Current canonical homes:
-::           Starter_Area_Tasks.json -> Lumbridge_Task_Folder\
 ::           Misthalin/Asgarnia/Kandarin/Varlamore/Zeah_Tasks.json
 ::                                   -> All_Areas_Task_Folder\
 ::         If a JSON moves to a new subfolder, just add it to
@@ -49,13 +48,13 @@ set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\cli
 :: Files the plugin actually loads at runtime (must match
 :: ChunkBlazerPlugin.TASK_JSON_FILES). If you add a new task
 :: JSON to TASK_JSON_FILES, add it here too.
-set TASK_JSONS=Starter_Area_Tasks.json Misthalin_Tasks.json Asgarnia_Tasks.json Kandarin_Tasks.json Karamja_Tasks.json Desert_Tasks.json Varlamore_Tasks.json Zeah_Tasks.json
+set TASK_JSONS=Misthalin_Tasks.json Asgarnia_Tasks.json Kandarin_Tasks.json Karamja_Tasks.json Desert_Tasks.json Varlamore_Tasks.json Zeah_Tasks.json
 
 :: Subfolders under Tasks_JSON\ that may contain TASK_JSONS files.
 :: Searched in priority order — first match wins. The trailing "."
 :: means "Tasks_JSON top-level itself" (legacy path before the
 :: per-area subfolder reorg, kept for back-compat).
-set JSON_SEARCH_DIRS=Lumbridge_Task_Folder All_Areas_Task_Folder .
+set JSON_SEARCH_DIRS=All_Areas_Task_Folder .
 
 echo ========================================
 echo    Sync ChunkBlazer -^> RuneLite

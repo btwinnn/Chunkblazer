@@ -1,0 +1,341 @@
+{
+  "region_id": [
+    12850
+  ],
+  "Friendly_Name": "Lumbridge",
+  "neighbor_ids": [
+    12851,
+    12849,
+    12594,
+    13106
+  ],
+  "tasks": [
+    {
+      "name": "Defeat a Level 2 Goblin",
+      "taskID": "Defeat_level_2_Goblin",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "target_npc": {
+        "npc": [
+          "Goblin"
+        ],
+        "npc_ids": [
+          5192,
+          5193,
+          5204,
+          5205,
+          5206,
+          5207,
+          5208,
+          3028,
+          3029,
+          3030,
+          3031,
+          3032,
+          3033,
+          3034,
+          3035,
+          3036,
+          3037,
+          3038,
+          3039,
+          3040,
+          3041,
+          3042,
+          3043,
+          3044,
+          3051,
+          3052,
+          3053,
+          3054,
+          5195,
+          5196,
+          5197,
+          5198,
+          5199,
+          5200,
+          5201,
+          5202,
+          5203
+        ],
+        "quantity": [
+          1,
+          10
+        ]
+      }
+    },
+    {
+      "name": "Spin a Ball of Wool",
+      "taskID": "Spin_Wool",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "category": "Crafting",
+      "level": 1,
+      "completion_type": "CRAFTING",
+      "required_items": [
+        {
+          "item": "Ball of Wool",
+          "item_ids": [
+            1759
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Obtain Goblin Mail",
+      "taskID": "obtain_goblin_mail",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "category": "Obtain",
+      "level": 1,
+      "completion_type": "OBTAIN",
+      "required_items": [
+        {
+          "item": "Goblin Mail",
+          "item_ids": [
+            288
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Chop a Tree",
+      "taskID": "chop_tree",
+      "category": "Woodcutting",
+      "level": 1,
+      "completion_type": "WOODCUTTING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Logs",
+          "item_ids": [
+            1511
+          ],
+          "quantity": [
+            25,
+            75
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Burn a Log",
+      "taskID": "burn_log",
+      "category": "Firemaking",
+      "level": 1,
+      "completion_type": "FIREMAKING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Logs",
+          "item_ids": [
+            1511
+          ],
+          "quantity": [
+            25,
+            60
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pickpocket a Man or Woman",
+      "taskID": "pickpocket_man",
+      "category": "Thieving",
+      "level": 1,
+      "completion_type": "THIEVING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "Man, Woman"
+        ],
+        "npc_ids": [
+          3261,
+          3106,
+          6818,
+          6987,
+          8858,
+          3109,
+          6815,
+          3108,
+          6989,
+          3107,
+          6988,
+          3112,
+          6991,
+          3111,
+          6990,
+          10728,
+          3113,
+          6992,
+          3110,
+          14920,
+          3264,
+          3265,
+          3652,
+          11057,
+          11058,
+          3014,
+          3112,
+          6991,
+          14921,
+          11053,
+          11054,
+          3015
+        ],
+        "quantity": [
+          1,
+          28
+        ]
+      }
+    },
+    {
+      "name": "Equip a Steel Battleaxe",
+      "taskID": "equip_steel_battleaxe",
+      "category": "Attack",
+      "level": 5,
+      "completion_type": "EQUIP",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Steel Battleaxe",
+          "item_ids": [
+            1365
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Burn some Oak Logs",
+      "taskID": "burn_oak_logs",
+      "category": "Firemaking",
+      "level": 15,
+      "completion_type": "FIREMAKING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Oak Logs",
+          "item_ids": [
+            1521
+          ],
+          "quantity": [
+            1,
+            50
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Equip a Blue Wizard Hat",
+      "taskID": "equip_blue_wizard_hat",
+      "category": "Defence",
+      "level": 1,
+      "completion_type": "EQUIP",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Blue Wizard Hat",
+          "item_ids": [
+            579
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Fletch a Shortbow(u)",
+      "taskID": "fletch_shortbow(u)",
+      "category": "Fletching",
+      "level": 5,
+      "completion_type": "FLETCHING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": [
+            "shortbow(u)"
+          ],
+          "item_ids": [
+            50
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Defeat a Level 2 Spider",
+      "taskID": "kill_some_spiders",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "Spider, Big Spider"
+        ],
+        "npc_ids": [
+          3017
+        ],
+        "quantity": [
+          1,
+          25
+        ]
+      }
+    },
+    {
+      "name": "Talk to Bob at his Axe Shop",
+      "taskID": "talk_to_bob_lumbridge",
+      "category": "Dialogue",
+      "completion_type": "NPC_DIALOGUE",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "Bob"
+        ],
+        "npc_ids": [
+          10619
+        ]
+      }
+    }
+  ],
+  "optional_quests_unlocked": [
+    {
+      "name": "Cook's Assistant",
+      "points": 1
+    },
+    {
+      "name": "Recipe for Disaster",
+      "points": 3
+    },
+    {
+      "name": "Restless Ghost",
+      "points": 1
+    },
+    {
+      "name": "The Lost Tribe",
+      "points": 2
+    },
+    {
+      "name": "Rune Mysteries",
+      "points": 1
+    },
+    {
+      "name": "X Marks the Spot",
+      "points": 1
+    }
+  ],
+  "is_completed": false
+}

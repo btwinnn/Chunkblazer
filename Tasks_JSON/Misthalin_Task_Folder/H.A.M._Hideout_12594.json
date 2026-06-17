@@ -1,0 +1,249 @@
+{
+  "region_id": [
+    12594
+  ],
+  "neighbor_ids": [
+    12595,
+    12850,
+    12593,
+    12338
+  ],
+  "Friendly_Name": "H.A.M. Hideout",
+  "tasks": [
+    {
+      "name": "Rake a Farming Patch",
+      "taskID": "rake_farming_patch",
+      "category": "Farming",
+      "level": 1,
+      "completion_type": "FARMING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Weeds",
+          "item_ids": [
+            6055
+          ],
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "name": "Obtain an Ensouled Goblin Head",
+      "taskID": "obtain_ensouled_goblin_head",
+      "category": "Obtain",
+      "completion_type": "OBTAIN",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Ensouled Goblin Head",
+          "item_ids": [
+            13447
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Polish some Buttons",
+      "taskID": "polish_buttons",
+      "category": "Crafting",
+      "level": 3,
+      "completion_type": "CRAFTING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Polished Buttons",
+          "item_ids": [
+            10496
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Defeat a Level 2 Goblin in 15 Seconds",
+      "taskID": "defeat_goblin_15 seconds",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "Goblin"
+        ],
+        "npc_ids": [
+          5192,
+          5193,
+          5204,
+          5205,
+          5206,
+          5207,
+          5208,
+          3028,
+          3029,
+          3030,
+          3031,
+          3032,
+          3033,
+          3034,
+          3035,
+          3036,
+          3037,
+          3038,
+          3039,
+          3040,
+          3041,
+          3042,
+          3043,
+          3044,
+          3051,
+          3052,
+          3053,
+          3054,
+          5195,
+          5196,
+          5197,
+          5198,
+          5199,
+          5200,
+          5201,
+          5202,
+          5203
+        ],
+        "quantity": 1
+      },
+      "constraints": {
+        "time_in_ticks": [
+          25
+        ]
+      }
+    },
+    {
+      "name": "Obtain a Rusty Sword",
+      "taskID": "steal_rusty_sword",
+      "category": "Obtain",
+      "completion_type": "OBTAIN",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Rusty Sword",
+          "item_ids": [
+            686
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Obtain an Uncut Opal",
+      "taskID": "obtain_uncut_opal",
+      "category": "Obtain",
+      "completion_type": "OBTAIN",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Uncut Opal",
+          "item_ids": [
+            1625
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Obtain an Uncut Jade",
+      "taskID": "obtain_uncut_jade",
+      "category": "Obtain",
+      "completion_type": "OBTAIN",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Uncut Jade",
+          "item_ids": [
+            1627
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pickpocket a H.A.M. Member",
+      "taskID": "pickpocket_HAM",
+      "category": "Thieving",
+      "level": 15,
+      "completion_type": "THIEVING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": "HAM Member",
+        "npc_ids": [
+          2541,
+          2540
+        ],
+        "quantity": [
+          1,
+          100
+        ]
+      }
+    },
+    {
+      "name": "Defeat a H.A.M. Guard",
+      "taskID": "defeat_ham_guard",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "HAM Guard"
+        ],
+        "npc_ids": [
+          2536,
+          2537,
+          2538
+        ],
+        "quantity": [
+          1,
+          10
+        ]
+      }
+    },
+    {
+      "name": "Equip a Steel Dagger",
+      "taskID": "equip_steel_dagger",
+      "category": "Attack",
+      "level": 5,
+      "completion_type": "EQUIP",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Steel Dagger",
+          "item_ids": [
+            1207
+          ]
+        }
+      ]
+    }
+  ],
+  "optional_quests_unlocked": [
+    {
+      "name": "Lost City",
+      "points": 2
+    }
+  ],
+  "is_completed": false
+}

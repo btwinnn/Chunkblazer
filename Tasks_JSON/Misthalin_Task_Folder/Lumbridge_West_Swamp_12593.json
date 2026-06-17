@@ -1,0 +1,240 @@
+{
+  "region_id": [
+    12593
+  ],
+  "Friendly_Name": "Lumbridge West Swamp",
+  "neighbor_ids": [
+    12849,
+    12594,
+    12592,
+    12337
+  ],
+  "tasks": [
+    {
+      "name": "Mine some Coal",
+      "taskID": "mine_coal",
+      "category": "Mining",
+      "level": 30,
+      "completion_type": "MINING",
+      "base_points": 2,
+      "assignment_weight": 5,
+      "required_items": [
+        {
+          "item": "Coal",
+          "item_ids": [
+            453
+          ],
+          "quantity": [
+            1,
+            25
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Obtain a Candle",
+      "taskID": "obtain_candle",
+      "category": "Obtain",
+      "completion_type": "OBTAIN",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Candle",
+          "item_ids": [
+            36,
+            33
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Defeat a Wall Beast",
+      "taskID": "defeat_wall_beast",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 2,
+      "assignment_weight": 1,
+      "target_npc": {
+        "npc": [
+          "Wall Beast"
+        ],
+        "npc_ids": [
+          476,
+          475
+        ],
+        "quantity": [
+          1
+        ]
+      }
+    },
+    {
+      "name": "Defeat a Big Frog",
+      "taskID": "defeat_big_frog",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "Big Frog"
+        ],
+        "npc_ids": [
+          8701,
+          478
+        ],
+        "quantity": [
+          1,
+          5
+        ]
+      }
+    },
+    {
+      "name": "Defeat a Cave Bug",
+      "taskID": "defeat_cave_bug",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "Cave Bug"
+        ],
+        "npc_ids": [
+          481,
+          483
+        ],
+        "quantity": [
+          1,
+          25
+        ]
+      }
+    },
+    {
+      "name": "Defeat a Cave Crawler",
+      "taskID": "defeat_cave_crawler",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 1,
+      "assignment_weight": 5,
+      "target_npc": {
+        "npc": [
+          "Cave Crawler"
+        ],
+        "npc_ids": [
+          406,
+          407,
+          408,
+          409
+        ],
+        "quantity": [
+          1
+        ]
+      }
+    },
+    {
+      "name": "Defeat a Cave Slime",
+      "taskID": "defeat_cave_slime",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "Cave Slime"
+        ],
+        "npc_ids": [
+          480
+        ],
+        "quantity": [
+          1,
+          5
+        ]
+      }
+    },
+    {
+      "name": "Catch some Frog Spawn",
+      "taskID": "catch_frog_spawn",
+      "category": "Fishing",
+      "level": 33,
+      "completion_type": "FISHING",
+      "base_points": 2,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Frog Spawn",
+          "item_ids": [
+            5004
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Catch a Slimy Eel",
+      "taskID": "catch_slimy_eel",
+      "category": "Fishing",
+      "level": 28,
+      "completion_type": "FISHING",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "required_items": [
+        {
+          "item": "Raw Slimy Eel",
+          "item_ids": [
+            3379
+          ],
+          "quantity": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Build a Medium STASH Unit in Lumbridge Cave",
+      "taskID": "build_rock_medium_stash_lumbridge_cave",
+      "category": "Construction",
+      "level": 42,
+      "completion_type": "CONSTRUCTION",
+      "base_points": 2,
+      "assignment_weight": 5,
+      "required_finished_object": [
+        {
+          "object": "Medium STASH Unit (rocks)",
+          "object_id": [
+            29000
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Defeat a Cave Goblin",
+      "taskID": "defeat_cave_goblin",
+      "category": "Combat",
+      "completion_type": "NPC_Kill",
+      "base_points": 1,
+      "assignment_weight": 8,
+      "target_npc": {
+        "npc": [
+          "Cave Goblin"
+        ],
+        "npc_ids": [
+          6437,
+          6435,
+          6436,
+          6434
+        ],
+        "quantity": [
+          1,
+          10
+        ]
+      }
+    }
+  ],
+  "is_completed": false
+}
