@@ -2727,9 +2727,9 @@
             "is_completed": false
         },
         {
-            "region_id": [5425],
+            "region_id": [5169],
             "Friendly_Name": "Tlati Rainforest North",
-            "neighbor_ids": [5426, 5681, 5424, 5169],
+            "neighbor_ids": [5170, 5425, 5168, 4913],
             "tasks": [
                 {
                     "name": "Chop some Teak Trees",
