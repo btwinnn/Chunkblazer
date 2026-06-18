@@ -1,6 +1,4 @@
 {
-    "Fremennik_Tasks": [
-        {
             "region_id": [10040],
             "Friendly_Name": "Lighthouse",
             "neighbor_ids": [10041, 10296, 10039, 9784],
@@ -187,6 +185,4 @@
                     }                       
                 ],
             "is_completed": false           
-        }                 
-    ]
-}
+        }
