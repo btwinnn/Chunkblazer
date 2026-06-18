@@ -564,12 +564,19 @@ public class ObtainModule extends AbstractTaskModule
 		int totalRequired = 0;
 		StringBuilder details = new StringBuilder();
 		Map<Integer, Integer> nextSnapshot = new HashMap<>();
-		// Per-slot delta with cap-per-slot:
-		//   prevSlotCredit = min(prevSumOfVariants, slot.required)
-		//   newSlotCredit  = min(currSumOfVariants, slot.required)
-		//   slotDelta      = newSlotCredit - prevSlotCredit
-		// This handles "any variant counts" correctly AND caps overflow
-		// (e.g. 3a-outfit gives 2 ores in one tick when only 1 needed).
+		// Per-slot delta = the PRODUCTION this tick (how much the inventory rose),
+		// capped at the slot's requirement:
+		//   slotDelta = clamp(currSumOfVariants - prevSumOfVariants, 0..slot.required)
+		// The snapshot is rolled forward every tick (and after every credit), so
+		// prevSum is last tick's count and (currSum - prevSum) is exactly what was
+		// produced this tick. Crucially this uses the RAW rise, not
+		// min(curr,req) - min(prev,req): items the player already HELD when the task
+		// started no longer suppress the credit. Before, spinning a 2nd ball of wool
+		// while already holding one gave min(2,1)-min(1,1)=0 and never completed; now
+		// it credits the +1 you just made. The XP-drop gate already proves you skilled
+		// it, and the task-level cap below still prevents over-crediting past target.
+		// Per-slot cap keeps a single over-producing tick from completing a
+		// multi-item task on one item alone.
 		for (Slot slot : slots)
 		{
 			totalRequired += slot.requiredQuantity;
@@ -593,9 +600,7 @@ public class ObtainModule extends AbstractTaskModule
 					slotGains.append("+").append(variantGain).append(" ").append(getItemName(variantId));
 				}
 			}
-			int prevSlotCredit = Math.min(prevSum, slot.requiredQuantity);
-			int newSlotCredit = Math.min(currSum, slot.requiredQuantity);
-			int slotDelta = newSlotCredit - prevSlotCredit;
+			int slotDelta = Math.min(Math.max(currSum - prevSum, 0), slot.requiredQuantity);
 			if (slotDelta > 0)
 			{
 				totalDelta += slotDelta;
