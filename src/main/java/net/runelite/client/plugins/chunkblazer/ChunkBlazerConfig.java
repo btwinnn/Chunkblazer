@@ -6,6 +6,7 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
+import net.runelite.client.config.Keybind;
 import net.runelite.client.config.Range;
 import net.runelite.client.config.Units;
 
@@ -22,9 +23,10 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "unlockedChunks",
 		name = "Unlocked Regions",
-		description = "Comma-separated list of unlocked region IDs",
+		description = "Internal: the player's unlocked region IDs (managed by the plugin, not hand-editable)",
 		section = generalSection,
-		position = 0
+		position = 0,
+		hidden = true
 	)
 	default String unlockedChunks()
 	{
@@ -466,6 +468,18 @@ public interface ChunkBlazerConfig extends Config
 	default boolean showUnlockPopup()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "worldMapUnlockKey",
+		name = "Map Unlock Key",
+		description = "Hold this key and click a neighbouring chunk on the world map to unlock it.",
+		section = regionSection,
+		position = 3
+	)
+	default Keybind worldMapUnlockKey()
+	{
+		return new Keybind(java.awt.event.KeyEvent.VK_U, 0);
 	}
 
 	@ConfigSection(

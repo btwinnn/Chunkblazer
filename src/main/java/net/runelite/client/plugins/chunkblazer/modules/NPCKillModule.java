@@ -1085,7 +1085,7 @@ public class NPCKillModule extends AbstractTaskModule
 						task.getName(), task.getTaskId(), foundQuantity, requiredQuantity);
 
 					// Send progress to chatbox
-					String details = String.format("Killed %s and received %s drop", npc.getName(), dropName);
+					String details = String.format("Killed %s and received %s drop", npc.getName(), dropName) + killTimeSuffix();
 					sendTaskProgress(task, details);
 
 					// Credit the kill immediately
@@ -1113,7 +1113,7 @@ public class NPCKillModule extends AbstractTaskModule
 				task.getName(), task.getTaskId());
 
 			// Send progress to chatbox
-			String details = String.format("Killed %s", npc.getName());
+			String details = String.format("Killed %s", npc.getName()) + killTimeSuffix();
 			sendTaskProgress(task, details);
 
 			// Send kill report to server
@@ -1576,5 +1576,26 @@ public class NPCKillModule extends AbstractTaskModule
 
 		log.info(">>> TIME CONSTRAINT PASSED for task '{}' - killed in {} tick(s)", task.getName(), elapsedTicks);
 		return null; // Constraint satisfied
+	}
+
+	/**
+	 * " in X.Xs" suffix describing how long the current target took to kill, or ""
+	 * if no combat start was recorded (e.g. an instant/one-shot kill whose first
+	 * hitsplat and death landed before timing began). Appended to the success
+	 * message so players see the kill time on success too — mirroring the time the
+	 * failure message already reports. 1 game tick = 0.6 seconds.
+	 */
+	private String killTimeSuffix()
+	{
+		if (combatStartTick < 0)
+		{
+			return "";
+		}
+		int elapsedTicks = client.getTickCount() - combatStartTick;
+		if (elapsedTicks < 0)
+		{
+			return "";
+		}
+		return String.format(" in %.1fs", elapsedTicks * 0.6);
 	}
 }

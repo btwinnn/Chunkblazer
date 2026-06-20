@@ -63,6 +63,15 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 		this.clientThread = clientThread;
 	}
 
+	/**
+	 * @return the region id under the cursor on the world map, or -1 if none.
+	 * Read by {@link ChunkBlazerPlugin#onMenuOptionClicked} for keybind+click unlock.
+	 */
+	int getHoveredRegionId()
+	{
+		return hoveredRegionId;
+	}
+
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
@@ -237,12 +246,12 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 			}
 		}
 
-		// Add right-click menu for unlocking neighbors
+		// Hovering an unlockable neighbour: show the keybind+click tooltip. The
+		// actual unlock is handled in ChunkBlazerPlugin.onMenuOptionClicked when
+		// the map-unlock key is held during the click (Region Locker model) —
+		// world-map right-click menu entries don't render reliably.
 		if (isHoveredUnlockable && hoveredRegionId > 0)
 		{
-			addUnlockMenuEntry(hoveredRegionId);
-
-			// Draw hover tooltip when hovering unlockable region
 			drawHoverTooltip(graphics, mousePos, hoveredRegionId);
 		}
 
@@ -318,7 +327,9 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 		// Build tooltip text
 		String line1 = regionName;
 		String line2 = "Cost: " + unlockCost + " pts";
-		String line3 = canAfford ? "Right-click to unlock" : "Need " + (unlockCost - playerPoints) + " more pts";
+		String line3 = canAfford
+			? "Hold " + config.worldMapUnlockKey() + " + click to unlock"
+			: "Need " + (unlockCost - playerPoints) + " more pts";
 
 		// Setup font
 		Font font = FontManager.getRunescapeSmallFont();

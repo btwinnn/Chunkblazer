@@ -48,6 +48,12 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	// UI Components
 	private JPanel regionUnlockPanel;
+	private JPanel unlockedListPanel;
+	private JPanel unlockableChunksPanel; // unused — list UI removed; dead code, delete in cleanup pass
+	// Pins the top-right region-unlock prompt to a chunk clicked on the world map
+	// (hold U + click), overriding the walk-into-chunk current-region behaviour
+	// until the player confirms or cancels.
+	private int mapUnlockRegionId = -1;
 	private JPanel modeSelectionPanel;
 	private JPanel lockedModePanel;
 	private JLabel lockedModeValueLabel;
@@ -211,6 +217,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		regionUnlockPanel = createRegionUnlockSection();
 		setupSectionPanel(regionUnlockPanel);
 		mainPanel.add(regionUnlockPanel);
+		mainPanel.add(Box.createVerticalStrut(8));
+
+		// Unlocked Chunks — read-only list of the chunks the player has unlocked.
+		unlockedListPanel = createUnlockedListSection();
+		setupSectionPanel(unlockedListPanel);
+		mainPanel.add(unlockedListPanel);
 		mainPanel.add(Box.createVerticalStrut(8));
 
 		// Mode Selection Section (hidden once the mode is locked)
@@ -879,6 +891,254 @@ public class ChunkBlazerPanel extends PluginPanel
 	}
 
 	/**
+	 * Empty container for the read-only "Unlocked Chunks" list; populated by
+	 * {@link #updateUnlockedListSection()}.
+	 */
+	private JPanel createUnlockedListSection()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		panel.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(ColorScheme.MEDIUM_GRAY_COLOR),
+			new EmptyBorder(6, 6, 6, 6)
+		));
+		panel.setVisible(false);
+		return panel;
+	}
+
+	/**
+	 * Refresh the read-only "Unlocked Chunks" list from the plugin's unlocked set.
+	 * Display only — not editable (the old editable config field was a free-unlock
+	 * cheat). Safe from any thread.
+	 */
+	public void updateUnlockedListSection()
+	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(this::updateUnlockedListSection);
+			return;
+		}
+		if (unlockedListPanel == null)
+		{
+			return;
+		}
+		unlockedListPanel.removeAll();
+
+		java.util.List<String> names = plugin.getUnlockedChunkDisplayNames();
+		if (!plugin.isLoggedIn() || names.isEmpty())
+		{
+			unlockedListPanel.setVisible(false);
+			if (unlockedListPanel.getParent() != null)
+			{
+				unlockedListPanel.getParent().revalidate();
+				unlockedListPanel.getParent().repaint();
+			}
+			return;
+		}
+
+		JLabel title = new JLabel("Unlocked Chunks (" + names.size() + ")");
+		title.setFont(FontManager.getRunescapeBoldFont());
+		title.setForeground(new Color(120, 220, 120));
+		title.setAlignmentX(LEFT_ALIGNMENT);
+		unlockedListPanel.add(title);
+		unlockedListPanel.add(Box.createVerticalStrut(4));
+
+		for (String n : names)
+		{
+			WrappingTextLabel row = new WrappingTextLabel(
+				n,
+				FontManager.getRunescapeSmallFont(),
+				Color.WHITE,
+				TASK_TEXT_WRAP_WIDTH);
+			row.setAlignmentX(LEFT_ALIGNMENT);
+			unlockedListPanel.add(row);
+			unlockedListPanel.add(Box.createVerticalStrut(2));
+		}
+
+		unlockedListPanel.setVisible(true);
+		unlockedListPanel.revalidate();
+		unlockedListPanel.repaint();
+		if (unlockedListPanel.getParent() != null)
+		{
+			unlockedListPanel.getParent().revalidate();
+			unlockedListPanel.getParent().repaint();
+		}
+	}
+
+	/**
+	 * Empty container for the "Unlockable Chunks" list; populated and shown/hidden
+	 * by {@link #updateUnlockableChunksSection()}.
+	 */
+	private JPanel createUnlockableChunksSection()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		panel.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(new Color(255, 215, 0)),
+			new EmptyBorder(6, 6, 6, 6)
+		));
+		panel.setVisible(false);
+		return panel;
+	}
+
+	/**
+	 * Lists every neighbouring chunk the player can unlock right now, each with an
+	 * inline Unlock button. Mirrors the world-map / minimap unlock but in the side
+	 * panel, so it's reachable without the map. Safe from any thread.
+	 */
+	public void updateUnlockableChunksSection()
+	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(this::updateUnlockableChunksSection);
+			return;
+		}
+		if (unlockableChunksPanel == null)
+		{
+			return;
+		}
+
+		java.util.List<Integer> neighbors = new java.util.ArrayList<>(plugin.getNeighborRegionIds());
+		neighbors.removeIf(r -> plugin.isRegionUnlocked(r));
+		java.util.Collections.sort(neighbors);
+
+		unlockableChunksPanel.removeAll();
+
+		if (!plugin.isLoggedIn() || neighbors.isEmpty())
+		{
+			unlockableChunksPanel.setVisible(false);
+			if (unlockableChunksPanel.getParent() != null)
+			{
+				unlockableChunksPanel.getParent().revalidate();
+				unlockableChunksPanel.getParent().repaint();
+			}
+			return;
+		}
+
+		int points = plugin.getTotalPoints();
+
+		JLabel title = new JLabel("Unlockable Chunks");
+		title.setFont(FontManager.getRunescapeBoldFont());
+		title.setForeground(new Color(255, 215, 0));
+		title.setAlignmentX(LEFT_ALIGNMENT);
+		unlockableChunksPanel.add(title);
+		unlockableChunksPanel.add(Box.createVerticalStrut(4));
+
+		for (int regionId : neighbors)
+		{
+			String name = plugin.getRegionName(regionId);
+			int cost = plugin.getRegionUnlockCost(regionId);
+			boolean canAfford = points >= cost;
+
+			JPanel row = new JPanel(new BorderLayout(4, 0));
+			row.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+			row.setAlignmentX(LEFT_ALIGNMENT);
+			row.setMaximumSize(new Dimension(CONTENT_WIDTH, 24));
+
+			JLabel nameLabel = new JLabel(name);
+			nameLabel.setFont(FontManager.getRunescapeSmallFont());
+			nameLabel.setForeground(Color.WHITE);
+			nameLabel.setToolTipText(name + " (" + regionId + ")");
+			row.add(nameLabel, BorderLayout.CENTER);
+
+			final int finalRegion = regionId;
+			final String finalName = name;
+			final int finalCost = cost;
+			JButton btn = new JButton(cost + " pts");
+			btn.setFont(FontManager.getRunescapeSmallFont());
+			btn.setFocusPainted(false);
+			btn.setMargin(new Insets(0, 4, 0, 4));
+			if (canAfford)
+			{
+				btn.setBackground(new Color(50, 110, 60));
+				btn.setForeground(Color.WHITE);
+				btn.addActionListener(e -> showListUnlockConfirm(row, finalRegion, finalName, finalCost));
+			}
+			else
+			{
+				btn.setEnabled(false);
+				btn.setToolTipText("Need " + (cost - points) + " more pts");
+			}
+			row.add(btn, BorderLayout.EAST);
+
+			unlockableChunksPanel.add(row);
+			unlockableChunksPanel.add(Box.createVerticalStrut(3));
+		}
+
+		unlockableChunksPanel.setVisible(true);
+		unlockableChunksPanel.revalidate();
+		unlockableChunksPanel.repaint();
+		if (unlockableChunksPanel.getParent() != null)
+		{
+			unlockableChunksPanel.getParent().revalidate();
+			unlockableChunksPanel.getParent().repaint();
+		}
+	}
+
+	/**
+	 * Inline "Spend N? Yes / No" confirm for an Unlockable Chunks row.
+	 */
+	private void showListUnlockConfirm(JPanel row, int regionId, String regionName, int cost)
+	{
+		row.removeAll();
+
+		JLabel prompt = new JLabel("Spend " + cost + "?");
+		prompt.setFont(FontManager.getRunescapeSmallFont());
+		prompt.setForeground(Color.WHITE);
+		row.add(prompt, BorderLayout.WEST);
+
+		JPanel choices = new JPanel(new GridLayout(1, 2, 4, 0));
+		choices.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+
+		JButton yes = new JButton("Yes");
+		yes.setFont(FontManager.getRunescapeSmallFont());
+		yes.setBackground(new Color(50, 110, 60));
+		yes.setForeground(Color.WHITE);
+		yes.setFocusPainted(false);
+		yes.addActionListener(e ->
+		{
+			plugin.closeChatboxPrompt();
+			plugin.unlockRegion(regionId);
+			log.info("Player unlocked region {} ({}) via panel list for {} pts", regionId, regionName, cost);
+			updateUnlockableChunksSection();
+			updateStats();
+			updateRegionUnlockSection();
+		});
+
+		JButton no = new JButton("No");
+		no.setFont(FontManager.getRunescapeSmallFont());
+		no.setBackground(new Color(110, 50, 50));
+		no.setForeground(Color.WHITE);
+		no.setFocusPainted(false);
+		no.addActionListener(e -> updateUnlockableChunksSection());
+
+		choices.add(yes);
+		choices.add(no);
+		row.add(choices, BorderLayout.EAST);
+
+		row.revalidate();
+		row.repaint();
+	}
+
+	/**
+	 * Pin the top-right unlock prompt to a specific chunk (from a world-map
+	 * U+click) and refresh, so it shows "Unlock X for Y points? Yes / No" there —
+	 * the same prompt the walk-into-chunk flow uses. Safe from any thread.
+	 */
+	public void promptUnlockForRegion(int regionId)
+	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(() -> promptUnlockForRegion(regionId));
+			return;
+		}
+		mapUnlockRegionId = regionId;
+		updateRegionUnlockSection();
+	}
+
+	/**
 	 * Refresh the region-unlock section based on the player's current region and
 	 * point total. Hides itself when the player is in an unlocked region (or
 	 * the current region is unknown / undefined). Safe to call from any thread —
@@ -896,7 +1156,9 @@ public class ChunkBlazerPanel extends PluginPanel
 			return;
 		}
 
-		int regionId = plugin.getCurrentRegionId();
+		// A world-map U+click pins this top-right prompt to the clicked chunk via
+		// mapUnlockRegionId; otherwise it follows the region the player stands in.
+		int regionId = mapUnlockRegionId > 0 ? mapUnlockRegionId : plugin.getCurrentRegionId();
 		// A region is only purchasable if it's a neighbor of an already-unlocked
 		// chunk. The plugin enforces this in unlockRegion() too as a backstop —
 		// here we hide the whole prompt for non-neighbors so we don't leak a
@@ -905,6 +1167,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		boolean isNeighbor = regionId > 0 && plugin.getNeighborRegionIds().contains(regionId);
 		if (regionId <= 0 || plugin.isRegionUnlocked(regionId) || !isNeighbor)
 		{
+			// Clicked target resolved (now unlocked / no longer valid) — drop the
+			// pin so the prompt reverts to the walk-into-chunk current region.
+			mapUnlockRegionId = -1;
 			if (regionUnlockPanel.isVisible())
 			{
 				regionUnlockPanel.setVisible(false);
@@ -1010,6 +1275,8 @@ public class ChunkBlazerPanel extends PluginPanel
 			plugin.closeChatboxPrompt();
 			plugin.unlockRegion(regionId);
 			log.info("Player unlocked region {} ({}) via panel for {} pts", regionId, regionName, cost);
+			// Clear any world-map click pin; the region is unlocked now.
+			mapUnlockRegionId = -1;
 			// updateRegionUnlockSection will be called by updateRegionDisplay /
 			// updateStats and hide the section now that the region is unlocked.
 			updateRegionUnlockSection();
@@ -1021,7 +1288,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		no.setBackground(new Color(110, 50, 50));
 		no.setForeground(Color.WHITE);
 		no.setFocusPainted(false);
-		no.addActionListener(e -> updateRegionUnlockSection());
+		no.addActionListener(e ->
+		{
+			// Cancel drops the world-map click pin too.
+			mapUnlockRegionId = -1;
+			updateRegionUnlockSection();
+		});
 
 		choices.add(yes);
 		choices.add(no);
@@ -1895,6 +2167,36 @@ public class ChunkBlazerPanel extends PluginPanel
 		devControlsContentPanel.add(chunkPanel);
 		devControlsContentPanel.add(Box.createVerticalStrut(4));
 
+		// Dev unlock-by-ID — replaces the old editable "Unlocked Regions" config
+		// field. Type one or more region IDs (comma-separated) and click Unlock to
+		// force-unlock them (no cost / no adjacency) for testing.
+		JPanel unlockByIdPanel = new JPanel(new BorderLayout(4, 0));
+		unlockByIdPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		unlockByIdPanel.setAlignmentX(LEFT_ALIGNMENT);
+		unlockByIdPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+		unlockByIdPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
+
+		JTextField unlockIdField = new JTextField();
+		unlockIdField.setFont(FontManager.getRunescapeSmallFont());
+		unlockIdField.setToolTipText("Region ID(s), comma-separated, e.g. 12594,12595");
+		unlockByIdPanel.add(unlockIdField, BorderLayout.CENTER);
+
+		JButton unlockIdButton = new JButton("Unlock");
+		unlockIdButton.setFont(FontManager.getRunescapeSmallFont());
+		unlockIdButton.setForeground(new Color(255, 200, 100));
+		unlockIdButton.setToolTipText("Force-unlock the entered region ID(s)");
+		unlockIdButton.addActionListener(e ->
+		{
+			plugin.devUnlockRegions(unlockIdField.getText());
+			unlockIdField.setText("");
+			updateStats();
+			updateRegionDisplay();
+		});
+		unlockByIdPanel.add(unlockIdButton, BorderLayout.EAST);
+
+		devControlsContentPanel.add(unlockByIdPanel);
+		devControlsContentPanel.add(Box.createVerticalStrut(4));
+
 		// Debug button row
 		JPanel debugPanel = new JPanel(new GridLayout(1, 2, 4, 0));
 		debugPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
@@ -2402,6 +2704,7 @@ public class ChunkBlazerPanel extends PluginPanel
 				// Conditionally-shown sections: hide outright while logged out so
 				// nothing interactive is reachable before there's an account.
 				regionUnlockPanel.setVisible(false);
+				unlockedListPanel.setVisible(false);
 				modeSelectionPanel.setVisible(false);
 				lockedModePanel.setVisible(false);
 				currentTaskPanel.setVisible(false);
@@ -2416,6 +2719,7 @@ public class ChunkBlazerPanel extends PluginPanel
 			updateTaskDisplay();
 			updateCompletedTasks();
 			updateTaskList();
+			updateUnlockedListSection();
 		});
 	}
 

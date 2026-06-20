@@ -35,7 +35,13 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuEntryAdded;
+import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.events.FocusChanged;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.widgets.Widget;
+import net.runelite.client.input.KeyManager;
+import lombok.Setter;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -129,6 +135,18 @@ public class ChunkBlazerPlugin extends Plugin
 
 	@Inject
 	private ScheduledExecutorService executorService;
+
+	@Inject
+	private KeyManager keyManager;
+
+	@Inject
+	private ChunkBlazerInput inputListener;
+
+	// True while the configured world-map unlock key is held. Set by
+	// ChunkBlazerInput (KeyListener); read in onMenuOptionClicked so a click on
+	// the world map while the key is down unlocks the hovered chunk.
+	@Setter
+	private boolean worldMapUnlockKeyPressed;
 
 	// --- Plugin State ---
 	@Getter
@@ -308,6 +326,9 @@ public class ChunkBlazerPlugin extends Plugin
 		// Register world map overlay
 		overlayManager.add(worldMapOverlay);
 
+		// Region Locker-style world-map unlock: track the hold-to-unlock key.
+		keyManager.registerKeyListener(inputListener);
+
 		// Register minimap overlay for chunk visualization and click-to-unlock
 		overlayManager.add(minimapOverlay);
 
@@ -379,6 +400,8 @@ public class ChunkBlazerPlugin extends Plugin
 		roster.clear();
 		clientToolbar.removeNavigation(navButton);
 		overlayManager.remove(worldMapOverlay);
+		keyManager.unregisterKeyListener(inputListener);
+		worldMapUnlockKeyPressed = false;
 		overlayManager.remove(minimapOverlay);
 		overlayManager.remove(sceneOverlay);
 		overlayManager.remove(playerOverlay);
@@ -547,6 +570,48 @@ public class ChunkBlazerPlugin extends Plugin
 			.setTarget("<col=ffff00>" + regionName + "</col> (" + cost + " pts)")
 			.setType(MenuAction.RUNELITE)
 			.onClick(e -> showMinimapUnlockPopup(hoveredRegion));
+	}
+
+	/**
+	 * World-map unlock (Region Locker model): if the map-unlock key is held and
+	 * the player clicks a neighbour chunk on the open world map, unlock it. We act
+	 * here rather than via a right-click menu entry because the world map doesn't
+	 * reliably surface custom menu entries — the same reason Region Locker uses a
+	 * keybind+click. The hovered region comes from the world-map overlay, which
+	 * already hit-tests the cursor against each drawn chunk.
+	 */
+	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked event)
+	{
+		if (!worldMapUnlockKeyPressed)
+		{
+			return;
+		}
+		Widget map = client.getWidget(InterfaceID.Worldmap.MAP_CONTAINER);
+		if (map == null)
+		{
+			return; // world map not open
+		}
+		int regionId = worldMapOverlay.getHoveredRegionId();
+		if (regionId <= 0 || isRegionUnlocked(regionId) || !getNeighborRegionIds().contains(regionId))
+		{
+			return; // not hovering an unlockable neighbour chunk
+		}
+		// Swallow the default world-map click so it doesn't also pan/select.
+		event.consume();
+		// Show the unlock confirm in the top-right side panel (same prompt as
+		// walking into a chunk), rather than a chatbox popup.
+		panel.promptUnlockForRegion(regionId);
+	}
+
+	@Subscribe
+	public void onFocusChanged(FocusChanged event)
+	{
+		if (!event.isFocused())
+		{
+			// Don't leave the key "stuck on" if focus is lost mid-hold.
+			worldMapUnlockKeyPressed = false;
+		}
 	}
 
 	private void showMinimapUnlockPopup(int regionId)
@@ -1429,6 +1494,14 @@ public class ChunkBlazerPlugin extends Plugin
 				}
 			}
 
+			// Rebuild the in-memory active-task list from the just-hydrated config
+			// (unlocked regions / completed tasks). Without this, a fresh install or
+			// post-reset login shows an EMPTY task list until the plugin is toggled
+			// off/on — because the earlier LOGGED_IN loadActiveTasks() ran against
+			// the then-empty local config, and hydration only updated config, not
+			// the live task list. Idempotent + cheap.
+			loadActiveTasks();
+
 			if (panel != null)
 			{
 				panel.updateModeDisplay();
@@ -1642,7 +1715,89 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public boolean isRegionUnlocked(int regionId)
 	{
-		return getUnlockedRegionIds().contains(String.valueOf(regionId));
+		Set<String> unlocked = getUnlockedRegionIds();
+		if (unlocked.contains(String.valueOf(regionId)))
+		{
+			return true;
+		}
+		// Multi-region chunk (e.g. a surface area + its dungeon, which have
+		// different region IDs): the whole chunk counts as unlocked if ANY of its
+		// regions is unlocked. Keeps surface and dungeon in lockstep, even for
+		// legacy / hydrated / hand-entered unlock lists that only hold one of them.
+		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+		if (chunk != null && chunk.getRegionIds() != null)
+		{
+			for (Integer r : chunk.getRegionIds())
+			{
+				if (unlocked.contains(String.valueOf(r)))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Distinct unlocked chunks as sorted display labels ("Name (regionId)"), one
+	 * per chunk — multi-region chunks (surface + dungeon) collapse to a single
+	 * entry. Backs the read-only "Unlocked Chunks" list in the side panel.
+	 */
+	public List<String> getUnlockedChunkDisplayNames()
+	{
+		java.util.TreeSet<String> labels = new java.util.TreeSet<>();
+		for (String idStr : getUnlockedRegionIds())
+		{
+			try
+			{
+				int id = Integer.parseInt(idStr.trim());
+				NuzlockeChunk chunk = chunksByRegionId.get(id);
+				if (chunk != null && chunk.getRegionIds() != null && !chunk.getRegionIds().isEmpty())
+				{
+					labels.add(chunk.getName() + " (" + chunk.getRegionIds().get(0) + ")");
+				}
+				else
+				{
+					labels.add("Region " + id);
+				}
+			}
+			catch (NumberFormatException ignored)
+			{
+				// skip malformed id
+			}
+		}
+		return new ArrayList<>(labels);
+	}
+
+	/**
+	 * Dev-only: unlock one or more regions by ID (comma-separated), bypassing the
+	 * point cost and adjacency gate. Replaces the old hand-editable "Unlocked
+	 * Regions" config field as the testing shortcut.
+	 */
+	public void devUnlockRegions(String csv)
+	{
+		if (csv == null)
+		{
+			return;
+		}
+		for (String part : csv.split(","))
+		{
+			String t = part.trim();
+			if (t.isEmpty())
+			{
+				continue;
+			}
+			try
+			{
+				unlockRegionFree(Integer.parseInt(t));
+			}
+			catch (NumberFormatException e)
+			{
+				log.warn("devUnlockRegions: ignoring bad region id '{}'", t);
+			}
+		}
+		loadActiveTasks();
+		panel.updatePanel();
 	}
 
 	// --- Task Methods ---
@@ -3032,17 +3187,23 @@ public class ChunkBlazerPlugin extends Plugin
 		// Deduct points
 		configManager.setConfiguration("chunkblazer", "totalPoints", currentPoints - cost);
 
-		// Add to unlocked list
-		String unlocked = config.unlockedChunks();
-		if (unlocked == null || unlocked.isEmpty())
+		// Add to unlocked list. Unlock EVERY region of this chunk, not just the
+		// clicked one — a chunk can span multiple regions (e.g. a surface area AND
+		// its dungeon, which have different region IDs). Adding only one leaves the
+		// other half showing as locked when you walk into it: the H.A.M. Hideout
+		// "go down to the dungeon, come back up, surface is locked" bug.
+		NuzlockeChunk unlockedChunk = chunksByRegionId.get(regionId);
+		List<Integer> toUnlock = (unlockedChunk != null && unlockedChunk.getRegionIds() != null
+			&& !unlockedChunk.getRegionIds().isEmpty())
+			? unlockedChunk.getRegionIds()
+			: java.util.Collections.singletonList(regionId);
+
+		java.util.LinkedHashSet<String> unlockedSet = new java.util.LinkedHashSet<>(getUnlockedRegionIds());
+		for (Integer r : toUnlock)
 		{
-			unlocked = String.valueOf(regionId);
+			unlockedSet.add(String.valueOf(r));
 		}
-		else
-		{
-			unlocked = unlocked + "," + regionId;
-		}
-		configManager.setConfiguration("chunkblazer", "unlockedChunks", unlocked);
+		configManager.setConfiguration("chunkblazer", "unlockedChunks", String.join(",", unlockedSet));
 
 		log.info("Unlocked region {} for {} points. Remaining points: {}",
 			regionId, cost, currentPoints - cost);
