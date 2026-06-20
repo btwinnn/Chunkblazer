@@ -1,0 +1,173 @@
+{
+            "region_id": [10811],
+            "Friendly_Name": "Rellekka Hunter Area",
+            "neighbor_ids": [10812, 11067, 10810, 10555],
+            "tasks": [               
+                {
+                    "name": "Catch a Sabre-Tooth Kebbit",
+                    "taskID": "catch_sabre-tooth_kebbit",
+                    "category": "Hunter",
+                    "level": 51,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Kebbit Teeth",
+                            "item_ids": [10109]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Mix some Hunter Potions",
+                    "taskID": "mix_hunter_potions",
+                    "category": "Obtain_Set",
+                    "level": 53,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                     "required_items": [
+                        {
+                            "item": ["Hunter Potion(3)", "Hunter Potion(4)"],
+                            "item_ids": [10000, 9998],
+                            "quantity": [1, 20]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Catch a Sabre-Tooth Kyatt",
+                    "taskID": "catch_sabre-tooth_kyatt",
+                    "category": "Hunter",
+                    "level": 60,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Raw Kyatt",
+                            "item_ids": [29125]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Obtain a Kyatt Tooth chip",
+                    "taskID": "obtain_kyatt_tooth_chip",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Kyatt Tooth chip"],
+                            "item_ids": [29232],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Sapphire Glacialis in a Butterfly Jar",
+                    "taskID": "catch_sapphire_glacialis_in_butterfly_jar",
+                    "category": "Hunter",
+                    "level": 25,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Sapphire Glacialis",
+                            "item_ids": [10018]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Catch a Snowy Knight in a Butterfly Jar",
+                    "taskID": "catch_snowy_knight_in_butterfly_jar",
+                    "category": "Hunter",
+                    "level": 35,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Snowy Knight",
+                            "item_ids": [10016]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Obtain the Kyatt Set",
+                    "taskID": "obtain_kyatt_set",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Kyatt Top"],
+                            "item_ids": [10037],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Kyatt Legs"],
+                            "item_ids": [10035],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Kyatt Hat"],
+                            "item_ids": [10039],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Cerulean Twitch",
+                    "taskID": "catch_cerulean_twitch",
+                    "category": "Hunter",
+                    "level": 11,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                            "item": "Blue Feather",
+                            "item_ids": [10089]
+                            },
+                            {
+                            "item": "Raw Bird Meat",
+                            "item_ids": [9978]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Obtain a White Butterfly Wing",
+                    "taskID": "obtain_white_butterfly_wing",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["White Butterfly Wing"],
+                            "item_ids": [29227],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Blue Butterfly Wing",
+                    "taskID": "obtain_blue_butterfly_wing",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Blue Butterfly Wing"],
+                            "item_ids": [29224],
+                            "quantity": [1]
+                        }
+                    ]
+                }                      
+            ],         
+            "is_completed": false           
+        }
