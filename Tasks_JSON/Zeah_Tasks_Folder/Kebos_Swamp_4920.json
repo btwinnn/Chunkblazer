@@ -1,7 +1,7 @@
 {
-            "region_id": [4921],
+            "region_id": [4920],
             "Friendly_Name": "Kebos Swamp",
-            "neighbor_ids": [4922, 5177, 4920, 4665],
+            "neighbor_ids": [4921, 5176, 4919, 4664],
             "tasks": [              
                 {
                     "name": "Defeat a Swamp Frog",

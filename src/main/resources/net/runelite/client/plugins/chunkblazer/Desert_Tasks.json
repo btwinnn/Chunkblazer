@@ -2248,6 +2248,1047 @@
                 }                                          
             ],                  
             "is_completed": false
+        },
+        {
+            "region_id": [12844],
+            "Friendly_Name": "Menaphos Desert",
+            "neighbor_ids": [12845, 13100, 12843, 12588],
+            "tasks": [
+                {
+                    "name": "Defeat a Vulture",
+                    "taskID": "defeat_vulture",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Vulture"],
+                        "npc_ids": [1268, 1267],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Vulture in the First Hit",
+                    "taskID": "defeat_vulture_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Vulture"],
+                        "npc_ids": [1268, 1267],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Crocadile",
+                    "taskID": "defeat_crocadile",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Crocadile"],
+                        "npc_ids": [11705, 11582, 11581, 4184],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Crocadile in 30 Seconds",
+                    "taskID": "defeat_crocadile_30_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Crocadile"],
+                        "npc_ids": [11705, 11582, 11581, 4184],
+                        "quantity": [1, 10]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [50]
+                    }
+                }                                          
+            ],                  
+            "is_completed": false
+        },
+        {
+            "region_id": [13100],
+            "Friendly_Name": "The Wanderer",
+            "neighbor_ids": [13101, 13356, 13099, 12844],
+            "tasks": [
+                {
+                    "name": "Defeat a Vulture",
+                    "taskID": "defeat_vulture",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Vulture"],
+                        "npc_ids": [1268, 1267],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Vulture in the First Hit",
+                    "taskID": "defeat_vulture_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Vulture"],
+                        "npc_ids": [1268, 1267],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Crocadile",
+                    "taskID": "defeat_crocadile",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Crocadile"],
+                        "npc_ids": [11705, 11582, 11581, 4184],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Crocadile in 30 Seconds",
+                    "taskID": "defeat_crocadile_30_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Crocadile"],
+                        "npc_ids": [11705, 11582, 11581, 4184],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [50]
+                    }
+                },
+                {
+                    "name": "Mix some Combat Potions",
+                    "taskID": "mix_combat_potions",
+                    "category": "Obtain_Set",
+                    "completion_type": "HEBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 36,
+                    "required_items": [
+                        {
+                            "item": ["Combat potion#(3)", "Combat potion#(4)"],
+                            "item_ids": [9741, 9739]
+                        }
+                    ]             
+                },
+                {
+                    "name": "Defeat a Goat in the First Hit",
+                    "taskID": "defeat_goat_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Goat#Brown", "Goat#Tan", "Billy Goat#Brown", "Billy Goat#Tan"],
+                        "npc_ids": [1792, 1793, 1795, 1796, 1794, 1797],
+                        "quantity": [1, 25]
+                    }
+                },
+                {                    
+                    "name": "Defeat a Jackal",
+                    "taskID": "defeat_jackal",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1, 25]                  
+                        }
+                    ]
+                },
+                {                    
+                    "name": "Defeat a Jackal on Task",
+                    "taskID": "defeat_jackal_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": [
+                        {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Jackal in the First Hit",
+                    "taskID": "defeat_jackal_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc":
+                    {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Jackal with nothing Equipped",
+                    "taskID": "defeat_jackal_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": 
+                    {
+                        "npc": ["Jackal"],
+                        "npc_ids": [4185, 11583], 
+                        "quantity": [1]                  
+                    },
+
+                    "constraints": {                       
+                        "equip_nothing": "TRUE"
+                    }                                     
+                },
+                {
+                    "name": "Mine some Gold Ore",
+                    "taskID": "mine_gold",
+                    "category": "Mining",
+                    "level": 40,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Gold Ore",
+                            "item_ids": [444],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                }                                          
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Icthlarin's Little Helper",
+                    "points": 2
+                }                                         
+            ],                  
+            "is_completed": false
+        },
+        {
+            "region_id": [13356],
+            "Friendly_Name": "Agility Pyramid",
+            "neighbor_ids": [13357, 13612, 13355, 13100],
+            "tasks": [
+                {
+                    "name": "Obtain a Pyramid Top",
+                    "taskID": "obtain_pyramid_top",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Pyramid Top"],
+                            "item_ids": [6970],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Talk to Simon Templeton",
+                    "taskID": "talk_to_simon_templeton",
+                    "category": "Dialogue",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Simon Templeton"],
+                        "npc_ids": [5786],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Equip a Keris",
+                    "taskID": "equip_keris",
+                    "completion_type": "EQUIP",
+                    "category": ["Attack"],
+                    "level": [50],
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Keris"],
+                            "item_ids": [10581, 10584, 10583, 10582, 27291, 27287, 25981, 30891, 25979]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Goat with your Bare Fists",
+                    "taskID": "defeat_goat_no_weapon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Goat#Brown", "Goat#Tan", "Billy Goat#Brown", "Billy Goat#Tan"],
+                        "npc_ids": [1792, 1793, 1795, 1796, 1794, 1797],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "must_be_empty_slots": ["WEAPON"]
+                    }
+                }                                                        
+            ],                           
+            "is_completed": false
+        },
+        {
+            "region_id": [13612],
+            "Friendly_Name": "North Ruins of Ullek",
+            "neighbor_ids": [13613, 13868, 13611, 13356],
+            "tasks": [
+                {
+                    "name": "Defeat a Locust Rider",
+                    "taskID": "defeat_locust_rider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Locust Rider"],
+                        "npc_ids": [795, 800, 796, 801],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Locust Rider in 30 Seconds",
+                    "taskID": "defeat_locust_rider_30_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Locust Rider"],
+                        "npc_ids": [795, 800, 796, 801],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [50]
+                    }
+                },
+                {
+                    "name": "Defeat a Locust Rider in the First Hit",
+                    "taskID": "defeat_locust_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Locust Rider"],
+                        "npc_ids": [795, 800, 796, 801],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Scarab Mage",
+                    "taskID": "defeat_scarab_mage",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Scarab Mage"],
+                        "npc_ids": [794, 799, 11508],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Scarab Mage in 9 Seconds",
+                    "taskID": "defeat_scarab_mage_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Scarab Mage"],
+                        "npc_ids": [794, 799, 11508],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                },
+                {
+                    "name": "Defeat the Champion of Scabaras",
+                    "taskID": "defeat_champion_of_scarbaras",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Champion of Scabaras"],
+                        "npc_ids": [794, 799, 11508],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Smelt an Adamantite Bar",
+                    "taskID": "smith_adamantite_bar",
+                    "category": "Smithing",
+                    "level": 70,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Adamantite Bar",
+                            "item_ids": [2361],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Talk to Mehhar",
+                    "taskID": "talk_to_mehhar",
+                    "category": "Dialogue",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "completion_type": "NPC_DIALOGUE",
+                    "target_npc": {
+                        "npc": ["Mehhar"],
+                        "npc_ids": [11479],
+                        "quantity": [1]
+                    }
+                }                                                       
+            ],                           
+            "is_completed": false
+        },
+        {
+            "region_id": [13611],
+            "Friendly_Name": "South Ruins of Ullek",
+            "neighbor_ids": [13612, 13867, 13610, 13355],
+            "tasks": [
+                {
+                    "name": "Defeat a Locust in the First Hit",
+                    "taskID": "defeat_locust_first hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Locust"],
+                        "npc_ids": [11584, 11585],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Chop some Teak Trees",
+                    "taskID": "Chop_teak_trees",
+                    "category": "Woodcutting",
+                    "level": 35,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Teak Log",
+                    "taskID": "burn_teak_log",
+                    "category": "Firemaking",
+                    "level": 35,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Teak Logs",
+                        "item_ids": [6333],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Crimson Swift",
+                    "taskID": "catch_crimson_swift",
+                    "category": "Hunter",
+                    "level": 1,
+                    "completion_type": "HUNTER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Red Feather",
+                            "item_ids": [10088]
+                            },
+                            {
+                            "item": "Raw Bird Meat",
+                            "item_ids": [9978]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Defeat a Crocadile",
+                    "taskID": "defeat_crocadile",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Crocadile"],
+                        "npc_ids": [11705, 11582, 11581, 4184],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Crocadile in 30 Seconds",
+                    "taskID": "defeat_crocadile_30_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Crocadile"],
+                        "npc_ids": [11705, 11582, 11581, 4184],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [50]
+                    }
+                },
+                {
+                    "name": "Defeat a Crocadile in the First Hit",
+                    "taskID": "defeat_crocadile_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Crocadile"],
+                        "npc_ids": [11705, 11582, 11581, 4184],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                }                                                       
+            ],                           
+            "is_completed": false
+        },
+        {
+            "region_id": [13355],
+            "Friendly_Name": "Menaphite Akh",
+            "neighbor_ids": [13356, 13611, 13354, 13099],
+            "tasks": [
+                {
+                    "name": "Mine some Clay",
+                    "taskID": "mine_clay",
+                    "category": "Mining",
+                    "level": 1,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Clay"],
+                            "item_ids": [434],
+                            "quantity": [1, 10]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Defeat Menaphite Akh",
+                    "taskID": "defeat_menaphite_akh",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Menaphite Akh"],
+                        "npc_ids": [11492],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Desert Lizard",
+                    "taskID": "defeat_desert_lizard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Desert Lizard#Yellow", "Desert Lizard#Orange", "Desert Lizard#Green"],
+                        "npc_ids": [460, 461, 459, 12003],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Desert Lizard on Task",
+                    "taskID": "defeat_desert_lizard_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Desert Lizard#Yellow", "Desert Lizard#Orange", "Desert Lizard#Green"],
+                        "npc_ids": [460, 461, 459, 12003],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Desert Lizard in 12 Seconds",
+                    "taskID": "defeat_desert_lizard_12_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_KILL",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Desert Lizard#Yellow", "Desert Lizard#Orange", "Desert Lizard#Green"],
+                        "npc_ids": [460, 461, 459, 12003],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [20]                       
+                        }
+                }                                                      
+            ],                           
+            "is_completed": false
+        },
+        {
+            "region_id": [13099],
+            "Friendly_Name": "Sophanem",
+            "neighbor_ids": [13100, 13355, 13098, 12843],
+            "tasks": [
+                {
+                    "name": "Obtain a Pharaoh's Sceptre",
+                    "taskID": "Obtain_pharaoh's_sceptre",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Pharaoh's Sceptre"],
+                            "item_ids": [26948, 26950, 26945]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Pottery Statuette",
+                    "taskID": "Obtain_pottery_statuette",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Pottery Statuette"],
+                            "item_ids": [9036]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Gold Seal",
+                    "taskID": "Obtain_gold_seal",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Gold Seal"],
+                            "item_ids": [9040]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Golden Scarab",
+                    "taskID": "Obtain_golden_scarab",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Golden Scarab"],
+                            "item_ids": [9028]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Obtain a Golden Scarab",
+                    "taskID": "Obtain_golden_scarab",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Golden Scarab"],
+                            "item_ids": [9028]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Golden Statuette",
+                    "taskID": "Obtain_golden_statuette",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Golden Statuette"],
+                            "item_ids": [9034]
+                        }
+                    ]
+                },
+                {
+                    "name": "Activate Protect from Missiles",
+                    "taskID": "pray_protect_from_missiles",
+                    "category": "Prayer",
+                    "level": 40,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 13
+                    }                   
+                },
+                {
+                    "name": "Activate Redemption",
+                    "taskID": "pray_redemption",
+                    "category": "Prayer",
+                    "level": 52,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 16
+                    }                   
+                },
+                {
+                    "name": "Defeat a Locust Rider",
+                    "taskID": "defeat_locust_rider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Locust Rider"],
+                        "npc_ids": [795, 800, 796, 801],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Locust Rider in 30 Seconds",
+                    "taskID": "defeat_locust_rider_30_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Locust Rider"],
+                        "npc_ids": [795, 800, 796, 801],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [50]
+                    }
+                },
+                {
+                    "name": "Defeat a Locust Rider in the First Hit",
+                    "taskID": "defeat_locust_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Locust Rider"],
+                        "npc_ids": [795, 800, 796, 801],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Scarab Mage",
+                    "taskID": "defeat_scarab_mage",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Scarab Mage"],
+                        "npc_ids": [794, 799, 11508],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Scarab Mage in 9 Seconds",
+                    "taskID": "defeat_scarab_mage_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Scarab Mage"],
+                        "npc_ids": [794, 799, 11508],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                }                                                     
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Contact!",
+                    "points": 3
+                },
+                {
+                    "name": "Beneath Cursed Sands",
+                    "points": 4
+                }                                         
+            ],                           
+            "is_completed": false
+        },
+        {
+            "region_id": [13098],
+            "Friendly_Name": "Necropolis Fairy Ring",
+            "neighbor_ids": [13099, 13354, 13097, 12842],
+            "tasks": [
+                {
+                    "name": "Catch an Orange Salamander",
+                    "taskID": "catch_barb_orange_salamander",
+                    "category": "Hunter",
+                    "level": 47,
+                    "completion_type": "HUNTER",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Orange salamander",
+                            "item_ids": [10146]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Obtain an Orange Salamander Claw",
+                    "taskID": "Obtain_orange_salamander_claw",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Orange salamander claw"],
+                            "item_ids": [29231]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 62 Agility Necropolis Stepping Stone",
+                    "taskID": "agility_level_62_Necropolis_stepping_stone",
+                    "category": "Agility",
+                    "level": 62,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_object": [
+                        {
+                            "object": ["Stepping stone (Necropolis)"],
+                            "object_id": [43989, 43990],
+                            "quantity": [1]
+                        }
+                    ]
+
+                },              
+                {
+                    "name": "Mine some Sandstone",
+                    "taskID": "mine_sandstone",
+                    "category": "Mining",
+                    "level": 35,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Sandstone"],
+                            "item_ids": [6977, 6971, 6973, 6975],
+                            "quantity": [50, 500]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Granite",
+                    "taskID": "mine_granite",
+                    "category": "Mining",
+                    "level": 45,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Granite"],
+                            "item_ids": [6981, 6979, 6983],
+                            "quantity": [50, 500]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Desert Wolf",
+                    "taskID": "defeat_desert_wolf",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Desert Wolf"],
+                        "npc_ids": [4649, 4650, 4651],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Desert Wolf in 21 Seconds",
+                    "taskID": "defeat_desert_wolf_21_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Desert Wolf"],
+                        "npc_ids": [4649, 4650, 4651],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [35]                       
+                        }
+                },
+                {
+                    "name": "Defeat a Desert Wolf in the First Hit",
+                    "taskID": "defeat_desert_wolf_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Desert Wolf"],
+                        "npc_ids": [4649, 4650, 4651],
+                        "quantity": [1]
+                    }, 
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]                       
+                        }
+                },
+                {
+                    "name": "Use Fairy Ring Code AKP",
+                    "taskID": "fairy_ring_AKP",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }                                         
+            ],                           
+            "is_completed": false
         }                    
     ]
 }

@@ -1,0 +1,984 @@
+{
+    "Fremennik_Tasks": [
+        {
+            "region_id": [10040],
+            "Friendly_Name": "Lighthouse",
+            "neighbor_ids": [10041, 10296, 10039, 9784],
+            "tasks": [
+                {
+                "name": "Build a Hard STASH Unit in the Lighthouse",
+                "taskID": "build_hard_stash_lighthouse",
+                "category": "Construction",
+                "level": 55,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,               
+                "required_finished_object": [
+                        {
+                        "object": "Hard STASH Unit (crate)",
+                        "object_id": [29011]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unholy Book",
+                    "taskID": "obtain_unholy_book",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Unholy Book"],
+                            "item_ids": [3842, 26498],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Holy Book",
+                    "taskID": "obtain_holy_book",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Holy Book"],
+                            "item_ids": [3840, 26496],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Book of Balance",
+                    "taskID": "obtain_book_balance",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Book of Balance"],
+                            "item_ids": [3844, 26488],
+                            "quantity": [1]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Obtain a Book of Law",
+                    "taskID": "obtain_book_law",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Book of Law"],
+                            "item_ids": [12610, 26492],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Book of War",
+                    "taskID": "obtain_book_war",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Book of War"],
+                            "item_ids": [12608, 26494],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Book of Darkness",
+                    "taskID": "obtain_book_darkness",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Book of Darkness"],
+                            "item_ids": [12612, 26490],
+                            "quantity": [1]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Defeat a Dagannoth in the First Hit",
+                    "taskID": "defeat_dagannoth_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Dagannoth"],
+                        "npc_ids": [976, 977, 978, 979, 2259, 5942, 3185, 5943, 2264, 3184, 970, 971, 972, 7259, 973, 974, 975, 7260, 7033, 2266, 2267, 2265],
+                        "quantity": [1]
+                    }, 
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Dagannoth",
+                    "taskID": "defeat_dagannoth",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Dagannoth"],
+                        "npc_ids": [976, 977, 978, 979, 2259, 5942, 3185, 5943, 2264, 3184, 970, 971, 972, 7259, 973, 974, 975, 7260, 7033, 2266, 2267, 2265],
+                        "quantity": [25, 150]
+                    }
+                },
+                {
+                    "name": "Defeat a Dagannoth with your Bare Fists",
+                    "taskID": "defeat_dagannoth_no_weapon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                         "npc": ["Dagannoth"],
+                        "npc_ids": [976, 977, 978, 979, 2259, 5942, 3185, 5943, 2264, 3184, 970, 971, 972, 7259, 973, 974, 975, 7260, 7033, 2266, 2267, 2265],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "must_be_empty_slots": ["WEAPON"]
+                    }
+                },
+                {
+                    "name": "Obtain an Ensouled Dagannoth Head",
+                    "taskID": "obtain_ensouled_dagannoth_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ensouled Dagannoth Head"],
+                            "item_ids": [13493, 13492],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use Fairy Ring Code ALP",
+                    "taskID": "fairy_ring_ALP",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }          
+            ],
+            "optional_quests_unlocked": [
+                    {
+                        "name": "Horror from the Deep",
+                        "points": 2
+                    }                       
+                ],
+            "is_completed": false           
+        },
+        {
+            "region_id": [10296],
+            "Friendly_Name": "Rower's Arm",
+            "neighbor_ids": [10297, 10552, 10295, 10040],
+            "tasks": [
+                {
+                    "name": "Chop an Arctic Pine Tree",
+                    "taskID": "chop_arctine_pine_tree",
+                    "category": "Woodcutting",
+                    "level": 54,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Arctic Pine Log",
+                            "item_ids": [10810],
+                            "quantity": [25, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn an Arctic Pine Log",
+                    "taskID": "burn_arctic_pine_log",
+                    "category": "Firemaking",
+                    "level": 42,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Arctic Pine Log",
+                            "item_ids": [10810],
+                            "quantity": [25, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
+                    "category": "Woodcutting",
+                    "level": 45,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Maple Logs",
+                            "item_ids": [1517],
+                            "quantity": [50, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Maple Logs",
+                    "taskID": "burn_maple_logs",
+                    "category": "Firemaking",
+                    "level": 45,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Maple Logs",
+                        "item_ids": [1517],
+                        "quantity": [25, 50]
+                        }
+                    ]
+                }          
+            ],          
+            "is_completed": false           
+        },
+        {
+            "region_id": [10552],
+            "Friendly_Name": "Rellekka House Portal",
+            "neighbor_ids": [10553, 10808, 10551, 10296],
+            "tasks": [
+                {
+                    "name": "Defeat some Level 64 Wolves",
+                    "taskID": "defeat_level_64_wolves",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 64 Wolf"],
+                        "npc_ids": [106, 3912],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 64 Wolf in 17 Seconds",
+                    "taskID": "defeat_level_64_wolf_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 64 Wolf"],
+                        "npc_ids": [106, 3912],
+                        "quantity": [1]
+                    },               
+                    "constraints": {
+                        "time_in_ticks": [28]
+                    }
+                },
+                {
+                    "name": "Build an Oak Throne Lectern",
+                    "taskID": "build_oak_throne",
+                    "category": "Construction",
+                    "level": 60,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 3,
+                    "assignment_weight": 3,                    
+                    "required_finished_object": [
+                            {
+                            "object": "Oak throne",
+                            "object_id": [13665]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Mounted Glory",
+                    "taskID": "build_mounted_glory",
+                    "category": "Construction",
+                    "level": 47,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 5,                    
+                    "required_finished_object": [
+                            {
+                            "object": "Amulet of glory (mounted)",
+                            "object_id": [13523]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Mounted Myth's Cape",
+                    "taskID": "build_mounted_myth's_cape",
+                    "category": "Construction",
+                    "level": 47,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 5,                    
+                    "required_finished_object": [
+                            {
+                            "object": "Mythical cape (mounted)",
+                            "object_id": [31986]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Servant's Money Bag",
+                    "taskID": "build_servant's_money_bag",
+                    "category": "Construction",
+                    "level": 58,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 5,                    
+                    "required_finished_object": [
+                            {
+                            "object": "Servant's Money Bag",
+                            "object_id": [28859]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Basic Jewellery Box",
+                    "taskID": "build_basic_jewellery_box",
+                    "category": "Construction",
+                    "level": 81,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 4,
+                    "assignment_weight": 5,                    
+                    "required_finished_object": [
+                            {
+                            "object": "Basic jewellery box",
+                            "object_id": [37492, 37493, 37494, 37495, 37496, 37497, 37498, 37499, 37500, 50710]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Revitalisation Pool",
+                    "taskID": "build_revitalisation_pool",
+                    "category": "Construction",
+                    "level": 70,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 3,
+                    "assignment_weight": 5,                    
+                    "required_finished_object": [
+                            {
+                            "object": "Revitalisation Pool",
+                            "object_id": [29238, 40845]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Spirit Tree",
+                    "taskID": "build_spirit_tree",
+                    "category": ["Construction", "Farming"],
+                    "level": [70, 83],
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 4,
+                    "assignment_weight": 5,                    
+                    "required_finished_object": [
+                            {
+                            "object": "Spirit tree (Construction)#Regular",
+                            "object_id": [29227, 44936, 40778]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Gilded Marble Altar",
+                    "taskID": "build_gilded_marble_altar",
+                    "category": "Construction",
+                    "level": [75],
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 3,
+                    "assignment_weight": 5,                    
+                    "required_finished_object": [
+                            {
+                            "object": ["Gilded altar#Gnome child", "Gilded altar#Guthix", "Gilded altar#Saradomin", "Gilded altar#Zamorak"],
+                            "object_id": [40878, 13199, 13197, 13198]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Greater Teleport Focus",
+                    "taskID": "build_greater_teleport_focus",
+                    "category": "Construction",
+                    "level": [65],
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 3,
+                    "assignment_weight": 5,                    
+                    "required_finished_object": [
+                            {
+                            "object": ["Greater teleport focus"],
+                            "object_id": [13641]
+                            }
+                        ]
+                },
+                {
+                    "name": "Obtain an Enchanted Lyre(i)",
+                    "taskID": "obtain_enchanted_lyre(i)",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Enchanted lyre(i)"],
+                            "item_ids": [23458],
+                            "quantity": [1]
+                        }
+                    ]
+                }         
+            ],          
+            "is_completed": false           
+        },
+        {
+            "region_id": [10808],
+            "Friendly_Name": "Rellekka Forest",
+            "neighbor_ids": [10809, 11064, 10807, 10552],
+            "tasks": [
+                {
+                    "name": "Defeat a Unicorn Foal in the First Hit",
+                    "taskID": "defeat_unicorn_foal_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Unicorn Foal"],
+                        "npc_ids": [3910],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Fox in the First Hit",
+                    "taskID": "defeat_fox_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Fox"],
+                        "npc_ids": [3901],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Chop some Maple Trees",
+                    "taskID": "chop_maple_trees",
+                    "category": "Woodcutting",
+                    "level": 45,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Maple Logs",
+                            "item_ids": [1517],
+                            "quantity": [50, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Maple Logs",
+                    "taskID": "burn_maple_logs",
+                    "category": "Firemaking",
+                    "level": 45,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Maple Logs",
+                        "item_ids": [1517],
+                        "quantity": [25, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 48 Agility Fremennik Log Balance",
+                    "taskID": "agility_level_48_fremennik_log_balance",
+                    "category": "Agility",
+                    "level": 48,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Log balance (Fremennik Province)"],
+                            "object_id": [16540, 16541, 16542],
+                            "quantity": [1]
+                        }
+                    ]
+
+                },
+                {
+                    "name": "Chop the Swaying Tree",
+                    "taskID": "chop_swaying_tree",
+                    "category": "Woodcutting",
+                    "level": 40,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Branch",
+                            "item_ids": [3692],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Lyre",
+                    "taskID": "fletch_lyre",
+                    "category": "Fletching",
+                    "level": 25,
+                    "completion_type": "FLETCHING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Lyre"],
+                            "item_ids": [3689],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Bear Cub in the First Hit",
+                    "taskID": "defeat_bear_cub_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bear Cub"],
+                        "npc_ids": [3908, 3909],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a White Unicorn in the First Hit",
+                    "taskID": "defeat_white_unicorn_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["White Unicorn"],
+                        "npc_ids": [2837, 14043, 3910],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                        }
+                }                        
+            ],          
+            "is_completed": false           
+        },
+        {
+            "region_id": [11064],
+            "Friendly_Name": "Fremennik Slayer Dungeon",
+            "neighbor_ids": [11065, 11320, 11063, 10808],
+            "tasks": [               
+                {
+                    "name": "Defeat a Cockatrice",
+                    "taskID": "defeat_cockatrice",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Cockatrice"],
+                        "npc_ids": [419],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Pyrefiend",
+                    "taskID": "defeat_pyrefiend",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Pyrefiend#Level 43", "Pyrefiend#Level 48"],
+                        "npc_ids": [433, 434, 435, 436, 3139, 6762, 6795],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Pyrelord",
+                    "taskID": "defeat_pyrelord",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Pyrelord#1", "Pyrelord#2"],
+                        "npc_ids": [6762, 6795],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Basilisk",
+                    "taskID": "defeat_basilisk",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Basilisk"],
+                        "npc_ids": [417, 9283, 9284, 9285, 9286, 9293, 9258, 9282, 7395],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Monstrous Basilisk",
+                    "taskID": "defeat_monstrous_basilisk",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Monstrous Basilisk"],
+                        "npc_ids": [7395],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Jelly",
+                    "taskID": "defeat_jelly",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jelly"],
+                        "npc_ids": [13799, 441, 11245, 442, 438, 11242, 440, 11244, 437, 11241, 439, 11243, 15501, 7399, 7400],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Vitreous Jelly",
+                    "taskID": "defeat_vitreous_jelly",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Vitreous Jelly"],
+                        "npc_ids": [15501, 7399, 7400],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Turoth",
+                    "taskID": "defeat_turoth",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Turoth"],
+                        "npc_ids": [10397, 430, 429, 427, 428],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Spiked Turoth",
+                    "taskID": "defeat_spiked_turoth",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Spiked Turoth"],
+                        "npc_ids": [10397],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Mix some Super Defence Potions",
+                    "taskID": "mix_super_defence_potions",
+                    "category": "Obtain_Set",
+                    "level": 66,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                     "required_items": [
+                        {
+                            "item": ["Super Defence Potion(3)", "Super Defence Potion(4)"],
+                            "item_ids": [163, 2442],
+                            "quantity": [50, 150]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Kurask",
+                    "taskID": "defeat_kurask",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Kurask"],
+                        "npc_ids": [7405, 411, 410],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a King Kurask",
+                    "taskID": "defeat_king_kurask",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["King Kurask"],
+                        "npc_ids": [7405],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Equip a Leaf-bladed Battleaxe",
+                    "taskID": "equip_leaf-bladed_battleaxe",
+                    "category": ["Attack", "Slayer"],
+                    "level": [65, 55],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Leaf-bladed Battleaxe"],
+                            "item_ids": [20727]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Equip a Leaf-bladed Sword",
+                    "taskID": "equip_leaf-bladed_sword",
+                    "category": ["Attack", "Slayer"],
+                    "level": [50, 55],
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Leaf-bladed Sword"],
+                            "item_ids": [11902]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use Fairy Ring Code AJR",
+                    "taskID": "fairy_ring_AJR",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }                       
+            ],          
+            "is_completed": false           
+        },
+        {
+            "region_id": [11065],
+            "Friendly_Name": "Mountain Camp",
+            "neighbor_ids": [11066, 11321, 11064, 10809],
+            "tasks": [               
+                {
+                    "name": "Defeat a Camp Dweller",
+                    "taskID": "defeat_camp_dweller",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Camp Dweller"],
+                        "npc_ids": [1383, 1379, 1380, 1381, 1382],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Camp Dweller in the First Hit",
+                    "taskID": "defeat_camp_dweller_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Camp Dweller"],
+                        "npc_ids": [1383, 1379, 1380, 1381, 1382],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                        }
+                },
+                {
+                    "name": "Defeat The Kendal",
+                    "taskID": "defeat_kendal",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["The Kendal"],
+                        "npc_ids": [1377, 1378, 6322, 6383],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Bearhead",
+                    "taskID": "obtain_bearhead",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Bearhead"],
+                            "item_ids": [4502],
+                            "quantity": [1]
+                        }
+                    ]
+                }                       
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Mountain Daughter",
+                    "points": 2
+                }
+            ],          
+            "is_completed": false           
+        },
+        {
+            "region_id": [10809],
+            "Friendly_Name": "Keldagrim Cliffside",
+            "neighbor_ids": [10810, 11065, 10808, 10553],
+            "tasks": [               
+                {                           
+                    "name": "Defeat a Black Unicorn",
+                    "taskID": "defeat_black_unicorn",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Black Unicorn"],
+                        "npc_ids": [2849, 3911],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Black Unicorn in the First Hit",
+                    "taskID": "defeat_black_unicorn_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Black Unicorn"],
+                        "npc_ids": [2849, 3911 ],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                        }
+                }, 
+                {
+                    "name": "Use the Level 57 Agility Rellekka Fence Jump",
+                    "taskID": "agility_level_57_rellekka_fence_jump",
+                    "category": "Agility",
+                    "level": 57,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": [
+                        {
+                            "object": ["Broken Fence (Rellekka)"],
+                            "object_id": [544],
+                            "quantity": [1]
+                        }
+                    ]
+
+                },
+                {
+                    "name": "Mine some Mithril Ore",
+                    "taskID": "mine_mithril",
+                    "category": "Mining",
+                    "level": 55,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mithril Ore",
+                            "item_ids": [447],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [25, 200]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt a Mithril Bar",
+                    "taskID": "smith_mithril_bar",
+                    "category": "Smithing",
+                    "level": 50,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mithril Bar",
+                            "item_ids": [2359],
+                            "quantity": [1]
+                        }
+                    ]
+                }                       
+            ],          
+            "is_completed": false           
+        }                 
+    ]
+}

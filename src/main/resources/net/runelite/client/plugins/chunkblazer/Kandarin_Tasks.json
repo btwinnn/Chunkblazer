@@ -9197,9 +9197,9 @@
             "is_completed": false
         },
         {
-            "region_id": [9271],
+            "region_id": [9272],
             "Friendly_Name": "Piscatoris Fairy Ring",
-            "neighbor_ids": [9272, 9527, 9270, 9015],
+            "neighbor_ids": [9273, 9528, 9271, 9016],
             "tasks": [
                 {
                     "name": "Catch a Copper Longtail",

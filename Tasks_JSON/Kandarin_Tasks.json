@@ -4353,15 +4353,15 @@
                         }
                 },
                 {
-                    "name": "Defeat a Unicorn in 22 Seconds",
-                    "taskID": "defeat_white_unicorn_fast",
+                    "name": "Defeat a White Unicorn in 22 Seconds",
+                    "taskID": "defeat_white_unicorn_22_seconds",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["White Unicorn"],
-                        "npc_ids": [2837, 14043],
+                        "npc_ids": [2837, 14043, 3910],
                         "quantity": [1]
                     },
                     
@@ -6504,14 +6504,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [33],
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                        "time_in_ticks": [33]
                     }
                 },
                 {

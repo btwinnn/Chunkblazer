@@ -564,7 +564,7 @@
                     "target_npc": {
                         "npc": ["Unicorn Foal"],
                         "npc_ids": [3910],
-                        "quantity": [1, 10]
+                        "quantity": [1]
                     },
                     
                     "constraints": {
@@ -9057,9 +9057,9 @@
             "is_completed": false
         },
         {
-            "region_id": [4921],
+            "region_id": [4920],
             "Friendly_Name": "Kebos Swamp",
-            "neighbor_ids": [4922, 5177, 4920, 4665],
+            "neighbor_ids": [4921, 5176, 4919, 4664],
             "tasks": [              
                 {
                     "name": "Defeat a Swamp Frog",
@@ -9128,9 +9128,9 @@
             "is_completed": false
         },
         {
-            "region_id": [4919],
+            "region_id": [4918],
             "Friendly_Name": "Mount Quidamortem South",
-            "neighbor_ids": [4920, 5175, 4918, 4663],
+            "neighbor_ids": [4919, 5174, 4917, 4662],
             "tasks": [              
                 {
                     "name": "Defeat many Trolls",
