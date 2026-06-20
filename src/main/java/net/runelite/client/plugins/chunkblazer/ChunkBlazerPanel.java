@@ -178,6 +178,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		JPanel header = createHeaderSection();
 		header.setAlignmentX(LEFT_ALIGNMENT);
 		mainPanel.add(header);
+		mainPanel.add(Box.createVerticalStrut(4));
+		// Always-visible data-sync notice (data disclosure in the UI itself).
+		mainPanel.add(createDataNoticeRow());
 		mainPanel.add(Box.createVerticalStrut(8));
 
 		// Logged-out prompt — shown in place of the gameplay sections until the
@@ -351,6 +354,105 @@ public class ChunkBlazerPanel extends PluginPanel
 				"Failed to open link:\n" + url + "\n\n" + e.getMessage(),
 				"Error",
 				JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * Compact, always-visible data notice under the header: tells players their
+	 * progress is synced to chunkblazer.com and links to the full data-use
+	 * explanation. This is the in-plugin half of the data disclosure (the config
+	 * "Enable Server Verification" description carries the other half).
+	 */
+	private JPanel createDataNoticeRow()
+	{
+		JPanel row = new JPanel(new FlowLayout(FlowLayout.CENTER, 3, 0));
+		row.setBackground(ColorScheme.DARK_GRAY_COLOR);
+		row.setAlignmentX(LEFT_ALIGNMENT);
+		row.setMaximumSize(new Dimension(PANEL_WIDTH, 16));
+
+		JLabel note = new JLabel("Progress synced to");
+		note.setFont(FontManager.getRunescapeSmallFont());
+		note.setForeground(ColorScheme.LIGHT_GRAY_COLOR);
+		row.add(note);
+
+		JLabel site = new JLabel("chunkblazer.com");
+		site.setFont(FontManager.getRunescapeSmallFont());
+		site.setForeground(new Color(255, 152, 0));
+		site.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+		site.setToolTipText("Track your account progress at chunkblazer.com");
+		site.addMouseListener(new java.awt.event.MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e)
+			{
+				openLink("https://chunkblazer.com");
+			}
+		});
+		row.add(site);
+
+		JLabel info = new JLabel("(?)"); // ASCII — Runescape font lacks a circled-i glyph
+		info.setFont(FontManager.getRunescapeSmallFont());
+		info.setForeground(ColorScheme.LIGHT_GRAY_COLOR);
+		info.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+		info.setToolTipText("How your data is used");
+		info.addMouseListener(new java.awt.event.MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e)
+			{
+				showDataUseDialog();
+			}
+		});
+		row.add(info);
+
+		return row;
+	}
+
+	/**
+	 * Full in-plugin data-use disclosure: what is collected, where it goes, and
+	 * how to opt out. Mirrors PRIVACY.md. Reached from the notice row's info icon.
+	 */
+	private void showDataUseDialog()
+	{
+		String msg =
+			"ChunkBlazer is a server-backed game mode, similar to Wise Old Man\n"
+			+ "and TempleOSRS. To save your progress and rank you on the\n"
+			+ "leaderboards, the plugin sends data to ChunkBlazer's servers.\n"
+			+ "\n"
+			+ "WHAT IS SENT (only while \"Enable Server Verification\" is on):\n"
+			+ "  • Your RuneScape name\n"
+			+ "  • Your current world and map region\n"
+			+ "  • Progress events: NPC kills, XP/skill changes, items\n"
+			+ "    obtained or equipped, and task completions\n"
+			+ "\n"
+			+ "WHAT IT IS USED FOR:\n"
+			+ "  • Saving your unlocked chunks, tasks, points and game mode\n"
+			+ "  • Server-side verification of completions (anti-cheat)\n"
+			+ "  • Leaderboards and seeing other ChunkBlazer players online\n"
+			+ "\n"
+			+ "WHERE IT GOES:\n"
+			+ "  • Over HTTPS to api.chunkblazer.com. Not shared with any\n"
+			+ "    third parties.\n"
+			+ "\n"
+			+ "YOUR CONTROL:\n"
+			+ "  • Turn off \"Enable Server Verification\" to play fully\n"
+			+ "    offline — no data leaves your client.\n"
+			+ "  • Turn off \"Visible to Others\" to stay hidden from players.\n"
+			+ "\n"
+			+ "Track your account progress at chunkblazer.com.";
+
+		int choice = JOptionPane.showOptionDialog(
+			this,
+			msg,
+			"ChunkBlazer — How your data is used",
+			JOptionPane.DEFAULT_OPTION,
+			JOptionPane.INFORMATION_MESSAGE,
+			null,
+			new Object[]{"Open chunkblazer.com", "Close"},
+			"Close");
+		if (choice == 0)
+		{
+			openLink("https://chunkblazer.com");
 		}
 	}
 

@@ -163,7 +163,9 @@ public interface ChunkBlazerConfig extends Config
 
 	@ConfigSection(
 		name = "API",
-		description = "Server API settings",
+		description = "Server connection. ChunkBlazer is a server-backed game mode: when verification is on, "
+			+ "your RuneScape name, current world/region, and progress events are sent to api.chunkblazer.com. "
+			+ "See the 'Enable Server Verification' option for the full list, or turn it off to play offline.",
 		position = 1
 	)
 	String apiSection = "api";
@@ -183,8 +185,12 @@ public interface ChunkBlazerConfig extends Config
 
 	@ConfigItem(
 		keyName = "apiEnabled",
-		name = "Enable API Verification",
-		description = "Enable server-side task verification (requires API key)",
+		name = "Enable Server Verification",
+		description = "When ON, ChunkBlazer connects to api.chunkblazer.com to verify task completions, "
+			+ "power the leaderboards, and show other ChunkBlazer players online. Data sent: your RuneScape "
+			+ "name, your current world and map region, and your in-game progress events (NPC kills, XP/skill "
+			+ "changes, items obtained or equipped, and task completions). Turn this OFF to play fully offline "
+			+ "with no data leaving your client (leaderboards and player discovery will be unavailable).",
 		section = apiSection,
 		position = 1
 	)

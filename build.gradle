@@ -1,0 +1,59 @@
+// ChunkBlazer — RuneLite Plugin Hub build file.
+//
+// This is the standalone Gradle build used for a Plugin Hub submission. It is
+// additive: it coexists with the existing pom.xml and the in-tree dev workflow
+// (run-chunkblazer.bat / sync-to-runelite.bat), which are unaffected. The Hub
+// only ever reads this build.gradle. See SUBMISSION.md for the remaining steps.
+//
+// TODO before submitting (see SUBMISSION.md):
+//   1. Rename the Java package  net.runelite.client.plugins.chunkblazer -> com.chunkblazer
+//      (the net.runelite.* namespace is reserved for first-party/core code, and
+//      it split-packages against the client jar).
+//   2. Point `plugins=` in runelite-plugin.properties at the new FQN.
+//   3. Run `gradle wrapper` once so gradlew + gradle-wrapper.jar are committed.
+
+plugins {
+	id 'java'
+}
+
+repositories {
+	mavenLocal()
+	maven {
+		url = 'https://repo.runelite.net'
+		content {
+			includeGroupByRegex("net\\.runelite.*")
+		}
+	}
+	mavenCentral()
+}
+
+def runeLiteVersion = 'latest.release'
+
+dependencies {
+	// RuneLite client is provided at runtime by the host; it also brings
+	// OkHttp + Gson transitively, so ChunkBlazer ships ZERO new dependencies.
+	compileOnly group: 'net.runelite', name: 'client', version: runeLiteVersion
+
+	compileOnly 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+	testImplementation group: 'net.runelite', name: 'client', version: runeLiteVersion
+	testImplementation group: 'net.runelite', name: 'jshell', version: runeLiteVersion
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+	testImplementation 'org.mockito:mockito-core:5.11.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'
+	testCompileOnly 'org.projectlombok:lombok:1.18.30'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
+
+group = 'com.chunkblazer'
+version = '1.0.0'
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+	options.release.set(11)
+}
+
+test {
+	useJUnitPlatform()
+}
