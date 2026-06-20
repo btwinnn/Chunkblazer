@@ -136,7 +136,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Black Unicorn"],
-                        "npc_ids": [2849],
+                        "npc_ids": [2849, 3911],
                         "quantity": [1]
                     }
                 },
@@ -149,7 +149,7 @@
                     "assignment_weight": 3,
                     "target_npc": {
                         "npc": ["Black Unicorn"],
-                        "npc_ids": [2849],
+                        "npc_ids": [2849, 3911],
                         "quantity": [1]
                     },
                     "constraints": {

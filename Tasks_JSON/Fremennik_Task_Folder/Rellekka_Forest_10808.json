@@ -143,7 +143,7 @@
                     "assignment_weight": 3,
                     "target_npc": {
                         "npc": ["White Unicorn"],
-                        "npc_ids": [2837, 14043],
+                        "npc_ids": [2837, 14043, 3910],
                         "quantity": [1]
                     },
                     "constraints": {
