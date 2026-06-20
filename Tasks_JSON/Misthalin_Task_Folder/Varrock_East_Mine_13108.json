@@ -103,8 +103,8 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Unicorn in 22 Seconds",
-                    "taskID": "defeat_white_unicorn_fast",
+                    "name": "Defeat a White Unicorn in 22 Seconds",
+                    "taskID": "defeat_white_unicorn_22_seconds",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
