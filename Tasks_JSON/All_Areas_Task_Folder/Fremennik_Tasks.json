@@ -806,6 +806,77 @@
                 }                       
             ],          
             "is_completed": false           
+        },
+        {
+            "region_id": [11065],
+            "Friendly_Name": "Mountain Camp",
+            "neighbor_ids": [11066, 11321, 11064, 10809],
+            "tasks": [               
+                {
+                    "name": "Defeat a Camp Dweller",
+                    "taskID": "defeat_camp_dweller",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Camp Dweller"],
+                        "npc_ids": [1383, 1379, 1380, 1381, 1382],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Camp Dweller in the First Hit",
+                    "taskID": "defeat_camp_dweller_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Camp Dweller"],
+                        "npc_ids": [1383, 1379, 1380, 1381, 1382],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                        }
+                },
+                {
+                    "name": "Defeat The Kendal",
+                    "taskID": "defeat_kendal",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["The Kendal"],
+                        "npc_ids": [1377, 1378, 6322, 6383],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Bearhead",
+                    "taskID": "obtain_bearhead",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Bearhead"],
+                            "item_ids": [4502],
+                            "quantity": [1]
+                        }
+                    ]
+                }                       
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Mountain Daughter",
+                    "points": 2
+                }
+            ],          
+            "is_completed": false           
         }                 
     ]
 }
