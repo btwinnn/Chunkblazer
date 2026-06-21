@@ -602,8 +602,10 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		// Swallow the default world-map click so it doesn't also pan/select.
 		event.consume();
-		// Show the unlock confirm in the top-right side panel (same prompt as
-		// walking into a chunk), rather than a chatbox popup.
+		// Show the unlock confirm both as a chatbox Yes/No prompt and in the top-right
+		// side panel, matching the walk-into-a-chunk experience. unlockRegion is
+		// idempotent, so acting on either prompt is safe if both are open.
+		showMinimapUnlockPopup(regionId);
 		panel.promptUnlockForRegion(regionId);
 	}
 
@@ -786,6 +788,8 @@ public class ChunkBlazerPlugin extends Plugin
 		if (!wasAlreadyUnlocked)
 		{
 			playRegionUnlockJingle(regionId);
+			// Confirm in chat so the player doesn't have to watch the side panel.
+			addPluginChatMessage("Unlocked " + getRegionName(regionId) + ".");
 		}
 
 		// Roll tasks for this region if it has a chunk defined
@@ -3307,6 +3311,10 @@ public class ChunkBlazerPlugin extends Plugin
 
 		// Update panel
 		panel.updatePanel();
+
+		// Confirm in chat so the player doesn't have to watch the side panel.
+		addPluginChatMessage("Unlocked " + getRegionName(regionId) + " for " + cost
+			+ (cost == 1 ? " point. " : " points. ") + (currentPoints - cost) + " remaining.");
 
 		if (!wasAlreadyUnlocked)
 		{

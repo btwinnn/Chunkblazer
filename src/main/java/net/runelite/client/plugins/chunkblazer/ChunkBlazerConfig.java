@@ -443,13 +443,13 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "worldMapUnlockKey",
 		name = "Map Unlock Key",
-		description = "Hold this key and click a neighbouring chunk on the world map to unlock it.",
+		description = "Hold this key (Shift by default) and click a neighbouring chunk on the world map to unlock it.",
 		section = regionSection,
 		position = 3
 	)
 	default Keybind worldMapUnlockKey()
 	{
-		return new Keybind(java.awt.event.KeyEvent.VK_U, 0);
+		return Keybind.SHIFT;
 	}
 
 	@ConfigSection(

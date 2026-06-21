@@ -3174,6 +3174,14 @@ public class ChunkBlazerPanel extends PluginPanel
 				g2.draw(box);
 				g2.dispose();
 			}
+
+			// Cap height to content so BoxLayout can't stretch the card to fill leftover
+			// viewport space — that stretch is what left the big gap below short task names.
+			@Override
+			public Dimension getMaximumSize()
+			{
+				return new Dimension(CONTENT_WIDTH - 10, getPreferredSize().height);
+			}
 		};
 		card.setOpaque(false);
 		return card;
@@ -3861,10 +3869,13 @@ public class ChunkBlazerPanel extends PluginPanel
 		taskListContentPanel.revalidate();
 		taskListContentPanel.repaint();
 
-		// Fixed height to show 5 items - scroll if more content exists
+		// Size the viewport to the actual (now height-capped) cards, capped at
+		// MAX_TASK_LIST_HEIGHT — shrinks the section when there are few small tasks
+		// instead of always reserving the full 5-item height, then scrolls beyond the cap.
 		if (taskListExpanded)
 		{
-			int height = MAX_TASK_LIST_HEIGHT;
+			int contentH = taskListContentPanel.getPreferredSize().height + 4;
+			int height = Math.max(50, Math.min(contentH, MAX_TASK_LIST_HEIGHT));
 			taskListScrollPane.setMinimumSize(new Dimension(CONTENT_WIDTH, height));
 			taskListScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, height));
 			taskListScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, height));
