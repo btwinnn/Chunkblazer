@@ -2624,13 +2624,10 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		if (taskListExpanded)
 		{
+			// updateTaskListContent() sizes the scroll pane to the actual (height-capped)
+			// cards, up to MAX_TASK_LIST_HEIGHT — don't re-set a fixed height here or it
+			// re-introduces the big empty block below short task lists.
 			updateTaskListContent();
-
-			// Fixed height to show 5 items - scroll if more content exists
-			int height = MAX_TASK_LIST_HEIGHT;
-			taskListScrollPane.setMinimumSize(new Dimension(CONTENT_WIDTH, height));
-			taskListScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, height));
-			taskListScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, height));
 		}
 		else
 		{
