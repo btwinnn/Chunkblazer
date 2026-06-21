@@ -124,7 +124,10 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 			for (int y = yRegionMin; y < yRegionMax; y += REGION_SIZE)
 			{
 				int regionId = ((x >> 6) << 8) | (y >> 6);
-				boolean isUnlocked = unlockedRegions.contains(String.valueOf(regionId));
+				// Free dungeon / off-map regions (regionY outside the surface band)
+				// are always accessible, so draw them as unlocked, not locked.
+				boolean isUnlocked = unlockedRegions.contains(String.valueOf(regionId))
+					|| plugin.isFreeRegion(regionId);
 				boolean isNeighbor = neighborRegions.contains(regionId);
 
 				int yTileOffset = -(yTileMin - y);
@@ -175,7 +178,10 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 			for (int y = yRegionMin; y < yRegionMax; y += REGION_SIZE)
 			{
 				int regionId = ((x >> 6) << 8) | (y >> 6);
-				boolean isUnlocked = unlockedRegions.contains(String.valueOf(regionId));
+				// Free dungeon / off-map regions (regionY outside the surface band)
+				// are always accessible, so draw them as unlocked, not locked.
+				boolean isUnlocked = unlockedRegions.contains(String.valueOf(regionId))
+					|| plugin.isFreeRegion(regionId);
 				boolean isNeighbor = neighborRegions.contains(regionId);
 				boolean isCurrent = regionId == currentRegionId;
 

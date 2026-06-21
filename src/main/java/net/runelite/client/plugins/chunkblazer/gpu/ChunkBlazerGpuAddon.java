@@ -39,6 +39,12 @@ public class ChunkBlazerGpuAddon
 	// rendered scene. GRID must match CHUNKBLAZER_GRID in vert.glsl.
 	private static final int GRID = 7;
 	private final int[] lockedGrid = new int[GRID * GRID];
+	// Free (dungeon / non-overworld) regions from Free_Chunks.json, loaded once and
+	// cached. They render full-colour like unlocked regions. Loaded here directly
+	// (not via ChunkBlazerPlugin.isRegionUnlocked) because this addon lives in a
+	// separate child injector and can't reference the main plugin — same reason
+	// the unlocked set is read from config rather than the plugin.
+	private Set<Integer> freeRegions = null;
 
 	private boolean isValid;
 	private int glProgram;
@@ -124,6 +130,8 @@ public class ChunkBlazerGpuAddon
 		// note on the class fields). Same parsing as
 		// ChunkBlazerPlugin.getUnlockedRegionIds(), just inlined.
 		Set<Integer> unlocked = readUnlockedRegionIds();
+		// Dungeon / non-overworld regions are always full-colour (never greyed).
+		Set<Integer> free = freeRegions();
 
 		// Don't grey out instanced areas (raids, GoTR, etc.) when the instance
 		// happens to share coordinates with an unlocked region — the shader
@@ -135,7 +143,7 @@ public class ChunkBlazerGpuAddon
 		{
 			for (int region : mapRegions)
 			{
-				if (unlocked.contains(region))
+				if (isAccessible(region, unlocked, free))
 				{
 					instanceCoincidesWithUnlockedRegion = true;
 					break;
@@ -167,7 +175,7 @@ public class ChunkBlazerGpuAddon
 				for (int gy = 0; gy < GRID; ++gy)
 				{
 					int regionId = ((gridBaseRegionX + gx) << 8) | (gridBaseRegionY + gy);
-					lockedGrid[gx * GRID + gy] = unlocked.contains(regionId) ? 0 : 1;
+					lockedGrid[gx * GRID + gy] = isAccessible(regionId, unlocked, free) ? 0 : 1;
 				}
 			}
 
@@ -188,6 +196,60 @@ public class ChunkBlazerGpuAddon
 		{
 			log.error("glGetError: {}", error);
 		}
+	}
+
+	/**
+	 * A region renders full-colour (not greyed) if it's unlocked, an explicit
+	 * free-chunk override, or an off-map dungeon by the coordinate rule: regionY
+	 * outside the overworld surface band 39..64. Mirrors
+	 * ChunkBlazerPlugin.isFreeRegion so the shader and the rest of the plugin agree.
+	 */
+	private boolean isAccessible(int regionId, Set<Integer> unlocked, Set<Integer> free)
+	{
+		int regionY = regionId & 0xFF;
+		if (regionY < 39 || regionY > 64)
+		{
+			return true;
+		}
+		return unlocked.contains(regionId) || free.contains(regionId);
+	}
+
+	/**
+	 * Load (and cache) the free / dungeon region IDs from Free_Chunks.json so the
+	 * shader leaves them full-colour. Read once; on failure returns an empty set
+	 * and the addon behaves as before. Absolute classpath path so it resolves from
+	 * this {@code .gpu} subpackage.
+	 */
+	private Set<Integer> freeRegions()
+	{
+		if (freeRegions != null)
+		{
+			return freeRegions;
+		}
+		Set<Integer> ids = new HashSet<>();
+		try (java.io.InputStream is = ChunkBlazerConfig.class.getResourceAsStream(
+			"/net/runelite/client/plugins/chunkblazer/Free_Chunks.json"))
+		{
+			if (is != null)
+			{
+				String json = new String(is.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+				com.google.gson.JsonObject obj = new com.google.gson.Gson().fromJson(json, com.google.gson.JsonObject.class);
+				if (obj != null && obj.has("free_regions") && obj.get("free_regions").isJsonArray())
+				{
+					for (com.google.gson.JsonElement el : obj.getAsJsonArray("free_regions"))
+					{
+						ids.add(el.getAsInt());
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			log.warn("GPU addon: failed to load Free_Chunks.json: {}", e.getMessage());
+		}
+		freeRegions = ids;
+		log.debug("GPU addon: loaded {} free (dungeon) regions", ids.size());
+		return freeRegions;
 	}
 
 	/**

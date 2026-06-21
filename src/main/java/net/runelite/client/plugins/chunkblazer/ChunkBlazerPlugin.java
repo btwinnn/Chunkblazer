@@ -157,6 +157,9 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private final List<NuzlockeChunk> allChunks = new ArrayList<>();
 	private final Map<Integer, NuzlockeChunk> chunksByRegionId = new HashMap<>();
+	// Region IDs that unlock for FREE (0 points), loaded from Free_Chunks.json.
+	// The design makes all dungeon regions free chunks; their IDs live in that file.
+	private final Set<Integer> freeRegionIds = new HashSet<>();
 	private final Map<String, NuzlockeTask> completedTaskCache = new HashMap<>(); // Cache completed tasks for lookup
 	private ChunkBlazerPanel panel;
 	private NavigationButton navButton;
@@ -1045,6 +1048,55 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			log.error("NO REGIONS LOADED! chunksByRegionId is empty!");
 		}
+
+		// Free (0-cost) chunk registry — dungeons etc. that unlock for free.
+		loadFreeChunks();
+	}
+
+	/**
+	 * Load the free-chunk registry (Free_Chunks.json): region IDs that unlock for
+	 * 0 points. The dungeon-as-free-chunk design lists dungeon regions here. Parsed
+	 * leniently (extra keys like "_comment" are ignored). Client-only for now — the
+	 * server doesn't yet validate unlocks, so when that lands it must read the same
+	 * list (or this file should move server-side too).
+	 */
+	private void loadFreeChunks()
+	{
+		String alt = flipJsonExtensionCase("Free_Chunks.json");
+		String abs = "/net/runelite/client/plugins/chunkblazer/";
+		String[] candidates = { "Free_Chunks.json", abs + "Free_Chunks.json", alt, abs + alt };
+		InputStream is = null;
+		for (String path : candidates)
+		{
+			is = getClass().getResourceAsStream(path);
+			if (is != null)
+			{
+				break;
+			}
+		}
+		if (is == null)
+		{
+			log.info("Free_Chunks.json not found — no free chunks configured");
+			return;
+		}
+		try
+		{
+			String json = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+			com.google.gson.JsonObject obj = gson.fromJson(json, com.google.gson.JsonObject.class);
+			if (obj != null && obj.has("free_regions") && obj.get("free_regions").isJsonArray())
+			{
+				freeRegionIds.clear();
+				for (com.google.gson.JsonElement el : obj.getAsJsonArray("free_regions"))
+				{
+					freeRegionIds.add(el.getAsInt());
+				}
+				log.info("Loaded {} free (0-cost) chunk region(s): {}", freeRegionIds.size(), freeRegionIds);
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("Failed to load Free_Chunks.json: {}", e.getMessage(), e);
+		}
 	}
 	// --- Game Mode Methods ---
 
@@ -1715,6 +1767,14 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public boolean isRegionUnlocked(int regionId)
 	{
+		// Dungeon / non-overworld regions are ALWAYS freely accessible — never
+		// locked or greyed, no unlock needed. They aren't part of the chunk
+		// challenge. This single check makes them read as "unlocked" everywhere
+		// (greyscale, prompts, map borders).
+		if (isFreeRegion(regionId))
+		{
+			return true;
+		}
 		Set<String> unlocked = getUnlockedRegionIds();
 		if (unlocked.contains(String.valueOf(regionId)))
 		{
@@ -3131,12 +3191,40 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public int getRegionUnlockCost(int regionId)
 	{
+		// Free chunks (dungeons, per Free_Chunks.json) cost nothing to unlock.
+		if (freeRegionIds.contains(regionId))
+		{
+			return 0;
+		}
 		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
 		if (chunk != null)
 		{
 			return chunk.getUnlockCostValue();
 		}
 		return 1; // Default cost
+	}
+
+	// Overworld surface lives in regionY 39..64 (world y 2496..4159). Everything
+	// outside that band is off-map storage — underground dungeons, relocated
+	// cities (Prifddinas), instanced content — which we treat as free dungeons.
+	private static final int SURFACE_MIN_REGION_Y = 39;
+	private static final int SURFACE_MAX_REGION_Y = 64;
+
+	/**
+	 * @return true if this region is a free dungeon (always accessible, never part
+	 * of the chunk challenge). A region qualifies if it's outside the overworld
+	 * surface band (regionY 39..64) — a coordinate rule that auto-covers every
+	 * dungeon / off-map area including future content, with no dataset gaps — OR if
+	 * it's explicitly listed in Free_Chunks.json (override for any oddballs).
+	 */
+	public boolean isFreeRegion(int regionId)
+	{
+		int regionY = regionId & 0xFF;
+		if (regionY < SURFACE_MIN_REGION_Y || regionY > SURFACE_MAX_REGION_Y)
+		{
+			return true;
+		}
+		return freeRegionIds.contains(regionId);
 	}
 
 	public void unlockRegion(int regionId)

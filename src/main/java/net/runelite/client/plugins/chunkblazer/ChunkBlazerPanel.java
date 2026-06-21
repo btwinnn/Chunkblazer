@@ -49,6 +49,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	// UI Components
 	private JPanel regionUnlockPanel;
 	private JPanel unlockedListPanel;
+	private boolean unlockedListExpanded = false; // Unlocked Chunks list collapsed by default
 	private JPanel unlockableChunksPanel; // unused — list UI removed; dead code, delete in cleanup pass
 	// Pins the top-right region-unlock prompt to a chunk clicked on the world map
 	// (hold U + click), overriding the walk-into-chunk current-region behaviour
@@ -141,6 +142,10 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private static final int PANEL_WIDTH = 225; // Standard RuneLite panel width
 	private static final int CONTENT_WIDTH = PANEL_WIDTH - 24; // Width for content inside panels (accounting for borders/padding)
+	// ChunkBlazer theme accent — flame orange. Primary border/title colour across
+	// the panel (replaces the old mismatched gold). Green stays for tasks/success,
+	// amber for verification, blue for dev, red for danger.
+	private static final Color FLAME = new Color(255, 152, 0);
 
 	// Max width passed to WrappingTextLabel as a hard cap for BoxLayout.
 	// Subtracts the vertical scrollbar (~17px) and item-panel borders so the
@@ -219,12 +224,6 @@ public class ChunkBlazerPanel extends PluginPanel
 		mainPanel.add(regionUnlockPanel);
 		mainPanel.add(Box.createVerticalStrut(8));
 
-		// Unlocked Chunks — read-only list of the chunks the player has unlocked.
-		unlockedListPanel = createUnlockedListSection();
-		setupSectionPanel(unlockedListPanel);
-		mainPanel.add(unlockedListPanel);
-		mainPanel.add(Box.createVerticalStrut(8));
-
 		// Mode Selection Section (hidden once the mode is locked)
 		modeSelectionPanel = createModeSelectionSection();
 		setupSectionPanel(modeSelectionPanel);
@@ -256,6 +255,13 @@ public class ChunkBlazerPanel extends PluginPanel
 		mainPanel.add(taskListPanel);
 		mainPanel.add(Box.createVerticalStrut(8));
 
+		// Unlocked Chunks — read-only list, tucked below the active tasks so it's
+		// out of the way (it can get long).
+		unlockedListPanel = createUnlockedListSection();
+		setupSectionPanel(unlockedListPanel);
+		mainPanel.add(unlockedListPanel);
+		mainPanel.add(Box.createVerticalStrut(8));
+
 		// Dev/Test Controls Section (at the bottom, collapsible)
 		devControlsPanel = createDevControlsSection();
 		setupSectionPanel(devControlsPanel);
@@ -277,6 +283,22 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Fixed width, but let height be determined by content (don't set preferredSize height)
 		panel.setMaximumSize(new Dimension(PANEL_WIDTH - 10, Integer.MAX_VALUE));
 		panel.setMinimumSize(new Dimension(PANEL_WIDTH - 10, 0));
+	}
+
+	/**
+	 * Thin flame-orange divider drawn under a section title — the consistent accent
+	 * across every section header. Full content width, 2px tall.
+	 */
+	private JPanel sectionDivider()
+	{
+		JPanel d = new JPanel();
+		d.setBackground(FLAME);
+		d.setAlignmentX(LEFT_ALIGNMENT);
+		Dimension sz = new Dimension(CONTENT_WIDTH, 2);
+		d.setPreferredSize(sz);
+		d.setMinimumSize(sz);
+		d.setMaximumSize(sz);
+		return d;
 	}
 
 	/**
@@ -488,7 +510,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		JLabel sectionTitle = new JLabel("Completed Tasks");
 		sectionTitle.setFont(FontManager.getRunescapeBoldFont());
-		sectionTitle.setForeground(new Color(150, 150, 255));
+		sectionTitle.setForeground(new Color(100, 255, 100));
 		headerRow.add(sectionTitle, BorderLayout.WEST);
 
 		completedTasksToggle = new JToggleButton("\u25BC");
@@ -505,6 +527,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		headerRow.add(completedTasksToggle, BorderLayout.EAST);
 
 		panel.add(headerRow);
+		panel.add(sectionDivider());
 		panel.add(Box.createVerticalStrut(5));
 
 		// Filter panel (visible when expanded)
@@ -779,7 +802,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	}
 
 	private static final int HEADER_HEIGHT = 38; // Fixed height for header section
-	private static final int STATS_HEIGHT = 36; // Fixed height for stats section
+	private static final int STATS_HEIGHT = 42; // Fixed height for stats section
 
 	private JPanel createHeaderSection()
 	{
@@ -844,7 +867,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		statsPanel.setLayout(new GridLayout(1, 3, 2, 0));
 		statsPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		statsPanel.setBorder(BorderFactory.createCompoundBorder(
-			BorderFactory.createLineBorder(new Color(255, 215, 0)), // Gold border
+			BorderFactory.createLineBorder(FLAME), // Gold border
 			new EmptyBorder(2, 3, 2, 3)
 		));
 		// Fixed size - never changes
@@ -852,18 +875,15 @@ public class ChunkBlazerPanel extends PluginPanel
 		statsPanel.setMinimumSize(new Dimension(PANEL_WIDTH - 10, STATS_HEIGHT));
 		statsPanel.setMaximumSize(new Dimension(PANEL_WIDTH - 10, STATS_HEIGHT));
 
-		// Points - use "Pts" for shorter label
-		JPanel pointsPanel = createStatBox("Pts", "0");
+		JPanel pointsPanel = createStatBox("Points", "0");
 		totalPointsLabel = (JLabel) ((JPanel) pointsPanel.getComponent(0)).getComponent(1);
 		statsPanel.add(pointsPanel);
 
-		// Chunks Unlocked - use "Chk" for shorter label
-		JPanel chunksPanel = createStatBox("Chk", "1");
+		JPanel chunksPanel = createStatBox("Chunks", "1");
 		chunksUnlockedLabel = (JLabel) ((JPanel) chunksPanel.getComponent(0)).getComponent(1);
 		statsPanel.add(chunksPanel);
 
-		// Tasks Done - use "Tsk" for shorter label
-		JPanel tasksPanel = createStatBox("Tsk", "0");
+		JPanel tasksPanel = createStatBox("Tasks", "0");
 		tasksCompletedLabel = (JLabel) ((JPanel) tasksPanel.getComponent(0)).getComponent(1);
 		statsPanel.add(tasksPanel);
 
@@ -883,7 +903,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		panel.setBorder(BorderFactory.createCompoundBorder(
-			BorderFactory.createLineBorder(new Color(255, 215, 0)), // gold — matches stats border
+			BorderFactory.createLineBorder(FLAME), // gold — matches stats border
 			new EmptyBorder(6, 6, 6, 6)
 		));
 		panel.setVisible(false); // shown by updateRegionUnlockSection() only when relevant
@@ -926,7 +946,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		unlockedListPanel.removeAll();
 
 		java.util.List<String> names = plugin.getUnlockedChunkDisplayNames();
-		if (!plugin.isLoggedIn() || names.isEmpty())
+		if (!plugin.isLoggedIn())
 		{
 			unlockedListPanel.setVisible(false);
 			if (unlockedListPanel.getParent() != null)
@@ -937,23 +957,49 @@ public class ChunkBlazerPanel extends PluginPanel
 			return;
 		}
 
+		// Collapsible header: title + count on the left, a toggle on the right.
+		// Collapsed by default so a long unlock list doesn't dominate the panel —
+		// the rows only render when expanded.
+		JPanel headerRow = new JPanel(new BorderLayout(4, 0));
+		headerRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		headerRow.setAlignmentX(LEFT_ALIGNMENT);
+		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 20));
+
 		JLabel title = new JLabel("Unlocked Chunks (" + names.size() + ")");
 		title.setFont(FontManager.getRunescapeBoldFont());
-		title.setForeground(new Color(120, 220, 120));
-		title.setAlignmentX(LEFT_ALIGNMENT);
-		unlockedListPanel.add(title);
-		unlockedListPanel.add(Box.createVerticalStrut(4));
+		title.setForeground(Color.WHITE);
+		headerRow.add(title, BorderLayout.WEST);
 
-		for (String n : names)
+		JToggleButton toggle = new JToggleButton(unlockedListExpanded ? "▲" : "▼");
+		toggle.setFont(new Font("Arial", Font.PLAIN, 10));
+		toggle.setPreferredSize(new Dimension(30, 18));
+		toggle.setMaximumSize(new Dimension(30, 18));
+		toggle.setSelected(unlockedListExpanded);
+		toggle.setToolTipText("Show/hide your unlocked chunks");
+		toggle.addActionListener(e ->
 		{
-			WrappingTextLabel row = new WrappingTextLabel(
-				n,
-				FontManager.getRunescapeSmallFont(),
-				Color.WHITE,
-				TASK_TEXT_WRAP_WIDTH);
-			row.setAlignmentX(LEFT_ALIGNMENT);
-			unlockedListPanel.add(row);
-			unlockedListPanel.add(Box.createVerticalStrut(2));
+			unlockedListExpanded = toggle.isSelected();
+			updateUnlockedListSection();
+		});
+		headerRow.add(toggle, BorderLayout.EAST);
+		unlockedListPanel.add(headerRow);
+
+		if (unlockedListExpanded)
+		{
+			unlockedListPanel.add(Box.createVerticalStrut(3));
+			unlockedListPanel.add(sectionDivider());
+			unlockedListPanel.add(Box.createVerticalStrut(5));
+			for (String n : names)
+			{
+				WrappingTextLabel row = new WrappingTextLabel(
+					n,
+					FontManager.getRunescapeSmallFont(),
+					Color.WHITE,
+					TASK_TEXT_WRAP_WIDTH);
+				row.setAlignmentX(LEFT_ALIGNMENT);
+				unlockedListPanel.add(row);
+				unlockedListPanel.add(Box.createVerticalStrut(2));
+			}
 		}
 
 		unlockedListPanel.setVisible(true);
@@ -976,7 +1022,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		panel.setBorder(BorderFactory.createCompoundBorder(
-			BorderFactory.createLineBorder(new Color(255, 215, 0)),
+			BorderFactory.createLineBorder(FLAME),
 			new EmptyBorder(6, 6, 6, 6)
 		));
 		panel.setVisible(false);
@@ -1021,7 +1067,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		JLabel title = new JLabel("Unlockable Chunks");
 		title.setFont(FontManager.getRunescapeBoldFont());
-		title.setForeground(new Color(255, 215, 0));
+		title.setForeground(FLAME);
 		title.setAlignmentX(LEFT_ALIGNMENT);
 		unlockableChunksPanel.add(title);
 		unlockableChunksPanel.add(Box.createVerticalStrut(4));
@@ -1188,10 +1234,12 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		JLabel title = new JLabel("🔒 Locked Region");
 		title.setFont(FontManager.getRunescapeBoldFont());
-		title.setForeground(new Color(255, 215, 0));
+		title.setForeground(Color.WHITE);
 		title.setAlignmentX(LEFT_ALIGNMENT);
 		regionUnlockPanel.add(title);
-		regionUnlockPanel.add(Box.createVerticalStrut(4));
+		regionUnlockPanel.add(Box.createVerticalStrut(3));
+		regionUnlockPanel.add(sectionDivider());
+		regionUnlockPanel.add(Box.createVerticalStrut(5));
 
 		WrappingTextLabel nameLabel = new WrappingTextLabel(
 			regionName + " (" + regionId + ")",
@@ -1313,14 +1361,14 @@ public class ChunkBlazerPanel extends PluginPanel
 		innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
 		innerPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 
-		JLabel labelText = new JLabel(label);
+		JLabel labelText = new JLabel(label.toUpperCase());
 		labelText.setFont(new Font("Arial", Font.PLAIN, 9));
-		labelText.setForeground(Color.LIGHT_GRAY);
+		labelText.setForeground(new Color(150, 150, 150)); // muted grey
 		labelText.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel valueText = new JLabel(value);
-		valueText.setFont(FontManager.getRunescapeBoldFont().deriveFont(12f));
-		valueText.setForeground(new Color(255, 215, 0)); // Gold color
+		valueText.setFont(FontManager.getRunescapeBoldFont().deriveFont(15f));
+		valueText.setForeground(FLAME); // gold
 		valueText.setAlignmentX(CENTER_ALIGNMENT);
 
 		innerPanel.add(labelText);
@@ -1346,6 +1394,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		sectionTitle.setForeground(Color.WHITE);
 		sectionTitle.setAlignmentX(LEFT_ALIGNMENT);
 		modePanel.add(sectionTitle);
+		modePanel.add(Box.createVerticalStrut(3));
+		modePanel.add(sectionDivider());
 		modePanel.add(Box.createVerticalStrut(5));
 
 		// Warning text
@@ -1481,7 +1531,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		selectedTaskPanel.setLayout(new BoxLayout(selectedTaskPanel, BoxLayout.Y_AXIS));
 		selectedTaskPanel.setBackground(new Color(60, 80, 60));
 		selectedTaskPanel.setBorder(BorderFactory.createCompoundBorder(
-			BorderFactory.createLineBorder(new Color(255, 215, 0), 2), // Gold border
+			BorderFactory.createLineBorder(FLAME, 2), // Gold border
 			new EmptyBorder(6, 6, 6, 6)
 		));
 		selectedTaskPanel.setAlignmentX(LEFT_ALIGNMENT);
@@ -1490,7 +1540,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		JLabel selectedTitle = new JLabel("\u2605 SELECTED TASK \u2605"); // Star symbols
 		selectedTitle.setFont(FontManager.getRunescapeBoldFont());
-		selectedTitle.setForeground(new Color(255, 215, 0)); // Gold color
+		selectedTitle.setForeground(FLAME); // Gold color
 		selectedTitle.setAlignmentX(LEFT_ALIGNMENT);
 		selectedTaskPanel.add(selectedTitle);
 
@@ -1532,6 +1582,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		headerRow.add(activeTasksToggle, BorderLayout.EAST);
 
 		taskPanel.add(headerRow);
+		taskPanel.add(sectionDivider());
 		taskPanel.add(Box.createVerticalStrut(4));
 
 		// === FILTER PANEL (collapsible) ===
@@ -1897,7 +1948,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		JLabel selectedTitle = new JLabel("\u2605 SELECTED TASK \u2605");
 		selectedTitle.setFont(FontManager.getRunescapeBoldFont());
-		selectedTitle.setForeground(new Color(255, 215, 0));
+		selectedTitle.setForeground(FLAME);
 		headerRow.add(selectedTitle, BorderLayout.WEST);
 
 		// Icon-style X: no button chrome, just a clickable glyph that lights up on hover.
@@ -1998,8 +2049,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		// child for this anymore.
 		JPanel progressBar = createPercentageProgressBar(
 			pct,
-			new Color(255, 215, 0),                // gold fill
-			new Color(255, 215, 0),                // gold border
+			FLAME,                // gold fill
+			FLAME,                // gold border
 			12);
 		progressRow.add(progressBar, BorderLayout.CENTER);
 
@@ -2384,6 +2435,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		headerRow.add(taskListToggle, BorderLayout.EAST);
 
 		listPanel.add(headerRow);
+		listPanel.add(sectionDivider());
 		listPanel.add(Box.createVerticalStrut(5));
 
 		// Filter text field (visible when expanded)
@@ -2713,6 +2765,11 @@ public class ChunkBlazerPanel extends PluginPanel
 				return;
 			}
 
+			// The Active Tasks section (currentTaskPanel) is hidden in the
+			// logged-out branch above and nowhere re-shown, so it stayed blank on
+			// login until a plugin toggle rebuilt the panel. Re-show it here.
+			currentTaskPanel.setVisible(true);
+
 			updateModeDisplay();
 			updateRegionDisplay();
 			updateStats();
@@ -2988,7 +3045,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Different colors for selected vs unselected
 		Color bgColor = isSelected ? new Color(60, 70, 50) : new Color(40, 50, 40);
-		Color borderColor = isSelected ? new Color(255, 215, 0) : new Color(60, 80, 60);
+		Color borderColor = isSelected ? FLAME : new Color(60, 80, 60);
 		int borderWidth = isSelected ? 2 : 1;
 
 		itemPanel.setBackground(bgColor);
@@ -3055,7 +3112,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		WrappingTextLabel nameLabel = new WrappingTextLabel(
 			numberPrefix + selectionPrefix + taskName,
 			FontManager.getRunescapeSmallFont(),
-			isSelected ? new Color(255, 215, 0) : new Color(150, 255, 150),
+			isSelected ? FLAME : new Color(150, 255, 150),
 			TASK_TEXT_WRAP_WIDTH);
 		itemPanel.add(nameLabel);
 
@@ -3103,8 +3160,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		// it wider than the preferred 80 px.
 		JPanel progressBar = createPercentageProgressBar(
 			pct,
-			isSelected ? new Color(255, 215, 0) : new Color(80, 180, 80),
-			isSelected ? new Color(255, 215, 0) : new Color(60, 60, 60),
+			isSelected ? FLAME : new Color(80, 180, 80),
+			isSelected ? FLAME : new Color(60, 60, 60),
 			10);
 		progressRow.add(progressBar, BorderLayout.CENTER);
 
@@ -3306,7 +3363,7 @@ public class ChunkBlazerPanel extends PluginPanel
 			int totalPoints = filteredTasks.stream().mapToInt(CompletedTaskInfo::getPoints).sum();
 			JLabel summaryLabel = new JLabel("Showing " + filteredTasks.size() + " tasks (" + totalPoints + " pts)");
 			summaryLabel.setFont(FontManager.getRunescapeSmallFont());
-			summaryLabel.setForeground(new Color(255, 215, 0));
+			summaryLabel.setForeground(FLAME);
 			summaryLabel.setAlignmentX(LEFT_ALIGNMENT);
 			completedTasksContentPanel.add(summaryLabel);
 			completedTasksContentPanel.add(Box.createVerticalStrut(5));
