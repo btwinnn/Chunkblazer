@@ -302,6 +302,55 @@ public class ChunkBlazerPanel extends PluginPanel
 	}
 
 	/**
+	 * Small triangle icon for collapse toggles — drawn rather than using a unicode
+	 * arrow glyph (which renders as a tofu box / "X" in the button font). Points
+	 * down when collapsed ("expand"), up when expanded ("collapse"). The raised
+	 * (out) vs pressed (in) bevel comes from the JToggleButton's selected state.
+	 */
+	private static javax.swing.Icon arrowIcon(boolean down)
+	{
+		return new javax.swing.Icon()
+		{
+			@Override
+			public int getIconWidth()
+			{
+				return 9;
+			}
+
+			@Override
+			public int getIconHeight()
+			{
+				return 9;
+			}
+
+			@Override
+			public void paintIcon(java.awt.Component c, Graphics g, int x, int y)
+			{
+				java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+				g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+					java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setColor(Color.WHITE);
+				if (down)
+				{
+					g2.fillPolygon(new int[]{x, x + 8, x + 4}, new int[]{y + 2, y + 2, y + 7}, 3);
+				}
+				else
+				{
+					g2.fillPolygon(new int[]{x, x + 8, x + 4}, new int[]{y + 7, y + 7, y + 2}, 3);
+				}
+				g2.dispose();
+			}
+		};
+	}
+
+	/** Point a collapse toggle's arrow: down when collapsed, up when expanded. */
+	private void setToggleArrow(JToggleButton btn, boolean expanded)
+	{
+		btn.setText(null);
+		btn.setIcon(arrowIcon(!expanded));
+	}
+
+	/**
 	 * Build the "Verify Your Account" banner. The big code label is filled in
 	 * at runtime by {@link #showVerificationPrompt(String)}.
 	 */
@@ -513,7 +562,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		sectionTitle.setForeground(new Color(100, 255, 100));
 		headerRow.add(sectionTitle, BorderLayout.WEST);
 
-		completedTasksToggle = new JToggleButton("\u25BC");
+		completedTasksToggle = new JToggleButton();
+		setToggleArrow(completedTasksToggle, completedTasksExpanded);
 		completedTasksToggle.setFont(new Font("Arial", Font.PLAIN, 10));
 		completedTasksToggle.setPreferredSize(new Dimension(30, 20));
 		completedTasksToggle.setMaximumSize(new Dimension(30, 20));
@@ -521,7 +571,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		completedTasksToggle.addActionListener(e ->
 		{
 			completedTasksExpanded = completedTasksToggle.isSelected();
-			completedTasksToggle.setText(completedTasksExpanded ? "\u25B2" : "\u25BC");
+			setToggleArrow(completedTasksToggle, completedTasksExpanded);
 			updateCompletedTasksVisibility();
 		});
 		headerRow.add(completedTasksToggle, BorderLayout.EAST);
@@ -683,7 +733,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(completedTasksScrollPane);
 
 		// Collapsed summary label
-		completedCollapsedLabel = new JLabel("Click \u25BC to view completed tasks");
+		completedCollapsedLabel = new JLabel("Click to view completed tasks");
 		completedCollapsedLabel.setFont(FontManager.getRunescapeSmallFont());
 		completedCollapsedLabel.setForeground(Color.GRAY);
 		completedCollapsedLabel.setAlignmentX(LEFT_ALIGNMENT);
@@ -970,7 +1020,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		title.setForeground(Color.WHITE);
 		headerRow.add(title, BorderLayout.WEST);
 
-		JToggleButton toggle = new JToggleButton(unlockedListExpanded ? "▲" : "▼");
+		JToggleButton toggle = new JToggleButton();
+		setToggleArrow(toggle, unlockedListExpanded);
 		toggle.setFont(new Font("Arial", Font.PLAIN, 10));
 		toggle.setPreferredSize(new Dimension(30, 18));
 		toggle.setMaximumSize(new Dimension(30, 18));
@@ -1567,8 +1618,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		activeTasksSectionTitle.setForeground(new Color(100, 255, 100));
 		headerRow.add(activeTasksSectionTitle, BorderLayout.WEST);
 
-		activeTasksToggle = new JToggleButton("\u25B2"); // Up arrow (expanded)
+		activeTasksToggle = new JToggleButton();
 		activeTasksToggle.setSelected(true); // Start expanded
+		setToggleArrow(activeTasksToggle, true);
 		activeTasksToggle.setFont(new Font("Arial", Font.PLAIN, 10));
 		activeTasksToggle.setPreferredSize(new Dimension(30, 20));
 		activeTasksToggle.setMaximumSize(new Dimension(30, 20));
@@ -1576,7 +1628,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		activeTasksToggle.addActionListener(e ->
 		{
 			activeTasksExpanded = activeTasksToggle.isSelected();
-			activeTasksToggle.setText(activeTasksExpanded ? "\u25B2" : "\u25BC");
+			setToggleArrow(activeTasksToggle, activeTasksExpanded);
 			updateActiveTasksVisibility();
 		});
 		headerRow.add(activeTasksToggle, BorderLayout.EAST);
@@ -1740,7 +1792,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		taskPanel.add(activeTasksScrollPane);
 
 		// === COLLAPSED LABEL ===
-		activeTasksCollapsedLabel = new JLabel("Click \u25BC to view tasks");
+		activeTasksCollapsedLabel = new JLabel("Click to view tasks");
 		activeTasksCollapsedLabel.setFont(FontManager.getRunescapeSmallFont());
 		activeTasksCollapsedLabel.setForeground(Color.GRAY);
 		activeTasksCollapsedLabel.setAlignmentX(LEFT_ALIGNMENT);
@@ -2088,7 +2140,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		sectionTitle.setForeground(new Color(150, 150, 255));
 		headerRow.add(sectionTitle, BorderLayout.WEST);
 
-		devControlsToggle = new JToggleButton("\u25BC"); // Down arrow (collapsed)
+		devControlsToggle = new JToggleButton();
+		setToggleArrow(devControlsToggle, devControlsExpanded);
 		devControlsToggle.setFont(new Font("Arial", Font.PLAIN, 10));
 		devControlsToggle.setPreferredSize(new Dimension(30, 20));
 		devControlsToggle.setMaximumSize(new Dimension(30, 20));
@@ -2096,7 +2149,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		devControlsToggle.addActionListener(e ->
 		{
 			devControlsExpanded = devControlsToggle.isSelected();
-			devControlsToggle.setText(devControlsExpanded ? "\u25B2" : "\u25BC");
+			setToggleArrow(devControlsToggle, devControlsExpanded);
 			updateDevControlsVisibility();
 		});
 		headerRow.add(devControlsToggle, BorderLayout.EAST);
@@ -2421,7 +2474,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		sectionTitle.setForeground(Color.WHITE);
 		headerRow.add(sectionTitle, BorderLayout.WEST);
 
-		taskListToggle = new JToggleButton("\u25BC"); // Down arrow
+		taskListToggle = new JToggleButton();
+		setToggleArrow(taskListToggle, taskListExpanded);
 		taskListToggle.setFont(new Font("Arial", Font.PLAIN, 10));
 		taskListToggle.setPreferredSize(new Dimension(30, 20));
 		taskListToggle.setMaximumSize(new Dimension(30, 20));
@@ -2429,7 +2483,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		taskListToggle.addActionListener(e ->
 		{
 			taskListExpanded = taskListToggle.isSelected();
-			taskListToggle.setText(taskListExpanded ? "\u25B2" : "\u25BC"); // Up/Down arrow
+			setToggleArrow(taskListToggle, taskListExpanded);
 			updateTaskListVisibility();
 		});
 		headerRow.add(taskListToggle, BorderLayout.EAST);
@@ -2485,7 +2539,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		listPanel.add(taskListScrollPane);
 
 		// Collapsed summary (visible when collapsed)
-		JLabel collapsedLabel = new JLabel("Click \u25BC to view tasks");
+		JLabel collapsedLabel = new JLabel("Click to view tasks");
 		collapsedLabel.setFont(FontManager.getRunescapeSmallFont());
 		collapsedLabel.setForeground(Color.GRAY);
 		collapsedLabel.setAlignmentX(LEFT_ALIGNMENT);
@@ -3040,21 +3094,44 @@ public class ChunkBlazerPanel extends PluginPanel
 			task.getTaskId() != null &&
 			task.getTaskId().equals(selectedTask.getTaskId());
 
-		JPanel itemPanel = new JPanel();
+		// Task card: a dark rounded box with a flame-orange left accent bar, painted
+		// (not a fixed image) so it scales to each row's height. Hover lightens the
+		// fill; selected warms it + flame border.
+		final boolean[] hovered = {false};
+		JPanel itemPanel = new JPanel()
+		{
+			@Override
+			protected void paintComponent(Graphics g)
+			{
+				super.paintComponent(g);
+				java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+				g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+					java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+				int w = getWidth();
+				int h = getHeight();
+				int arc = 12;
+				java.awt.geom.RoundRectangle2D box =
+					new java.awt.geom.RoundRectangle2D.Float(0.5f, 0.5f, w - 1.5f, h - 1.5f, arc, arc);
+				g2.setColor(isSelected ? new Color(46, 41, 30)
+					: (hovered[0] ? new Color(42, 42, 42) : new Color(30, 30, 30)));
+				g2.fill(box);
+				// Flame-orange left accent bar, clipped to the rounded shape.
+				java.awt.Shape oldClip = g2.getClip();
+				g2.clip(box);
+				g2.setColor(FLAME);
+				g2.fillRect(0, 0, 5, h);
+				g2.setClip(oldClip);
+				g2.setColor(isSelected ? FLAME : new Color(70, 70, 70));
+				g2.setStroke(new java.awt.BasicStroke(isSelected ? 1.6f : 1f));
+				g2.draw(box);
+				g2.dispose();
+			}
+		};
+		itemPanel.setOpaque(false);
 		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
-
-		// Different colors for selected vs unselected
-		Color bgColor = isSelected ? new Color(60, 70, 50) : new Color(40, 50, 40);
-		Color borderColor = isSelected ? FLAME : new Color(60, 80, 60);
-		int borderWidth = isSelected ? 2 : 1;
-
-		itemPanel.setBackground(bgColor);
-		itemPanel.setBorder(BorderFactory.createCompoundBorder(
-			BorderFactory.createLineBorder(borderColor, borderWidth),
-			new EmptyBorder(4, 5, 4, 5)
-		));
+		// Left inset (12) clears the orange bar; the rest is breathing room.
+		itemPanel.setBorder(new EmptyBorder(5, 12, 6, 6));
 		itemPanel.setAlignmentX(LEFT_ALIGNMENT);
-		// Allow dynamic height based on content
 		itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, Integer.MAX_VALUE));
 
 		// Click + hover behaviour. Attached recursively at the bottom of this method so the
@@ -3083,7 +3160,8 @@ public class ChunkBlazerPanel extends PluginPanel
 			{
 				if (!isSelected)
 				{
-					itemPanel.setBackground(new Color(50, 60, 50));
+					hovered[0] = true;
+					itemPanel.repaint();
 				}
 			}
 
@@ -3100,7 +3178,8 @@ public class ChunkBlazerPanel extends PluginPanel
 				java.awt.Point local = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), itemPanel);
 				if (!itemPanel.contains(local))
 				{
-					itemPanel.setBackground(bgColor);
+					hovered[0] = false;
+					itemPanel.repaint();
 				}
 			}
 		};
@@ -3150,7 +3229,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		pct = Math.min(pct, 1.0f); // Cap at 100%
 
 		JPanel progressRow = new JPanel(new BorderLayout(4, 0));
-		progressRow.setBackground(bgColor);
+		progressRow.setOpaque(false);
 		progressRow.setAlignmentX(LEFT_ALIGNMENT);
 		progressRow.setPreferredSize(new Dimension(CONTENT_WIDTH - 20, 16));
 		progressRow.setMaximumSize(new Dimension(CONTENT_WIDTH - 20, 16));
@@ -3262,8 +3341,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		if (completedCollapsedLabel != null)
 		{
 			completedCollapsedLabel.setText(count > 0 ?
-				"Click \u25BC to view " + count + " completed tasks" :
-				"Click \u25BC to view completed tasks");
+				"Click to view " + count + " completed tasks" :
+				"Click to view completed tasks");
 		}
 
 		if (completedTasksPanel.getComponentCount() > 0)
