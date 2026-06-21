@@ -1594,7 +1594,8 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 			int world = client.getWorld();
 			int region = lastRegionId;
-			apiClient.sendHeartbeat(world, region, config.visibleToOthers());
+			// Always visible: the "Visible to Others" toggle was removed (was broken).
+			apiClient.sendHeartbeat(world, region, true);
 		});
 	}
 
@@ -1644,7 +1645,8 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 			int world = client.getWorld();
 			int region = lastRegionId;
-			apiClient.sendHeartbeat(world, region, config.visibleToOthers())
+			// Always visible: the "Visible to Others" toggle was removed (was broken).
+			apiClient.sendHeartbeat(world, region, true)
 				.whenComplete((v, t) -> refreshRoster());
 		});
 	}

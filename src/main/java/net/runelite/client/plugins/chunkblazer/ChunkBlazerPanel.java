@@ -343,6 +343,42 @@ public class ChunkBlazerPanel extends PluginPanel
 		};
 	}
 
+	/**
+	 * A painted "X" close glyph (the ✕ font character renders as tofu in the
+	 * RuneScape UI font), drawn in the given colour so callers can swap it on hover.
+	 */
+	private static javax.swing.Icon xIcon(Color color)
+	{
+		return new javax.swing.Icon()
+		{
+			@Override
+			public int getIconWidth()
+			{
+				return 9;
+			}
+
+			@Override
+			public int getIconHeight()
+			{
+				return 9;
+			}
+
+			@Override
+			public void paintIcon(java.awt.Component c, Graphics g, int x, int y)
+			{
+				java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+				g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+					java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setColor(color);
+				g2.setStroke(new java.awt.BasicStroke(1.8f,
+					java.awt.BasicStroke.CAP_ROUND, java.awt.BasicStroke.JOIN_ROUND));
+				g2.drawLine(x + 1, y + 1, x + 7, y + 7);
+				g2.drawLine(x + 7, y + 1, x + 1, y + 7);
+				g2.dispose();
+			}
+		};
+	}
+
 	/** Point a collapse toggle's arrow: down when collapsed, up when expanded. */
 	private void setToggleArrow(JToggleButton btn, boolean expanded)
 	{
@@ -516,11 +552,6 @@ public class ChunkBlazerPanel extends PluginPanel
 			+ "WHERE IT GOES:\n"
 			+ "  • Over HTTPS to api.chunkblazer.com. Not shared with any\n"
 			+ "    third parties.\n"
-			+ "\n"
-			+ "YOUR CONTROL:\n"
-			+ "  • Turn off \"Enable Server Verification\" to play fully\n"
-			+ "    offline — no data leaves your client.\n"
-			+ "  • Turn off \"Visible to Others\" to stay hidden from players.\n"
 			+ "\n"
 			+ "Track your account progress at chunkblazer.com.";
 
@@ -1040,16 +1071,27 @@ public class ChunkBlazerPanel extends PluginPanel
 			unlockedListPanel.add(Box.createVerticalStrut(3));
 			unlockedListPanel.add(sectionDivider());
 			unlockedListPanel.add(Box.createVerticalStrut(5));
-			for (String n : names)
+			if (names.isEmpty())
 			{
-				WrappingTextLabel row = new WrappingTextLabel(
-					n,
-					FontManager.getRunescapeSmallFont(),
-					Color.WHITE,
-					TASK_TEXT_WRAP_WIDTH);
-				row.setAlignmentX(LEFT_ALIGNMENT);
-				unlockedListPanel.add(row);
-				unlockedListPanel.add(Box.createVerticalStrut(2));
+				JLabel empty = new JLabel("No chunks unlocked yet.");
+				empty.setFont(FontManager.getRunescapeSmallFont());
+				empty.setForeground(ColorScheme.LIGHT_GRAY_COLOR);
+				empty.setAlignmentX(LEFT_ALIGNMENT);
+				unlockedListPanel.add(empty);
+			}
+			else
+			{
+				// Compact wrapping "chips" instead of one chunk per row, so a long unlock
+				// list stays tight and modern-looking as it grows.
+				JPanel chipWrap = new JPanel(new WrapLayout(FlowLayout.LEFT, 4, 4));
+				chipWrap.setOpaque(false);
+				chipWrap.setAlignmentX(LEFT_ALIGNMENT);
+				chipWrap.setMaximumSize(new Dimension(CONTENT_WIDTH, Integer.MAX_VALUE));
+				for (String n : names)
+				{
+					chipWrap.add(makeChunkChip(n));
+				}
+				unlockedListPanel.add(chipWrap);
 			}
 		}
 
@@ -2006,9 +2048,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Icon-style X: no button chrome, just a clickable glyph that lights up on hover.
 		final Color dismissIdleColor = new Color(180, 180, 180);
 		final Color dismissHoverColor = new Color(255, 120, 120);
-		JButton dismissButton = new JButton("\u2715");
-		dismissButton.setFont(new Font("Arial", Font.BOLD, 13));
-		dismissButton.setForeground(dismissIdleColor);
+		JButton dismissButton = new JButton(xIcon(dismissIdleColor));
 		dismissButton.setContentAreaFilled(false);
 		dismissButton.setBorderPainted(false);
 		dismissButton.setFocusPainted(false);
@@ -2023,13 +2063,13 @@ public class ChunkBlazerPanel extends PluginPanel
 			@Override
 			public void mouseEntered(java.awt.event.MouseEvent e)
 			{
-				dismissButton.setForeground(dismissHoverColor);
+				dismissButton.setIcon(xIcon(dismissHoverColor));
 			}
 
 			@Override
 			public void mouseExited(java.awt.event.MouseEvent e)
 			{
-				dismissButton.setForeground(dismissIdleColor);
+				dismissButton.setIcon(xIcon(dismissIdleColor));
 			}
 		});
 		dismissButton.addActionListener(e ->
@@ -3087,6 +3127,169 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 	}
 
+	/**
+	 * A rounded ChunkBlazer "card" panel: navy fill, flame-orange left accent bar and a
+	 * subtle border, painted (not a fixed image) so it scales to the row's height. Shared
+	 * by the completed- and chunk-task rows so every task box has one consistent look.
+	 * (The active-task card paints its own variant because it also needs hover/selection.)
+	 */
+	private JPanel createCardPanel(Color fill, Color border)
+	{
+		JPanel card = new JPanel()
+		{
+			@Override
+			protected void paintComponent(Graphics g)
+			{
+				super.paintComponent(g);
+				java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+				g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+					java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+				int w = getWidth();
+				int h = getHeight();
+				java.awt.geom.RoundRectangle2D box =
+					new java.awt.geom.RoundRectangle2D.Float(0.5f, 0.5f, w - 1.5f, h - 1.5f, 12, 12);
+				g2.setColor(fill);
+				g2.fill(box);
+				java.awt.Shape oldClip = g2.getClip();
+				g2.clip(box);
+				g2.setColor(FLAME);
+				g2.fillRect(0, 0, 5, h);
+				g2.setClip(oldClip);
+				g2.setColor(border);
+				g2.setStroke(new java.awt.BasicStroke(1f));
+				g2.draw(box);
+				g2.dispose();
+			}
+		};
+		card.setOpaque(false);
+		return card;
+	}
+
+	/**
+	 * A compact rounded "pill" for one unlocked chunk. The region-id parenthetical is
+	 * dropped from the visible label to keep chips tight; the full name (with id) is the
+	 * tooltip. Laid out by {@link WrapLayout} so chips flow and wrap instead of stacking
+	 * one-per-row.
+	 */
+	private JLabel makeChunkChip(String fullText)
+	{
+		String label = fullText.replaceAll("\\s*\\([^)]*\\)\\s*$", "");
+		JLabel chip = new JLabel(label)
+		{
+			@Override
+			protected void paintComponent(Graphics g)
+			{
+				java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+				g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+					java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setColor(new Color(40, 52, 76));
+				g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+				g2.setColor(new Color(64, 80, 108));
+				g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
+				g2.dispose();
+				super.paintComponent(g);
+			}
+		};
+		chip.setOpaque(false);
+		chip.setForeground(new Color(210, 220, 235));
+		chip.setFont(FontManager.getRunescapeSmallFont());
+		chip.setBorder(new EmptyBorder(2, 7, 2, 7));
+		chip.setToolTipText(fullText);
+		return chip;
+	}
+
+	/**
+	 * FlowLayout that actually wraps to multiple rows and reports the correct preferred
+	 * height for the available width — plain FlowLayout always claims a single row, which
+	 * breaks inside a BoxLayout/scroll pane. Standard well-known WrapLayout.
+	 */
+	private static class WrapLayout extends FlowLayout
+	{
+		WrapLayout(int align, int hgap, int vgap)
+		{
+			super(align, hgap, vgap);
+		}
+
+		@Override
+		public Dimension preferredLayoutSize(java.awt.Container target)
+		{
+			return layoutSize(target, true);
+		}
+
+		@Override
+		public Dimension minimumLayoutSize(java.awt.Container target)
+		{
+			Dimension minimum = layoutSize(target, false);
+			minimum.width -= (getHgap() + 1);
+			return minimum;
+		}
+
+		private Dimension layoutSize(java.awt.Container target, boolean preferred)
+		{
+			synchronized (target.getTreeLock())
+			{
+				java.awt.Container container = target;
+				while (container.getSize().width == 0 && container.getParent() != null)
+				{
+					container = container.getParent();
+				}
+				int targetWidth = container.getSize().width;
+				if (targetWidth == 0)
+				{
+					targetWidth = Integer.MAX_VALUE;
+				}
+				int hgap = getHgap();
+				int vgap = getVgap();
+				java.awt.Insets insets = target.getInsets();
+				int horizontalInsetsAndGap = insets.left + insets.right + (hgap * 2);
+				int maxWidth = targetWidth - horizontalInsetsAndGap;
+				Dimension dim = new Dimension(0, 0);
+				int rowWidth = 0;
+				int rowHeight = 0;
+				int nmembers = target.getComponentCount();
+				for (int i = 0; i < nmembers; i++)
+				{
+					java.awt.Component m = target.getComponent(i);
+					if (m.isVisible())
+					{
+						Dimension d = preferred ? m.getPreferredSize() : m.getMinimumSize();
+						if (rowWidth + d.width > maxWidth)
+						{
+							addRow(dim, rowWidth, rowHeight);
+							rowWidth = 0;
+							rowHeight = 0;
+						}
+						if (rowWidth != 0)
+						{
+							rowWidth += hgap;
+						}
+						rowWidth += d.width;
+						rowHeight = Math.max(rowHeight, d.height);
+					}
+				}
+				addRow(dim, rowWidth, rowHeight);
+				dim.width += horizontalInsetsAndGap;
+				dim.height += insets.top + insets.bottom + vgap * 2;
+				java.awt.Container scrollPane = SwingUtilities.getAncestorOfClass(JScrollPane.class, target);
+				if (scrollPane != null && target.isValid())
+				{
+					dim.width -= (hgap + 1);
+				}
+				return dim;
+			}
+		}
+
+		private void addRow(Dimension dim, int rowWidth, int rowHeight)
+		{
+			dim.width = Math.max(dim.width, rowWidth);
+			if (dim.height > 0)
+			{
+				dim.height += getVgap();
+			}
+			dim.height += rowHeight;
+		}
+	}
+
 	private JPanel createActiveTaskItem(NuzlockeTask task, int taskNumber)
 	{
 		// Check if this task is currently selected
@@ -3112,8 +3315,10 @@ public class ChunkBlazerPanel extends PluginPanel
 				int arc = 12;
 				java.awt.geom.RoundRectangle2D box =
 					new java.awt.geom.RoundRectangle2D.Float(0.5f, 0.5f, w - 1.5f, h - 1.5f, arc, arc);
-				g2.setColor(isSelected ? new Color(46, 41, 30)
-					: (hovered[0] ? new Color(42, 42, 42) : new Color(30, 30, 30)));
+				// ChunkBlazer navy backdrop (matches the News & Updates header) so the
+				// card pops off the near-black panel; brightens on hover / selection.
+				g2.setColor(isSelected ? new Color(44, 56, 82)
+					: (hovered[0] ? new Color(40, 52, 76) : new Color(30, 40, 60)));
 				g2.fill(box);
 				// Flame-orange left accent bar, clipped to the rounded shape.
 				java.awt.Shape oldClip = g2.getClip();
@@ -3121,7 +3326,7 @@ public class ChunkBlazerPanel extends PluginPanel
 				g2.setColor(FLAME);
 				g2.fillRect(0, 0, 5, h);
 				g2.setClip(oldClip);
-				g2.setColor(isSelected ? FLAME : new Color(70, 70, 70));
+				g2.setColor(isSelected ? FLAME : new Color(60, 74, 100));
 				g2.setStroke(new java.awt.BasicStroke(isSelected ? 1.6f : 1f));
 				g2.draw(box);
 				g2.dispose();
@@ -3478,13 +3683,11 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private JPanel createEnhancedCompletedTaskItem(CompletedTaskInfo info)
 	{
-		JPanel itemPanel = new JPanel();
+		// Shared navy card look; dimmed slightly since these are already done.
+		JPanel itemPanel = createCardPanel(new Color(28, 36, 54), new Color(54, 66, 92));
 		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
-		itemPanel.setBackground(new Color(40, 40, 60));
-		itemPanel.setBorder(BorderFactory.createCompoundBorder(
-			BorderFactory.createLineBorder(new Color(60, 60, 100)),
-			new EmptyBorder(4, 5, 4, 5)
-		));
+		// Left inset (12) clears the orange accent bar.
+		itemPanel.setBorder(new EmptyBorder(5, 12, 6, 6));
 		itemPanel.setAlignmentX(LEFT_ALIGNMENT);
 		// Allow dynamic height based on content
 		itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, Integer.MAX_VALUE));
@@ -3660,31 +3863,36 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private JPanel createTaskListItem(NuzlockeTask task)
 	{
-		JPanel itemPanel = new JPanel();
-		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
-		itemPanel.setBorder(new EmptyBorder(4, 5, 4, 5));
-		// Allow dynamic height based on content
-		itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, Integer.MAX_VALUE));
-		itemPanel.setAlignmentX(LEFT_ALIGNMENT);
-
 		// Determine task status
 		boolean isAssigned = plugin.isTaskAssigned(task.getTaskId());
 		boolean isActive = plugin.getActiveTask() != null &&
 			task.getTaskId().equals(plugin.getActiveTask().getTaskId());
 
-		// Set background based on status
+		// Shared navy card; brighter + flame border when active, dimmed when already done.
+		Color cardFill;
+		Color cardBorder;
 		if (isActive)
 		{
-			itemPanel.setBackground(new Color(40, 60, 40)); // Green tint for active
+			cardFill = new Color(44, 56, 82);
+			cardBorder = FLAME;
 		}
 		else if (isAssigned)
 		{
-			itemPanel.setBackground(new Color(50, 50, 50)); // Darker for assigned/done
+			cardFill = new Color(26, 32, 46);
+			cardBorder = new Color(50, 60, 80);
 		}
 		else
 		{
-			itemPanel.setBackground(ColorScheme.DARK_GRAY_COLOR);
+			cardFill = new Color(30, 40, 60);
+			cardBorder = new Color(60, 74, 100);
 		}
+		JPanel itemPanel = createCardPanel(cardFill, cardBorder);
+		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
+		// Left inset (12) clears the orange accent bar.
+		itemPanel.setBorder(new EmptyBorder(5, 12, 6, 6));
+		// Allow dynamic height based on content
+		itemPanel.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, Integer.MAX_VALUE));
+		itemPanel.setAlignmentX(LEFT_ALIGNMENT);
 
 		// Determine text color based on status
 		Color textColor;
@@ -3716,7 +3924,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Task info line (status + points + level)
 		JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-		infoPanel.setBackground(itemPanel.getBackground());
+		infoPanel.setOpaque(false);
 		infoPanel.setAlignmentX(LEFT_ALIGNMENT);
 
 		// Status indicator

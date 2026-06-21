@@ -483,17 +483,6 @@ public interface ChunkBlazerConfig extends Config
 		return true;
 	}
 
-	@ConfigItem(
-		keyName = "visibleToOthers",
-		name = "Visible to Others",
-		description = "Allow other ChunkBlazer players to see you in-game. Disable for privacy.",
-		section = playerDiscoverySection,
-		position = 2
-	)
-	default boolean visibleToOthers()
-	{
-		return true;
-	}
 
 	@ConfigItem(
 		keyName = "showPlayerPoints",
