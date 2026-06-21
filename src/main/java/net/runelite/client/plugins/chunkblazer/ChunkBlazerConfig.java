@@ -13,18 +13,10 @@ import net.runelite.client.config.Units;
 @ConfigGroup("chunkblazer")
 public interface ChunkBlazerConfig extends Config
 {
-	@ConfigSection(
-		name = "General",
-		description = "General plugin settings",
-		position = 0
-	)
-	String generalSection = "general";
-
 	@ConfigItem(
 		keyName = "unlockedChunks",
 		name = "Unlocked Regions",
 		description = "Internal: the player's unlocked region IDs (managed by the plugin, not hand-editable)",
-		section = generalSection,
 		position = 0,
 		hidden = true
 	)
@@ -37,7 +29,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "gameMode",
 		name = "Game Mode",
 		description = "Current game mode (Casual or Nuzlocke)",
-		section = generalSection,
 		position = 1,
 		hidden = true
 	)
@@ -50,7 +41,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "accountModeHash",
 		name = "Account Mode Hash",
 		description = "Stores the locked game mode for this account (RSN hash)",
-		section = generalSection,
 		position = 2,
 		hidden = true
 	)
@@ -63,7 +53,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "completedTasks",
 		name = "Completed Tasks",
 		description = "Comma-separated list of completed task IDs",
-		section = generalSection,
 		position = 3,
 		hidden = true
 	)
@@ -76,7 +65,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "assignedTasks",
 		name = "Assigned Tasks",
 		description = "Comma-separated list of all tasks ever assigned (cannot be reassigned)",
-		section = generalSection,
 		position = 4,
 		hidden = true
 	)
@@ -89,7 +77,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "regionRolledTasks",
 		name = "Region Rolled Tasks",
 		description = "Stores the 4-5 tasks rolled per region (format: regionId:task1,task2|regionId2:task3,task4)",
-		section = generalSection,
 		position = 5,
 		hidden = true
 	)
@@ -102,7 +89,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "currentTaskId",
 		name = "Current Task ID",
 		description = "The currently active task ID",
-		section = generalSection,
 		position = 4,
 		hidden = true
 	)
@@ -115,7 +101,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "currentTaskQuantity",
 		name = "Current Task Quantity",
 		description = "Target quantity for current task",
-		section = generalSection,
 		position = 5,
 		hidden = true
 	)
@@ -128,7 +113,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "currentTaskProgress",
 		name = "Current Task Progress",
 		description = "Progress towards current task",
-		section = generalSection,
 		position = 6,
 		hidden = true
 	)
@@ -141,7 +125,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "totalPoints",
 		name = "Total Points",
 		description = "Total points earned from completed tasks",
-		section = generalSection,
 		position = 7,
 		hidden = true
 	)
@@ -154,7 +137,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "taskProgressData",
 		name = "Task Progress Data",
 		description = "Stores progress for all active tasks (format: taskId:progress,taskId2:progress2)",
-		section = generalSection,
 		position = 8,
 		hidden = true
 	)
@@ -231,18 +213,6 @@ public interface ChunkBlazerConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "showChunkBorders",
-		name = "Show Chunk Borders",
-		description = "Highlight locked/unlocked chunk borders on the world map",
-		section = displaySection,
-		position = 1
-	)
-	default boolean showChunkBorders()
-	{
-		return true;
-	}
-
-	@ConfigItem(
 		keyName = "showMinimapChunks",
 		name = "Show Minimap Chunks",
 		description = "Highlight chunk borders on the minimap. Click on neighbor chunks to unlock them.",
@@ -257,7 +227,7 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "showSceneChunks",
 		name = "Show Chunk Borders",
-		description = "Draw chunk (region) borders on the game scene. Locked chunks get a translucent grey wash.",
+		description = "Draw chunk/region borders on the game scene and world map. Locked chunks get a translucent grey wash.",
 		section = displaySection,
 		position = 3
 	)
@@ -575,14 +545,17 @@ public interface ChunkBlazerConfig extends Config
 
 	@Alpha
 	@ConfigItem(
-		keyName = "recognitionColor",
+		// Key bumped from "recognitionColor" to drop stale persisted values (an old
+		// default saved a dark blue into existing profiles); this re-applies the
+		// flame-orange default for everyone. Still user-customisable.
+		keyName = "recognitionColorV2",
 		name = "Highlight Colour",
-		description = "Colour used for the minimap dot and model outline on other ChunkBlazer players",
+		description = "Colour for the overhead tag, model outline, and minimap dot on other ChunkBlazer players",
 		section = playerDiscoverySection,
 		position = 7
 	)
 	default Color recognitionColor()
 	{
-		return new Color(255, 140, 0); // orange
+		return new Color(255, 152, 0); // flame orange (matches the ChunkBlazer theme)
 	}
 }

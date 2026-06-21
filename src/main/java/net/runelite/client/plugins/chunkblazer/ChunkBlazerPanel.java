@@ -449,9 +449,9 @@ public class ChunkBlazerPanel extends PluginPanel
 	private void showDataUseDialog()
 	{
 		String msg =
-			"ChunkBlazer is a server-backed game mode, similar to Wise Old Man\n"
-			+ "and TempleOSRS. To save your progress and rank you on the\n"
-			+ "leaderboards, the plugin sends data to ChunkBlazer's servers.\n"
+			"ChunkBlazer is a server-backed game mode. To save your progress\n"
+			+ "and rank you on the leaderboards, the plugin sends data to\n"
+			+ "ChunkBlazer's servers.\n"
 			+ "\n"
 			+ "WHAT IS SENT (only while \"Enable Server Verification\" is on):\n"
 			+ "  • Your RuneScape name\n"
