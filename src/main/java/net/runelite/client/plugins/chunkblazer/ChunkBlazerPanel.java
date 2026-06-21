@@ -344,23 +344,25 @@ public class ChunkBlazerPanel extends PluginPanel
 	}
 
 	/**
-	 * A painted "X" close glyph (the ✕ font character renders as tofu in the
-	 * RuneScape UI font), drawn in the given colour so callers can swap it on hover.
+	 * A beveled "close" button icon: a raised dark square (light top/left edge, dark
+	 * bottom/right edge) with an X cut into it — drawn instead of the ✕ font glyph, which
+	 * renders as tofu in the RuneScape UI font. {@code xColor} lets callers brighten the X
+	 * on hover.
 	 */
-	private static javax.swing.Icon xIcon(Color color)
+	private static javax.swing.Icon xIcon(Color xColor)
 	{
 		return new javax.swing.Icon()
 		{
 			@Override
 			public int getIconWidth()
 			{
-				return 9;
+				return 16;
 			}
 
 			@Override
 			public int getIconHeight()
 			{
-				return 9;
+				return 16;
 			}
 
 			@Override
@@ -369,11 +371,23 @@ public class ChunkBlazerPanel extends PluginPanel
 				java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
 				g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
 					java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-				g2.setColor(color);
+				int s = 16;
+				// Square body.
+				g2.setColor(new Color(43, 43, 43));
+				g2.fillRect(x, y, s - 1, s - 1);
+				// Raised bevel: light top/left, dark bottom/right.
+				g2.setColor(new Color(96, 96, 96));
+				g2.drawLine(x, y, x + s - 2, y);
+				g2.drawLine(x, y, x, y + s - 2);
+				g2.setColor(new Color(16, 16, 16));
+				g2.drawLine(x, y + s - 2, x + s - 2, y + s - 2);
+				g2.drawLine(x + s - 2, y, x + s - 2, y + s - 2);
+				// X.
+				g2.setColor(xColor);
 				g2.setStroke(new java.awt.BasicStroke(1.8f,
 					java.awt.BasicStroke.CAP_ROUND, java.awt.BasicStroke.JOIN_ROUND));
-				g2.drawLine(x + 1, y + 1, x + 7, y + 7);
-				g2.drawLine(x + 7, y + 1, x + 1, y + 7);
+				g2.drawLine(x + 5, y + 5, x + 10, y + 10);
+				g2.drawLine(x + 10, y + 5, x + 5, y + 10);
 				g2.dispose();
 			}
 		};
@@ -2045,7 +2059,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		selectedTitle.setForeground(FLAME);
 		headerRow.add(selectedTitle, BorderLayout.WEST);
 
-		// Icon-style X: no button chrome, just a clickable glyph that lights up on hover.
+		// Beveled close button (painted xIcon); the X brightens to red on hover.
 		final Color dismissIdleColor = new Color(180, 180, 180);
 		final Color dismissHoverColor = new Color(255, 120, 120);
 		JButton dismissButton = new JButton(xIcon(dismissIdleColor));
