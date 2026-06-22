@@ -257,13 +257,94 @@ public class ChunkBlazerApiClient
 	}
 
 	/**
-	 * Permanently lock the player's game mode.
-	 * This cannot be undone (except by server admin).
+	 * Ask the server whether this account qualifies for a Full Nuzlocke start
+	 * (a fresh "level 3" account). The server is authoritative — it re-derives
+	 * the verdict from the submitted snapshot. Used as a pre-check so the plugin
+	 * can show the player the right message before starting the lock handshake.
 	 *
-	 * @param mode The game mode to lock (CASUAL or NUZLOCKE)
-	 * @return CompletableFuture with the lock response
+	 * @param snapshot the live account state read from the game client
+	 * @return CompletableFuture with the eligibility verdict
+	 */
+	public CompletableFuture<NuzlockeEligibilityResponse> checkNuzlockeEligibility(EligibilitySnapshot snapshot)
+	{
+		if (!config.apiEnabled())
+		{
+			return CompletableFuture.completedFuture(NuzlockeEligibilityResponse.offline());
+		}
+		String apiKey = playerApiKey != null && !playerApiKey.isEmpty() ? playerApiKey : config.apiKey();
+		if (apiKey == null || apiKey.isEmpty())
+		{
+			return CompletableFuture.completedFuture(NuzlockeEligibilityResponse.offline());
+		}
+
+		CompletableFuture<NuzlockeEligibilityResponse> future = new CompletableFuture<>();
+		String url = config.apiBaseUrl() + "/api/player/nuzlocke/eligibility";
+		String json = gson.toJson(new EligibilityRequestBody(snapshot));
+
+		Request httpRequest = new Request.Builder()
+			.url(url)
+			.addHeader("Content-Type", "application/json")
+			.addHeader("X-API-Key", apiKey)
+			.post(RequestBody.create(JSON, json))
+			.build();
+
+		httpClient.newCall(httpRequest).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				log.warn("nuzlocke/eligibility request failed: {}", e.getMessage());
+				future.complete(NuzlockeEligibilityResponse.offline());
+			}
+
+			@Override
+			public void onResponse(Call call, Response response) throws IOException
+			{
+				try (response)
+				{
+					String body = response.body() != null ? response.body().string() : "";
+					if (response.isSuccessful())
+					{
+						future.complete(gson.fromJson(body, NuzlockeEligibilityResponse.class));
+					}
+					else
+					{
+						log.warn("nuzlocke/eligibility returned {}: {}", response.code(), body);
+						future.complete(NuzlockeEligibilityResponse.offline());
+					}
+				}
+			}
+		});
+
+		return future;
+	}
+
+	private static class EligibilityRequestBody
+	{
+		final EligibilitySnapshot eligibility;
+		EligibilityRequestBody(EligibilitySnapshot eligibility) { this.eligibility = eligibility; }
+	}
+
+	/**
+	 * Permanently lock the player's game mode. CASUAL locks immediately; for
+	 * NUZLOCKE callers must use {@link #lockGameMode(GameMode, EligibilitySnapshot)}
+	 * so the server can re-validate fresh-account eligibility.
 	 */
 	public CompletableFuture<LockModeResponse> lockGameMode(GameMode mode)
+	{
+		return lockGameMode(mode, null);
+	}
+
+	/**
+	 * Permanently lock the player's game mode, optionally carrying the Nuzlocke
+	 * eligibility snapshot. This cannot be undone (except by a server admin).
+	 *
+	 * @param mode The game mode to lock (CASUAL or NUZLOCKE)
+	 * @param eligibility Fresh-account snapshot; required by the server for
+	 *                    NUZLOCKE, ignored (pass null) for CASUAL
+	 * @return CompletableFuture with the lock response
+	 */
+	public CompletableFuture<LockModeResponse> lockGameMode(GameMode mode, EligibilitySnapshot eligibility)
 	{
 		if (!config.apiEnabled())
 		{
@@ -283,6 +364,7 @@ public class ChunkBlazerApiClient
 
 		LockModeRequest request = LockModeRequest.builder()
 			.gameMode(mode.name())
+			.eligibility(eligibility)
 			.build();
 
 		String url = config.apiBaseUrl() + "/api/player/lock-mode";
