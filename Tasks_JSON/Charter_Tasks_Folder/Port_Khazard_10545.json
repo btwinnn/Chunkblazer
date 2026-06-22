@@ -1,0 +1,288 @@
+{
+            "region_id": [10545],
+            "friendly_name": "Port Khazard",
+            "neighbor_ids": [10289, 10544, 10801, 10546],
+            "travel_connections": [
+                {
+                    "destination_id": 12082,
+                    "travel_name": "Sail to Port Sarim"
+                },
+                {
+                    "destination_id": 11058,
+                    "travel_name": "Sail to Brimhaven"
+                },
+                {
+                    "destination_id": 5678,
+                    "travel_name": "Sail to Aldarin"
+                },
+                {
+                    "destination_id": 6961,
+                    "travel_name": "Sail to Civitas illa Fortis"
+                },
+                {
+                    "destination_id": 10284,
+                    "travel_name": "Sail to Corsair Cove"
+                },               
+                {
+                    "destination_id": 11061,
+                    "travel_name": "Sail to Catherby"
+                },
+                {
+                    "destination_id": 6961,
+                    "travel_name": "Sail to Port Tyras"
+                },
+                {
+                    "destination_id": 12639,
+                    "travel_name": "Sail to Prifddinas"
+                },
+                {
+                    "destination_id": 5934,
+                    "travel_name": "Sail to Sunset Coast"
+                },
+                {
+                    "destination_id": 14637,
+                    "travel_name": "Sail to Mos Le'Harmless"
+                },
+                {
+                    "destination_id": 14646,
+                    "travel_name": "Sail to Port Phasmatys"
+                },
+                {
+                    "destination_id": 5941,
+                    "travel_name": "Sail to Land's End"
+                },
+                {
+                    "destination_id": 7225,
+                    "travel_name": "Sail to Port Piscarilius"
+                },              
+                {
+                    "destination_id": 11825,
+                    "travel_name": "Sail to Musa Point"
+                },
+                {
+                    "destination_id": 11823,
+                    "travel_name": "Sail to Karamja Shipyard"
+                }
+            ],
+    "tasks":[
+                {
+                    "name": "Obtain the Angler Set",
+                    "taskID": "obtain_angler_set",
+                    "category": ["Fishing", "Defence"],
+                    "level": [34, 1],
+                    "completion_type": "Obtain_Set",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Angler Hat", "Spirit angler headband"],
+                            "item_ids": [13258, 25592]
+                        },
+                        {
+                            "item": ["Angler Top", "Spirit angler top"],
+                            "item_ids": [13259, 25594]
+                        },
+                        {
+                            "item": ["Angler Waders", "Spirit angler waders"],
+                            "item_ids": [13260, 25596]
+                        },
+                        {
+                            "item": ["Angler Boots", "Spirit angler boots"],
+                            "item_ids": [13261, 25598]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Mine some Mithril Ore",
+                    "taskID": "mine_mithril",
+                    "category": "Mining",
+                    "level": 55,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mithril Ore",
+                            "item_ids": [447],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Mithril Arrows",
+                    "taskID": "fletch_mithril_arrows",
+                    "category": "Fletching",
+                    "level": 45,
+                    "completion_type": "FLETCHING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mithril Arrows"],
+                            "item_ids": [888],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Khazard Teleport Tablet",
+                    "taskID": "obtain_khazard_teleport_tablet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Khazard Teleport"],
+                            "item_ids": [24957],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Manta Ray",
+                    "taskID": "cook_manta_ray",
+                    "category": "Cooking",
+                    "level": 91,
+                    "completion_type": "COOKING",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Manta Ray",
+                            "item_ids": [391],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Sea Turtle",
+                    "taskID": "cook_sea_turtle",
+                    "category": "Cooking",
+                    "level": 82,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Sea Turtle",
+                            "item_ids": [397],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Shark",
+                    "taskID": "cook_shark",
+                    "category": "Cooking",
+                    "level": 80,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Shark",
+                            "item_ids": [385],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                 {
+                    "name": "Cook a Swordfish",
+                    "taskID": "cook_swordfish",
+                    "category": "Cooking",
+                    "level": 45,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Swordfish",
+                            "item_ids": [373],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Lobster",
+                    "taskID": "cook_lobster",
+                    "category": "Cooking",
+                    "level": 40,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Lobster",
+                            "item_ids": [379],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Tuna",
+                    "taskID": "cook_tuna",
+                    "category": "Cooking",
+                    "level": 30,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Tuna",
+                            "item_ids": [361],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Mithril Chainbody",
+                    "taskID": "smith_mithril_chainbody",
+                    "category": "Smithing",
+                    "level": 61,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                                "item": ["Mithril Chainbody"],
+                                "item_ids": [1119],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Smith a Mithril Chainbody",
+                    "taskID": "smith_mithril_chainbody",
+                    "category": "Smithing",
+                    "level": 61,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                                "item": ["Mithril Chainbody"],
+                                "item_ids": [1119],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Smith a Steel Dagger",
+                    "taskID": "smith_steel_dagger",
+                    "category": "Smithing",
+                    "level": 30,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                                "item": ["Steel Dagger"],
+                                "item_ids": [1207],
+                                "quantity": [1]
+                            }
+                        ]
+                }
+            ],
+            "is_completed": false
+        }

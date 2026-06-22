@@ -2658,19 +2658,19 @@
                     ]
                 },
                 {
-                "name": "Build a Hard STASH Unit in the Fishing Guild",
-                "taskID": "build_hard_stash_fishing_guild",
-                "category": "Construction",
-                "level": 55,
-                "completion_type": "CONSTRUCTION",
-                "base_points": 2,
-                "assignment_weight": 8,               
-                "required_finished_object": [
-                        {
-                        "object": "Hard STASH Unit (crate)",
-                        "object_id": [29010]
-                        }
-                    ]
+                    "name": "Build a Hard STASH Unit in the Fishing Guild",
+                    "taskID": "build_hard_stash_fishing_guild",
+                    "category": "Construction",
+                    "level": 55,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 8,               
+                    "required_finished_object": [
+                            {
+                            "object": "Hard STASH Unit (crate)",
+                            "object_id": [29010]
+                            }
+                        ]
                 },
                 {
                     "name": "Catch a Minnow",
