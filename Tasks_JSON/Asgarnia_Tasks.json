@@ -938,7 +938,7 @@
                     "target_npc": {
                         "npc": ["Black Knight"],
                         "npc_ids": [11953, 517, 4331, 11952, 516],
-                        "quantity": [1, 1200]
+                        "quantity": [1, 25]
                     }
                 },               
                 {

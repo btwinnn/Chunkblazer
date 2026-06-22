@@ -1250,7 +1250,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Pyrefiend#Level 43", "Pyrefiend#Level 48"],
-                        "npc_ids": [433, 434, 435, 436, 3139],
+                        "npc_ids": [433, 434, 435, 436, 3139, 6762, 6795],
                         "quantity": [1, 10]
                     }
                 },

@@ -1685,7 +1685,7 @@
                     "name": "Defeat a Sourhog",
                     "taskID": "defeat_sourhog",
                     "category": "Combat",
-                    "completion_type": "COMBAT",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
@@ -1747,7 +1747,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Mugger"],
-                        "npc_ids": [513, 1461, 6996],
+                        "npc_ids": [513, 1461, 6996, 13282, 8732],
                         "quantity": [1]
                     },
                     "constraints": {
