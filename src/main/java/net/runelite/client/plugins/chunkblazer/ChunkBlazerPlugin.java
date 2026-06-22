@@ -29,6 +29,7 @@ import net.runelite.api.GameState;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MessageNode;
 import net.runelite.api.Player;
+import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.events.ChatMessage;
@@ -38,6 +39,7 @@ import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.FocusChanged;
 import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.gameval.VarPlayerID;
 import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.input.KeyManager;
@@ -55,6 +57,8 @@ import net.runelite.client.util.Text;
 import net.runelite.client.game.ChatIconManager;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.chunkblazer.api.ChunkBlazerApiClient;
+import net.runelite.client.plugins.chunkblazer.api.EligibilitySnapshot;
+import net.runelite.client.plugins.chunkblazer.api.NuzlockeEligibilityResponse;
 import net.runelite.client.plugins.chunkblazer.api.PlayerLoginResponse;
 import net.runelite.client.plugins.chunkblazer.api.PlayerSyncRequest;
 import net.runelite.client.plugins.chunkblazer.api.VerifyStartResponse;
@@ -193,6 +197,10 @@ public class ChunkBlazerPlugin extends Plugin
 	 * the message *contains* this digit nonce (no prefix required).
 	 */
 	private volatile String pendingVerificationNonce;
+	// Set once an account passes the Full Nuzlocke eligibility pre-check and is
+	// completing the chat-code handshake. Non-null means "commit a NUZLOCKE lock
+	// (with this snapshot) the moment verification succeeds". Cleared on logout.
+	private volatile EligibilitySnapshot pendingNuzlockeSnapshot;
 
 	// --- Constants ---
 	private static final String DEV_MENU_OPTION = "DEBUG: Complete Task";
@@ -483,8 +491,9 @@ public class ChunkBlazerPlugin extends Plugin
 			// (which is a fresh game session) re-runs loginToServer.
 			serverLoginDone = false;
 			// And clear any pending verification — the nonce is tied to the
-			// pre-logout session.
+			// pre-logout session. Also drop any in-flight Nuzlocke lock.
 			pendingVerificationNonce = null;
+			pendingNuzlockeSnapshot = null;
 			panel.hideVerificationPrompt();
 			// Drop the recognition roster; it'll repopulate after next login.
 			roster.clear();
@@ -1146,7 +1155,150 @@ public class ChunkBlazerPlugin extends Plugin
 		return hash.startsWith(expectedPrefix);
 	}
 
+	/**
+	 * Entry point from the side panel's "Confirm Mode" button. CASUAL locks
+	 * immediately. Full Nuzlocke is gated: we first prove the account is a fresh
+	 * "level 3" start and that the player owns the RSN (chat-code handshake)
+	 * before committing the lock — see {@link #beginNuzlockeLock()}.
+	 */
 	public void lockGameMode(GameMode mode)
+	{
+		if (getPlayerName() == null)
+		{
+			log.warn("Cannot lock game mode: player not logged in");
+			return;
+		}
+
+		if (mode == GameMode.NUZLOCKE)
+		{
+			beginNuzlockeLock();
+			return;
+		}
+
+		commitModeLock(mode, null);
+	}
+
+	/**
+	 * Kick off the Full Nuzlocke gate: read the live account on the client
+	 * thread, ask the server whether it qualifies (a fresh level-3 start), then
+	 * either start the verification handshake (eligible) or tell the player why
+	 * they don't qualify (ineligible). The lock itself is only committed later,
+	 * once verification succeeds.
+	 */
+	private void beginNuzlockeLock()
+	{
+		if (!config.apiEnabled() || apiClient == null)
+		{
+			// Without the server we can't authoritatively verify eligibility.
+			// Fail closed rather than locking an unchecked account into Nuzlocke.
+			addPluginChatMessage("Full Nuzlocke needs a connection to the ChunkBlazer server to verify your account. Try again when online.");
+			return;
+		}
+
+		// Skill levels and quest points must be read on the client thread.
+		clientThread.invoke(() ->
+		{
+			EligibilitySnapshot snapshot = buildEligibilitySnapshot();
+			if (snapshot == null)
+			{
+				addPluginChatMessage("Log in fully before selecting Full Nuzlocke.");
+				return;
+			}
+
+			apiClient.checkNuzlockeEligibility(snapshot)
+				.thenAccept(resp ->
+				{
+					if (resp != null && resp.isEligible())
+					{
+						// Stash the snapshot; the chat-code handshake will commit
+						// the lock (re-sending it for the server to re-validate).
+						pendingNuzlockeSnapshot = snapshot;
+						startNuzlockeVerification();
+					}
+					else
+					{
+						pendingNuzlockeSnapshot = null;
+						addPluginChatMessage("Sorry, your account does not meet the Nuzlocke requirements, "
+							+ "please create a new account or play Casual Mode.");
+					}
+				});
+		});
+	}
+
+	/**
+	 * Read the local account's combat level, quest points, total level, and
+	 * every skill's real level into a snapshot for the server to evaluate.
+	 * MUST be called on the client thread. Returns null if not yet logged in.
+	 */
+	private EligibilitySnapshot buildEligibilitySnapshot()
+	{
+		Player local = client.getLocalPlayer();
+		if (local == null)
+		{
+			return null;
+		}
+		Map<String, Integer> skills = new HashMap<>();
+		for (Skill skill : Skill.values())
+		{
+			skills.put(skill.name(), client.getRealSkillLevel(skill));
+		}
+		return EligibilitySnapshot.builder()
+			.combatLevel(local.getCombatLevel())
+			.questPoints(client.getVarpValue(VarPlayerID.QP))
+			.totalLevel(client.getTotalLevel())
+			.skills(skills)
+			.build();
+	}
+
+	/**
+	 * Start (or short-circuit) the verification handshake for a pending Nuzlocke
+	 * lock. If the account is already verified we commit straight away; otherwise
+	 * we issue a chat code and ask the player to type it — typing it is what
+	 * commits the lock (see {@link #handleVerificationChat}).
+	 */
+	private void startNuzlockeVerification()
+	{
+		apiClient.verifyStart()
+			.thenAccept(start ->
+			{
+				if (start == null)
+				{
+					pendingNuzlockeSnapshot = null;
+					addPluginChatMessage("Couldn't reach the server to verify your account. Try again shortly.");
+					return;
+				}
+				if (start.isAlreadyVerified())
+				{
+					// RSN ownership already proven — commit the Nuzlocke lock now.
+					EligibilitySnapshot snap = pendingNuzlockeSnapshot;
+					pendingNuzlockeSnapshot = null;
+					if (snap != null)
+					{
+						addPluginChatMessage("Your account meets the Nuzlocke requirements — locking it in!");
+						commitModeLock(GameMode.NUZLOCKE, snap);
+					}
+					return;
+				}
+				if (start.getNonce() == null || start.getChatPhrase() == null)
+				{
+					pendingNuzlockeSnapshot = null;
+					addPluginChatMessage("Couldn't issue a verification code right now. Try again shortly.");
+					return;
+				}
+				String nonce = start.getNonce();
+				pendingVerificationNonce = nonce;
+				addPluginChatMessage("Your account meets the Nuzlocke requirements! Type " + nonce
+					+ " in public chat and hit Enter to lock in Full Nuzlocke.");
+				panel.showVerificationPrompt(nonce);
+			});
+	}
+
+	/**
+	 * Actually commit a mode lock: write local config, mirror to the server, and
+	 * (for Casual) unlock the starting chunk. For NUZLOCKE the server re-checks
+	 * the eligibility snapshot and the verified flag before accepting the lock.
+	 */
+	private void commitModeLock(GameMode mode, EligibilitySnapshot eligibility)
 	{
 		String rsn = getPlayerName();
 		if (rsn == null)
@@ -1163,14 +1315,14 @@ public class ChunkBlazerPlugin extends Plugin
 
 		log.info("Game mode locked to {} for account hash {}", mode, rsnHash);
 
-		// Mirror the lock to the server. Fire-and-forget — local config is the
-		// immediate source of truth; the server call backs it up so the choice
-		// survives across installs / machines.
+		// Mirror the lock to the server. Local config is the immediate source of
+		// truth; the server call backs it up so the choice survives across
+		// installs / machines (and, for Nuzlocke, re-validates eligibility).
 		log.info("[CB-DIAG] lockGameMode server-call apiEnabled={} apiClient={} mode={}",
 			config.apiEnabled(), apiClient, mode);
 		if (config.apiEnabled() && apiClient != null)
 		{
-			apiClient.lockGameMode(mode)
+			apiClient.lockGameMode(mode, eligibility)
 				.thenAccept(response ->
 				{
 					if (response == null)
@@ -1180,6 +1332,10 @@ public class ChunkBlazerPlugin extends Plugin
 					if (response.isSuccess())
 					{
 						log.info("Server confirmed mode lock: {}", mode);
+						if (mode == GameMode.NUZLOCKE)
+						{
+							addPluginChatMessage("Full Nuzlocke locked in. Good luck — there's no going back!");
+						}
 					}
 					else if (response.isAlreadyLocked())
 					{
@@ -1400,16 +1556,37 @@ public class ChunkBlazerPlugin extends Plugin
 				if (resp != null && resp.isVerified())
 				{
 					log.info("Account verified via chat handshake");
-					addPluginChatMessage("Account verified! You're all set.");
 					panel.hideVerificationPrompt();
+					// If this handshake was the final step of a Full Nuzlocke
+					// lock, commit it now (the server re-validates the snapshot
+					// and the verified flag before accepting).
+					EligibilitySnapshot snap = pendingNuzlockeSnapshot;
+					if (snap != null)
+					{
+						pendingNuzlockeSnapshot = null;
+						addPluginChatMessage("Account verified! Locking in Full Nuzlocke...");
+						commitModeLock(GameMode.NUZLOCKE, snap);
+					}
+					else
+					{
+						addPluginChatMessage("Account verified! You're all set.");
+					}
 				}
 				else
 				{
 					log.warn("Verification POST rejected: {}",
 						resp != null ? resp.getMessage() : "null response");
 					addPluginChatMessage("That code didn't work - it may have expired. Issuing a fresh one...");
-					// Likely an expired code. Issue a new one so the player can retry.
-					requestAndShowVerification();
+					// Likely an expired code. Issue a new one so the player can
+					// retry. Use the Nuzlocke-aware kickoff if a lock is pending.
+					if (pendingNuzlockeSnapshot != null)
+					{
+						startNuzlockeVerification();
+					}
+					else
+					{
+						requestAndShowVerification();
+					}
 				}
 			});
 	}

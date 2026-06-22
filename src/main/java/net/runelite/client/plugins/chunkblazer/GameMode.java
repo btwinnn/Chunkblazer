@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum GameMode
 {
-	CASUAL("Casual", "Any account, no leaderboard tracking"),
-	NUZLOCKE("Full Nuzlocke", "Level 3 start in Lumbridge, leaderboard eligible");
+	CASUAL("Casual", "Any account, Casual leaderboard"),
+	NUZLOCKE("Full Nuzlocke", "Level 3 start in Lumbridge, Nuzlocke leaderboard");
 
 	private final String name;
 	private final String description;

@@ -16,4 +16,12 @@ public class LockModeRequest
 	 */
 	@SerializedName("game_mode")
 	private String gameMode;
+
+	/**
+	 * Fresh-account snapshot, required when {@link #gameMode} is "NUZLOCKE" so
+	 * the server can re-validate eligibility at lock time. Null (and omitted
+	 * from the JSON) for CASUAL.
+	 */
+	@SerializedName("eligibility")
+	private EligibilitySnapshot eligibility;
 }
