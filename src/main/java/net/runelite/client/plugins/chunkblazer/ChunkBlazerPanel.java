@@ -1517,7 +1517,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		ButtonGroup modeGroup = new ButtonGroup();
 
 		casualRadio = new JRadioButton("Casual Mode");
-		casualRadio.setToolTipText("Any account, no leaderboard tracking");
+		casualRadio.setToolTipText("Any account, Casual leaderboard");
 		casualRadio.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		casualRadio.setForeground(Color.WHITE);
 		casualRadio.setSelected(true);
@@ -1525,7 +1525,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		modeGroup.add(casualRadio);
 		modePanel.add(casualRadio);
 
-		JLabel casualDesc = new JLabel("   Any account, no leaderboard");
+		JLabel casualDesc = new JLabel("   Any account, Casual leaderboard");
 		casualDesc.setFont(FontManager.getRunescapeSmallFont());
 		casualDesc.setForeground(Color.LIGHT_GRAY);
 		casualDesc.setAlignmentX(LEFT_ALIGNMENT);
@@ -1533,14 +1533,14 @@ public class ChunkBlazerPanel extends PluginPanel
 		modePanel.add(Box.createVerticalStrut(5));
 
 		nuzlockeRadio = new JRadioButton("Full Nuzlocke");
-		nuzlockeRadio.setToolTipText("Level 3 start, Lumbridge, leaderboard eligible");
+		nuzlockeRadio.setToolTipText("Level 3 start, Lumbridge, Nuzlocke leaderboard");
 		nuzlockeRadio.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		nuzlockeRadio.setForeground(Color.WHITE);
 		nuzlockeRadio.setAlignmentX(LEFT_ALIGNMENT);
 		modeGroup.add(nuzlockeRadio);
 		modePanel.add(nuzlockeRadio);
 
-		JLabel nuzlockeDesc = new JLabel("   Level 3 start, leaderboard eligible");
+		JLabel nuzlockeDesc = new JLabel("   Level 3 start, Nuzlocke leaderboard");
 		nuzlockeDesc.setFont(FontManager.getRunescapeSmallFont());
 		nuzlockeDesc.setForeground(Color.LIGHT_GRAY);
 		nuzlockeDesc.setAlignmentX(LEFT_ALIGNMENT);
