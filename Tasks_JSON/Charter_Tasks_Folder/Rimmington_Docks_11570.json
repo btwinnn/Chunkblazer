@@ -1,0 +1,165 @@
+{
+            "region_id": [11570],
+            "friendly_name": "Rimmington Docks",
+            "neighbor_ids": [11826, 11569, 11314, 11571],
+            "travel_connections": [               
+                {
+                    "destination_id": 11058,
+                    "travel_name": "Sail to Brimhaven"
+                },
+                {
+                    "destination_id": 10547,
+                    "travel_name": "Sail to Ardoungne"
+                },
+                {
+                    "destination_id": 10284,
+                    "travel_name": "Sail to Corsair Cove"
+                }
+            ],
+    "tasks":[
+                {
+                    "name": "Plant some Cadava Berries",
+                    "taskID": "plant_cadava_berries",
+                    "category": "Farming",
+                    "level": 22,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Cadavaberry Seeds"],
+                            "item_ids": [5102],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Dwellberry Seed",
+                    "taskID": "plant_dwellberry_seed",
+                    "category": "Farming",
+                    "level": 36,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dwellberry Seed"],
+                            "item_ids": [5103],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Jangerberry Seed",
+                    "taskID": "plant_jangerberry_seed",
+                    "category": "Farming",
+                    "level": 48,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Jangerberry Seed"],
+                            "item_ids": [5104],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Whiteberry Seed",
+                    "taskID": "plant_whiteberry_seed",
+                    "category": "Farming",
+                    "level": 59,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Whiteberry Seed"],
+                            "item_ids": [5105],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Poison Ivy Seed",
+                    "taskID": "plant_poison_ivy_seed",
+                    "category": "Farming",
+                    "level": 70,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Jangerberry Seed"],
+                            "item_ids": [5106],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1, 250]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Melzar's Map Part",
+                    "taskID": "obtain_map_part_(melzar)",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Map part (melzar)"],
+                            "item_ids": [1535],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Yew Shortbow(u)",
+                    "taskID": "fletch_yew_shortbow(u)",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yew Shortbow(u)"],
+                            "item_ids": [66],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1, 50]            
+                        }
+                    ]
+                }
+            ],          
+            "is_completed": false
+        }
