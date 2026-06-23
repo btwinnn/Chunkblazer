@@ -86,11 +86,11 @@
                     "target_npc": {
                         "npc": ["Varlamore Guard Level 21"],
                         "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
-                        "quantity": [1]
+                        "quantity": [1, 25]
                     }
                 },
                 {
-                    "name": "Defeat a Varlamore Guard",
+                    "name": "Defeat a Varlamore Guard in 9 Second",
                     "taskID": "defeat_a_varlamore_9_seconds",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

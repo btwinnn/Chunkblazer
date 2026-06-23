@@ -2329,12 +2329,6 @@
                     }
                 }
             ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Dragon Slayer I",
-                    "points": 3
-                }
-            ],
             "is_completed": false
         },
         {
@@ -2405,95 +2399,103 @@
             ],
     "tasks":[
                 {
-                    "name": "Plant some Cadava Berries",
-                    "taskID": "plant_cadava_berries",
-                    "category": "Farming",
-                    "level": 22,
-                    "completion_type": "FARMING",
+                    "name": "Defeat a Thief in Varlamore",
+                    "taskID": "defeat_a_thief_varlamore",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Cadavaberry Seeds"],
-                            "item_ids": [5102],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain Soft Clay",
-                    "taskID": "obtain_soft_clay",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Soft Clay"],
-                            "item_ids": [1761],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Talk to the Champions' Guildmaster",
-                    "taskID": "talk_to_champions_guildmaster",
-                    "category": "Dialogue",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "completion_type": "NPC_DIALOGUE",
                     "target_npc": {
-                        "npc": ["Guildmaster"],
-                        "npc_ids": [814],
+                        "npc": ["Varlamore Thief Level 16"],
+                        "npc_ids": [13291, 13292, 13293, 13294, 13295, 13296],
                         "quantity": [1]
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
-                    "category": "Agility",
-                    "level": 31,
-                    "completion_type": "AGILITY",
+                    "name": "Defeat a Thief in Varlamore in the First Hit",
+                    "taskID": "defeat_a_thief_varlamore_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Varlamore Thief Level 16"],
+                        "npc_ids": [13291, 13292, 13293, 13294, 13295, 13296],
+                        "quantity": [1]
+                    },                   
+                    "constraints": {
+                        "time_in_ticks": [1]
+                        }
                 },
                 {
-                    "name": "Equip Rune Platelegs",
-                    "taskID": "equip_rune_platelegs",
+                    "name": "Mix some Prayer Potions",
+                    "taskID": "mix_prayer_potions",
+                    "category": "Obtain_Set",
+                    "level": 38,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                     "required_items": [
+                        {
+                            "item": ["Prayer Potion(3)", "Prayer Potion(4)"],
+                            "item_ids": [139, 2434],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Seagull in the First Hit",
+                    "taskID": "defeat_seagull_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Seagull"],
+                        "npc_ids": [9609, 1338, 1339, 14938],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Pickpocket a Tourist",
+                    "taskID": "pickpocket_tourist",
+                    "category": "Thieving",
+                    "level": 1,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Man, Woman"],
+                        "npc_ids": [13206, 13207, 13208, 13209, 13210, 13211],
+                        "quantity": [1, 28]
+                    }
+                },
+                {
+                    "name": "Pickpocket a Varlamore Guard",
+                    "taskID": "pickpocket_varlamore_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
                     "base_points": 2,
                     "assignment_weight": 5,
-                    "category": "Defence",
-                    "level": 40,
-                    "completion_type": "EQUIP",
-                    "required_items": [
-                        {
-                            "item": ["Rune Platelegs"],
-                            "item_ids": [1079]
-                        }
-                    ]
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
+                        "quantity": [1]
+                    }
                 },
                 {
-                    "name": "Equip a Rune Mace",
-                    "taskID": "equip_rune_mace",
+                    "name": "Defeat a Varlamore Guard",
+                    "taskID": "defeat_a_varlamore_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 5,
-                    "category": "Attack",
-                    "level": 40,
-                    "completion_type": "EQUIP",
-                    "required_items": [
-                        {
-                            "item": ["Rune Mace"],
-                            "item_ids": [1432]
-                        }
-                    ]
-                },
-                {
-                    "name": "Enter the Sourhog Cave",
-                    "taskID": "enter_sourhog_cave",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 8
+                    "target_npc": {
+                        "npc": ["Varlamore Guard Level 21"],
+                        "npc_ids": [13100, 13101, 13109, 13102, 13103, 13104, 13105, 13106, 13107, 13108],
+                        "quantity": [1, 25]
+                    }
                 },
                 {
                     "name": "Defeat a Sourhog",
