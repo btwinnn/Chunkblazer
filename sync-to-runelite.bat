@@ -72,6 +72,16 @@ if not exist "%RUNELITE_DIR%" (
     exit /b 1
 )
 
+:: ---- Regenerate charter aggregate from per-port folder ------------------
+echo [0/3] Rebuilding Charter_Tasks.json + Free_Chunks.json from Charter_Tasks_Folder...
+powershell -NoProfile -ExecutionPolicy Bypass -File "%CHUNKBLAZER_DIR%\Tasks_JSON\build-charter-tasks.ps1"
+if %ERRORLEVEL% NEQ 0 (
+    echo ERROR: charter aggregation failed.
+    pause
+    exit /b 1
+)
+echo.
+
 :: ---- Refresh JSON resources from Tasks_JSON -----------------------------
 echo [1/3] Refreshing task JSONs from Tasks_JSON subfolders...
 echo   From: %TASKS_JSON_SRC%

@@ -1,18 +1,22 @@
 {
   "region_id": [
-    6961
+    5678
   ],
-  "friendly_name": "Fortis Cothon",
+  "friendly_name": "Aldarin Docks",
   "neighbor_ids": [
-    6960,
-    7217,
-    6962,
-    6705
+    5677,
+    5934,
+    5422,
+    5679
   ],
   "travel_connections": [
     {
-      "destination_id": 12082,
+      "destination_id": 12081,
       "travel_name": "Sail to Port Sarim"
+    },
+    {
+      "destination_id": 5934,
+      "travel_name": "Sail to Sunset Coast"
     },
     {
       "destination_id": 10545,
@@ -21,10 +25,6 @@
     {
       "destination_id": 11058,
       "travel_name": "Sail to Brimhaven"
-    },
-    {
-      "destination_id": 5678,
-      "travel_name": "Sail to Aldarin"
     },
     {
       "destination_id": 11061,
@@ -39,12 +39,12 @@
       "travel_name": "Sail to Prifddinas"
     },
     {
-      "destination_id": 5934,
-      "travel_name": "Sail to Sunset Coast"
-    },
-    {
       "destination_id": 14637,
       "travel_name": "Sail to Mos Le'Harmless"
+    },
+    {
+      "destination_id": 6961,
+      "travel_name": "Sail to Civitas illa Fortis"
     },
     {
       "destination_id": 10284,

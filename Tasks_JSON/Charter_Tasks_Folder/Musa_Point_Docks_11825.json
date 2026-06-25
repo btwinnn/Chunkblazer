@@ -1,34 +1,38 @@
 {
   "region_id": [
-    6961
+    11825
   ],
-  "friendly_name": "Fortis Cothon",
+  "friendly_name": "Musa Point Docks",
   "neighbor_ids": [
-    6960,
-    7217,
-    6962,
-    6705
+    11824,
+    12081,
+    11569,
+    11826
   ],
   "travel_connections": [
     {
-      "destination_id": 12082,
-      "travel_name": "Sail to Port Sarim"
-    },
-    {
-      "destination_id": 10545,
-      "travel_name": "Sail to Port Khazard"
+      "destination_id": 5678,
+      "travel_name": "Sail to Aldarin"
     },
     {
       "destination_id": 11058,
       "travel_name": "Sail to Brimhaven"
     },
     {
-      "destination_id": 5678,
-      "travel_name": "Sail to Aldarin"
-    },
-    {
       "destination_id": 11061,
       "travel_name": "Sail to Catherby"
+    },
+    {
+      "destination_id": 6961,
+      "travel_name": "Sail to Civitas illa Fortis"
+    },
+    {
+      "destination_id": 10284,
+      "travel_name": "Sail to Corsair Cove"
+    },
+    {
+      "destination_id": 10545,
+      "travel_name": "Sail to Port Khazard"
     },
     {
       "destination_id": 6961,
@@ -47,12 +51,12 @@
       "travel_name": "Sail to Mos Le'Harmless"
     },
     {
-      "destination_id": 10284,
-      "travel_name": "Sail to Corsair Cove"
-    },
-    {
       "destination_id": 14646,
       "travel_name": "Sail to Port Phasmatys"
+    },
+    {
+      "destination_id": 11823,
+      "travel_name": "Sail to Karamja Shipyard"
     },
     {
       "destination_id": 5941,
@@ -63,12 +67,8 @@
       "travel_name": "Sail to Port Piscarilius"
     },
     {
-      "destination_id": 11825,
-      "travel_name": "Sail to Musa Point"
-    },
-    {
-      "destination_id": 11823,
-      "travel_name": "Sail to Karamja Shipyard"
+      "destination_id": 12082,
+      "travel_name": "Sail to Port Sarim"
     }
   ],
   "tasks": [

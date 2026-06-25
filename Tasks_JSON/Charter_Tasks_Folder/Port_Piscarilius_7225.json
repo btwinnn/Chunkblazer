@@ -1,13 +1,13 @@
 {
   "region_id": [
-    6961
+    7225
   ],
-  "friendly_name": "Fortis Cothon",
+  "friendly_name": "Port Piscarilius",
   "neighbor_ids": [
-    6960,
-    7217,
-    6962,
-    6705
+    7481,
+    7224,
+    6969,
+    7226
   ],
   "travel_connections": [
     {
@@ -39,12 +39,16 @@
       "travel_name": "Sail to Prifddinas"
     },
     {
+      "destination_id": 14637,
+      "travel_name": "Sail to Mos Le'Harmless"
+    },
+    {
       "destination_id": 5934,
       "travel_name": "Sail to Sunset Coast"
     },
     {
-      "destination_id": 14637,
-      "travel_name": "Sail to Mos Le'Harmless"
+      "destination_id": 6961,
+      "travel_name": "Sail to Civitas illa Fortis"
     },
     {
       "destination_id": 10284,
@@ -55,20 +59,16 @@
       "travel_name": "Sail to Port Phasmatys"
     },
     {
-      "destination_id": 5941,
-      "travel_name": "Sail to Land's End"
-    },
-    {
-      "destination_id": 7225,
-      "travel_name": "Sail to Port Piscarilius"
-    },
-    {
       "destination_id": 11825,
       "travel_name": "Sail to Musa Point"
     },
     {
       "destination_id": 11823,
       "travel_name": "Sail to Karamja Shipyard"
+    },
+    {
+      "destination_id": 5941,
+      "travel_name": "Sail to Land's End"
     }
   ],
   "tasks": [

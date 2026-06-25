@@ -1,13 +1,13 @@
 {
   "region_id": [
-    6961
+    5934
   ],
-  "friendly_name": "Fortis Cothon",
+  "friendly_name": "Sunset Coast",
   "neighbor_ids": [
-    6960,
-    7217,
-    6962,
-    6705
+    5935,
+    6190,
+    5933,
+    5678
   ],
   "travel_connections": [
     {
@@ -39,12 +39,12 @@
       "travel_name": "Sail to Prifddinas"
     },
     {
-      "destination_id": 5934,
-      "travel_name": "Sail to Sunset Coast"
-    },
-    {
       "destination_id": 14637,
       "travel_name": "Sail to Mos Le'Harmless"
+    },
+    {
+      "destination_id": 6961,
+      "travel_name": "Sail to Civitas illa Fortis"
     },
     {
       "destination_id": 10284,
