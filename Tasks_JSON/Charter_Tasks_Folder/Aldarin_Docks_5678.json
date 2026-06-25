@@ -1,308 +1,208 @@
 {
-  "region_id": [
-    5678
-  ],
-  "friendly_name": "Aldarin Docks",
-  "neighbor_ids": [
-    5677,
-    5934,
-    5422,
-    5679
-  ],
-  "chunk_type": "Charter",
-  "unlock_cost": 0,
-  "travel_connections": [
-    {
-      "destination_id": 12081,
-      "travel_name": "Sail to Port Sarim"
-    },
-    {
-      "destination_id": 5934,
-      "travel_name": "Sail to Sunset Coast"
-    },
-    {
-      "destination_id": 10545,
-      "travel_name": "Sail to Port Khazard"
-    },
-    {
-      "destination_id": 11058,
-      "travel_name": "Sail to Brimhaven"
-    },
-    {
-      "destination_id": 11061,
-      "travel_name": "Sail to Catherby"
-    },
-    {
-      "destination_id": 6961,
-      "travel_name": "Sail to Port Tyras"
-    },
-    {
-      "destination_id": 12639,
-      "travel_name": "Sail to Prifddinas"
-    },
-    {
-      "destination_id": 14637,
-      "travel_name": "Sail to Mos Le'Harmless"
-    },
-    {
-      "destination_id": 6961,
-      "travel_name": "Sail to Civitas illa Fortis"
-    },
-    {
-      "destination_id": 10284,
-      "travel_name": "Sail to Corsair Cove"
-    },
-    {
-      "destination_id": 14646,
-      "travel_name": "Sail to Port Phasmatys"
-    },
-    {
-      "destination_id": 5941,
-      "travel_name": "Sail to Land's End"
-    },
-    {
-      "destination_id": 7225,
-      "travel_name": "Sail to Port Piscarilius"
-    },
-    {
-      "destination_id": 11825,
-      "travel_name": "Sail to Musa Point"
-    },
-    {
-      "destination_id": 11823,
-      "travel_name": "Sail to Karamja Shipyard"
-    }
-  ],
-  "tasks": [
-    {
-      "name": "Plant some Cadava Berries",
-      "taskID": "plant_cadava_berries",
-      "category": "Farming",
-      "level": 22,
-      "completion_type": "FARMING",
-      "base_points": 1,
-      "assignment_weight": 5,
-      "required_items": [
-        {
-          "item": [
-            "Cadavaberry Seeds"
-          ],
-          "item_ids": [
-            5102
-          ],
-          "quantity": [
-            1
-          ]
+            "region_id": [5678],
+            "friendly_name": "Aldarin Docks",
+            "neighbor_ids": [5677, 5934, 5422, 5679],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
+            "travel_connections": [
+                {
+                    "destination_id": 12081,
+                    "travel_name": "Sail to Port Sarim"
+                },
+                {
+                    "destination_id": 5934,
+                    "travel_name": "Sail to Sunset Coast"
+                },
+                {
+                    "destination_id": 10545,
+                    "travel_name": "Sail to Port Khazard"
+                },
+                {
+                    "destination_id": 11058,
+                    "travel_name": "Sail to Brimhaven"
+                },          
+                {
+                    "destination_id": 11061,
+                    "travel_name": "Sail to Catherby"
+                },
+                {
+                    "destination_id": 6961,
+                    "travel_name": "Sail to Port Tyras"
+                },
+                {
+                    "destination_id": 12639,
+                    "travel_name": "Sail to Prifddinas"
+                },
+                {
+                    "destination_id": 14637,
+                    "travel_name": "Sail to Mos Le'Harmless"
+                },
+                {
+                    "destination_id": 6961,
+                    "travel_name": "Sail to Civitas illa Fortis"
+                },
+                {
+                    "destination_id": 10284,
+                    "travel_name": "Sail to Corsair Cove"
+                },
+                {
+                    "destination_id": 14646,
+                    "travel_name": "Sail to Port Phasmatys"
+                },
+                {
+                    "destination_id": 5941,
+                    "travel_name": "Sail to Land's End"
+                },
+                {
+                    "destination_id": 7225,
+                    "travel_name": "Sail to Port Piscarilius"
+                },              
+                {
+                    "destination_id": 11825,
+                    "travel_name": "Sail to Musa Point"
+                },
+                {
+                    "destination_id": 11823,
+                    "travel_name": "Sail to Karamja Shipyard"
+                }
+            ],
+    "tasks":[
+                {
+                    "name": "Build a Teak Demon Lectern",
+                    "taskID": "build_teak_demon_lectern",
+                    "category": "Construction",
+                    "level": 57,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 5,      
+                    "required_finished_object": [
+                            {
+                            "object": "Teak Demon Lectern",
+                            "object_id": [13646]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Teak Eagle Lectern",
+                    "taskID": "build_teak_eagle_lectern",
+                    "category": "Construction",
+                    "level": 57,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 5,                    
+                    "required_finished_object": [
+                            {
+                            "object": "Teak Eagle Lectern",
+                            "object_id": [13645]
+                            }
+                        ]
+                },
+                {
+                    "name": "Build a Mounted Glory",
+                    "taskID": "build_mounted_glory",
+                    "category": "Construction",
+                    "level": 47,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 5,                    
+                    "required_finished_object": [
+                            {
+                            "object": "Amulet of glory (mounted)",
+                            "object_id": [13523]
+                            }
+                        ]
+                },
+                {
+                    "name": "Make a Jug of Wine",
+                    "taskID": "Cook_wine",
+                    "category": "Cooking",
+                    "level": 35,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Jug of Wine",
+                            "item_ids": [1993],
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft an Emerald Ring",
+                    "taskID": "craft_emerald_ring",
+                    "category": "Crafting",
+                    "level": 27,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Emerald Ring"],
+                            "item_ids": [1639],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Sapphire Ring",
+                    "taskID": "craft_sapphire_ring",
+                    "category": "Crafting",
+                    "level": 20,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Sapphire Ring"],
+                            "item_ids": [1637],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Ruby Ring",
+                    "taskID": "craft_ruby_ring",
+                    "category": "Crafting",
+                    "level": 34,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Ruby Ring"],
+                            "item_ids": [1641],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket an Aldarin Guard",
+                    "taskID": "pickpocket_aldarin_guard",
+                    "category": "Thieving",
+                    "level": 40,
+                    "completion_type": "THIEVING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Aldarin Guard Level 21"],
+                        "npc_ids": [13986, 13995, 13987, 13988, 13989, 13990, 13991, 13992, 13993, 13993],
+                        "quantity": [1, 50]
+                    }
+                },
+                {
+                    "name": "Defeat an Aldarin Guard",
+                    "taskID": "defeat_an_aldarin_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Aldarin Guard Level 21"],
+                        "npc_ids": [13986, 13995, 13987, 13988, 13989, 13990, 13991, 13992, 13993, 13993],
+                        "quantity": [1, 25]
+                    }
+                }
+            ],
+            "is_completed": false
         }
-      ]
-    },
-    {
-      "name": "Obtain Soft Clay",
-      "taskID": "obtain_soft_clay",
-      "category": "Obtain",
-      "completion_type": "OBTAIN",
-      "base_points": 1,
-      "assignment_weight": 8,
-      "required_items": [
-        {
-          "item": [
-            "Soft Clay"
-          ],
-          "item_ids": [
-            1761
-          ],
-          "quantity": [
-            1
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Talk to the Champions' Guildmaster",
-      "taskID": "talk_to_champions_guildmaster",
-      "category": "Dialogue",
-      "base_points": 2,
-      "assignment_weight": 8,
-      "completion_type": "NPC_DIALOGUE",
-      "target_npc": {
-        "npc": [
-          "Guildmaster"
-        ],
-        "npc_ids": [
-          814
-        ],
-        "quantity": [
-          1
-        ]
-      }
-    },
-    {
-      "name": "Use the Agility Stepping Stones",
-      "taskID": "agility_stepping_stones",
-      "category": "Agility",
-      "level": 31,
-      "completion_type": "AGILITY",
-      "base_points": 1,
-      "assignment_weight": 8
-    },
-    {
-      "name": "Equip Rune Platelegs",
-      "taskID": "equip_rune_platelegs",
-      "base_points": 2,
-      "assignment_weight": 5,
-      "category": "Defence",
-      "level": 40,
-      "completion_type": "EQUIP",
-      "required_items": [
-        {
-          "item": [
-            "Rune Platelegs"
-          ],
-          "item_ids": [
-            1079
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Equip a Rune Mace",
-      "taskID": "equip_rune_mace",
-      "base_points": 1,
-      "assignment_weight": 5,
-      "category": "Attack",
-      "level": 40,
-      "completion_type": "EQUIP",
-      "required_items": [
-        {
-          "item": [
-            "Rune Mace"
-          ],
-          "item_ids": [
-            1432
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Enter the Sourhog Cave",
-      "taskID": "enter_sourhog_cave",
-      "category": "Travel",
-      "completion_type": "TRAVEL",
-      "base_points": 1,
-      "assignment_weight": 8
-    },
-    {
-      "name": "Defeat a Sourhog",
-      "taskID": "defeat_sourhog",
-      "category": "Combat",
-      "completion_type": "COMBAT",
-      "base_points": 1,
-      "assignment_weight": 8,
-      "target_npc": {
-        "npc": [
-          "Sourhog"
-        ],
-        "npc_ids": [
-          10435
-        ],
-        "quantity": [
-          1,
-          5
-        ]
-      }
-    },
-    {
-      "name": "Obtain a Cape Yellow",
-      "taskID": "obtain_yellow_cape",
-      "category": "Obtain",
-      "completion_type": "OBTAIN",
-      "base_points": 1,
-      "assignment_weight": 8,
-      "required_items": [
-        {
-          "item": [
-            "Yellow Cape"
-          ],
-          "item_ids": [
-            1023
-          ],
-          "quantity": [
-            1
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Equip Green D'Hide Chaps",
-      "taskID": "equip_green_d'hide_chaps",
-      "category": "Ranged",
-      "level": 40,
-      "completion_type": "EQUIP",
-      "base_points": 1,
-      "assignment_weight": 5,
-      "required_items": [
-        {
-          "item": [
-            "Green D'Hide Chaps"
-          ],
-          "item_ids": [
-            1099
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Obtain a White Bead",
-      "taskID": "obtain_white_bead",
-      "category": "Obtain",
-      "completion_type": "OBTAIN",
-      "base_points": 1,
-      "assignment_weight": 8,
-      "required_items": [
-        {
-          "item": [
-            "White Bead"
-          ],
-          "item_ids": [
-            1476
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Defeat a Mugger in 16 Seconds",
-      "taskID": "defeat_mugger_fast",
-      "category": "Combat",
-      "completion_type": "NPC_Kill",
-      "base_points": 1,
-      "assignment_weight": 8,
-      "target_npc": {
-        "npc": [
-          "Mugger"
-        ],
-        "npc_ids": [
-          513,
-          1461,
-          6996,
-          13282,
-          8732
-        ],
-        "quantity": [
-          1
-        ]
-      },
-      "constraints": {
-        "time_in_ticks": [
-          28
-        ]
-      }
-    }
-  ],
-  "optional_quests_unlocked": [
-    {
-      "name": "Dragon Slayer I",
-      "points": 3
-    }
-  ],
-  "is_completed": false
-}
