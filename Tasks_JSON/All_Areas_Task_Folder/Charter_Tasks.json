@@ -2544,6 +2544,8 @@
             "region_id": [5934],
             "friendly_name": "Sunset Coast",
             "neighbor_ids": [5935, 6190, 5933, 5678],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 12082,
@@ -2784,6 +2786,8 @@
             "region_id": [5678],
             "friendly_name": "Aldarin Docks",
             "neighbor_ids": [5677, 5934, 5422, 5679],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 12081,
@@ -3024,6 +3028,8 @@
             "region_id": [10537],
             "friendly_name": "Void Knight Outpost",
             "neighbor_ids": [10793, 10538, 10281, 10536],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 12082,
@@ -3208,6 +3214,8 @@
             "region_id": [5941],
             "friendly_name": "Land's End", 
             "neighbor_ids": [5940, 5685, 5942, 6197],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 12082,
@@ -3448,6 +3456,8 @@
             "region_id": [7225],
             "friendly_name": "Port Piscarilius", 
             "neighbor_ids": [7481, 7224, 6969, 7226],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 12082,
@@ -3688,6 +3698,8 @@
             "region_id": [7225],
             "friendly_name": "Port Piscarilius", 
             "neighbor_ids": [7481, 7224, 6969, 7226],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 12082,
@@ -3928,6 +3940,8 @@
             "region_id": [13365],
             "Friendly_Name": "Digsite",
             "neighbor_ids": [13364, 13621, 13109, 13366],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 14907,
@@ -4128,6 +4142,8 @@
             "region_id": [14907],
             "Friendly_Name": "Fossil Island Museum Camp",
             "neighbor_ids": [15163, 14906, 14651, 14908],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 13365,
@@ -4328,6 +4344,8 @@
             "region_id": [7225],
             "friendly_name": "Port Piscarilius", 
             "neighbor_ids": [7481, 7224, 6969, 7226],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 12082,
@@ -4568,6 +4586,8 @@
             "region_id": [12639],
             "friendly_name": "Prifddinas North Port",
             "neighbor_ids": [8499, 8756, 8757, 8244],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 5678,
@@ -4808,6 +4828,8 @@
             "region_id": [14637],
             "friendly_name": "Mos Le'Harmless Docks",
             "neighbor_ids": [14637, 14894, 14382, 14639],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 5678,
@@ -5044,6 +5066,8 @@
             "region_id": [14646],
             "friendly_name": "Port Phasmaty's",
             "neighbor_ids": [14645, 14902, 14647, 14390],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 5678,

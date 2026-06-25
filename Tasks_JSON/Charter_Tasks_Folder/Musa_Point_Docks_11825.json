@@ -9,6 +9,8 @@
     11569,
     11826
   ],
+  "chunk_type": "Charter",
+            "unlock_cost": 0,
   "travel_connections": [
     {
       "destination_id": 5678,
