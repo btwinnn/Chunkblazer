@@ -2,6 +2,8 @@
             "region_id": [11058],
             "friendly_name": "Brimhaven Docks",
             "neighbor_ids": [11059, 11314, 11057, 10802],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 5678,

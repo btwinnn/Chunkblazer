@@ -2,6 +2,8 @@
             "region_id": [11570],
             "friendly_name": "Rimmington Docks",
             "neighbor_ids": [11826, 11569, 11314, 11571],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [               
                 {
                     "destination_id": 11058,

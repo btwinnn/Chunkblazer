@@ -2,6 +2,8 @@
             "region_id": [11316],
             "friendly_name": "Entrana",
             "neighbor_ids": [11060, 11315, 11572, 11317],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [               
                 {
                     "destination_id": 12081,

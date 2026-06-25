@@ -2,6 +2,8 @@
             "region_id": [10547],
             "Friendly_Name": "Ardougne Market",
             "neighbor_ids": [10548, 10803, 10546, 10291],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "tasks": [
                 {
                     "name": "Equip a Black Platebody",

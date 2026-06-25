@@ -2,6 +2,8 @@
             "region_id": [11061],
             "friendly_name": "Catherby",
             "neighbor_ids": [11317, 11060, 10805, 11062],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 12082,

@@ -2,6 +2,8 @@
             "region_id": [12082],
             "friendly_name": "Port Sarim",
             "neighbor_ids": [12083, 12338, 12081, 11826],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 10537,

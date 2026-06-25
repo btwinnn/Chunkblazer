@@ -2,6 +2,8 @@
             "region_id": [10545],
             "friendly_name": "Port Khazard",
             "neighbor_ids": [10289, 10544, 10801, 10546],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
             "travel_connections": [
                 {
                     "destination_id": 12082,
