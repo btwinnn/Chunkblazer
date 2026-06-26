@@ -54,7 +54,7 @@ class Zone
 	// Zone vertex format
 	// index 0: short vec3(x, y, z)
 	// index 1: int abhsl
-	// index 2: short vec4(id, x, y, z)
+	// index 2: short vec4(id, u, v, 0)
 	static final int VERT_SIZE = 20;
 
 	int glVao;
@@ -537,10 +537,10 @@ class Zone
 		lastzx = zx;
 		lastzz = zz;
 
-		int yawsin = Perspective.SINE[cyaw];
-		int yawcos = Perspective.COSINE[cyaw];
-		int pitchsin = Perspective.SINE[cpitch];
-		int pitchcos = Perspective.COSINE[cpitch];
+		int yawsin = Perspective.SINE14[cyaw];
+		int yawcos = Perspective.COSINE14[cyaw];
+		int pitchsin = Perspective.SINE14[cpitch];
+		int pitchcos = Perspective.COSINE14[cpitch];
 		for (int j = 0; j < alphaModels.size(); ++j) // NOPMD: ForLoopCanBeForeach
 		{
 			AlphaModel m = alphaModels.get(j);
