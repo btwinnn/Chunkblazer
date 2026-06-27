@@ -26,7 +26,12 @@
                     "level": 21,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Underwall tunnel (Grand Exchange)"],
+                        "object_id": [16529, 16530], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Talk to Perdu",

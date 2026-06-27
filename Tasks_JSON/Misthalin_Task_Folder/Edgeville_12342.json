@@ -72,13 +72,18 @@
                     }
                 },
                 {
-                    "name": "Use the Level 51 Agility Pipe Squeeze",
+                    "name": "Use the Level 51 Agility Edgeville Dungeon Pipe Squeeze",
                     "taskID": "agility_level_51_pipe_squeeze",
                     "category": "Agility",
                     "level": 51,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Obstacle pipe (Edgeville Dungeon)"],
+                        "object_id": [16511], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Obtain a Giant Key",

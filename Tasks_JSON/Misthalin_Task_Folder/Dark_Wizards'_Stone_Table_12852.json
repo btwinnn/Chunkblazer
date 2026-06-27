@@ -34,13 +34,18 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Fence Jump Shortcut",
+                    "name": "Use the Level 13 Agility Varrock Fence Jump Shortcut",
                     "taskID": "agility_fence_jump",
                     "category": "Agility",
                     "level": 13,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Fence (Varrock)"],
+                        "object_id": [16518], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Obtain a Fire Talisman",
