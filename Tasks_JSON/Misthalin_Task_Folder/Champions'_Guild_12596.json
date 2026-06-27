@@ -68,8 +68,13 @@
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Stepping stone (Champions' Guild)"],
+                        "object_id": [16533], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip Rune Platelegs",
