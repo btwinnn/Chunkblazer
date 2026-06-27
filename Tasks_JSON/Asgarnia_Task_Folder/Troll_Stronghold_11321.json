@@ -132,7 +132,12 @@
                     "level": 73,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Rocks (Troll Stronghold)"],
+                        "object_id": [16464], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Obtain a Curved Bone",

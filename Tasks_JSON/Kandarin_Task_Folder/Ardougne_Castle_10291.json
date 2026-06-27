@@ -89,7 +89,12 @@
                     "level": 33,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Log balance (East Ardougne)"],
+                        "object_id": [16546, 16547, 16548], 
+                        "quantity": [1]
+                    }
                 },
                 {                           
                     "name": "Defeat a Level 3 Monkey in the First Hit",

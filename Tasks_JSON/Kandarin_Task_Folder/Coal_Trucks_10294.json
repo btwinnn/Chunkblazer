@@ -151,7 +151,12 @@
                     "level": 20,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Log balance (Coal Trucks)"],
+                        "object_id": [23274, 23142, 23143], 
+                        "quantity": [1]
+                    }
                 }
             ],            
                     "optional_quests_unlocked": [
