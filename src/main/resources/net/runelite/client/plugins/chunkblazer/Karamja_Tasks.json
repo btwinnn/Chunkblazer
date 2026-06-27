@@ -311,7 +311,7 @@
                     "name": "Defeat a Moss Giant on Task",
                     "taskID": "defeat_moss_giant_on_task",
                     "category": "Slayer",
-                    "completion_type": "NPC_Kill",
+                    "completion_type": "SLAYER",
                     "base_points": 1,
                     "assignment_weight": 3,
                     "target_npc": {
@@ -892,7 +892,7 @@
                     "name": "Defeat a Moss Giant on Task",
                     "taskID": "defeat_moss_giant_on_task",
                     "category": "Slayer",
-                    "completion_type": "NPC_Kill",
+                    "completion_type": "SLAYER",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {

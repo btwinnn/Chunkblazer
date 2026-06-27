@@ -525,7 +525,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Ancient Custodian Stalker"],
-                        "npc_ids": [14704],
+                        "npc_ids": [14520],
                         "quantity": [1]
                     }
                 },

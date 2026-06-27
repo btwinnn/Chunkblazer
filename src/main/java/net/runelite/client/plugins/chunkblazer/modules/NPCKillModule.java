@@ -15,6 +15,7 @@ import net.runelite.api.ItemContainer;
 import net.runelite.api.NPC;
 import net.runelite.api.Player;
 import net.runelite.api.Scene;
+import net.runelite.api.Skill;
 import net.runelite.api.Tile;
 import net.runelite.api.TileItem;
 import net.runelite.api.coords.LocalPoint;
@@ -25,6 +26,7 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.InteractingChanged;
 import net.runelite.api.events.ItemSpawned;
+import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatColorType;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
@@ -52,6 +54,15 @@ public class NPCKillModule extends AbstractTaskModule
 
 	// Slayer task VarPlayer IDs (from RuneLite's SlayerPlugin)
 	private static final int SLAYER_TASK_COUNT_VARP = 394;  // VarPlayerID.SLAYER_COUNT
+
+	// On-task slayer kills award Slayer XP; off-task kills award none. So a Slayer
+	// XP gain in the same tick window as a kill means the dead NPC was the player's
+	// ASSIGNED monster — a name-agnostic "on the right task" signal. The kill's XP
+	// event fires during the tick; deaths are processed at end-of-tick (onGameTick),
+	// so the gain is already recorded by then. A small window covers timing skew.
+	private static final int SLAYER_XP_WINDOW_TICKS = 2;
+	private int previousSlayerXp = -1;
+	private int lastSlayerXpGainTick = -1;
 
 	@Inject
 	private VarPlayerVerificationService varPlayerService;
@@ -182,6 +193,8 @@ public class NPCKillModule extends AbstractTaskModule
 		currentTargetIndex = -1;
 		damageDealtToTarget = 0;
 		combatStartTick = -1;
+		previousSlayerXp = -1;
+		lastSlayerXpGainTick = -1;
 		pendingDropKills.clear();
 		pendingDeaths.clear();
 		log.info("NpcKillModule stopped");
@@ -195,6 +208,13 @@ public class NPCKillModule extends AbstractTaskModule
 		currentTargetIndex = -1;
 		damageDealtToTarget = 0;
 		combatStartTick = -1;
+
+		// Baseline Slayer XP so the first on-task kill after assignment registers a
+		// gain (rather than being swallowed as the baseline). Guarded for tests/off-thread.
+		if (client.getLocalPlayer() != null)
+		{
+			previousSlayerXp = client.getSkillExperience(Skill.SLAYER);
+		}
 
 		// Log task assignment with full details
 		log.info("=== [TASK ASSIGNED] ===");
@@ -312,6 +332,8 @@ public class NPCKillModule extends AbstractTaskModule
 		combatStartTick = -1;
 		baselineKc = -1;
 		currentBossName = null;
+		previousSlayerXp = -1;
+		lastSlayerXpGainTick = -1;
 		pendingDropKills.clear();
 		pendingDeaths.clear();
 		log.info("[TASK DEBUG] Task cleared - reset all tracking state");
@@ -436,6 +458,28 @@ public class NPCKillModule extends AbstractTaskModule
 		}
 
 		return parts.isEmpty() ? "none" : String.join(", ", parts);
+	}
+
+	@Subscribe
+	public void onStatChanged(StatChanged event)
+	{
+		// Track Slayer XP gains so we can tell on-task kills (XP awarded) from
+		// off-task kills (no XP) — see wasOnTaskKill().
+		if (event.getSkill() != Skill.SLAYER)
+		{
+			return;
+		}
+		int xp = event.getXp();
+		if (previousSlayerXp < 0)
+		{
+			previousSlayerXp = xp;
+			return;
+		}
+		if (xp > previousSlayerXp)
+		{
+			lastSlayerXpGainTick = client.getTickCount();
+		}
+		previousSlayerXp = xp;
 	}
 
 	@Subscribe
@@ -965,8 +1009,14 @@ public class NPCKillModule extends AbstractTaskModule
 		log.info(">>> CONFIRMED OUR KILL: {} (Index: {}, Damage dealt: {})",
 			npc.getName(), npc.getIndex(), damageDealtToTarget);
 
+		// Diagnostic for collecting real runtime NPC ids in-game: the wiki id often
+		// differs from / is incomplete vs what the client reports (level/spawn/hue
+		// variants). If a kill doesn't credit a task you expected, grep this line
+		// for the actual id and add it to the task's npc_ids.
+		log.info("[NPCKILL-DEBUG] confirmed kill: id={} name='{}'", npc.getId(), npc.getName());
+
 		// Check all active tasks for a match
-		List<NuzlockeTask> matchingTasks = findMatchingTasks(npc);
+		List<NuzlockeTask> matchingTasks = mostSpecificMatches(findMatchingTasks(npc));
 
 		// Debug: Log what we're checking against
 		for (NuzlockeTask task : activeTasks)
@@ -995,17 +1045,21 @@ public class NPCKillModule extends AbstractTaskModule
 		// Update progress for all matching tasks
 		for (NuzlockeTask task : matchingTasks)
 		{
-			// SLAYER task check - must be on a slayer task to credit SLAYER completion type kills
+			// SLAYER task check — must be killing the ASSIGNED monster, not just
+			// holding any slayer assignment. On-task kills award Slayer XP; off-task
+			// kills don't, so a Slayer XP gain in this kill's tick window proves the
+			// dead NPC was the assigned creature. (Old check was SLAYER_COUNT>0, which
+			// credited the right monster even while assigned to a different one.)
 			if (SLAYER_TYPE.equalsIgnoreCase(task.getCompletionType()))
 			{
-				if (!hasActiveSlayerTask())
+				if (!wasOnTaskKill())
 				{
-					log.warn("[TASK FAILED] Task '{}' (ID: {}) - SLAYER task requires an active slayer assignment",
+					log.warn("[TASK FAILED] Task '{}' (ID: {}) - not an on-task slayer kill (no Slayer XP for this kill)",
 						task.getName(), task.getTaskId());
-					sendTaskFailure(task, "Not on a slayer task");
+					sendTaskFailure(task, "Not on a slayer task for this monster");
 					continue; // Skip this task, don't credit the kill
 				}
-				log.info("[TASK DEBUG] Task '{}' - SLAYER task check passed (player is on slayer task)", task.getName());
+				log.info("[TASK DEBUG] Task '{}' - on-task slayer kill confirmed (Slayer XP awarded)", task.getName());
 			}
 
 			TaskConstraints constraints = task.getConstraints();
@@ -1157,6 +1211,48 @@ public class NPCKillModule extends AbstractTaskModule
 		}
 
 		return matches;
+	}
+
+	/**
+	 * When a kill matches several tasks, credit only the MOST SPECIFIC — the
+	 * task(s) with the smallest target-NPC id set. This stops a kill of a
+	 * sub-monster (e.g. an Ogress, ids {7989-7992}) from also crediting a broader
+	 * superset task (e.g. Ogre, a 28-id list that contains those). Tasks with
+	 * equal-size id sets (genuine duplicates — e.g. two tasks both pinned to the
+	 * single id 14704) can't be told apart, so they're all kept.
+	 */
+	private List<NuzlockeTask> mostSpecificMatches(List<NuzlockeTask> matches)
+	{
+		if (matches.size() <= 1)
+		{
+			return matches;
+		}
+
+		int minSize = Integer.MAX_VALUE;
+		for (NuzlockeTask task : matches)
+		{
+			int size = npcIdSetSize(task);
+			if (size > 0 && size < minSize)
+			{
+				minSize = size;
+			}
+		}
+
+		List<NuzlockeTask> specific = new ArrayList<>();
+		for (NuzlockeTask task : matches)
+		{
+			if (npcIdSetSize(task) == minSize)
+			{
+				specific.add(task);
+			}
+		}
+		return specific;
+	}
+
+	private int npcIdSetSize(NuzlockeTask task)
+	{
+		TargetNpc targetNpc = task.getTargetNpc();
+		return (targetNpc != null && targetNpc.getNpcIds() != null) ? targetNpc.getNpcIds().size() : 0;
 	}
 
 	/**
@@ -1368,11 +1464,21 @@ public class NPCKillModule extends AbstractTaskModule
 	 * Uses VarPlayer SLAYER_COUNT - if > 0, player has an active task.
 	 * @return true if player has an active slayer task, false otherwise
 	 */
-	private boolean hasActiveSlayerTask()
+	/**
+	 * True if the kill currently being processed was an on-task slayer kill — i.e.
+	 * a Slayer XP gain landed within SLAYER_XP_WINDOW_TICKS of now. Off-task kills
+	 * award no Slayer XP, so this distinguishes "killed my assigned monster" from
+	 * "killed a monster that merely matches the task while assigned to something
+	 * else". SLAYER_COUNT (varp 394) is intentionally no longer used — it only
+	 * told us the player had *an* assignment, not *which* one.
+	 */
+	private boolean wasOnTaskKill()
 	{
-		int slayerTaskCount = client.getVarpValue(SLAYER_TASK_COUNT_VARP);
-		log.info(">>> SLAYER CHECK: VarPlayer {} (SLAYER_COUNT) = {}", SLAYER_TASK_COUNT_VARP, slayerTaskCount);
-		return slayerTaskCount > 0;
+		int tick = client.getTickCount();
+		boolean onTask = lastSlayerXpGainTick > 0 && (tick - lastSlayerXpGainTick) <= SLAYER_XP_WINDOW_TICKS;
+		log.info(">>> SLAYER CHECK: lastSlayerXpGainTick={} currentTick={} -> onTask={}",
+			lastSlayerXpGainTick, tick, onTask);
+		return onTask;
 	}
 
 	/**
