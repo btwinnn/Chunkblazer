@@ -154,7 +154,12 @@
                     "level": 64,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Stepping stone (Stalker Den)"],
+                        "object_id": [57277], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Defeat many Stalkers",

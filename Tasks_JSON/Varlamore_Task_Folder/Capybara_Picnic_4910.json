@@ -57,7 +57,12 @@
                     "level": 43,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Tlati Rainforest)"],
+                        "object_id": [57604, 57605], 
+                        "quantity": [1]
+                    }
                 }              
             ],                      
             "is_completed": false
