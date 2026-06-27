@@ -33,30 +33,45 @@
                 },
                 {
                     "name": "Use the Level 43 Trollheim Medium Cliffside Scramble",
-                    "taskID": "agility_level_41_medium_cliffside_scramble",
+                    "taskID": "agility_level_43_medium_cliffside_scramble",
                     "category": "Agility",
                     "level": 43,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Rocks (Trollheim medium)"],
+                        "object_id": [16522], 
+                        "quantity": [1]
+                    }
                 },
                 {
-                    "name": "Use the Level 43 Trollheim Medium Cliffside Scramble",
-                    "taskID": "agility_level_41_medium_cliffside_scramble",
+                    "name": "Use the Level 47 Trollheim Hard Cliffside Scramble",
+                    "taskID": "agility_level_47_hard_cliffside_scramble",
                     "category": "Agility",
-                    "level": 43,
+                    "level": 47,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Rocks (Trollheim hard)"],
+                        "object_id": [16524], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 44 Trollheim Advanced Cliffside Scramble",
-                    "taskID": "agility_level_41_advanced_cliffside_scramble",
+                    "taskID": "agility_level_44_advanced_cliffside_scramble",
                     "category": "Agility",
                     "level": 44,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Rocks (Trollheim advanced)"],
+                        "object_id": [16523], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 64 Trollheim Wilderness Route",
@@ -65,7 +80,12 @@
                     "level": 64,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Rocks (Wilderness, Trollheim)"],
+                        "object_id": [16545], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 41 Trollheim Easy Cliffside Scramble",
@@ -74,7 +94,12 @@
                     "level": 41,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Rocks (Trollheim easy)"],
+                        "object_id": [16521], 
+                        "quantity": [1]
+                    }
                 }               
             ],                          
             "is_completed": false

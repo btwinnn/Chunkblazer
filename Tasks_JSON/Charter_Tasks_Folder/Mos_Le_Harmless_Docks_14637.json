@@ -133,14 +133,19 @@
       }
     },
     {
-      "name": "Use the Agility Stepping Stones",
-      "taskID": "agility_stepping_stones",
-      "category": "Agility",
-      "level": 31,
-      "completion_type": "AGILITY",
-      "base_points": 1,
-      "assignment_weight": 8
-    },
+                    "name": "Use the Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
+                    "category": "Agility",
+                    "level": 31,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Stepping stone (Champions' Guild)"],
+                        "object_id": [16533], 
+                        "quantity": [1]
+                    }
+                },
     {
       "name": "Equip Rune Platelegs",
       "taskID": "equip_rune_platelegs",

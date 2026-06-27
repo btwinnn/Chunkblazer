@@ -526,7 +526,7 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones at the Champion's Guild",
+                    "name": "Use the Agility Stepping Stone at the Champion's Guild",
                     "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
@@ -3000,8 +3000,8 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
@@ -3247,8 +3247,8 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
@@ -3898,8 +3898,8 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
@@ -4145,8 +4145,8 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
@@ -4388,8 +4388,8 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
@@ -4631,8 +4631,8 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
