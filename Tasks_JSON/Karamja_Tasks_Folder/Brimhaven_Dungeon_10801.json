@@ -4,13 +4,18 @@
             "neighbor_ids": [10802, 11057, 10800, 10545],
             "tasks": [
                 {
-                    "name": "Use the Agility Brimhaven Dungeon Red Dragon Shortcut",
+                    "name": "Use the Level 56 Agility Brimhaven Dungeon Stepping Stones",
                     "taskID": "agility_red_dragon_stepping_stones",
                     "category": "Agility",
                     "level": 56,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 3
+                    "assignment_weight": 3,
+                    "required_object": {
+                        "object": ["Stepping stones (Eastern Brimhaven Dungeon)"],
+                        "object_id": [19040, 19041], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Defeat a Fire Giant",
