@@ -429,4 +429,153 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 		verify(completionCallback).onProgressUpdated(eq(draynor), eq(1));
 		assertEquals(1, draynor.getCurrentProgress());
 	}
+
+	// --- Shortcut mis-completion (the reported bug) ----------------------------------------------
+	//
+	// 49 of 73 AGILITY tasks ship with NO required_object. AgilityModule credits
+	// those "shortcut" tasks on ANY Agility XP >= SHORTCUT_XP_THRESHOLD, with no
+	// idea which obstacle produced it. The next three tests CHARACTERIZE the
+	// resulting bugs (they assert today's wrong behaviour, with WRONG: notes), and
+	// the two after them prove the fix direction: once a shortcut carries its real
+	// required_object id, the existing object-gated path isolates it correctly.
+
+	/**
+	 * Cross-type contamination: an objectless shortcut task is credited by Agility
+	 * XP that came from something else entirely — e.g. an obstacle on a rooftop lap
+	 * the player is also running. No shortcut object of its own was ever used.
+	 */
+	@Test
+	void testObjectlessShortcut_creditedByUnrelatedXp_documentsBug()
+	{
+		NuzlockeTask shortcut = createTestTask(
+			"Use the Rocks Agility Shortcut", "agility_rocks_shortcut", "AGILITY", 1);
+		shortcut.setHasRequiredObject(false); // matches the JSON: no required_object
+
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(shortcut);
+
+		// A single unrelated obstacle XP drop (e.g. a Draynor rooftop step ~8 XP).
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, 8, 1, 1));
+
+		assertEquals(1, shortcut.getCurrentProgress(),
+			"WRONG: objectless shortcut is credited by unrelated Agility XP — it has no obstacle of its own to gate on");
+	}
+
+	/**
+	 * Cross-task contamination: two objectless shortcut tasks active, the player
+	 * uses ONE shortcut, and BOTH complete off the single XP event.
+	 */
+	@Test
+	void testTwoObjectlessShortcuts_oneUseCreditsBoth_documentsBug()
+	{
+		NuzlockeTask tunnel = createTestTask(
+			"Use the Level 21 Agility Underwall Tunnel", "agility_level_21_underwall_tunnel", "AGILITY", 1);
+		tunnel.setHasRequiredObject(false);
+		NuzlockeTask stones = createTestTask(
+			"Use the Agility Stepping Stones", "agility_stepping_stones", "AGILITY", 1);
+		stones.setHasRequiredObject(false);
+
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(tunnel);
+		agilityModule.addActiveTask(stones);
+
+		// Player uses ONE shortcut → one XP event.
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, 8, 1, 1));
+
+		assertEquals(1, tunnel.getCurrentProgress());
+		assertEquals(1, stones.getCurrentProgress(),
+			"WRONG: using one shortcut credits every active objectless shortcut task");
+	}
+
+	/**
+	 * "It completes a different one." A shortcut was given a wiki object id that
+	 * doesn't match what the client actually reports, while a *different* active
+	 * task happens to hold the real runtime id. Clicking the real object credits
+	 * the wrong task and never the intended one. (Reproduces the "ids don't line
+	 * up" symptom; the [AGILITY-DEBUG] log added to AgilityModule surfaces the
+	 * real id so the JSON can be corrected.)
+	 */
+	@Test
+	void testWrongWikiId_creditsDifferentTask_documentsBug()
+	{
+		final int WIKI_ID_WRONG = 16545;    // taken from the wiki, but NOT what the client reports
+		final int REAL_RUNTIME_ID = 11631;  // what MenuOptionClicked actually carries
+
+		NuzlockeTask rocks = createTaskWithRequiredObject(
+			"Use the Rocks Agility Shortcut", "agility_rocks_shortcut", "AGILITY", 1,
+			Collections.singletonList(WIKI_ID_WRONG));
+		rocks.setHasRequiredObject(true);
+		NuzlockeTask other = createTaskWithRequiredObject(
+			"Some Other Obstacle", "agility_other_obstacle", "AGILITY", 1,
+			Collections.singletonList(REAL_RUNTIME_ID));
+		other.setHasRequiredObject(true);
+
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(rocks);
+		agilityModule.addActiveTask(other);
+
+		// Player clicks the REAL rocks object (the id the client reports) + gains XP.
+		agilityModule.onMenuOptionClicked(mockObjectClick(REAL_RUNTIME_ID, MenuAction.GAME_OBJECT_FIRST_OPTION));
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, 8, 1, 1));
+
+		assertEquals(0, rocks.getCurrentProgress(),
+			"WRONG: the rocks shortcut holds a wiki id the client never reports, so it never credits");
+		assertEquals(1, other.getCurrentProgress(),
+			"WRONG: a different task that happens to hold the real runtime id credits instead");
+	}
+
+	/**
+	 * Fix direction: give each shortcut its REAL required_object id. The existing
+	 * object-gated path then isolates them — using one shortcut credits only that
+	 * task, even with several shortcuts active.
+	 */
+	@Test
+	void testObjectGatedShortcuts_onlyTheUsedOneCredits()
+	{
+		final int TUNNEL_ID = 16529;
+		final int STONES_ID = 16533;
+
+		NuzlockeTask tunnel = createTaskWithRequiredObject(
+			"Use the Level 21 Agility Underwall Tunnel", "agility_level_21_underwall_tunnel", "AGILITY", 1,
+			Collections.singletonList(TUNNEL_ID));
+		tunnel.setHasRequiredObject(true);
+		NuzlockeTask stones = createTaskWithRequiredObject(
+			"Use the Agility Stepping Stones", "agility_stepping_stones", "AGILITY", 1,
+			Collections.singletonList(STONES_ID));
+		stones.setHasRequiredObject(true);
+
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(tunnel);
+		agilityModule.addActiveTask(stones);
+
+		// Use the tunnel: click ITS object, then gain XP.
+		agilityModule.onMenuOptionClicked(mockObjectClick(TUNNEL_ID, MenuAction.GAME_OBJECT_FIRST_OPTION));
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, 8, 1, 1));
+
+		assertEquals(1, tunnel.getCurrentProgress(), "the shortcut actually used credits");
+		assertEquals(0, stones.getCurrentProgress(), "the other shortcut must NOT credit");
+	}
+
+	/**
+	 * And the unrelated-XP contamination is gone too once gated: obstacle XP from
+	 * a rooftop lap (no shortcut object clicked) does not credit a gated shortcut.
+	 */
+	@Test
+	void testObjectGatedShortcut_notCreditedByUnrelatedXp()
+	{
+		final int TUNNEL_ID = 16529;
+		NuzlockeTask tunnel = createTaskWithRequiredObject(
+			"Use the Level 21 Agility Underwall Tunnel", "agility_level_21_underwall_tunnel", "AGILITY", 1,
+			Collections.singletonList(TUNNEL_ID));
+		tunnel.setHasRequiredObject(true);
+
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(tunnel);
+
+		// Unrelated obstacle XP, no tunnel click.
+		agilityModule.onStatChanged(new StatChanged(Skill.AGILITY, 8, 1, 1));
+
+		assertEquals(0, tunnel.getCurrentProgress(),
+			"a gated shortcut is not credited by Agility XP unless its own object was clicked");
+	}
 }

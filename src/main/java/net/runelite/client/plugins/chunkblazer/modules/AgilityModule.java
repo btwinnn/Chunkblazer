@@ -1,5 +1,6 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -80,6 +81,16 @@ public class AgilityModule extends AbstractTaskModule
 	// How many ticks after clicking the lap-end obstacle the XP event is still
 	// considered "from that click". Matches ThievingModule's window.
 	private static final int INTERACTION_TIMEOUT_TICKS = 5;
+
+	// Menu-option verbs that indicate an agility obstacle / shortcut interaction.
+	// Used only by the diagnostic logger to filter the firehose of GameObject
+	// clicks down to agility-relevant ones, so we can surface the REAL runtime
+	// object id (the OSRS Wiki id often differs — multiloc / varbit-morphed
+	// objects — which is why wiki ids "don't line up" in the task JSON).
+	private static final Set<String> AGILITY_VERB_HINTS = new HashSet<>(Arrays.asList(
+		"climb", "cross", "squeeze", "jump", "leap", "vault", "hurdle", "swing",
+		"balance", "tightrope", "grapple", "hop", "scramble", "crawl", "traverse",
+		"slide", "dive", "walk-across", "run-across", "step", "boulder", "rockslide"));
 
 	// GameObject menu actions — same set used in ThievingModule. Anything else
 	// (examine, walk, cancel) is ignored.
@@ -237,7 +248,7 @@ public class AgilityModule extends AbstractTaskModule
 	@Subscribe
 	public void onMenuOptionClicked(MenuOptionClicked event)
 	{
-		if (activeTasks.isEmpty() || watchedObjectIds.isEmpty())
+		if (activeTasks.isEmpty())
 		{
 			return;
 		}
@@ -246,13 +257,43 @@ public class AgilityModule extends AbstractTaskModule
 			return;
 		}
 		int objectId = event.getId();
+		String option = event.getMenuOption();
+
+		// Diagnostic: log the REAL runtime object id for any agility obstacle /
+		// shortcut clicked while a task is active — even unwatched ones (objectless
+		// shortcuts have no watched ids at all). Do the shortcut in-game and read
+		// the id here, then put it in the task's required_object. This is how to
+		// reconcile the "wiki id doesn't line up with what the client reports" gap.
+		if (option != null && isAgilityVerb(option))
+		{
+			log.info("[AGILITY-DEBUG] obstacle/shortcut clicked: id={} option='{}' target='{}' (watched={})",
+				objectId, option, event.getMenuTarget(), watchedObjectIds.contains(objectId));
+		}
+
+		if (watchedObjectIds.isEmpty())
+		{
+			return;
+		}
 		if (watchedObjectIds.contains(objectId))
 		{
 			lastInteractionObjectId = objectId;
 			lastInteractionObjectTick = client.getTickCount();
 			log.info(">>> AgilityModule: Player acted on watched lap-end object (ID: {}, option: {})",
-				objectId, event.getMenuOption());
+				objectId, option);
 		}
+	}
+
+	private static boolean isAgilityVerb(String option)
+	{
+		String o = option.toLowerCase();
+		for (String hint : AGILITY_VERB_HINTS)
+		{
+			if (o.contains(hint))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Subscribe
