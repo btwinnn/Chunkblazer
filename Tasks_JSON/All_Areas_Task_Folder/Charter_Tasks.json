@@ -2767,7 +2767,7 @@
             ],
     "tasks":[
                 {
-                    "name": "Equip Void Ranger Helm",
+                    "name": "Equip a Void Ranger Helm",
                     "taskID": "equip_void_ranger_helm",
                     "base_points": 2,
                     "assignment_weight": 8,
@@ -2777,112 +2777,145 @@
                     "required_items": [
                         {
                             "item": ["Void Ranger Helm"],
-                            "item_ids": [11664]
+                            "item_ids": [11664, 24184, 20479, 26475, 27006]
                         }
                     ]
                 },
                 {
-                    "name": "Equip a Rune Mace",
-                    "taskID": "equip_rune_mace",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "category": "Attack",
-                    "level": 40,
+                    "name": "Equip a Void Melee Helm",
+                    "taskID": "equip_void_melee_helm",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Defence",
+                    "level": 42,
                     "completion_type": "EQUIP",
                     "required_items": [
                         {
-                            "item": ["Rune Mace"],
-                            "item_ids": [1432]
+                            "item": ["Void Melee Helm"],
+                            "item_ids": [11665, 24185, 20481, 26477, 27007]
                         }
                     ]
                 },
                 {
-                    "name": "Enter the Sourhog Cave",
-                    "taskID": "enter_sourhog_cave",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
-                {
-                    "name": "Defeat a Sourhog",
-                    "taskID": "defeat_sourhog",
-                    "category": "Combat",
-                    "completion_type": "COMBAT",
-                    "base_points": 1,
+                    "name": "Equip a Void Mage Helm",
+                    "taskID": "equip_void_mage_helm",
+                    "base_points": 2,
                     "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Sourhog"],
-                        "npc_ids": [10435],
-                        "quantity": [1, 5]
-                    }
+                    "category": "Defence",
+                    "level": 42,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Void Mage Helm"],
+                            "item_ids": [11663, 24183, 20477, 26473, 27005]
+                        }
+                    ]
                 },
                 {
-                    "name": "Obtain a Cape Yellow",
-                    "taskID": "obtain_yellow_cape",
+                    "name": "Equip a Void Knight Top",
+                    "taskID": "equip_void_knight_top",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Defence",
+                    "level": 42,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Void Knight Top"],
+                            "item_ids": [8839, 24177, 20465, 26463, 27000, 13072, 24178, 20467, 26469, 27003]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Void Knight Robe",
+                    "taskID": "equip_void_knight_robe",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Defence",
+                    "level": 42,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Void Knight Robe"],
+                            "item_ids": [8840, 24179, 20469, 26465, 27001, 13073, 24180, 20471, 26471, 27004]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Void Knight Gloves",
+                    "taskID": "equip_void_knight_gloves",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Defence",
+                    "level": 42,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Void Knight Gloves"],
+                            "item_ids": [8842, 24182, 20475, 26467, 27002]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Elite Void Knight Robe",
+                    "taskID": "equip_elite_void_knight_robe",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "category": "Defence",
+                    "level": 42,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Elite Void Knight Robe"],
+                            "item_ids": [13073, 24180, 20471, 26471, 27004]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Elite Void Knight Top",
+                    "taskID": "equip_elite_void_knight_top",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Defence",
+                    "level": 42,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Elite Void Knight Top"],
+                            "item_ids": [13072, 24178, 20467, 26469, 27003]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Void Knight Seal(8)",
+                    "taskID": "obtain_void_seal(8)",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Yellow Cape"],
-                            "item_ids": [1023],
+                            "item": ["Void seal#(8)"],
+                            "item_ids": [11666],
                             "quantity": [1]
                         }
                     ]
                 },
-                {
-                    "name": "Equip Green D'Hide Chaps",
-                    "taskID": "equip_green_d'hide_chaps",
-                    "category": "Ranged",
-                    "level": 40,
+                 {
+                    "name": "Equip a Void Knight Mace",
+                    "taskID": "equip_void_knight_mace",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Attack",
+                    "level": 42,
                     "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Green D'Hide Chaps"],
-                            "item_ids": [1099]
+                            "item": ["Void Knight Mace"],
+                            "item_ids": [8841, 24181, 20473]
                         }
                     ]
-                },
-                {
-                    "name": "Obtain a White Bead",
-                    "taskID": "obtain_white_bead",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["White Bead"],
-                            "item_ids": [1476]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Mugger in 16 Seconds",
-                    "taskID": "defeat_mugger_fast",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Mugger"],
-                        "npc_ids": [513, 1461, 6996, 13282, 8732],
-                        "quantity": [1]
-                    },
-                    "constraints": {
-                        "time_in_ticks": [28]
-                    }
-                }
-            ],
-            "optional_quests_unlocked": [
-                {
-                    "name": "Dragon Slayer I",
-                    "points": 3
-                }
+                }          
             ],
             "is_completed": false
         },
