@@ -111,9 +111,8 @@
                 {
                     "name": "Obtain the Spirit Angler Set",
                     "taskID": "obtain_spirit_angler_set",
-                    "category": ["Fishing", "Defence"],
-                    "level": [34, 1],
-                    "completion_type": "Obtain_Set",
+                    "category": "Obtain_Set",
+                    "completion_type": "Obtain",
                     "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [

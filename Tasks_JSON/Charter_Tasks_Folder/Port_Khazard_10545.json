@@ -70,9 +70,8 @@
                 {
                     "name": "Obtain the Angler Set",
                     "taskID": "obtain_angler_set",
-                    "category": ["Fishing", "Defence"],
-                    "level": [34, 1],
-                    "completion_type": "Obtain_Set",
+                    "category": "Obtain_Set",
+                    "completion_type": "Obtain",
                     "base_points": 2,
                     "assignment_weight": 10,
                     "required_items": [

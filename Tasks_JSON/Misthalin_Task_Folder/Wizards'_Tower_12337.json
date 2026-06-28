@@ -42,10 +42,10 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Equip a Splitbark Set",
-                    "taskID": "equip_splitbark_set",
-                    "category": "Defence",
-                    "completion_type": "EQUIP",
+                    "name": "Obtain a Splitbark Set",
+                    "taskID": "obtain_splitbark_set",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
                     "base_points": 3,
                     "assignment_weight": 5,
                     "required_items": [
@@ -123,8 +123,7 @@
                     "name": "Equip the Raiments of the Eye Set",
                     "taskID": "equip_raiments_of_eye_set",
                     "category": "Obtain_Set",
-                    "level": 1,
-                    "completion_type": "EQUIP",
+                    "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [

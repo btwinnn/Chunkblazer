@@ -5416,7 +5416,7 @@
                 {
                     "name": "Obtain the Guild Hunter Set",
                     "taskID": "obtain_guild_hunter_set",
-                    "category": "Obtain",
+                    "category": "Obtain_Set",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 10,

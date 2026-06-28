@@ -1559,7 +1559,7 @@
                 {
                     "name": "Obtain the Carpenter Set",
                     "taskID": "obtain_carpenter_set",
-                    "category": "Obtain",
+                    "category": "Obtain_Set",
                     "completion_type": "OBTAIN",
                     "base_points": 3,
                     "assignment_weight": 8,
@@ -1613,7 +1613,7 @@
                 {
                     "name": "Obtain the Prospector Set",
                     "taskID": "obtain_prospector_set",
-                    "category": "Obtain",
+                    "category": "Obtain_Set",
                     "completion_type": "OBTAIN",
                     "base_points": 3,
                     "assignment_weight": 10,

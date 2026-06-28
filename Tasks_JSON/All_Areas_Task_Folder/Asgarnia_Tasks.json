@@ -1575,7 +1575,7 @@
                 {
                     "name": "Obtain the Carpenter Set",
                     "taskID": "obtain_carpenter_set",
-                    "category": "Obtain",
+                    "category": "Obtain_Set",
                     "completion_type": "OBTAIN",
                     "base_points": 3,
                     "assignment_weight": 8,
@@ -2527,7 +2527,7 @@
                 {
                     "name": "Obtain the Rogue Set",
                     "taskID": "obtain_rogue_set",
-                    "category": "Obtain",
+                    "category": "Obtain_Set",
                     "completion_type": "OBTAIN",
                     "base_points": 2,
                     "assignment_weight": 10,

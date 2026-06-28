@@ -109,9 +109,8 @@
                 {
                     "name": "Equip the Farmer's Set",
                     "taskID": "equip_farmer's_set",
-                    "category": "Runecrafting",
-                    "level": 1,
-                    "completion_type": "EQUIP",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [

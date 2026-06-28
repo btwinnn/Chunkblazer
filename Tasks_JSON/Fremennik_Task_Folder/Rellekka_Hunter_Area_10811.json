@@ -97,7 +97,7 @@
                 {
                     "name": "Obtain the Kyatt Set",
                     "taskID": "obtain_kyatt_set",
-                    "category": "Obtain",
+                    "category": "Obtain_Set",
                     "completion_type": "OBTAIN",
                     "base_points": 3,
                     "assignment_weight": 3,

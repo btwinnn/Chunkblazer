@@ -21,9 +21,8 @@
                 {
                     "name": "Equip the Pyromancer's Set",
                     "taskID": "equip_pyromancer's_set",
-                    "category": ["Firemaking", "Defence"],
-                    "level": [50, 1],
-                    "completion_type": "EQUIP",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [
