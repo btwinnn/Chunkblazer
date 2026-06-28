@@ -2,6 +2,7 @@ package net.runelite.client.plugins.chunkblazer.modules;
 
 import net.runelite.api.MenuAction;
 import net.runelite.api.Skill;
+import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
@@ -151,6 +152,25 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 		lenient().when(event.getId()).thenReturn(objectId);
 		lenient().when(event.getMenuOption()).thenReturn("Climb");
 		return event;
+	}
+
+	// A "Walk here" click — used to simulate the player cancelling/clicking away.
+	private MenuOptionClicked mockWalkClick()
+	{
+		MenuOptionClicked event = mock(MenuOptionClicked.class);
+		when(event.getMenuAction()).thenReturn(MenuAction.WALK);
+		lenient().when(event.getId()).thenReturn(0);
+		return event;
+	}
+
+	// Simulate the local player starting an animation (proof they actually used
+	// the obstacle they clicked).
+	private void simulatePlayerAnimation(int animId)
+	{
+		lenient().when(localPlayer.getAnimation()).thenReturn(animId);
+		AnimationChanged ev = mock(AnimationChanged.class);
+		lenient().when(ev.getActor()).thenReturn(localPlayer);
+		agilityModule.onAnimationChanged(ev);
 	}
 
 	/**
@@ -554,6 +574,71 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 
 		assertEquals(1, tunnel.getCurrentProgress(), "the shortcut actually used credits");
 		assertEquals(0, stones.getCurrentProgress(), "the other shortcut must NOT credit");
+	}
+
+	private static final int SHILO_STEPPING_STONE = 16466; // captured in-game (watched=true, gives NO XP)
+
+	private NuzlockeTask shiloSteppingTask()
+	{
+		NuzlockeTask t = createTaskWithRequiredObject(
+			"Shilo Village Stepping Stones", "shilo_stepping_stones", "AGILITY", 1,
+			Collections.singletonList(SHILO_STEPPING_STONE));
+		t.setHasRequiredObject(true);
+		when(client.getSkillExperience(Skill.AGILITY)).thenReturn(0);
+		agilityModule.addActiveTask(t);
+		return t;
+	}
+
+	/**
+	 * Mike's "object IDs without XP drops did not work": stepping stones/pipes give
+	 * NO Agility XP. The fix credits on the watched click once USE is confirmed by
+	 * a player animation — so a no-XP obstacle still credits.
+	 */
+	@Test
+	void testObjectGatedTask_creditsOnAnimationWithNoXp()
+	{
+		NuzlockeTask stones = shiloSteppingTask();
+
+		agilityModule.onMenuOptionClicked(mockObjectClick(SHILO_STEPPING_STONE, MenuAction.GAME_OBJECT_FIRST_OPTION));
+		simulatePlayerAnimation(769); // player crosses the stone — no XP fires
+
+		assertEquals(1, stones.getCurrentProgress(),
+			"object-gated task credits on confirmed use (animation) even with zero Agility XP");
+		assertTrue(stones.isCompleted());
+	}
+
+	/**
+	 * The "no level" / accidental-click case: the player clicks but never actually
+	 * uses it (no animation, no XP) — must NOT credit.
+	 */
+	@Test
+	void testObjectGatedTask_clickWithNoUse_notCredited()
+	{
+		NuzlockeTask stones = shiloSteppingTask();
+
+		agilityModule.onMenuOptionClicked(mockObjectClick(SHILO_STEPPING_STONE, MenuAction.GAME_OBJECT_FIRST_OPTION));
+		// No animation, no XP — e.g. they lack the level, or never reached it.
+
+		assertEquals(0, stones.getCurrentProgress(),
+			"a click that produces no animation/XP (no level, or walked away) must not credit");
+		assertFalse(stones.isCompleted());
+	}
+
+	/**
+	 * The "click then click away" case: clicking elsewhere cancels the pending
+	 * traversal, so a later animation does not credit it.
+	 */
+	@Test
+	void testObjectGatedTask_clickAwayCancels()
+	{
+		NuzlockeTask stones = shiloSteppingTask();
+
+		agilityModule.onMenuOptionClicked(mockObjectClick(SHILO_STEPPING_STONE, MenuAction.GAME_OBJECT_FIRST_OPTION));
+		agilityModule.onMenuOptionClicked(mockWalkClick()); // changed mind, walked away
+		simulatePlayerAnimation(769);                       // some later animation
+
+		assertEquals(0, stones.getCurrentProgress(),
+			"clicking away cancels the pending traversal; a later animation must not credit");
 	}
 
 	/**
