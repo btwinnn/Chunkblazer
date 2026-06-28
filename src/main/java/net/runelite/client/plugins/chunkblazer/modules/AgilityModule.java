@@ -12,7 +12,9 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.MenuAction;
+import net.runelite.api.Player;
 import net.runelite.api.Skill;
+import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
@@ -26,15 +28,19 @@ import net.runelite.client.plugins.chunkblazer.RequiredObject;
  * Module for handling AGILITY completion type tasks.
  *
  * Two task shapes:
- *   Lap tasks  — JSON has required_object pointing at the course's lap-end obstacle
- *                 (e.g. Ardougne → Gap #4, id 15612). Credit only when the player
- *                 clicks THAT specific object and an Agility XP gain ≥ LAP_XP_THRESHOLD
- *                 fires shortly after. This prevents a single high-XP obstacle from
- *                 crediting every active lap task at once.
- *   Shortcut tasks — no required_object, e.g. "Use the Level 21 Underwall Tunnel".
- *                 Credit on any small Agility XP gain. Known cross-credit limitation
- *                 when multiple shortcut tasks are active simultaneously; out of scope
- *                 for this pass.
+ *   Object-gated tasks — JSON has required_object pointing at the obstacle (e.g.
+ *                 Ardougne → Gap #4, id 15612; a Shilo stepping stone, id 16466).
+ *                 The player clicks THAT specific object, then we credit once their
+ *                 USE of it is confirmed by a player animation OR an Agility XP gain
+ *                 within {@link #TRAVERSAL_TIMEOUT_TICKS}. Confirming on use (not the
+ *                 raw click) means obstacles that award NO XP still credit, while a
+ *                 misclick the player walks away from — or a shortcut they lack the
+ *                 level for — does not (neither animates nor grants XP). Matching is
+ *                 by the task's own object id, so only the intended task credits.
+ *   Objectless shortcut tasks — no required_object, e.g. some "Use the … Shortcut"
+ *                 tasks. Legacy fallback: credit on any small Agility XP gain. Known
+ *                 cross-credit limitation when several are active at once; the fix is
+ *                 to give each a required_object id so it uses the path above.
  */
 @Slf4j
 @Singleton
@@ -48,39 +54,22 @@ public class AgilityModule extends AbstractTaskModule
 	private static final String COLOR_DARK_GREEN = "228b22";
 	private static final String COLOR_BLACK = "000000";
 
-	// Per-task XP threshold for a credit. AGILITY tasks come in two shapes:
+	// Object-gated tasks (have required_object) credit on the watched-object CLICK
+	// once the player's USE of it is confirmed by an animation or Agility XP (see
+	// onMenuOptionClicked / onAnimationChanged / confirmPendingTraversal).
 	//
-	//   Lap tasks (have required_object in JSON, e.g. "Complete some Laps of
-	//   Draynor Rooftop"): every obstacle awards 5–22 XP, then the lap-end
-	//   bonus awards 39+ XP as a separate StatChanged event. We want to count
-	//   only the lap-end bonus, so the threshold has to sit above any single
-	//   obstacle.
-	//
-	//   Shortcut tasks (no required_object, e.g. "Use the Level 21 Underwall
-	//   Tunnel"): one tiny XP gain per use, want to credit on it. Threshold
-	//   has to be small.
-	//
-	// 30 sits between the largest single-obstacle XP (~22 XP on rooftop
-	// courses) and the smallest lap-end bonus (39 XP, Gnome Stronghold).
-	// 5 catches every legitimate shortcut XP gain.
-	//
-	// Caveat: a few non-rooftop lap courses have a single obstacle whose XP
-	// straddles 30 (e.g. Wilderness Agility's Pile of Rocks at 62.5 XP) and
-	// will double-count laps until AgilityModule moves to per-task
-	// required_object id tracking. Acceptable for now — Mike's report was
-	// Draynor.
-	// Lap tasks credit on any positive Agility XP gain that fires within
-	// INTERACTION_TIMEOUT_TICKS of clicking the watched object — supports
-	// "hop on the course = 1 lap" semantics where the first obstacle's XP
-	// may be as low as 5 (Draynor). The discriminator is the object click,
-	// not the XP magnitude. Consume-after-credit prevents double-counting
-	// when multiple XP events fire from one click.
-	private static final int LAP_XP_THRESHOLD = 1;
+	// Legacy objectless shortcut tasks (no required_object) still credit on any
+	// small Agility XP gain. This threshold catches every legitimate shortcut XP
+	// gain (the smallest are ~5). The end goal is to give every agility task a
+	// required_object id so nothing relies on this loose XP path.
 	private static final int SHORTCUT_XP_THRESHOLD = 5;
 
-	// How many ticks after clicking the lap-end obstacle the XP event is still
-	// considered "from that click". Matches ThievingModule's window.
-	private static final int INTERACTION_TIMEOUT_TICKS = 5;
+	// After clicking a watched obstacle we wait this many ticks for proof the
+	// player ACTUALLY used it (an animation or an Agility XP gain). Covers walking
+	// to the obstacle. If nothing confirms in time the click is dropped — so a
+	// misclick they walk away from, or a shortcut they lack the level for (neither
+	// produces an animation/XP), never credits.
+	private static final int TRAVERSAL_TIMEOUT_TICKS = 12;
 
 	// Menu-option verbs that indicate an agility obstacle / shortcut interaction.
 	// Used only by the diagnostic logger to filter the firehose of GameObject
@@ -113,9 +102,11 @@ public class AgilityModule extends AbstractTaskModule
 	// Union of all lap-end object IDs across active lap tasks.
 	private final Set<Integer> watchedObjectIds = ConcurrentHashMap.newKeySet();
 
-	// Most recent watched-object interaction.
-	private int lastInteractionObjectId = -1;
-	private int lastInteractionObjectTick = -1;
+	// A watched obstacle the player clicked and that is awaiting use-confirmation
+	// (animation or Agility XP). -1 when nothing is pending. Cleared if the player
+	// clicks away (cancels), or on timeout.
+	private int pendingObjectId = -1;
+	private int pendingTick = -1;
 
 	// Debug heartbeat
 	private int tickCounter = 0;
@@ -153,8 +144,8 @@ public class AgilityModule extends AbstractTaskModule
 		previousAgilityXp = -1;
 		taskRequiredObjectIds.clear();
 		watchedObjectIds.clear();
-		lastInteractionObjectId = -1;
-		lastInteractionObjectTick = -1;
+		pendingObjectId = -1;
+		pendingTick = -1;
 		log.info("AgilityModule stopped");
 	}
 
@@ -214,8 +205,8 @@ public class AgilityModule extends AbstractTaskModule
 		previousAgilityXp = -1;
 		taskRequiredObjectIds.clear();
 		watchedObjectIds.clear();
-		lastInteractionObjectId = -1;
-		lastInteractionObjectTick = -1;
+		pendingObjectId = -1;
+		pendingTick = -1;
 	}
 
 	@Override
@@ -238,6 +229,15 @@ public class AgilityModule extends AbstractTaskModule
 	{
 		tickCounter++;
 
+		// Expire a pending click that never got confirmed (e.g. the player lacked
+		// the level — no animation/XP ever fires). Prevents a much-later unrelated
+		// animation from crediting it.
+		if (pendingObjectId > 0 && (client.getTickCount() - pendingTick) > TRAVERSAL_TIMEOUT_TICKS)
+		{
+			pendingObjectId = -1;
+			pendingTick = -1;
+		}
+
 		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
 		{
 			log.info(">>> AgilityModule HEARTBEAT - tick {} - activeTasks: {}",
@@ -252,11 +252,25 @@ public class AgilityModule extends AbstractTaskModule
 		{
 			return;
 		}
-		if (!GAME_OBJECT_ACTIONS.contains(event.getMenuAction()))
+
+		MenuAction action = event.getMenuAction();
+		int objectId = event.getId();
+
+		// Cancel a pending traversal if the player clicks away before using the
+		// obstacle — a walk somewhere, an attack, or a different object. (Auto-walk
+		// to the clicked obstacle does NOT fire its own click, so any click here
+		// other than re-selecting the same obstacle means "I changed my mind".)
+		boolean reSelectingPending = GAME_OBJECT_ACTIONS.contains(action) && objectId == pendingObjectId;
+		if (pendingObjectId > 0 && !reSelectingPending)
+		{
+			pendingObjectId = -1;
+			pendingTick = -1;
+		}
+
+		if (!GAME_OBJECT_ACTIONS.contains(action))
 		{
 			return;
 		}
-		int objectId = event.getId();
 		String option = event.getMenuOption();
 
 		// Diagnostic: log the REAL runtime object id for any agility obstacle /
@@ -270,17 +284,20 @@ public class AgilityModule extends AbstractTaskModule
 				objectId, option, event.getMenuTarget(), watchedObjectIds.contains(objectId));
 		}
 
-		if (watchedObjectIds.isEmpty())
+		if (watchedObjectIds.isEmpty() || !watchedObjectIds.contains(objectId))
 		{
 			return;
 		}
-		if (watchedObjectIds.contains(objectId))
-		{
-			lastInteractionObjectId = objectId;
-			lastInteractionObjectTick = client.getTickCount();
-			log.info(">>> AgilityModule: Player acted on watched lap-end object (ID: {}, option: {})",
-				objectId, option);
-		}
+
+		// Don't credit yet — record the click as INTENT and wait for proof the
+		// player actually used the obstacle (an animation or an Agility XP gain;
+		// see onAnimationChanged / onStatChanged). This avoids crediting a misclick
+		// the player walks away from, or a shortcut they lack the level for —
+		// neither produces an animation or XP.
+		pendingObjectId = objectId;
+		pendingTick = client.getTickCount();
+		log.info(">>> AgilityModule: watched obstacle {} clicked (option '{}') — awaiting use confirmation",
+			objectId, option);
 	}
 
 	private static boolean isAgilityVerb(String option)
@@ -294,6 +311,65 @@ public class AgilityModule extends AbstractTaskModule
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * The player started an animation — proof they're actually performing the
+	 * obstacle they just clicked. Works for obstacles that award NO Agility XP
+	 * (stepping stones, pipes), which an XP gate can't catch. Confirms the pending
+	 * traversal; a misclick the player walks away from, or one they lack the level
+	 * for, never animates, so it never credits.
+	 */
+	@Subscribe
+	public void onAnimationChanged(AnimationChanged event)
+	{
+		if (pendingObjectId <= 0)
+		{
+			return;
+		}
+		Player local = client.getLocalPlayer();
+		if (local == null || event.getActor() != local)
+		{
+			return;
+		}
+		if (local.getAnimation() == -1)
+		{
+			return; // animation reset to idle, not the start of an obstacle anim
+		}
+		confirmPendingTraversal("animation " + local.getAnimation());
+	}
+
+	/**
+	 * Credit the task(s) watching the pending obstacle, if the use-confirmation
+	 * arrived in time. Cleared afterwards so one traversal credits once.
+	 */
+	private void confirmPendingTraversal(String trigger)
+	{
+		if (pendingObjectId <= 0)
+		{
+			return;
+		}
+		int obj = pendingObjectId;
+		if (client.getTickCount() - pendingTick > TRAVERSAL_TIMEOUT_TICKS)
+		{
+			// Stale — the confirmation came too late to be from this click.
+			pendingObjectId = -1;
+			pendingTick = -1;
+			return;
+		}
+		pendingObjectId = -1;
+		pendingTick = -1;
+
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
+		{
+			Set<Integer> taskObjects = taskRequiredObjectIds.get(task.getTaskId());
+			if (taskObjects != null && taskObjects.contains(obj))
+			{
+				log.info(">>> AgilityModule: '{}' credited (used watched object {} — {})",
+					task.getName(), obj, trigger);
+				creditTaskProgress(task, 1);
+			}
+		}
 	}
 
 	@Subscribe
@@ -318,57 +394,33 @@ public class AgilityModule extends AbstractTaskModule
 
 		int xpGained = currentXp - previousAgilityXp;
 		previousAgilityXp = currentXp;
+		if (xpGained <= 0)
+		{
+			return;
+		}
 
-		int currentTick = client.getTickCount();
-		boolean recentObjectInteraction = lastInteractionObjectId > 0
-			&& (currentTick - lastInteractionObjectTick) <= INTERACTION_TIMEOUT_TICKS;
+		// An Agility XP gain also confirms a pending object-gated traversal (e.g.
+		// rooftop lap-end). Most obstacles that award XP also animate, but this is a
+		// cheap belt-and-suspenders for any that don't.
+		confirmPendingTraversal("Agility XP +" + xpGained);
 
-		// Two paths:
-		//   Lap task  -> require recent click on THIS task's lap-end object AND XP ≥ threshold.
-		//   Shortcut  -> any XP ≥ threshold credits (existing loose behaviour, cross-credit risk).
-		boolean creditedLapThisEvent = false;
+		// Legacy path for shortcut tasks that have NO required_object: they still
+		// credit on any small Agility XP gain. (Going forward, give every agility
+		// task a required_object id so it uses the precise click+confirm path.)
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			Set<Integer> taskObjects = taskRequiredObjectIds.get(task.getTaskId());
-			boolean isLapTask = taskObjects != null && !taskObjects.isEmpty();
-
-			if (isLapTask)
+			boolean isObjectGated = taskObjects != null && !taskObjects.isEmpty();
+			if (isObjectGated)
 			{
-				if (!recentObjectInteraction || !taskObjects.contains(lastInteractionObjectId))
-				{
-					continue;
-				}
-				if (xpGained < LAP_XP_THRESHOLD)
-				{
-					// Sanity check — ignore zero/negative XP deltas. The actual
-					// double-credit protection is the consume-after-credit below.
-					continue;
-				}
-				log.info(">>> AgilityModule: '{}' credited (lap-end object {} clicked, gained {} XP)",
-					task.getName(), lastInteractionObjectId, xpGained);
+				continue; // credited via the watched-object click + confirmation
+			}
+			if (xpGained >= SHORTCUT_XP_THRESHOLD)
+			{
+				log.info(">>> AgilityModule: '{}' credited (objectless shortcut, gained {} XP)",
+					task.getName(), xpGained);
 				creditTaskProgress(task, 1);
-				creditedLapThisEvent = true;
 			}
-			else
-			{
-				if (xpGained >= SHORTCUT_XP_THRESHOLD)
-				{
-					log.info(">>> AgilityModule: '{}' credited (shortcut, gained {} XP, threshold {})",
-						task.getName(), xpGained, SHORTCUT_XP_THRESHOLD);
-					creditTaskProgress(task, 1);
-				}
-			}
-		}
-
-		// Consume the click after a successful lap credit. Some courses (Ardougne) fire
-		// both the final obstacle XP and the dismount-bonus XP within the same window,
-		// and both would credit otherwise — double-counting one lap on multi-lap tasks.
-		// Clear the ID (the gate uses `lastInteractionObjectId > 0`) so the next XP
-		// event in this window can't satisfy the recent-interaction check.
-		if (creditedLapThisEvent)
-		{
-			lastInteractionObjectId = -1;
-			lastInteractionObjectTick = -1;
 		}
 	}
 
