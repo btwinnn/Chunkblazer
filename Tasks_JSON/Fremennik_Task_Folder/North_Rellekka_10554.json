@@ -1,0 +1,127 @@
+{
+            "region_id": [10554],
+            "neighbor_ids": [10555, 10809, 10552, 10297],
+            "Friendly_Name": "North Rellekka",
+            "tasks": [
+                {
+                    "name": "Defeat a Rock Crab",
+                    "taskID": "defeat_rock_crab",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Rock Crab"],
+                        "npc_ids": [2261, 2262, 14425, 5941, 5940, 100, 102],
+                        "quantity": [25, 100]
+                    }
+                },
+                {
+                    "name": "Defeat a Rock Crab in the First Hit",
+                    "taskID": "defeat_rock_crab_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Rock Crab"],
+                        "npc_ids": [2261, 2262, 14425, 5941, 5940, 100, 102],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Rock Crab in 9 Seconds",
+                    "taskID": "defeat_rock_crab_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Rock Crab"],
+                        "npc_ids": [2261, 2262, 14425, 5941, 5940, 100, 102],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                },
+                {
+                    "name": "Defeat a Fremennik Warrior",
+                    "taskID": "defeat_fremennik_warrior",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Fremennik Warrior"],
+                        "npc_ids": [3950],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Fremennik Warrior in 9 Seconds",
+                    "taskID": "defeat_fremennik_warrior_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Fremennik Warrior"],
+                        "npc_ids": [3950],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                },
+                {
+                    "name": "Defeat some Hobgoblins",
+                    "taskID": "defeat_hobgoblins",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hobgoblin"],
+                        "npc_ids": [3354, 132, 3049, 2241, 3050, 3286, 3289, 3287, 3288],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Mix a Super Strength Potion",
+                    "taskID": "mix_super_strength_potion",
+                    "category": "Obtain_Set",
+                    "level": 55,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Super Strength Potion(3)", "Super Strength Potion(4)"],
+                            "item_ids": [157, 2440],
+                            "quantity": [50, 150]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Sapphire Bracelet",
+                    "taskID": "craft_sapphire_bracelet",
+                    "category": "Crafting",
+                    "level": 23,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Sapphire Bracelet"],
+                            "item_ids": [11072],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }
