@@ -1,0 +1,235 @@
+{
+            "region_id": [10297],
+            "neighbor_ids": [10298, 10553, 10296, 10041],
+            "Friendly_Name": "West Rellekka",
+            "tasks": [
+                {
+                    "name": "Fletch an Adamant Arrow",
+                    "taskID": "fletch_adamant_arrow",
+                    "category": "Fletching",
+                    "level": 60,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Arrow"],
+                            "item_ids": [890],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Tiara",
+                    "taskID": "craft_tiara",
+                    "category": "Crafting",
+                    "level": 23,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Tiara",
+                            "item_ids": [5525],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Pot Lid",
+                    "taskID": "craft_unfired_pot_lid",
+                    "category": "Crafting",
+                    "level": 25,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Pot Lid"],
+                            "item_ids": [4438],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Spin Rope",
+                    "taskID": "spin_rope",
+                    "category": "Crafting",
+                    "level": 30,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Rope"],
+                            "item_ids": [954],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Mithril Longsword",
+                    "taskID": "smith_mithril_longsword",
+                    "category": "Smithing",
+                    "level": 56,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Mithril Longsword"],
+                            "item_ids": [1299],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Mithril Plateskirt",
+                    "taskID": "smith_mithril_plateskirt",
+                    "category": "Smithing",
+                    "level": 66,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Mithril Plateskirt"],
+                            "item_ids": [1085],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith an Adamant Scimitar",
+                    "taskID": "smith_adamant_scimitar",
+                    "category": "Smithing",
+                    "level": 75,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Scimitar"],
+                            "item_ids": [1331],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Steel Kiteshield",
+                    "taskID": "smith_steel_kiteshield",
+                    "category": "Smithing",
+                    "level": 42,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Steel Kiteshield"],
+                            "item_ids": [1193],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Mithril Grapple",
+                    "taskID": "fletch_mithril_grapple",
+                    "category": "Fletching",
+                    "level": 59,
+                    "completion_type": "FLETCHING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Mith grapple"],
+                            "item_ids": [9419],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch Ruby-Tipped Adamantite Bolts",
+                    "taskID": "fletch_ruby_bolts",
+                    "category": "Fletching",
+                    "level": 63,
+                    "completion_type": "FLETCHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Ruby Bolts"],
+                            "item_ids": [9339],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch Diamond-Tipped Adamantite Bolts",
+                    "taskID": "fletch_diamond_bolts",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Diamond Bolts"],
+                            "item_ids": [9340],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Fremennik Warrior",
+                    "taskID": "defeat_fremennik_warrior",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Fremennik Warrior"],
+                        "npc_ids": [3950],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Fremennik Warrior in 9 Seconds",
+                    "taskID": "defeat_fremennik_warrior_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Fremennik Warrior"],
+                        "npc_ids": [3950],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                },
+                {
+                    "name": "Defeat a Fremennik Warrior in the First Hit",
+                    "taskID": "defeat_fremennik_warrior_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Fremennik Warrior"],
+                        "npc_ids": [3950],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Lunar Diplomacy",
+                    "points": 3
+                }
+            ],
+            "is_completed": false
+        }

@@ -1098,8 +1098,7 @@
                     "required_items": [
                         {
                             "item": "Tiara",
-                            "item_ids": [5525],
-                            "action": "obtain",
+                            "item_ids": [5525],                       
                             "quantity": [1]
                         }
                     ]
