@@ -93,6 +93,10 @@
                         "npc": ["Seagull"],
                         "npc_ids": [9609, 1338, 1339, 14938],
                         "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
                     }
                 },
                 {
