@@ -213,7 +213,12 @@
                     "level": 18,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Crevice (Crabclaw Caves)"],
+                        "object_id": [31695, 31696], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Mix some Anti-Poison Potions",

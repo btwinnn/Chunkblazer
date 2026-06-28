@@ -25,7 +25,12 @@
                     "level": 23,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Observatory)#Bottom rocks)", "Rocks (Observatory)#Rocks with grapple", "Rocks (Observatory)#Rocks without grapple", "Rocks (Observatory)#Rope"],
+                        "object_id": [33422, 31850, 31848, 31853], 
+                        "quantity": [1]
+                    }
                 },             
                 {
                     "name": "Obtain some Stardust",

@@ -75,20 +75,89 @@
                                                      ],
                               "tasks":  [
                                             {
-                                                "name":  "Plant some Cadava Berries",
-                                                "taskID":  "plant_cadava_berries",
-                                                "category":  "Farming",
-                                                "level":  22,
-                                                "completion_type":  "FARMING",
+                                                "name":  "Build a Teak Demon Lectern",
+                                                "taskID":  "build_teak_demon_lectern",
+                                                "category":  "Construction",
+                                                "level":  57,
+                                                "completion_type":  "CONSTRUCTION",
+                                                "base_points":  2,
+                                                "assignment_weight":  5,
+                                                "required_finished_object":  [
+                                                                                 {
+                                                                                     "object":  "Teak Demon Lectern",
+                                                                                     "object_id":  [
+                                                                                                       13646
+                                                                                                   ]
+                                                                                 }
+                                                                             ]
+                                            },
+                                            {
+                                                "name":  "Build a Teak Eagle Lectern",
+                                                "taskID":  "build_teak_eagle_lectern",
+                                                "category":  "Construction",
+                                                "level":  57,
+                                                "completion_type":  "CONSTRUCTION",
+                                                "base_points":  2,
+                                                "assignment_weight":  5,
+                                                "required_finished_object":  [
+                                                                                 {
+                                                                                     "object":  "Teak Eagle Lectern",
+                                                                                     "object_id":  [
+                                                                                                       13645
+                                                                                                   ]
+                                                                                 }
+                                                                             ]
+                                            },
+                                            {
+                                                "name":  "Build a Mounted Glory",
+                                                "taskID":  "build_mounted_glory",
+                                                "category":  "Construction",
+                                                "level":  47,
+                                                "completion_type":  "CONSTRUCTION",
+                                                "base_points":  2,
+                                                "assignment_weight":  5,
+                                                "required_finished_object":  [
+                                                                                 {
+                                                                                     "object":  "Amulet of glory (mounted)",
+                                                                                     "object_id":  [
+                                                                                                       13523
+                                                                                                   ]
+                                                                                 }
+                                                                             ]
+                                            },
+                                            {
+                                                "name":  "Make a Jug of Wine",
+                                                "taskID":  "Cook_wine",
+                                                "category":  "Cooking",
+                                                "level":  35,
+                                                "completion_type":  "COOKING",
+                                                "base_points":  2,
+                                                "assignment_weight":  5,
+                                                "required_items":  [
+                                                                       {
+                                                                           "item":  "Jug of Wine",
+                                                                           "item_ids":  [
+                                                                                            1993
+                                                                                        ],
+                                                                           "quantity":  1
+                                                                       }
+                                                                   ]
+                                            },
+                                            {
+                                                "name":  "Craft an Emerald Ring",
+                                                "taskID":  "craft_emerald_ring",
+                                                "category":  "Crafting",
+                                                "level":  27,
+                                                "completion_type":  "CRAFTING",
                                                 "base_points":  1,
                                                 "assignment_weight":  5,
                                                 "required_items":  [
                                                                        {
                                                                            "item":  [
-                                                                                        "Cadavaberry Seeds"
+                                                                                        "Emerald Ring"
                                                                                     ],
                                                                            "item_ids":  [
-                                                                                            5102
+                                                                                            1639
                                                                                         ],
                                                                            "quantity":  [
                                                                                             1
@@ -97,19 +166,20 @@
                                                                    ]
                                             },
                                             {
-                                                "name":  "Obtain Soft Clay",
-                                                "taskID":  "obtain_soft_clay",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
+                                                "name":  "Craft a Sapphire Ring",
+                                                "taskID":  "craft_sapphire_ring",
+                                                "category":  "Crafting",
+                                                "level":  20,
+                                                "completion_type":  "CRAFTING",
                                                 "base_points":  1,
-                                                "assignment_weight":  8,
+                                                "assignment_weight":  5,
                                                 "required_items":  [
                                                                        {
                                                                            "item":  [
-                                                                                        "Soft Clay"
+                                                                                        "Sapphire Ring"
                                                                                     ],
                                                                            "item_ids":  [
-                                                                                            1761
+                                                                                            1637
                                                                                         ],
                                                                            "quantity":  [
                                                                                             1
@@ -118,192 +188,87 @@
                                                                    ]
                                             },
                                             {
-                                                "name":  "Talk to the Champions\u0027 Guildmaster",
-                                                "taskID":  "talk_to_champions_guildmaster",
-                                                "category":  "Dialogue",
-                                                "base_points":  2,
-                                                "assignment_weight":  8,
-                                                "completion_type":  "NPC_DIALOGUE",
-                                                "target_npc":  {
-                                                                   "npc":  [
-                                                                               "Guildmaster"
-                                                                           ],
-                                                                   "npc_ids":  [
-                                                                                   814
-                                                                               ],
-                                                                   "quantity":  [
-                                                                                    1
-                                                                                ]
-                                                               }
-                                            },
-                                            {
-                                                "name":  "Use the Agility Stepping Stones",
-                                                "taskID":  "agility_stepping_stones",
-                                                "category":  "Agility",
-                                                "level":  31,
-                                                "completion_type":  "AGILITY",
+                                                "name":  "Craft a Ruby Ring",
+                                                "taskID":  "craft_ruby_ring",
+                                                "category":  "Crafting",
+                                                "level":  34,
+                                                "completion_type":  "CRAFTING",
                                                 "base_points":  1,
-                                                "assignment_weight":  8
-                                            },
-                                            {
-                                                "name":  "Equip Rune Platelegs",
-                                                "taskID":  "equip_rune_platelegs",
-                                                "base_points":  2,
                                                 "assignment_weight":  5,
-                                                "category":  "Defence",
-                                                "level":  40,
-                                                "completion_type":  "EQUIP",
                                                 "required_items":  [
                                                                        {
                                                                            "item":  [
-                                                                                        "Rune Platelegs"
+                                                                                        "Ruby Ring"
                                                                                     ],
                                                                            "item_ids":  [
-                                                                                            1079
+                                                                                            1641
+                                                                                        ],
+                                                                           "quantity":  [
+                                                                                            1
                                                                                         ]
                                                                        }
                                                                    ]
                                             },
                                             {
-                                                "name":  "Equip a Rune Mace",
-                                                "taskID":  "equip_rune_mace",
-                                                "base_points":  1,
-                                                "assignment_weight":  5,
-                                                "category":  "Attack",
+                                                "name":  "Pickpocket an Aldarin Guard",
+                                                "taskID":  "pickpocket_aldarin_guard",
+                                                "category":  "Thieving",
                                                 "level":  40,
-                                                "completion_type":  "EQUIP",
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Rune Mace"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            1432
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Enter the Sourhog Cave",
-                                                "taskID":  "enter_sourhog_cave",
-                                                "category":  "Travel",
-                                                "completion_type":  "TRAVEL",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
-                                            },
-                                            {
-                                                "name":  "Defeat a Sourhog",
-                                                "taskID":  "defeat_sourhog",
-                                                "category":  "Combat",
-                                                "completion_type":  "COMBAT",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
+                                                "completion_type":  "THIEVING",
+                                                "base_points":  2,
+                                                "assignment_weight":  5,
                                                 "target_npc":  {
                                                                    "npc":  [
-                                                                               "Sourhog"
+                                                                               "Aldarin Guard Level 21"
                                                                            ],
                                                                    "npc_ids":  [
-                                                                                   10435
+                                                                                   13986,
+                                                                                   13995,
+                                                                                   13987,
+                                                                                   13988,
+                                                                                   13989,
+                                                                                   13990,
+                                                                                   13991,
+                                                                                   13992,
+                                                                                   13993,
+                                                                                   13993
                                                                                ],
                                                                    "quantity":  [
                                                                                     1,
-                                                                                    5
+                                                                                    50
                                                                                 ]
                                                                }
                                             },
                                             {
-                                                "name":  "Obtain a Cape Yellow",
-                                                "taskID":  "obtain_yellow_cape",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Yellow Cape"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            1023
-                                                                                        ],
-                                                                           "quantity":  [
-                                                                                            1
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Equip Green D\u0027Hide Chaps",
-                                                "taskID":  "equip_green_d\u0027hide_chaps",
-                                                "category":  "Ranged",
-                                                "level":  40,
-                                                "completion_type":  "EQUIP",
-                                                "base_points":  1,
-                                                "assignment_weight":  5,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Green D\u0027Hide Chaps"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            1099
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Obtain a White Bead",
-                                                "taskID":  "obtain_white_bead",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "White Bead"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            1476
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Defeat a Mugger in 16 Seconds",
-                                                "taskID":  "defeat_mugger_fast",
+                                                "name":  "Defeat an Aldarin Guard",
+                                                "taskID":  "defeat_an_aldarin_guard",
                                                 "category":  "Combat",
                                                 "completion_type":  "NPC_Kill",
                                                 "base_points":  1,
-                                                "assignment_weight":  8,
+                                                "assignment_weight":  5,
                                                 "target_npc":  {
                                                                    "npc":  [
-                                                                               "Mugger"
+                                                                               "Aldarin Guard Level 21"
                                                                            ],
                                                                    "npc_ids":  [
-                                                                                   513,
-                                                                                   1461,
-                                                                                   6996,
-                                                                                   13282,
-                                                                                   8732
+                                                                                   13986,
+                                                                                   13995,
+                                                                                   13987,
+                                                                                   13988,
+                                                                                   13989,
+                                                                                   13990,
+                                                                                   13991,
+                                                                                   13992,
+                                                                                   13993,
+                                                                                   13993
                                                                                ],
                                                                    "quantity":  [
-                                                                                    1
+                                                                                    1,
+                                                                                    25
                                                                                 ]
-                                                               },
-                                                "constraints":  {
-                                                                    "time_in_ticks":  [
-                                                                                          28
-                                                                                      ]
-                                                                }
+                                                               }
                                             }
                                         ],
-                              "optional_quests_unlocked":  [
-                                                               {
-                                                                   "name":  "Dragon Slayer I",
-                                                                   "points":  3
-                                                               }
-                                                           ],
                               "is_completed":  false,
                               "Friendly_Name":  "Aldarin Docks",
                               "chunk_type":  "CHARTER"
@@ -2630,13 +2595,24 @@
                                                                }
                                             },
                                             {
-                                                "name":  "Use the Agility Stepping Stones",
-                                                "taskID":  "agility_stepping_stones",
+                                                "name":  "Use the Agility Stepping Stone at the Champion\u0027s Guild",
+                                                "taskID":  "agility_stepping_stones_champion_guild",
                                                 "category":  "Agility",
                                                 "level":  31,
                                                 "completion_type":  "AGILITY",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
+                                                "base_points":  2,
+                                                "assignment_weight":  8,
+                                                "required_object":  {
+                                                                        "object":  [
+                                                                                       "Stepping stone (Champions\u0027 Guild)"
+                                                                                   ],
+                                                                        "object_id":  [
+                                                                                          16533
+                                                                                      ],
+                                                                        "quantity":  [
+                                                                                         1
+                                                                                     ]
+                                                                    }
                                             },
                                             {
                                                 "name":  "Equip Rune Platelegs",
@@ -2934,13 +2910,24 @@
                                                                }
                                             },
                                             {
-                                                "name":  "Use the Agility Stepping Stones",
-                                                "taskID":  "agility_stepping_stones",
+                                                "name":  "Use the Agility Stepping Stone at the Champion\u0027s Guild",
+                                                "taskID":  "agility_stepping_stones_champion_guild",
                                                 "category":  "Agility",
                                                 "level":  31,
                                                 "completion_type":  "AGILITY",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
+                                                "base_points":  2,
+                                                "assignment_weight":  8,
+                                                "required_object":  {
+                                                                        "object":  [
+                                                                                       "Stepping stone (Champions\u0027 Guild)"
+                                                                                   ],
+                                                                        "object_id":  [
+                                                                                          16533
+                                                                                      ],
+                                                                        "quantity":  [
+                                                                                         1
+                                                                                     ]
+                                                                    }
                                             },
                                             {
                                                 "name":  "Equip Rune Platelegs",
@@ -3242,13 +3229,24 @@
                                                                }
                                             },
                                             {
-                                                "name":  "Use the Agility Stepping Stones",
-                                                "taskID":  "agility_stepping_stones",
+                                                "name":  "Use the Agility Stepping Stone at the Champion\u0027s Guild",
+                                                "taskID":  "agility_stepping_stones_champion_guild",
                                                 "category":  "Agility",
                                                 "level":  31,
                                                 "completion_type":  "AGILITY",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
+                                                "base_points":  2,
+                                                "assignment_weight":  8,
+                                                "required_object":  {
+                                                                        "object":  [
+                                                                                       "Stepping stone (Champions\u0027 Guild)"
+                                                                                   ],
+                                                                        "object_id":  [
+                                                                                          16533
+                                                                                      ],
+                                                                        "quantity":  [
+                                                                                         1
+                                                                                     ]
+                                                                    }
                                             },
                                             {
                                                 "name":  "Equip Rune Platelegs",
@@ -3938,13 +3936,24 @@
                                                                }
                                             },
                                             {
-                                                "name":  "Use the Agility Stepping Stones",
-                                                "taskID":  "agility_stepping_stones",
+                                                "name":  "Use the Agility Stepping Stone at the Champion\u0027s Guild",
+                                                "taskID":  "agility_stepping_stones_champion_guild",
                                                 "category":  "Agility",
                                                 "level":  31,
                                                 "completion_type":  "AGILITY",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
+                                                "base_points":  2,
+                                                "assignment_weight":  8,
+                                                "required_object":  {
+                                                                        "object":  [
+                                                                                       "Stepping stone (Champions\u0027 Guild)"
+                                                                                   ],
+                                                                        "object_id":  [
+                                                                                          16533
+                                                                                      ],
+                                                                        "quantity":  [
+                                                                                         1
+                                                                                     ]
+                                                                    }
                                             },
                                             {
                                                 "name":  "Equip Rune Platelegs",
@@ -4246,13 +4255,24 @@
                                                                }
                                             },
                                             {
-                                                "name":  "Use the Agility Stepping Stones",
-                                                "taskID":  "agility_stepping_stones",
+                                                "name":  "Use the Agility Stepping Stone at the Champion\u0027s Guild",
+                                                "taskID":  "agility_stepping_stones_champion_guild",
                                                 "category":  "Agility",
                                                 "level":  31,
                                                 "completion_type":  "AGILITY",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
+                                                "base_points":  2,
+                                                "assignment_weight":  8,
+                                                "required_object":  {
+                                                                        "object":  [
+                                                                                       "Stepping stone (Champions\u0027 Guild)"
+                                                                                   ],
+                                                                        "object_id":  [
+                                                                                          16533
+                                                                                      ],
+                                                                        "quantity":  [
+                                                                                         1
+                                                                                     ]
+                                                                    }
                                             },
                                             {
                                                 "name":  "Equip Rune Platelegs",
@@ -5139,13 +5159,24 @@
                                                                }
                                             },
                                             {
-                                                "name":  "Use the Agility Stepping Stones",
-                                                "taskID":  "agility_stepping_stones",
+                                                "name":  "Use the Agility Stepping Stone at the Champion\u0027s Guild",
+                                                "taskID":  "agility_stepping_stones_champion_guild",
                                                 "category":  "Agility",
                                                 "level":  31,
                                                 "completion_type":  "AGILITY",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
+                                                "base_points":  2,
+                                                "assignment_weight":  8,
+                                                "required_object":  {
+                                                                        "object":  [
+                                                                                       "Stepping stone (Champions\u0027 Guild)"
+                                                                                   ],
+                                                                        "object_id":  [
+                                                                                          16533
+                                                                                      ],
+                                                                        "quantity":  [
+                                                                                         1
+                                                                                     ]
+                                                                    }
                                             },
                                             {
                                                 "name":  "Equip Rune Platelegs",
@@ -5317,7 +5348,7 @@
                               "neighbor_ids":  [
                                                    8499,
                                                    8756,
-                                                   8757,
+                                                   8501,
                                                    8244
                                                ],
                               "unlock_cost":  0,
@@ -5447,13 +5478,24 @@
                                                                }
                                             },
                                             {
-                                                "name":  "Use the Agility Stepping Stones",
-                                                "taskID":  "agility_stepping_stones",
+                                                "name":  "Use the Agility Stepping Stone at the Champion\u0027s Guild",
+                                                "taskID":  "agility_stepping_stones_champion_guild",
                                                 "category":  "Agility",
                                                 "level":  31,
                                                 "completion_type":  "AGILITY",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
+                                                "base_points":  2,
+                                                "assignment_weight":  8,
+                                                "required_object":  {
+                                                                        "object":  [
+                                                                                       "Stepping stone (Champions\u0027 Guild)"
+                                                                                   ],
+                                                                        "object_id":  [
+                                                                                          16533
+                                                                                      ],
+                                                                        "quantity":  [
+                                                                                         1
+                                                                                     ]
+                                                                    }
                                             },
                                             {
                                                 "name":  "Equip Rune Platelegs",
@@ -5919,20 +5961,20 @@
                                                      ],
                               "tasks":  [
                                             {
-                                                "name":  "Plant some Cadava Berries",
-                                                "taskID":  "plant_cadava_berries",
-                                                "category":  "Farming",
-                                                "level":  22,
-                                                "completion_type":  "FARMING",
-                                                "base_points":  1,
-                                                "assignment_weight":  5,
+                                                "name":  "Smith an Iron Platebody",
+                                                "taskID":  "smith_iron_platebody",
+                                                "category":  "Smithing",
+                                                "level":  33,
+                                                "completion_type":  "SMITHING",
+                                                "base_points":  2,
+                                                "assignment_weight":  8,
                                                 "required_items":  [
                                                                        {
                                                                            "item":  [
-                                                                                        "Cadavaberry Seeds"
+                                                                                        "Iron Platebody"
                                                                                     ],
                                                                            "item_ids":  [
-                                                                                            5102
+                                                                                            1115
                                                                                         ],
                                                                            "quantity":  [
                                                                                             1
@@ -5941,19 +5983,20 @@
                                                                    ]
                                             },
                                             {
-                                                "name":  "Obtain Soft Clay",
-                                                "taskID":  "obtain_soft_clay",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
+                                                "name":  "Smith an Iron Longsword",
+                                                "taskID":  "smith_iron_longsword",
+                                                "category":  "Smithing",
+                                                "level":  21,
+                                                "completion_type":  "SMITHING",
                                                 "base_points":  1,
                                                 "assignment_weight":  8,
                                                 "required_items":  [
                                                                        {
                                                                            "item":  [
-                                                                                        "Soft Clay"
+                                                                                        "Iron Longsword"
                                                                                     ],
                                                                            "item_ids":  [
-                                                                                            1761
+                                                                                            1293
                                                                                         ],
                                                                            "quantity":  [
                                                                                             1
@@ -5962,192 +6005,84 @@
                                                                    ]
                                             },
                                             {
-                                                "name":  "Talk to the Champions\u0027 Guildmaster",
-                                                "taskID":  "talk_to_champions_guildmaster",
-                                                "category":  "Dialogue",
-                                                "base_points":  2,
-                                                "assignment_weight":  8,
-                                                "completion_type":  "NPC_DIALOGUE",
-                                                "target_npc":  {
-                                                                   "npc":  [
-                                                                               "Guildmaster"
-                                                                           ],
-                                                                   "npc_ids":  [
-                                                                                   814
-                                                                               ],
-                                                                   "quantity":  [
-                                                                                    1
-                                                                                ]
-                                                               }
-                                            },
-                                            {
-                                                "name":  "Use the Agility Stepping Stones",
-                                                "taskID":  "agility_stepping_stones",
-                                                "category":  "Agility",
-                                                "level":  31,
-                                                "completion_type":  "AGILITY",
+                                                "name":  "Smith an Oil Lantern Frame",
+                                                "taskID":  "smith_oil_lantern_frame",
+                                                "category":  "Smithing",
+                                                "level":  26,
+                                                "completion_type":  "SMITHING",
                                                 "base_points":  1,
-                                                "assignment_weight":  8
+                                                "assignment_weight":  8,
+                                                "required_items":  [
+                                                                       {
+                                                                           "item":  [
+                                                                                        "Oil Lantern Frame"
+                                                                                    ],
+                                                                           "item_ids":  [
+                                                                                            4540
+                                                                                        ],
+                                                                           "quantity":  [
+                                                                                            1
+                                                                                        ]
+                                                                       }
+                                                                   ]
                                             },
                                             {
-                                                "name":  "Equip Rune Platelegs",
-                                                "taskID":  "equip_rune_platelegs",
-                                                "base_points":  2,
-                                                "assignment_weight":  5,
+                                                "name":  "Smith an Iron Mace",
+                                                "taskID":  "smith_iron_mace",
+                                                "category":  "Smithing",
+                                                "level":  17,
+                                                "completion_type":  "SMITHING",
+                                                "base_points":  1,
+                                                "assignment_weight":  8,
+                                                "required_items":  [
+                                                                       {
+                                                                           "item":  [
+                                                                                        "Iron Mace"
+                                                                                    ],
+                                                                           "item_ids":  [
+                                                                                            1420
+                                                                                        ],
+                                                                           "quantity":  [
+                                                                                            1
+                                                                                        ]
+                                                                       }
+                                                                   ]
+                                            },
+                                            {
+                                                "name":  "Equip a Mithril Medium Helm",
+                                                "taskID":  "equip_mithril_med_helm",
                                                 "category":  "Defence",
-                                                "level":  40,
-                                                "completion_type":  "EQUIP",
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Rune Platelegs"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            1079
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Equip a Rune Mace",
-                                                "taskID":  "equip_rune_mace",
-                                                "base_points":  1,
-                                                "assignment_weight":  5,
-                                                "category":  "Attack",
-                                                "level":  40,
-                                                "completion_type":  "EQUIP",
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Rune Mace"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            1432
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Enter the Sourhog Cave",
-                                                "taskID":  "enter_sourhog_cave",
-                                                "category":  "Travel",
-                                                "completion_type":  "TRAVEL",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
-                                            },
-                                            {
-                                                "name":  "Defeat a Sourhog",
-                                                "taskID":  "defeat_sourhog",
-                                                "category":  "Combat",
-                                                "completion_type":  "COMBAT",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "target_npc":  {
-                                                                   "npc":  [
-                                                                               "Sourhog"
-                                                                           ],
-                                                                   "npc_ids":  [
-                                                                                   10435
-                                                                               ],
-                                                                   "quantity":  [
-                                                                                    1,
-                                                                                    5
-                                                                                ]
-                                                               }
-                                            },
-                                            {
-                                                "name":  "Obtain a Cape Yellow",
-                                                "taskID":  "obtain_yellow_cape",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Yellow Cape"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            1023
-                                                                                        ],
-                                                                           "quantity":  [
-                                                                                            1
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Equip Green D\u0027Hide Chaps",
-                                                "taskID":  "equip_green_d\u0027hide_chaps",
-                                                "category":  "Ranged",
-                                                "level":  40,
+                                                "level":  20,
                                                 "completion_type":  "EQUIP",
                                                 "base_points":  1,
                                                 "assignment_weight":  5,
                                                 "required_items":  [
                                                                        {
-                                                                           "item":  [
-                                                                                        "Green D\u0027Hide Chaps"
-                                                                                    ],
+                                                                           "item":  "Mithril Med Helm",
                                                                            "item_ids":  [
-                                                                                            1099
+                                                                                            1143
                                                                                         ]
                                                                        }
                                                                    ]
                                             },
                                             {
-                                                "name":  "Obtain a White Bead",
-                                                "taskID":  "obtain_white_bead",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
+                                                "name":  "Equip an Adamant Full Helm",
+                                                "taskID":  "equip_adamant_full_helm",
+                                                "category":  "Defence",
+                                                "level":  30,
+                                                "completion_type":  "EQUIP",
+                                                "base_points":  2,
+                                                "assignment_weight":  5,
                                                 "required_items":  [
                                                                        {
-                                                                           "item":  [
-                                                                                        "White Bead"
-                                                                                    ],
+                                                                           "item":  "Adamant Full Helm",
                                                                            "item_ids":  [
-                                                                                            1476
+                                                                                            1143
                                                                                         ]
                                                                        }
                                                                    ]
-                                            },
-                                            {
-                                                "name":  "Defeat a Mugger in 16 Seconds",
-                                                "taskID":  "defeat_mugger_fast",
-                                                "category":  "Combat",
-                                                "completion_type":  "NPC_Kill",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "target_npc":  {
-                                                                   "npc":  [
-                                                                               "Mugger"
-                                                                           ],
-                                                                   "npc_ids":  [
-                                                                                   513,
-                                                                                   1461,
-                                                                                   6996,
-                                                                                   13282,
-                                                                                   8732
-                                                                               ],
-                                                                   "quantity":  [
-                                                                                    1
-                                                                                ]
-                                                               },
-                                                "constraints":  {
-                                                                    "time_in_ticks":  [
-                                                                                          28
-                                                                                      ]
-                                                                }
                                             }
                                         ],
-                              "optional_quests_unlocked":  [
-                                                               {
-                                                                   "name":  "Dragon Slayer I",
-                                                                   "points":  3
-                                                               }
-                                                           ],
                               "is_completed":  false,
                               "Friendly_Name":  "Sunset Coast",
                               "chunk_type":  "CHARTER"
@@ -6171,91 +6106,20 @@
                                                      ],
                               "tasks":  [
                                             {
-                                                "name":  "Plant some Cadava Berries",
-                                                "taskID":  "plant_cadava_berries",
-                                                "category":  "Farming",
-                                                "level":  22,
-                                                "completion_type":  "FARMING",
-                                                "base_points":  1,
-                                                "assignment_weight":  5,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Cadavaberry Seeds"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            5102
-                                                                                        ],
-                                                                           "quantity":  [
-                                                                                            1
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Obtain Soft Clay",
-                                                "taskID":  "obtain_soft_clay",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Soft Clay"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            1761
-                                                                                        ],
-                                                                           "quantity":  [
-                                                                                            1
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Talk to the Champions\u0027 Guildmaster",
-                                                "taskID":  "talk_to_champions_guildmaster",
-                                                "category":  "Dialogue",
+                                                "name":  "Equip Void Ranger Helm",
+                                                "taskID":  "equip_void_ranger_helm",
                                                 "base_points":  2,
                                                 "assignment_weight":  8,
-                                                "completion_type":  "NPC_DIALOGUE",
-                                                "target_npc":  {
-                                                                   "npc":  [
-                                                                               "Guildmaster"
-                                                                           ],
-                                                                   "npc_ids":  [
-                                                                                   814
-                                                                               ],
-                                                                   "quantity":  [
-                                                                                    1
-                                                                                ]
-                                                               }
-                                            },
-                                            {
-                                                "name":  "Use the Agility Stepping Stones",
-                                                "taskID":  "agility_stepping_stones",
-                                                "category":  "Agility",
-                                                "level":  31,
-                                                "completion_type":  "AGILITY",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
-                                            },
-                                            {
-                                                "name":  "Equip Rune Platelegs",
-                                                "taskID":  "equip_rune_platelegs",
-                                                "base_points":  2,
-                                                "assignment_weight":  5,
                                                 "category":  "Defence",
-                                                "level":  40,
+                                                "level":  42,
                                                 "completion_type":  "EQUIP",
                                                 "required_items":  [
                                                                        {
                                                                            "item":  [
-                                                                                        "Rune Platelegs"
+                                                                                        "Void Ranger Helm"
                                                                                     ],
                                                                            "item_ids":  [
-                                                                                            1079
+                                                                                            11664
                                                                                         ]
                                                                        }
                                                                    ]

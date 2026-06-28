@@ -526,13 +526,18 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Level 31 Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Stepping stone (Champions' Guild)"],
+                        "object_id": [16533], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip Rune Platelegs",
@@ -2762,70 +2767,17 @@
             ],
     "tasks":[
                 {
-                    "name": "Plant some Cadava Berries",
-                    "taskID": "plant_cadava_berries",
-                    "category": "Farming",
-                    "level": 22,
-                    "completion_type": "FARMING",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Cadavaberry Seeds"],
-                            "item_ids": [5102],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain Soft Clay",
-                    "taskID": "obtain_soft_clay",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Soft Clay"],
-                            "item_ids": [1761],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Talk to the Champions' Guildmaster",
-                    "taskID": "talk_to_champions_guildmaster",
-                    "category": "Dialogue",
+                    "name": "Equip Void Ranger Helm",
+                    "taskID": "equip_void_ranger_helm",
                     "base_points": 2,
                     "assignment_weight": 8,
-                    "completion_type": "NPC_DIALOGUE",
-                    "target_npc": {
-                        "npc": ["Guildmaster"],
-                        "npc_ids": [814],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
-                    "category": "Agility",
-                    "level": 31,
-                    "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
-                {
-                    "name": "Equip Rune Platelegs",
-                    "taskID": "equip_rune_platelegs",
-                    "base_points": 2,
-                    "assignment_weight": 5,
                     "category": "Defence",
-                    "level": 40,
+                    "level": 42,
                     "completion_type": "EQUIP",
                     "required_items": [
                         {
-                            "item": ["Rune Platelegs"],
-                            "item_ids": [1079]
+                            "item": ["Void Ranger Helm"],
+                            "item_ids": [11664]
                         }
                     ]
                 },
@@ -3048,13 +3000,18 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Level 31 Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Stepping stone (Champions' Guild)"],
+                        "object_id": [16533], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip Rune Platelegs",
@@ -3290,13 +3247,18 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Level 31 Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Stepping stone (Champions' Guild)"],
+                        "object_id": [16533], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip Rune Platelegs",
@@ -3936,13 +3898,18 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Level 31 Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Stepping stone (Champions' Guild)"],
+                        "object_id": [16533], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip Rune Platelegs",
@@ -4067,7 +4034,7 @@
         {
             "region_id": [12639],
             "friendly_name": "Prifddinas North Port",
-            "neighbor_ids": [8499, 8756, 8757, 8244],
+            "neighbor_ids": [8499, 8756, 8501, 8244],
             "chunk_type": "Charter",
             "unlock_cost": 0,
             "travel_connections": [
@@ -4178,13 +4145,18 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Level 31 Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Stepping stone (Champions' Guild)"],
+                        "object_id": [16533], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip Rune Platelegs",
@@ -4416,13 +4388,18 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Level 31 Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Stepping stone (Champions' Guild)"],
+                        "object_id": [16533], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip Rune Platelegs",
@@ -4654,13 +4631,18 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stones",
-                    "taskID": "agility_stepping_stones",
+                    "name": "Use the Level 31 Agility Stepping Stone at the Champion's Guild",
+                    "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
                     "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Stepping stone (Champions' Guild)"],
+                        "object_id": [16533], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip Rune Platelegs",

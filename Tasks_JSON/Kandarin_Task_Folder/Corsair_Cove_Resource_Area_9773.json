@@ -74,7 +74,12 @@
                     "level": 30,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Corsair Cove Resource Area)"],
+                        "object_id": [31758, 31759], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Mine some Mithril Ore",
@@ -131,7 +136,12 @@
                     "level": 15,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Pillar (Corsair Cove Dungeon)"],
+                        "object_id": [31809], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip a Mithril Kiteshield",

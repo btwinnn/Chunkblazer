@@ -2319,13 +2319,18 @@
                     ]
                 },
                 {
-                    "name": "Use the Level 40 Agility River Hos Stepping Stones",
+                    "name": "Use the Level 40 Agility River Hos Stepping Stone",
                     "taskID": "agility_level_40_river_hos_stepping_stones",
                     "category": "Agility",
                     "level": 40,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Stepping stone (River Hos)"],
+                        "object_id": [29729, 29730], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip Ranger Boots",
@@ -3053,7 +3058,12 @@
                     "level": 18,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Crevice (Crabclaw Caves)"],
+                        "object_id": [31695, 31696], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Mix some Anti-Poison Potions",
@@ -5531,7 +5541,12 @@
                     "level": 73,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (dense essence mine, west)"],
+                        "object_id": [27984, 27985], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 52 Agility Dark Essence Mine Rock Climb",
@@ -5540,7 +5555,12 @@
                     "level": 52,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (dense essence mine, east)#Inner", "Rocks (dense essence mine, east)#Outer"],
+                        "object_id": [27988, 27987], 
+                        "quantity": [1]
+                    }
                 }, 
                 {
                     "name": "Use the Level 49 Agility Dark Essence Mine Boulder Jump",
@@ -5549,7 +5569,12 @@
                     "level": 49,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Boulder (dense essence mine)"],
+                        "object_id": [27990], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 69 Agility Dark Essence Mine Rock Climb",
@@ -5558,7 +5583,12 @@
                     "level": 69,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (dense essence mine, north)"],
+                        "object_id": [34741], 
+                        "quantity": [1]
+                    }
                 }                                                                               
             ],             
             "is_completed": false 

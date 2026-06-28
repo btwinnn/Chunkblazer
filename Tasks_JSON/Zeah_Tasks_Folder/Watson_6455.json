@@ -139,13 +139,18 @@
                     ]
                 },
                 {
-                    "name": "Use the Level 40 Agility River Hos Stepping Stones",
+                    "name": "Use the Level 40 Agility River Hos Stepping Stone",
                     "taskID": "agility_level_40_river_hos_stepping_stones",
                     "category": "Agility",
                     "level": 40,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Stepping stone (River Hos)"],
+                        "object_id": [29729, 29730], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip Ranger Boots",

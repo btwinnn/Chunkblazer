@@ -60,7 +60,12 @@
                     "level": 26,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Underwall tunnel (Falador)"],
+                        "object_id": [16527, 16528], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip an Adamant Chainbody",

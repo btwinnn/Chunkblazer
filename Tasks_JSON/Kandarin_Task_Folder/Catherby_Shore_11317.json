@@ -73,7 +73,12 @@
                     "level": 32,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Catherby)"],
+                        "object_id": [17042], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 36 Agility Water Obelisk Crossbow Shorcut",
@@ -82,7 +87,12 @@
                     "level": 36,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Crossbow Tree"],
+                        "object_id": [17062], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Plant an Apple Tree Seed",

@@ -10,7 +10,12 @@
                     "level": 16,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Underwall tunnel (Yanille)#Castle wall", "Underwall tunnel (Yanille)#Hole"],
+                        "object_id": [16519, 16520], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "task_name": "Grapple shortcut the South Yanille Wall",

@@ -156,7 +156,12 @@
                     "level": 71,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Crumbling wall (Gu'Tanoth)#Rocks", "Crumbling wall (Gu'Tanoth)#Wall"],
+                        "object_id": [40356, 40355], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Defeat an Ogre City Guard",

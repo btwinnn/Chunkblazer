@@ -166,7 +166,12 @@
                     "level": 24,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Broken wall (Nemus Retreat)"],
+                        "object_id": [56996, 56997], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 41 Rocks Shortcut at Nemus Retreat",
@@ -175,7 +180,12 @@
                     "level": 41,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Nemus Retreat)"],
+                        "object_id": [56994], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 33 Tunnel Shortcut at Nemus Retreat",
@@ -184,7 +194,12 @@
                     "level": 33,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Tunnel (Nemus Retreat)"],
+                        "object_id": [56989], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 36 Stepping Stones Shortcut at Nemus Retreat",
@@ -193,7 +208,12 @@
                     "level": 36,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Stepping stone (Nemus Retreat)"],
+                        "object_id": [56717], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Chop some Magic Trees",

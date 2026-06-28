@@ -10,7 +10,12 @@
                     "level": 70,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Obstacle pipe (Taverley Dungeon)"],
+                        "object_id": [16509], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Defeat a Blue Dragon",

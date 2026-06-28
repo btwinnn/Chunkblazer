@@ -155,7 +155,12 @@
                     "level": 72,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Tunnel (Stronghold Slayer Cave)"],
+                        "object_id": [30174, 30175], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Obtain a Crystal Saw",

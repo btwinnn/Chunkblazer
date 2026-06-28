@@ -72,7 +72,12 @@
                     "level": 40,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Log balance (Tlati Rainforest)"],
+                        "object_id": [57593, 57594, 57595], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Defeat a Jaguar in the First Hit",
