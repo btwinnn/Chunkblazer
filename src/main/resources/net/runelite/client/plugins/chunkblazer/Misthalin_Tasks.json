@@ -1098,8 +1098,7 @@
                     "required_items": [
                         {
                             "item": "Tiara",
-                            "item_ids": [5525],
-                            "action": "obtain",
+                            "item_ids": [5525],                       
                             "quantity": [1]
                         }
                     ]
@@ -1452,13 +1451,18 @@
             "neighbor_ids": [12851, 13106, 13108, 13363],
             "tasks": [
                 {
-                    "name": "Use the Rocks Agility Shortcut",
+                    "name": "Use Level 38 Agility Al Kharid Mine Rocks Shortcut",
                     "taskID": "Al_Kharid_mine_rocks_shortcut",
                     "category": "Agility",
                     "level": 38,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 3
+                    "assignment_weight": 3,
+                    "required_object": {
+                        "object": ["Rocks (Al Kharid)"],
+                        "object_id": [16549, 16550], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Mine some Gold Ore",
@@ -1650,7 +1654,7 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Stepping Stone at the Champion's Guild",
+                    "name": "Use the Level 31 Agility Stepping Stone at the Champion's Guild",
                     "taskID": "agility_stepping_stones_champion_guild",
                     "category": "Agility",
                     "level": 31,
@@ -1767,7 +1771,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Mugger"],
-                        "npc_ids": [513, 1461, 6996],
+                        "npc_ids": [513, 1461, 6996, 13282, 8732],
                         "quantity": [1]
                     },
                     "constraints": {
@@ -2360,10 +2364,10 @@
                     "assignment_weight": 5
                 },
                 {
-                    "name": "Equip a Splitbark Set",
-                    "taskID": "equip_splitbark_set",
-                    "category": "Defence",
-                    "completion_type": "EQUIP",
+                    "name": "Obtain a Splitbark Set",
+                    "taskID": "obtain_splitbark_set",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
                     "base_points": 3,
                     "assignment_weight": 5,
                     "required_items": [
@@ -2441,8 +2445,7 @@
                     "name": "Equip the Raiments of the Eye Set",
                     "taskID": "equip_raiments_of_eye_set",
                     "category": "Obtain_Set",
-                    "level": 1,
-                    "completion_type": "EQUIP",
+                    "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
@@ -2510,13 +2513,18 @@
                     }
                 },
                 {
-                    "name": "Use the Agility Fence Jump Shortcut",
+                    "name": "Use the Level 13 Agility Varrock Fence Jump Shortcut",
                     "taskID": "agility_fence_jump",
                     "category": "Agility",
                     "level": 13,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Fence (Varrock)"],
+                        "object_id": [16518], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Obtain a Fire Talisman",
@@ -3733,13 +3741,18 @@
                     }
                 },
                 {
-                    "name": "Use the Level 51 Agility Pipe Squeeze",
+                    "name": "Use the Level 51 Agility Edgeville Dungeon Pipe Squeeze",
                     "taskID": "agility_level_51_pipe_squeeze",
                     "category": "Agility",
                     "level": 51,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Obstacle pipe (Edgeville Dungeon)"],
+                        "object_id": [16511], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Obtain a Giant Key",
@@ -3829,7 +3842,12 @@
                     "level": 21,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Underwall tunnel (Grand Exchange)"],
+                        "object_id": [16529, 16530], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Talk to Perdu",

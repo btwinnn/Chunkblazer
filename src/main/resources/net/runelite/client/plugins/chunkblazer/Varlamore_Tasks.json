@@ -581,7 +581,12 @@
                     "level": 64,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Stepping stone (Stalker Den)"],
+                        "object_id": [57277], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Defeat many Stalkers",
@@ -952,7 +957,12 @@
                     "level": 45,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 3
+                    "assignment_weight": 3,
+                    "required_object": {
+                        "object": ["Log balance (Auburn Valley)"],
+                        "object_id": [56991, 56992, 56993], 
+                        "quantity": [1]
+                    }
                 }        
             ],
             "is_completed": false
@@ -1295,7 +1305,12 @@
                     "level": 24,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Broken wall (Nemus Retreat)"],
+                        "object_id": [56996, 56997], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 41 Rocks Shortcut at Nemus Retreat",
@@ -1304,7 +1319,12 @@
                     "level": 41,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Nemus Retreat)"],
+                        "object_id": [56994], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 33 Tunnel Shortcut at Nemus Retreat",
@@ -1313,7 +1333,12 @@
                     "level": 33,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Tunnel (Nemus Retreat)"],
+                        "object_id": [56989], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 36 Stepping Stones Shortcut at Nemus Retreat",
@@ -1322,7 +1347,12 @@
                     "level": 36,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Stepping stone (Nemus Retreat)"],
+                        "object_id": [56717], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Chop some Magic Trees",
@@ -1910,7 +1940,12 @@
                     "level": 45,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (The Proudspire, lower)"],
+                        "object_id": [56983], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 71 Agility Rock Climb at The Proudspire",
@@ -1919,7 +1954,12 @@
                     "level": 71,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (The Proudspire, upper)"],
+                        "object_id": [56978, 56980], 
+                        "quantity": [1]
+                    }
                 }                                                      
             ],                 
                 "is_completed": false
@@ -2800,7 +2840,12 @@
                     "level": 40,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Log balance (Tlati Rainforest)"],
+                        "object_id": [57593, 57594, 57595], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Defeat a Jaguar in the First Hit",
@@ -4318,7 +4363,12 @@
                     "level": 43,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Tlati Rainforest)"],
+                        "object_id": [57604, 57605], 
+                        "quantity": [1]
+                    }
                 }              
             ],                      
             "is_completed": false
@@ -5366,7 +5416,7 @@
                 {
                     "name": "Obtain the Guild Hunter Set",
                     "taskID": "obtain_guild_hunter_set",
-                    "category": "Obtain",
+                    "category": "Obtain_Set",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 10,
@@ -8153,6 +8203,119 @@
                         "equip_nothing": "TRUE"
                     }                                    
                 }                      
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [6960],
+            "neighbor_ids": [6961, 7216, 6959, 6704],
+            "Friendly_Name": "East Civitas illa Fortis",
+            "tasks": [
+                {
+                    "name": "Obtain a House key",
+                    "taskID": "obtain_house_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["House Keys"],
+                            "item_ids": [29325],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Pickpocket a Citizen",
+                    "taskID": "pickpocket_citizen",
+                    "category": "Thieving",
+                    "level": 1,
+                    "completion_type": "THIEVING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Citizen"],
+                        "npc_ids": [
+                            13883, 13884, 13885, 13886, 13887, 13888, 13889, 13890, 13891, 13892,
+                            13893, 13894, 13895, 13896, 13897, 13898, 13899, 13900, 13901,
+                            14646, 14647, 14648, 14649, 14650, 14651, 14652, 14653,
+                            13164, 13165, 13166, 13167, 13168, 13169, 13170, 13171, 13172, 13173,
+                            13178, 13179, 13180, 13181, 13182, 13183, 13184, 13185, 13186, 13187,
+                            13192, 13193, 13194, 13195, 13196, 13197, 13198, 13199, 13200, 13201,
+                            13202, 13203, 13204, 13205,
+                            14741, 14742, 14743, 14744, 14745, 14746, 14747, 14748,
+                            14763, 14764, 14765, 14766, 14767, 14768, 14769, 14770
+                        ],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain an Old Boot",
+                    "taskID": "obtain_old_boot",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Old boot"],
+                            "item_ids": [685],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Cut Jade",
+                    "taskID": "obtain_cut_jade",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Jade"],
+                            "item_ids": [1611],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Red Topaz",
+                    "taskID": "obtain_red_topaz",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Red topaz"],
+                            "item_ids": [1613],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Beginner Clue",
+                    "taskID": "obtain_beginner_clue",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Beginner Clue Scroll",
+                            "item_ids": [23182],
+                            "quantity": 1
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Meat and Greet",
+                    "points": 2
+                }
             ],
             "is_completed": false
         }                                   

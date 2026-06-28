@@ -75,7 +75,12 @@
                     "level": 32,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Catherby)"],
+                        "object_id": [17042], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Use the Level 36 Agility Water Obelisk Crossbow Shorcut",
@@ -84,7 +89,12 @@
                     "level": 36,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Crossbow Tree"],
+                        "object_id": [17062], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Plant an Apple Tree Sapling",
@@ -810,7 +820,7 @@
                 {
                     "name": "Obtain the Forestry Set",
                     "taskID": "obtain_forestry_set",
-                    "category": "Obtain",
+                    "category": "Obtain_Set",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 10,
@@ -2513,7 +2523,12 @@
                     "level": 20,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Log balance (Coal Trucks)"],
+                        "object_id": [23274, 23142, 23143], 
+                        "quantity": [1]
+                    }
                 }
             ],            
                     "optional_quests_unlocked": [
@@ -3007,7 +3022,12 @@
                     "level": 33,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Log balance (East Ardougne)"],
+                        "object_id": [16546, 16547, 16548], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Defeat a Level 3 Monkey in the First Hit",
@@ -3965,19 +3985,25 @@
                     "level": 16,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 8
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Underwall tunnel (Yanille)#Castle wall", "Underwall tunnel (Yanille)#Hole"],
+                        "object_id": [16519, 16520], 
+                        "quantity": [1]
+                    }
                 },
                 {
-                    "task_name": "Grapple shortcut the South Yanille Wall",
+                    "task_name": "Use the Level 39 Agility South Yanille Wall Grapple",
                     "taskID": "grapple_shortcut_south_yanille_wall",
                     "category":"Agility",
-                    "completion_type": "VARP_CHECK",
+                    "leve": 39,
+                    "completion_type": "AGILITY",
                     "base_points": 2,
                     "assignment_weight": 8,
-                    "constraints": {
-                        "varp_id": 1196,
-                        "bit_index": 14,
-                        "expected_value": 1
+                    "required_object": {
+                        "object": ["Wall (Yanille)#Grappled Wall)"],
+                        "object_id": [17047], 
+                        "quantity": [1]
                     }
                 },
                 {
@@ -4297,7 +4323,12 @@
                     "level": 71,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Crumbling wall (Gu'Tanoth)#Rocks", "Crumbling wall (Gu'Tanoth)#Wall"],
+                        "object_id": [40356, 40355], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Defeat an Ogre City Guard",
@@ -5243,7 +5274,12 @@
                     "level": 10,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Corsair Cove)"],
+                        "object_id": [31757], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Catch Raw Anchovies",
@@ -5498,7 +5534,12 @@
                     "level": 30,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Corsair Cove Resource Area)"],
+                        "object_id": [31758, 31759], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Mine some Mithril Ore",
@@ -5555,7 +5596,12 @@
                     "level": 15,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Pillar (Corsair Cove Dungeon)"],
+                        "object_id": [31809], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Equip a Mithril Kiteshield",
@@ -6121,7 +6167,12 @@
                     "level": 23,
                     "completion_type": "AGILITY",
                     "base_points": 1,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Observatory)#Bottom rocks)", "Rocks (Observatory)#Rocks with grapple", "Rocks (Observatory)#Rocks without grapple", "Rocks (Observatory)#Rope"],
+                        "object_id": [33422, 31850, 31848, 31853], 
+                        "quantity": [1]
+                    }
                 },             
                 {
                     "name": "Obtain some Stardust",
@@ -7624,7 +7675,12 @@
                     "level": 72,
                     "completion_type": "AGILITY",
                     "base_points": 3,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Tunnel (Stronghold Slayer Cave)"],
+                        "object_id": [30174, 30175], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Obtain a Crystal Saw",
