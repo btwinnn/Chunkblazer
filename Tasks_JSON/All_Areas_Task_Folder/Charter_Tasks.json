@@ -2989,180 +2989,226 @@
             ],
     "tasks":[
                 {
-                    "name": "Plant some Cadava Berries",
-                    "taskID": "plant_cadava_berries",
-                    "category": "Farming",
-                    "level": 22,
-                    "completion_type": "FARMING",
+                    "name": "Bake a Redberry Pie",
+                    "taskID": "cook_redberry_pie",
+                    "category": "Cooking",
+                    "level": 10,
+                    "completion_type": "COOKING",
                     "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Redberry Pie",
+                            "item_ids": [2325]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Lobster",
+                    "taskID": "catch_raw_lobster",
+                    "category": "Fishing",
+                    "level": 40,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Cadavaberry Seeds"],
-                            "item_ids": [5102],
+                        "item": "Raw Lobster",
+                        "item_ids": [377],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Lobster",
+                    "taskID": "cook_lobster",
+                    "category": "Cooking",
+                    "level": 40,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Lobster",
+                            "item_ids": [379],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Shark",
+                    "taskID": "catch_raw_shark",
+                    "category": "Fishing",
+                    "level": 76,
+                    "completion_type": "FISHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Raw Shark",
+                        "item_ids": [383],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Cook a Shark",
+                    "taskID": "cook_shark",
+                    "category": "Cooking",
+                    "level": 80,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Shark",
+                            "item_ids": [385],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch Raw Anchovies",
+                    "taskID": "catch_anchovies",
+                    "category": "Fishing",
+                    "level": 15,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Raw Anchovies",
+                        "item_ids": [321],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },             
+                {
+                    "name": "Cook Anchovies",
+                    "taskID": "cook_anchovies",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Anchovies",
+                        "item_ids": [319],
+                        "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop some Yew Trees",
+                    "taskID": "chop_yew_trees",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1, 50]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Yew Shortbow",
+                    "taskID": "fletch_yew_shortbow",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yew Shortbow"],
+                            "item_ids": [857],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain Soft Clay",
-                    "taskID": "obtain_soft_clay",
+                    "name": "Fletch a Yew Longbow",
+                    "taskID": "fletch_yew_longbow",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Yew Longbow"],
+                            "item_ids": [855],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ensouled Bear Head",
+                    "taskID": "obtain_ensouled_bear_head",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Soft Clay"],
-                            "item_ids": [1761],
-                            "quantity": [1]
+                            "item": ["Ensouled Bear Head"],
+                            "item_ids": [13462, 13463]
                         }
                     ]
                 },
                 {
-                    "name": "Talk to the Champions' Guildmaster",
-                    "taskID": "talk_to_champions_guildmaster",
-                    "category": "Dialogue",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "completion_type": "NPC_DIALOGUE",
-                    "target_npc": {
-                        "npc": ["Guildmaster"],
-                        "npc_ids": [814],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Use the Level 31 Agility Stepping Stone at the Champion's Guild",
-                    "taskID": "agility_stepping_stones_champion_guild",
-                    "category": "Agility",
-                    "level": 31,
-                    "completion_type": "AGILITY",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_object": {
-                        "object": ["Stepping stone (Champions' Guild)"],
-                        "object_id": [16533], 
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Equip Rune Platelegs",
-                    "taskID": "equip_rune_platelegs",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "category": "Defence",
-                    "level": 40,
-                    "completion_type": "EQUIP",
-                    "required_items": [
-                        {
-                            "item": ["Rune Platelegs"],
-                            "item_ids": [1079]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip a Rune Mace",
-                    "taskID": "equip_rune_mace",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "category": "Attack",
-                    "level": 40,
-                    "completion_type": "EQUIP",
-                    "required_items": [
-                        {
-                            "item": ["Rune Mace"],
-                            "item_ids": [1432]
-                        }
-                    ]
-                },
-                {
-                    "name": "Enter the Sourhog Cave",
-                    "taskID": "enter_sourhog_cave",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
-                {
-                    "name": "Defeat a Sourhog",
-                    "taskID": "defeat_sourhog",
-                    "category": "Combat",
-                    "completion_type": "COMBAT",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Sourhog"],
-                        "npc_ids": [10435],
-                        "quantity": [1, 5]
-                    }
-                },
-                {
-                    "name": "Obtain a Cape Yellow",
-                    "taskID": "obtain_yellow_cape",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Yellow Cape"],
-                            "item_ids": [1023],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip Green D'Hide Chaps",
-                    "taskID": "equip_green_d'hide_chaps",
-                    "category": "Ranged",
-                    "level": 40,
-                    "completion_type": "EQUIP",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Green D'Hide Chaps"],
-                            "item_ids": [1099]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a White Bead",
-                    "taskID": "obtain_white_bead",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["White Bead"],
-                            "item_ids": [1476]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Mugger in 16 Seconds",
-                    "taskID": "defeat_mugger_fast",
+                    "name": "Defeat a Black Bear in 12 Seconds",
+                    "taskID": "defeat_black_bear_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {
-                        "npc": ["Mugger"],
-                        "npc_ids": [513, 1461, 6996, 13282, 8732],
+                        "npc": ["Black Bear"],
+                        "npc_ids": [2839],
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [28]
+                        "time_in_ticks": [20]
                     }
-                }
-            ],
-            "optional_quests_unlocked": [
+                },
                 {
-                    "name": "Dragon Slayer I",
-                    "points": 3
-                }
+                    "name": "Defeat a Bear Cub in the First Hit",
+                    "taskID": "defeat_bear_cub_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Bear Cub"],
+                        "npc_ids": [3908, 3909],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                }           
             ],
             "is_completed": false
         },
