@@ -1,0 +1,13 @@
+{
+            "region_id": [11562],
+            "friendly_name": "Crash Island",
+            "neighbor_ids": [11563, 11818, 11561, 11306],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
+            "travel_connections": [
+                
+            ],
+    "tasks":[             
+            ],
+            "is_completed": false
+        }

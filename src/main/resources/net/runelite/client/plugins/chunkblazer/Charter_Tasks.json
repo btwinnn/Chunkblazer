@@ -1351,6 +1351,27 @@
                           },
                           {
                               "region_id":  [
+                                                11562
+                                            ],
+                              "neighbor_ids":  [
+                                                   11563,
+                                                   11818,
+                                                   11561,
+                                                   11306
+                                               ],
+                              "unlock_cost":  0,
+                              "travel_connections":  [
+
+                                                     ],
+                              "tasks":  [
+
+                                        ],
+                              "is_completed":  false,
+                              "Friendly_Name":  "Crash Island",
+                              "chunk_type":  "CHARTER"
+                          },
+                          {
+                              "region_id":  [
                                                 13365
                                             ],
                               "neighbor_ids":  [

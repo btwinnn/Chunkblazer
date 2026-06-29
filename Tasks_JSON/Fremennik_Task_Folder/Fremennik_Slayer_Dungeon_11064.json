@@ -64,7 +64,7 @@
                     "assignment_weight": 1,
                     "target_npc": {
                         "npc": ["Monstrous Basilisk"],
-                        "npc_ids": [7395],
+                        "npc_ids": [7395, 9287, 9288],
                         "quantity": [1]
                     }
                 },
