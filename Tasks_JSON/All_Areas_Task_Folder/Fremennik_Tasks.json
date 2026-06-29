@@ -3154,6 +3154,172 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [9790],
+            "neighbor_ids": [9791, 10046, 9789, 9534],
+            "Friendly_Name": "Island of Stone",
+            "tasks": [
+                {
+                    "name": "Defeat a Basilisk",
+                    "taskID": "defeat_basilisk",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Basilisk"],
+                        "npc_ids": [417, 9283, 9284, 9285, 9286, 9293, 9258, 9282, 9287, 9288, 7395],
+                        "quantity": [1, 50]
+                    }
+                },
+                {
+                    "name": "Defeat a Basilisk Knight",
+                    "taskID": "defeat_basilisk_knight",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Basilisk Knight"],
+                        "npc_ids": [9293, 9258],
+                        "quantity": [1, 50]
+                    }
+                },
+                {
+                    "name": "Equip a Neitiznot Faceguard",
+                    "taskID": "equip_neitiznot_faceguard",
+                    "category": "Defence",
+                    "level": 70,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Neitiznot Faceguard"],
+                            "item_ids": [24271]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Basilisk Sentinel",
+                    "taskID": "defeat_basilisk_sentinel",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Basilisk Sentinel"],
+                        "npc_ids": [9258],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Monstrous Basilisk",
+                    "taskID": "defeat_monstrous_basilisk",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Monstrous Basilisk"],
+                        "npc_ids": [7395, 9287, 9288],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Basilisk in 9 Seconds",
+                    "taskID": "defeat_basilisk_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Basilisk"],
+                        "npc_ids": [417, 9283, 9284, 9285, 9286, 9293, 9258, 9282, 9287, 9288, 7395],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                },
+                {
+                    "name": "Defeat a Basilisk Knight in 48 Seconds",
+                    "taskID": "defeat_basilisk_knight_48_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Basilisk Knight"],
+                        "npc_ids": [9293, 9258],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [80]
+                    }
+                },
+                {
+                    "name": "Defeat a Basilisk in the First Hit",
+                    "taskID": "defeat_basilisk_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Basilisk"],
+                        "npc_ids": [417, 9283, 9284, 9285, 9286],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Equip a Light Mystic Hat",
+                    "taskID": "equip_light_mystic_hat",
+                    "category": "Magic",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Mystic Hat (light)"],
+                            "item_ids": [4109]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Basilisk Head",
+                    "taskID": "obtain_basilisk_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Basilisk Head"],
+                            "item_ids": [7977],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Basilisk on Task",
+                    "taskID": "defeat_basilisk_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Basilisk"],
+                        "npc_ids": [417, 9283, 9284, 9285, 9286, 9293, 9258, 9282, 9287, 9288, 7395],
+                        "quantity": [1]
+                    }
+                }
+            ],
+            "is_completed": false
         }                                                
     ]
 }
