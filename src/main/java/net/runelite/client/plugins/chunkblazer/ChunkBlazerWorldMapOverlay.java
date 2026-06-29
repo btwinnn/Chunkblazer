@@ -156,15 +156,16 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 					}
 				}
 
-				// Draw fills first. Owned chunks are filled in; unlockable chunks
-				// (neighbours + charter ports) get a yellow outline only (border
-				// pass) with NO fill; locked chunks get the dark wash.
+				// Draw fills first. Owned chunks are filled in (green); everything
+				// not yet owned gets the SAME dark wash — including unlockable
+				// chunks, so they don't stand out as "highlighted". The only thing
+				// that marks an unlockable chunk is its yellow outline (border pass).
 				if (isUnlocked)
 				{
 					graphics.setColor(UNLOCKED_FILL);
 					graphics.fillRect(xPos, yPos, regionPixelSize, regionPixelSize);
 				}
-				else if (!isNeighbor && !isCharter)
+				else
 				{
 					graphics.setColor(LOCKED_FILL);
 					graphics.fillRect(xPos, yPos, regionPixelSize, regionPixelSize);
