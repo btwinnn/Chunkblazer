@@ -32,11 +32,14 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 
 	// Colors
 	private static final Color UNLOCKED_BORDER = new Color(0, 255, 0, 180);
+	private static final Color UNLOCKED_FILL = new Color(0, 255, 0, 35); // Owned chunks are filled in
 	private static final Color LOCKED_BORDER = new Color(255, 0, 0, 120);
 	private static final Color LOCKED_FILL = new Color(0, 0, 0, 100);
-	private static final Color NEIGHBOR_BORDER = new Color(255, 215, 0, 200);
-	private static final Color NEIGHBOR_FILL = new Color(255, 215, 0, 30);
-	private static final Color NEIGHBOR_HOVER_FILL = new Color(255, 215, 0, 80); // Brighter when hovered
+	// Yellow outline = "you can unlock this" — the baseline unlock marker for
+	// every unlockable chunk (adjacent neighbours AND charter ports). Outline
+	// only: unlockable chunks are never filled or highlighted, so owned (filled)
+	// vs available (outlined) reads at a glance.
+	private static final Color UNLOCKABLE_BORDER = new Color(255, 215, 0, 220);
 	private static final Color CURRENT_BORDER = new Color(0, 200, 255, 255);
 
 	private final Client client;
@@ -132,6 +135,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 				boolean isUnlocked = unlockedRegions.contains(String.valueOf(regionId))
 					|| plugin.isFreeRegion(regionId);
 				boolean isNeighbor = neighborRegions.contains(regionId);
+				boolean isCharter = plugin.isCharterRegion(regionId);
 
 				int yTileOffset = -(yTileMin - y);
 				int xTileOffset = x + widthInTiles / 2 - worldMapPosition.getX();
@@ -148,26 +152,22 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 					if (regionRect.contains(mousePos.getX(), mousePos.getY()))
 					{
 						hoveredRegionId = regionId;
-						isHoveredUnlockable = isNeighbor && !isUnlocked;
+						isHoveredUnlockable = (isNeighbor || isCharter) && !isUnlocked;
 					}
 				}
 
-				// Draw fills first
-				if (!isUnlocked)
+				// Draw fills first. Owned chunks are filled in; unlockable chunks
+				// (neighbours + charter ports) get a yellow outline only (border
+				// pass) with NO fill; locked chunks get the dark wash.
+				if (isUnlocked)
 				{
-					if (isNeighbor)
-					{
-						// Unlockable neighbor - brighter when hovered
-						boolean isHovered = (regionId == hoveredRegionId);
-						graphics.setColor(isHovered ? NEIGHBOR_HOVER_FILL : NEIGHBOR_FILL);
-						graphics.fillRect(xPos, yPos, regionPixelSize, regionPixelSize);
-					}
-					else
-					{
-						// Locked - dark overlay (greyscale effect)
-						graphics.setColor(LOCKED_FILL);
-						graphics.fillRect(xPos, yPos, regionPixelSize, regionPixelSize);
-					}
+					graphics.setColor(UNLOCKED_FILL);
+					graphics.fillRect(xPos, yPos, regionPixelSize, regionPixelSize);
+				}
+				else if (!isNeighbor && !isCharter)
+				{
+					graphics.setColor(LOCKED_FILL);
+					graphics.fillRect(xPos, yPos, regionPixelSize, regionPixelSize);
 				}
 			}
 		}
@@ -186,6 +186,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 				boolean isUnlocked = unlockedRegions.contains(String.valueOf(regionId))
 					|| plugin.isFreeRegion(regionId);
 				boolean isNeighbor = neighborRegions.contains(regionId);
+				boolean isCharter = plugin.isCharterRegion(regionId);
 				boolean isCurrent = regionId == currentRegionId;
 
 				int yTileOffset = -(yTileMin - y);
@@ -204,9 +205,9 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 				{
 					graphics.setColor(UNLOCKED_BORDER);
 				}
-				else if (isNeighbor)
+				else if (isNeighbor || isCharter)
 				{
-					graphics.setColor(NEIGHBOR_BORDER);
+					graphics.setColor(UNLOCKABLE_BORDER);
 				}
 				else
 				{
@@ -216,8 +217,13 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 				// Draw border
 				graphics.drawRect(xPos, yPos, regionPixelSize, regionPixelSize);
 
-				// Draw thicker border for current region
+				// Thicker border for the current region, and a hover emphasis on
+				// unlockable chunks (still outline-only — no fill/highlight).
 				if (isCurrent)
+				{
+					graphics.drawRect(xPos + 1, yPos + 1, regionPixelSize - 2, regionPixelSize - 2);
+				}
+				else if ((isNeighbor || isCharter) && regionId == hoveredRegionId)
 				{
 					graphics.drawRect(xPos + 1, yPos + 1, regionPixelSize - 2, regionPixelSize - 2);
 				}
@@ -361,7 +367,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 		graphics.fillRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
 
 		// Draw border
-		graphics.setColor(canAfford ? NEIGHBOR_BORDER : LOCKED_BORDER);
+		graphics.setColor(canAfford ? UNLOCKABLE_BORDER : LOCKED_BORDER);
 		graphics.drawRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
 
 		// Draw text

@@ -526,8 +526,18 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			lastRegionId = currentRegionId;
 
+			// Charter ports are free and unlock the instant you set foot in them.
+			// They're reached by boat (not adjacent neighbours), so the normal
+			// neighbour-based auto-unlock/popup paths below don't cover them.
+			// unlockRegionFree is 0-cost and rolls their tasks.
+			if (isCharterRegion(currentRegionId) && !isRegionUnlocked(currentRegionId))
+			{
+				unlockRegionFree(currentRegionId);
+				loadActiveTasks();
+				panel.updatePanel();
+			}
 			// Auto-unlock region if enabled and player has enough points
-			if (config.autoUnlockRegions())
+			else if (config.autoUnlockRegions())
 			{
 				tryAutoUnlockCurrentRegion(currentRegionId);
 			}
@@ -567,8 +577,8 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
-		// Check if it's an unlockable neighbor
-		if (!getNeighborRegionIds().contains(hoveredRegion) || isRegionUnlocked(hoveredRegion))
+		// Check if it's unlockable (neighbour or charter port)
+		if (!isUnlockableRegion(hoveredRegion))
 		{
 			return;
 		}
@@ -605,9 +615,9 @@ public class ChunkBlazerPlugin extends Plugin
 			return; // world map not open
 		}
 		int regionId = worldMapOverlay.getHoveredRegionId();
-		if (regionId <= 0 || isRegionUnlocked(regionId) || !getNeighborRegionIds().contains(regionId))
+		if (regionId <= 0 || !isUnlockableRegion(regionId))
 		{
-			return; // not hovering an unlockable neighbour chunk
+			return; // not hovering an unlockable chunk
 		}
 		// Swallow the default world-map click so it doesn't also pan/select.
 		event.consume();
@@ -1382,53 +1392,77 @@ public class ChunkBlazerPlugin extends Plugin
 		panel.updatePanel();
 	}
 
+	private static final String CHARTER_SEED_STRIPPED_KEY = "charterSeedStripped";
+
 	/**
-	 * Charter ports are free and open from the start. We seed every chunk tagged
-	 * {@code "chunk_type":"CHARTER"} into the player's unlocked set (no point
-	 * cost) rather than marking them free-by-rule — seeding is what makes
-	 * {@link #loadActiveTasks()} roll their tasks (it iterates the unlocked set),
-	 * so their tasks are offered and count toward points like any other chunk.
-	 * Idempotent: only appends regions not already unlocked, so it's safe to call
-	 * on every task (re)load.
+	 * One-time migration. Earlier builds SEEDED every charter port into the
+	 * player's unlocked set at startup. Charter ports are now unlock-on-demand
+	 * (free, 0-cost, shown with a yellow "unlockable" outline), so strip any
+	 * previously-seeded charter regions exactly once and let players re-unlock
+	 * them by sailing in or clicking. Guarded by a hidden config flag so a
+	 * charter port the player unlocks AFTER the migration is never stripped —
+	 * safe because, pre-migration, every charter region in the unlocked set got
+	 * there via seeding. Cheap no-op once the flag is set, so it's fine to keep
+	 * calling on every task (re)load.
 	 */
-	public void ensureCharterChunksUnlocked()
+	public void migrateStripSeededCharterChunks()
 	{
-		Set<String> currentlyUnlocked = getUnlockedRegionIds();
-		StringBuilder newUnlocked = new StringBuilder();
-		String existing = config.unlockedChunks();
-		if (existing != null && !existing.isEmpty())
+		if ("true".equals(configManager.getConfiguration("chunkblazer", CHARTER_SEED_STRIPPED_KEY)))
 		{
-			newUnlocked.append(existing);
+			return;
 		}
-		boolean needsUpdate = false;
 
-		for (NuzlockeChunk chunk : allChunks)
+		List<String> kept = new ArrayList<>();
+		int removed = 0;
+		for (String regionIdStr : getUnlockedRegionIds())
 		{
-			if (!chunk.isCharter() || chunk.getRegionIds() == null)
+			boolean charter;
+			try
 			{
-				continue;
+				charter = isCharterRegion(Integer.parseInt(regionIdStr));
 			}
-			for (Integer regionId : chunk.getRegionIds())
+			catch (NumberFormatException e)
 			{
-				if (regionId == null || currentlyUnlocked.contains(String.valueOf(regionId)))
-				{
-					continue;
-				}
-				if (newUnlocked.length() > 0)
-				{
-					newUnlocked.append(",");
-				}
-				newUnlocked.append(regionId);
-				currentlyUnlocked.add(String.valueOf(regionId)); // dedupe within this pass
-				needsUpdate = true;
+				charter = false;
+			}
+			if (charter)
+			{
+				removed++;
+			}
+			else
+			{
+				kept.add(regionIdStr);
 			}
 		}
 
-		if (needsUpdate)
+		if (removed > 0)
 		{
-			configManager.setConfiguration("chunkblazer", "unlockedChunks", newUnlocked.toString());
-			log.info("Seeded charter port chunks into unlocked set (free, auto-open)");
+			configManager.setConfiguration("chunkblazer", "unlockedChunks", String.join(",", kept));
+			log.info("Charter migration: stripped {} previously-seeded charter region(s) from unlocked set", removed);
 		}
+		configManager.setConfiguration("chunkblazer", CHARTER_SEED_STRIPPED_KEY, "true");
+	}
+
+	/** True if the region belongs to a charter-port chunk ({@code chunk_type:CHARTER}). */
+	public boolean isCharterRegion(int regionId)
+	{
+		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+		return chunk != null && chunk.isCharter();
+	}
+
+	/**
+	 * A region the player can unlock right now: a not-yet-unlocked neighbour of
+	 * the unlocked set, OR any not-yet-unlocked charter port. Charter ports are
+	 * reached by boat and aren't adjacent to the contiguous unlocked area, so
+	 * they're unlockable from anywhere (and free — see {@link #getRegionUnlockCost}).
+	 */
+	public boolean isUnlockableRegion(int regionId)
+	{
+		if (isRegionUnlocked(regionId))
+		{
+			return false;
+		}
+		return isCharterRegion(regionId) || getNeighborRegionIds().contains(regionId);
 	}
 
 	private String hashRsn(String rsn)
@@ -2165,7 +2199,7 @@ public class ChunkBlazerPlugin extends Plugin
 		// it here — the single path every task (re)load goes through — guarantees the
 		// start chunk can never end up locked or task-less. Idempotent + cheap.
 		ensureStartingChunkUnlocked();
-		ensureCharterChunksUnlocked();
+		migrateStripSeededCharterChunks();
 
 		activeTasks.clear();
 		taskModuleManager.clearTask(); // Clear module state to prevent duplicates
@@ -3435,6 +3469,11 @@ public class ChunkBlazerPlugin extends Plugin
 			return 0;
 		}
 		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+		// Charter ports are always free to unlock.
+		if (chunk != null && chunk.isCharter())
+		{
+			return 0;
+		}
 		if (chunk != null)
 		{
 			return chunk.getUnlockCostValue();
@@ -3475,6 +3514,18 @@ public class ChunkBlazerPlugin extends Plugin
 		if (isRegionUnlocked(regionId))
 		{
 			log.info("unlockRegion({}) — already unlocked, ignoring duplicate request", regionId);
+			return;
+		}
+
+		// Charter ports are free and reachable by boat (not adjacent to the
+		// unlocked area), so they bypass the points + adjacency path below.
+		// Routing through here means every unlock entry point (minimap, world
+		// map, side panel) handles charter ports correctly.
+		if (isCharterRegion(regionId))
+		{
+			unlockRegionFree(regionId);
+			loadActiveTasks();
+			panel.updatePanel();
 			return;
 		}
 

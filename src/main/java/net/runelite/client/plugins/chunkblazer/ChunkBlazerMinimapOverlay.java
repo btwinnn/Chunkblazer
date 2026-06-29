@@ -113,8 +113,8 @@ public class ChunkBlazerMinimapOverlay extends Overlay
 			{
 				int regionId = (rx << 8) | ry;
 
-				// Only care about neighbor regions for unlock
-				if (!neighborRegions.contains(regionId))
+				// Only care about unlockable regions (neighbours + charter ports)
+				if (!neighborRegions.contains(regionId) && !plugin.isCharterRegion(regionId))
 				{
 					continue;
 				}
@@ -177,15 +177,8 @@ public class ChunkBlazerMinimapOverlay extends Overlay
 			return false;
 		}
 
-		// Check if it's a neighbor region that can be unlocked
-		Set<Integer> neighborRegions = plugin.getNeighborRegionIds();
-		if (!neighborRegions.contains(hoveredRegionId))
-		{
-			return false;
-		}
-
-		// Already unlocked?
-		if (plugin.isRegionUnlocked(hoveredRegionId))
+		// Check if it's an unlockable region (neighbour or charter port)
+		if (!plugin.isUnlockableRegion(hoveredRegionId))
 		{
 			return false;
 		}
