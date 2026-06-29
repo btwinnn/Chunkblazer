@@ -6047,6 +6047,27 @@
                           },
                           {
                               "region_id":  [
+                                                8748
+                                            ],
+                              "neighbor_ids":  [
+                                                   8749,
+                                                   9004,
+                                                   8747,
+                                                   8492
+                                               ],
+                              "unlock_cost":  0,
+                              "travel_connections":  [
+
+                                                     ],
+                              "tasks":  [
+
+                                        ],
+                              "is_completed":  false,
+                              "Friendly_Name":  "Soul Wars Lobby",
+                              "chunk_type":  "CHARTER"
+                          },
+                          {
+                              "region_id":  [
                                                 5934
                                             ],
                               "neighbor_ids":  [

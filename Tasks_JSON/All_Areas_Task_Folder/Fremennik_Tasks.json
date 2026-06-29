@@ -2939,8 +2939,8 @@
             "is_completed": false
         },
         {
-            "region_id": [9531],
-            "neighbor_ids": [9532, 9787, 9530, 9275],
+            "region_id": [9532],
+            "neighbor_ids": [9533, 9788, 9531, 9276],
             "Friendly_Name": "North Jatizso",
             "tasks": [
                 {

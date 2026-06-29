@@ -1,0 +1,13 @@
+{
+            "region_id": [8748],
+            "friendly_name": "Soul Wars Lobby",
+            "neighbor_ids": [8749, 9004, 8747, 8492],
+            "chunk_type": "Charter",
+            "unlock_cost": 0,
+            "travel_connections": [
+                
+            ],
+    "tasks":[             
+            ],
+            "is_completed": false
+        }
