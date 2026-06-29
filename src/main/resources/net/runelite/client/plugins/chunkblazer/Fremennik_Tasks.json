@@ -2559,6 +2559,183 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [9275],
+            "neighbor_ids": [9276, 9531, 9274, 9019],
+            "Friendly_Name": "Neitiznot",
+            "tasks": [
+                {
+                    "name": "Equip a Helm of Neitiznot",
+                    "taskID": "equip_helm_of_neitiznot",
+                    "category": "Defence",
+                    "level": 55,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Helm of Neitiznot", "Helm of Neitiznot (or)"],
+                            "item_ids": [10828, 28070]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Neitiznot Shield",
+                    "taskID": "equip_neitiznot_shield",
+                    "category": "Defence",
+                    "level": 25,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Neitiznot Shield"],
+                            "item_ids": [10826]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Yak",
+                    "taskID": "defeat_yak",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Yak"],
+                        "npc_ids": [5816],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Spin Rope",
+                    "taskID": "spin_rope",
+                    "category": "Crafting",
+                    "level": 30,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rope"],
+                            "item_ids": [954],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop an Arctic Pine Tree",
+                    "taskID": "chop_arctine_pine_tree",
+                    "category": "Woodcutting",
+                    "level": 54,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Arctic Pine Log",
+                            "item_ids": [10810],
+                            "quantity": [25, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Neitiznot Shield",
+                    "taskID": "craft_neitiznot_shield",
+                    "category": "Crafting",
+                    "level": 1,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Neitiznot Shield"],
+                            "item_ids": [10826],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft Yak Hide Body Armor",
+                    "taskID": "craft_yak_hide_body",
+                    "category": "Crafting",
+                    "level": 46,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Yak-hide Armour"],
+                            "item_ids": [10822],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft Yak Hide Leg Armor",
+                    "taskID": "craft_yak_hide_legs",
+                    "category": "Crafting",
+                    "level": 43,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Yak-hide Armour (legs)"],
+                            "item_ids": [10824],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Yak Hide Body Armor",
+                    "taskID": "equip_yak_hide_body",
+                    "category": "Defence",
+                    "level": 20,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Yak-hide Armour"],
+                            "item_ids": [10822]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Yak Hide Leg Armor",
+                    "taskID": "equip_yak_hide_legs",
+                    "category": "Defence",
+                    "level": 20,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Yak-hide Armour (legs)"],
+                            "item_ids": [10824]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt a Runite Bar",
+                    "taskID": "smelt_runite_bar",
+                    "category": "Smithing",
+                    "level": 85,
+                    "completion_type": "SMITHING",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Runite Bar"],
+                            "item_ids": [2363],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
         }                                               
     ]
 }
