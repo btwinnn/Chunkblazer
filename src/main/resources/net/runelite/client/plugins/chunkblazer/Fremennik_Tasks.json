@@ -2272,6 +2272,293 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [9531],
+            "neighbor_ids": [9532, 9787, 9530, 9275],
+            "Friendly_Name": "Jatizso",
+            "tasks": [
+                {
+                    "name": "Catch a Raw Shark",
+                    "taskID": "catch_raw_shark",
+                    "category": "Fishing",
+                    "level": 76,
+                    "completion_type": "FISHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Raw Shark",
+                            "item_ids": [383],
+                            "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Lobster",
+                    "taskID": "catch_raw_lobster",
+                    "category": "Fishing",
+                    "level": 40,
+                    "completion_type": "FISHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Raw Lobster",
+                            "item_ids": [377],
+                            "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Cod",
+                    "taskID": "catch_raw_cod",
+                    "category": "Fishing",
+                    "level": 23,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Raw Cod",
+                            "item_ids": [341],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Mackerel",
+                    "taskID": "catch_raw_mackerel",
+                    "category": "Fishing",
+                    "level": 16,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Raw Mackerel",
+                            "item_ids": [353],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Shark",
+                    "taskID": "cook_shark",
+                    "category": "Cooking",
+                    "level": 80,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Shark",
+                            "item_ids": [385],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Lobster",
+                    "taskID": "cook_lobster",
+                    "category": "Cooking",
+                    "level": 40,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Lobster",
+                            "item_ids": [379],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Cod",
+                    "taskID": "cook_cod",
+                    "category": "Cooking",
+                    "level": 18,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Cod",
+                            "item_ids": [339],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Mackerel",
+                    "taskID": "cook_mackerel",
+                    "category": "Cooking",
+                    "level": 10,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Mackerel",
+                            "item_ids": [355],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Tuna",
+                    "taskID": "cook_tuna",
+                    "category": "Cooking",
+                    "level": 30,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Tuna",
+                            "item_ids": [361],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Mithril Ore",
+                    "taskID": "mine_mithril",
+                    "category": "Mining",
+                    "level": 55,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mithril Ore",
+                            "item_ids": [447],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Mithril Warhammer",
+                    "taskID": "smith_mithril_warhammer",
+                    "category": "Smithing",
+                    "level": 54,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Mithril Warhammer"],
+                            "item_ids": [1343],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Mithril Platebody",
+                    "taskID": "smith_mithril_platebody",
+                    "category": "Smithing",
+                    "level": 68,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mithril Platebody"],
+                            "item_ids": [1121],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith an Adamant Med Helm",
+                    "taskID": "smith_adamant_med_helm",
+                    "category": "Smithing",
+                    "level": 78,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Med Helm"],
+                            "item_ids": [1145],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith an Adamant Battleaxe",
+                    "taskID": "smith_adamant_battleaxe",
+                    "category": "Smithing",
+                    "level": 80,
+                    "completion_type": "SMITHING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Battleaxe"],
+                            "item_ids": [1371],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Ice Troll Runt",
+                    "taskID": "defeat_ice_troll_runt",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice troll runt"],
+                        "npc_ids": [5828, 1874],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Ice Troll Female",
+                    "taskID": "defeat_ice_troll_female",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice troll female"],
+                        "npc_ids": [5830, 1876],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Ice Troll Male",
+                    "taskID": "defeat_ice_troll_male",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice troll male"],
+                        "npc_ids": [5829, 1875],
+                        "quantity": [1]
+                    }
+                }
+            ],
+            "is_completed": false
         }                                               
     ]
 }
