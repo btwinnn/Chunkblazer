@@ -4,9 +4,10 @@
 # (bare chunk objects). Neither the plugin loader (expects a single wrapped
 # {"Charter_Tasks":[...]} file) nor the Go server catalog (same shape) can read
 # those bare files directly, so this script aggregates the folder into the one
-# loadable Charter_Tasks.json and drops a copy everywhere it needs to live:
-#   - plugin resources  (bundled into the RuneLite plugin)
-#   - server data       (embedded into the Go catalog so charter tasks score)
+# loadable Charter_Tasks.json and writes it to the plugin resources (bundled
+# into the RuneLite plugin). The Go server keeps its own copy of the task JSON;
+# pushing to the server is a SEPARATE step (see the JSON->server migration), so
+# this script intentionally does NOT write to the server repo.
 #
 # It also normalizes on the way out, without touching the source files:
 #   - ensures "Friendly_Name" (capital F) — the key the Go catalog reads for
@@ -22,7 +23,6 @@ $srcFolder = Join-Path $root 'Charter_Tasks_Folder'
 $outName   = 'Charter_Tasks.json'
 
 $pluginDest = 'C:\Chunkblazer\src\main\resources\net\runelite\client\plugins\chunkblazer\' + $outName
-$serverDest = 'C:\Chunkblazer-Server\internal\tasks\data\' + $outName
 
 $chunks = @()
 foreach ($f in Get-ChildItem $srcFolder -Filter *.json | Sort-Object Name) {
@@ -46,8 +46,6 @@ $json    = $wrapper | ConvertTo-Json -Depth 40
 $enc = New-Object System.Text.UTF8Encoding($false)   # UTF-8, NO BOM (Gson/Go json choke on a BOM)
 [System.IO.File]::WriteAllText($pluginDest, $json, $enc)
 Write-Output ("Wrote {0} chunk(s) -> {1}" -f $chunks.Count, $pluginDest)
-[System.IO.File]::WriteAllText($serverDest, $json, $enc)
-Write-Output ("Wrote {0} chunk(s) -> {1}" -f $chunks.Count, $serverDest)
 
 # NOTE: charter ports are made free + auto-open by SEEDING them into the
 # player's unlocked set at startup (ChunkBlazerPlugin.ensureCharterChunksUnlocked,
