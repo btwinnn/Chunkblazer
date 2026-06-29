@@ -17,21 +17,7 @@
                         "object_id": [28995]
                         }
                     ]
-                },
-                {
-                    "name": "Use the Level 23 Agility Crossbow Observatory Shortcut",
-                    "taskID": "agility_level_23_crossbow_observatory",
-                    "category": "Agility",
-                    "level": 23,
-                    "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_object": {
-                        "object": ["Rocks (Observatory)#Bottom rocks)", "Rocks (Observatory)#Rocks with grapple", "Rocks (Observatory)#Rocks without grapple", "Rocks (Observatory)#Rope"],
-                        "object_id": [33422, 31850, 31848, 31853], 
-                        "quantity": [1]
-                    }
-                },             
+                },                          
                 {
                     "name": "Obtain some Stardust",
                     "taskID": "obtain_stardust",
