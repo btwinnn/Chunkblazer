@@ -19,6 +19,20 @@
                     ]
                 },
                 {
+                    "name": "Use the Draynor Rooftop Course",
+                    "taskID": "complete_draynor_roof",
+                    "category": "Agility",
+                    "level": 10,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_object": {
+                        "object": ["Crate (Draynor Village Rooftop Course)"],
+                        "object_id": [11632], 
+                        "quantity": [1, 20]
+                    }
+                },
+                {
                     "name": "Defeat a Highwayman in 24 Seconds",
                     "taskID": "defeat_highwayman_fast",
                     "category": "Combat",
