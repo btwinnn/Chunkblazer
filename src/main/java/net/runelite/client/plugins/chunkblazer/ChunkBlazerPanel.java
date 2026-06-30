@@ -77,6 +77,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JLabel regionLabel;
 	private JLabel modeLabel;
 	private JLabel totalPointsLabel;
+	private JLabel bossTokensLabel;
 	private JLabel chunksUnlockedLabel;
 	private JLabel tasksCompletedLabel;
 	private JLabel taskNameLabel;
@@ -959,7 +960,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JPanel createStatsSection()
 	{
 		JPanel statsPanel = new JPanel();
-		statsPanel.setLayout(new GridLayout(1, 3, 2, 0));
+		statsPanel.setLayout(new GridLayout(1, 4, 2, 0));
 		statsPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		statsPanel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(FLAME), // Gold border
@@ -981,6 +982,11 @@ public class ChunkBlazerPanel extends PluginPanel
 		JPanel tasksPanel = createStatBox("Tasks", "0");
 		tasksCompletedLabel = (JLabel) ((JPanel) tasksPanel.getComponent(0)).getComponent(1);
 		statsPanel.add(tasksPanel);
+
+		// Boss Tokens — secondary currency, shown last (far right) for a cleaner layout.
+		JPanel tokensPanel = createStatBox("Tokens", "2");
+		bossTokensLabel = (JLabel) ((JPanel) tokensPanel.getComponent(0)).getComponent(1);
+		statsPanel.add(tokensPanel);
 
 		return statsPanel;
 	}
@@ -2897,6 +2903,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		int tasks = plugin.getCompletedTaskCount();
 
 		totalPointsLabel.setText(String.valueOf(points));
+		bossTokensLabel.setText(String.valueOf(plugin.getBossTokens()));
 		chunksUnlockedLabel.setText(String.valueOf(chunks));
 		tasksCompletedLabel.setText(String.valueOf(tasks));
 

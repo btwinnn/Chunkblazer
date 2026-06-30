@@ -114,6 +114,47 @@ class ChunkBlazerPluginTest
 		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("unlockedChunks"), any());
 	}
 
+	// --- Boss Tokens (secondary currency) ---
+
+	@Test
+	void newPlayerStartsWithTwoBossTokens()
+	{
+		when(config.bossTokens()).thenReturn(2); // the config default
+		assertEquals(2, plugin.getBossTokens());
+	}
+
+	@Test
+	void spendBossTokenDecrementsWhenAvailable()
+	{
+		when(config.bossTokens()).thenReturn(2);
+		assertTrue(plugin.spendBossToken());
+		verify(configManager).setConfiguration("chunkblazer", "bossTokens", 1);
+	}
+
+	@Test
+	void spendBossTokenFailsWhenNoneLeft()
+	{
+		when(config.bossTokens()).thenReturn(0);
+		assertFalse(plugin.spendBossToken());
+		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("bossTokens"), any());
+	}
+
+	@Test
+	void addBossTokensIncrements()
+	{
+		when(config.bossTokens()).thenReturn(2);
+		plugin.addBossTokens(1);
+		verify(configManager).setConfiguration("chunkblazer", "bossTokens", 3);
+	}
+
+	@Test
+	void addBossTokensClampsAtZero()
+	{
+		when(config.bossTokens()).thenReturn(0);
+		plugin.addBossTokens(-5);
+		verify(configManager).setConfiguration("chunkblazer", "bossTokens", 0);
+	}
+
 	// --- reflection helpers (the plugin's fields are private; no test seam) ---
 
 	@SuppressWarnings("unchecked")

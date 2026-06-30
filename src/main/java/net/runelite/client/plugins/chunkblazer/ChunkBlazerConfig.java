@@ -134,6 +134,18 @@ public interface ChunkBlazerConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "bossTokens",
+		name = "Boss Tokens",
+		description = "Secondary currency spent to unlock boss chunks. New players start with 2.",
+		position = 8,
+		hidden = true
+	)
+	default int bossTokens()
+	{
+		return 2;
+	}
+
+	@ConfigItem(
 		keyName = "taskProgressData",
 		name = "Task Progress Data",
 		description = "Stores progress for all active tasks (format: taskId:progress,taskId2:progress2)",
@@ -268,6 +280,18 @@ public interface ChunkBlazerConfig extends Config
 		position = 4
 	)
 	default boolean playRegionUnlockSound()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showBossTokenCounter",
+		name = "Show Boss Token Counter",
+		description = "Show the Boss Token currency icon + count above the chatbox (bottom-left)",
+		section = displaySection,
+		position = 5
+	)
+	default boolean showBossTokenCounter()
 	{
 		return true;
 	}

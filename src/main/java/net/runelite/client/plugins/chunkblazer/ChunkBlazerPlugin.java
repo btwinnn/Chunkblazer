@@ -111,6 +111,12 @@ public class ChunkBlazerPlugin extends Plugin
 	private ChunkBlazerMinimapPlayerOverlay minimapPlayerOverlay;
 
 	@Inject
+	private ChunkBlazerOrbOverlay orbOverlay;
+
+	@Inject
+	private ChunkBlazerBossTokenOverlay bossTokenOverlay;
+
+	@Inject
 	private ChunkBlazerRoster roster;
 
 	@Inject
@@ -358,6 +364,8 @@ public class ChunkBlazerPlugin extends Plugin
 		// minimap dots. Each render path is individually config-gated.
 		overlayManager.add(playerOverlay);
 		overlayManager.add(minimapPlayerOverlay);
+		overlayManager.add(orbOverlay);
+		overlayManager.add(bossTokenOverlay);
 
 		// Register the ChunkBlazer chat icon shown next to other plugin users'
 		// names in public chat. chat_icon.png is a purpose-built 16x16
@@ -417,6 +425,8 @@ public class ChunkBlazerPlugin extends Plugin
 		overlayManager.remove(sceneOverlay);
 		overlayManager.remove(playerOverlay);
 		overlayManager.remove(minimapPlayerOverlay);
+		overlayManager.remove(orbOverlay);
+		overlayManager.remove(bossTokenOverlay);
 		// overlayManager.remove(taskCompletionOverlay); // Legacy overlay disabled
 		overlayManager.remove(taskCompletionAnimationOverlay);
 		taskModuleManager.shutDown();
@@ -3402,6 +3412,50 @@ public class ChunkBlazerPlugin extends Plugin
 	{
 		int current = config.totalPoints();
 		configManager.setConfiguration("chunkblazer", "totalPoints", current + points);
+	}
+
+	// --- Boss Tokens (secondary currency) ---
+
+	/** Current Boss Token balance. New players start with 2 (config default). */
+	public int getBossTokens()
+	{
+		return config.bossTokens();
+	}
+
+	/**
+	 * Add (or, with a negative amount, remove) Boss Tokens; clamped at 0. Earned
+	 * by defeating a boss in its boss chunk, or rarely from superior slayer
+	 * monsters. (Earning triggers are wired separately once boss chunks exist /
+	 * superior detection lands.)
+	 */
+	public void addBossTokens(int amount)
+	{
+		int updated = Math.max(0, config.bossTokens() + amount);
+		configManager.setConfiguration("chunkblazer", "bossTokens", updated);
+		if (panel != null)
+		{
+			panel.updateStats();
+		}
+	}
+
+	/**
+	 * Spend one Boss Token (e.g. unlocking a boss chunk). Returns false without
+	 * mutating if the player has none. Wire into boss-chunk unlock once boss
+	 * chunks are defined.
+	 */
+	public boolean spendBossToken()
+	{
+		int current = config.bossTokens();
+		if (current <= 0)
+		{
+			return false;
+		}
+		configManager.setConfiguration("chunkblazer", "bossTokens", current - 1);
+		if (panel != null)
+		{
+			panel.updateStats();
+		}
+		return true;
 	}
 
 	// --- Helper Methods ---
