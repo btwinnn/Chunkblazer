@@ -1,6 +1,4 @@
 {
-    "Tirannwn_Tasks": [     
-        {
             "region_id": [9264],
             "neighbor_ids": [9265, 9520, 9263, 9008],
             "Friendly_Name": "Poison Waste Dungeon",
@@ -150,5 +148,3 @@
             ],
             "is_completed": false        
         }
-    ]
-}

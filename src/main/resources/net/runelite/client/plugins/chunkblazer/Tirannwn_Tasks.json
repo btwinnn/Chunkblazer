@@ -1,4 +1,154 @@
 {
-    "Tirannwn_Tasks": [
+    "Tirannwn_Tasks": [     
+        {
+            "region_id": [9264],
+            "neighbor_ids": [9265, 9520, 9263, 9008],
+            "Friendly_Name": "Poison Waste Dungeon",
+            "tasks": [
+                {
+                    "name": "Defeat a Warped Terrorbird",
+                    "taskID": "defeat_warped_terrorbird",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Warped Terrorbird"],
+                        "npc_ids": [12499, 12500, 12501, 12502, 12503, 12504, 12491, 12492, 12493, 12494, 12495, 12496, 12497, 12498, 12464],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Warped Tortoise",
+                    "taskID": "defeat_warped_tortoise",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Warped Tortoise"],
+                        "npc_ids": [12490],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Equip a Rune Warhammer",
+                    "taskID": "equip_rune_warhammer",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rune Warhammer"],
+                            "item_ids": [1347]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Kiteshield",
+                    "taskID": "equip_rune_kiteshield",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rune Kiteshield"],
+                            "item_ids": [1201]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Warped Sceptre",
+                    "taskID": "equip_warped_sceptre",
+                    "category": "Magic",
+                    "level": 62,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Warped Sceptre (uncharged)", "Warped Sceptre"],
+                            "item_ids": [28583, 28585]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Warped Terrorbird in 24 Seconds",
+                    "taskID": "defeat_warped_terrorbird_24_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Warped Terrorbird"],
+                        "npc_ids": [12499, 12500, 12501, 12502, 12503, 12504, 12491, 12492, 12493, 12494, 12495, 12496, 12497, 12498, 12464],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Defeat a Warped Tortoise in 24 Seconds",
+                    "taskID": "defeat_warped_tortoise_24_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Warped Tortoise"],
+                        "npc_ids": [12490, 12465],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Defeat a Warped Creature on Task",
+                    "taskID": "defeat_warped_creature_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Warped Terrorbird", "Warped Tortoise"],
+                        "npc_ids": [12499, 12500, 12501, 12502, 12503, 12504, 12491, 12492, 12493, 12494, 12495, 12496, 12497, 12498, 12464, 12490, 12465],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Mutated Tortoise",
+                    "taskID": "defeat_mutated_tortoise",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Mutated Tortoise"],
+                        "npc_ids": [12465],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Mutated Terrorbird",
+                    "taskID": "defeat_mutated_terrorbird",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Mutated Terrorbird"],
+                        "npc_ids": [12464],
+                        "quantity": [1]
+                    }
+                }
+            ],
+            "is_completed": false        
+        }
     ]
 }
