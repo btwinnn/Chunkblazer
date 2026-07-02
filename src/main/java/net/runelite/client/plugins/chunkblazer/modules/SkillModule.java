@@ -62,7 +62,6 @@ public class SkillModule extends AbstractTaskModule
 	{
 		eventBus.register(this);
 		initializeSkillTracking();
-		log.info("SkillModule started");
 	}
 
 	@Override
@@ -71,7 +70,6 @@ public class SkillModule extends AbstractTaskModule
 		eventBus.unregister(this);
 		previousLevels.clear();
 		previousXp.clear();
-		log.info("SkillModule stopped");
 	}
 
 	@Override
@@ -140,12 +138,10 @@ public class SkillModule extends AbstractTaskModule
 		if (trackingLevel)
 		{
 			targetLevel = constraints.getRequiredLevel();
-			log.info("Tracking skill level: {} to level {}", targetSkill, targetLevel);
 		}
 		else
 		{
 			targetXp = constraints.getRequiredXp();
-			log.info("Tracking skill XP: {} to {} XP", targetSkill, targetXp);
 		}
 	}
 
@@ -238,7 +234,6 @@ public class SkillModule extends AbstractTaskModule
 
 			if (currentLevel >= targetLevel)
 			{
-				log.info("Skill level target reached locally: {} level {}", targetSkill, currentLevel);
 				// Verify via Jagex Hiscores before completing
 				verifyAndComplete();
 			}
@@ -250,7 +245,6 @@ public class SkillModule extends AbstractTaskModule
 
 			if (currentXp >= targetXp)
 			{
-				log.info("Skill XP target reached locally: {} XP {}", targetSkill, currentXp);
 				// Verify via Jagex Hiscores before completing
 				verifyAndComplete();
 			}
@@ -267,7 +261,6 @@ public class SkillModule extends AbstractTaskModule
 			return;
 		}
 
-		log.info("Verifying {} completion via Jagex Hiscores...", targetSkill.getName());
 
 		if (trackingLevel)
 		{
@@ -276,8 +269,6 @@ public class SkillModule extends AbstractTaskModule
 				{
 					if (result.verified)
 					{
-						log.info("VERIFIED via Hiscores: {} level {} (actual: {})",
-							targetSkill.getName(), targetLevel, result.actualValue);
 						onTaskCompleted();
 					}
 					else
@@ -287,7 +278,6 @@ public class SkillModule extends AbstractTaskModule
 						// For now, trust client if hiscores fail
 						if (result.actualValue < 0)
 						{
-							log.info("Hiscores unavailable, trusting client");
 							onTaskCompleted();
 						}
 					}
@@ -300,8 +290,6 @@ public class SkillModule extends AbstractTaskModule
 				{
 					if (result.verified)
 					{
-						log.info("VERIFIED via Hiscores: {} XP {} (actual: {})",
-							targetSkill.getName(), targetXp, result.actualValue);
 						onTaskCompleted();
 					}
 					else
@@ -309,7 +297,6 @@ public class SkillModule extends AbstractTaskModule
 						log.warn("Hiscore verification failed: {}", result.message);
 						if (result.actualValue < 0)
 						{
-							log.info("Hiscores unavailable, trusting client");
 							onTaskCompleted();
 						}
 					}
@@ -343,14 +330,12 @@ public class SkillModule extends AbstractTaskModule
 		// Check for level up
 		if (newLevel > previousLevel)
 		{
-			log.info("{} leveled up: {} -> {}", skill.getName(), previousLevel, newLevel);
 			sendSkillChangeReport(skill, previousLevel, newLevel, previousXpValue, newXp);
 		}
 		else if (newXp > previousXpValue)
 		{
 			// XP gain without level up
 			int xpGained = newXp - previousXpValue;
-			log.debug("{} XP gained: {} (total: {})", skill.getName(), xpGained, newXp);
 		}
 
 		// Update progress

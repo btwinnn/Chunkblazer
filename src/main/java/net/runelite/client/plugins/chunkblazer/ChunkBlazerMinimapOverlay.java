@@ -213,7 +213,6 @@ public class ChunkBlazerMinimapOverlay extends Overlay
 					.option("Yes, unlock!", () ->
 					{
 						plugin.unlockRegion(regionId);
-						log.info("Player unlocked region {} via minimap click", regionName);
 					})
 					.option("No", () -> {})
 					.build();

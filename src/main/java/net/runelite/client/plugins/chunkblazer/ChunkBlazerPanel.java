@@ -1260,7 +1260,6 @@ public class ChunkBlazerPanel extends PluginPanel
 		{
 			plugin.closeChatboxPrompt();
 			plugin.unlockRegion(regionId);
-			log.info("Player unlocked region {} ({}) via panel list for {} pts", regionId, regionName, cost);
 			updateUnlockableChunksSection();
 			updateStats();
 			updateRegionUnlockSection();
@@ -1435,7 +1434,6 @@ public class ChunkBlazerPanel extends PluginPanel
 			// idempotency guard inside unlockRegion as a backstop.
 			plugin.closeChatboxPrompt();
 			plugin.unlockRegion(regionId);
-			log.info("Player unlocked region {} ({}) via panel for {} pts", regionId, regionName, cost);
 			// Clear any world-map click pin; the region is unlocked now.
 			mapUnlockRegionId = -1;
 			// updateRegionUnlockSection will be called by updateRegionDisplay /
@@ -2318,10 +2316,8 @@ public class ChunkBlazerPanel extends PluginPanel
 			int regionId = plugin.getCurrentRegionId();
 			if (regionId <= 0)
 			{
-				log.info("Dev: Force Unlock pressed but current region is unknown (id={})", regionId);
 				return;
 			}
-			log.info("Dev: Force-unlocking region {} (no adjacency check)", regionId);
 			plugin.unlockRegionFree(regionId);
 			updateStats();
 			updateRegionDisplay();
@@ -2401,7 +2397,6 @@ public class ChunkBlazerPanel extends PluginPanel
 		prayerDumpButton.setToolTipText("Append current PRAYER-related VarBit/VarPlayer values to C:\\Chunkblazer\\VarBit_VarPlayer.txt");
 		prayerDumpButton.addActionListener(e ->
 		{
-			log.info("Dev: Prayer Vars button pressed — dumping prayer vars");
 			plugin.dumpPrayerVars();
 		});
 		varDumpPanel.add(prayerDumpButton);
@@ -2412,7 +2407,6 @@ public class ChunkBlazerPanel extends PluginPanel
 		magicDumpButton.setToolTipText("Append current SPELL/MAGIC/AUTOCAST/SPELLBOOK VarBit/VarPlayer values to C:\\Chunkblazer\\VarBit_VarPlayer.txt (excludes PRAYER_*)");
 		magicDumpButton.addActionListener(e ->
 		{
-			log.info("Dev: Magic Vars button pressed — dumping magic vars");
 			plugin.dumpMagicVars();
 		});
 		varDumpPanel.add(magicDumpButton);
@@ -2457,11 +2451,9 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		if (confirm == JOptionPane.YES_OPTION)
 		{
-			log.info(">>> Dev: Reset Tasks confirmed, calling devResetTasks()...");
 			try
 			{
 				plugin.devResetTasks();
-				log.info(">>> Dev: devResetTasks() completed");
 
 				// Clear selected task
 				selectedTask = null;
@@ -2476,7 +2468,6 @@ public class ChunkBlazerPanel extends PluginPanel
 				completedTasksContentPanel.revalidate();
 				completedTasksContentPanel.repaint();
 
-				log.info(">>> Dev: Reset complete, all panels refreshed");
 				JOptionPane.showMessageDialog(this, "Task progress reset!", "Reset Complete", JOptionPane.INFORMATION_MESSAGE);
 			}
 			catch (Exception e)
@@ -2681,7 +2672,6 @@ public class ChunkBlazerPanel extends PluginPanel
 	{
 		if (selectedTask != null)
 		{
-			log.info("Dev: Completing selected task: {}", selectedTask.getName());
 			plugin.devCompleteSpecificTask(selectedTask);
 			// Clear selection after completing
 			selectedTask = null;
@@ -2689,7 +2679,6 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 		else
 		{
-			log.info("Dev: No task selected, completing first active task");
 			plugin.devCompleteActiveTask();
 		}
 		updateTaskDisplay();
@@ -2697,11 +2686,9 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private void onRerollTask()
 	{
-		log.info(">>> Dev: Reroll task button CLICKED");
 		try
 		{
 			plugin.rerollTask();
-			log.info(">>> Dev: rerollTask() completed, updating display...");
 
 			// Force update on EDT
 			SwingUtilities.invokeLater(() ->
@@ -2711,7 +2698,6 @@ public class ChunkBlazerPanel extends PluginPanel
 				updateActiveTasksDisplay();
 				revalidate();
 				repaint();
-				log.info(">>> Dev: Reroll UI refresh complete");
 			});
 		}
 		catch (Exception e)
@@ -2991,8 +2977,6 @@ public class ChunkBlazerPanel extends PluginPanel
 			SwingUtilities.invokeLater(this::updateActiveTasksDisplay);
 			return;
 		}
-		log.debug(">>> updateActiveTasksDisplay() CALLED");
-		log.debug(">>> Stack trace: {}", Thread.currentThread().getStackTrace()[2]);
 
 		// Capture scroll position so the rebuild below doesn't snap the user back to the top
 		// when a chunk is unlocked or a task completes.
@@ -3016,7 +3000,6 @@ public class ChunkBlazerPanel extends PluginPanel
 			}
 			taskIds.add(t.getTaskId());
 		}
-		log.debug(">>> allTasks size: {}, unique taskIds: {}", allTasks.size(), taskIds.size());
 
 		// Cache filter values
 		final String filterText = activeTasksSearchText != null ? activeTasksSearchText : "";
@@ -3092,8 +3075,6 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Update the section title to show count
 		updateActiveTasksSectionTitle(allTasks.size(), filteredTasks.size());
 
-		log.debug(">>> updateActiveTasksDisplay() DONE - added {} items to panel, component count: {}",
-			filteredTasks.size(), activeTasksContentPanel.getComponentCount());
 
 		activeTasksContentPanel.revalidate();
 		activeTasksContentPanel.repaint();

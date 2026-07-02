@@ -68,8 +68,6 @@ public class ChunkBlazerChatIconManager
 			nuzlockeIconIndex = addModIcon(nuzlockeImage);
 			casualIconIndex = addModIcon(casualImage);
 
-			log.info("ChunkBlazer chat icons loaded - main: {}, nuzlocke: {}, casual: {}",
-				chunkBlazerIconIndex, nuzlockeIconIndex, casualIconIndex);
 
 			return true;
 		});
@@ -164,7 +162,6 @@ public class ChunkBlazerChatIconManager
 		knownPlayers.clear();
 		// Store with lowercase keys for case-insensitive matching
 		players.forEach((rsn, mode) -> knownPlayers.put(rsn.toLowerCase(), mode));
-		log.debug("Updated known players for chat icons: {} players", knownPlayers.size());
 	}
 
 	/**

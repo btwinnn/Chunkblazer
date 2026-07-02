@@ -82,7 +82,6 @@ public class NpcDialogueModule extends AbstractTaskModule
 	public void startUp()
 	{
 		eventBus.register(this);
-		log.info("=== NpcDialogueModule STARTED ===");
 	}
 
 	@Override
@@ -93,7 +92,6 @@ public class NpcDialogueModule extends AbstractTaskModule
 		watchedNpcIds.clear();
 		lastInteractionNpcId = -1;
 		wasDialogueOpen = false;
-		log.info("NpcDialogueModule stopped");
 	}
 
 	@Override
@@ -103,9 +101,6 @@ public class NpcDialogueModule extends AbstractTaskModule
 		{
 			super.addActiveTask(task);
 
-			log.info("=== NpcDialogueModule: ADDING ACTIVE TASK ===");
-			log.info("  Task Name: {}", task.getName());
-			log.info("  Task ID: {}", task.getTaskId());
 
 			// Parse target NPCs
 			Set<Integer> targetNpcs = new HashSet<>();
@@ -120,7 +115,6 @@ public class NpcDialogueModule extends AbstractTaskModule
 					{
 						targetNpcs.add(npcId);
 						watchedNpcIds.add(npcId);
-						log.info("      >>> WATCHING NPC ID: {}", npcId);
 					}
 				}
 			}
@@ -161,8 +155,6 @@ public class NpcDialogueModule extends AbstractTaskModule
 
 		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
 		{
-			log.info(">>> NpcDialogueModule HEARTBEAT - tick {} - activeTasks: {}, watchedNpcs: {}",
-				tickCounter, activeTasks.size(), watchedNpcIds.size());
 		}
 
 		if (activeTasks.isEmpty())
@@ -176,7 +168,6 @@ public class NpcDialogueModule extends AbstractTaskModule
 		// Detect dialogue opening (edge detection: was closed, now open)
 		if (isDialogueOpen && !wasDialogueOpen)
 		{
-			log.info(">>> NpcDialogueModule: Dialogue opened!");
 
 			// Check if we recently interacted with a watched NPC
 			int currentTick = client.getTickCount();
@@ -185,7 +176,6 @@ public class NpcDialogueModule extends AbstractTaskModule
 
 			if (recentInteraction && watchedNpcIds.contains(lastInteractionNpcId))
 			{
-				log.info(">>> NpcDialogueModule: Dialogue with watched NPC {} detected!", lastInteractionNpcId);
 
 				// Credit progress to matching tasks
 				for (NuzlockeTask task : new HashSet<>(activeTasks))
@@ -220,8 +210,6 @@ public class NpcDialogueModule extends AbstractTaskModule
 			{
 				lastInteractionNpcId = npcId;
 				lastInteractionTick = client.getTickCount();
-				log.info(">>> NpcDialogueModule: Player interacting with watched NPC {} (ID: {})",
-					npc.getName(), npcId);
 			}
 		}
 	}
@@ -273,8 +261,6 @@ public class NpcDialogueModule extends AbstractTaskModule
 		// Check for completion
 		if (newProgress >= required)
 		{
-			log.info("NpcDialogueModule: Task '{}' COMPLETED! ({}/{})",
-				task.getName(), newProgress, required);
 			task.setCompleted(true);
 
 			sendTaskSuccess(task, "Dialogue complete!");
@@ -316,6 +302,5 @@ public class NpcDialogueModule extends AbstractTaskModule
 			.value(message)
 			.build());
 
-		log.info("[CHAT] NPC dialogue success: {} - {}", task.getName(), details);
 	}
 }

@@ -62,7 +62,6 @@ public class HiscoreVerificationService
 				cachedResult = result;
 				cacheTimestamp = System.currentTimeMillis();
 
-				log.info("Fetched hiscores for {}", player.getName());
 				return result;
 			}
 			catch (IOException e)
@@ -100,8 +99,6 @@ public class HiscoreVerificationService
 			int actualLevel = skillData.getLevel();
 			boolean verified = actualLevel >= expectedLevel;
 
-			log.info("Skill verification: {} level {} (expected {}): {}",
-				skill.getName(), actualLevel, expectedLevel, verified ? "VERIFIED" : "FAILED");
 
 			return new SkillVerificationResult(verified, actualLevel,
 				verified ? "Verified via Jagex Hiscores" : "Level mismatch");
@@ -135,8 +132,6 @@ public class HiscoreVerificationService
 			long actualXp = skillData.getExperience();
 			boolean verified = actualXp >= expectedXp;
 
-			log.info("XP verification: {} XP {} (expected {}): {}",
-				skill.getName(), actualXp, expectedXp, verified ? "VERIFIED" : "FAILED");
 
 			return new SkillVerificationResult(verified, (int) actualXp,
 				verified ? "Verified via Jagex Hiscores" : "XP mismatch");
@@ -221,8 +216,6 @@ public class HiscoreVerificationService
 			int actualKc = bossData.getLevel(); // For bosses, "level" is the KC
 			boolean verified = actualKc >= expectedMinKc;
 
-			log.info("Boss KC verification: {} KC {} (expected >= {}): {}",
-				bossName, actualKc, expectedMinKc, verified ? "VERIFIED" : "PENDING");
 
 			return new BossVerificationResult(verified, actualKc,
 				verified ? "Verified via Jagex Hiscores" : "KC not yet updated", true);
@@ -389,7 +382,6 @@ public class HiscoreVerificationService
 			case "SOL_HEREDIT":
 			case "COLOSSEUM": return HiscoreSkill.SOL_HEREDIT;
 			default:
-				log.debug("Unknown boss for hiscore lookup: {}", bossName);
 				return null;
 		}
 	}

@@ -443,7 +443,6 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 				.option("Confirm", () ->
 				{
 					plugin.unlockRegion(regionId);
-					log.info("Unlocked region {} for {} points", regionName, unlockCost);
 				})
 				.option("Cancel", () -> {})
 				.build();

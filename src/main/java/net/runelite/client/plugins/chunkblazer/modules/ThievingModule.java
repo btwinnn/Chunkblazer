@@ -110,7 +110,6 @@ public class ThievingModule extends AbstractTaskModule
 	public void startUp()
 	{
 		eventBus.register(this);
-		log.info("=== ThievingModule STARTED ===");
 	}
 
 	@Override
@@ -126,7 +125,6 @@ public class ThievingModule extends AbstractTaskModule
 		lastInteractionTick = -1;
 		lastInteractionObjectId = -1;
 		lastInteractionObjectTick = -1;
-		log.info("ThievingModule stopped");
 	}
 
 	@Override
@@ -136,9 +134,6 @@ public class ThievingModule extends AbstractTaskModule
 		{
 			super.addActiveTask(task);
 
-			log.info("=== ThievingModule: ADDING ACTIVE TASK ===");
-			log.info("  Task Name: {}", task.getName());
-			log.info("  Task ID: {}", task.getTaskId());
 
 			// Parse target NPCs
 			Set<Integer> targetNpcs = new HashSet<>();
@@ -153,7 +148,6 @@ public class ThievingModule extends AbstractTaskModule
 					{
 						targetNpcs.add(npcId);
 						watchedNpcIds.add(npcId);
-						log.info("      >>> WATCHING NPC ID: {}", npcId);
 					}
 				}
 			}
@@ -174,14 +168,12 @@ public class ThievingModule extends AbstractTaskModule
 						{
 							requiredObjectIds.add(id);
 							watchedObjectIds.add(id);
-							log.info("      >>> WATCHING OBJECT ID: {}", id);
 						}
 					}
 				}
 			}
 
 			taskRequiredObjectIds.put(task.getTaskId(), requiredObjectIds);
-			log.info("  Target quantity: {}", task.getTargetQuantity());
 
 			// Initialize XP tracking on client thread
 			clientThread.invokeLater(this::initializeXpTracking);
@@ -221,7 +213,6 @@ public class ThievingModule extends AbstractTaskModule
 		if (client.getLocalPlayer() != null)
 		{
 			previousThievingXp = client.getSkillExperience(Skill.THIEVING);
-			log.info("ThievingModule: Initialized XP tracking at {} xp", previousThievingXp);
 		}
 	}
 
@@ -232,8 +223,6 @@ public class ThievingModule extends AbstractTaskModule
 
 		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
 		{
-			log.info(">>> ThievingModule HEARTBEAT - tick {} - activeTasks: {}, watchedNpcs: {}",
-				tickCounter, activeTasks.size(), watchedNpcIds.size());
 		}
 	}
 
@@ -255,8 +244,6 @@ public class ThievingModule extends AbstractTaskModule
 			{
 				lastInteractionNpcId = npcId;
 				lastInteractionTick = client.getTickCount();
-				log.info(">>> ThievingModule: Player interacting with watched NPC {} (ID: {})",
-					npc.getName(), npcId);
 			}
 		}
 	}
@@ -279,8 +266,6 @@ public class ThievingModule extends AbstractTaskModule
 		{
 			lastInteractionObjectId = objectId;
 			lastInteractionObjectTick = client.getTickCount();
-			log.info(">>> ThievingModule: Player acted on watched object (ID: {}, option: {})",
-				objectId, event.getMenuOption());
 		}
 	}
 
@@ -309,7 +294,6 @@ public class ThievingModule extends AbstractTaskModule
 
 		if (xpGained >= MIN_XP_THRESHOLD)
 		{
-			log.info(">>> ThievingModule: Gained {} Thieving XP", xpGained);
 
 			int currentTick = client.getTickCount();
 			boolean recentNpc = lastInteractionNpcId > 0 &&
@@ -335,7 +319,6 @@ public class ThievingModule extends AbstractTaskModule
 
 			if (recentNpc)
 			{
-				log.info(">>> ThievingModule: Successful pickpocket of NPC ID {} detected!", lastInteractionNpcId);
 				for (NuzlockeTask task : new HashSet<>(activeTasks))
 				{
 					Set<Integer> taskNpcs = taskTargetNpcs.get(task.getTaskId());
@@ -347,7 +330,6 @@ public class ThievingModule extends AbstractTaskModule
 			}
 			else if (recentObject)
 			{
-				log.info(">>> ThievingModule: Successful theft from object ID {} detected!", lastInteractionObjectId);
 				for (NuzlockeTask task : new HashSet<>(activeTasks))
 				{
 					Set<Integer> taskObjects = taskRequiredObjectIds.get(task.getTaskId());
@@ -387,8 +369,6 @@ public class ThievingModule extends AbstractTaskModule
 		// Check for completion
 		if (newProgress >= required && !task.isCompleted())
 		{
-			log.info("ThievingModule: Task '{}' COMPLETED! ({}/{})",
-				task.getName(), newProgress, required);
 			task.setCompleted(true);
 
 			sendTaskSuccess(task, "Thieving task complete!");
@@ -437,7 +417,6 @@ public class ThievingModule extends AbstractTaskModule
 			.value(message)
 			.build());
 
-		log.info("[CHAT] Thieving progress: {} ({}/{}) - {}", task.getName(), current, total, details);
 	}
 
 	private void sendTaskSuccess(NuzlockeTask task, String details)
@@ -456,6 +435,5 @@ public class ThievingModule extends AbstractTaskModule
 			.value(message)
 			.build());
 
-		log.info("[CHAT] Thieving success: {} - {}", task.getName(), details);
 	}
 }

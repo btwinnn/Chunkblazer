@@ -181,8 +181,6 @@ public class TaskCompletionSoundManager
 			"Tinsay_Satisfied_(Tai_Bwo_Wannai_Trio).wav"
 		));
 
-		log.info("TaskCompletionSoundManager initialized with {} area mappings and {} sound folders",
-			AREA_TO_FOLDER.size(), areaSoundFiles.size());
 	}
 
 	/**
@@ -193,14 +191,12 @@ public class TaskCompletionSoundManager
 	{
 		if (area == null || area.isEmpty())
 		{
-			log.debug("No area provided for sound playback");
 			return;
 		}
 
 		String folder = AREA_TO_FOLDER.get(area);
 		if (folder == null)
 		{
-			log.debug("No sound folder mapping for area: {}", area);
 			// Try to find a partial match
 			for (Map.Entry<String, String> entry : AREA_TO_FOLDER.entrySet())
 			{
@@ -213,7 +209,6 @@ public class TaskCompletionSoundManager
 			}
 			if (folder == null)
 			{
-				log.debug("Could not find sound folder for area: {}", area);
 				return;
 			}
 		}
@@ -225,7 +220,6 @@ public class TaskCompletionSoundManager
 			sounds = discoverSoundsInFolder(folder);
 			if (sounds.isEmpty())
 			{
-				log.debug("No sounds available for folder: {}", folder);
 				return;
 			}
 			areaSoundFiles.put(folder, sounds);
@@ -235,7 +229,6 @@ public class TaskCompletionSoundManager
 		String soundFile = sounds.get(random.nextInt(sounds.size()));
 		String fullPath = SOUNDS_BASE_PATH + folder + "/" + soundFile;
 
-		log.info("Playing sound for area {}: {}", area, soundFile);
 		playSound(fullPath);
 	}
 
@@ -282,7 +275,6 @@ public class TaskCompletionSoundManager
 		// Stop any currently playing sound
 		stopCurrentSound();
 
-		log.info("Attempting to play sound: {}", resourcePath);
 
 		try
 		{
@@ -293,12 +285,10 @@ public class TaskCompletionSoundManager
 				return;
 			}
 
-			log.info("Sound file found, attempting to load audio stream...");
 
 			BufferedInputStream bis = new BufferedInputStream(is);
 			AudioInputStream ais = AudioSystem.getAudioInputStream(bis);
 
-			log.info("Audio stream loaded, format: {}", ais.getFormat());
 
 			currentClip = AudioSystem.getClip();
 			currentClip.open(ais);
@@ -314,7 +304,6 @@ public class TaskCompletionSoundManager
 			}
 
 			currentClip.start();
-			log.info("Started playing sound: {}", resourcePath);
 		}
 		catch (javax.sound.sampled.UnsupportedAudioFileException e)
 		{

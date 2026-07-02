@@ -93,8 +93,6 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 			registerModuleWithType(obtainModule, type);
 		}
 
-		log.info("TaskModuleManager initialized with {} modules", modules.size());
-		log.info("ObtainModule registered for types: OBTAIN + {} skilling types", skillingTypes.length);
 	}
 
 	private void registerModule(AbstractTaskModule module)
@@ -126,7 +124,6 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 		{
 			module.startUp();
 		}
-		log.info("All task modules started");
 	}
 
 	/**
@@ -139,7 +136,6 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 			module.shutDown();
 		}
 		activeModule = null;
-		log.info("All task modules stopped");
 	}
 
 	/**
@@ -178,7 +174,6 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 		activeModule = module;
 		module.onTaskAssigned(task);
 
-		log.info("Task {} assigned to {} module", task.getTaskId(), module.getCompletionType());
 	}
 
 	/**
@@ -187,7 +182,6 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	public void clearTask()
 	{
 		// Diagnostic: clearTask wipes module per-task state. If this fires unexpectedly during a session, log the trigger so we can correlate with progress regressions.
-		log.debug("clearTask() called, current activeTasks={}, caller stack:", activeTasks.size(), new Throwable());
 		// Clear every module's per-module list, not just the legacy activeModule. Otherwise modules retain stale tasks across resets and end up with duplicates after re-registration.
 		for (AbstractTaskModule module : modules)
 		{
@@ -212,9 +206,6 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 
 		String completionType = task.getCompletionType();
 		String category = task.getCategory();
-		log.info("=== REGISTERING TASK: {} ===", task.getName());
-		log.info("  TaskID: {}", task.getTaskId());
-		log.info("  CompletionType: {}, Category: {}", completionType, category);
 
 		// Find module that can handle this task
 		AbstractTaskModule module = findModuleForTask(task);
@@ -226,7 +217,6 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 			return;
 		}
 
-		log.info(">>> Found module: {} for task: {}", module.getCompletionType(), task.getName());
 
 		// Add to active tasks list
 		if (!activeTasks.contains(task))
@@ -234,11 +224,9 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 			activeTasks.add(task);
 			taskToModuleMap.put(task.getTaskId(), module);
 			module.addActiveTask(task);
-			log.info(">>> Task registered successfully. Total manager tasks: {}", activeTasks.size());
 		}
 		else
 		{
-			log.info(">>> Task already registered: {}", task.getName());
 		}
 	}
 
@@ -332,7 +320,6 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	@Override
 	public void onTaskCompleted(NuzlockeTask task, int progress)
 	{
-		log.info("Task completed: {} (progress: {})", task.getName(), progress);
 		if (completionHandler != null)
 		{
 			completionHandler.onTaskCompleted(task, progress);
@@ -342,7 +329,6 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	@Override
 	public void onServerVerified(NuzlockeTask task, int pointsAwarded)
 	{
-		log.info("Server verified task: {} (+{} points)", task.getName(), pointsAwarded);
 		if (completionHandler != null)
 		{
 			completionHandler.onServerVerified(task, pointsAwarded);
@@ -352,7 +338,6 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	@Override
 	public void onProgressUpdated(NuzlockeTask task, int newProgress)
 	{
-		log.debug("Progress updated: {} -> {}", task.getName(), newProgress);
 		if (completionHandler != null)
 		{
 			completionHandler.onProgressUpdated(task, newProgress);

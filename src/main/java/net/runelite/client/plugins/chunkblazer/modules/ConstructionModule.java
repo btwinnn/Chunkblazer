@@ -121,7 +121,6 @@ public class ConstructionModule extends AbstractTaskModule
 	public void startUp()
 	{
 		eventBus.register(this);
-		log.info("=== ConstructionModule STARTED ===");
 	}
 
 	@Override
@@ -137,7 +136,6 @@ public class ConstructionModule extends AbstractTaskModule
 		lastSpawnedObjectId = -1;
 		lastSpawnedObjectTick = -1;
 		previousConstructionXp = -1;
-		log.info("ConstructionModule stopped");
 	}
 
 	@Override
@@ -147,9 +145,6 @@ public class ConstructionModule extends AbstractTaskModule
 		{
 			super.addActiveTask(task);
 
-			log.info("=== ConstructionModule: ADDING ACTIVE TASK ===");
-			log.info("  Task Name: {}", task.getName());
-			log.info("  Task ID: {}", task.getTaskId());
 
 			// Parse required items (planks, nails, etc.)
 			Map<Integer, Integer> targetItems = new HashMap<>();
@@ -166,8 +161,6 @@ public class ConstructionModule extends AbstractTaskModule
 						{
 							targetItems.put(itemId, item.getRequiredQuantity());
 							watchedItemIds.add(itemId);
-							log.info("      >>> WATCHING ITEM: Item ID {} ({}) - qty: {}",
-								itemId, getItemName(itemId), item.getRequiredQuantity());
 						}
 					}
 				}
@@ -189,7 +182,6 @@ public class ConstructionModule extends AbstractTaskModule
 						{
 							requiredObjectIds.add(id);
 							watchedObjectIds.add(id);
-							log.info("      >>> WATCHING BUILT OBJECT ID: {}", id);
 						}
 					}
 				}
@@ -262,7 +254,6 @@ public class ConstructionModule extends AbstractTaskModule
 				}
 			}
 		}
-		log.info("ConstructionModule: Initialized inventory tracking");
 	}
 
 	private void initializeXpTracking()
@@ -270,7 +261,6 @@ public class ConstructionModule extends AbstractTaskModule
 		if (client.getLocalPlayer() != null)
 		{
 			previousConstructionXp = client.getSkillExperience(Skill.CONSTRUCTION);
-			log.info("ConstructionModule: Initialized Construction XP tracking at {} xp", previousConstructionXp);
 		}
 	}
 
@@ -281,8 +271,6 @@ public class ConstructionModule extends AbstractTaskModule
 
 		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
 		{
-			log.info(">>> ConstructionModule HEARTBEAT - tick {} - activeTasks: {}, watchedItems: {}",
-				tickCounter, activeTasks.size(), watchedItemIds.size());
 		}
 	}
 
@@ -323,8 +311,6 @@ public class ConstructionModule extends AbstractTaskModule
 			if (currentCount < previousCount)
 			{
 				int consumed = previousCount - currentCount;
-				log.info(">>> ConstructionModule: DETECTED {} x {} consumed!",
-					consumed, getItemName(watchedItemId));
 
 				// Track consumed items to match with XP gain
 				itemsConsumedSinceLastXp.merge(watchedItemId, consumed, Integer::sum);
@@ -353,8 +339,6 @@ public class ConstructionModule extends AbstractTaskModule
 		{
 			lastSpawnedObjectId = objectId;
 			lastSpawnedObjectTick = client.getTickCount();
-			log.info(">>> ConstructionModule: Watched built object {} spawned at tick {}",
-				objectId, lastSpawnedObjectTick);
 		}
 	}
 
@@ -386,7 +370,6 @@ public class ConstructionModule extends AbstractTaskModule
 			return;
 		}
 
-		log.info(">>> ConstructionModule: Gained {} Construction XP", xpGained);
 
 		int currentTick = client.getTickCount();
 		boolean recentSpawn = lastSpawnedObjectId > 0
@@ -430,13 +413,9 @@ public class ConstructionModule extends AbstractTaskModule
 			}
 			if (taskRegionId > 0 && playerRegionId > 0 && taskRegionId != playerRegionId)
 			{
-				log.info(">>> ConstructionModule: '{}' NOT credited — built in region {} but task is in region {}",
-					task.getName(), playerRegionId, taskRegionId);
 				continue;
 			}
 
-			log.info(">>> ConstructionModule: '{}' credited (built object {} confirmed in region {})",
-				task.getName(), lastSpawnedObjectId, playerRegionId);
 			creditTaskProgress(task, 1, "Built object " + lastSpawnedObjectId + " confirmed");
 			creditedFromObject = true;
 		}
@@ -453,7 +432,6 @@ public class ConstructionModule extends AbstractTaskModule
 		// legacy item-consumption check. Skips object-gated tasks (already handled).
 		if (!itemsConsumedSinceLastXp.isEmpty())
 		{
-			log.info(">>> Items consumed since last XP: {}", itemsConsumedSinceLastXp);
 			for (NuzlockeTask task : new HashSet<>(activeTasks))
 			{
 				Set<Integer> taskObjects = taskRequiredObjectIds.get(task.getTaskId());
@@ -525,8 +503,6 @@ public class ConstructionModule extends AbstractTaskModule
 		// Check for completion
 		if (newProgress >= required && !task.isCompleted())
 		{
-			log.info("ConstructionModule: Task '{}' COMPLETED! ({}/{})",
-				task.getName(), newProgress, required);
 			task.setCompleted(true);
 
 			sendTaskSuccess(task, "Construction task complete!");
@@ -591,7 +567,6 @@ public class ConstructionModule extends AbstractTaskModule
 			.value(message)
 			.build());
 
-		log.info("[CHAT] Construction progress: {} ({}/{}) - {}", task.getName(), current, total, details);
 	}
 
 	private void sendTaskSuccess(NuzlockeTask task, String details)
@@ -610,6 +585,5 @@ public class ConstructionModule extends AbstractTaskModule
 			.value(message)
 			.build());
 
-		log.info("[CHAT] Construction success: {} - {}", task.getName(), details);
 	}
 }

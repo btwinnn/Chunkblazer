@@ -220,7 +220,6 @@ public class VarPlayerVerificationService
 			if (entry.getValue() == varpId)
 			{
 				int newKc = client.getVarpValue(varpId);
-				log.info("Boss KC changed via VarPlayer: {} = {}", entry.getKey(), newKc);
 
 				if (kcChangeListener != null)
 				{
@@ -234,7 +233,6 @@ public class VarPlayerVerificationService
 		if (varpId == VarPlayerID.SLAYER_COUNT)
 		{
 			int remaining = event.getValue();
-			log.info("Slayer task count changed: {} remaining", remaining);
 
 			if (kcChangeListener != null)
 			{

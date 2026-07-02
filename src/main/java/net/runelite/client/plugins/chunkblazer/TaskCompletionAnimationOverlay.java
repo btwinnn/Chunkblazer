@@ -75,7 +75,6 @@ public class TaskCompletionAnimationOverlay extends Overlay
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 		setPriority(OverlayPriority.HIGH);
 		loadImages();
-		log.info("TaskCompletionAnimationOverlay initialized");
 	}
 
 	private void loadImages()
@@ -86,8 +85,6 @@ public class TaskCompletionAnimationOverlay extends Overlay
 			pointsBoxImage = loadImage("Task_Complete_Anim/Base_Anim_Points_Box.png");
 			taskCompleteBoxImage = loadImage("Task_Complete_Anim/Base_Anim_TaskComplete_Box.png");
 
-			log.info("Loaded images - bar1: {}, pointsBox: {}, taskComplete: {}",
-				dims(bar1Image), dims(pointsBoxImage), dims(taskCompleteBoxImage));
 		}
 		catch (Exception e)
 		{
@@ -108,7 +105,6 @@ public class TaskCompletionAnimationOverlay extends Overlay
 			if (is != null)
 			{
 				BufferedImage img = ImageIO.read(is);
-				log.info("Loaded {}: {}x{}", path, img.getWidth(), img.getHeight());
 				return img;
 			}
 			log.warn("Could not find image: {}", path);
@@ -129,7 +125,6 @@ public class TaskCompletionAnimationOverlay extends Overlay
 		if (this.regionName.contains("("))
 			this.regionName = this.regionName.substring(0, this.regionName.indexOf("(")).trim();
 		this.startTime = System.currentTimeMillis();
-		log.info("Starting animation for '{}' (+{} points) in {}", taskName, pointsAwarded, this.regionName);
 	}
 
 	public void showTaskCompletion(String name, int points, String regionName)

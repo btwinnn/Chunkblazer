@@ -63,8 +63,6 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 	{
 		this.activeTask = task;
 		this.currentProgress = task.getCurrentProgress();
-		log.info("{} module: Task assigned - {} (progress: {}/{})",
-			getCompletionType(), task.getName(), currentProgress, task.getTargetQuantity());
 	}
 
 	/**
@@ -81,15 +79,9 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 				activeTask = task;
 				currentProgress = task.getCurrentProgress();
 			}
-			log.info("=== {} module: ADDED active task ===", getCompletionType());
-			log.info("  Task: {} (ID: {})", task.getName(), task.getTaskId());
-			log.info("  Progress: {}/{}", task.getCurrentProgress(), task.getTargetQuantity());
-			log.info("  CompletionType: {}, Category: {}", task.getCompletionType(), task.getCategory());
-			log.info("  Total active tasks now: {}", activeTasks.size());
 		}
 		else
 		{
-			log.info("{} module: Task {} already in active list", getCompletionType(), task.getName());
 		}
 	}
 
@@ -135,8 +127,6 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 		currentProgress += amount;
 		activeTask.setCurrentProgress(currentProgress);
 
-		log.info("{} module: Progress updated - {}/{}",
-			getCompletionType(), currentProgress, activeTask.getTargetQuantity());
 
 		if (currentProgress >= activeTask.getTargetQuantity())
 		{
@@ -155,7 +145,6 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 			return;
 		}
 
-		log.info("{} module: Task completed locally, requesting server verification", getCompletionType());
 
 		// Notify the plugin that this task is complete
 		completionCallback.onTaskCompleted(activeTask, currentProgress);
@@ -170,7 +159,6 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 		{
 			if (response.isTaskCompleted())
 			{
-				log.info("Server confirmed task completion! Points awarded: {}", response.getPointsAwarded());
 				if (completionCallback != null && activeTask != null)
 				{
 					completionCallback.onServerVerified(activeTask, response.getPointsAwarded());
@@ -184,7 +172,6 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 				{
 					activeTask.setCurrentProgress(currentProgress);
 				}
-				log.info("Server verified progress: {}", currentProgress);
 			}
 		}
 		else

@@ -89,7 +89,6 @@ public class FiremakingModule extends AbstractTaskModule
 	public void startUp()
 	{
 		eventBus.register(this);
-		log.info("=== FiremakingModule STARTED ===");
 	}
 
 	@Override
@@ -101,7 +100,6 @@ public class FiremakingModule extends AbstractTaskModule
 		watchedItemIds.clear();
 		logsConsumedSinceLastXp.clear();
 		previousFiremakingXp = -1;
-		log.info("FiremakingModule stopped");
 	}
 
 	@Override
@@ -111,9 +109,6 @@ public class FiremakingModule extends AbstractTaskModule
 		{
 			super.addActiveTask(task);
 
-			log.info("=== FiremakingModule: ADDING ACTIVE TASK ===");
-			log.info("  Task Name: {}", task.getName());
-			log.info("  Task ID: {}", task.getTaskId());
 
 			// Parse required items (logs to burn)
 			Map<Integer, Integer> targetItems = new HashMap<>();
@@ -130,8 +125,6 @@ public class FiremakingModule extends AbstractTaskModule
 						{
 							targetItems.put(itemId, item.getRequiredQuantity());
 							watchedItemIds.add(itemId);
-							log.info("      >>> WATCHING LOG: Item ID {} ({}) - qty: {}",
-								itemId, getItemName(itemId), item.getRequiredQuantity());
 						}
 					}
 				}
@@ -193,7 +186,6 @@ public class FiremakingModule extends AbstractTaskModule
 				}
 			}
 		}
-		log.info("FiremakingModule: Initialized inventory tracking");
 	}
 
 	private void initializeXpTracking()
@@ -201,7 +193,6 @@ public class FiremakingModule extends AbstractTaskModule
 		if (client.getLocalPlayer() != null)
 		{
 			previousFiremakingXp = client.getSkillExperience(Skill.FIREMAKING);
-			log.info("FiremakingModule: Initialized FM XP tracking at {} xp", previousFiremakingXp);
 		}
 	}
 
@@ -212,8 +203,6 @@ public class FiremakingModule extends AbstractTaskModule
 
 		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
 		{
-			log.info(">>> FiremakingModule HEARTBEAT - tick {} - activeTasks: {}, watchedLogs: {}",
-				tickCounter, activeTasks.size(), watchedItemIds.size());
 		}
 	}
 
@@ -254,8 +243,6 @@ public class FiremakingModule extends AbstractTaskModule
 			if (currentCount < previousCount)
 			{
 				int consumed = previousCount - currentCount;
-				log.info(">>> FiremakingModule: DETECTED {} x {} consumed!",
-					consumed, getItemName(watchedItemId));
 
 				// Track consumed logs to match with XP gain
 				logsConsumedSinceLastXp.merge(watchedItemId, consumed, Integer::sum);
@@ -292,12 +279,10 @@ public class FiremakingModule extends AbstractTaskModule
 
 		if (xpGained > 0)
 		{
-			log.info(">>> FiremakingModule: Gained {} Firemaking XP", xpGained);
 
 			// Check if we consumed any watched logs
 			if (!logsConsumedSinceLastXp.isEmpty())
 			{
-				log.info(">>> Logs consumed since last XP: {}", logsConsumedSinceLastXp);
 
 				// Credit progress for tasks
 				for (NuzlockeTask task : new HashSet<>(activeTasks))
@@ -329,8 +314,6 @@ public class FiremakingModule extends AbstractTaskModule
 			if (targetItems.containsKey(itemId))
 			{
 				progressIncrement += quantity;
-				log.info(">>> FiremakingModule: Crediting {} burned logs for task {}",
-					quantity, task.getName());
 			}
 		}
 
@@ -352,8 +335,6 @@ public class FiremakingModule extends AbstractTaskModule
 			// Check for completion
 			if (newProgress >= required && !task.isCompleted())
 			{
-				log.info("FiremakingModule: Task '{}' COMPLETED! ({}/{})",
-					task.getName(), newProgress, required);
 				task.setCompleted(true);
 
 				sendTaskSuccess(task, "All logs burned!");
@@ -419,7 +400,6 @@ public class FiremakingModule extends AbstractTaskModule
 			.value(message)
 			.build());
 
-		log.info("[CHAT] Firemaking progress: {} ({}/{}) - {}", task.getName(), current, total, details);
 	}
 
 	private void sendTaskSuccess(NuzlockeTask task, String details)
@@ -438,6 +418,5 @@ public class FiremakingModule extends AbstractTaskModule
 			.value(message)
 			.build());
 
-		log.info("[CHAT] Firemaking success: {} - {}", task.getName(), details);
 	}
 }

@@ -134,7 +134,6 @@ public class AgilityModule extends AbstractTaskModule
 	public void startUp()
 	{
 		eventBus.register(this);
-		log.info("=== AgilityModule STARTED ===");
 	}
 
 	@Override
@@ -146,7 +145,6 @@ public class AgilityModule extends AbstractTaskModule
 		watchedObjectIds.clear();
 		pendingObjectId = -1;
 		pendingTick = -1;
-		log.info("AgilityModule stopped");
 	}
 
 	@Override
@@ -156,10 +154,6 @@ public class AgilityModule extends AbstractTaskModule
 		{
 			super.addActiveTask(task);
 
-			log.info("=== AgilityModule: ADDING ACTIVE TASK ===");
-			log.info("  Task Name: {}", task.getName());
-			log.info("  Task ID: {}", task.getTaskId());
-			log.info("  Target Quantity: {}", task.getTargetQuantity());
 
 			// Capture lap-end object IDs for lap tasks.
 			Set<Integer> requiredObjectIds = new HashSet<>();
@@ -175,7 +169,6 @@ public class AgilityModule extends AbstractTaskModule
 						{
 							requiredObjectIds.add(id);
 							watchedObjectIds.add(id);
-							log.info("      >>> WATCHING LAP-END OBJECT ID: {}", id);
 						}
 					}
 				}
@@ -220,7 +213,6 @@ public class AgilityModule extends AbstractTaskModule
 		if (client.getLocalPlayer() != null)
 		{
 			previousAgilityXp = client.getSkillExperience(Skill.AGILITY);
-			log.info("AgilityModule: Initialized XP tracking at {} xp", previousAgilityXp);
 		}
 	}
 
@@ -240,8 +232,6 @@ public class AgilityModule extends AbstractTaskModule
 
 		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
 		{
-			log.info(">>> AgilityModule HEARTBEAT - tick {} - activeTasks: {}",
-				tickCounter, activeTasks.size());
 		}
 	}
 
@@ -296,8 +286,6 @@ public class AgilityModule extends AbstractTaskModule
 		// neither produces an animation or XP.
 		pendingObjectId = objectId;
 		pendingTick = client.getTickCount();
-		log.info(">>> AgilityModule: watched obstacle {} clicked (option '{}') — awaiting use confirmation",
-			objectId, option);
 	}
 
 	private static boolean isAgilityVerb(String option)
@@ -365,8 +353,6 @@ public class AgilityModule extends AbstractTaskModule
 			Set<Integer> taskObjects = taskRequiredObjectIds.get(task.getTaskId());
 			if (taskObjects != null && taskObjects.contains(obj))
 			{
-				log.info(">>> AgilityModule: '{}' credited (used watched object {} — {})",
-					task.getName(), obj, trigger);
 				creditTaskProgress(task, 1);
 			}
 		}
@@ -417,8 +403,6 @@ public class AgilityModule extends AbstractTaskModule
 			}
 			if (xpGained >= SHORTCUT_XP_THRESHOLD)
 			{
-				log.info(">>> AgilityModule: '{}' credited (objectless shortcut, gained {} XP)",
-					task.getName(), xpGained);
 				creditTaskProgress(task, 1);
 			}
 		}
@@ -448,8 +432,6 @@ public class AgilityModule extends AbstractTaskModule
 		// Check for completion
 		if (newProgress >= required && !task.isCompleted())
 		{
-			log.info("AgilityModule: Task '{}' COMPLETED! ({}/{})",
-				task.getName(), newProgress, required);
 			task.setCompleted(true);
 
 			sendTaskSuccess(task, "Course completed!");
@@ -493,7 +475,6 @@ public class AgilityModule extends AbstractTaskModule
 			.value(message)
 			.build());
 
-		log.info("[CHAT] Agility progress: {} ({}/{}) - {}", task.getName(), current, total, details);
 	}
 
 	private void sendTaskSuccess(NuzlockeTask task, String details)
@@ -512,6 +493,5 @@ public class AgilityModule extends AbstractTaskModule
 			.value(message)
 			.build());
 
-		log.info("[CHAT] Agility success: {} - {}", task.getName(), details);
 	}
 }

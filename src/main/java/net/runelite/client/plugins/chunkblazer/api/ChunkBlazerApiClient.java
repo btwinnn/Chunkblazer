@@ -69,7 +69,6 @@ public class ChunkBlazerApiClient
 	{
 		if (!config.apiEnabled())
 		{
-			log.debug("API disabled, returning offline login");
 			return CompletableFuture.completedFuture(PlayerLoginResponse.offline());
 		}
 
@@ -115,7 +114,6 @@ public class ChunkBlazerApiClient
 						if (loginResponse.getApiKey() != null)
 						{
 							playerApiKey = loginResponse.getApiKey();
-							log.info("Received new API key for player");
 						}
 
 						future.complete(loginResponse);
@@ -348,7 +346,6 @@ public class ChunkBlazerApiClient
 	{
 		if (!config.apiEnabled())
 		{
-			log.debug("API disabled, returning offline mode lock");
 			return CompletableFuture.completedFuture(LockModeResponse.offline(mode));
 		}
 
@@ -588,7 +585,6 @@ public class ChunkBlazerApiClient
 			@Override
 			public void onFailure(Call call, IOException e)
 			{
-				log.debug("Heartbeat failed: {}", e.getMessage());
 				future.complete(null);
 			}
 
@@ -704,7 +700,6 @@ public class ChunkBlazerApiClient
 			@Override
 			public void onFailure(Call call, IOException e)
 			{
-				log.debug("Go offline failed: {}", e.getMessage());
 				future.complete(null);
 			}
 
@@ -732,7 +727,6 @@ public class ChunkBlazerApiClient
 		if (!config.apiEnabled())
 		{
 			// API disabled - return offline success for testing
-			log.debug("API disabled, returning offline verification");
 			return CompletableFuture.completedFuture(
 				TaskVerificationResponse.offlineSuccess(request.getTaskId())
 			);

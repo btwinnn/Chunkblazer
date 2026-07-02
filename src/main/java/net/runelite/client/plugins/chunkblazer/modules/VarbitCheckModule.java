@@ -92,7 +92,6 @@ public class VarbitCheckModule extends AbstractTaskModule
 	public void startUp()
 	{
 		eventBus.register(this);
-		log.info("=== VarbitCheckModule STARTED ===");
 	}
 
 	@Override
@@ -107,7 +106,6 @@ public class VarbitCheckModule extends AbstractTaskModule
 		watchedVarpIds.clear();
 		previousVarbitValues.clear();
 		previousVarpValues.clear();
-		log.info("VarbitCheckModule stopped");
 	}
 
 	@Override
@@ -117,10 +115,6 @@ public class VarbitCheckModule extends AbstractTaskModule
 		{
 			super.addActiveTask(task);
 
-			log.info("=== VarbitCheckModule: ADDING ACTIVE TASK ===");
-			log.info("  Task Name: {}", task.getName());
-			log.info("  Task ID: {}", task.getTaskId());
-			log.info("  Completion Type: {}", task.getCompletionType());
 
 			// Parse varbit/varp requirements from constraints
 			TaskConstraints constraints = task.getConstraints();
@@ -181,18 +175,15 @@ public class VarbitCheckModule extends AbstractTaskModule
 				if (isVarp)
 				{
 					watchedVarpIds.add(varbitId);
-					log.info("      >>> WATCHING VARP ID: {} (expected value: {})", varbitId, expectedValue);
 				}
 				else
 				{
 					watchedVarbitIds.add(varbitId);
 					if (bit != null && bit >= 0)
 					{
-						log.info("      >>> WATCHING VARBIT ID: {} (bit {} of bitmap)", varbitId, bit);
 					}
 					else
 					{
-						log.info("      >>> WATCHING VARBIT ID: {} (expected value: {})", varbitId, expectedValue);
 					}
 				}
 
@@ -251,13 +242,11 @@ public class VarbitCheckModule extends AbstractTaskModule
 			{
 				currentValue = client.getVarpValue(varId);
 				previousVarpValues.put(varId, currentValue);
-				log.info("VarbitCheckModule: Initialized VARP {} tracking at value {}", varId, currentValue);
 			}
 			else
 			{
 				currentValue = client.getVarbitValue(varId);
 				previousVarbitValues.put(varId, currentValue);
-				log.info("VarbitCheckModule: Initialized VARBIT {} tracking at value {}", varId, currentValue);
 			}
 		}
 		catch (Exception e)
@@ -273,8 +262,6 @@ public class VarbitCheckModule extends AbstractTaskModule
 
 		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
 		{
-			log.info(">>> VarbitCheckModule HEARTBEAT - tick {} - activeTasks: {}, watchedVarbits: {}, watchedVarps: {}",
-				tickCounter, activeTasks.size(), watchedVarbitIds.size(), watchedVarpIds.size());
 		}
 
 		// Check varp values each tick (since VarbitChanged doesn't always fire for varps)
@@ -314,7 +301,6 @@ public class VarbitCheckModule extends AbstractTaskModule
 			if (previousValue == null || currentValue != previousValue)
 			{
 				previousVarpValues.put(varpId, currentValue);
-				log.info(">>> VarbitCheckModule: VARP {} changed to {}", varpId, currentValue);
 
 				// Check tasks that watch this varp
 				for (NuzlockeTask task : new HashSet<>(activeTasks))
@@ -370,13 +356,9 @@ public class VarbitCheckModule extends AbstractTaskModule
 		{
 			if (bit != null)
 			{
-				log.info(">>> VarbitCheckModule: {} {} bit {} is set (raw value {}), task COMPLETED!",
-					isVarp ? "VARP" : "VARBIT", varId, bit, currentValue);
 			}
 			else
 			{
-				log.info(">>> VarbitCheckModule: {} {} = {} (expected {}), task COMPLETED!",
-					isVarp ? "VARP" : "VARBIT", varId, currentValue, expectedValue);
 			}
 
 			task.setCurrentProgress(1);
@@ -435,6 +417,5 @@ public class VarbitCheckModule extends AbstractTaskModule
 			.value(message)
 			.build());
 
-		log.info("[CHAT] Varbit check success: {} - {}", task.getName(), details);
 	}
 }

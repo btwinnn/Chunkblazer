@@ -152,8 +152,6 @@ public class ObtainModule extends AbstractTaskModule
 	public void startUp()
 	{
 		eventBus.register(this);
-		log.info("=== ObtainModule STARTED ===");
-		log.info("ObtainModule: eventBus={}, client={}", eventBus != null ? "OK" : "NULL", client != null ? "OK" : "NULL");
 	}
 
 	@Override
@@ -164,7 +162,6 @@ public class ObtainModule extends AbstractTaskModule
 		watchedItemIds.clear();
 		inventoryHeldSnapshot.clear();
 		previousXp.clear();
-		log.info("ObtainModule stopped");
 	}
 
 	@Override
@@ -172,15 +169,8 @@ public class ObtainModule extends AbstractTaskModule
 	{
 		try
 		{
-			log.info(">>> ObtainModule.addActiveTask() ENTRY - calling super...");
 			super.addActiveTask(task);
-			log.info(">>> ObtainModule.addActiveTask() - super returned");
 
-			log.info("=== ObtainModule: ADDING ACTIVE TASK ===");
-			log.info("  Task Name: {}", task.getName());
-			log.info("  Task ID: {}", task.getTaskId());
-			log.info("  Completion Type: {}", task.getCompletionType());
-			log.info("  Category: {}", task.getCategory());
 
 			// Parse required items from task into one Slot per RequiredItem.
 			// Within a Slot, item_ids are OR'd (any variant counts); across
@@ -188,17 +178,13 @@ public class ObtainModule extends AbstractTaskModule
 			List<Slot> slots = new ArrayList<>();
 			List<RequiredItem> requiredItems = task.getRequiredItems();
 
-			log.info("  Required Items: {}", requiredItems != null ? requiredItems.size() + " slots" : "NULL");
 
 			if (requiredItems != null)
 			{
 				for (RequiredItem item : requiredItems)
 				{
-					log.info("    Processing RequiredItem: {}", item);
 					List<Integer> itemIds = item.getItemIds();
 					int requiredQty = item.getRequiredQuantity();
-					log.info("      Item IDs (OR'd within slot): {}", itemIds);
-					log.info("      Slot Required Qty: {}", requiredQty);
 
 					if (itemIds != null && !itemIds.isEmpty())
 					{
@@ -207,8 +193,6 @@ public class ObtainModule extends AbstractTaskModule
 						watchedItemIds.addAll(variantIds);
 						for (Integer itemId : variantIds)
 						{
-							log.info("      >>> WATCHING: Item ID {} ({}) - slot qty: {} for task '{}'",
-								itemId, getItemName(itemId), requiredQty, task.getName());
 						}
 					}
 					else
@@ -229,10 +213,6 @@ public class ObtainModule extends AbstractTaskModule
 			// require the client thread. Until the seed runs, an empty snapshot
 			// means any XP drop that fires would see "no prior count" and skip
 			// crediting (safe default).
-			log.info("  Total slots for this task: {}", slots.size());
-			log.info("  All watched item IDs across all tasks: {}", watchedItemIds);
-			log.info("  Skill for XP gating: {}", skillForCompletionType(task.getCompletionType()));
-			log.info("=== END ADDING TASK ===");
 
 			// Run initial setup on the client thread. countIn() asserts the client
 			// thread. Seed the inventory-only snapshot so future XP drops compare
@@ -362,8 +342,6 @@ public class ObtainModule extends AbstractTaskModule
 			itemDetails.append("[").append(variantBreakdown).append("]")
 				.append(" ").append(slotHeld).append("/").append(slot.requiredQuantity);
 
-			log.debug("ObtainModule: slot {} - held {}/{} (sum across {} variants, inv+bank+equip)",
-				variantBreakdown, slotHeld, slot.requiredQuantity, slot.variantIds.size());
 		}
 
 		// Floor progress at the previously-saved value so we never regress across sessions
@@ -384,12 +362,10 @@ public class ObtainModule extends AbstractTaskModule
 			}
 		}
 
-		log.debug("ObtainModule: Task '{}' progress: {}/{}", task.getName(), newProgress, totalRequired);
 
 		// Check for completion
 		if (newProgress >= totalRequired && !task.isCompleted())
 		{
-			log.info("ObtainModule: Task '{}' COMPLETED! ({}/{})", task.getName(), totalObtained, totalRequired);
 			task.setCompleted(true);
 
 			// Send success chat message
@@ -555,8 +531,6 @@ public class ObtainModule extends AbstractTaskModule
 		{
 			// Deferred init in addActiveTask hasn't run yet — skip this drop
 			// rather than risk crediting bank-stocked items as a "delta from 0".
-			log.debug("ObtainModule: {} XP drop for '{}' arrived before snapshot seed — deferring",
-				skill.getName(), task.getName());
 			return;
 		}
 
@@ -617,8 +591,6 @@ public class ObtainModule extends AbstractTaskModule
 
 		if (totalDelta == 0)
 		{
-			log.debug("ObtainModule: {} XP drop for '{}' had no inventory delta — not credited",
-				skill.getName(), task.getName());
 			return;
 		}
 
@@ -629,8 +601,6 @@ public class ObtainModule extends AbstractTaskModule
 			return;
 		}
 		task.setCurrentProgress(newProgress);
-		log.debug("ObtainModule: '{}' credited {} (now {}/{})",
-			task.getName(), details, newProgress, totalRequired);
 		sendTaskProgress(task, details.toString(), newProgress, totalRequired);
 		if (completionCallback != null)
 		{
@@ -639,8 +609,6 @@ public class ObtainModule extends AbstractTaskModule
 
 		if (newProgress >= totalRequired && !task.isCompleted())
 		{
-			log.info("ObtainModule: Task '{}' COMPLETED! ({}/{})",
-				task.getName(), newProgress, totalRequired);
 			task.setCompleted(true);
 			sendTaskSuccess(task, "Task complete!");
 			if (completionCallback != null)
@@ -703,8 +671,6 @@ public class ObtainModule extends AbstractTaskModule
 		// Log heartbeat periodically to confirm module is running
 		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
 		{
-			log.info(">>> ObtainModule HEARTBEAT - tick {} - activeTasks: {}, watchedItems: {}",
-				tickCounter, activeTasks.size(), watchedItemIds.size());
 
 			// List all active obtain tasks
 			for (NuzlockeTask task : activeTasks)
@@ -723,14 +689,10 @@ public class ObtainModule extends AbstractTaskModule
 							.reduce((a, b) -> a + ", " + b)
 							.orElse("(empty)");
 				}
-				log.info(">>>   Active obtain task: {} ({}) - {}/{} - {}",
-					task.getName(), task.getTaskId(),
-					task.getCurrentProgress(), task.getTargetQuantity(), itemInfo);
 			}
 
 			if (activeTasks.isEmpty())
 			{
-				log.info(">>>   (No active OBTAIN tasks)");
 			}
 		}
 	}
@@ -753,8 +715,6 @@ public class ObtainModule extends AbstractTaskModule
 			return;
 		}
 
-		log.debug(">>> ObtainModule: container {} changed - rechecking for {} tasks",
-			containerId, activeTasks.size());
 
 		// OBTAIN (no-skill) tasks — re-derive progress from inv+bank+equip.
 		// Skilling tasks early-exit inside checkTaskProgress, so this loop only
@@ -870,7 +830,6 @@ public class ObtainModule extends AbstractTaskModule
 			})
 			.exceptionally(ex ->
 			{
-				log.debug("ObtainModule: Failed to send item report (API may be offline): {}", ex.getMessage());
 				return null;
 			});
 	}
@@ -886,7 +845,6 @@ public class ObtainModule extends AbstractTaskModule
 		// Check config - if showChatProgress is disabled, don't send
 		if (!config.showChatProgress())
 		{
-			log.info("[CHAT] Obtain progress (hidden by config): {} - {}", task.getName(), details);
 			return;
 		}
 
@@ -910,7 +868,6 @@ public class ObtainModule extends AbstractTaskModule
 				.build());
 		}
 
-		log.info("[CHAT] Obtain progress: {} ({}/{}) - {}", task.getName(), current, total, details);
 	}
 
 	/**
@@ -922,7 +879,6 @@ public class ObtainModule extends AbstractTaskModule
 		// Check config - if showChatSuccess is disabled, don't send
 		if (!config.showChatSuccess())
 		{
-			log.info("[CHAT] Obtain success (hidden by config): {} - {}", task.getName(), details);
 			return;
 		}
 
@@ -945,6 +901,5 @@ public class ObtainModule extends AbstractTaskModule
 				.build());
 		}
 
-		log.info("[CHAT] Obtain success: {} - {}", task.getName(), details);
 	}
 }
