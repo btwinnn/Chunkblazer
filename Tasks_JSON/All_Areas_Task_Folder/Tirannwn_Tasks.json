@@ -468,6 +468,152 @@
                         }
                     ],
                     "is_completed": false
-                }
+                },
+                {
+            "region_id": [8753],
+            "neighbor_ids": [8754, 9009, 8752, 8497],
+            "Friendly_Name": "Tyras Camp",
+            "tasks": [
+                {
+                    "name": "Defeat a Tyras Guard",
+                    "taskID": "defeat_tyras_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Tyras Guard"],
+                        "npc_ids": [639, 1327, 3433, 3434, 3436, 8945, 8961, 8962, 8963, 8964],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Tyras Guard in 12 Seconds",
+                    "taskID": "defeat_tyras_guard_12_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Tyras Guard"],
+                        "npc_ids": [639, 1327, 3433, 3434, 3436, 8945, 8961, 8962, 8963, 8964],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [20]
+                    }
+                },
+                {
+                    "name": "Equip a Dragon Halberd",
+                    "taskID": "equip_dragon_halberd",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Halberd"],
+                            "item_ids": [3204]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop a Yew Tree",
+                    "taskID": "chop_yew_trees",
+                    "category": "Woodcutting",
+                    "level": 60,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1, 250]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Yew Shortbow",
+                    "taskID": "fletch_yew_shortbow",
+                    "category": "Fletching",
+                    "level": 65,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Yew Shortbow"],
+                            "item_ids": [857],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Yew Longbow",
+                    "taskID": "fletch_yew_longbow",
+                    "category": "Fletching",
+                    "level": 70,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Yew Longbow"],
+                            "item_ids": [855],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                            "name": "Equip a Crystal Shield",
+                            "taskID": "equip_crystal_shield",
+                            "category": "Defence",
+                            "level": 70,
+                            "completion_type": "EQUIP",
+                            "base_points": 3,
+                            "assignment_weight": 5,
+                            "required_items": [
+                                {
+                                    "item": ["Crystal Shield"],
+                                    "item_ids": [23991, 23993, 24127]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Equip a Crystal Bow",
+                            "taskID": "equip_crystal_bow",
+                            "category": "Ranged",
+                            "level": 70,
+                            "completion_type": "EQUIP",
+                            "base_points": 3,
+                            "assignment_weight": 5,
+                            "required_items": [
+                                {
+                                    "item": ["Crystal Bow"],
+                                    "item_ids": [23983, 23985, 24123]
+                                }
+                            ]
+                        }
+            ],
+            "is_completed": false
+        }
     ]
 }

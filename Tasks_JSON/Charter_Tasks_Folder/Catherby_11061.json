@@ -147,7 +147,7 @@
                     "name": "Fletch a Yew Longbow",
                     "taskID": "fletch_yew_longbow",
                     "category": "Fletching",
-                    "level": 65,
+                    "level": 70,
                     "completion_type": "FLETCHING",
                     "base_points": 3,
                     "assignment_weight": 3,
