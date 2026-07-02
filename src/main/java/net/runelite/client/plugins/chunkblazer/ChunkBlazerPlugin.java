@@ -173,6 +173,8 @@ public class ChunkBlazerPlugin extends Plugin
 	// always-accessible dungeon regions are handled separately by the coordinate
 	// rule in isFreeRegion, NOT by this list.
 	private final Set<Integer> freeUnlockableRegionIds = new HashSet<>();
+	// Region id -> Friendly_Name for free chunks, used in the unlock message.
+	private final Map<Integer, String> freeUnlockableNames = new HashMap<>();
 	private final Map<String, NuzlockeTask> completedTaskCache = new HashMap<>(); // Cache completed tasks for lookup
 	private ChunkBlazerPanel panel;
 	private NavigationButton navButton;
@@ -1127,12 +1129,42 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			String json = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 			com.google.gson.JsonObject obj = gson.fromJson(json, com.google.gson.JsonObject.class);
-			if (obj != null && obj.has("free_regions") && obj.get("free_regions").isJsonArray())
+			freeUnlockableRegionIds.clear();
+			freeUnlockableNames.clear();
+			// Accept "Free_chunks" (current schema: array of {region_id[], Friendly_Name,
+			// neighbor_ids[], unlock_cost}) or lower-case "free_chunks" for forgiveness.
+			com.google.gson.JsonArray arr = null;
+			if (obj != null && obj.has("Free_chunks") && obj.get("Free_chunks").isJsonArray())
 			{
-				freeUnlockableRegionIds.clear();
-				for (com.google.gson.JsonElement el : obj.getAsJsonArray("free_regions"))
+				arr = obj.getAsJsonArray("Free_chunks");
+			}
+			else if (obj != null && obj.has("free_chunks") && obj.get("free_chunks").isJsonArray())
+			{
+				arr = obj.getAsJsonArray("free_chunks");
+			}
+			if (arr != null)
+			{
+				for (com.google.gson.JsonElement el : arr)
 				{
-					freeUnlockableRegionIds.add(el.getAsInt());
+					if (!el.isJsonObject())
+					{
+						continue;
+					}
+					com.google.gson.JsonObject entry = el.getAsJsonObject();
+					String name = (entry.has("Friendly_Name") && !entry.get("Friendly_Name").isJsonNull())
+						? entry.get("Friendly_Name").getAsString() : null;
+					if (entry.has("region_id") && entry.get("region_id").isJsonArray())
+					{
+						for (com.google.gson.JsonElement idEl : entry.getAsJsonArray("region_id"))
+						{
+							int rid = idEl.getAsInt();
+							freeUnlockableRegionIds.add(rid);
+							if (name != null && !name.isEmpty())
+							{
+								freeUnlockableNames.put(rid, name);
+							}
+						}
+					}
 				}
 				log.info("Loaded {} free (0-cost, no-task) chunk region(s): {}", freeUnlockableRegionIds.size(), freeUnlockableRegionIds);
 			}
@@ -3517,6 +3549,11 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			// Return friendly format: "ChunkName (regionId)"
 			return chunk.getName() + " (" + regionId + ")";
+		}
+		String freeName = freeUnlockableNames.get(regionId);
+		if (freeName != null)
+		{
+			return freeName + " (" + regionId + ")";
 		}
 		return "Unknown Region (" + regionId + ")";
 	}
