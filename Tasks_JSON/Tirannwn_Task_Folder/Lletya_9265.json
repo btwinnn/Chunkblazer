@@ -40,7 +40,7 @@
                             "target_npc": {
                                 "npc": ["Elf Warrior"],
                                 "npc_ids": [5293, 5294],
-                                "quantity": [1]
+                                "quantity": [1, 25]
                             }
                         },
                         {
@@ -142,7 +142,7 @@
                             "level": 81,
                             "completion_type": "FARMING",
                             "base_points": 4,
-                            "assignment_weight": 10,
+                            "assignment_weight": 3,
                             "required_items": [
                                 {
                                     "item": ["Dragonfruit Tree Sapling"],
