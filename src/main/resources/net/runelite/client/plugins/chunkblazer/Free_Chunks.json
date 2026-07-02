@@ -1,4 +1,7 @@
 {
   "_comment": "Region IDs listed in 'free_regions' are FREE, UNLOCK-ON-DEMAND chunks: they behave exactly like charter ports (0-cost; shown with a yellow 'unlockable' outline; unlock by walking in or clicking) EXCEPT they have no tasks, so nothing rolls on unlock (see ChunkBlazerPlugin.isFreeUnlockableRegion). They start locked and become owned once entered. NOTE: this is NOT the same as always-accessible dungeons — those are auto-freed by a coordinate rule in ChunkBlazerPlugin.isFreeRegion (any region whose regionY is outside the overworld surface band 39-64 / world y 2496-4159), which covers all underground/instanced content automatically and does NOT need entries here. Charter ports are also separate (chunk_type:CHARTER). Add a region ID below only to make it a free, taskless, unlock-on-demand chunk.",
-  "free_regions": []
+  "free_region_id": 
+         [
+
+         ]
 }
