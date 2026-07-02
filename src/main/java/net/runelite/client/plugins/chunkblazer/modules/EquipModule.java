@@ -596,7 +596,13 @@ public class EquipModule extends AbstractTaskModule
 	public void onGameTick(GameTick event)
 	{
 		// Keep inventory tracking current for server verification of equips.
-		initializeInventoryTracking();
+		// Only while an EQUIP task is active — the set feeds the wasInInventory
+		// flag on equip reports, and addActiveTask() re-primes it when a task
+		// arrives, so scanning with no tasks is wasted work every tick.
+		if (!activeTasks.isEmpty())
+		{
+			initializeInventoryTracking();
+		}
 	}
 
 	@Subscribe

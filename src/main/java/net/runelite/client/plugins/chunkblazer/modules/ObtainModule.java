@@ -664,7 +664,7 @@ public class ObtainModule extends AbstractTaskModule
 		}
 		skillsXpGainedThisTick.clear();
 
-		// Log heartbeat periodically to confirm module is running
+
 	}
 
 	@Subscribe
