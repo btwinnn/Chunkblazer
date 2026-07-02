@@ -54,6 +54,361 @@
             "region_id": [11323],
             "Friendly_Name": "Ice Path",
             "neighbor_ids": [11324, 11579, 11322, 11067]
-        }
+        },
+        {
+    "region_id": [4149],
+    "Friendly_Name": "Stranglewood Coastline",
+    "neighbor_ids": [4150, 4405, 4148, 3893]
+},
+{
+    "region_id": [4406],
+    "Friendly_Name": "Stranglewood Coastline",
+    "neighbor_ids": [4407, 4662, 4405, 4150]
+},
+{
+    "region_id": [4404],
+    "Friendly_Name": "Stranglewood Island",
+    "neighbor_ids": [4405, 4660, 4403, 4148]
+},
+{
+    "region_id": [4403],
+    "Friendly_Name": "Stranglewood Camp",
+    "neighbor_ids": [4404, 4659, 4402, 4147]
+},
+{
+    "region_id": [4660],
+    "Friendly_Name": "The Stranglewood",
+    "neighbor_ids": [4661, 4916, 4659, 4404]
+},
+{
+    "region_id": [4661],
+    "Friendly_Name": "Stranglewood Temple",
+    "neighbor_ids": [4662, 4917, 4660, 4405]
+},
+{
+    "region_id": [4662],
+    "Friendly_Name": "Talon's Grasp",
+    "neighbor_ids": [4663, 4918, 4661, 4406]
+},
+{
+    "region_id": [4663],
+    "Friendly_Name": "Talon's Coastline",
+    "neighbor_ids": [4664, 4919, 4662, 4407]
+},
+{
+    "region_id": [4664],
+    "Friendly_Name": "Kebos Coastline",
+    "neighbor_ids": [4665, 4920, 4663, 4408]
+},
+{
+    "region_id": [4665],
+    "Friendly_Name": "Kebos Coastline",
+    "neighbor_ids": [4666, 4921, 4664, 4409]
+},
+{
+    "region_id": [4666],
+    "Friendly_Name": "Kebos Shore",
+    "neighbor_ids": [4667, 4922, 4665, 4410]
+},
+{
+    "region_id": [4923],
+    "Friendly_Name": "West Mount Karuulm",
+    "neighbor_ids": [4924, 5179, 4922, 4667]
+},
+{
+    "region_id": [5180],
+    "Friendly_Name": "North Mount Karuulm",
+    "neighbor_ids": [5181, 5436, 5179, 4924]
+},
+{
+    "region_id": [5436],
+    "Friendly_Name": "Sulphur Cove",
+    "neighbor_ids": [5437, 5692, 5435, 5180]
+},
+{
+    "region_id": [5435],
+    "Friendly_Name": "Forsaken Tower",
+    "neighbor_ids": [5436, 5691, 5434, 5179]
+},
+{
+    "region_id": [5434],
+    "Friendly_Name": "Battlefront",
+    "neighbor_ids": [5435, 5690, 5433, 5178]
+},
+{
+    "region_id": [5691],
+    "Friendly_Name": "Lovakite Bank",
+    "neighbor_ids": [5692, 5947, 5690, 5435]
+},
+{
+    "region_id": [5693],
+    "Friendly_Name": "White Love Cliffs",
+    "neighbor_ids": [5694, 5949, 5692, 5437]
+},
+{
+    "region_id": [5949],
+    "Friendly_Name": "White Love Cliffs",
+    "neighbor_ids": [5950, 6205, 5948, 5693]
+},
+{
+    "region_id": [6205],
+    "Friendly_Name": "Unmarked Grave",
+    "neighbor_ids": [6206, 6461, 6204, 5949]
+},
+{
+    "region_id": [6462],
+    "Friendly_Name": "The Wintertodt",
+    "neighbor_ids": [6463, 6718, 6461, 6206]
+},
+{
+    "region_id": [6717],
+    "Friendly_Name": "Fishing Hamlet",
+    "neighbor_ids": [6718, 6973, 6716, 6461]
+},
+{
+    "region_id": [6460],
+    "Friendly_Name": "Arceuus Fairy Ring",
+    "neighbor_ids": [6461, 6716, 6459, 6204]
+},
+{
+    "region_id": [7484],
+    "Friendly_Name": "Champion's Mounument",
+    "neighbor_ids": [7485, 7740, 7483, 7228]
+},
+{
+    "region_id": [7483],
+    "Friendly_Name": "Gulf of Kourend",
+    "neighbor_ids": [7484, 7739, 7482, 7227]
+},
+{
+    "region_id": [7482],
+    "Friendly_Name": "Gulf of Kourend",
+    "neighbor_ids": [7483, 7738, 7481, 7226]
+},
+{
+    "region_id": [7481],
+    "Friendly_Name": "Gulf of Kourend",
+    "neighbor_ids": [7482, 7737, 7480, 7225]
+},
+{
+    "region_id": [7480],
+    "Friendly_Name": "Hosidian Sea",
+    "neighbor_ids": [7481, 7736, 7479, 7224]
+},
+{
+    "region_id": [7479],
+    "Friendly_Name": "Vineyard Coast",
+    "neighbor_ids": [7480, 7735, 7478, 7223]
+},
+{
+    "region_id": [7478],
+    "Friendly_Name": "Tithe Farm Coast",
+    "neighbor_ids": [7479, 7734, 7477, 7222]
+},
+{
+    "region_id": [7221],
+    "Friendly_Name": "Tithe Farm Coast",
+    "neighbor_ids": [7222, 7477, 7220, 6965]
+},
+{
+    "region_id": [6964],
+    "Friendly_Name": "Crabclaw Bay",
+    "neighbor_ids": [6965, 7220, 6963, 6708]
+},
+{
+    "region_id": [6709],
+    "Friendly_Name": "Crabclaw Bay",
+    "neighbor_ids": [6710, 6965, 6708, 6453]
+},
+{
+    "region_id": [6708],
+    "Friendly_Name": "Crabclaw Bay",
+    "neighbor_ids": [6709, 6964, 6707, 6452]
+},
+{
+    "region_id": [6452],
+    "Friendly_Name": "Crabclaw Bay",
+    "neighbor_ids": [6453, 6708, 6451, 6196]
+},
+{
+    "region_id": [6196],
+    "Friendly_Name": "Great Sound",
+    "neighbor_ids": [6197, 6452, 6195, 5940]
+},
+{
+    "region_id": [5685],
+    "Friendly_Name": "Great Sound",
+    "neighbor_ids": [5686, 5941, 5684, 5429]
+},
+{
+    "region_id": [5429],
+    "Friendly_Name": "The Lonely Dock",
+    "neighbor_ids": [5430, 5685, 5428, 5173]
+},
+{
+    "region_id": [4917],
+    "Friendly_Name": "Custodia Mountains",
+    "neighbor_ids": [4918, 5173, 4916, 4661]
+},
+{
+    "region_id": [5687],
+    "Friendly_Name": "Shayziens' Defense",
+    "neighbor_ids": [5688, 5943, 5686, 5431]
+},
+{
+    "region_id": [6971],
+    "Friendly_Name": "Northwest Port Piscarilius",
+    "neighbor_ids": [6972, 7227, 6970, 6715]
+},
+{
+    "region_id": [6963],
+    "Friendly_Name": "Twilight Coast",
+    "neighbor_ids": [6964, 7219, 6962, 6707]
+},
+{
+    "region_id": [6962],
+    "Friendly_Name": "Twilight Coast",
+    "neighbor_ids": [6963, 7218, 6961, 6706]
+},
+{
+    "region_id": [7217],
+    "Friendly_Name": "Colosseum Coast",
+    "neighbor_ids": [7218, 7473, 7216, 6961]
+},
+{
+    "region_id": [7472],
+    "Friendly_Name": "Colosseum Coast",
+    "neighbor_ids": [7473, 7728, 7471, 7216]
+},
+{
+    "region_id": [7215],
+    "Friendly_Name": "Colosseum Coast",
+    "neighbor_ids": [7216, 7471, 7214, 6959]
+},
+{
+    "region_id": [7214],
+    "Friendly_Name": "Fortis Bay",
+    "neighbor_ids": [7215, 7470, 7213, 6958]
+},
+{
+    "region_id": [7213],
+    "Friendly_Name": "Fortis Bay",
+    "neighbor_ids": [7214, 7469, 7212, 6957]
+},
+{
+    "region_id": [6956],
+    "Friendly_Name": "Aureum Coast",
+    "neighbor_ids": [6957, 7212, 6955, 6700]
+},
+{
+    "region_id": [6700],
+    "Friendly_Name": "Aureum Coast",
+    "neighbor_ids": [6701, 6956, 6699, 6444]
+},
+{
+    "region_id": [6444],
+    "Friendly_Name": "Wyrm's Waters",
+    "neighbor_ids": [6445, 6700, 6443, 6188]
+},
+{
+    "region_id": [6189],
+    "Friendly_Name": "Sunset Bay",
+    "neighbor_ids": [6190, 6445, 6188, 5933]
+},
+{
+    "region_id": [5933],
+    "Friendly_Name": "Backstage Entrance",
+    "neighbor_ids": [5934, 6189, 5932, 5677]
+},
+{
+    "region_id": [5932],
+    "Friendly_Name": "Mistrock Coast",
+    "neighbor_ids": [5933, 6188, 5931, 5676]
+},
+{
+    "region_id": [5675],
+    "Friendly_Name": "Misty Sea",
+    "neighbor_ids": [5676, 5931, 5674, 5419]
+},
+{
+    "region_id": [5419],
+    "Friendly_Name": "Misty Sea",
+    "neighbor_ids": [5420, 5675, 5418, 5163]
+},
+{
+    "region_id": [5164],
+    "Friendly_Name": "Mistrock Coast",
+    "neighbor_ids": [5165, 5420, 5163, 4908]
+},
+{
+    "region_id": [4909],
+    "Friendly_Name": "Dusk's Maw",
+    "neighbor_ids": [4910, 5165, 4908, 4653]
+},
+{
+    "region_id": [4654],
+    "Friendly_Name": "Dusk's Maw",
+    "neighbor_ids": [4655, 4910, 4653, 4398]
+},
+{
+    "region_id": [4655],
+    "Friendly_Name": "Tal Teklan Coast",
+    "neighbor_ids": [4656, 4911, 4654, 4399]
+},
+{
+    "region_id": [5677],
+    "Friendly_Name": "Villa Lucens",
+    "neighbor_ids": [5678, 5933, 5676, 5421]
+},
+{
+    "region_id": [5165],
+    "Friendly_Name": "Darkmoon Ravine",
+    "neighbor_ids": [5166, 5421, 5164, 4909]
+},
+{
+    "region_id": [4400],
+    "Friendly_Name": "Tal Teklan Coast",
+    "neighbor_ids": [4401, 4656, 4399, 4144]
+},
+{
+    "region_id": [4657],
+    "Friendly_Name": "Tal Teklan Coast",
+    "neighbor_ids": [4658, 4913, 4656, 4401]
+},
+{
+    "region_id": [4658],
+    "Friendly_Name": "Aestuarium Tempestus",
+    "neighbor_ids": [4659, 4914, 4657, 4402]
+},
+{
+    "region_id": [4914],
+    "Friendly_Name": "Southwest Tempestus",
+    "neighbor_ids": [4915, 5170, 4913, 4658]
+},
+{
+    "region_id": [5170],
+    "Friendly_Name": "Southeast Tempestus",
+    "neighbor_ids": [5171, 5426, 5169, 4914]
+},
+{
+    "region_id": [5171],
+    "Friendly_Name": "Northeast Tempestus",
+    "neighbor_ids": [5172, 5427, 5170, 4915]
+},
+{
+    "region_id": [4915],
+    "Friendly_Name": "Northwest Tempestus",
+    "neighbor_ids": [4916, 5171, 4914, 4659]
+},
+{
+    "region_id": [6703],
+    "Friendly_Name": "Outer Fortis",
+    "neighbor_ids": [6704, 6959, 6702, 6447]
+},
+{
+    "region_id": [6193],
+    "Friendly_Name": "Fortis Aqueduct",
+    "neighbor_ids": [6194, 6449, 6192, 5937]
+}
     ]
 }
