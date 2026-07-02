@@ -114,7 +114,7 @@ public class ChunkBlazerMinimapOverlay extends Overlay
 				int regionId = (rx << 8) | ry;
 
 				// Only care about unlockable regions (neighbours + charter ports)
-				if (!neighborRegions.contains(regionId) && !plugin.isCharterRegion(regionId))
+				if (!neighborRegions.contains(regionId) && !plugin.isCharterRegion(regionId) && !plugin.isFreeUnlockableRegion(regionId))
 				{
 					continue;
 				}

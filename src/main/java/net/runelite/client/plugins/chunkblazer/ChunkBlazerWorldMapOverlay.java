@@ -136,6 +136,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 					|| plugin.isFreeRegion(regionId);
 				boolean isNeighbor = neighborRegions.contains(regionId);
 				boolean isCharter = plugin.isCharterRegion(regionId);
+				boolean isFreeUnlockable = plugin.isFreeUnlockableRegion(regionId);
 
 				int yTileOffset = -(yTileMin - y);
 				int xTileOffset = x + widthInTiles / 2 - worldMapPosition.getX();
@@ -152,7 +153,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 					if (regionRect.contains(mousePos.getX(), mousePos.getY()))
 					{
 						hoveredRegionId = regionId;
-						isHoveredUnlockable = (isNeighbor || isCharter) && !isUnlocked;
+						isHoveredUnlockable = (isNeighbor || isCharter || isFreeUnlockable) && !isUnlocked;
 					}
 				}
 
@@ -188,6 +189,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 					|| plugin.isFreeRegion(regionId);
 				boolean isNeighbor = neighborRegions.contains(regionId);
 				boolean isCharter = plugin.isCharterRegion(regionId);
+				boolean isFreeUnlockable = plugin.isFreeUnlockableRegion(regionId);
 				boolean isCurrent = regionId == currentRegionId;
 
 				int yTileOffset = -(yTileMin - y);
@@ -206,7 +208,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 				{
 					graphics.setColor(UNLOCKED_BORDER);
 				}
-				else if (isNeighbor || isCharter)
+				else if (isNeighbor || isCharter || isFreeUnlockable)
 				{
 					graphics.setColor(UNLOCKABLE_BORDER);
 				}
@@ -224,7 +226,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 				{
 					graphics.drawRect(xPos + 1, yPos + 1, regionPixelSize - 2, regionPixelSize - 2);
 				}
-				else if ((isNeighbor || isCharter) && regionId == hoveredRegionId)
+				else if ((isNeighbor || isCharter || isFreeUnlockable) && regionId == hoveredRegionId)
 				{
 					graphics.drawRect(xPos + 1, yPos + 1, regionPixelSize - 2, regionPixelSize - 2);
 				}

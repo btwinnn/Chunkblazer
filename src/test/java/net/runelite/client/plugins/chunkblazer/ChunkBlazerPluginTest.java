@@ -3,6 +3,7 @@ package net.runelite.client.plugins.chunkblazer;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 import net.runelite.client.config.ConfigManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,9 @@ class ChunkBlazerPluginTest
 	// Lumbridge — a normal (non-charter) surface region, deliberately NOT
 	// registered as a chunk in these tests.
 	private static final int NON_CHARTER_REGION = 12850;
+	// A surface-band region (12345 & 0xFF = 57, inside [39,64]) used as a
+	// Free_Chunks.json entry — so it isn't caught by the free-dungeon coordinate rule.
+	private static final int FREE_REGION = 12345;
 
 	@Mock
 	private ChunkBlazerConfig config;
@@ -155,6 +159,30 @@ class ChunkBlazerPluginTest
 		verify(configManager).setConfiguration("chunkblazer", "bossTokens", 0);
 	}
 
+	// --- Free chunks (Free_Chunks.json: 0-cost, unlock-on-demand, no tasks) ---
+
+	@Test
+	void freeChunkIsZeroCostAndUnlockableFromAnywhere() throws Exception
+	{
+		freeUnlockableRegionIds().add(FREE_REGION);
+		when(config.unlockedChunks()).thenReturn(""); // not yet unlocked
+		assertTrue(plugin.isFreeUnlockableRegion(FREE_REGION));
+		assertEquals(0, plugin.getRegionUnlockCost(FREE_REGION));
+		// Unlockable even though it's neither a neighbour nor a defined chunk.
+		assertTrue(plugin.isUnlockableRegion(FREE_REGION));
+	}
+
+	@Test
+	void freeChunkStartsLockedNotAlwaysAccessible() throws Exception
+	{
+		// Regression for the decouple: older builds treated Free_Chunks.json regions
+		// as always-unlocked. Being in the list must NOT make it always-free now.
+		freeUnlockableRegionIds().add(FREE_REGION);
+		when(config.unlockedChunks()).thenReturn("");
+		assertFalse(plugin.isFreeRegion(FREE_REGION));     // coordinate rule only
+		assertFalse(plugin.isRegionUnlocked(FREE_REGION)); // not auto-unlocked
+	}
+
 	// --- reflection helpers (the plugin's fields are private; no test seam) ---
 
 	@SuppressWarnings("unchecked")
@@ -163,6 +191,14 @@ class ChunkBlazerPluginTest
 		Field f = findField(plugin.getClass(), "chunksByRegionId");
 		f.setAccessible(true);
 		return (Map<Integer, NuzlockeChunk>) f.get(plugin);
+	}
+
+	@SuppressWarnings("unchecked")
+	private Set<Integer> freeUnlockableRegionIds() throws Exception
+	{
+		Field f = findField(plugin.getClass(), "freeUnlockableRegionIds");
+		f.setAccessible(true);
+		return (Set<Integer>) f.get(plugin);
 	}
 
 	private static void setField(Object target, String name, Object value) throws Exception

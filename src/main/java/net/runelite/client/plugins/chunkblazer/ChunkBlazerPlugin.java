@@ -167,9 +167,12 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private final List<NuzlockeChunk> allChunks = new ArrayList<>();
 	private final Map<Integer, NuzlockeChunk> chunksByRegionId = new HashMap<>();
-	// Region IDs that unlock for FREE (0 points), loaded from Free_Chunks.json.
-	// The design makes all dungeon regions free chunks; their IDs live in that file.
-	private final Set<Integer> freeRegionIds = new HashSet<>();
+	// Region IDs listed in Free_Chunks.json: 0-cost, unlock-on-demand chunks that
+	// behave exactly like charter ports (yellow-unlockable, unlock by walking in /
+	// clicking) EXCEPT they have no tasks, so nothing rolls on unlock. NOTE:
+	// always-accessible dungeon regions are handled separately by the coordinate
+	// rule in isFreeRegion, NOT by this list.
+	private final Set<Integer> freeUnlockableRegionIds = new HashSet<>();
 	private final Map<String, NuzlockeTask> completedTaskCache = new HashMap<>(); // Cache completed tasks for lookup
 	private ChunkBlazerPanel panel;
 	private NavigationButton navButton;
@@ -536,11 +539,13 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			lastRegionId = currentRegionId;
 
-			// Charter ports are free and unlock the instant you set foot in them.
-			// They're reached by boat (not adjacent neighbours), so the normal
+			// Charter ports AND free-list chunks unlock the instant you set foot in
+			// them: both are 0-cost and aren't adjacent neighbours, so the normal
 			// neighbour-based auto-unlock/popup paths below don't cover them.
-			// unlockRegionFree is 0-cost and rolls their tasks.
-			if (isCharterRegion(currentRegionId) && !isRegionUnlocked(currentRegionId))
+			// unlockRegionFree is 0-cost; it rolls tasks for charter ports but skips
+			// rolling for free-list chunks (they have none).
+			if ((isCharterRegion(currentRegionId) || isFreeUnlockableRegion(currentRegionId))
+				&& !isRegionUnlocked(currentRegionId))
 			{
 				unlockRegionFree(currentRegionId);
 				loadActiveTasks();
@@ -821,9 +826,10 @@ public class ChunkBlazerPlugin extends Plugin
 			addPluginChatMessage("Unlocked " + getRegionName(regionId) + ".");
 		}
 
-		// Roll tasks for this region if it has a chunk defined
+		// Roll tasks for this region if it has a chunk defined. Free-list chunks
+		// (Free_Chunks.json) never roll — they have no tasks by design.
 		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
-		if (chunk != null && chunk.getTasks() != null && !chunk.getTasks().isEmpty())
+		if (!isFreeUnlockableRegion(regionId) && chunk != null && chunk.getTasks() != null && !chunk.getTasks().isEmpty())
 		{
 			Set<String> existingRolled = getRolledTasksForRegion(regionId);
 			if (existingRolled.isEmpty())
@@ -1123,12 +1129,12 @@ public class ChunkBlazerPlugin extends Plugin
 			com.google.gson.JsonObject obj = gson.fromJson(json, com.google.gson.JsonObject.class);
 			if (obj != null && obj.has("free_regions") && obj.get("free_regions").isJsonArray())
 			{
-				freeRegionIds.clear();
+				freeUnlockableRegionIds.clear();
 				for (com.google.gson.JsonElement el : obj.getAsJsonArray("free_regions"))
 				{
-					freeRegionIds.add(el.getAsInt());
+					freeUnlockableRegionIds.add(el.getAsInt());
 				}
-				log.info("Loaded {} free (0-cost) chunk region(s): {}", freeRegionIds.size(), freeRegionIds);
+				log.info("Loaded {} free (0-cost, no-task) chunk region(s): {}", freeUnlockableRegionIds.size(), freeUnlockableRegionIds);
 			}
 		}
 		catch (Exception e)
@@ -1472,7 +1478,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return false;
 		}
-		return isCharterRegion(regionId) || getNeighborRegionIds().contains(regionId);
+		return isCharterRegion(regionId) || isFreeUnlockableRegion(regionId) || getNeighborRegionIds().contains(regionId);
 	}
 
 	private String hashRsn(String rsn)
@@ -3517,8 +3523,8 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public int getRegionUnlockCost(int regionId)
 	{
-		// Free chunks (dungeons, per Free_Chunks.json) cost nothing to unlock.
-		if (freeRegionIds.contains(regionId))
+		// Free chunks (Free_Chunks.json) cost nothing to unlock.
+		if (freeUnlockableRegionIds.contains(regionId))
 		{
 			return 0;
 		}
@@ -3545,17 +3551,24 @@ public class ChunkBlazerPlugin extends Plugin
 	 * @return true if this region is a free dungeon (always accessible, never part
 	 * of the chunk challenge). A region qualifies if it's outside the overworld
 	 * surface band (regionY 39..64) — a coordinate rule that auto-covers every
-	 * dungeon / off-map area including future content, with no dataset gaps — OR if
-	 * it's explicitly listed in Free_Chunks.json (override for any oddballs).
+	 * dungeon / off-map area including future content, with no dataset gaps.
+	 * (Free_Chunks.json regions are NOT always-free — they're 0-cost unlock-on-demand
+	 * chunks; see {@link #isFreeUnlockableRegion}.)
 	 */
 	public boolean isFreeRegion(int regionId)
 	{
 		int regionY = regionId & 0xFF;
-		if (regionY < SURFACE_MIN_REGION_Y || regionY > SURFACE_MAX_REGION_Y)
-		{
-			return true;
-		}
-		return freeRegionIds.contains(regionId);
+		return regionY < SURFACE_MIN_REGION_Y || regionY > SURFACE_MAX_REGION_Y;
+	}
+
+	/**
+	 * True if the region is listed in Free_Chunks.json: a 0-cost, unlock-on-demand
+	 * chunk that behaves like a charter port (yellow-unlockable, unlock by walking
+	 * in / clicking) but has NO tasks — nothing rolls on unlock.
+	 */
+	public boolean isFreeUnlockableRegion(int regionId)
+	{
+		return freeUnlockableRegionIds.contains(regionId);
 	}
 
 	public void unlockRegion(int regionId)
@@ -3571,11 +3584,11 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
-		// Charter ports are free and reachable by boat (not adjacent to the
-		// unlocked area), so they bypass the points + adjacency path below.
-		// Routing through here means every unlock entry point (minimap, world
-		// map, side panel) handles charter ports correctly.
-		if (isCharterRegion(regionId))
+		// Charter ports and free-list chunks are 0-cost and aren't adjacent to the
+		// unlocked area, so they bypass the points + adjacency path below. Routing
+		// through here means every unlock entry point (minimap, world map, side
+		// panel) handles them correctly.
+		if (isCharterRegion(regionId) || isFreeUnlockableRegion(regionId))
 		{
 			unlockRegionFree(regionId);
 			loadActiveTasks();
