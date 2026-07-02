@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
@@ -70,10 +69,6 @@ public class EquipModule extends AbstractTaskModule
 	// Track items that were in inventory before equip (for server verification)
 	private final Set<Integer> inventoryItemIds = ConcurrentHashMap.newKeySet();
 
-	// Debug heartbeat
-	private int tickCounter = 0;
-	private static final int DEBUG_LOG_INTERVAL = 100; // Log every 100 ticks (~60 seconds)
-
 	@Inject
 	public EquipModule()
 	{
@@ -90,8 +85,6 @@ public class EquipModule extends AbstractTaskModule
 	{
 		// Handle both "EQUIP" completion type and "Equip" in name
 		String type = task.getCompletionType();
-		String category = task.getCategory();
-
 		return (type != null && type.equalsIgnoreCase(COMPLETION_TYPE));
 	}
 
@@ -99,8 +92,6 @@ public class EquipModule extends AbstractTaskModule
 	public void startUp()
 	{
 		eventBus.register(this);
-		log.info("=== EquipModule STARTED ===");
-		log.info("EquipModule: eventBus={}, client={}", eventBus != null ? "OK" : "NULL", client != null ? "OK" : "NULL");
 	}
 
 	@Override
@@ -111,7 +102,6 @@ public class EquipModule extends AbstractTaskModule
 		taskTargetItems.clear();
 		watchedItemIds.clear();
 		inventoryItemIds.clear();
-		log.info("EquipModule stopped");
 	}
 
 	@Override
@@ -119,55 +109,37 @@ public class EquipModule extends AbstractTaskModule
 	{
 		try
 		{
-			log.info(">>> EquipModule.addActiveTask() ENTRY - calling super...");
 			super.addActiveTask(task);
-			log.info(">>> EquipModule.addActiveTask() - super returned");
-
-			log.info("=== EquipModule: ADDING ACTIVE TASK ===");
-			log.info("  Task Name: {}", task.getName());
-			log.info("  Task ID: {}", task.getTaskId());
-			log.info("  Completion Type: {}", task.getCompletionType());
-			log.info("  Category: {}", task.getCategory());
 
 			// Parse required items from task
 			Map<Integer, Boolean> targetItems = new HashMap<>();
 			List<RequiredItem> requiredItems = task.getRequiredItems();
 
-			log.info("  Required Items: {}", requiredItems != null ? requiredItems.size() + " items" : "NULL");
-
 			if (requiredItems != null)
 			{
 				for (RequiredItem item : requiredItems)
 				{
-					log.info("    Processing RequiredItem: {}", item);
 					List<Integer> itemIds = item.getItemIds();
-					log.info("      Item IDs: {}", itemIds);
-
 					if (itemIds != null)
 					{
 						for (Integer itemId : itemIds)
 						{
 							targetItems.put(itemId, false); // false = not yet equipped
 							watchedItemIds.add(itemId);
-							log.info("      >>> WATCHING: Item ID {} ({}) for task '{}'",
-								itemId, getItemName(itemId), task.getName());
 						}
 					}
 					else
 					{
-						log.warn("      >>> WARNING: itemIds is NULL for this RequiredItem!");
+						log.warn("EquipModule: itemIds is NULL for a RequiredItem on task '{}'", task.getName());
 					}
 				}
 			}
 			else
 			{
-				log.warn("  >>> WARNING: No required_items defined for this EQUIP task!");
+				log.warn("EquipModule: no required_items defined for EQUIP task '{}'", task.getName());
 			}
 
 			taskTargetItems.put(task.getTaskId(), targetItems);
-			log.info("  Total items being watched for this task: {}", targetItems.size());
-			log.info("  All watched item IDs across all tasks: {}", watchedItemIds);
-			log.info("=== END ADDING TASK ===");
 
 			// Initialize tracking on client thread
 			clientThread.invokeLater(() ->
@@ -180,7 +152,7 @@ public class EquipModule extends AbstractTaskModule
 		}
 		catch (Exception e)
 		{
-			log.error(">>> EquipModule.addActiveTask() EXCEPTION: ", e);
+			log.error("EquipModule.addActiveTask() failed", e);
 		}
 	}
 
@@ -219,8 +191,6 @@ public class EquipModule extends AbstractTaskModule
 	{
 		previousEquipment.clear();
 
-		log.info(">>> EquipModule: Initializing equipment tracking...");
-
 		ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
 		if (equipment != null)
 		{
@@ -231,20 +201,12 @@ public class EquipModule extends AbstractTaskModule
 				if (item != null && item.getId() > 0)
 				{
 					previousEquipment.put(slot, item.getId());
-
-					// Log if this is a watched item
-					if (watchedItemIds.contains(item.getId()))
-					{
-						log.info(">>>   Already equipped watched item: {} (ID: {}) in slot {}",
-							getItemName(item.getId()), item.getId(), getSlotName(slot));
-					}
 				}
 			}
-			log.info(">>> EquipModule: Initialized with {} equipped items", previousEquipment.size());
 		}
 		else
 		{
-			log.warn(">>> EquipModule: Equipment container is NULL during initialization!");
+			log.warn("EquipModule: equipment container is NULL during initialization");
 		}
 	}
 
@@ -266,13 +228,11 @@ public class EquipModule extends AbstractTaskModule
 					inventoryItemIds.add(canonicalId);
 				}
 			}
-			log.info(">>> EquipModule: Tracking {} unique items in inventory", inventoryItemIds.size());
 		}
 	}
 
 	/**
 	 * Check progress for a specific task.
-	 * @param isInitialCheck true if this is called during task assignment (for already-equipped items)
 	 */
 	private void checkTaskProgress(NuzlockeTask task)
 	{
@@ -334,8 +294,6 @@ public class EquipModule extends AbstractTaskModule
 		// (tasks typically only have one required item for equip)
 		task.setCurrentProgress(totalEquipped);
 
-		log.debug("EquipModule: Task '{}' progress: {}/{}", task.getName(), totalEquipped, totalRequired);
-
 		// Check for completion (at least one required item equipped)
 		if (totalEquipped > 0 && !task.isCompleted())
 		{
@@ -343,7 +301,6 @@ public class EquipModule extends AbstractTaskModule
 			String levelViolation = validateLevelRequirements(task, equippedIds);
 			if (levelViolation != null)
 			{
-				log.warn("EquipModule: Task '{}' - Level requirement not met: {}", task.getName(), levelViolation);
 				sendTaskFailure(task, levelViolation);
 				return;
 			}
@@ -352,19 +309,16 @@ public class EquipModule extends AbstractTaskModule
 			String constraintViolation = validateEquipmentConstraints(task);
 			if (constraintViolation != null)
 			{
-				log.warn("EquipModule: Task '{}' - Constraint violated: {}", task.getName(), constraintViolation);
 				sendTaskFailure(task, constraintViolation);
 				return;
 			}
 
-			log.info("EquipModule: Task '{}' COMPLETED! Item equipped.", task.getName());
 			task.setCompleted(true);
 
 			// EDGE CASE: If this is initial check (item already equipped on task assignment),
 			// we need to send the server report here since ItemContainerChanged won't fire
 			if (isInitialCheck && foundItemId > 0)
 			{
-				log.info("EquipModule: Item was already equipped - sending server report for verification");
 				// Item was already equipped, not from inventory swap
 				sendItemEquippedReport(foundItemId, foundSlot, -1, false);
 			}
@@ -441,8 +395,6 @@ public class EquipModule extends AbstractTaskModule
 					return String.format("Requires %s level %d (you have %d)",
 						requiredSkill.getName(), requiredLevel, playerLevel);
 				}
-				log.info(">>> LEVEL CHECK PASSED for '{}': {} level {} >= required {}",
-					task.getName(), requiredSkill.getName(), playerLevel, requiredLevel);
 			}
 		}
 
@@ -643,32 +595,8 @@ public class EquipModule extends AbstractTaskModule
 	@Subscribe
 	public void onGameTick(GameTick event)
 	{
-		tickCounter++;
-
-		// Update inventory tracking for server verification
+		// Keep inventory tracking current for server verification of equips.
 		initializeInventoryTracking();
-
-		// Log heartbeat periodically to confirm module is running
-		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
-		{
-			log.info(">>> EquipModule HEARTBEAT - tick {} - activeTasks: {}, watchedItems: {}",
-				tickCounter, activeTasks.size(), watchedItemIds.size());
-
-			// List all active equip tasks
-			for (NuzlockeTask task : activeTasks)
-			{
-				Map<Integer, Boolean> items = taskTargetItems.get(task.getTaskId());
-				String itemInfo = items != null ? "watching " + items.size() + " item IDs: " + items.keySet() : "NO ITEMS";
-				log.info(">>>   Active equip task: {} ({}) - {}/{} - {}",
-					task.getName(), task.getTaskId(),
-					task.getCurrentProgress(), task.getTargetQuantity(), itemInfo);
-			}
-
-			if (activeTasks.isEmpty())
-			{
-				log.info(">>>   (No active EQUIP tasks)");
-			}
-		}
 	}
 
 	@Subscribe
@@ -677,12 +605,7 @@ public class EquipModule extends AbstractTaskModule
 		int containerId = event.getContainerId();
 
 		// Skip if no tasks or no watched items
-		if (activeTasks.isEmpty())
-		{
-			return;
-		}
-
-		if (watchedItemIds.isEmpty())
+		if (activeTasks.isEmpty() || watchedItemIds.isEmpty())
 		{
 			return;
 		}
@@ -692,9 +615,6 @@ public class EquipModule extends AbstractTaskModule
 		{
 			return;
 		}
-
-		log.info(">>> EquipModule: EQUIPMENT CHANGED - checking for watched items...");
-		log.info(">>> Watched item IDs: {}", watchedItemIds);
 
 		// Build current equipment state
 		Map<Integer, Integer> currentEquipment = new HashMap<>();
@@ -708,13 +628,6 @@ public class EquipModule extends AbstractTaskModule
 				if (item != null && item.getId() > 0)
 				{
 					currentEquipment.put(slot, item.getId());
-
-					// Log if this is a watched item
-					if (watchedItemIds.contains(item.getId()))
-					{
-						log.info(">>>   FOUND watched item in equipment: {} (ID: {}) in slot {}",
-							getItemName(item.getId()), item.getId(), getSlotName(slot));
-					}
 				}
 			}
 		}
@@ -729,8 +642,6 @@ public class EquipModule extends AbstractTaskModule
 			// Check if a watched item was newly equipped in this slot
 			if (currentItemId > 0 && currentItemId != previousItemId && watchedItemIds.contains(currentItemId))
 			{
-				log.info(">>> EquipModule: DETECTED newly equipped item: {} (ID: {}) in {} slot",
-					getItemName(currentItemId), currentItemId, getSlotName(slot));
 				anyNewEquips = true;
 
 				// Check if item was in inventory (for server verification)
@@ -748,7 +659,6 @@ public class EquipModule extends AbstractTaskModule
 		// Check progress for all tasks if any watched items were equipped
 		if (anyNewEquips)
 		{
-			log.info(">>> New equips detected - checking progress for {} active tasks", activeTasks.size());
 			for (NuzlockeTask task : new HashSet<>(activeTasks))
 			{
 				checkTaskProgress(task);
@@ -850,18 +760,10 @@ public class EquipModule extends AbstractTaskModule
 			{
 				if (response != null && !response.isSuccess())
 				{
-					log.warn("EquipModule: Server rejected equip report: {}", response.getErrorMessage());
-				}
-				else
-				{
-					log.info("EquipModule: Server verified equip of {} in {} slot", getItemName(itemId), getSlotName(slot));
+					log.warn("EquipModule: server rejected equip report: {}", response.getErrorMessage());
 				}
 			})
-			.exceptionally(ex ->
-			{
-				log.debug("EquipModule: Failed to send equip report (API may be offline): {}", ex.getMessage());
-				return null;
-			});
+			.exceptionally(ex -> null);
 	}
 
 	/**
@@ -897,7 +799,6 @@ public class EquipModule extends AbstractTaskModule
 	{
 		if (!config.showChatProgress())
 		{
-			log.info("[CHAT] Equip progress (hidden by config): {} - {}", task.getName(), details);
 			return;
 		}
 
@@ -920,8 +821,6 @@ public class EquipModule extends AbstractTaskModule
 				.value(detailMessage)
 				.build());
 		}
-
-		log.info("[CHAT] Equip progress: {} ({}/{}) - {}", task.getName(), current, total, details);
 	}
 
 	/**
@@ -931,7 +830,6 @@ public class EquipModule extends AbstractTaskModule
 	{
 		if (!config.showChatSuccess())
 		{
-			log.info("[CHAT] Equip success (hidden by config): {} - {}", task.getName(), details);
 			return;
 		}
 
@@ -953,8 +851,6 @@ public class EquipModule extends AbstractTaskModule
 				.value(detailMessage)
 				.build());
 		}
-
-		log.info("[CHAT] Equip success: {} - {}", task.getName(), details);
 	}
 
 	/**
@@ -964,7 +860,6 @@ public class EquipModule extends AbstractTaskModule
 	{
 		if (!config.showChatFailed())
 		{
-			log.info("[CHAT] Equip failed (hidden by config): {} - Reason: {}", task.getName(), reason);
 			return;
 		}
 
@@ -983,7 +878,5 @@ public class EquipModule extends AbstractTaskModule
 			.type(ChatMessageType.GAMEMESSAGE)
 			.value(reasonMessage)
 			.build());
-
-		log.info("[CHAT] Equip failed: {} - Reason: {}", task.getName(), reason);
 	}
 }

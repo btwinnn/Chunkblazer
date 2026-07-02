@@ -123,9 +123,6 @@ public class ChunkBlazerPlugin extends Plugin
 	private ChatIconManager chatIconManager;
 
 	@Inject
-	private TaskCompletionOverlay taskCompletionOverlay;
-
-	@Inject
 	private TaskCompletionAnimationOverlay taskCompletionAnimationOverlay;
 
 	@Inject
@@ -222,7 +219,6 @@ public class ChunkBlazerPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
-		log.info("ChunkBlazer starting up...");
 
 		// Start verification service (registers for VarPlayer events)
 		varPlayerService.startUp();
@@ -241,18 +237,12 @@ public class ChunkBlazerPlugin extends Plugin
 			public void onTaskCompleted(NuzlockeTask task, int progress)
 			{
 				// Task completed locally - request server verification
-				log.info(">>> onTaskCompleted CALLBACK TRIGGERED");
-				log.info(">>>   Task: {} (progress: {})", task != null ? task.getName() : "NULL", progress);
-				log.info(">>>   taskCompletionOverlay: {}", taskCompletionOverlay != null ? "NOT NULL" : "NULL");
-				log.info(">>>   taskCompletionAnimationOverlay: {}", taskCompletionAnimationOverlay != null ? "NOT NULL" : "NULL");
 
 				// Show animated task completion popup
 				if (taskCompletionAnimationOverlay != null && task != null)
 				{
-					log.info(">>>   Calling taskCompletionAnimationOverlay.showTaskCompletion()...");
 					String regionName = getTaskRegionName(task);
 					taskCompletionAnimationOverlay.showTaskCompletion(task, task.getBasePoints(), regionName);
-					log.info(">>>   Animated popup triggered with region: {}", regionName);
 
 					// Play region-specific completion sound
 					if (config.playTaskCompletionSound())
@@ -261,7 +251,6 @@ public class ChunkBlazerPlugin extends Plugin
 						if (soundManager != null && area != null)
 						{
 							soundManager.playRandomSoundForArea(area);
-							log.info(">>>   Playing completion sound for area: {}", area);
 						}
 					}
 				}
@@ -287,7 +276,6 @@ public class ChunkBlazerPlugin extends Plugin
 			public void onServerVerified(NuzlockeTask task, int pointsAwarded)
 			{
 				// Server verified completion
-				log.info("Server verified: {} (+{} points)", task.getName(), pointsAwarded);
 				// Points already awarded in completeTask, but this confirms server agreement
 				panel.updateStats();
 				panel.updateTaskDisplay();
@@ -363,7 +351,6 @@ public class ChunkBlazerPlugin extends Plugin
 
 		// Register animated task completion overlay
 		overlayManager.add(taskCompletionAnimationOverlay);
-		log.info(">>> TaskCompletionAnimationOverlay registered with OverlayManager: {}", taskCompletionAnimationOverlay != null ? "OK" : "NULL");
 
 		// Player recognition surfaces: overhead tag + model outline (scene) and
 		// minimap dots. Each render path is individually config-gated.
@@ -399,13 +386,11 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 
-		log.info("ChunkBlazer started successfully");
 	}
 
 	@Override
 	protected void shutDown()
 	{
-		log.info("ChunkBlazer shutting down...");
 		if (syncFuture != null)
 		{
 			syncFuture.cancel(false);
@@ -680,7 +665,6 @@ public class ChunkBlazerPlugin extends Plugin
 					.option("Yes, unlock!", () ->
 					{
 						unlockRegion(regionId);
-						log.info("Player unlocked region {} via minimap", regionName);
 					})
 					.option("No", () -> {})
 					.build();
@@ -709,8 +693,6 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			// Free unlock - don't spend points, unlock ANY region
 			String chunkName = chunk != null ? chunk.getName() : "Unknown";
-			log.info("Auto-unlocking region {} ({}) for FREE (exploration mode)",
-				regionId, chunkName);
 			unlockRegionFree(regionId);
 
 			// Roll tasks for this region if it has tasks defined
@@ -790,7 +772,6 @@ public class ChunkBlazerPlugin extends Plugin
 					.option("Yes, unlock!", () ->
 					{
 						unlockRegion(regionId);
-						log.info("Player unlocked region {} via popup", regionName);
 					})
 					.option("No, not yet", () -> {})
 					.build();
@@ -819,7 +800,6 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		configManager.setConfiguration("chunkblazer", "unlockedChunks", unlocked);
 
-		log.info("Unlocked region {} for FREE", regionId);
 
 		if (!wasAlreadyUnlocked)
 		{
@@ -837,7 +817,6 @@ public class ChunkBlazerPlugin extends Plugin
 			if (existingRolled.isEmpty())
 			{
 				Set<String> newTasks = rollTasksForRegion(regionId);
-				log.info("Rolled {} tasks for free-unlocked region {}", newTasks.size(), regionId);
 			}
 		}
 
@@ -875,13 +854,11 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 			newUnlocked.append(DEFAULT_START_REGION);
 			needsUpdate = true;
-			log.info("Unlocking starting chunk: {}", DEFAULT_START_REGION);
 		}
 
 		if (needsUpdate)
 		{
 			configManager.setConfiguration("chunkblazer", "unlockedChunks", newUnlocked.toString());
-			log.info("Unlocked starting chunk {} (neighbours remain unlockable)", DEFAULT_START_REGION);
 		}
 
 		// Pre-roll tasks for the starting chunk so they're ready immediately.
@@ -891,9 +868,7 @@ public class ChunkBlazerPlugin extends Plugin
 			NuzlockeChunk chunk = chunksByRegionId.get(DEFAULT_START_REGION);
 			if (chunk != null && chunk.getTasks() != null && !chunk.getTasks().isEmpty())
 			{
-				log.info("Rolling tasks for starting chunk {} ({})", DEFAULT_START_REGION, chunk.getName());
 				Set<String> newTasks = rollTasksForRegion(DEFAULT_START_REGION);
-				log.info("Rolled {} tasks for starting chunk: {}", newTasks.size(), newTasks);
 			}
 			else
 			{
@@ -952,7 +927,6 @@ public class ChunkBlazerPlugin extends Plugin
 		allChunks.clear();
 		chunksByRegionId.clear();
 
-		log.info("=== CHUNKBLAZER LOADING CHUNK DATA ===");
 
 		Type mapType = new TypeToken<Map<String, List<NuzlockeChunk>>>()
 		{
@@ -964,7 +938,6 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			try
 			{
-				log.info(">>> Attempting to load: {}", jsonFile);
 
 				// Resource lookups inside a JAR are case-sensitive (unlike Windows fs),
 				// so a file shipped as Foo.JSON breaks a getResourceAsStream("Foo.json")
@@ -992,10 +965,8 @@ public class ChunkBlazerPlugin extends Plugin
 						jsonFile, java.util.Arrays.toString(candidates));
 					continue;
 				}
-				log.info("Found {} via {}", jsonFile, foundVia);
 
 				String jsonContent = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-				log.info("Read {} bytes from {}", jsonContent.length(), jsonFile);
 
 				Map<String, List<NuzlockeChunk>> data = null;
 				try
@@ -1014,8 +985,6 @@ public class ChunkBlazerPlugin extends Plugin
 					String rootKey = data.keySet().iterator().next();
 					List<NuzlockeChunk> chunks = data.get(rootKey);
 
-					log.info("Found root key '{}' in {} with {} chunks",
-						rootKey, jsonFile, chunks != null ? chunks.size() : 0);
 
 					if (chunks != null && !chunks.isEmpty())
 					{
@@ -1037,8 +1006,6 @@ public class ChunkBlazerPlugin extends Plugin
 								{
 									chunksByRegionId.put(regionId, chunk);
 									regionCount++;
-									log.debug("Mapped region {} -> {} ({})",
-										regionId, chunk.getName(), jsonFile);
 								}
 							}
 							else
@@ -1049,8 +1016,6 @@ public class ChunkBlazerPlugin extends Plugin
 
 						totalChunksLoaded += chunkCount;
 						totalRegionMappings += regionCount;
-						log.info("Loaded {} chunks with {} regions from {} (key: {})",
-							chunkCount, regionCount, jsonFile, rootKey);
 					}
 					else
 					{
@@ -1070,21 +1035,15 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 
-		log.info("=== CHUNKBLAZER LOAD COMPLETE ===");
-		log.info("Total: {} chunks, {} region mappings", totalChunksLoaded, totalRegionMappings);
 
 		// Debug: Log all loaded region IDs
 		if (!chunksByRegionId.isEmpty())
 		{
-			log.info("All loaded region IDs: {}", chunksByRegionId.keySet());
 
 			// Specifically check for Lumbridge (12850)
 			if (chunksByRegionId.containsKey(12850))
 			{
 				NuzlockeChunk lumbridge = chunksByRegionId.get(12850);
-				log.info(">>> LUMBRIDGE (12850) FOUND: name={}, tasks={}",
-					lumbridge.getName(),
-					lumbridge.getTasks() != null ? lumbridge.getTasks().size() : 0);
 			}
 			else
 			{
@@ -1123,7 +1082,6 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		if (is == null)
 		{
-			log.info("Free_Chunks.json not found — no free chunks configured");
 			return;
 		}
 		try
@@ -1167,7 +1125,6 @@ public class ChunkBlazerPlugin extends Plugin
 						}
 					}
 				}
-				log.info("Loaded {} free (0-cost, no-task) chunk region(s): {}", freeUnlockableRegionIds.size(), freeUnlockableRegionIds);
 			}
 		}
 		catch (Exception e)
@@ -1377,13 +1334,10 @@ public class ChunkBlazerPlugin extends Plugin
 		configManager.setConfiguration("chunkblazer", "accountModeHash", modeKey);
 		configManager.setConfiguration("chunkblazer", "gameMode", mode);
 
-		log.info("Game mode locked to {} for account hash {}", mode, rsnHash);
 
 		// Mirror the lock to the server. Local config is the immediate source of
 		// truth; the server call backs it up so the choice survives across
 		// installs / machines (and, for Nuzlocke, re-validates eligibility).
-		log.info("[CB-DIAG] lockGameMode server-call apiEnabled={} apiClient={} mode={}",
-			config.apiEnabled(), apiClient, mode);
 		if (config.apiEnabled() && apiClient != null)
 		{
 			apiClient.lockGameMode(mode, eligibility)
@@ -1395,7 +1349,6 @@ public class ChunkBlazerPlugin extends Plugin
 					}
 					if (response.isSuccess())
 					{
-						log.info("Server confirmed mode lock: {}", mode);
 						if (mode == GameMode.NUZLOCKE)
 						{
 							addPluginChatMessage("Full Nuzlocke locked in. Good luck — there's no going back!");
@@ -1417,23 +1370,19 @@ public class ChunkBlazerPlugin extends Plugin
 		if (mode == GameMode.CASUAL)
 		{
 			int currentRegion = getCurrentRegionId();
-			log.info("Casual mode selected - checking current region: {}", currentRegion);
 
 			if (currentRegion > 0 && !isRegionUnlocked(currentRegion))
 			{
-				log.info("Unlocking current region {} for Casual mode start", currentRegion);
 				unlockRegionFree(currentRegion);
 
 				// Roll tasks for the newly unlocked region
 				Set<String> newTasks = rollTasksForRegion(currentRegion);
-				log.info("Rolled {} tasks for starting region {}", newTasks.size(), currentRegion);
 
 				// Reload active tasks
 				loadActiveTasks();
 			}
 			else if (currentRegion > 0)
 			{
-				log.info("Current region {} is already unlocked", currentRegion);
 			}
 		}
 
@@ -1487,7 +1436,6 @@ public class ChunkBlazerPlugin extends Plugin
 		if (removed > 0)
 		{
 			configManager.setConfiguration("chunkblazer", "unlockedChunks", String.join(",", kept));
-			log.info("Charter migration: stripped {} previously-seeded charter region(s) from unlocked set", removed);
 		}
 		configManager.setConfiguration("chunkblazer", CHARTER_SEED_STRIPPED_KEY, "true");
 	}
@@ -1542,8 +1490,6 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void loginToServer()
 	{
-		log.info("[CB-DIAG] loginToServer entered apiEnabled={} rsn={} apiClient={}",
-			config.apiEnabled(), getPlayerName(), apiClient);
 		if (!config.apiEnabled())
 		{
 			return;
@@ -1558,14 +1504,9 @@ public class ChunkBlazerPlugin extends Plugin
 			log.warn("[CB-DIAG] apiClient is NULL — Guice injection failed for plugin class");
 			return;
 		}
-		log.info("[CB-DIAG] loginToServer calling apiClient.login url={}/api/player/login",
-			config.apiBaseUrl());
 		apiClient.login(rsn, fullHashRsn(rsn))
 			.thenAccept(resp ->
 			{
-				log.info("[CB-DIAG] login response received: status={} apiKey={}",
-					resp == null ? "null" : resp.getStatus(),
-					resp == null ? "null" : (resp.getApiKey() != null ? "set" : "null"));
 				// Only mark complete on a real OK / created response. Offline
 				// or error responses leave the flag false so we retry next
 				// LOGGED_IN tick instead of pretending we're done.
@@ -1692,7 +1633,6 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				if (resp != null && resp.isVerified())
 				{
-					log.info("Account verified via chat handshake");
 					panel.hideVerificationPrompt();
 					// If this handshake was the final step of a Full Nuzlocke
 					// lock, commit it now (the server re-validates the snapshot
@@ -1769,7 +1709,6 @@ public class ChunkBlazerPlugin extends Plugin
 				}
 				String nonce = start.getNonce();
 				pendingVerificationNonce = nonce;
-				log.info("Verification nonce issued: {}", nonce);
 				addPluginChatMessage("Type " + nonce
 					+ " in public chat and hit Enter to verify your ChunkBlazer account.");
 				panel.showVerificationPrompt(nonce);
@@ -1821,7 +1760,6 @@ public class ChunkBlazerPlugin extends Plugin
 				String modeKey = hashRsn(rsn) + ":" + serverMode.name();
 				configManager.setConfiguration("chunkblazer", "accountModeHash", modeKey);
 				configManager.setConfiguration("chunkblazer", "gameMode", serverMode);
-				log.info("Game mode hydrated from server: {}", serverMode);
 			}
 			else if (isModeLocked() && !response.isModeLocked())
 			{
@@ -1833,7 +1771,6 @@ public class ChunkBlazerPlugin extends Plugin
 				GameMode localMode = getGameMode(); // authoritative locked mode, not the raw dropdown
 				if (localMode != null && config.apiEnabled() && apiClient != null)
 				{
-					log.info("Mode locked locally but not on server — re-pushing lock: {}", localMode);
 					apiClient.lockGameMode(localMode);
 				}
 			}
@@ -1848,7 +1785,6 @@ public class ChunkBlazerPlugin extends Plugin
 						.map(String::valueOf)
 						.collect(Collectors.joining(","));
 					configManager.setConfiguration("chunkblazer", "unlockedChunks", csv);
-					log.info("Unlocked regions hydrated from server: {} regions", pdata.getUnlockedRegions().size());
 				}
 			}
 
@@ -1860,7 +1796,6 @@ public class ChunkBlazerPlugin extends Plugin
 				{
 					String csv = String.join(",", pdata.getCompletedTasks());
 					configManager.setConfiguration("chunkblazer", "completedTasks", csv);
-					log.info("Completed tasks hydrated from server: {} tasks", pdata.getCompletedTasks().size());
 				}
 			}
 
@@ -1937,7 +1872,6 @@ public class ChunkBlazerPlugin extends Plugin
 			.thenAccept(roster::update)
 			.exceptionally(e ->
 			{
-				log.debug("Roster refresh failed: {}", e.toString());
 				return null;
 			});
 	}
@@ -1995,10 +1929,6 @@ public class ChunkBlazerPlugin extends Plugin
 				{
 					if (resp != null && resp.isSuccess())
 					{
-						log.debug("Sync ok: points={} regions={} tasks={}",
-							resp.getServerPoints(),
-							resp.getServerUnlockedRegions() != null ? resp.getServerUnlockedRegions().size() : 0,
-							resp.getServerCompletedTasks() != null ? resp.getServerCompletedTasks().size() : 0);
 					}
 				});
 		});
@@ -2257,7 +2187,6 @@ public class ChunkBlazerPlugin extends Plugin
 		Set<String> addedTaskIds = new HashSet<>(); // Track added tasks to prevent duplicates
 
 		Set<String> unlockedRegions = getUnlockedRegionIds();
-		log.info("Loading tasks for {} unlocked regions: {}", unlockedRegions.size(), unlockedRegions);
 
 		for (String regionIdStr : unlockedRegions)
 		{
@@ -2288,8 +2217,6 @@ public class ChunkBlazerPlugin extends Plugin
 							// Self-heal stuck tasks where progress saved but completion never fired (e.g. throw in popup code between onProgressUpdated and onTaskCompleted).
 							if (task.getCurrentProgress() >= task.getTargetQuantity())
 							{
-								log.info("Self-healing stuck task '{}' ({}/{}) — crediting as completed",
-									task.getName(), task.getCurrentProgress(), task.getTargetQuantity());
 								completedTaskCache.put(taskId, task);
 								addPoints(task.getBasePoints());
 								markTaskCompleted(taskId);
@@ -2318,7 +2245,6 @@ public class ChunkBlazerPlugin extends Plugin
 		// Set first task as "active" for backward compatibility
 		activeTask = activeTasks.isEmpty() ? null : activeTasks.get(0);
 
-		log.info("Loaded {} active tasks across all unlocked regions", activeTasks.size());
 		saveActiveTasks();
 	}
 
@@ -2506,7 +2432,6 @@ public class ChunkBlazerPlugin extends Plugin
 
 		if (eligibleTasks.isEmpty())
 		{
-			log.info("No eligible tasks available (all rolled tasks have been assigned)");
 			activeTask = null;
 			saveCurrentTask();
 			panel.showNoTasksMessage();
@@ -2554,8 +2479,6 @@ public class ChunkBlazerPlugin extends Plugin
 			// Route task to appropriate module for auto-tracking
 			taskModuleManager.assignTask(activeTask);
 
-			log.info("Assigned new task: {} (type: {}, target: {})",
-				activeTask.getName(), activeTask.getCompletionType(), targetQty);
 			saveCurrentTask();
 		}
 		else
@@ -2590,8 +2513,6 @@ public class ChunkBlazerPlugin extends Plugin
 			log.warn("rollTasksForRegion: Chunk {} ({}) has no tasks", regionId, chunk.getName());
 			return new HashSet<>();
 		}
-		log.info("rollTasksForRegion: Found chunk {} ({}) with {} tasks",
-			regionId, chunk.getName(), chunk.getTasks().size());
 
 		// Get tasks already rolled for this region
 		Set<String> alreadyRolledForThisRegion = getRolledTasksForRegion(regionId);
@@ -2613,7 +2534,6 @@ public class ChunkBlazerPlugin extends Plugin
 
 		if (availableTasks.isEmpty())
 		{
-			log.info("No available tasks for region {} (all locked or already assigned globally)", regionId);
 			return new HashSet<>();
 		}
 
@@ -2646,7 +2566,6 @@ public class ChunkBlazerPlugin extends Plugin
 		// Save to config
 		saveRolledTasksForRegion(regionId, rolledIds);
 
-		log.info("Rolled {} tasks for region {} (weighted): {}", rolledIds.size(), regionId, rolledIds);
 		return rolledIds;
 	}
 
@@ -2818,13 +2737,11 @@ public class ChunkBlazerPlugin extends Plugin
 			assigned = assigned + "," + taskId;
 		}
 		configManager.setConfiguration("chunkblazer", "assignedTasks", assigned);
-		log.info("Marked task {} as assigned (cannot be reassigned)", taskId);
 	}
 
 	public void rerollTask()
 	{
 		int currentRegion = getCurrentRegionId();
-		log.info("DEV Rerolling tasks for region {}...", currentRegion);
 
 		// Clear rolled tasks for current region
 		if (currentRegion > 0)
@@ -2835,7 +2752,6 @@ public class ChunkBlazerPlugin extends Plugin
 		// DEV: Clear globally assigned tasks so reroll can get fresh tasks
 		// This bypasses the "no duplicate tasks globally" rule for testing
 		configManager.setConfiguration("chunkblazer", "assignedTasks", "");
-		log.info("DEV: Cleared global assigned tasks list for fresh reroll");
 
 		// Clear task progress data
 		configManager.setConfiguration("chunkblazer", "taskProgressData", "");
@@ -2851,18 +2767,15 @@ public class ChunkBlazerPlugin extends Plugin
 		loadActiveTasks();
 		panel.updatePanel();
 
-		log.info("DEV: Tasks re-rolled for region {}", currentRegion);
 	}
 
 	public void devCompleteActiveTask()
 	{
 		if (activeTask == null)
 		{
-			log.info("No active task to complete");
 			return;
 		}
 
-		log.info("DEV: Completing task: {}", activeTask.getName());
 		completeTask(activeTask);
 	}
 
@@ -2873,18 +2786,15 @@ public class ChunkBlazerPlugin extends Plugin
 	{
 		if (task == null)
 		{
-			log.info("DEV: No task specified to complete");
 			return;
 		}
 
 		// Check if this task is in our active tasks list
 		if (!activeTasks.contains(task))
 		{
-			log.info("DEV: Task '{}' is not in active tasks list", task.getName());
 			return;
 		}
 
-		log.info("DEV: Completing specific task: {}", task.getName());
 		completeTask(task);
 	}
 
@@ -2892,12 +2802,10 @@ public class ChunkBlazerPlugin extends Plugin
 	{
 		int current = config.totalPoints();
 		configManager.setConfiguration("chunkblazer", "totalPoints", current + points);
-		log.info("DEV: Added {} points. Total: {}", points, current + points);
 	}
 
 	public void devResetTasks()
 	{
-		log.info("DEV: devResetTasks() called");
 
 		// Clear rolled tasks for current region only
 		int currentRegion = getCurrentRegionId();
@@ -2907,7 +2815,6 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		// Log current state before clearing
-		log.info("DEV: Before clear - completedTasks={}", config.completedTasks());
 
 		// Clear completed tasks
 		configManager.setConfiguration("chunkblazer", "completedTasks", "");
@@ -2919,7 +2826,6 @@ public class ChunkBlazerPlugin extends Plugin
 		configManager.setConfiguration("chunkblazer", "regionRolledTasks", "");
 
 		// Verify the clear worked
-		log.info("DEV: After clear - completedTasks={}", config.completedTasks());
 
 		// Clear module state
 		taskModuleManager.clearTask();
@@ -2929,7 +2835,6 @@ public class ChunkBlazerPlugin extends Plugin
 		activeTask = null;
 		completedTaskCache.clear();
 
-		log.info("DEV: Reset all task progress for region {}", currentRegion);
 
 		// Re-roll and load tasks
 		loadActiveTasks();
@@ -2972,7 +2877,6 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 		configManager.setConfiguration("chunkblazer", "regionRolledTasks", newData.toString());
-		log.info("Cleared rolled tasks for region {}", regionId);
 	}
 
 	public void devResetAll()
@@ -2999,7 +2903,6 @@ public class ChunkBlazerPlugin extends Plugin
 		configManager.setConfiguration("chunkblazer", "accountModeHash", "");
 		configManager.setConfiguration("chunkblazer", "gameMode", GameMode.CASUAL);
 
-		log.info("DEV: Full reset complete");
 
 		// Re-roll and load tasks for the now-only starting chunk so the panel populates.
 		loadActiveTasks();
@@ -3026,7 +2929,6 @@ public class ChunkBlazerPlugin extends Plugin
 		// Clear progress data for this task
 		saveActiveTasks();
 
-		log.info("Task completed: {} (+{} points)", task.getName(), task.getBasePoints());
 
 		// Clear selected task if it was the completed one
 		panel.clearSelectedTaskIfMatch(task);
@@ -3618,7 +3520,6 @@ public class ChunkBlazerPlugin extends Plugin
 		// region" — that's this race.
 		if (isRegionUnlocked(regionId))
 		{
-			log.info("unlockRegion({}) — already unlocked, ignoring duplicate request", regionId);
 			return;
 		}
 
@@ -3687,12 +3588,9 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		configManager.setConfiguration("chunkblazer", "unlockedChunks", String.join(",", unlockedSet));
 
-		log.info("Unlocked region {} for {} points. Remaining points: {}",
-			regionId, cost, currentPoints - cost);
 
 		// Auto-roll tasks for the new region
 		Set<String> newTasks = rollTasksForRegion(regionId);
-		log.info("Auto-rolled {} tasks for newly unlocked region {}", newTasks.size(), regionId);
 
 		// Reload all active tasks (includes the new region's tasks)
 		loadActiveTasks();
@@ -3738,7 +3636,6 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 		soundManager.playRandomSoundForArea(area);
-		log.info("Playing unlock jingle for region {} ({}, area={})", regionId, chunk.getName(), area);
 	}
 
 	/**
@@ -3816,7 +3713,6 @@ public class ChunkBlazerPlugin extends Plugin
 				sb.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8),
 				java.nio.file.StandardOpenOption.CREATE,
 				java.nio.file.StandardOpenOption.APPEND);
-			log.info("Dev: dumped {} vars to {}", label, outPath);
 		}
 		catch (Exception e)
 		{
