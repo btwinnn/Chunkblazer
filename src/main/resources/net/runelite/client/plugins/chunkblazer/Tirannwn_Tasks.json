@@ -149,6 +149,168 @@
                 }
             ],
             "is_completed": false        
-        }
+        },
+        {
+                    "region_id": [9265],
+                    "neighbor_ids": [9266, 9521, 9264, 9009],
+                    "Friendly_Name": "Lletya",
+                    "tasks": [
+                        {
+                            "name": "Pickpocket Arvel",
+                            "taskID": "pickpocket_arvel",
+                            "category": "Thieving",
+                            "level": 85,
+                            "completion_type": "THIEVING",
+                            "base_points": 4,
+                            "assignment_weight": 5,
+                            "target_npc": {
+                                "npc": ["Arvel"],
+                                "npc_ids": [5299],
+                                "quantity": [1, 25]
+                            }
+                        },
+                        {
+                            "name": "Defeat an Elf Archer",
+                            "taskID": "defeat_elf_archer",
+                            "category": "Combat",
+                            "completion_type": "NPC_Kill",
+                            "base_points": 1,
+                            "assignment_weight": 5,
+                            "target_npc": {
+                                "npc": ["Elf Archer"],
+                                "npc_ids": [5295, 5296],
+                                "quantity": [1, 25]
+                            }
+                        },
+                        {
+                            "name": "Defeat an Elf Warrior",
+                            "taskID": "defeat_elf_warrior",
+                            "category": "Combat",
+                            "completion_type": "NPC_Kill",
+                            "base_points": 2,
+                            "assignment_weight": 5,
+                            "target_npc": {
+                                "npc": ["Elf Warrior"],
+                                "npc_ids": [5293, 5294],
+                                "quantity": [1]
+                            }
+                        },
+                        {
+                            "name": "Spin some Flax",
+                            "taskID": "Spin_flax",
+                            "category": "Crafting",
+                            "level": 10,
+                            "completion_type": "CRAFTING",
+                            "base_points": 1,
+                            "assignment_weight": 8,
+                            "required_items": [
+                                {
+                                    "item": "Bow String",
+                                    "item_ids": [1777],
+                                    "quantity": [1, 100]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Activate Eagle Eye",
+                            "taskID": "pray_eagle_eye",
+                            "category": "Prayer",
+                            "level": 44,
+                            "completion_type": "VARBIT_CHECK",
+                            "base_points": 2,
+                            "assignment_weight": 5,
+                            "constraints": {
+                                "varbit_id": 4101,
+                                "varbit_boolean": 1,
+                                "varbit_bit": 22
+                            }
+                        },
+                        {
+                            "name": "Activate Protect from Missiles",
+                            "taskID": "pray_protect_from_missiles",
+                            "category": "Prayer",
+                            "level": 40,
+                            "completion_type": "VARBIT_CHECK",
+                            "base_points": 2,
+                            "assignment_weight": 3,
+                            "constraints": {
+                                "varbit_id": 4101,
+                                "varbit_boolean": 1,
+                                "varbit_bit": 13
+                            }
+                        },
+                        {
+                            "name": "Plant a Curry Tree Sapling",
+                            "taskID": "plant_curry_tree_Sapling",
+                            "category": "Farming",
+                            "level": 42,
+                            "completion_type": "FARMING",
+                            "base_points": 2,
+                            "assignment_weight": 8,
+                            "required_items": [
+                                {
+                                    "item": ["Curry Tree Sapling"],
+                                    "item_ids": [5499],
+                                    "quantity": [1]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Plant a Pineapple Sapling",
+                            "taskID": "plant_pineapple_sapling",
+                            "category": "Farming",
+                            "level": 51,
+                            "completion_type": "FARMING",
+                            "base_points": 2,
+                            "assignment_weight": 8,
+                            "required_items": [
+                                {
+                                    "item": ["Pineapple Sapling"],
+                                    "item_ids": [5500],
+                                    "quantity": [1]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Plant a Palm Tree Sapling",
+                            "taskID": "plant_palm_tree_sapling",
+                            "category": "Farming",
+                            "level": 68,
+                            "completion_type": "FARMING",
+                            "base_points": 3,
+                            "assignment_weight": 3,
+                            "required_items": [
+                                {
+                                    "item": ["Palm Tree Sapling"],
+                                    "item_ids": [5502],
+                                    "quantity": [1]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Plant a Dragonfruit Tree Sapling",
+                            "taskID": "plant_dragonfruit_tree_sapling",
+                            "category": "Farming",
+                            "level": 81,
+                            "completion_type": "FARMING",
+                            "base_points": 4,
+                            "assignment_weight": 10,
+                            "required_items": [
+                                {
+                                    "item": ["Dragonfruit Tree Sapling"],
+                                    "item_ids": [22866],
+                                    "quantity": [1]
+                                }
+                            ]
+                        }
+                    ],
+                    "optional_quests_unlocked": [
+                        {
+                            "name": "Mourning's End Part II",
+                            "points": 4
+                        }
+                    ],
+                    "is_completed": false
+                }
     ]
 }
