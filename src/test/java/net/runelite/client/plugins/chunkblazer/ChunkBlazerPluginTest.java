@@ -183,6 +183,22 @@ class ChunkBlazerPluginTest
 		assertFalse(plugin.isRegionUnlocked(FREE_REGION)); // not auto-unlocked
 	}
 
+	@Test
+	void freeChunksJsonParsesAndLoadsFromResource() throws Exception
+	{
+		// Guards the bundled Free_Chunks.json against syntax/schema breakage: inject a
+		// real Gson, run the loader, and confirm it populated the free set + names.
+		setField(plugin, "gson", new com.google.gson.Gson());
+		java.lang.reflect.Method load = plugin.getClass().getDeclaredMethod("loadFreeChunks");
+		load.setAccessible(true);
+		load.invoke(plugin);
+
+		assertTrue(freeUnlockableRegionIds().contains(12336)); // Tutorial Island
+		assertTrue(freeUnlockableRegionIds().contains(11323)); // Ice Path
+		assertEquals(0, plugin.getRegionUnlockCost(12336));
+		assertEquals("Tutorial Island (12336)", plugin.getRegionName(12336));
+	}
+
 	// --- reflection helpers (the plugin's fields are private; no test seam) ---
 
 	@SuppressWarnings("unchecked")
