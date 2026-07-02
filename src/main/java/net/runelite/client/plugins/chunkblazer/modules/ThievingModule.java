@@ -13,7 +13,6 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.MenuAction;
 import net.runelite.api.NPC;
 import net.runelite.api.Skill;
-import net.runelite.api.events.GameTick;
 import net.runelite.api.events.InteractingChanged;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
@@ -84,9 +83,6 @@ public class ThievingModule extends AbstractTaskModule
 	private int lastInteractionObjectId = -1;
 	private int lastInteractionObjectTick = -1;
 
-	// Debug heartbeat
-	private int tickCounter = 0;
-	private static final int DEBUG_LOG_INTERVAL = 100;
 
 	@Inject
 	public ThievingModule()
@@ -213,16 +209,6 @@ public class ThievingModule extends AbstractTaskModule
 		if (client.getLocalPlayer() != null)
 		{
 			previousThievingXp = client.getSkillExperience(Skill.THIEVING);
-		}
-	}
-
-	@Subscribe
-	public void onGameTick(GameTick event)
-	{
-		tickCounter++;
-
-		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
-		{
 		}
 	}
 

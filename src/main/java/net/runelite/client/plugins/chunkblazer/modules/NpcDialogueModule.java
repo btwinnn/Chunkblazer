@@ -56,9 +56,6 @@ public class NpcDialogueModule extends AbstractTaskModule
 	// Track if dialogue was open last tick (for edge detection)
 	private boolean wasDialogueOpen = false;
 
-	// Debug heartbeat
-	private int tickCounter = 0;
-	private static final int DEBUG_LOG_INTERVAL = 100;
 
 	@Inject
 	public NpcDialogueModule()
@@ -151,11 +148,7 @@ public class NpcDialogueModule extends AbstractTaskModule
 	@Subscribe
 	public void onGameTick(GameTick event)
 	{
-		tickCounter++;
 
-		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
-		{
-		}
 
 		if (activeTasks.isEmpty())
 		{

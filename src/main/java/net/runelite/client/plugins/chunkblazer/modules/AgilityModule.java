@@ -108,9 +108,6 @@ public class AgilityModule extends AbstractTaskModule
 	private int pendingObjectId = -1;
 	private int pendingTick = -1;
 
-	// Debug heartbeat
-	private int tickCounter = 0;
-	private static final int DEBUG_LOG_INTERVAL = 100;
 
 	@Inject
 	public AgilityModule()
@@ -219,7 +216,6 @@ public class AgilityModule extends AbstractTaskModule
 	@Subscribe
 	public void onGameTick(GameTick event)
 	{
-		tickCounter++;
 
 		// Expire a pending click that never got confirmed (e.g. the player lacked
 		// the level — no animation/XP ever fires). Prevents a much-later unrelated
@@ -230,9 +226,6 @@ public class AgilityModule extends AbstractTaskModule
 			pendingTick = -1;
 		}
 
-		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
-		{
-		}
 	}
 
 	@Subscribe

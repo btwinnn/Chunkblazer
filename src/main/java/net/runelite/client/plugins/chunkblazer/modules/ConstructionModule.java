@@ -17,7 +17,6 @@ import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.Skill;
 import net.runelite.api.events.GameObjectSpawned;
-import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
@@ -95,9 +94,6 @@ public class ConstructionModule extends AbstractTaskModule
 	// as "from that build". Matches the window used in Thieving/Agility.
 	private static final int INTERACTION_TIMEOUT_TICKS = 5;
 
-	// Debug heartbeat
-	private int tickCounter = 0;
-	private static final int DEBUG_LOG_INTERVAL = 100;
 
 	@Inject
 	public ConstructionModule()
@@ -261,16 +257,6 @@ public class ConstructionModule extends AbstractTaskModule
 		if (client.getLocalPlayer() != null)
 		{
 			previousConstructionXp = client.getSkillExperience(Skill.CONSTRUCTION);
-		}
-	}
-
-	@Subscribe
-	public void onGameTick(GameTick event)
-	{
-		tickCounter++;
-
-		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
-		{
 		}
 	}
 

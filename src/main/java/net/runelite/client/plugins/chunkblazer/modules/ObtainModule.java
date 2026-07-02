@@ -121,9 +121,6 @@ public class ObtainModule extends AbstractTaskModule
 	// caught the former). Cleared at the end of every tick in onGameTick.
 	private final Set<Skill> skillsXpGainedThisTick = ConcurrentHashMap.newKeySet();
 
-	// Debug heartbeat
-	private int tickCounter = 0;
-	private static final int DEBUG_LOG_INTERVAL = 100; // Log every 100 ticks (~60 seconds)
 
 	@Inject
 	public ObtainModule()
@@ -643,7 +640,6 @@ public class ObtainModule extends AbstractTaskModule
 	@Subscribe
 	public void onGameTick(GameTick event)
 	{
-		tickCounter++;
 
 		// End-of-tick reconciliation for skilling tasks. GameTick fires after this
 		// tick's StatChanged / ItemContainerChanged, so all production crediting for
@@ -669,32 +665,6 @@ public class ObtainModule extends AbstractTaskModule
 		skillsXpGainedThisTick.clear();
 
 		// Log heartbeat periodically to confirm module is running
-		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
-		{
-
-			// List all active obtain tasks
-			for (NuzlockeTask task : activeTasks)
-			{
-				List<Slot> slots = taskSlots.get(task.getTaskId());
-				String itemInfo;
-				if (slots == null)
-				{
-					itemInfo = "NO SLOTS";
-				}
-				else
-				{
-					itemInfo = "watching " + slots.size() + " slot(s): " +
-						slots.stream()
-							.map(s -> "{" + s.variantIds + " x" + s.requiredQuantity + "}")
-							.reduce((a, b) -> a + ", " + b)
-							.orElse("(empty)");
-				}
-			}
-
-			if (activeTasks.isEmpty())
-			{
-			}
-		}
 	}
 
 	@Subscribe

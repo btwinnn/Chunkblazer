@@ -65,9 +65,6 @@ public class VarbitCheckModule extends AbstractTaskModule
 	private final Map<Integer, Integer> previousVarbitValues = new ConcurrentHashMap<>();
 	private final Map<Integer, Integer> previousVarpValues = new ConcurrentHashMap<>();
 
-	// Debug heartbeat
-	private int tickCounter = 0;
-	private static final int DEBUG_LOG_INTERVAL = 100;
 
 	@Inject
 	public VarbitCheckModule()
@@ -258,11 +255,7 @@ public class VarbitCheckModule extends AbstractTaskModule
 	@Subscribe
 	public void onGameTick(GameTick event)
 	{
-		tickCounter++;
 
-		if (tickCounter % DEBUG_LOG_INTERVAL == 0)
-		{
-		}
 
 		// Check varp values each tick (since VarbitChanged doesn't always fire for varps)
 		if (!activeTasks.isEmpty() && !watchedVarpIds.isEmpty())

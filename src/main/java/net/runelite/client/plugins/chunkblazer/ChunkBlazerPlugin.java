@@ -259,15 +259,6 @@ public class ChunkBlazerPlugin extends Plugin
 					log.error(">>>   CANNOT show animated popup - overlay or task is null!");
 				}
 
-				// Legacy popup disabled - using new animation overlay instead
-				// if (taskCompletionOverlay != null && task != null)
-				// {
-				// 	log.info(">>>   Calling taskCompletionOverlay.showTaskCompletion()...");
-				// 	String regionName = getTaskRegionName(task);
-				// 	String area = getTaskArea(task);
-				// 	taskCompletionOverlay.showTaskCompletion(task, task.getBasePoints(), regionName, area);
-				// 	log.info(">>>   Legacy popup completed with region: {}, area: {}", regionName, area);
-				// }
 
 				completeTask(task);
 			}
@@ -346,8 +337,6 @@ public class ChunkBlazerPlugin extends Plugin
 		overlayManager.add(sceneOverlay);
 
 		// Legacy task completion popup overlay disabled - using animation overlay instead
-		// overlayManager.add(taskCompletionOverlay);
-		// log.info(">>> TaskCompletionOverlay registered with OverlayManager: {}", taskCompletionOverlay != null ? "OK" : "NULL");
 
 		// Register animated task completion overlay
 		overlayManager.add(taskCompletionAnimationOverlay);
@@ -417,7 +406,6 @@ public class ChunkBlazerPlugin extends Plugin
 		overlayManager.remove(minimapPlayerOverlay);
 		overlayManager.remove(orbOverlay);
 		overlayManager.remove(bossTokenOverlay);
-		// overlayManager.remove(taskCompletionOverlay); // Legacy overlay disabled
 		overlayManager.remove(taskCompletionAnimationOverlay);
 		taskModuleManager.shutDown();
 		varPlayerService.shutDown();
