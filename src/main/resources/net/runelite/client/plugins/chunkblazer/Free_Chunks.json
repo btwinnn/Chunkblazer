@@ -1,7 +1,70 @@
 {
-  "_comment": "Region IDs listed in 'free_regions' are FREE, UNLOCK-ON-DEMAND chunks: they behave exactly like charter ports (0-cost; shown with a yellow 'unlockable' outline; unlock by walking in or clicking) EXCEPT they have no tasks, so nothing rolls on unlock (see ChunkBlazerPlugin.isFreeUnlockableRegion). They start locked and become owned once entered. NOTE: this is NOT the same as always-accessible dungeons — those are auto-freed by a coordinate rule in ChunkBlazerPlugin.isFreeRegion (any region whose regionY is outside the overworld surface band 39-64 / world y 2496-4159), which covers all underground/instanced content automatically and does NOT need entries here. Charter ports are also separate (chunk_type:CHARTER). Add a region ID below only to make it a free, taskless, unlock-on-demand chunk.",
-  "free_region_id": 
+    "Free_chunks": [
+           {
+    "free_region_id": 
          [
 
          ]
+        },
+        {
+            "region_id": [12336],
+            "Friendly_Name": "Tutorial Island",
+            "neighbor_ids": [12337,12335,12080,12592],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [12592],
+            "Friendly_Name": "Tutorial Island East",
+            "neighbor_ids": [12593, 12848, 12335, 12336],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [12335],
+            "Friendly_Name": "Tutorial Island The Node",
+            "neighbor_ids": [12336, 12591, 12334, 12079],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [12079],
+            "Friendly_Name": "Tutorial Island SouthWest",
+            "neighbor_ids": [12080, 12335, 12078, 11823],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [12080],
+            "Friendly_Name": "Tutorial Island West",
+            "neighbor_ids": [12336, 12335, 11824, 12081],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [11576],
+            "Friendly_Name": "Troll Arena",
+            "neighbor_ids": [11577, 11832, 11575, 11320],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [11066],
+            "Friendly_Name": "Trollweiss Mountain Bottom",
+            "neighbor_ids": [11067, 11322, 11065, 10810],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [11067],
+            "Friendly_Name": "Trollweiss Mountain Middle",
+            "neighbor_ids": [11068, 11323, 11066, 10811],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [11068],
+            "Friendly_Name": "Trollweiss Mountain Top",
+            "neighbor_ids": [11069, 11324, 11067, 10812],
+            "unlock_cost": 0
+        },
+        {
+            "region_id": [11323],
+            "Friendly_Name": "Ice Path",
+            "neighbor_ids": [11324, 11579, 11322, 11067],
+            "unlock_cost": 0
+        }
+    ]
 }
