@@ -806,6 +806,257 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [12894],
+            "neighbor_ids": [12895, 13150, 12893, 12638],
+            "Friendly_Name": "Southwest Prifddinas",
+            "tasks": [
+                {
+                    "name": "Pickpocket Feanor",
+                    "taskID": "pickpocket_feanor",
+                    "category": "Thieving",
+                    "level": 85,
+                    "completion_type": "THIEVING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Feanor"],
+                        "npc_ids": [9088],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Crystal Crown",
+                    "taskID": "obtain_crystal_crown",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Crystal Crown"],
+                            "item_ids": [23925, 23917, 23919, 23923, 23913, 23911, 23921, 23915]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Crystal Body",
+                    "taskID": "equip_crystal_body",
+                    "category": "Defence",
+                    "level": 70,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Crystal Body"],
+                            "item_ids": [27769, 27771, 27745, 27747, 27757, 27759, 27697, 27699, 27721, 27723, 27709, 27711, 27733, 27735, 23975, 23977]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Crystal Legs",
+                    "taskID": "equip_crystal_legs",
+                    "category": "Defence",
+                    "level": 70,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Crystal Legs"],
+                            "item_ids": [27773, 27775, 27749, 27751, 27761, 27763, 27701, 27703, 27725, 27727, 27713, 27715, 27737, 27739, 23979, 23981]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Crystal Helm",
+                    "taskID": "equip_crystal_helm",
+                    "category": "Defence",
+                    "level": 70,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Crystal Helm"],
+                            "item_ids": [27777, 27779, 27753, 27755, 27765, 27767, 27705, 27707, 27729, 27731, 27717, 27719, 27741, 27743, 23971, 23973]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Halberd",
+                    "taskID": "equip_dragon_halberd",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Halberd"],
+                            "item_ids": [3204]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Crystal Halberd",
+                    "taskID": "equip_crystal_halberd",
+                    "category": "Attack",
+                    "level": 70,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Crystal Halberd", "Crystal Halberd (inactive)", "Crystal Halberd (new)"],
+                            "item_ids": [23987, 23989, 24125]
+                        }
+                    ]
+                },
+                {
+                    "name": "Build a Mounted Xeric's Talisman",
+                    "taskID": "build_mounted_xerics_talisman",
+                    "category": "Construction",
+                    "level": 72,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_finished_object": [
+                        {
+                            "object": "Mounted Xeric's Talisman",
+                            "object_id": [33411, 33412, 33413, 33414, 33415, 33419]
+                        }
+                    ]
+                },
+                {
+                    "name": "Build a Mounted Digsite Pendant",
+                    "taskID": "build_mounted_digsite_pendant",
+                    "category": "Construction",
+                    "level": 82,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_finished_object": [
+                        {
+                            "object": "Mounted Digsite Pendant",
+                            "object_id": [33416, 33417, 33418, 33420]
+                        }
+                    ]
+                },
+                {
+                    "name": "Build a Gilded Marble Altar",
+                    "taskID": "build_gilded_marble_altar",
+                    "category": "Construction",
+                    "level": [75],
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_finished_object": [
+                        {
+                            "object": ["Gilded altar#Gnome child", "Gilded altar#Guthix", "Gilded altar#Saradomin", "Gilded altar#Zamorak"],
+                            "object_id": [40878, 13199, 13197, 13198]
+                        }
+                    ]
+                },
+                {
+                    "name": "Build a Rejuvenation Pool",
+                    "taskID": "build_rejuvenation_pool",
+                    "category": "Construction",
+                    "level": 80,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_finished_object": [
+                        {
+                            "object": "Rejuvenation Pool",
+                            "object_id": [29240, 40847]
+                        }
+                    ]
+                },
+                {
+                    "name": "Build a Fancy Jewellery Box",
+                    "taskID": "build_fancy_jewellery_box",
+                    "category": "Construction",
+                    "level": 86,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_finished_object": [
+                        {
+                            "object": "Fancy jewellery box",
+                            "object_id": [37501, 37502, 37503, 37504, 37505, 37506, 37507, 37508, 37509, 37510, 37511, 37512, 37513, 37514, 37515, 37516, 37517, 37518, 37519, 50711]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Nechryael",
+                    "taskID": "defeat_nechryael",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Nechryael"],
+                        "npc_ids": [7278, 11240, 8, 11, 7411],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Dark Beast",
+                    "taskID": "defeat_dark_beast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Dark Beast"],
+                        "npc_ids": [4005, 7250, 7409],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Kurask on Task",
+                    "taskID": "defeat_kurask_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Kurask"],
+                        "npc_ids": [7405, 411, 410],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Nechryarch",
+                    "taskID": "defeat_nechryarch",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Nechryarch"],
+                        "npc_ids": [7411],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Night Beast",
+                    "taskID": "defeat_night_beast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Night Beast"],
+                        "npc_ids": [7409],
+                        "quantity": [1]
+                    }
+                }
+            ],
+            "is_completed": false
         }
     ]
 }
