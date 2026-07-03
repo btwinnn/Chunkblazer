@@ -409,6 +409,26 @@
     "region_id": [6193],
     "Friendly_Name": "Fortis Aqueduct",
     "neighbor_ids": [6194, 6449, 6192, 5937]
+},
+{
+    "region_id": [8755],
+    "Friendly_Name": "Prifddinas",
+    "neighbor_ids": [8756, 9011, 8754, 8499]
+},
+{
+    "region_id": [9011],
+    "Friendly_Name": "Prifddinas",
+    "neighbor_ids": [9012, 9267, 9010, 8755]
+},
+{
+    "region_id": [9012],
+    "Friendly_Name": "Prifddinas",
+    "neighbor_ids": [9013, 9268, 9011, 8756]
+},
+{
+    "region_id": [8756],
+    "Friendly_Name": "Prifddinas",
+    "neighbor_ids": [8757, 9012, 8755, 8500]
 }
     ]
 }
