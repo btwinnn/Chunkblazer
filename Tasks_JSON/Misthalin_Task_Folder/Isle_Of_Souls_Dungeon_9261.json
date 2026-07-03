@@ -1,0 +1,201 @@
+{
+            "region_id": [9261],
+            "neighbor_ids": [9262, 9517, 9260, 9005],
+            "Friendly_Name": "Isle of Souls Dungeon",
+            "tasks": [
+                {
+                    "name": "Defeat a Greater Demon",
+                    "taskID": "defeat_greater_demon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Greater Demon"],
+                        "npc_ids": [12387, 7245, 7244, 7871, 7872, 7873, 7246, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Greater Demon in 27 Seconds",
+                    "taskID": "defeat_greater_demon_27_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Greater Demon"],
+                        "npc_ids": [12387, 7245, 7244, 7871, 7872, 7873, 7246, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [45]
+                    }
+                },
+                {
+                    "name": "Defeat a Fire Giant",
+                    "taskID": "defeat_fire_giant",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Fire Giant"],
+                        "npc_ids": [7252, 7251, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083, 2084],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Fire Giant in 27 Seconds",
+                    "taskID": "defeat_fire_giant_27_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Fire Giant"],
+                        "npc_ids": [7252, 7251, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083, 2084],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [45]
+                    }
+                },
+                {
+                    "name": "Defeat a Blue Dragon",
+                    "taskID": "defeat_blue_dragons",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Blue Dragon"],
+                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Blue Dragon on Task",
+                    "taskID": "defeat_blue_dragon_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Blue Dragon"],
+                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Blue Dragon in 24 Seconds",
+                    "taskID": "defeat_blue_dragon_24_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Blue Dragon"],
+                        "npc_ids": [265, 266, 267, 268, 269, 14103, 14104, 5878, 5879, 5880, 5881, 5882],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Defeat an Iron Dragon",
+                    "taskID": "defeat_iron_dragon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Iron Dragon"],
+                        "npc_ids": [7254, 272, 273, 8080],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Mix some Antifire Potions",
+                    "taskID": "mix_antifire_potions",
+                    "category": "Obtain_Set",
+                    "level": 69,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Antifire Potion(3)", "Antifire Potion(4)"],
+                            "item_ids": [2454, 2452],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix a Weapon Poison",
+                    "taskID": "mix_weapon_poison",
+                    "category": "Obtain_Set",
+                    "level": 60,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Weapon Poison"],
+                            "item_ids": [187],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Iron Dragon in 36 Seconds",
+                    "taskID": "defeat_iron_dragon_36_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Iron Dragon"],
+                        "npc_ids": [7254, 272, 273, 8080],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [60]
+                    }
+                },
+                {
+                    "name": "Mine some Runite Ore",
+                    "taskID": "mine_runite_ore",
+                    "category": "Mining",
+                    "level": 85,
+                    "completion_type": "MINING",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Runite Ore"],
+                            "item_ids": [451],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        } 

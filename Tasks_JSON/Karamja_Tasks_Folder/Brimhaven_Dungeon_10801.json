@@ -84,7 +84,7 @@
                 },
                 {
                     "name": "Defeat an Iron Dragon",
-                    "taskID": "defeat_Bronze_dragon",
+                    "taskID": "defeat_iron_dragon",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 2,
