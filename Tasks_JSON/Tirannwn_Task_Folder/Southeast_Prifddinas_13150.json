@@ -1,0 +1,146 @@
+{
+            "region_id": [13150],
+            "neighbor_ids": [13151, 13406, 13149, 12894],
+            "Friendly_Name": "Southeast Prifddinas",
+            "tasks": [
+                {
+                    "name": "Obtain a Crystal Tool Seed",
+                    "taskID": "obtain_crystal_tool_seed",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Crystal Tool Seed"],
+                            "item_ids": [23953],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Zalcano Shard",
+                    "taskID": "obtain_zalcano_shard",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Zalcano Shard"],
+                            "item_ids": [23908],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Uncut Onyx",
+                    "taskID": "obtain_uncut_onyx",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Uncut Onyx"],
+                            "item_ids": [6571],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat Zalcano",
+                    "taskID": "defeat_zalcano",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Zalcano"],
+                        "npc_ids": [9049, 9050],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Mine some Runite Ore",
+                    "taskID": "mine_runite_ore",
+                    "category": "Mining",
+                    "level": 85,
+                    "completion_type": "MINING",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Runite Ore"],
+                            "item_ids": [451],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Crystal Body",
+                    "taskID": "craft_crystal_body",
+                    "category": "Crafting",
+                    "level": 74,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Crystal Body"],
+                            "item_ids": [23975],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Crystal Helm",
+                    "taskID": "craft_crystal_helm",
+                    "category": "Crafting",
+                    "level": 70,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Crystal Helm"],
+                            "item_ids": [23971],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft Crystal Legs",
+                    "taskID": "craft_crystal_legs",
+                    "category": "Crafting",
+                    "level": 72,
+                    "completion_type": "CRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Crystal Legs"],
+                            "item_ids": [23979],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }
