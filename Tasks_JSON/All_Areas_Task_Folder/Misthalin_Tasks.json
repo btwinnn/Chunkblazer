@@ -317,18 +317,11 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Cow"],
-                        "npc_ids": [2790, 2791, 2793],
+                        "npc_ids": [2790, 2791, 2793, 2795],
                         "quantity": 1
                     },
                     "constraints": {
-                        "time_in_ticks": [12],
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                        "time_in_ticks": [12]
                     }
                 },
                 {
@@ -359,14 +352,7 @@
                         "quantity": [1]
                     },
                     "constraints": {
-                        "time_in_ticks": [1],
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                        "time_in_ticks": [1]
                     }
                 },
                 {

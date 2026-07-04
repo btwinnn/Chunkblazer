@@ -1,6 +1,6 @@
 {
     "novice_mystery_tasks": [
-        {
+        
            
                 {
                     "name": "A Quick Harvest",
@@ -89,4 +89,7 @@
                             "action": "use_item_on"                            
                         },
                     "target_interactions": 1
-                },
+                }
+            
+        ]
+    }
