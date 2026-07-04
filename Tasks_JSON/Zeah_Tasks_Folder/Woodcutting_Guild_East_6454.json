@@ -82,8 +82,8 @@
                         ]
                 },
                 {
-                    "name": "Obtain some Bird Nests",
-                    "taskID": "obtain_bird_nests",
+                    "name": "Obtain a Bird Nest",
+                    "taskID": "obtain_bird_nest",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,

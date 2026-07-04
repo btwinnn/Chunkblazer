@@ -2433,8 +2433,8 @@
                         ]
                 },
                 {
-                    "name": "Obtain some Bird Nests",
-                    "taskID": "obtain_bird_nests",
+                    "name": "Obtain a Bird Nest",
+                    "taskID": "obtain_bird_nest",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
@@ -2530,8 +2530,8 @@
             "neighbor_ids": [6199, 6454, 6197, 5942],
             "tasks": [
                 {
-                    "name": "Obtain some Bird Nests",
-                    "taskID": "obtain_bird_nests",
+                    "name": "Obtain a Bird Nest",
+                    "taskID": "obtain_bird_nest",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
