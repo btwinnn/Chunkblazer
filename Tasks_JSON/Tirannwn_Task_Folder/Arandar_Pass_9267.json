@@ -1,0 +1,139 @@
+{
+            "region_id": [9267],
+            "neighbor_ids": [9268, 9523, 9266, 9011, 8756, 9012, 8755],
+            "Friendly_Name": "Arandar Pass",
+            "tasks": [
+                {
+                    "name": "Mine some Limestone",
+                    "taskID": "mine_limestone",
+                    "category": "Mining",
+                    "level": 10,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Limestone"],
+                            "item_ids": [3211],
+                            "quantity": [1, 10]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix some Super Restore Potions",
+                    "taskID": "mix_super_restore_potions",
+                    "category": "Obtain_Set",
+                    "level": 63,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Super Restore(3)", "Super Restore(4)"],
+                            "item_ids": [3026, 3024],
+                            "quantity": [50, 150]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Deadly Red Spider",
+                    "taskID": "defeat_deadly_red_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Deadly Red Spider"],
+                        "npc_ids": [3021],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Deadly Red Spider in the First Hit",
+                    "taskID": "defeat_deadly_red_spider_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Deadly Red Spider"],
+                        "npc_ids": [3021],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Use the Level 59 Agility Arandar Rocks Shortcut",
+                    "taskID": "agility_level_59_arandar_rocks",
+                    "category": "Agility",
+                    "level": 59,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Tirannwn)#Easy"],
+                        "object_id": [16514, 16515],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Use the Level 68 Agility Arandar Rocks Shortcut",
+                    "taskID": "agility_level_68_arandar_rocks",
+                    "category": "Agility",
+                    "level": 68,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Rocks (Tirannwn)#Medium"],
+                        "object_id": [16514, 16515],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Dire Wolf",
+                    "taskID": "defeat_dire_wolf",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Dire Wolf"],
+                        "npc_ids": [9181, 3426, 13813, 13812],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Dire Wolf in 12 Seconds",
+                    "taskID": "defeat_dire_wolf_12_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Dire Wolf"],
+                        "npc_ids": [9181, 3426, 13813, 13812],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [20]
+                    }
+                },
+                {
+                    "name": "Defeat a Dire Wolf on Task",
+                    "taskID": "defeat_dire_wolf_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Dire Wolf"],
+                        "npc_ids": [9181, 3426, 13813, 13812],
+                        "quantity": [1]
+                    }
+                }
+            ],
+            "is_completed": false
+        }
