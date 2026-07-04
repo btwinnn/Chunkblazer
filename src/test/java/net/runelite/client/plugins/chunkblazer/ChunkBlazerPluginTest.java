@@ -199,6 +199,49 @@ class ChunkBlazerPluginTest
 		assertEquals("Tutorial Island (12336)", plugin.getRegionName(12336));
 	}
 
+	// --- Prifddinas: real city regions in instance coordinates (regionY 94-95) ---
+
+	@Test
+	void prifCityRegionsAreNotAutoFreedByCoordinateRule()
+	{
+		// The city's regionY (94-95) is outside the surface band [39,64], which
+		// used to auto-free it like a dungeon. It must be exempt...
+		assertFalse(plugin.isFreeRegion(12894));
+		assertFalse(plugin.isFreeRegion(12895));
+		assertFalse(plugin.isFreeRegion(13150));
+		assertFalse(plugin.isFreeRegion(13151));
+		// ...while genuine out-of-band regions stay free (regionY 16 < 39).
+		assertTrue(plugin.isFreeRegion(10000));
+	}
+
+	@Test
+	void prifCityLockedAndNotUnlockableWithoutGateChunk()
+	{
+		when(config.unlockedChunks()).thenReturn("");
+		assertFalse(plugin.isRegionUnlocked(12894));
+		assertFalse(plugin.isUnlockableRegion(12894));
+	}
+
+	@Test
+	void prifCityUnlockableOnceAnyGateChunkUnlocked()
+	{
+		// Unlocking one surrounding Tirannwn gate chunk (8757) bridges all four
+		// city chunks into the unlockable (yellow) set.
+		when(config.unlockedChunks()).thenReturn("8757");
+		Set<Integer> neighbors = plugin.getNeighborRegionIds();
+		assertTrue(neighbors.containsAll(Arrays.asList(12894, 12895, 13150, 13151)));
+		assertTrue(plugin.isUnlockableRegion(12894));
+	}
+
+	@Test
+	void prifCityChunkNotReofferedOnceUnlocked()
+	{
+		when(config.unlockedChunks()).thenReturn("8757,12894");
+		Set<Integer> neighbors = plugin.getNeighborRegionIds();
+		assertFalse(neighbors.contains(12894));
+		assertTrue(neighbors.contains(12895)); // the others remain unlockable
+	}
+
 	// --- reflection helpers (the plugin's fields are private; no test seam) ---
 
 	@SuppressWarnings("unchecked")

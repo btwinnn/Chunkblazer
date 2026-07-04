@@ -3430,6 +3430,24 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 
+		// Prifddinas bridge: the city's real regions live in instance coordinates,
+		// so they can never appear in a surface chunk's neighbor_ids. If any gate
+		// chunk around the city is unlocked, all four city chunks become unlockable.
+		for (Integer gate : PRIF_GATE_REGIONS)
+		{
+			if (unlocked.contains(String.valueOf(gate)))
+			{
+				for (Integer city : PRIF_CITY_REGIONS)
+				{
+					if (!unlocked.contains(String.valueOf(city)))
+					{
+						neighbors.add(city);
+					}
+				}
+				break;
+			}
+		}
+
 		return neighbors;
 	}
 
@@ -3483,8 +3501,24 @@ public class ChunkBlazerPlugin extends Plugin
 	 * (Free_Chunks.json regions are NOT always-free — they're 0-cost unlock-on-demand
 	 * chunks; see {@link #isFreeUnlockableRegion}.)
 	 */
+	// Prifddinas: the city's REAL in-game regions sit far above the overworld
+	// surface band (regionY 94–95), so the free-dungeon coordinate rule would
+	// auto-free them the moment a player steps inside. It's a genuine surface
+	// city, not a dungeon — exempt it so the four city chunks start LOCKED.
+	private static final Set<Integer> PRIF_CITY_REGIONS = new HashSet<>(Arrays.asList(
+		12894, 12895, 13150, 13151));
+	// The Tirannwn surface chunks surrounding the city. The city regions aren't
+	// adjacent to them in region-id space (instance coordinates), so unlocking
+	// ANY of these bridges all four city chunks into the unlockable set.
+	private static final Set<Integer> PRIF_GATE_REGIONS = new HashSet<>(Arrays.asList(
+		8757, 9013, 9268, 9267, 9010, 8754, 8500, 8499));
+
 	public boolean isFreeRegion(int regionId)
 	{
+		if (PRIF_CITY_REGIONS.contains(regionId))
+		{
+			return false; // real surface city despite its out-of-band regionY
+		}
 		int regionY = regionId & 0xFF;
 		return regionY < SURFACE_MIN_REGION_Y || regionY > SURFACE_MAX_REGION_Y;
 	}
