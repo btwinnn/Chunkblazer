@@ -9911,6 +9911,155 @@
                             "quantity": [1]
                         }
                     ]
+                },
+                {
+                    "name": "Use Fairy Ring Code CLR",
+                    "taskID": "fairy_ring_CLR",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [11050],
+            "neighbor_ids": [11051, 11306, 11049, 10794],
+            "Friendly_Name": "Ape Atoll Dungeon",
+            "tasks": [
+                {
+                    "name": "Chop some Teak Trees",
+                    "taskID": "Chop_teak_trees",
+                    "category": "Woodcutting",
+                    "level": 35,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Teak Logs",
+                            "item_ids": [6333],
+                            "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Teak Log",
+                    "taskID": "burn_teak_log",
+                    "category": "Firemaking",
+                    "level": 35,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Teak Logs",
+                            "item_ids": [6333],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ape Atoll Teleport Tablet",
+                    "taskID": "obtain_ape_atoll_teleport_tablet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Ape Atoll Teleport"],
+                            "item_ids": [19631],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Shark",
+                    "taskID": "catch_raw_shark",
+                    "category": "Fishing",
+                    "level": 76,
+                    "completion_type": "FISHING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Raw Shark",
+                            "item_ids": [383],
+                            "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Shark",
+                    "taskID": "cook_shark",
+                    "category": "Cooking",
+                    "level": 80,
+                    "completion_type": "COOKING",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Shark",
+                            "item_ids": [385],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Zombie Monkey",
+                    "taskID": "defeat_zombie_monkey",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Monkey Zombie"],
+                        "npc_ids": [5282, 5283, 5281],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Skeleton Monkey",
+                    "taskID": "defeat_skeleton_monkey",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Skeleton"],
+                        "npc_ids": [5237],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Talk to Zooknock",
+                    "taskID": "talk_to_zooknock",
+                    "category": "NPC_Dialogue",
+                    "completion_type": "NPC_DIALOGUE",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Zooknock"],
+                        "npc_ids": [1442, 7113, 7170, 7171]
+                    }
+                },
+                {
+                    "name": "Defeat a Skeleton Monkey in 12 Seconds",
+                    "taskID": "defeat_skeleton_monkey_12_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Skeleton"],
+                        "npc_ids": [5237],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [20]
+                    }
                 }
             ],
             "is_completed": false
