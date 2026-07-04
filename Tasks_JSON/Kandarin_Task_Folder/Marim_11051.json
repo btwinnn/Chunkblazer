@@ -1,0 +1,110 @@
+{
+            "region_id": [11051],
+            "neighbor_ids": [11052, 11307, 11050, 10795],
+            "Friendly_Name": "Marim",
+            "tasks": [
+                {
+                    "name": "Defeat a Monkey Guard",
+                    "taskID": "defeat_monkey_guard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Monkey Guard"],
+                        "npc_ids": [5276, 5275],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Activate Protect from Missiles",
+                    "taskID": "pray_protect_from_missiles",
+                    "category": "Prayer",
+                    "level": 40,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 13
+                    }
+                },
+                {
+                    "name": "Defeat a Monkey Archer",
+                    "taskID": "defeat_monkey_archer",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Monkey Archer"],
+                        "npc_ids": [5272, 5274],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Equip a Dragon Scimitar",
+                    "taskID": "equip_dragon_scimitar",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Scimitar"],
+                            "item_ids": [4587]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cut a Zenyte",
+                    "taskID": "cut_zenyte",
+                    "category": "Crafting",
+                    "level": 89,
+                    "completion_type": "CRAFTING",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Zenyte"],
+                            "item_ids": [19493],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Stuffed Snake",
+                    "taskID": "obtain_stuffed_snake",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Stuffed Snake"],
+                            "item_ids": [7579],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Monkey Guard in 36 Seconds",
+                    "taskID": "defeat_monkey_guard_36_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Monkey Guard"],
+                        "npc_ids": [5276, 5275],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [60]
+                    }
+                }
+            ],
+            "is_completed": false
+        }
