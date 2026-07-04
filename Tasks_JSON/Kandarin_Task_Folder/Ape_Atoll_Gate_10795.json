@@ -1,0 +1,77 @@
+{
+            "region_id": [10795],
+            "neighbor_ids": [10796, 11051, 10794, 10539],
+            "Friendly_Name": "Ape Atoll Gate",
+            "tasks": [
+                {
+                    "name": "Talk to Duke",
+                    "taskID": "talk_to_duke",
+                    "category": "NPC_Dialogue",
+                    "completion_type": "NPC_DIALOGUE",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Duke"],
+                        "npc_ids": [7176, 5258]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 24 Snake in 9 Seconds",
+                    "taskID": "defeat_level_24_snake_9_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Snake"],
+                        "npc_ids": [5244],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                },
+                {
+                    "name": "Defeat a Maniacal Monkey",
+                    "taskID": "defeat_maniacal_monkey",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Maniacal Monkey"],
+                        "npc_ids": [7119, 7118],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Monkey Talisman",
+                    "taskID": "obtain_monkey_talisman",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Monkey Talisman"],
+                            "item_ids": [4023],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Jungle Spider",
+                    "taskID": "defeat_jungle_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Jungle Spider"],
+                        "npc_ids": [5243, 3020, 6267, 6271],
+                        "quantity": [1, 10]
+                    }
+                }
+            ],
+            "is_completed": false
+        }
