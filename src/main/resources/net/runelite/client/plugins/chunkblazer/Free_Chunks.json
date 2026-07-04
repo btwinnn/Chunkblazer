@@ -429,6 +429,26 @@
     "region_id": [8756],
     "Friendly_Name": "Prifddinas",
     "neighbor_ids": [8757, 9012, 8755, 8500]
+},
+{
+    "region_id": [9010],
+    "Friendly_Name": "Afon Ganol",
+    "neighbor_ids": [9011, 9266, 9009, 8754, 8756, 9012, 8755]
+},
+{
+    "region_id": [9266],
+    "Friendly_Name": "South Arandar Pass",
+    "neighbor_ids": [9267, 9522, 9265, 9010]
+},
+{
+    "region_id": [8499],
+    "Friendly_Name": "Prifddinas South Port",
+    "neighbor_ids": [8500, 8755, 8498, 8243, 8756, 9012, 9011]
+},
+{
+    "region_id": [9268],
+    "Friendly_Name": "Arandar Mountains",
+    "neighbor_ids": [9269, 9524, 9267, 9012, 8756, 8755, 9011]
 }
     ]
 }

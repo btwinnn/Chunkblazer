@@ -1,0 +1,108 @@
+{
+            "region_id": [9013],
+            "neighbor_ids": [9014, 9269, 9012, 8757, 8756, 8755, 9011],
+            "Friendly_Name": "Gorlah",
+            "tasks": [
+                {
+                    "name": "Catch a Red Chinchompa",
+                    "taskID": "catch_red_chinchimpa",
+                    "category": "Hunter",
+                    "level": 63,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Red Chinchompa",
+                            "item_ids": [10034]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Red Chinchompa Tuft",
+                    "taskID": "obtain_red_chinchompa_tuft",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Red Chinchompa Tuft"],
+                            "item_ids": [29235],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Activate Piety",
+                    "taskID": "pray_piety",
+                    "category": "Prayer",
+                    "level": 70,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 26
+                    }
+                },
+                {
+                    "name": "Activate Chivalry",
+                    "taskID": "pray_chivalry",
+                    "category": "Prayer",
+                    "level": 60,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 25
+                    }
+                },
+                {
+                    "name": "Activate Redemption",
+                    "taskID": "pray_redemption",
+                    "category": "Prayer",
+                    "level": 52,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 16
+                    }
+                },
+                {
+                    "name": "Activate Retribution",
+                    "taskID": "pray_retribution",
+                    "category": "Prayer",
+                    "level": 46,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 15
+                    }
+                },
+                {
+                    "name": "Activate Smite",
+                    "taskID": "pray_smite",
+                    "category": "Prayer",
+                    "level": 52,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 17
+                    }
+                }
+            ],
+            "is_completed": false
+        }

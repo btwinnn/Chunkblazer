@@ -92,54 +92,6 @@
                             "quantity": [1, 50]
                         }
                     ]
-                },
-                {
-                    "name": "Craft a Crystal Body",
-                    "taskID": "craft_crystal_body",
-                    "category": "Crafting",
-                    "level": 74,
-                    "completion_type": "CRAFTING",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Crystal Body"],
-                            "item_ids": [23975],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Craft a Crystal Helm",
-                    "taskID": "craft_crystal_helm",
-                    "category": "Crafting",
-                    "level": 70,
-                    "completion_type": "CRAFTING",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Crystal Helm"],
-                            "item_ids": [23971],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Craft Crystal Legs",
-                    "taskID": "craft_crystal_legs",
-                    "category": "Crafting",
-                    "level": 72,
-                    "completion_type": "CRAFTING",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Crystal Legs"],
-                            "item_ids": [23979],
-                            "quantity": [1]
-                        }
-                    ]
                 }
             ],
             "is_completed": false
