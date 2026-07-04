@@ -77,21 +77,7 @@
                         "object_id": [16514, 16515],
                         "quantity": [1]
                     }
-                },
-                {
-                    "name": "Use the Level 68 Agility Arandar Rocks Shortcut",
-                    "taskID": "agility_level_68_arandar_rocks",
-                    "category": "Agility",
-                    "level": 68,
-                    "completion_type": "AGILITY",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_object": {
-                        "object": ["Rocks (Tirannwn)#Medium"],
-                        "object_id": [16514, 16515],
-                        "quantity": [1]
-                    }
-                },
+                },              
                 {
                     "name": "Defeat a Dire Wolf",
                     "taskID": "defeat_dire_wolf",
