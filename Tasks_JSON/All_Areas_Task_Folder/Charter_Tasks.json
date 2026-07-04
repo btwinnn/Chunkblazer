@@ -2200,291 +2200,211 @@
                               "chunk_type":  "CHARTER"
                           },
                           {
-                              "region_id":  [
-                                                14907
-                                            ],
-                              "neighbor_ids":  [
-                                                   15163,
-                                                   14906,
-                                                   14651,
-                                                   14908
-                                               ],
-                              "unlock_cost":  0,
+    "region_id": [14907],
+    "neighbor_ids": [14908, 15163, 14906, 14651],
+    "Friendly_Name": "Fossil Island Museum Camp",
+    "unlock_cost":  0,
                               "travel_connections":  [
                                                          {
                                                              "destination_id":  13365,
                                                              "travel_name":  "Sail to the Digsite"
                                                          }
                                                      ],
-                              "tasks":  [
-                                            {
-                                                "name":  "Travel to Fossil Island",
-                                                "taskID":  "travel_fossil_island",
-                                                "category":  "Travel",
-                                                "completion_type":  "TRAVEL",
-                                                "base_points":  1,
-                                                "assignment_weight":  10
-                                            },
-                                            {
-                                                "name":  "Obtain Charcoal",
-                                                "taskID":  "obtain_charcoal",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Charcoal"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            973
-                                                                                        ],
-                                                                           "quantity":  [
-                                                                                            1
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Obtain a Digsite Pendant",
-                                                "taskID":  "obtain_digsite_pendant",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
-                                                "base_points":  2,
-                                                "assignment_weight":  10,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Digsite Pendant"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            11190,
-                                                                                            11191,
-                                                                                            11192,
-                                                                                            11193,
-                                                                                            11194
-                                                                                        ],
-                                                                           "quantity":  [
-                                                                                            1
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Obtain a Digsite Vase",
-                                                "taskID":  "obtain_digsite_vase",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Vase(Digsite)"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            3734
-                                                                                        ],
-                                                                           "quantity":  [
-                                                                                            1
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Dig some Soil",
-                                                "taskID":  "dig_soil",
-                                                "category":  "Mining",
-                                                "level":  1,
-                                                "completion_type":  "MINING",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
-                                            },
-                                            {
-                                                "name":  "Obtain an Old Tooth",
-                                                "taskID":  "obtain_old_tooth",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Old Tooth"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            695
-                                                                                        ],
-                                                                           "quantity":  [
-                                                                                            1
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Equip a Black Med Helm",
-                                                "taskID":  "equip_black_med_helm",
-                                                "category":  "Defence",
-                                                "level":  10,
-                                                "completion_type":  "EQUIP",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Black Med Helm"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            1151
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Obtain an Ancient Talisman",
-                                                "taskID":  "obtain_ancient_talisman",
-                                                "category":  "Obtain",
-                                                "completion_type":  "OBTAIN",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Ancient Talisman"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            681
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Defeat a Level 22 Skeleton in 12 Seconds",
-                                                "taskID":  "defeat_level_22_skeleton_fast",
-                                                "category":  "Combat",
-                                                "completion_type":  "NPC_Kill",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "target_npc":  {
-                                                                   "npc":  [
-                                                                               "Skeleton Level 22"
-                                                                           ],
-                                                                   "npc_ids":  [
-                                                                                   70,
-                                                                                   71,
-                                                                                   72,
-                                                                                   73
-                                                                               ],
-                                                                   "quantity":  [
-                                                                                    1
-                                                                                ]
-                                                               },
-                                                "constraints":  {
-                                                                    "time_in_ticks":  [
-                                                                                          20
-                                                                                      ]
-                                                                }
-                                            },
-                                            {
-                                                "name":  "Defeat some Level 22 Skeletons",
-                                                "taskID":  "defeat_level_22_skeletons",
-                                                "category":  "Combat",
-                                                "completion_type":  "NPC_Kill",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "target_npc":  {
-                                                                   "npc":  [
-                                                                               "Skeleton Level 22"
-                                                                           ],
-                                                                   "npc_ids":  [
-                                                                                   70,
-                                                                                   71,
-                                                                                   72,
-                                                                                   73
-                                                                               ],
-                                                                   "quantity":  [
-                                                                                    1,
-                                                                                    25
-                                                                                ]
-                                                               }
-                                            },
-                                            {
-                                                "name":  "Defeat a Level 22 Skeleton with nothing Equipped",
-                                                "taskID":  "defeat_level_22_skeleton_naked",
-                                                "category":  "Combat",
-                                                "completion_type":  "NPC_Kill",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "target_npc":  {
-                                                                   "npc":  [
-                                                                               "Skeleton Level 22"
-                                                                           ],
-                                                                   "npc_ids":  [
-                                                                                   70,
-                                                                                   71,
-                                                                                   72,
-                                                                                   73
-                                                                               ],
-                                                                   "quantity":  [
-                                                                                    1
-                                                                                ]
-                                                               },
-                                                "constraints":  {
-                                                                    "must_be_empty_slots":  [
-                                                                                                "HEAD",
-                                                                                                "CAPE",
-                                                                                                "AMULET",
-                                                                                                "BODY",
-                                                                                                "SHIELD",
-                                                                                                "LEGS",
-                                                                                                "GLOVES",
-                                                                                                "BOOTS",
-                                                                                                "RING",
-                                                                                                "AMMO",
-                                                                                                "WEAPON"
-                                                                                            ]
-                                                                }
-                                            },
-                                            {
-                                                "name":  "Build an Easy STASH Unit in the Exam Centre",
-                                                "taskID":  "build_easy_stash_exam_centre",
-                                                "category":  "Construction",
-                                                "level":  27,
-                                                "completion_type":  "CONSTRUCTION",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "required_finished_object":  [
-                                                                                 {
-                                                                                     "object":  "Easy STASH Unit (inconspicuous bush)",
-                                                                                     "object_id":  [
-                                                                                                       28980
-                                                                                                   ]
-                                                                                 }
-                                                                             ]
-                                            },
-                                            {
-                                                "name":  "Pickpocket a Digsite Worker",
-                                                "taskID":  "pickpocket_digsite_worker",
-                                                "category":  "Thieving",
-                                                "level":  25,
-                                                "completion_type":  "THIEVING",
-                                                "base_points":  1,
-                                                "assignment_weight":  8,
-                                                "target_npc":  {
-                                                                   "npc":  "Digsite Worker",
-                                                                   "npc_ids":  [
-                                                                                   3628,
-                                                                                   3630,
-                                                                                   3631
-                                                                               ]
-                                                               }
-                                            }
-                                        ],
-                              "is_completed":  false,
-                              "Friendly_Name":  "Fossil Island Museum Camp",
-                              "chunk_type":  "CHARTER"
-                          },
+    "tasks": [
+        {
+            "name": "Defeat a Taloned Wyvern",
+            "taskID": "defeat_taloned_wyvern",
+            "category": "Combat",
+            "completion_type": "NPC_Kill",
+            "base_points": 2,
+            "assignment_weight": 5,
+            "target_npc": {
+                "npc": ["Taloned Wyvern"],
+                "npc_ids": [7793],
+                "quantity": [1, 10]
+            }
+        },
+        {
+            "name": "Defeat an Ancient Wyvern",
+            "taskID": "defeat_ancient_wyvern",
+            "category": "Combat",
+            "completion_type": "NPC_Kill",
+            "base_points": 3,
+            "assignment_weight": 5,
+            "target_npc": {
+                "npc": ["Ancient Wyvern"],
+                "npc_ids": [7795],
+                "quantity": [1, 10]
+            }
+        },
+        {
+            "name": "Defeat a Long-Tailed Wyvern",
+            "taskID": "defeat_long_tailed_wyvern",
+            "category": "Combat",
+            "completion_type": "NPC_Kill",
+            "base_points": 2,
+            "assignment_weight": 5,
+            "target_npc": {
+                "npc": ["Long-tailed Wyvern"],
+                "npc_ids": [7792],
+                "quantity": [1, 10]
+            }
+        },
+        {
+            "name": "Equip a Granite Longsword",
+            "taskID": "equip_granite_longsword",
+            "category": "Attack",
+            "level": 50,
+            "completion_type": "EQUIP",
+            "base_points": 2,
+            "assignment_weight": 3,
+            "required_items": [
+                {
+                    "item": ["Granite Longsword"],
+                    "item_ids": [21646]
+                }
+            ]
+        },
+        {
+            "name": "Equip Granite Boots",
+            "taskID": "equip_granite_boots",
+            "category": "Defence",
+            "level": 50,
+            "completion_type": "EQUIP",
+            "base_points": 5,
+            "assignment_weight": 1,
+            "required_items": [
+                {
+                    "item": ["Granite Boots"],
+                    "item_ids": [21643]
+                }
+            ]
+        },
+        {
+            "name": "Fletch an Adamant Crossbow",
+            "taskID": "fletch_adamant_crossbow",
+            "category": "Fletching",
+            "level": 61,
+            "completion_type": "FLETCHING",
+            "base_points": 3,
+            "assignment_weight": 5,
+            "required_items": [
+                {
+                    "item": ["Adamant Crossbow"],
+                    "item_ids": [9177],
+                    "quantity": [1]
+                }
+            ]
+        },
+        {
+            "name": "Equip an Ancient Wyvern Shield",
+            "taskID": "equip_ancient_wyvern_shield",
+            "category": "Defence",
+            "level": 70,
+            "completion_type": "EQUIP",
+            "base_points": 5,
+            "assignment_weight": 3,
+            "required_items": [
+                {
+                    "item": ["Ancient Wyvern Shield (uncharged)", "Ancient Wyvern Shield"],
+                    "item_ids": [21633, 21634]
+                }
+            ]
+        },
+        {
+            "name": "Mix some Prayer Potions",
+            "taskID": "mix_prayer_potions",
+            "category": "Obtain_Set",
+            "level": 38,
+            "completion_type": "HERBLORE",
+            "base_points": 2,
+            "assignment_weight": 8,
+            "required_items": [
+                {
+                    "item": ["Prayer Potion(3)", "Prayer Potion(4)"],
+                    "item_ids": [139, 2434],
+                    "quantity": [1, 50]
+                }
+            ]
+        },
+        {
+            "name": "Fletch a Rune Crossbow",
+            "taskID": "fletch_rune_crossbow",
+            "category": "Fletching",
+            "level": 69,
+            "completion_type": "FLETCHING",
+            "base_points": 3,
+            "assignment_weight": 5,
+            "required_items": [
+                {
+                    "item": ["Rune Crossbow"],
+                    "item_ids": [9185],
+                    "quantity": [1]
+                }
+            ]
+        },
+        {
+            "name": "Defeat an Ancient Wyvern on Task",
+            "taskID": "defeat_ancient_wyvern_on_task",
+            "category": "Slayer",
+            "completion_type": "SLAYER",
+            "base_points": 3,
+            "assignment_weight": 3,
+            "target_npc": {
+                "npc": ["Ancient Wyvern"],
+                "npc_ids": [7795],
+                "quantity": [1]
+            }
+        },
+        {
+            "name": "Defeat a Long-Tailed Wyvern in 24 Seconds",
+            "taskID": "defeat_long_tailed_wyvern_24_seconds",
+            "category": "Combat",
+            "completion_type": "NPC_Kill",
+            "base_points": 2,
+            "assignment_weight": 3,
+            "target_npc": {
+                "npc": ["Long-tailed Wyvern"],
+                "npc_ids": [7792],
+                "quantity": [1]
+            },
+            "constraints": {
+                "time_in_ticks": [40]
+            }
+        },
+        {
+            "name": "Defeat a Taloned Wyvern in 24 Seconds",
+            "taskID": "defeat_taloned_wyvern_24_seconds",
+            "category": "Combat",
+            "completion_type": "NPC_Kill",
+            "base_points": 2,
+            "assignment_weight": 3,
+            "target_npc": {
+                "npc": ["Taloned Wyvern"],
+                "npc_ids": [7793],
+                "quantity": [1]
+            },
+            "constraints": {
+                "time_in_ticks": [40]
+            }
+        },
+        {
+            "name": "Use the Level 70 Agility Fossil Island Hole Shortcut",
+            "taskID": "agility_level_70_fossil_island_hole",
+            "category": "Agility",
+            "level": 70,
+            "completion_type": "AGILITY",
+            "base_points": 3,
+            "assignment_weight": 5,
+            "required_object": {
+                "object": ["Hole"],
+                "object_id": [31481, 31482],
+                "quantity": [1]
+            }
+        }
+    ],
+    "is_completed": false
+},
                           {
                               "region_id":  [
                                                 11823
