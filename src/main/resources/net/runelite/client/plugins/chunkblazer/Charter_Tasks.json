@@ -1464,15 +1464,6 @@
                                                                    ]
                                             },
                                             {
-                                                "name":  "Dig some Soil",
-                                                "taskID":  "dig_soil",
-                                                "category":  "Mining",
-                                                "level":  1,
-                                                "completion_type":  "MINING",
-                                                "base_points":  1,
-                                                "assignment_weight":  8
-                                            },
-                                            {
                                                 "name":  "Obtain an Old Tooth",
                                                 "taskID":  "obtain_old_tooth",
                                                 "category":  "Obtain",
