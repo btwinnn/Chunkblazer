@@ -1,0 +1,144 @@
+{
+            "region_id": [14650],
+            "neighbor_ids": [14651, 14906, 14649, 14394],
+            "Friendly_Name": "Tar Swamp",
+            "tasks": [
+                {
+                    "name": "Defeat a Tar Monster",
+                    "taskID": "defeat_tar_monster",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Tar Monster"],
+                        "npc_ids": [7804, 7805, 7801],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Tar Monster in 60 Seconds",
+                    "taskID": "defeat_tar_monster_60_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Tar Monster"],
+                        "npc_ids": [7804, 7805, 7801],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [100]
+                    }
+                },
+                {
+                    "name": "Chop a Sulliuscep for Mushrooms",
+                    "taskID": "chop_sulliuscep",
+                    "category": "Woodcutting",
+                    "level": 65,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Mushroom", "Sulliuscep Cap", "Mort Myre Fungus"],
+                            "item_ids": [6004, 2970, 21626],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Bake a Mushroom Pie",
+                    "taskID": "bake_mushroom_pie",
+                    "category": "Cooking",
+                    "level": 60,
+                    "completion_type": "COOKING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Mushroom Pie"],
+                            "item_ids": [21690],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Numulite",
+                    "taskID": "obtain_numulite",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Numulite"],
+                            "item_ids": [21555],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Small Fossil",
+                    "taskID": "obtain_unidentified_small_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Small Fossil"],
+                            "item_ids": [21562],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Medium Fossil",
+                    "taskID": "obtain_unidentified_medium_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Medium Fossil"],
+                            "item_ids": [21564],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Large Fossil",
+                    "taskID": "obtain_unidentified_large_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Large Fossil"],
+                            "item_ids": [21566],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Rare Fossil",
+                    "taskID": "obtain_unidentified_rare_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Rare Fossil"],
+                            "item_ids": [21568],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }   
