@@ -9296,6 +9296,205 @@
                             }                                    
             ],                                                      
             "is_completed": false
+        },
+        {
+            "region_id": [5179],
+            "neighbor_ids": [5180, 5435, 5178, 4923],
+            "Friendly_Name": "Mount Karuulm",
+            "tasks": [
+                {
+                    "name": "Equip a Dragon Hasta",
+                    "taskID": "equip_dragon_hasta",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Hasta"],
+                            "item_ids": [22731, 22740, 22737, 22734, 22743]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Alchemical Hydra",
+                    "taskID": "defeat_alchemical_hydra",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Alchemical Hydra"],
+                        "npc_ids": [8621, 8622],
+                        "quantity": [25, 100]
+                    }
+                },
+                {
+                    "name": "Obtain a Hydra's Claw",
+                    "taskID": "obtain_hydras_claw",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Hydra's Claw"],
+                            "item_ids": [22966],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Brimstone Ring",
+                    "taskID": "obtain_brimstone_ring",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Brimstone Ring"],
+                            "item_ids": [22975],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Drake's Tooth",
+                    "taskID": "obtain_drakes_tooth",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Drake's Tooth"],
+                            "item_ids": [22960],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Drake's Claw",
+                    "taskID": "obtain_drakes_claw",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Drake's Claw"],
+                            "item_ids": [22957],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Dragon Harpoon",
+                    "taskID": "obtain_dragon_harpoon",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dragon harpoon", "Dragon harpoon (or)#Trailblazer", "Dragon harpoon (or)#Trailblazer Reloaded"],
+                            "item_ids": [21028, 25373, 30349],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Sword",
+                    "taskID": "equip_dragon_sword",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Sword"],
+                            "item_ids": [21009]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Hydra Leather",
+                    "taskID": "obtain_hydra_leather",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Hydra Leather"],
+                            "item_ids": [22983],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Hydra Tail",
+                    "taskID": "obtain_hydra_tail",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Hydra Tail"],
+                            "item_ids": [22988],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Alchemical Hydra Heads",
+                    "taskID": "obtain_alchemical_hydra_heads",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Alchemical Hydra Heads"],
+                            "item_ids": [23077],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Jar of Chemicals",
+                    "taskID": "obtain_jar_of_chemicals",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Jar of Chemicals"],
+                            "item_ids": [23064],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Unlock Reptile Got Ripped",
+                    "taskID": "unlock_reptile_got_ripped",
+                    "category": "Unlock",
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4996,
+                        "varbit_boolean": 1,
+                        "description": "Unlock status of Reptile Got Ripped"
+                    }
+                }
+            ],
+            "is_completed": false
         }                    
     ]
 }
