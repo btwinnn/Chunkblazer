@@ -1,81 +1,197 @@
 {
-            "region_id": [14651],
-            "neighbor_ids": [14652, 14907, 14650, 14395],
-            "Friendly_Name": "Tar Border",
+            "region_id": [14652],
+            "neighbor_ids": [14653, 14908, 14651, 14396],
+            "Friendly_Name": "Ancient Shroom",
             "tasks": [
                 {
-                    "name": "Chop a Sulliuscep for Mushrooms",
-                    "taskID": "chop_sulliuscep",
-                    "category": "Woodcutting",
-                    "level": 65,
-                    "completion_type": "WOODCUTTING",
+                    "name": "Obtain a Rare Enriched Bone",
+                    "taskID": "obtain_rare_enriched_bone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
                     "base_points": 3,
-                    "assignment_weight": 5,
+                    "assignment_weight": 3,
                     "required_items": [
                         {
-                            "item": ["Mushroom", "Sulliuscep Cap", "Mort Myre Fungus"],
-                            "item_ids": [6004, 2970, 21626],
-                            "quantity": [1, 50]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat a Hoop Snake",
-                    "taskID": "defeat_hoop_snake",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "target_npc": {
-                        "npc": ["Hoop Snake"],
-                        "npc_ids": [7802, 7803],
-                        "quantity": [1, 25]
-                    }
-                },
-                {
-                    "name": "Defeat a Hoop Snake in 12 Seconds",
-                    "taskID": "defeat_hoop_snake_12_seconds",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "target_npc": {
-                        "npc": ["Hoop Snake"],
-                        "npc_ids": [7802, 7803],
-                        "quantity": [1]
-                    },
-                    "constraints": {
-                        "time_in_ticks": [20]
-                    }
-                },
-                {
-                    "name": "Plant a Teak Sapling",
-                    "taskID": "plant_teak_sapling",
-                    "category": "Farming",
-                    "level": 35,
-                    "completion_type": "FARMING",
-                    "base_points": 2,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Teak Sapling"],
-                            "item_ids": [21477],
+                            "item": ["Rare Enriched Bone"],
+                            "item_ids": [21553],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Plant a Mahogany Sapling",
-                    "taskID": "plant_mahogany_sapling",
-                    "category": "Farming",
-                    "level": 55,
-                    "completion_type": "FARMING",
+                    "name": "Obtain a Large Enriched Bone",
+                    "taskID": "obtain_large_enriched_bone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Large Enriched Bone"],
+                            "item_ids": [21551],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Medium Enriched Bone",
+                    "taskID": "obtain_medium_enriched_bone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Medium Enriched Bone"],
+                            "item_ids": [21549],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Small Enriched Bone",
+                    "taskID": "obtain_small_enriched_bone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Small Enriched Bone"],
+                            "item_ids": [21547],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Ancient Zygomite",
+                    "taskID": "defeat_ancient_zygomite",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ancient Zygomite"],
+                        "npc_ids": [7797, 8690, 8691],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat an Ancient Zygomite in 36 Seconds",
+                    "taskID": "defeat_ancient_zygomite_36_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ancient Zygomite"],
+                        "npc_ids": [7797, 8690, 8691],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [60]
+                    }
+                },
+                {
+                    "name": "Equip a Granite Longsword",
+                    "taskID": "equip_granite_longsword",
+                    "category": "Attack",
+                    "level": 50,
+                    "completion_type": "EQUIP",
                     "base_points": 2,
                     "assignment_weight": 8,
                     "required_items": [
                         {
-                            "item": ["Mahogany Sapling"],
-                            "item_ids": [21480],
+                            "item": ["Granite Longsword"],
+                            "item_ids": [21646]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Spitting Wyvern",
+                    "taskID": "defeat_spitting_wyvern",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Spitting Wyvern"],
+                        "npc_ids": [7794],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Fletch an Adamant Crossbow",
+                    "taskID": "fletch_adamant_crossbow",
+                    "category": "Fletching",
+                    "level": 61,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Crossbow"],
+                            "item_ids": [9183],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Small Fossil",
+                    "taskID": "obtain_unidentified_small_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Small Fossil"],
+                            "item_ids": [21562],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Medium Fossil",
+                    "taskID": "obtain_unidentified_medium_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Medium Fossil"],
+                            "item_ids": [21564],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Large Fossil",
+                    "taskID": "obtain_unidentified_large_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Large Fossil"],
+                            "item_ids": [21566],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Rare Fossil",
+                    "taskID": "obtain_unidentified_rare_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Rare Fossil"],
+                            "item_ids": [21568],
                             "quantity": [1]
                         }
                     ]
@@ -101,7 +217,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                         "item": "Grimy Ranarr Weed",
@@ -116,7 +232,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                         "item": "Grimy Irit Leaf",
@@ -131,7 +247,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                         "item": "Grimy Avantoe",
@@ -146,7 +262,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                         "item": "Grimy Kwuarm",
@@ -154,14 +270,14 @@
                         "quantity": [1]
                         }
                     ]
-                },
+                },               
                 {
                     "name": "Obtain a Grimy Torstol",
                     "taskID": "obtain_grimy_torstol",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                         "item": "Grimy Torstol",
@@ -176,7 +292,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                         "item": "Grimy Cadantine",
@@ -191,7 +307,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                         "item": "Grimy Dwarf Weed",
@@ -206,7 +322,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                         "item": "Grimy Snapdragon",
@@ -221,7 +337,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                         "item": "Grimy Lantadyme",
@@ -236,7 +352,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Grimy Guam Leaf"],
@@ -251,7 +367,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Grimy Marrentill"],
@@ -266,7 +382,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Grimy Tarromin"],
@@ -281,7 +397,7 @@
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Grimy Harralander"],

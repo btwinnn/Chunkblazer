@@ -8,7 +8,7 @@
                     "taskID": "obtain_bird_nest",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 5,
+                    "base_points": 1,
                     "assignment_weight": 8,
                     "required_items": [
                             {
