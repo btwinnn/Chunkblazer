@@ -5618,6 +5618,141 @@
                         "quantity": [1]
                         }
                     ]
+                },               
+                {
+                    "name": "Obtain a Grimy Torstol",
+                    "taskID": "obtain_grimy_torstol",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Grimy Torstol",
+                        "item_ids": [219],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Cadantine",
+                    "taskID": "obtain_grimy_cadantine",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Grimy Cadantine",
+                        "item_ids": [215],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Dwarf Weed",
+                    "taskID": "obtain_grimy_dwarf_weed",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Grimy Dwarf Weed",
+                        "item_ids": [217],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Snapdragon",
+                    "taskID": "obtain_grimy_snapdragon",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Grimy Snapdragon",
+                        "item_ids": [3051],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Lantadyme",
+                    "taskID": "obtain_grimy_lantadyme",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Grimy Lantadyme",
+                        "item_ids": [2485],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Guam Leaf",
+                    "taskID": "obtain_grimy_guam",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Grimy Guam Leaf"],
+                            "item_ids": [199],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Marrentill",
+                    "taskID": "obtain_grimy_marrentill",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Grimy Marrentill"],
+                            "item_ids": [201],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Tarromin",
+                    "taskID": "obtain_grimy_tarromin",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Grimy Tarromin"],
+                            "item_ids": [203],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Grimy Harralander",
+                    "taskID": "obtain_grimy_harralander",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Grimy Harralander"],
+                            "item_ids": [205],
+                            "quantity": [1]
+                        }
+                    ]
                 }
             ],
             "is_completed": false
