@@ -1,0 +1,144 @@
+{
+            "region_id": [15162],
+            "neighbor_ids": [15163, 15418, 15161, 14906],
+            "Friendly_Name": "Ammonite Fight",
+            "tasks": [
+                {
+                    "name": "Defeat an Ammonite Crab",
+                    "taskID": "defeat_ammonite_crab",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ammonite Crab"],
+                        "npc_ids": [7799, 7800],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Ammonite Crab in 24 Seconds",
+                    "taskID": "defeat_ammonite_crab_24_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ammonite Crab"],
+                        "npc_ids": [7799, 7800],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Defeat an Ammonite Crab in the First Hit",
+                    "taskID": "defeat_ammonite_crab_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Ammonite Crab"],
+                        "npc_ids": [7799, 7800],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Obtain Ultracompost",
+                    "taskID": "obtain_ultracompost",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ultracompost"],
+                            "item_ids": [21483],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix some Compost Potions",
+                    "taskID": "mix_compost_potions",
+                    "category": "Obtain_Set",
+                    "level": 22,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Compost Potion(3)", "Compost Potion(4)"],
+                            "item_ids": [6472, 6470],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Small Fossil",
+                    "taskID": "obtain_unidentified_small_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Small Fossil"],
+                            "item_ids": [21562],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Medium Fossil",
+                    "taskID": "obtain_unidentified_medium_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Medium Fossil"],
+                            "item_ids": [21564],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Large Fossil",
+                    "taskID": "obtain_unidentified_large_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Large Fossil"],
+                            "item_ids": [21566],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Unidentified Rare Fossil",
+                    "taskID": "obtain_unidentified_rare_fossil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Unidentified Rare Fossil"],
+                            "item_ids": [21568],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }  
