@@ -1,0 +1,161 @@
+{
+            "region_id": [14649],
+            "neighbor_ids": [14650, 14905, 14648, 14393],
+            "Friendly_Name": "Deranged Archaeologist",
+            "tasks": [
+                {
+                    "name": "Defeat the Deranged Archaeologist",
+                    "taskID": "defeat_deranged_archaeologist",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Deranged Archaeologist"],
+                        "npc_ids": [7806],
+                        "quantity": [10, 25]
+                    }
+                },
+                {
+                    "name": "Obtain the Steel Ring",
+                    "taskID": "obtain_steel_ring",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Steel Ring"],
+                            "item_ids": [30895],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Black D'hide Body",
+                    "taskID": "equip_black_d'hide_body",
+                    "category": "Ranged",
+                    "level": 70,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Black D'hide Body"],
+                            "item_ids": [2503]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Rune Crossbow",
+                    "taskID": "fletch_rune_crossbow",
+                    "category": "Fletching",
+                    "level": 69,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Rune Crossbow"],
+                            "item_ids": [9185],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Long Bone",
+                    "taskID": "obtain_long_bone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Long Bone"],
+                            "item_ids": [10976],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cut a Diamond",
+                    "taskID": "cut_diamond",
+                    "category": "Crafting",
+                    "level": 43,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Diamond"],
+                            "item_ids": [1601],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix some Defence Potions",
+                    "taskID": "mix_defence_potions",
+                    "category": "Obtain_Set",
+                    "level": 30,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Defence Potion(3)", "Defence Potion(4)"],
+                            "item_ids": [133, 2432],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix some Super Defence Potions",
+                    "taskID": "mix_super_defence_potions",
+                    "category": "Obtain_Set",
+                    "level": 66,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Super Defence(3)", "Super Defence(4)"],
+                            "item_ids": [163, 2442],
+                            "quantity": [50, 150]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune 2H Sword",
+                    "taskID": "equip_rune_2h_sword",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rune 2H Sword"],
+                            "item_ids": [1319]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch some Onyx Bolts",
+                    "taskID": "fletch_onyx_bolts",
+                    "category": "Fletching",
+                    "level": 73,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Onyx Bolts", "Dragon Onyx Bolts"],
+                            "item_ids": [9342, 21973],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }  

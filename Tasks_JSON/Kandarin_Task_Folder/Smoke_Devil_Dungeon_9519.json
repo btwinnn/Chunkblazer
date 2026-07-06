@@ -120,7 +120,7 @@
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Onyx Bolts", "Onyx Bolts (unf)"],
+                            "item": ["Onyx Bolts", "Dragon Onyx Bolts"],
                             "item_ids": [9342, 21973],
                             "quantity": [1]
                         }
