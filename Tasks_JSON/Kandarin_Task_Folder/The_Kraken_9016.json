@@ -8,7 +8,7 @@
                     "taskID": "defeat_cave_kraken",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 2,
+                    "base_points": 4,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Cave Kraken"],
