@@ -10399,7 +10399,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Smoke Devil"],
-                        "npc_ids": [7406, 498],
+                        "npc_ids": [7406, 498, 499],
                         "quantity": [1, 25]
                     }
                 },
