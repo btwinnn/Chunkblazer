@@ -10,7 +10,7 @@
                     "level": 60,
                     "completion_type": "EQUIP",
                     "base_points": 3,
-                    "assignment_weight": 5,
+                    "assignment_weight": 1,
                     "required_items": [
                         {
                             "item": ["Dragon Hasta"],
