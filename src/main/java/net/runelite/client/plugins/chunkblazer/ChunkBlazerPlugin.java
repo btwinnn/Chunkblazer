@@ -172,6 +172,11 @@ public class ChunkBlazerPlugin extends Plugin
 	private final Set<Integer> freeUnlockableRegionIds = new HashSet<>();
 	// Region id -> Friendly_Name for free chunks, used in the unlock message.
 	private final Map<Integer, String> freeUnlockableNames = new HashMap<>();
+	// Region id -> neighbor_ids for free chunks. Free chunks live only in
+	// Free_Chunks.json (no task-chunk entry), so without this an unlocked free
+	// chunk contributed NO neighbors — a connectivity dead end that made areas
+	// behind it (e.g. the Rellekka islands) unreachable without routing around.
+	private final Map<Integer, List<Integer>> freeUnlockableNeighbors = new HashMap<>();
 	private final Map<String, NuzlockeTask> completedTaskCache = new HashMap<>(); // Cache completed tasks for lookup
 	private ChunkBlazerPanel panel;
 	private NavigationButton navButton;
@@ -1078,6 +1083,7 @@ public class ChunkBlazerPlugin extends Plugin
 			com.google.gson.JsonObject obj = gson.fromJson(json, com.google.gson.JsonObject.class);
 			freeUnlockableRegionIds.clear();
 			freeUnlockableNames.clear();
+			freeUnlockableNeighbors.clear();
 			// Accept "Free_chunks" (current schema: array of {region_id[], Friendly_Name,
 			// neighbor_ids[], unlock_cost}) or lower-case "free_chunks" for forgiveness.
 			com.google.gson.JsonArray arr = null;
@@ -1100,6 +1106,14 @@ public class ChunkBlazerPlugin extends Plugin
 					com.google.gson.JsonObject entry = el.getAsJsonObject();
 					String name = (entry.has("Friendly_Name") && !entry.get("Friendly_Name").isJsonNull())
 						? entry.get("Friendly_Name").getAsString() : null;
+					List<Integer> neighborIds = new ArrayList<>();
+					if (entry.has("neighbor_ids") && entry.get("neighbor_ids").isJsonArray())
+					{
+						for (com.google.gson.JsonElement nEl : entry.getAsJsonArray("neighbor_ids"))
+						{
+							neighborIds.add(nEl.getAsInt());
+						}
+					}
 					if (entry.has("region_id") && entry.get("region_id").isJsonArray())
 					{
 						for (com.google.gson.JsonElement idEl : entry.getAsJsonArray("region_id"))
@@ -1109,6 +1123,10 @@ public class ChunkBlazerPlugin extends Plugin
 							if (name != null && !name.isEmpty())
 							{
 								freeUnlockableNames.put(rid, name);
+							}
+							if (!neighborIds.isEmpty())
+							{
+								freeUnlockableNeighbors.put(rid, neighborIds);
 							}
 						}
 					}
@@ -3417,6 +3435,29 @@ public class ChunkBlazerPlugin extends Plugin
 					for (Integer neighborId : chunk.getNeighborIds())
 					{
 						// Only add if not already unlocked
+						if (!unlocked.contains(String.valueOf(neighborId)))
+						{
+							neighbors.add(neighborId);
+						}
+					}
+				}
+				// Free chunks have no task-chunk entry — their neighbours come
+				// from Free_Chunks.json. Without this, an unlocked free chunk
+				// offered nothing onward (connectivity dead end). INVARIANT: a
+				// free chunk ALWAYS opens its 4 cardinal neighbours — if the JSON
+				// entry has no neighbor_ids, derive them from the region grid
+				// (regionId ±1 = N/S, ±256 = E/W). Authored neighbor_ids act as
+				// a curation override.
+				List<Integer> freeNeighbors = freeUnlockableNeighbors.get(regionId);
+				if (freeNeighbors == null && freeUnlockableRegionIds.contains(regionId))
+				{
+					freeNeighbors = Arrays.asList(
+						regionId + 1, regionId - 1, regionId + 256, regionId - 256);
+				}
+				if (freeNeighbors != null)
+				{
+					for (Integer neighborId : freeNeighbors)
+					{
 						if (!unlocked.contains(String.valueOf(neighborId)))
 						{
 							neighbors.add(neighborId);

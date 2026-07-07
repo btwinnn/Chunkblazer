@@ -199,6 +199,41 @@ class ChunkBlazerPluginTest
 		assertEquals("Tutorial Island (12336)", plugin.getRegionName(12336));
 	}
 
+	@Test
+	void unlockedFreeChunkOffersItsNeighbors() throws Exception
+	{
+		// Regression (Cruk's report): free chunks have no task-chunk entry, so an
+		// unlocked one contributed NO neighbours — a connectivity dead end that
+		// made e.g. the Rellekka islands unreachable. Their neighbor_ids come
+		// from Free_Chunks.json and must feed the unlockable set.
+		setField(plugin, "gson", new com.google.gson.Gson());
+		java.lang.reflect.Method load = plugin.getClass().getDeclaredMethod("loadFreeChunks");
+		load.setAccessible(true);
+		load.invoke(plugin);
+
+		// Troll Arena (11576) unlocked -> its JSON neighbours become unlockable.
+		when(config.unlockedChunks()).thenReturn("11576");
+		Set<Integer> neighbors = plugin.getNeighborRegionIds();
+		assertTrue(neighbors.containsAll(Arrays.asList(11577, 11832, 11575, 11320)));
+
+		// Already-unlocked neighbours are not re-offered.
+		when(config.unlockedChunks()).thenReturn("11576,11320");
+		assertFalse(plugin.getNeighborRegionIds().contains(11320));
+	}
+
+	@Test
+	void freeChunkWithoutAuthoredNeighborsStillOffersFourCardinals() throws Exception
+	{
+		// Invariant: a free chunk ALWAYS opens its 4 cardinal neighbours, even
+		// when its Free_Chunks.json entry has no neighbor_ids (derived from the
+		// region grid: ±1 = N/S, ±256 = E/W).
+		freeUnlockableRegionIds().add(FREE_REGION); // no neighbours registered
+		when(config.unlockedChunks()).thenReturn(String.valueOf(FREE_REGION));
+		Set<Integer> neighbors = plugin.getNeighborRegionIds();
+		assertTrue(neighbors.containsAll(Arrays.asList(
+			FREE_REGION + 1, FREE_REGION - 1, FREE_REGION + 256, FREE_REGION - 256)));
+	}
+
 	// --- Prifddinas: real city regions in instance coordinates (regionY 94-95) ---
 
 	@Test
