@@ -1,6 +1,4 @@
-{
-    "Morytania_Tasks": [
-        {
+ {
             "region_id": [13622],
             "neighbor_ids": [13623, 13878, 13621, 13366],
             "Friendly_Name": "Paterdomus Temple",
@@ -195,5 +193,3 @@
             ],
             "is_completed": false
         }
-    ]
-}        
