@@ -2493,6 +2493,193 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [14644],
+            "neighbor_ids": [14645, 14900, 14643, 14388],
+            "Friendly_Name": "Hallowed Sepulchre",
+            "tasks": [
+                {
+                    "name": "Use the Level 63 Agility Darkmeyer Long Rope Shortcut",
+                    "taskID": "use_darkmeyer_long_rope_shortcut_63",
+                    "category": "Agility",
+                    "level": 63,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Long rope"],
+                        "object_id": [39166, 39168],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Hallowed Grapple",
+                    "taskID": "obtain_hallowed_grapple",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Hallowed grapple"],
+                            "item_ids": [24721],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Hallowed Focus",
+                    "taskID": "obtain_hallowed_focus",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Hallowed focus"],
+                            "item_ids": [24723],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Hallowed Symbol",
+                    "taskID": "obtain_hallowed_symbol",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Hallowed symbol"],
+                            "item_ids": [24725],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Hallowed Hammer",
+                    "taskID": "obtain_hallowed_hammer",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Hallowed hammer"],
+                            "item_ids": [24727],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Hallowed Ring",
+                    "taskID": "obtain_hallowed_ring",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Hallowed ring"],
+                            "item_ids": [24731],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Dark Dye",
+                    "taskID": "obtain_dark_dye",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dark dye"],
+                            "item_ids": [24729],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Dark Acorn",
+                    "taskID": "obtain_dark_acorn",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Dark acorn"],
+                            "item_ids": [24733],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Hallowed Sack",
+                    "taskID": "obtain_hallowed_sack",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Hallowed sack"],
+                            "item_ids": [24946],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Strange Old Lockpick",
+                    "taskID": "obtain_strange_old_lockpick",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Strange old lockpick"],
+                            "item_ids": [24740, 24738],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Ring of Endurance",
+                    "taskID": "obtain_ring_of_endurance",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Ring of endurance"],
+                            "item_ids": [24736, 24844],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Sanfew Serum(4)",
+                    "taskID": "obtain_sanfew_serum_4",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Sanfew serum(4)"],
+                            "item_ids": [10925],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
         }
     ]
 }        
