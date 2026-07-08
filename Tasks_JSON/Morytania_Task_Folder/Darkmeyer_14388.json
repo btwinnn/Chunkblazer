@@ -76,17 +76,16 @@
                     ]
                 },
                 {
-                    "name": "Mine some Daeyalt Essence",
-                    "taskID": "mine_daeyalt_essence",
-                    "category": "Mining",
-                    "level": 60,
-                    "completion_type": "MINING",
+                    "name": "Obtain a Daeyalt Shard",
+                    "taskID": "obtain_daeyalt_shard",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
                     "base_points": 3,
-                    "assignment_weight": 5,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
-                            "item": ["Daeyalt essence"],
-                            "item_ids": [24704],
+                            "item": ["Daeyalt shard"],
+                            "item_ids": [24706],
                             "quantity": [1]
                         }
                     ]
