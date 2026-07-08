@@ -112,7 +112,7 @@
                     "level": 63,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
-                    "assignment_weight": 5,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
                             "item": ["Super Restore(3)", "Super Restore(4)"],
