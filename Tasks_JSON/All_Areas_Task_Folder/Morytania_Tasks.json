@@ -669,6 +669,85 @@
                 }
             ],
             "is_completed": false
-        }
+        },
+        {
+                "region_id": [14135],
+                "neighbor_ids": [14136, 14391, 14134, 13879],
+                "Friendly_Name": "Fenkenstrain's Castle",
+                "tasks": [
+                    {
+                        "name": "Obtain a Fenkenstrain's Castle Teleport Tablet",
+                        "taskID": "obtain_fenkenstrain_castle_teleport",
+                        "category": "Obtain",
+                        "completion_type": "OBTAIN",
+                        "base_points": 2,
+                        "assignment_weight": 5,
+                        "required_items": [
+                            {
+                                "item": ["Fenkenstrain's Castle Teleport"],
+                                "item_ids": [19621],
+                                "quantity": [1]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Talk to Lord Rologarth",
+                        "taskID": "talk_lord_rologarth",
+                        "category": "Dialogue",
+                        "completion_type": "NPC_DIALOGUE",
+                        "base_points": 1,
+                        "assignment_weight": 5,
+                        "target_npc": {
+                            "npc": ["Lord Rologarth"],
+                            "npc_ids": [1271, 1270]
+                        }
+                    },
+                    {
+                    "name": "Defeat a Fenkenstrain Experiment",
+                    "taskID": "defeat_fenkenstrain_experiment",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Experiment"],
+                        "npc_ids": [1275, 1274, 1273],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Fenkenstrain Experiment in 24 Seconds",
+                    "taskID": "defeat_fenkenstrain_experiment_24_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Experiment"],
+                        "npc_ids": [1275, 1274, 1273],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                        "name": "Obtain a Ring of Charos",
+                        "taskID": "obtain_ring_of_charos",
+                        "category": "Obtain",
+                        "completion_type": "OBTAIN",
+                        "base_points": 1,
+                        "assignment_weight": 5,
+                        "required_items": [
+                            {
+                                "item": ["Ring of charos#Activated", "Ring of charos#Normal"],
+                                "item_ids": [6465, 4202],
+                                "quantity": [1]
+                            }
+                        ]
+                    }
+                ],
+                "is_completed": false
+            }
     ]
 }        
