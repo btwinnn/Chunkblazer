@@ -37,7 +37,7 @@
                     "taskID": "defeat_ghast_24s",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 2,
+                    "base_points": 1,
                     "assignment_weight": 5,
                     "target_npc": {
                         "npc": ["Ghast"],
@@ -54,13 +54,13 @@
                     "category": "Obtain_Set",
                     "level": 52,
                     "completion_type": "HERBLORE",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 5,
                     "required_items": [
                         {
                             "item": ["Super energy potion(3)", "Super energy potion(4)"],
                             "item_ids": [3018, 3016],
-                            "quantity": [1]
+                            "quantity": [25, 100]
                         }
                     ]
                 },
