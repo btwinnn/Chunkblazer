@@ -2791,6 +2791,181 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [14132],
+            "neighbor_ids": [14133, 14388, 14131, 13876],
+            "Friendly_Name": "Castle Drakan",
+            "tasks": [
+                {
+                    "name": "Defeat the Maggot King",
+                    "taskID": "defeat_maggot_king",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Maggot King"],
+                        "npc_ids": [15741, 15742],
+                        "quantity": [25, 100]
+                    }
+                },
+                {
+                    "name": "Obtain an Elder Venator Fang",
+                    "taskID": "obtain_elder_venator_fang",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Elder venator fang"],
+                            "item_ids": [33634],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Crimson Kisten",
+                    "taskID": "equip_crimson_kisten",
+                    "category": "Strength",
+                    "level": 85,
+                    "completion_type": "EQUIP",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Crimson kisten"],
+                            "item_ids": [33631]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bucket of Bloodwood Sap",
+                    "taskID": "obtain_bucket_of_bloodwood_sap",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Bucket of bloodwood sap"],
+                            "item_ids": [33539],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Blood Shard",
+                    "taskID": "obtain_blood_shard",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Blood shard"],
+                            "item_ids": [24777],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Venator",
+                    "taskID": "defeat_venator",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Venator"],
+                        "npc_ids": [15770, 15765, 15766, 15767, 15768, 15769],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Catch a Leechfin",
+                    "taskID": "catch_leechfin",
+                    "category": "Fishing",
+                    "level": 78,
+                    "completion_type": "FISHING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Leechfin"],
+                            "item_ids": [33621],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Stymphike",
+                    "taskID": "catch_stymphike",
+                    "category": "Hunter",
+                    "level": 82,
+                    "completion_type": "HUNTER",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Stymphike feather"],
+                            "item_ids": [33651],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Stymphike carcass"],
+                            "item_ids": [33653],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Letvek",
+                    "taskID": "catch_letvek",
+                    "category": "Hunter",
+                    "level": 76,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Letvek"],
+                            "item_ids": [33625],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Blood Starved Venator",
+                    "taskID": "defeat_blood_starved_venator",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Blood Starved Venator"],
+                        "npc_ids": [15770],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Equip the Sunspear",
+                    "taskID": "equip_sunspear",
+                    "category": "Attack",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Sunspear"],
+                            "item_ids": [33722]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
         }
     ]
 }        
