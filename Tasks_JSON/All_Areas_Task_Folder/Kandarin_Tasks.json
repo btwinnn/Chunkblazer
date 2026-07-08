@@ -7473,7 +7473,7 @@
                     "taskID": "unlock_malevolent_masquerade",
                     "category": "Unlock",
                     "completion_type": "VARBIT_CHECK",
-                    "base_points": 1,
+                    "base_points": 4,
                     "assignment_weight": 8,                   
                     "constraints": {                       
                         "varbit_id": 3202,        
@@ -7520,7 +7520,7 @@
                     "taskID": "unlock_malevolent_masquerade",
                     "category": "Unlock",
                     "completion_type": "VARBIT_CHECK",
-                    "base_points": 1,
+                    "base_points": 4,
                     "assignment_weight": 8,                   
                     "constraints": {                       
                         "varbit_id": 3202,        
@@ -7584,14 +7584,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [30],
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                        "time_in_ticks": [30]
                     }
                 },
                 {
@@ -7604,7 +7597,7 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Bloodveld"],
-                        "npc_ids": [484, 485, 486, 487, 3138, 7276],
+                        "npc_ids": [484, 485, 486, 487, 3138, 7276, 7397, 7398],
                         "quantity": [1]
                     }
                 },
@@ -7632,19 +7625,12 @@
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Bloodveld"],
-                        "npc_ids": [484, 485, 486, 487, 3138, 7276],
+                        "npc_ids": [484, 485, 486, 487, 3138, 7276, 7397, 7398],
                         "quantity": [1]
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [40],
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                        "time_in_ticks": [40]
                     }
                 },
                 {

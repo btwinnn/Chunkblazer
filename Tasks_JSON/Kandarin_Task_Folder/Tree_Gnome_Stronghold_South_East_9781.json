@@ -279,7 +279,7 @@
                     "taskID": "unlock_malevolent_masquerade",
                     "category": "Unlock",
                     "completion_type": "VARBIT_CHECK",
-                    "base_points": 1,
+                    "base_points": 4,
                     "assignment_weight": 8,                   
                     "constraints": {                       
                         "varbit_id": 3202,        
