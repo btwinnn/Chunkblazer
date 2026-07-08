@@ -2680,6 +2680,118 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [14388],
+            "neighbor_ids": [14389, 14644, 14387, 14132],
+            "Friendly_Name": "Darkmeyer",
+            "tasks": [
+                {
+                    "name": "Chop some Blisterwood Logs",
+                    "taskID": "chop_blisterwood_logs",
+                    "category": "Woodcutting",
+                    "level": 62,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Blisterwood logs"],
+                            "item_ids": [24691],
+                            "quantity": [25, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Vyrewatch Sentinel",
+                    "taskID": "defeat_vyrewatch_sentinel",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Vyrewatch Sentinel"],
+                        "npc_ids": [9756, 9757, 9760, 9762, 9763, 9759, 9758, 9761],
+                        "quantity": [25, 100]
+                    }
+                },
+                {
+                    "name": "Activate Protect from Melee",
+                    "taskID": "pray_protect_from_melee",
+                    "category": "Prayer",
+                    "level": 43,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 14
+                    }                   
+                },
+                {
+                    "name": "Pickpocket Valentina Diaemus",
+                    "taskID": "pickpocket_valentina_diaemus",
+                    "category": "Thieving",
+                    "level": 82,
+                    "completion_type": "THIEVING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Valentina Diaemus"],
+                        "npc_ids": [9711],
+                        "quantity": [1, 100]
+                    }
+                },
+                {
+                    "name": "Obtain a Blood Shard",
+                    "taskID": "obtain_blood_shard",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Blood shard"],
+                            "item_ids": [24777],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Daeyalt Essence",
+                    "taskID": "mine_daeyalt_essence",
+                    "category": "Mining",
+                    "level": 60,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Daeyalt essence"],
+                            "item_ids": [24704],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Vyrewatch Sentinel in 36 Seconds",
+                    "taskID": "defeat_vyrewatch_sentinel_36s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Vyrewatch Sentinel"],
+                        "npc_ids": [9756, 9757, 9760, 9762, 9763, 9759, 9758, 9761],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [60]
+                    }
+                }
+            ],
+            "is_completed": false
         }
     ]
 }        
