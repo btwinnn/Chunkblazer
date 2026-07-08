@@ -90,7 +90,7 @@
                         }
                     },
                     {
-                        "name": "Defeat a Leech in 15 Seconds",
+                        "name": "Defeat a Haunted Woods Leech in 15 Seconds",
                         "taskID": "defeat_leech_15s",
                         "category": "Combat",
                         "completion_type": "NPC_Kill",

@@ -1,0 +1,74 @@
+ {
+                "region_id": [14390],
+                "neighbor_ids": [14391, 14646, 14389, 14134],
+                "Friendly_Name": "East Haunted Woods",
+                "tasks": [
+                    {
+                        "name": "Use Fairy Ring Code ALQ",
+                        "taskID": "use_fairy_ring_alq",
+                        "category": "Travel",
+                        "completion_type": "TRAVEL",
+                        "base_points": 2,
+                        "assignment_weight": 5
+                    },
+                    {
+                        "name": "Defeat a Feral Vampyre",
+                        "taskID": "defeat_feral_vampyre",
+                        "category": "Combat",
+                        "completion_type": "NPC_Kill",
+                        "base_points": 1,
+                        "assignment_weight": 5,
+                        "target_npc": {
+                            "npc": ["Feral Vampyre"],
+                            "npc_ids": [3237, 3707, 3708, 4431, 5641, 5642, 3234, 3137, 5640],
+                            "quantity": [1]
+                        }
+                    },
+                    {
+                        "name": "Defeat a Haunted Woods Leech in 15 Seconds",
+                        "taskID": "defeat_leech_15s",
+                        "category": "Combat",
+                        "completion_type": "NPC_Kill",
+                        "base_points": 2,
+                        "assignment_weight": 5,
+                        "target_npc": {
+                            "npc": ["Leech"],
+                            "npc_ids": [3233, 15441],
+                            "quantity": [1]
+                        },                      
+                        "constraints": {
+                        "time_in_ticks": [25]
+                        }
+                    },
+                    {
+                        "name": "Defeat a Haunted Woods Leech",
+                        "taskID": "defeat_haunted_woods_leech",
+                        "category": "Combat",
+                        "completion_type": "NPC_Kill",
+                        "base_points": 1,
+                        "assignment_weight": 5,
+                        "target_npc": {
+                            "npc": ["Leech"],
+                            "npc_ids": [3233, 15441],
+                            "quantity": [1]
+                        }
+                    },
+                    {
+                        "name": "Defeat a Feral Vampyre in 15 Seconds",
+                        "taskID": "defeat_feral_vampyre_15_seconds",
+                        "category": "Combat",
+                        "completion_type": "NPC_Kill",
+                        "base_points": 1,
+                        "assignment_weight": 5,
+                        "target_npc": {
+                            "npc": ["Feral Vampyre"],
+                            "npc_ids": [3237, 3707, 3708, 4431, 5641, 5642, 3234, 3137, 5640],
+                            "quantity": [1]
+                        },                      
+                        "constraints": {
+                        "time_in_ticks": [25]
+                        }
+                    }
+                ],
+                "is_completed": false
+            }
