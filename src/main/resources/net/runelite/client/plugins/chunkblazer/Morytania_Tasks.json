@@ -1,0 +1,488 @@
+{
+    "Morytania_Tasks": [
+        {
+            "region_id": [13622],
+            "neighbor_ids": [13623, 13878, 13621, 13366],
+            "Friendly_Name": "Paterdomus Temple",
+            "tasks": [
+                {
+                    "name": "Defeat a Monk of Zamorak",
+                    "taskID": "defeat_monk_of_zamorak",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Monk of Zamorak"],
+                        "npc_ids": [528, 3485, 8401, 527, 3484, 8400, 8698, 3486, 529],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Monk of Zamorak in 6 Seconds",
+                    "taskID": "defeat_monk_of_zamorak_6_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Monk of Zamorak"],
+                        "npc_ids": [528, 3485, 8401, 527, 3484, 8400, 8698, 3486, 529],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [10]
+                    }
+                },
+                {
+                    "name": "Defeat a Monk of Zamorak in the First Hit",
+                    "taskID": "defeat_monk_of_zamorak_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Monk of Zamorak"],
+                        "npc_ids": [528, 3485, 8401, 527, 3484, 8400, 8698, 3486, 529],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Equip a Zamorak Monk Robe Top",
+                    "taskID": "equip_zamorak_monk_robe_top",
+                    "category": "Defence",
+                    "level": 1,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Zamorak Monk Top"],
+                            "item_ids": [1035]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Blue Temple Trekking Token",
+                    "taskID": "obtain_blue_temple_trekking_token",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Reward Token (blue)"],
+                            "item_ids": [10936],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Yellow Temple Trekking Token",
+                    "taskID": "obtain_yellow_temple_trekking_token",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Reward Token (yellow)"],
+                            "item_ids": [10934],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Red Temple Trekking Token",
+                    "taskID": "obtain_red_temple_trekking_token",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Reward Token (red)"],
+                            "item_ids": [10935],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Mushroom Spore",
+                    "taskID": "plant_mushroom_spore",
+                    "category": "Farming",
+                    "level": 53,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Mushroom Spore"],
+                            "item_ids": [5282],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use Fairy Ring Code CKS",
+                    "taskID": "fairy_ring_CKS",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Obtain a Salve Graveyard Teleport Tablet",
+                    "taskID": "obtain_salve_graveyard_teleport_tablet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Salve Graveyard Teleport"],
+                            "item_ids": [19619],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Ghoul",
+                    "taskID": "defeat_ghoul",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ghoul"],
+                        "npc_ids": [289, 3330],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Ghoul in 24 Seconds",
+                    "taskID": "defeat_ghoul_24_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ghoul"],
+                        "npc_ids": [289, 3330],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Use the Level 65 Agility Paterdomus Temple Ornate Railing",
+                    "taskID": "agility_level_65_paterdomus_ornate_railing",
+                    "category": "Agility",
+                    "level": 65,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Ornate Railing"],
+                        "object_id": [16552, 17000],
+                        "quantity": [1]
+                    }
+                }
+            ],
+            "optional_quests_unlocked": [
+                        {
+                            "name": "Devious Minds",
+                            "points": 3
+                        },
+                        {
+                            "name": "Nature Spirit",
+                            "points": 2
+                        }
+                    ],                 
+                    "is_completed": false
+        },
+        {
+            "region_id": [13623],
+            "neighbor_ids": [13624, 13879, 13622, 13367],
+            "Friendly_Name": "Slayer Tower",
+            "tasks": [
+                {
+                    "name": "Equip an Abyssal Whip",
+                    "taskID": "equip_abyssal_whip",
+                    "category": "Attack",
+                    "level": 70,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Abyssal Whip"],
+                            "item_ids": [12774, 12773, 4151, 26482, 12006, 26484]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Rune Boots",
+                    "taskID": "equip_rune_boots",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Boots"],
+                            "item_ids": [4131]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Granite Maul",
+                    "taskID": "equip_granite_maul",
+                    "category": "Attack",
+                    "level": 50,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Granite Maul"],
+                            "item_ids": [4153, 12848, 24225, 24227]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Grotesque Guardians",
+                    "taskID": "defeat_grotesque_guardians",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Grotesque Guardians"],
+                        "npc_ids": [7887, 7888, 7889],
+                        "quantity": [25, 100]
+                    }
+                },
+                {
+                    "name": "Obtain a Black Tourmaline Core",
+                    "taskID": "obtain_black_tourmaline_core",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Black Tourmaline Core"],
+                            "item_ids": [21730],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Granite Ring",
+                    "taskID": "obtain_granite_ring",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Granite Ring"],
+                            "item_ids": [21739, 26685, 21752, 25193],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Granite Hammer",
+                    "taskID": "obtain_granite_hammer",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Granite Hammer"],
+                            "item_ids": [21742],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Granite Gloves",
+                    "taskID": "obtain_granite_gloves",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Granite Gloves"],
+                            "item_ids": [21736],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Jar of Stone",
+                    "taskID": "obtain_jar_of_stone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Jar of Stone"],
+                            "item_ids": [21745],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch Dragonstone Bolts",
+                    "taskID": "fletch_dragonstone_bolts",
+                    "category": "Fletching",
+                    "level": 71,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dragonstone Bolts", "Dragonstone Bolts (e)"],
+                            "item_ids": [9341, 21971],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Greater Abyssal Demon",
+                    "taskID": "defeat_greater_abyssal_demon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Greater Abyssal Demon"],
+                        "npc_ids": [7410],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Marble Gargoyle",
+                    "taskID": "defeat_marble_gargoyle",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Marble Gargoyle"],
+                        "npc_ids": [7407, 7408],
+                        "quantity": [1]
+                    }
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [13879],
+            "neighbor_ids": [13880, 14135, 13878, 13623],
+            "Friendly_Name": "Mausoleum",
+            "tasks": [
+                {
+                    "name": "Use the Level 69 Agility Mausoleum Bridge Jump",
+                    "taskID": "agility_level_69_mausoleum_bridge_jump",
+                    "category": "Agility",
+                    "level": 69,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Bridge (Mausoleum)"],
+                        "object_id": [57713, 57714],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Build a Medium STASH Unit at the Mausoleum",
+                    "taskID": "build_medium_stash_mausoleum",
+                    "category": "Construction",
+                    "level": 42,
+                    "completion_type": "CONSTRUCTION",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_finished_object": [
+                        {
+                            "object": "Medium STASH Unit (inconspicuous hole)",
+                            "object_id": [28988]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Fenkenstrain Experiment",
+                    "taskID": "defeat_fenkenstrain_experiment",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Experiment"],
+                        "npc_ids": [1275, 1274, 1273],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Fenkenstrain Experiment in 24 Seconds",
+                    "taskID": "defeat_fenkenstrain_experiment_24_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Experiment"],
+                        "npc_ids": [1275, 1274, 1273],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Obtain a Cavern Key",
+                    "taskID": "obtain_cavern_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Cavern Key"],
+                            "item_ids": [4184],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Enchanted Ghostspeak Amulet",
+                    "taskID": "obtain_enchanted_ghostspeak_amulet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Enchanted Ghostspeak Amulet"],
+                            "item_ids": [4250],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }
+    ]
+}        
