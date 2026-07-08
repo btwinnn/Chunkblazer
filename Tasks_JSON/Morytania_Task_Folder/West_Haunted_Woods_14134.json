@@ -94,7 +94,7 @@
                         "taskID": "defeat_leech_15s",
                         "category": "Combat",
                         "completion_type": "NPC_Kill",
-                        "base_points": 2,
+                        "base_points": 1,
                         "assignment_weight": 5,
                         "target_npc": {
                             "npc": ["Leech"],
