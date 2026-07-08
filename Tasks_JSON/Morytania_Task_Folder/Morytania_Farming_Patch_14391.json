@@ -2,22 +2,7 @@
                 "region_id": [14391],
                 "neighbor_ids": [14392, 14647, 14390, 14135],
                 "Friendly_Name": "Morytania Farming Patch",
-                "tasks": [
-                    {
-                        "name": "Obtain an Ectophial",
-                        "taskID": "obtain_ectophial",
-                        "category": "Obtain",
-                        "completion_type": "OBTAIN",
-                        "base_points": 1,
-                        "assignment_weight": 10,
-                        "required_items": [
-                            {
-                                "item": ["Ectophial"],
-                                "item_ids": [4252, 4251],
-                                "quantity": [1]
-                            }
-                        ]
-                    },
+                "tasks": [                  
                     {
                     "name": "Plant some Potatoes",
                     "taskID": "plant_potatoes",

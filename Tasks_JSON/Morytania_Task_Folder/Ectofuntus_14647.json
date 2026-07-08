@@ -1,0 +1,85 @@
+{
+            "region_id": [14647],
+            "neighbor_ids": [14648, 14903, 14646, 14391],
+            "Friendly_Name": "Ectofuntus",
+            "tasks": [
+                {
+                    "name": "Defeat a Tortured Soul",
+                    "taskID": "defeat_tortured_soul",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Tortured Soul"],
+                        "npc_ids": [2999],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Tortured Soul in 9 Seconds",
+                    "taskID": "defeat_tortured_soul_9s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Tortured Soul"],
+                        "npc_ids": [2999],
+                        "quantity": [1]
+                    },                  
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                    
+                },
+                {
+                    "name": "Defeat a Tortured Soul in the First Hit",
+                    "taskID": "defeat_tortured_soul_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Tortured Soul"],
+                        "npc_ids": [2999],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Obtain an Ectophial",
+                    "taskID": "obtain_ectophial",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Ectophial"],
+                            "item_ids": [4252, 4251],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix some Strength Potions",
+                    "taskID": "mix_strength_potions",
+                    "category": "Obtain_Set",
+                    "level": 12,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                     "required_items": [
+                        {
+                            "item": ["Strength Potion(3)", "Strength Potion(4)"],
+                            "item_ids": [115, 113],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }
