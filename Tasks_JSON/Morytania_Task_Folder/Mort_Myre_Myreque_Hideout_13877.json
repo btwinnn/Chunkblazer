@@ -1,0 +1,217 @@
+{
+            "region_id": [13877],
+            "neighbor_ids": [13878, 14133, 13879, 13621],
+            "Friendly_Name": "Mort Myre Myreque Hideout",
+            "tasks": [
+                {
+                    "name": "Use the Level 93 Agility Blood Altar Cave Shortcut",
+                    "taskID": "use_blood_altar_shortcut_93",
+                    "category": "Agility",
+                    "level": 93,
+                    "completion_type": "AGILITY",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_object": {
+                        "object": ["Cave (Meiyerditch Laboratories advanced)"],
+                        "object_id": [43761, 43762, 43763],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Use the Level 74 Agility Blood Altar Cave Shortcut",
+                    "taskID": "use_blood_altar_shortcut_74",
+                    "category": "Agility",
+                    "level": 74,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Cave (Meiyerditch Laboratories medium)"],
+                        "object_id": [43755, 43756, 43757, 43758],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Use Fairy Ring Code BKR",
+                    "taskID": "use_fairy_ring_bkr",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Catch a Slimy Eel",
+                    "taskID": "catch_slimy_eel",
+                    "category": "Fishing",
+                    "level": 28,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Raw Slimy Eel",
+                            "item_ids": [3379],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Ghast",
+                    "taskID": "defeat_ghast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ghast"],
+                        "npc_ids": [945, 5622, 5623, 5624, 5626, 5627, 946, 5625],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Ghast in 24 Seconds",
+                    "taskID": "defeat_ghast_24s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ghast"],
+                        "npc_ids": [945, 5622, 5623, 5624, 5626, 5627, 946, 5625],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Mix some Super Energy Potions",
+                    "taskID": "mix_super_energy_potions",
+                    "category": "Obtain_Set",
+                    "level": 52,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Super energy potion(3)", "Super energy potion(4)"],
+                            "item_ids": [3018, 3016],
+                            "quantity": [25, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mix some Attack Potions",
+                    "taskID": "mix_attack_potions",
+                    "category": "Obtain_Set",
+                    "level": 3,
+                    "completion_type": "HERBLORE",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                     "required_items": [
+                        {
+                            "item": ["Attack Potion(3)", "Attack Potion(4)"],
+                            "item_ids": [121, 2428],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Rotten Food",
+                    "taskID": "obtain_rotten_food",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Rotten food"],
+                            "item_ids": [2959],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Mort Myre Fungus",
+                    "taskID": "obtain_mort_myre_fungus",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Mort myre fungus"],
+                            "item_ids": [2970],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Slimy Eel",
+                    "taskID": "cook_slimy_eel",
+                    "category": "Cooking",
+                    "level": 28,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Cooked slimy eel"],
+                            "item_ids": [3381],
+                            "quantity": [1, 10]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Blood Rune",
+                    "taskID": "runecraft_blood_rune",                   
+                    "category": "Runecrafting",
+                    "level": 77,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Blood Rune",
+                        "item_ids": [565],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Bloodveld on Task",
+                    "taskID": "defeat_bloodveld_on_task",
+                    "category": "Slayer",
+                    "level": 50,
+                    "completion_type": "SLAYER",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Bloodveld"],
+                        "npc_ids": [484, 485, 486, 487, 3138, 7276, 7397, 7398],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Insatiable Bloodveld on Task",
+                    "taskID": "defeat_insatiable_bloodveld_on_task",
+                    "category": "Slayer",
+                    "level": 50,
+                    "completion_type": "SLAYER",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Insatiable Bloodveld"],
+                        "npc_ids": [7397],
+                        "quantity": [1]
+                    }
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "In Aid of the Myreque",
+                    "points": 2
+                }
+            ],
+            "is_completed": false
+        }
