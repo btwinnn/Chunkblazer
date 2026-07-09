@@ -106,23 +106,17 @@
                     ]
                 },
                 {
-                    "name": "Catch a Stymphike",
-                    "taskID": "catch_stymphike",
-                    "category": "Hunter",
-                    "level": 82,
-                    "completion_type": "HUNTER",
+                    "name": "Obtain a Stymphike Carcass",
+                    "taskID": "obtain_stymphike_carcass",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
                     "base_points": 4,
                     "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Stymphike feather"],
-                            "item_ids": [33651],
-                            "quantity": [1]
-                        },
+                    "required_items": [                    
                         {
                             "item": ["Stymphike carcass"],
                             "item_ids": [33653],
-                            "quantity": [1, 25]
+                            "quantity": [1]
                         }
                     ]
                 },
