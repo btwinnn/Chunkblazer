@@ -297,6 +297,65 @@ class ObtainModuleTest extends AbstractTaskModuleTest
 	}
 
 	/**
+	 * Mike's obtain_set bug: duplicate copies of one set piece must not count
+	 * toward the other pieces. With 3 Splitbark helms held, set progress is 1
+	 * (the helm slot, capped at its quantity of 1) — not 3. The set completes
+	 * only once every distinct piece is held.
+	 */
+	@Test
+	void testObtainSet_DuplicatePiecesFillOnlyTheirOwnSlot()
+	{
+		NuzlockeTask task = new NuzlockeTask();
+		task.setName("Obtain a Splitbark Set");
+		task.setTaskId("obtain_splitbark_set");
+		task.setCompletionType("OBTAIN");
+		task.setCurrentProgress(0);
+		task.setCompleted(false);
+		task.setRequiredItems(Arrays.asList(
+			pieceOf(3385), pieceOf(3387), pieceOf(3389), pieceOf(3391), pieceOf(3393)));
+		task.setTargetQuantity(5);
+
+		// 3 unstacked helms in inventory, nothing else. addActiveTask runs
+		// checkTaskProgress inline for OBTAIN tasks (clientThread mock).
+		// Build the mock items BEFORE the thenReturn call — stubbing a new
+		// mock inside another stubbing trips UnfinishedStubbingException.
+		Item[] threeHelms = {itemOf(3385), itemOf(3385), itemOf(3385)};
+		when(client.getItemContainer(InventoryID.INVENTORY)).thenReturn(inventoryContainer);
+		when(inventoryContainer.getItems()).thenReturn(threeHelms);
+
+		obtainModule.addActiveTask(task);
+
+		assertEquals(1, task.getCurrentProgress(),
+			"3 helms fill the helm slot once — progress must be 1/5, not 3/5");
+		assertFalse(task.isCompleted());
+
+		// One of each remaining piece arrives: now the set is complete.
+		Item[] fullSetPlusSpares = {
+			itemOf(3385), itemOf(3385), itemOf(3385),
+			itemOf(3387), itemOf(3389), itemOf(3391), itemOf(3393)};
+		when(inventoryContainer.getItems()).thenReturn(fullSetPlusSpares);
+		obtainModule.checkProgress();
+
+		assertEquals(5, task.getCurrentProgress());
+		assertTrue(task.isCompleted(), "holding every distinct piece must complete the set");
+	}
+
+	private static RequiredItem pieceOf(int itemId)
+	{
+		RequiredItem piece = new RequiredItem();
+		piece.setItemIds(Arrays.asList(itemId));
+		return piece;
+	}
+
+	private Item itemOf(int itemId)
+	{
+		Item item = mock(Item.class);
+		lenient().when(item.getId()).thenReturn(itemId);
+		lenient().when(item.getQuantity()).thenReturn(1);
+		return item;
+	}
+
+	/**
 	 * Companion for #27: prove that a JSON {@code quantity: [5, 25]} field
 	 * deserializes into a {@link RequiredItem} whose
 	 * {@link RequiredItem#getRequiredQuantity()} returns a value in [5, 25],

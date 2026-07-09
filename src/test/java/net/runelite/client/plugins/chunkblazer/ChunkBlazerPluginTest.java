@@ -277,6 +277,71 @@ class ChunkBlazerPluginTest
 		assertTrue(neighbors.contains(12895)); // the others remain unlockable
 	}
 
+	// --- initializeTask: saved-target restore must not corrupt multi-item sets ---
+
+	@Test
+	void restoreDoesNotPinSummedTargetOntoFirstSetPiece() throws Exception
+	{
+		// Mike's obtain_set bug: for a multi-item set the saved target is the
+		// SUM across items (5 for Splitbark). Restoring pinned that sum onto the
+		// FIRST item's roll cache, so the helm slot demanded 5 helms — duplicate
+		// copies of one piece then counted toward the whole set (3 helms = 3/9).
+		when(config.taskProgressData()).thenReturn("obtain_splitbark_set:2:5");
+
+		NuzlockeTask task = new NuzlockeTask();
+		task.setName("Obtain a Splitbark Set");
+		task.setTaskId("obtain_splitbark_set");
+		task.setCompletionType("OBTAIN");
+		java.util.List<RequiredItem> pieces = new java.util.ArrayList<>();
+		for (int itemId : new int[]{3385, 3387, 3389, 3391, 3393})
+		{
+			RequiredItem piece = new RequiredItem();
+			piece.setItemIds(Arrays.asList(itemId));
+			pieces.add(piece);
+		}
+		task.setRequiredItems(pieces);
+
+		initializeTask(task);
+
+		assertEquals(5, task.getTargetQuantity());
+		assertEquals(2, task.getCurrentProgress());
+		for (RequiredItem piece : task.getRequiredItems())
+		{
+			assertEquals(1, piece.getRequiredQuantity(),
+				"each set slot must keep its authored quantity of 1, not the task-total");
+		}
+	}
+
+	@Test
+	void restoreStillPinsSavedRollForSingleItemTask() throws Exception
+	{
+		// Single-item tasks with a quantity range must keep the pin: the saved
+		// value IS that item's roll, and without it modules would re-roll and
+		// disagree with the panel (the original roll-cache bug).
+		when(config.taskProgressData()).thenReturn("cook_shrimp:1:17");
+
+		NuzlockeTask task = new NuzlockeTask();
+		task.setName("Cook some Shrimp");
+		task.setTaskId("cook_shrimp");
+		task.setCompletionType("COOKING");
+		RequiredItem shrimp = new RequiredItem();
+		shrimp.setItemIds(Arrays.asList(315));
+		shrimp.setQuantityRange(Arrays.asList(5, 25));
+		task.setRequiredItems(java.util.Collections.singletonList(shrimp));
+
+		initializeTask(task);
+
+		assertEquals(17, task.getTargetQuantity());
+		assertEquals(17, shrimp.getRequiredQuantity());
+	}
+
+	private void initializeTask(NuzlockeTask task) throws Exception
+	{
+		java.lang.reflect.Method init = plugin.getClass().getDeclaredMethod("initializeTask", NuzlockeTask.class);
+		init.setAccessible(true);
+		init.invoke(plugin, task);
+	}
+
 	// --- reflection helpers (the plugin's fields are private; no test seam) ---
 
 	@SuppressWarnings("unchecked")

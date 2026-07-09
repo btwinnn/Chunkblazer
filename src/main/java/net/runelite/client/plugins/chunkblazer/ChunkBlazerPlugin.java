@@ -2286,17 +2286,32 @@ public class ChunkBlazerPlugin extends Plugin
 			// subsequent caller (e.g. ObtainModule.addActiveTask) reading
 			// getRequiredQuantity() sees the same number we just restored.
 			// Otherwise modules re-roll, the panel says (1/37) and the chatbox
-			// says (1/18) for the same task. For multi-item tasks the saved
-			// value is the SUM, which we can't split across items, so we only
-			// pin the first item (matches initializeTask's first-item roll on
-			// the fresh path below).
+			// says (1/18) for the same task.
 			if (task.getTargetNpc() != null)
 			{
 				task.getTargetNpc().setRolledQuantity(savedTargetQty);
 			}
 			else if (task.getRequiredItems() != null && !task.getRequiredItems().isEmpty())
 			{
-				task.getRequiredItems().get(0).setRolledQuantity(savedTargetQty);
+				List<RequiredItem> requiredItems = task.getRequiredItems();
+				if (requiredItems.size() == 1)
+				{
+					requiredItems.get(0).setRolledQuantity(savedTargetQty);
+				}
+				else
+				{
+					// Multi-item (set) task: the saved target is the SUM across
+					// items, not any single item's quantity. Pinning the sum onto
+					// the first item inflated that slot's requirement (Splitbark
+					// helm became x5 for a 5-piece set), letting duplicate copies
+					// of one piece count toward the whole set. Per-item quantities
+					// here are deterministic (authored fixed values, default 1),
+					// so clear stale caches and let each item report its own.
+					for (RequiredItem item : requiredItems)
+					{
+						item.clearRolledQuantity();
+					}
+				}
 			}
 			else if (task.getRequiredObjects() != null && !task.getRequiredObjects().isEmpty())
 			{
