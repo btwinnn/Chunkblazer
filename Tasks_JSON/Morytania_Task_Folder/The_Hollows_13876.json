@@ -1,7 +1,7 @@
 {
-            "region_id": [13620],
-            "neighbor_ids": [13621, 13876, 13619, 13364],
-            "Friendly_Name": "Nature Grotto",
+            "region_id": [13876],
+            "neighbor_ids": [13877, 14132, 13875, 13620],
+            "Friendly_Name": "The Hollows",
             "tasks": [             
                 {
                     "name": "Defeat a Ghast",
