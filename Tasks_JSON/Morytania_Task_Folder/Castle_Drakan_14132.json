@@ -101,7 +101,7 @@
                         {
                             "item": ["Leechfin"],
                             "item_ids": [33621],
-                            "quantity": [1, 25]
+                            "quantity": [1, 50]
                         }
                     ]
                 },
@@ -132,7 +132,7 @@
                         {
                             "item": ["Letvek"],
                             "item_ids": [33625],
-                            "quantity": [1]
+                            "quantity": [1, 50]
                         }
                     ]
                 },
