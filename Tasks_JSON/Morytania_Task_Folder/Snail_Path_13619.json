@@ -1,0 +1,126 @@
+{
+            "region_id": [13619],
+            "neighbor_ids": [13620, 13875, 13618, 13363],
+            "Friendly_Name": "Snail Path",
+            "tasks": [
+                {
+                    "name": "Catch a Slimy Eel",
+                    "taskID": "catch_slimy_eel",
+                    "category": "Fishing",
+                    "level": 28,
+                    "completion_type": "FISHING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Raw Slimy Eel",
+                            "item_ids": [3379],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use Fairy Ring Code BIP",
+                    "taskID": "use_fairy_ring_bip",
+                    "category": "Travel",
+                    "completion_type": "TRAVEL",
+                    "base_points": 2,
+                    "assignment_weight": 5
+                },
+                {
+                    "name": "Use the Level 50 Agility Salve River Stepping Stone",
+                    "taskID": "use_salve_river_stepping_stone_50",
+                    "category": "Agility",
+                    "level": 50,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Stepping stone (Mort Myre Swamp)"],
+                        "object_id": [13504],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Myre Blamish Snail in the First Hit",
+                    "taskID": "defeat_myre_blamish_snail_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Myre Blamish Snail"],
+                        "npc_ids": [2649, 2634],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Bark Blamish Snail in 6 Seconds",
+                    "taskID": "defeat_bark_blamish_snail_6s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Bark Blamish Snail"],
+                        "npc_ids": [2648],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [10]
+                    }
+                },
+                {
+                    "name": "Defeat an Ochre Blamish Snail in the First Hit",
+                    "taskID": "defeat_ochre_blamish_snail_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ochre Blamish Snail"],
+                        "npc_ids": [2651, 2646],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Craft a Broken Bark Snelm",
+                    "taskID": "craft_broken_bark_snelm",
+                    "category": "Crafting",
+                    "level": 15,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Broken bark snelm"],
+                            "item_ids": [3335],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Craft a Myre Snelm",
+                    "taskID": "craft_myre_snelm",
+                    "category": "Crafting",
+                    "level": 15,
+                    "completion_type": "CRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Myre snelm"],
+                            "item_ids": [3327, 3337],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }
