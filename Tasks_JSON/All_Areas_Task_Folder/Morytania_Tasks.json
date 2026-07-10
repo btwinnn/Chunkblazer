@@ -3485,6 +3485,244 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [13875],
+            "neighbor_ids": [13876, 14131, 13874, 13619],
+            "Friendly_Name": "Mort'ton",
+            "tasks": [
+                {
+                    "name": "Obtain Sacred Oil(4)",
+                    "taskID": "obtain_sacred_oil_4",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Sacred oil(4)"],
+                            "item_ids": [3430],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Loar Shade",
+                    "taskID": "defeat_loar_shade",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Loar Shade"],
+                        "npc_ids": [1277, 1276],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Phrin Shade",
+                    "taskID": "defeat_phrin_shade",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Phrin Shade"],
+                        "npc_ids": [1280, 1279],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Riyl Shade",
+                    "taskID": "defeat_riyl_shade",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Riyl Shade"],
+                        "npc_ids": [1282, 1281],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Asyn Shade",
+                    "taskID": "defeat_asyn_shade",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Asyn Shade"],
+                        "npc_ids": [1284, 1283],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Fiyr Shade",
+                    "taskID": "defeat_fiyr_shade",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Fiyr Shade"],
+                        "npc_ids": [1286, 1285],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Urium Shade",
+                    "taskID": "defeat_urium_shade",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Urium Shade"],
+                        "npc_ids": [10589, 6143],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Obtain a Zealot's Set",
+                    "taskID": "obtain_zealot's_set",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Zealot's Boots"],
+                            "item_ids": [25440]
+                        },
+                        {
+                            "item": ["Zealot's Helm"],
+                            "item_ids": [25438]
+                        },
+                        {
+                            "item": ["Zealot's Robe Bottom"],
+                            "item_ids": [25436]
+                        },
+                        {
+                            "item": ["Zealot's Robe Top"],
+                            "item_ids": [25434]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Amulet of the Damned",
+                    "taskID": "obtain_amulet_of_the_damned",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Amulet of the damned"],
+                            "item_ids": [12851, 12853],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Gold Coffin",
+                    "taskID": "obtain_gold_coffin",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Gold coffin"],
+                            "item_ids": [25467, 25473],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Mort'ton Teleport Scroll",
+                    "taskID": "obtain_mortton_teleport_scroll",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Mort'ton teleport (tablet)"],
+                            "item_ids": [12406],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Swampbark Set",
+                    "taskID": "obtain_swampbark_set",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Swampbark Body"],
+                            "item_ids": [25389]
+                        },
+                        {
+                            "item": ["Swampbark Boots"],
+                            "item_ids": [25395]
+                        },
+                        {
+                            "item": ["Swampbark Gauntlets"],
+                            "item_ids": [25392]
+                        },
+                        {
+                            "item": ["Swampbark Helm"],
+                            "item_ids": [25398]
+                        },
+                        {
+                            "item": ["Swampbark Legs"],
+                            "item_ids": [25401]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bloodbark Set",
+                    "taskID": "obtain_bloodbark_set",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Bloodbark Body"],
+                            "item_ids": [25404]
+                        },
+                        {
+                            "item": ["Bloodbark Boots"],
+                            "item_ids": [25410]
+                        },
+                        {
+                            "item": ["Bloodbark Gauntlets"],
+                            "item_ids": [25407]
+                        },
+                        {
+                            "item": ["Bloodbark Helm"],
+                            "item_ids": [25413]
+                        },
+                        {
+                            "item": ["Bloodbark Legs"],
+                            "item_ids": [25416]
+                        }
+                    ]
+                }
+            ],
+            "optional_quests_unlocked": [
+                {
+                    "name": "Shades of Mort'ton",
+                    "points": 2
+                }
+            ],
+            "is_completed": false
         }
     ]
 }        
