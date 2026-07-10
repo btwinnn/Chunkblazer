@@ -1,0 +1,201 @@
+{
+            "region_id": [13618],
+            "neighbor_ids": [13619, 13874, 13617, 13362],
+            "Friendly_Name": "Abandoned Mine",
+            "tasks": [
+                {
+                    "name": "Obtain a Salve Amulet",
+                    "taskID": "obtain_salve_amulet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Salve amulet"],
+                            "item_ids": [4081],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Terror Dog",
+                    "taskID": "defeat_terror_dog",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Terror Dog"],
+                        "npc_ids": [6474, 6473],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat Treus Dayth",
+                    "taskID": "defeat_treus_dayth",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Treus Dayth"],
+                        "npc_ids": [3617, 6298, 6359, 3616],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Salve Amulet (e)",
+                    "taskID": "obtain_salve_amulet_e",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Salve amulet (e)"],
+                            "item_ids": [10588, 4081],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Ranging Potion(3)",
+                    "taskID": "obtain_ranging_potion_3",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Ranging potion(3)"],
+                            "item_ids": [169],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Black Nails",
+                    "taskID": "obtain_black_nails",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Black nails"],
+                            "item_ids": [4821],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Scimitar",
+                    "taskID": "equip_rune_scimitar",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rune Scimitar"],
+                            "item_ids": [1333]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Defeat a Giant Skeleton",
+                    "taskID": "defeat_giant_skeleton",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Giant Skeleton"],
+                        "npc_ids": [680, 681, 6440],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Equip a Granite Helm",
+                    "taskID": "equip_granite_helm",
+                    "category": "Equip",
+                    "level": 50,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Granite helm"],
+                            "item_ids": [10589]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [25, 200]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Mine some Mithril Ore",
+                    "taskID": "mine_mithril",
+                    "category": "Mining",
+                    "level": 55,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mithril Ore",
+                            "item_ids": [447],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }
