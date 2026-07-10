@@ -3582,6 +3582,12 @@
                                                                    ]
                                             }
                                         ],
+                              "optional_quests_unlocked":  [
+                                                               {
+                                                                   "name":  "The Great Brain Robbery",
+                                                                   "points":  3
+                                                               }
+                                                           ],
                               "is_completed":  false,
                               "Friendly_Name":  "Mos Le\u0027Harmless",
                               "chunk_type":  "CHARTER"
