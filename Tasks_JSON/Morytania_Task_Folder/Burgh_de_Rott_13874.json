@@ -1,0 +1,96 @@
+{
+            "region_id": [13874],
+            "neighbor_ids": [13875, 14130, 13873, 13618],
+            "Friendly_Name": "Burgh de Rott",
+            "tasks": [
+                {
+                    "name": "Use the Level 25 Agility Burgh de Rott Low Fence",
+                    "taskID": "use_burgh_de_rott_low_fence_25",
+                    "category": "Agility",
+                    "level": 25,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Low fence"],
+                        "object_id": [12776],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Blue Burgh de Rott Ramble Token",
+                    "taskID": "obtain_blue_burgh_token",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Reward Token (blue)"],
+                            "item_ids": [10944],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Yellow Burgh de Rott Ramble Token",
+                    "taskID": "obtain_yellow_burgh_token",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Reward Token (yellow)"],
+                            "item_ids": [10942],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Red Burgh de Rott Ramble Token",
+                    "taskID": "obtain_red_burgh_token",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Reward Token (red)"],
+                            "item_ids": [10943],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                        "name": "Defeat a Feral Vampyre",
+                        "taskID": "defeat_feral_vampyre",
+                        "category": "Combat",
+                        "completion_type": "NPC_Kill",
+                        "base_points": 1,
+                        "assignment_weight": 5,
+                        "target_npc": {
+                            "npc": ["Feral Vampyre"],
+                            "npc_ids": [3237, 3707, 3708, 4431, 5641, 5642, 3234, 3137, 5640],
+                            "quantity": [1, 25]
+                        }
+                },
+                {
+                        "name": "Defeat a Feral Vampyre in 15 Seconds",
+                        "taskID": "defeat_feral_vampyre_15_seconds",
+                        "category": "Combat",
+                        "completion_type": "NPC_Kill",
+                        "base_points": 1,
+                        "assignment_weight": 5,
+                        "target_npc": {
+                            "npc": ["Feral Vampyre"],
+                            "npc_ids": [3237, 3707, 3708, 4431, 5641, 5642, 3234, 3137, 5640],
+                            "quantity": [1]
+                        },                      
+                        "constraints": {
+                        "time_in_ticks": [25]
+                        }
+                }
+            ],
+            "is_completed": false
+        }
