@@ -4207,6 +4207,72 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [14639],
+            "neighbor_ids": [14640, 14895, 14638, 14383],
+            "Friendly_Name": "Mos Le'Harmless West Jungle",
+            "tasks": [
+                {
+                    "name": "Defeat a Jungle Horror",
+                    "taskID": "defeat_jungle_horror",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Jungle Horror"],
+                        "npc_ids": [1046, 1044, 1042, 1045, 1043],
+                        "quantity": [1, 25]
+                    }
+                },             
+                {
+                    "name": "Defeat a Jungle Horror in 9 Seconds",
+                    "taskID": "defeat_jungle_horror_9s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jungle Horror"],
+                        "npc_ids": [1046, 1044, 1042, 1045, 1043],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Defeat a Jungle Horror in the First Hit",
+                    "taskID": "defeat_jungle_horror_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Jungle Horror"],
+                        "npc_ids": [1046, 1044, 1042, 1045, 1043],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Giant Mosquito",
+                    "taskID": "defeat_giant_mosquito",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Mosquito"],
+                        "npc_ids": [1041, 15440],
+                        "quantity": [1, 10]
+                    }
+                }
+            ],
+            "is_completed": false
         }      
     ]
 }        
