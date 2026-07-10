@@ -43,6 +43,9 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	private FiremakingModule firemakingModule;
 
 	@Inject
+	private FarmingModule farmingModule;
+
+	@Inject
 	private AgilityModule agilityModule;
 
 	@Inject
@@ -75,6 +78,7 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 		registerModule(obtainModule);
 		registerModule(equipModule);
 		registerModule(firemakingModule);
+		registerModule(farmingModule);
 		registerModule(agilityModule);
 		registerModule(thievingModule);
 		registerModule(constructionModule);

@@ -1,0 +1,284 @@
+package net.runelite.client.plugins.chunkblazer.modules;
+
+import net.runelite.api.InventoryID;
+import net.runelite.api.Item;
+import net.runelite.api.ItemContainer;
+import net.runelite.api.Skill;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.StatChanged;
+import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.game.ItemManager;
+import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
+import net.runelite.client.plugins.chunkblazer.RequiredItem;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
+
+/**
+ * Unit tests for FarmingModule.
+ *
+ * <p>The verification model under test: a Farming XP drop on the same game
+ * tick as a change in the watched item's inventory count credits ONE action.
+ * Plant tasks consume the seed/sapling (count drops — allotments burn 3 seeds
+ * for one planting); the rake task produces Weeds (count rises).
+ */
+@ExtendWith(MockitoExtension.class)
+class FarmingModuleTest extends AbstractTaskModuleTest
+{
+	private static final int SWEETCORN_SEED = 5320;
+	private static final int WEEDS = 6055;
+
+	@Mock
+	private ItemManager itemManager;
+
+	@Mock
+	private ChatMessageManager chatMessageManager;
+
+	@InjectMocks
+	private FarmingModule farmingModule;
+
+	@Mock
+	private ItemContainer inventoryContainer;
+
+	@BeforeEach
+	void setUp() throws Exception
+	{
+		setupCommonMocks();
+
+		injectField(farmingModule, "client", client);
+		injectField(farmingModule, "clientThread", clientThread);
+		injectField(farmingModule, "eventBus", eventBus);
+		injectField(farmingModule, "config", config);
+		injectField(farmingModule, "itemManager", itemManager);
+
+		farmingModule.setCompletionCallback(completionCallback);
+
+		lenient().when(itemManager.canonicalize(anyInt())).thenAnswer(inv -> inv.getArgument(0));
+	}
+
+	private void injectField(Object target, String fieldName, Object value) throws Exception
+	{
+		for (Class<?> clazz = target.getClass(); clazz != null; clazz = clazz.getSuperclass())
+		{
+			try
+			{
+				Field field = clazz.getDeclaredField(fieldName);
+				field.setAccessible(true);
+				field.set(target, value);
+				return;
+			}
+			catch (NoSuchFieldException ignored)
+			{
+				// walk up
+			}
+		}
+	}
+
+	private NuzlockeTask farmingTask(String name, String taskId, int itemId, int target)
+	{
+		NuzlockeTask task = new NuzlockeTask();
+		task.setName(name);
+		task.setTaskId(taskId);
+		task.setCategory("Farming");
+		task.setCompletionType("FARMING");
+		task.setCurrentProgress(0);
+		task.setCompleted(false);
+		RequiredItem item = new RequiredItem();
+		item.setItemIds(Arrays.asList(itemId));
+		item.setQuantity(1);
+		task.setRequiredItems(Collections.singletonList(item));
+		task.setTargetQuantity(target);
+		return task;
+	}
+
+	private Item itemOf(int itemId, int quantity)
+	{
+		Item item = mock(Item.class);
+		lenient().when(item.getId()).thenReturn(itemId);
+		lenient().when(item.getQuantity()).thenReturn(quantity);
+		return item;
+	}
+
+	private void setInventory(Item... items)
+	{
+		lenient().when(client.getItemContainer(InventoryID.INVENTORY)).thenReturn(inventoryContainer);
+		lenient().when(inventoryContainer.getItems()).thenReturn(items);
+	}
+
+	@Test
+	void testGetCompletionType()
+	{
+		assertEquals("FARMING", farmingModule.getCompletionType());
+	}
+
+	@Test
+	void testCanHandle_FarmingTypeAndCategory()
+	{
+		assertTrue(farmingModule.canHandle(farmingTask("Plant some Sweetcorn", "plant_sweetcorn_seed", SWEETCORN_SEED, 1)));
+
+		NuzlockeTask wrongType = new NuzlockeTask();
+		wrongType.setCompletionType("OBTAIN");
+		wrongType.setCategory("Obtain");
+		assertFalse(farmingModule.canHandle(wrongType));
+	}
+
+	@Test
+	void plantingSeedWithFarmingXpCompletesTask()
+	{
+		NuzlockeTask task = farmingTask("Plant some Sweetcorn", "plant_sweetcorn_seed", SWEETCORN_SEED, 1);
+
+		// 5 seeds in a stack at task-load time (baseline snapshot).
+		Item seedStack = itemOf(SWEETCORN_SEED, 5);
+		setInventory(seedStack);
+		farmingModule.addActiveTask(task);
+
+		// One planting: allotment consumes 3 seeds, Farming XP fires same tick
+		// (XP first, then the container event — the gathering-style order).
+		setInventory(itemOf(SWEETCORN_SEED, 2));
+		farmingModule.onStatChanged(new StatChanged(Skill.FARMING, 17, 20, 20));
+
+		assertEquals(1, task.getCurrentProgress());
+		assertTrue(task.isCompleted(), "one planting must complete a target-1 plant task");
+		verify(completionCallback).onTaskCompleted(task, 1);
+	}
+
+	@Test
+	void itemChangeBeforeXpSameTickStillCredits()
+	{
+		NuzlockeTask task = farmingTask("Plant some Sweetcorn", "plant_sweetcorn_seed", SWEETCORN_SEED, 1);
+
+		setInventory(itemOf(SWEETCORN_SEED, 5));
+		farmingModule.addActiveTask(task);
+
+		// Container event fires FIRST this tick — no XP yet, so nothing credits
+		// and the baseline must NOT move.
+		setInventory(itemOf(SWEETCORN_SEED, 2));
+		farmingModule.onItemContainerChanged(new ItemContainerChanged(InventoryID.INVENTORY.getId(), inventoryContainer));
+		assertEquals(0, task.getCurrentProgress());
+
+		// The XP drop lands later the same tick — the pending delta credits now.
+		farmingModule.onStatChanged(new StatChanged(Skill.FARMING, 17, 20, 20));
+		assertEquals(1, task.getCurrentProgress());
+		assertTrue(task.isCompleted());
+	}
+
+	@Test
+	void allotmentPlantingCreditsOneActionNotThreeSeeds()
+	{
+		// Hypothetical "plant twice" task: a single 3-seed planting must credit
+		// one ACTION, not three items.
+		NuzlockeTask task = farmingTask("Plant some Sweetcorn twice", "plant_sweetcorn_twice", SWEETCORN_SEED, 2);
+
+		setInventory(itemOf(SWEETCORN_SEED, 6));
+		farmingModule.addActiveTask(task);
+
+		setInventory(itemOf(SWEETCORN_SEED, 3));
+		farmingModule.onStatChanged(new StatChanged(Skill.FARMING, 17, 20, 20));
+
+		assertEquals(1, task.getCurrentProgress(), "3 consumed seeds = 1 planting action");
+		assertFalse(task.isCompleted());
+
+		// Second planting on a later tick completes it.
+		farmingModule.onGameTick(new GameTick());
+		setInventory(itemOf(SWEETCORN_SEED, 0));
+		farmingModule.onStatChanged(new StatChanged(Skill.FARMING, 34, 20, 20));
+
+		assertEquals(2, task.getCurrentProgress());
+		assertTrue(task.isCompleted());
+	}
+
+	@Test
+	void bankingSeedsWithoutXpDoesNotCredit()
+	{
+		NuzlockeTask task = farmingTask("Plant some Sweetcorn", "plant_sweetcorn_seed", SWEETCORN_SEED, 1);
+
+		setInventory(itemOf(SWEETCORN_SEED, 5));
+		farmingModule.addActiveTask(task);
+
+		// Seeds banked: container change with NO Farming XP this tick.
+		setInventory();
+		farmingModule.onItemContainerChanged(new ItemContainerChanged(InventoryID.INVENTORY.getId(), inventoryContainer));
+		assertEquals(0, task.getCurrentProgress());
+
+		// End of tick slides the baseline past the banked change...
+		farmingModule.onGameTick(new GameTick());
+
+		// ...so a LATER farming XP drop (watering, harvesting — no watched
+		// change) must not credit the stale decrease.
+		farmingModule.onStatChanged(new StatChanged(Skill.FARMING, 17, 20, 20));
+		assertEquals(0, task.getCurrentProgress());
+		assertFalse(task.isCompleted());
+	}
+
+	@Test
+	void rakingWeedsIntoInventoryWithXpCompletesRakeTask()
+	{
+		// The two "Rake a Farming Patch" tasks watch Weeds, which APPEAR in the
+		// inventory when raking grants Farming XP — the opposite direction from
+		// plant tasks. Any deviation from the baseline counts.
+		NuzlockeTask task = farmingTask("Rake a Farming Patch", "rake_farming_patch", WEEDS, 1);
+
+		setInventory();
+		farmingModule.addActiveTask(task);
+
+		setInventory(itemOf(WEEDS, 1));
+		farmingModule.onStatChanged(new StatChanged(Skill.FARMING, 4, 3, 3));
+
+		assertEquals(1, task.getCurrentProgress());
+		assertTrue(task.isCompleted());
+	}
+
+	@Test
+	void farmingXpWithoutWatchedItemChangeDoesNotCredit()
+	{
+		// Watering / composting / harvesting grant Farming XP but never touch
+		// the watched seed.
+		NuzlockeTask task = farmingTask("Plant some Sweetcorn", "plant_sweetcorn_seed", SWEETCORN_SEED, 1);
+
+		setInventory(itemOf(SWEETCORN_SEED, 5));
+		farmingModule.addActiveTask(task);
+
+		farmingModule.onStatChanged(new StatChanged(Skill.FARMING, 1, 20, 20));
+
+		assertEquals(0, task.getCurrentProgress());
+		assertFalse(task.isCompleted());
+	}
+
+	@Test
+	void onTaskClearedResetsTracking()
+	{
+		NuzlockeTask task = farmingTask("Plant some Sweetcorn", "plant_sweetcorn_seed", SWEETCORN_SEED, 1);
+		setInventory(itemOf(SWEETCORN_SEED, 5));
+		farmingModule.addActiveTask(task);
+		assertEquals(1, farmingModule.getActiveTasks().size());
+
+		farmingModule.onTaskCleared();
+		assertTrue(farmingModule.getActiveTasks().isEmpty());
+
+		// A post-clear planting-shaped tick must not credit the removed task.
+		setInventory(itemOf(SWEETCORN_SEED, 2));
+		farmingModule.onStatChanged(new StatChanged(Skill.FARMING, 17, 20, 20));
+		assertEquals(0, task.getCurrentProgress());
+	}
+
+	@Test
+	void startUpAndShutDownManageEventBus()
+	{
+		farmingModule.startUp();
+		verify(eventBus).register(farmingModule);
+		farmingModule.shutDown();
+		verify(eventBus).unregister(farmingModule);
+	}
+}

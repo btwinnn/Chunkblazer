@@ -40,6 +40,9 @@ class TaskModuleManagerTest
 	private FiremakingModule firemakingModule;
 
 	@Mock
+	private FarmingModule farmingModule;
+
+	@Mock
 	private AgilityModule agilityModule;
 
 	@Mock
@@ -66,6 +69,7 @@ class TaskModuleManagerTest
 		injectField(taskModuleManager, "obtainModule", obtainModule);
 		injectField(taskModuleManager, "equipModule", equipModule);
 		injectField(taskModuleManager, "firemakingModule", firemakingModule);
+		injectField(taskModuleManager, "farmingModule", farmingModule);
 		injectField(taskModuleManager, "agilityModule", agilityModule);
 		injectField(taskModuleManager, "thievingModule", thievingModule);
 		injectField(taskModuleManager, "constructionModule", constructionModule);
@@ -78,6 +82,7 @@ class TaskModuleManagerTest
 		when(obtainModule.getCompletionType()).thenReturn("OBTAIN");
 		when(equipModule.getCompletionType()).thenReturn("EQUIP");
 		when(firemakingModule.getCompletionType()).thenReturn("FIREMAKING");
+		when(farmingModule.getCompletionType()).thenReturn("FARMING");
 		when(agilityModule.getCompletionType()).thenReturn("AGILITY");
 		when(thievingModule.getCompletionType()).thenReturn("THIEVING");
 		when(constructionModule.getCompletionType()).thenReturn("CONSTRUCTION");
@@ -253,6 +258,16 @@ class TaskModuleManagerTest
 		taskModuleManager.registerActiveTask(task);
 
 		verify(firemakingModule).addActiveTask(task);
+	}
+
+	@Test
+	void testRegisterActiveTask_Farming()
+	{
+		NuzlockeTask task = createTask("Plant some Sweetcorn", "plant_sweetcorn_seed", "FARMING");
+
+		taskModuleManager.registerActiveTask(task);
+
+		verify(farmingModule).addActiveTask(task);
 	}
 
 	@Test
