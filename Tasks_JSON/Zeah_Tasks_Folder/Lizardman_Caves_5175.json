@@ -50,32 +50,7 @@
                         }
                     ]
                 },
-                {
-                    "name": "Complete the Combat Achievements: Shayzien Specialist, Shayzien Protector, and A Scaley Encounter",
-                    "taskID": "complete_all_lizardman_shaman_CAs",
-                    "category": "Unlock",
-                    "completion_type": "VARBIT_CHECK",
-                    "base_points": 4,
-                    "assignment_weight": 10,
-                    "varbit_boolean": 1,                 
-                    "constraints": [                   
-                            {                       
-                            "varbit_id": 314,              
-                            "description": "Shayzien Specialist",
-                            "tier": "Elite"
-                            },
-                            {                       
-                            "varbit_id": 175,              
-                            "description": "Shayzien Protector",
-                            "tier": "Easy"
-                            },
-                            {                       
-                            "varbit_id": 174,              
-                            "description": "A Scaley Encounter",
-                            "tier": "Easy"
-                            }
-                        ]
-                },
+                
                 {
                     "name": "Defeat a Lizardman Shaman",
                     "taskID": "defeat_lizardman_shaman",
