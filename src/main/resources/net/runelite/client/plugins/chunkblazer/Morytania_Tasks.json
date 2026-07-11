@@ -4494,6 +4494,134 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [15151],
+            "neighbor_ids": [15152, 15407, 15150, 14895],
+            "Friendly_Name": "Trouble Brewing",
+            "tasks": [
+                {
+                    "name": "Obtain a Cutthroat Flag",
+                    "taskID": "obtain_cutthroat_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Cutthroat flag"],
+                            "item_ids": [8966],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Gilded Smile Flag",
+                    "taskID": "obtain_gilded_smile_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Gilded smile flag"],
+                            "item_ids": [8967],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bronze Fist Flag",
+                    "taskID": "obtain_bronze_fist_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Bronze fist flag"],
+                            "item_ids": [8968],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Lucky Shot Flag",
+                    "taskID": "obtain_lucky_shot_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Lucky shot flag"],
+                            "item_ids": [8969],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Treasure Flag",
+                    "taskID": "obtain_treasure_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Treasure flag"],
+                            "item_ids": [8970],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Phasmatys Flag",
+                    "taskID": "obtain_phasmatys_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Phasmatys flag"],
+                            "item_ids": [8971],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain The Stuff",
+                    "taskID": "obtain_the_stuff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["The stuff"],
+                            "item_ids": [8988],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Braindeath 'Rum'",
+                    "taskID": "obtain_braindeath_rum",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Braindeath 'rum'"],
+                            "item_ids": [7157],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
         }      
     ]
 }        
