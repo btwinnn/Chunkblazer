@@ -2422,6 +2422,7 @@
                                                 "taskID":  "defeat_ancient_wyvern_on_task",
                                                 "category":  "Slayer",
                                                 "completion_type":  "SLAYER",
+                                                "level":  82,
                                                 "base_points":  3,
                                                 "assignment_weight":  3,
                                                 "target_npc":  {

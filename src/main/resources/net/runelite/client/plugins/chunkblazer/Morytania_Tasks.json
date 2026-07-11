@@ -4339,6 +4339,115 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [14894],
+            "neighbor_ids": [14895, 15150, 14893, 14639],
+            "Friendly_Name": "Mos Le'Harmless Cave",
+            "tasks": [
+                {
+            "name": "Equip a Black Mask",
+            "taskID": "equip_black_mask",
+            "category": "Defence",
+            "level": 10,
+            "completion_type": "EQUIP",
+            "base_points": 1,
+            "assignment_weight": 10,
+            "required_items": [
+                {
+                    "item": ["Black mask"],
+                    "item_ids": [25275, 26780, 11783, 11774, 25266, 26771, 11782, 26779, 25274, 11781, 26778, 25273, 11780, 25272, 26777, 11779, 25271, 26776, 25270, 11778, 26775, 11777, 25269, 26774, 26773, 11776, 25268, 11775, 25267, 26772, 11784, 26781, 25276, 8919, 8901, 8917, 8915, 8913, 8911, 8909, 8907, 8905, 8903, 8921, 19639, 26675, 19641, 25179, 19643, 26676, 19645, 25181, 33066, 33072, 33068, 33070, 23073, 26680, 23075, 25189, 33338, 33443, 33439, 33441, 21264, 26678, 21266, 25185, 33340, 33449, 33445, 33447, 19647, 26677, 19649, 25183, 11864, 26674, 11865, 25177, 21888, 26679, 21890, 25187, 24370, 26681, 24444, 25191, 25910, 26684, 25912, 25914, 25898, 26682, 25900, 25902, 25904, 26683, 25906, 25908, 29816, 29822, 29818, 29820]
+                }
+                    ]
+                },
+                {
+                    "name": "Defeat a Cave Horror",
+                    "taskID": "defeat_cave_horror",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Cave Horror"],
+                        "npc_ids": [1051, 1049, 1050, 1047, 1048],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat an Albino Bat",
+                    "taskID": "defeat_albino_bat",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Albino Bat"],
+                        "npc_ids": [1039],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Equip a Rune Dagger",
+                    "taskID": "equip_rune_dagger",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Rune dagger"],
+                            "item_ids": [1213]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ensouled Horror Head",
+                    "taskID": "obtain_ensouled_horror_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Ensouled horror head"],
+                            "item_ids": [13487],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Albino Bat in the First Hit",
+                    "taskID": "defeat_albino_bat_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Albino Bat"],
+                        "npc_ids": [1039],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Cave Horror on Task",
+                    "taskID": "defeat_cave_horror",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "level": 58,
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Cave Horror"],
+                        "npc_ids": [1051, 1049, 1050, 1047, 1048],
+                        "quantity": [1, 25]
+                    }
+                }
+            ],
+            "is_completed": false
         }      
     ]
 }        
