@@ -184,11 +184,14 @@ public class FarmingModule extends AbstractTaskModule
 			// swallowed as a first-sighting baseline.
 			clientThread.invokeLater(() ->
 			{
-				inventorySnapshot.put(task.getTaskId(), snapshotInventoryCounts(watched));
+				Map<Integer, Integer> seeded = snapshotInventoryCounts(watched);
+				inventorySnapshot.put(task.getTaskId(), seeded);
 				if (previousFarmingXp < 0 && client.getLocalPlayer() != null)
 				{
 					previousFarmingXp = client.getSkillExperience(Skill.FARMING);
 				}
+				log.info("[FARMING-DEBUG] tracking '{}' ({}) watched={} snapshot={} target={} xpBaseline={}",
+					task.getName(), task.getTaskId(), watched, seeded, task.getTargetQuantity(), previousFarmingXp);
 			});
 		}
 		catch (Exception e)
@@ -241,6 +244,7 @@ public class FarmingModule extends AbstractTaskModule
 		}
 
 		farmingActionThisTick = true;
+		log.info("[FARMING-DEBUG] farming xp +{} ({} -> {}) tick={}", newXp - prevXp, prevXp, newXp, getGameTick());
 
 		// Marker-after-item order: the inventory may already differ from the
 		// snapshot (the container event fired earlier this tick without the
@@ -271,6 +275,8 @@ public class FarmingModule extends AbstractTaskModule
 		}
 
 		farmingActionThisTick = true;
+		log.info("[FARMING-DEBUG] plant message tick={} type={} msg='{}'",
+			getGameTick(), event.getType(), Text.removeTags(event.getMessage()));
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			creditFarmingAction(task);
@@ -295,6 +301,20 @@ public class FarmingModule extends AbstractTaskModule
 		// onGameTick rolls past uncredited.
 		if (!farmingActionThisTick)
 		{
+			// Diagnostic only: report an unarmed change to a watched item so a
+			// marker/change tick mismatch is visible in the log.
+			for (Map.Entry<String, Map<Integer, Integer>> e : inventorySnapshot.entrySet())
+			{
+				for (Map.Entry<Integer, Integer> s : e.getValue().entrySet())
+				{
+					int curr = countInInventory(s.getKey());
+					if (curr != s.getValue())
+					{
+						log.info("[FARMING-DEBUG] watched item {} changed {}->{} tick={} WITHOUT action marker (task {})",
+							s.getKey(), s.getValue(), curr, getGameTick(), e.getKey());
+					}
+				}
+			}
 			return;
 		}
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
@@ -315,9 +335,19 @@ public class FarmingModule extends AbstractTaskModule
 			for (NuzlockeTask task : new HashSet<>(activeTasks))
 			{
 				Set<Integer> watched = taskWatchedItems.get(task.getTaskId());
-				if (watched != null)
+				if (watched == null)
 				{
-					inventorySnapshot.put(task.getTaskId(), snapshotInventoryCounts(watched));
+					continue;
+				}
+				Map<Integer, Integer> next = snapshotInventoryCounts(watched);
+				Map<Integer, Integer> old = inventorySnapshot.put(task.getTaskId(), next);
+				// Smoking-gun diagnostic: an uncredited watched-item change is
+				// being erased here. If this fires on a plant tick, the action
+				// marker and the item change landed on DIFFERENT ticks.
+				if (old != null && !old.equals(next))
+				{
+					log.info("[FARMING-DEBUG] tick={} slide consumed uncredited change for '{}': {} -> {} (markerThisTick={})",
+						getGameTick(), task.getTaskId(), old, next, farmingActionThisTick);
 				}
 			}
 		}
@@ -372,8 +402,12 @@ public class FarmingModule extends AbstractTaskModule
 
 		if (!changed)
 		{
+			log.info("[FARMING-DEBUG] tick={} marker fired but no watched-item delta for '{}' (snapshot={})",
+				getGameTick(), task.getTaskId(), nextSnapshot);
 			return;
 		}
+
+		log.info("[FARMING-DEBUG] tick={} crediting '{}': {}", getGameTick(), task.getTaskId(), details);
 
 		int totalRequired = Math.max(1, task.getTargetQuantity());
 		int previousProgress = task.getCurrentProgress();
