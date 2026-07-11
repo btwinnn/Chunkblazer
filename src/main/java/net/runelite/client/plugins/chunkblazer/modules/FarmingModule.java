@@ -43,24 +43,29 @@ import net.runelite.client.util.Text;
  *       Same rule, opposite direction; each rake tick is one action.</li>
  * </ul>
  *
- * <p>The action is signalled by EITHER of two same-tick markers:
+ * <p>The action is signalled by two markers:
  * <ul>
- *   <li>A Farming XP rise — seeds, herbs, flowers and raking grant their
- *       XP immediately.</li>
- *   <li>The server's "You plant ..." game message — tree and fruit-tree
- *       SAPLINGS grant NO XP at plant time (Cruk's dragonfruit test run:
- *       the sapling left the inventory with zero Farming XP that tick, so
- *       an XP-only gate never fired). The message fires on the plant tick
- *       for every crop type, saplings included.</li>
+ *   <li>A Farming XP rise, same tick as the item change — covers raking
+ *       (weeds + XP land together). A game update moved PLANTING XP to
+ *       harvest/check-health, so XP never fires on a plant tick anymore
+ *       (proven in both Cruk's dragonfruit log and bao's guam/onion log).</li>
+ *   <li>The server's "You plant ..." game message. Planting consumes the
+ *       seed at the START of the animation and sends this message at the
+ *       END — 3 ticks apart in bao's onion log — so the message may NOT
+ *       share a tick with the item change. An unarmed watched-item change
+ *       is therefore held as a PENDING change for {@link #PENDING_WINDOW_TICKS}
+ *       ticks, and a plant message credits a pending DECREASE from that
+ *       window.</li>
  * </ul>
  *
- * <p>Watering, composting, harvesting and other Farming XP sources don't
- * touch the watched item, so they never credit. Banking or dropping the
- * seed changes the count but has no same-tick action marker, so the
- * end-of-tick snapshot slide in {@link #onGameTick} rolls the baseline
- * past it uncredited — the same gate model as ObtainModule's skilling
- * path (and deliberately NOT FiremakingModule's buffer, which can carry a
- * bank withdrawal across ticks into a later unrelated XP drop).
+ * <p>Why the pending window is message-only and decrease-only: letting the
+ * XP marker consume pendings would credit "bank the seeds, water a patch
+ * seconds later"; letting increases through would credit "withdraw the
+ * seeds, plant a different crop". Watering, composting and harvesting
+ * never touch the watched item, so they never credit. Unwatched changes
+ * expire out of the window at {@link #onGameTick} — the same gate model as
+ * ObtainModule's skilling path, widened just enough for the plant
+ * animation gap (unlike FiremakingModule's unbounded buffer).
  */
 @Slf4j
 @Singleton
@@ -92,11 +97,52 @@ public class FarmingModule extends AbstractTaskModule
 	// Union of all watched item IDs across active tasks (fast relevance check).
 	private final Set<Integer> watchedItemIds = ConcurrentHashMap.newKeySet();
 
-	// The plant confirmation the server sends on the plant tick, e.g.
-	// "You plant the dragonfruit tree sapling in the fruit tree patch." /
-	// "You plant 3 sweetcorn seeds in the allotment." Arrives as SPAM (or
-	// GAMEMESSAGE when the player has filtered messages shown).
+	// The plant confirmation the server sends at the END of the planting
+	// animation, e.g. "You plant the dragonfruit tree sapling in the fruit
+	// tree patch." / "You plant 3 onion seeds in the allotment." Arrives as
+	// SPAM (or GAMEMESSAGE when the player has filtered messages shown).
 	private static final String PLANT_MESSAGE_PREFIX = "You plant ";
+
+	// How many ticks a marker-less watched-item change stays creditable.
+	// The seed leaves the inventory when the plant animation starts and the
+	// "You plant" message arrives when it ends — observed 3 ticks apart.
+	private static final int PENDING_WINDOW_TICKS = 5;
+
+	/**
+	 * A watched-item change seen WITHOUT an action marker on its tick, held
+	 * until a plant message claims it or it ages out of the window.
+	 */
+	private static final class PendingChange
+	{
+		final int tick;
+		final boolean decrease;
+		final String details;
+
+		PendingChange(int tick, boolean decrease, String details)
+		{
+			this.tick = tick;
+			this.decrease = decrease;
+			this.details = details;
+		}
+	}
+
+	/**
+	 * A live deviation of watched-item counts from the snapshot.
+	 */
+	private static final class DeltaResult
+	{
+		final boolean decrease;
+		final String details;
+
+		DeltaResult(boolean decrease, String details)
+		{
+			this.decrease = decrease;
+			this.details = details;
+		}
+	}
+
+	// Per-task pending change (taskId -> change awaiting its plant message).
+	private final Map<String, PendingChange> pendingChanges = new ConcurrentHashMap<>();
 
 	// Last observed Farming XP; -1 until the first sighting seeds the baseline.
 	private int previousFarmingXp = -1;
@@ -139,6 +185,7 @@ public class FarmingModule extends AbstractTaskModule
 		eventBus.unregister(this);
 		taskWatchedItems.clear();
 		inventorySnapshot.clear();
+		pendingChanges.clear();
 		watchedItemIds.clear();
 		previousFarmingXp = -1;
 		farmingActionThisTick = false;
@@ -214,6 +261,7 @@ public class FarmingModule extends AbstractTaskModule
 		super.onTaskCleared();
 		taskWatchedItems.clear();
 		inventorySnapshot.clear();
+		pendingChanges.clear();
 		watchedItemIds.clear();
 	}
 
@@ -246,12 +294,12 @@ public class FarmingModule extends AbstractTaskModule
 		farmingActionThisTick = true;
 		log.info("[FARMING-DEBUG] farming xp +{} ({} -> {}) tick={}", newXp - prevXp, prevXp, newXp, getGameTick());
 
-		// Marker-after-item order: the inventory may already differ from the
-		// snapshot (the container event fired earlier this tick without the
-		// action flag). Credit that pending change now.
+		// XP is a SAME-TICK marker only (raking). It must not claim pending
+		// changes from earlier ticks — that would credit "bank the seeds,
+		// then water a patch".
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
-			creditFarmingAction(task);
+			creditOnMarker(task, false);
 		}
 	}
 
@@ -277,9 +325,12 @@ public class FarmingModule extends AbstractTaskModule
 		farmingActionThisTick = true;
 		log.info("[FARMING-DEBUG] plant message tick={} type={} msg='{}'",
 			getGameTick(), event.getType(), Text.removeTags(event.getMessage()));
+		// The plant message arrives at the END of the planting animation; the
+		// seed left the inventory at its START, ticks earlier. Allow claiming
+		// a pending DECREASE from the window.
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
-			creditFarmingAction(task);
+			creditOnMarker(task, true);
 		}
 	}
 
@@ -294,32 +345,29 @@ public class FarmingModule extends AbstractTaskModule
 		{
 			return;
 		}
-		// Item-after-marker order: only credit when this tick's action marker
-		// (XP rise or plant message) already fired. Without the flag, leave
-		// the snapshot untouched — either the marker arrives later this tick
-		// (its handler credits then), or this was a non-farming change that
-		// onGameTick rolls past uncredited.
 		if (!farmingActionThisTick)
 		{
-			// Diagnostic only: report an unarmed change to a watched item so a
-			// marker/change tick mismatch is visible in the log.
-			for (Map.Entry<String, Map<Integer, Integer>> e : inventorySnapshot.entrySet())
+			// No marker (yet) this tick. Consume the change into a pending
+			// entry — the plant message arrives ticks later, after the
+			// animation, and will claim it from the window. Rolling the
+			// snapshot here also stops onGameTick's slide from silently
+			// erasing the evidence (the original guam/onion failure).
+			for (NuzlockeTask task : new HashSet<>(activeTasks))
 			{
-				for (Map.Entry<Integer, Integer> s : e.getValue().entrySet())
+				DeltaResult delta = detectWatchedDelta(task);
+				if (delta != null)
 				{
-					int curr = countInInventory(s.getKey());
-					if (curr != s.getValue())
-					{
-						log.info("[FARMING-DEBUG] watched item {} changed {}->{} tick={} WITHOUT action marker (task {})",
-							s.getKey(), s.getValue(), curr, getGameTick(), e.getKey());
-					}
+					pendingChanges.put(task.getTaskId(),
+						new PendingChange(getGameTick(), delta.decrease, delta.details));
+					log.info("[FARMING-DEBUG] tick={} pending change recorded for '{}': {} (awaiting marker)",
+						getGameTick(), task.getTaskId(), delta.details);
 				}
 			}
 			return;
 		}
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
-			creditFarmingAction(task);
+			creditOnMarker(task, false);
 		}
 	}
 
@@ -341,9 +389,9 @@ public class FarmingModule extends AbstractTaskModule
 				}
 				Map<Integer, Integer> next = snapshotInventoryCounts(watched);
 				Map<Integer, Integer> old = inventorySnapshot.put(task.getTaskId(), next);
-				// Smoking-gun diagnostic: an uncredited watched-item change is
-				// being erased here. If this fires on a plant tick, the action
-				// marker and the item change landed on DIFFERENT ticks.
+				// Watched changes are normally consumed into pendingChanges by
+				// onItemContainerChanged before this slide runs; a change dying
+				// here means a container event was missed entirely.
 				if (old != null && !old.equals(next))
 				{
 					log.info("[FARMING-DEBUG] tick={} slide consumed uncredited change for '{}': {} -> {} (markerThisTick={})",
@@ -351,33 +399,93 @@ public class FarmingModule extends AbstractTaskModule
 				}
 			}
 		}
+
+		// Age pending changes out of the credit window so a banked/dropped
+		// seed can't be claimed by a much later plant message.
+		pendingChanges.entrySet().removeIf(e ->
+		{
+			boolean expired = getGameTick() - e.getValue().tick > PENDING_WINDOW_TICKS;
+			if (expired)
+			{
+				log.info("[FARMING-DEBUG] tick={} pending change for '{}' expired unclaimed: {}",
+					getGameTick(), e.getKey(), e.getValue().details);
+			}
+			return expired;
+		});
+
 		farmingActionThisTick = false;
 	}
 
 	/**
-	 * Credit ONE farming action to the task if any watched item's inventory
-	 * count deviates from the snapshot, then roll the snapshot forward. Called
-	 * only on ticks where an action marker fired (Farming XP rise or "You
-	 * plant ..." message). One action per tick regardless of the delta
-	 * magnitude — planting an allotment consumes 3 seeds but is one "Plant"
-	 * (and every authored task needs just 1 action anyway).
+	 * Credit ONE farming action on an action-marker tick. First preference is
+	 * a LIVE watched-item delta (item change and marker on the same tick —
+	 * raking, and the marker-before-item event order). When the plant message
+	 * is the marker ({@code allowPending}), a pending DECREASE recorded within
+	 * the last {@link #PENDING_WINDOW_TICKS} ticks is claimed instead — the
+	 * seed leaves the inventory at the start of the plant animation, the
+	 * message arrives at its end. One action per marker regardless of the
+	 * delta magnitude — planting an allotment consumes 3 seeds but is one
+	 * "Plant" (and every authored task needs just 1 action anyway).
 	 */
-	private void creditFarmingAction(NuzlockeTask task)
+	private void creditOnMarker(NuzlockeTask task, boolean allowPending)
+	{
+		DeltaResult delta = detectWatchedDelta(task);
+		if (delta != null)
+		{
+			// A live delta supersedes any stale pending for this task.
+			pendingChanges.remove(task.getTaskId());
+			log.info("[FARMING-DEBUG] tick={} crediting '{}' from live delta: {}",
+				getGameTick(), task.getTaskId(), delta.details);
+			applyCredit(task, delta.details);
+			return;
+		}
+
+		PendingChange pending = pendingChanges.get(task.getTaskId());
+		if (pending != null)
+		{
+			// A pending from THIS tick is the item-change-before-marker event
+			// order (raking's weeds+XP, or message-on-the-plant-tick) — any
+			// marker claims it, same as the original same-tick gate. OLDER
+			// pendings are the plant-animation gap: only the plant message
+			// claims them, and only when the item count went DOWN.
+			boolean sameTick = pending.tick == getGameTick();
+			boolean inWindow = getGameTick() - pending.tick <= PENDING_WINDOW_TICKS;
+			if (sameTick || (allowPending && inWindow && pending.decrease))
+			{
+				pendingChanges.remove(task.getTaskId());
+				log.info("[FARMING-DEBUG] tick={} crediting '{}' from pending change (tick={}): {}",
+					getGameTick(), task.getTaskId(), pending.tick, pending.details);
+				applyCredit(task, pending.details);
+				return;
+			}
+		}
+
+		log.info("[FARMING-DEBUG] tick={} marker fired but nothing to credit for '{}' (allowPending={}, pending={})",
+			getGameTick(), task.getTaskId(), allowPending,
+			pendingChanges.containsKey(task.getTaskId()));
+	}
+
+	/**
+	 * Diff the watched-item counts against the task's snapshot and roll the
+	 * snapshot forward. Returns null when nothing changed.
+	 */
+	private DeltaResult detectWatchedDelta(NuzlockeTask task)
 	{
 		Set<Integer> watched = taskWatchedItems.get(task.getTaskId());
 		if (watched == null || watched.isEmpty())
 		{
-			return;
+			return null;
 		}
 		Map<Integer, Integer> snapshot = inventorySnapshot.get(task.getTaskId());
 		if (snapshot == null)
 		{
 			// Deferred init in addActiveTask hasn't run yet — skip rather than
 			// treat the whole inventory as a fresh delta.
-			return;
+			return null;
 		}
 
 		boolean changed = false;
+		boolean decrease = false;
 		StringBuilder details = new StringBuilder();
 		Map<Integer, Integer> nextSnapshot = new HashMap<>();
 		for (Integer itemId : watched)
@@ -390,6 +498,7 @@ public class FarmingModule extends AbstractTaskModule
 				continue;
 			}
 			changed = true;
+			decrease |= curr < prev;
 			if (details.length() > 0)
 			{
 				details.append(", ");
@@ -400,15 +509,15 @@ public class FarmingModule extends AbstractTaskModule
 		}
 		inventorySnapshot.put(task.getTaskId(), nextSnapshot);
 
-		if (!changed)
-		{
-			log.info("[FARMING-DEBUG] tick={} marker fired but no watched-item delta for '{}' (snapshot={})",
-				getGameTick(), task.getTaskId(), nextSnapshot);
-			return;
-		}
+		return changed ? new DeltaResult(decrease, details.toString()) : null;
+	}
 
-		log.info("[FARMING-DEBUG] tick={} crediting '{}': {}", getGameTick(), task.getTaskId(), details);
-
+	/**
+	 * Apply one action of progress, fire chat + callbacks, and clean up on
+	 * completion.
+	 */
+	private void applyCredit(NuzlockeTask task, String details)
+	{
 		int totalRequired = Math.max(1, task.getTargetQuantity());
 		int previousProgress = task.getCurrentProgress();
 		int newProgress = Math.min(totalRequired, previousProgress + 1);
@@ -418,7 +527,7 @@ public class FarmingModule extends AbstractTaskModule
 		}
 		task.setCurrentProgress(newProgress);
 
-		sendTaskProgress(task, details.toString(), newProgress, totalRequired);
+		sendTaskProgress(task, details, newProgress, totalRequired);
 		if (completionCallback != null)
 		{
 			completionCallback.onProgressUpdated(task, newProgress);
@@ -427,7 +536,7 @@ public class FarmingModule extends AbstractTaskModule
 		if (newProgress >= totalRequired && !task.isCompleted())
 		{
 			task.setCompleted(true);
-			sendTaskSuccess(task, details.toString());
+			sendTaskSuccess(task, details);
 			if (completionCallback != null)
 			{
 				completionCallback.onTaskCompleted(task, newProgress);
@@ -436,6 +545,7 @@ public class FarmingModule extends AbstractTaskModule
 			// Clean up task tracking
 			taskWatchedItems.remove(task.getTaskId());
 			inventorySnapshot.remove(task.getTaskId());
+			pendingChanges.remove(task.getTaskId());
 			activeTasks.remove(task);
 			rebuildWatchedItems();
 		}

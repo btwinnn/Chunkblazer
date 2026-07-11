@@ -42,6 +42,12 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 	private static final int SWEETCORN_SEED = 5320;
 	private static final int WEEDS = 6055;
 	private static final int DRAGONFRUIT_SAPLING = 22866;
+	private static final int ONION_SEED = 5319;
+	private static final int GUAM_SEED = 5291;
+
+	// Mutable game tick returned by the client mock; tests advance it to
+	// model the plant-animation gap between item change and marker.
+	private int currentTick;
 
 	@Mock
 	private ItemManager itemManager;
@@ -69,6 +75,7 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 		farmingModule.setCompletionCallback(completionCallback);
 
 		lenient().when(itemManager.canonicalize(anyInt())).thenAnswer(inv -> inv.getArgument(0));
+		lenient().when(client.getTickCount()).thenAnswer(inv -> currentTick);
 	}
 
 	private void injectField(Object target, String fieldName, Object value) throws Exception
@@ -211,15 +218,16 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 		farmingModule.addActiveTask(task);
 
 		// Seeds banked: container change with NO Farming XP this tick.
+		currentTick = 0;
 		setInventory();
 		farmingModule.onItemContainerChanged(new ItemContainerChanged(InventoryID.INVENTORY.getId(), inventoryContainer));
 		assertEquals(0, task.getCurrentProgress());
 
-		// End of tick slides the baseline past the banked change...
 		farmingModule.onGameTick(new GameTick());
 
-		// ...so a LATER farming XP drop (watering, harvesting — no watched
-		// change) must not credit the stale decrease.
+		// A LATER farming XP drop (watering, harvesting — no watched change)
+		// must not claim the banked decrease: XP is a same-tick marker only.
+		currentTick = 2;
 		farmingModule.onStatChanged(new StatChanged(Skill.FARMING, 17, 20, 20));
 		assertEquals(0, task.getCurrentProgress());
 		assertFalse(task.isCompleted());
@@ -338,6 +346,94 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 	private ChatMessage plantMessage(ChatMessageType type, String message)
 	{
 		return new ChatMessage(null, type, "", message, null, 0);
+	}
+
+	/**
+	 * bao's guam/onion regression (session 2026-07-10 20:01): planting
+	 * consumes the seeds at the START of the animation (onion 22->19 at tick
+	 * 12, no marker) and the "You plant" message arrives at its END (tick 15).
+	 * The change must survive as a pending entry across the gap and be
+	 * credited by the message.
+	 */
+	@Test
+	void plantAnimationGap_PendingChangeClaimedByLaterMessage()
+	{
+		NuzlockeTask task = farmingTask("Plant some Onions", "plant_onions", ONION_SEED, 1);
+
+		setInventory(itemOf(ONION_SEED, 22));
+		farmingModule.addActiveTask(task);
+
+		// Tick 12: 3 seeds consumed, no marker anywhere this tick.
+		currentTick = 12;
+		setInventory(itemOf(ONION_SEED, 19));
+		farmingModule.onItemContainerChanged(new ItemContainerChanged(InventoryID.INVENTORY.getId(), inventoryContainer));
+		assertEquals(0, task.getCurrentProgress(), "no marker yet — must not credit");
+		farmingModule.onGameTick(new GameTick());
+
+		// Ticks 13-14: nothing happens; the pending must survive the slides.
+		currentTick = 13;
+		farmingModule.onGameTick(new GameTick());
+		currentTick = 14;
+		farmingModule.onGameTick(new GameTick());
+
+		// Tick 15: the plant confirmation lands.
+		currentTick = 15;
+		farmingModule.onChatMessage(plantMessage(ChatMessageType.SPAM,
+			"You plant 3 onion seeds in the allotment."));
+
+		assertEquals(1, task.getCurrentProgress());
+		assertTrue(task.isCompleted(), "message must claim the pending seed consumption from tick 12");
+		verify(completionCallback).onTaskCompleted(task, 1);
+	}
+
+	@Test
+	void pendingChangeExpiresOutsideWindow()
+	{
+		// A watched-seed decrease with NO plant message inside the window
+		// (deposited/dropped) must not be claimable by a much later message.
+		NuzlockeTask task = farmingTask("Plant some Onions", "plant_onions", ONION_SEED, 1);
+
+		setInventory(itemOf(ONION_SEED, 22));
+		farmingModule.addActiveTask(task);
+
+		currentTick = 0;
+		setInventory(itemOf(ONION_SEED, 19));
+		farmingModule.onItemContainerChanged(new ItemContainerChanged(InventoryID.INVENTORY.getId(), inventoryContainer));
+		for (int t = 0; t <= 6; t++)
+		{
+			currentTick = t;
+			farmingModule.onGameTick(new GameTick());
+		}
+
+		currentTick = 10;
+		farmingModule.onChatMessage(plantMessage(ChatMessageType.SPAM,
+			"You plant 3 onion seeds in the allotment."));
+
+		assertEquals(0, task.getCurrentProgress());
+		assertFalse(task.isCompleted());
+	}
+
+	@Test
+	void withdrawnSeedsIncreaseNotClaimedByPlantMessage()
+	{
+		// Withdrawing the watched seeds (count INCREASES) followed by
+		// planting a different crop within the window must not credit — only
+		// decreases are plant-shaped.
+		NuzlockeTask task = farmingTask("Plant a Guam Seed", "plant_guam", GUAM_SEED, 1);
+
+		setInventory();
+		farmingModule.addActiveTask(task);
+
+		currentTick = 1;
+		setInventory(itemOf(GUAM_SEED, 18));
+		farmingModule.onItemContainerChanged(new ItemContainerChanged(InventoryID.INVENTORY.getId(), inventoryContainer));
+
+		currentTick = 3;
+		farmingModule.onChatMessage(plantMessage(ChatMessageType.SPAM,
+			"You plant 3 onion seeds in the allotment."));
+
+		assertEquals(0, task.getCurrentProgress());
+		assertFalse(task.isCompleted());
 	}
 
 	@Test
