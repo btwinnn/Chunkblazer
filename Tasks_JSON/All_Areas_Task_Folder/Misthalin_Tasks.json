@@ -594,23 +594,7 @@
             "region_id": [12594],
             "neighbor_ids": [12595, 12850, 12593, 12338],
             "Friendly_Name": "H.A.M. Hideout",
-            "tasks": [
-                {
-                    "name": "Rake a Farming Patch",
-                    "taskID": "rake_farming_patch",
-                    "category": "Farming",
-                    "level": 1,
-                    "completion_type": "FARMING",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": "Weeds",
-                            "item_ids": [6055],
-                            "quantity": 1
-                        }
-                    ]
-                },
+            "tasks": [          
                 {
                     "name": "Obtain an Ensouled Goblin Head",
                     "taskID": "obtain_ensouled_goblin_head",
