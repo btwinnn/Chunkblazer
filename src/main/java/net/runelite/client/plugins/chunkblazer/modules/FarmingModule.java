@@ -14,6 +14,7 @@ import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.Skill;
+import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.StatChanged;
@@ -23,13 +24,14 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
 import net.runelite.client.plugins.chunkblazer.RequiredItem;
+import net.runelite.client.util.Text;
 
 /**
  * Module for FARMING completion type tasks.
  *
  * <p>The authored farming tasks are ACTIONS, not item counts: "Plant a
  * Sweetcorn Seed", "Plant an Apple Tree Sapling", "Rake a Farming Patch".
- * The verification signal is a Farming XP drop landing on the same game
+ * The verification signal is a farming ACTION landing on the same game
  * tick as a change in the task's watched item count in the INVENTORY:
  *
  * <ul>
@@ -41,9 +43,20 @@ import net.runelite.client.plugins.chunkblazer.RequiredItem;
  *       Same rule, opposite direction; each rake tick is one action.</li>
  * </ul>
  *
+ * <p>The action is signalled by EITHER of two same-tick markers:
+ * <ul>
+ *   <li>A Farming XP rise — seeds, herbs, flowers and raking grant their
+ *       XP immediately.</li>
+ *   <li>The server's "You plant ..." game message — tree and fruit-tree
+ *       SAPLINGS grant NO XP at plant time (Cruk's dragonfruit test run:
+ *       the sapling left the inventory with zero Farming XP that tick, so
+ *       an XP-only gate never fired). The message fires on the plant tick
+ *       for every crop type, saplings included.</li>
+ * </ul>
+ *
  * <p>Watering, composting, harvesting and other Farming XP sources don't
  * touch the watched item, so they never credit. Banking or dropping the
- * seed changes the count but has no same-tick Farming XP, so the
+ * seed changes the count but has no same-tick action marker, so the
  * end-of-tick snapshot slide in {@link #onGameTick} rolls the baseline
  * past it uncredited — the same gate model as ObtainModule's skilling
  * path (and deliberately NOT FiremakingModule's buffer, which can carry a
@@ -79,14 +92,20 @@ public class FarmingModule extends AbstractTaskModule
 	// Union of all watched item IDs across active tasks (fast relevance check).
 	private final Set<Integer> watchedItemIds = ConcurrentHashMap.newKeySet();
 
+	// The plant confirmation the server sends on the plant tick, e.g.
+	// "You plant the dragonfruit tree sapling in the fruit tree patch." /
+	// "You plant 3 sweetcorn seeds in the allotment." Arrives as SPAM (or
+	// GAMEMESSAGE when the player has filtered messages shown).
+	private static final String PLANT_MESSAGE_PREFIX = "You plant ";
+
 	// Last observed Farming XP; -1 until the first sighting seeds the baseline.
 	private int previousFarmingXp = -1;
 
-	// True once Farming XP has risen during the CURRENT game tick. Makes the
-	// credit order-independent within the tick: planting fires an inventory
-	// change and an XP drop on the same tick, in either order. Cleared in
-	// onGameTick.
-	private boolean farmingXpGainedThisTick = false;
+	// True once a farming-action marker (Farming XP rise OR "You plant ..."
+	// message) has fired during the CURRENT game tick. Makes the credit
+	// order-independent within the tick: planting fires an inventory change
+	// and its marker on the same tick, in either order. Cleared in onGameTick.
+	private boolean farmingActionThisTick = false;
 
 	@Inject
 	public FarmingModule()
@@ -122,7 +141,7 @@ public class FarmingModule extends AbstractTaskModule
 		inventorySnapshot.clear();
 		watchedItemIds.clear();
 		previousFarmingXp = -1;
-		farmingXpGainedThisTick = false;
+		farmingActionThisTick = false;
 	}
 
 	@Override
@@ -221,11 +240,37 @@ public class FarmingModule extends AbstractTaskModule
 			return;
 		}
 
-		farmingXpGainedThisTick = true;
+		farmingActionThisTick = true;
 
-		// XP-after-item order: the inventory may already differ from the
+		// Marker-after-item order: the inventory may already differ from the
 		// snapshot (the container event fired earlier this tick without the
-		// XP flag). Credit that pending change now.
+		// action flag). Credit that pending change now.
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
+		{
+			creditFarmingAction(task);
+		}
+	}
+
+	@Subscribe
+	public void onChatMessage(ChatMessage event)
+	{
+		// Tree and fruit-tree saplings grant NO Farming XP on the plant tick,
+		// so the XP marker never fires for them. The server's plant
+		// confirmation message is the action marker instead.
+		if (event.getType() != ChatMessageType.SPAM && event.getType() != ChatMessageType.GAMEMESSAGE)
+		{
+			return;
+		}
+		if (activeTasks.isEmpty())
+		{
+			return;
+		}
+		if (!Text.removeTags(event.getMessage()).startsWith(PLANT_MESSAGE_PREFIX))
+		{
+			return;
+		}
+
+		farmingActionThisTick = true;
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			creditFarmingAction(task);
@@ -243,11 +288,12 @@ public class FarmingModule extends AbstractTaskModule
 		{
 			return;
 		}
-		// Item-after-XP order: only credit when this tick's Farming XP already
-		// fired. Without the flag, leave the snapshot untouched — either the
-		// XP arrives later this tick (onStatChanged credits then), or this was
-		// a non-farming change that onGameTick rolls past uncredited.
-		if (!farmingXpGainedThisTick)
+		// Item-after-marker order: only credit when this tick's action marker
+		// (XP rise or plant message) already fired. Without the flag, leave
+		// the snapshot untouched — either the marker arrives later this tick
+		// (its handler credits then), or this was a non-farming change that
+		// onGameTick rolls past uncredited.
+		if (!farmingActionThisTick)
 		{
 			return;
 		}
@@ -275,15 +321,16 @@ public class FarmingModule extends AbstractTaskModule
 				}
 			}
 		}
-		farmingXpGainedThisTick = false;
+		farmingActionThisTick = false;
 	}
 
 	/**
 	 * Credit ONE farming action to the task if any watched item's inventory
 	 * count deviates from the snapshot, then roll the snapshot forward. Called
-	 * only on ticks where Farming XP rose. One action per tick regardless of
-	 * the delta magnitude — planting an allotment consumes 3 seeds but is one
-	 * "Plant" (and every authored task needs just 1 action anyway).
+	 * only on ticks where an action marker fired (Farming XP rise or "You
+	 * plant ..." message). One action per tick regardless of the delta
+	 * magnitude — planting an allotment consumes 3 seeds but is one "Plant"
+	 * (and every authored task needs just 1 action anyway).
 	 */
 	private void creditFarmingAction(NuzlockeTask task)
 	{

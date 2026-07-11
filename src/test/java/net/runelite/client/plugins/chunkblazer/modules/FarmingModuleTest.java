@@ -1,9 +1,11 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.Skill;
+import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.StatChanged;
@@ -39,6 +41,7 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 {
 	private static final int SWEETCORN_SEED = 5320;
 	private static final int WEEDS = 6055;
+	private static final int DRAGONFRUIT_SAPLING = 22866;
 
 	@Mock
 	private ItemManager itemManager;
@@ -238,6 +241,103 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 
 		assertEquals(1, task.getCurrentProgress());
 		assertTrue(task.isCompleted());
+	}
+
+	/**
+	 * Cruk's Farmers' Guild regression (session_2026-07-10): tree and
+	 * fruit-tree SAPLINGS grant no Farming XP on the plant tick, so the
+	 * XP marker never fires — the sapling left the inventory and the module
+	 * shrugged. The server's "You plant ..." message is the action marker
+	 * for those crops.
+	 */
+	@Test
+	void treeSaplingPlantWithNoXpCreditsViaPlantMessage()
+	{
+		NuzlockeTask task = farmingTask("Plant a Dragonfruit Tree Sapling",
+			"plant_dragonfruit_tree_sapling", DRAGONFRUIT_SAPLING, 1);
+
+		setInventory(itemOf(DRAGONFRUIT_SAPLING, 1));
+		farmingModule.addActiveTask(task);
+
+		// Plant tick: sapling consumed, ZERO Farming XP, only the SPAM
+		// confirmation message (message-after-item order).
+		setInventory();
+		farmingModule.onItemContainerChanged(new ItemContainerChanged(InventoryID.INVENTORY.getId(), inventoryContainer));
+		assertEquals(0, task.getCurrentProgress(), "item change alone must not credit");
+
+		farmingModule.onChatMessage(plantMessage(ChatMessageType.SPAM,
+			"You plant the dragonfruit tree sapling in the fruit tree patch."));
+
+		assertEquals(1, task.getCurrentProgress());
+		assertTrue(task.isCompleted(), "sapling plant must complete via the plant message marker");
+		verify(completionCallback).onTaskCompleted(task, 1);
+	}
+
+	@Test
+	void plantMessageBeforeItemChangeSameTickStillCredits()
+	{
+		NuzlockeTask task = farmingTask("Plant a Dragonfruit Tree Sapling",
+			"plant_dragonfruit_tree_sapling", DRAGONFRUIT_SAPLING, 1);
+
+		setInventory(itemOf(DRAGONFRUIT_SAPLING, 1));
+		farmingModule.addActiveTask(task);
+
+		// Message fires first — no delta yet, but the flag is set...
+		farmingModule.onChatMessage(plantMessage(ChatMessageType.SPAM,
+			"You plant the dragonfruit tree sapling in the fruit tree patch."));
+		assertEquals(0, task.getCurrentProgress());
+
+		// ...so the container change later the same tick credits.
+		setInventory();
+		farmingModule.onItemContainerChanged(new ItemContainerChanged(InventoryID.INVENTORY.getId(), inventoryContainer));
+
+		assertEquals(1, task.getCurrentProgress());
+		assertTrue(task.isCompleted());
+	}
+
+	@Test
+	void plantMessageWithoutWatchedItemChangeDoesNotCredit()
+	{
+		// Someone plants a DIFFERENT crop: the message fires, the watched
+		// sapling is untouched — no credit.
+		NuzlockeTask task = farmingTask("Plant a Dragonfruit Tree Sapling",
+			"plant_dragonfruit_tree_sapling", DRAGONFRUIT_SAPLING, 1);
+
+		setInventory(itemOf(DRAGONFRUIT_SAPLING, 1));
+		farmingModule.addActiveTask(task);
+
+		farmingModule.onChatMessage(plantMessage(ChatMessageType.SPAM,
+			"You plant the apple tree sapling in the fruit tree patch."));
+
+		assertEquals(0, task.getCurrentProgress());
+		assertFalse(task.isCompleted());
+	}
+
+	@Test
+	void nonPlantChatMessagesAreIgnored()
+	{
+		NuzlockeTask task = farmingTask("Plant a Dragonfruit Tree Sapling",
+			"plant_dragonfruit_tree_sapling", DRAGONFRUIT_SAPLING, 1);
+
+		setInventory(itemOf(DRAGONFRUIT_SAPLING, 1));
+		farmingModule.addActiveTask(task);
+
+		// Wrong type (public chat saying the magic words) must not arm the tick.
+		farmingModule.onChatMessage(plantMessage(ChatMessageType.PUBLICCHAT,
+			"You plant the dragonfruit tree sapling in the fruit tree patch."));
+		// Unrelated game message must not either.
+		farmingModule.onChatMessage(plantMessage(ChatMessageType.GAMEMESSAGE,
+			"You rake the patch clear of weeds."));
+
+		setInventory();
+		farmingModule.onItemContainerChanged(new ItemContainerChanged(InventoryID.INVENTORY.getId(), inventoryContainer));
+
+		assertEquals(0, task.getCurrentProgress());
+	}
+
+	private ChatMessage plantMessage(ChatMessageType type, String message)
+	{
+		return new ChatMessage(null, type, "", message, null, 0);
 	}
 
 	@Test
