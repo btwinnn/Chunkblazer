@@ -1,0 +1,183 @@
+{
+            "region_id": [14142],
+            "neighbor_ids": [14143, 14398, 14141, 13886],
+            "Friendly_Name": "Lithkren",
+            "tasks": [
+                {
+                    "name": "Equip Ferocious Gloves",
+                    "taskID": "equip_ferocious_gloves",
+                    "category": "Defence",
+                    "level": 80,
+                    "completion_type": "EQUIP",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Ferocious gloves"],
+                            "item_ids": [22981]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Rune Dragon",
+                    "taskID": "defeat_rune_dragon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Rune dragon"],
+                        "npc_ids": [8031, 8091],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat an Adamant Dragon",
+                    "taskID": "defeat_adamant_dragon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Adamant dragon"],
+                        "npc_ids": [8030, 8090],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Rune Dragon on Task",
+                    "taskID": "defeat_rune_dragon_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Rune dragon"],
+                        "npc_ids": [8031, 8091],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Adamant Dragon on Task",
+                    "taskID": "defeat_adamant_dragon_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Adamant dragon"],
+                        "npc_ids": [8030, 8090],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Fletch a Dragon Crossbow",
+                    "taskID": "fletch_dragon_crossbow",
+                    "category": "Fletching",
+                    "level": 78,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Dragon crossbow"],
+                            "item_ids": [21902],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Dragon Metal Lump",
+                    "taskID": "obtain_dragon_metal_lump",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Dragon metal lump"],
+                            "item_ids": [22103],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Dragon Metal Slice",
+                    "taskID": "obtain_dragon_metal_slice",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Dragon metal slice"],
+                            "item_ids": [22100],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Wrath Talisman",
+                    "taskID": "obtain_wrath_talisman",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Wrath talisman"],
+                            "item_ids": [22118],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Adamant Dragon in 24 Seconds",
+                    "taskID": "defeat_adamant_dragon_24s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Adamant dragon"],
+                        "npc_ids": [8030, 8090],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Defeat a Rune Dragon in 24 Seconds",
+                    "taskID": "defeat_rune_dragon_24s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Rune dragon"],
+                        "npc_ids": [8031, 8091],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Equip a Dragonfire Shield",
+                    "taskID": "equip_dragonfire_shield",
+                    "category": "Defence",
+                    "level": 75,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Dragonfire Shield"],
+                            "item_ids": [11283, 11284]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }    
