@@ -1,6 +1,4 @@
 {
-    "Wilderness_Tasks": [
-            {
             "region_id": [12855],
             "neighbor_ids": [12856, 13111, 12854, 12599],
             "Friendly_Name": "Wilderness Rats",
@@ -127,5 +125,3 @@
             ],                          
             "is_completed": false
         }
-    ]
-}
