@@ -1,0 +1,212 @@
+{
+            "region_id": [12343],
+            "neighbor_ids": [12344, 12599, 12342, 12087],
+            "Friendly_Name": "The Abyss",
+            "tasks": [
+                {
+                    "name": "Obtain a Small Pouch",
+                    "taskID": "obtain_small_pouch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Small pouch"],
+                            "item_ids": [5509],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Medium Pouch",
+                    "taskID": "obtain_medium_pouch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Medium pouch"],
+                            "item_ids": [5510, 5511],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Large Pouch",
+                    "taskID": "obtain_large_pouch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Large pouch"],
+                            "item_ids": [5513, 5512],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Giant Pouch",
+                    "taskID": "obtain_giant_pouch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Giant pouch"],
+                            "item_ids": [5514, 5515],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft an Air Rune",
+                    "taskID": "runecraft_air_rune",
+                    "category": "Runecrafting",
+                    "level": 1,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Air Rune",
+                            "item_ids": [556],
+                            "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Runecraft a Fire Rune",
+                    "taskID": "runecraft_fire_rune",
+                    "category": "Runecrafting",
+                    "level": 14,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Fire Rune",
+                            "item_ids": [554],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Nature Rune",
+                    "taskID": "runecraft_nature_rune",                   
+                    "category": "Runecrafting",
+                    "level": 44,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Nature Rune",
+                        "item_ids": [561],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Law Rune",
+                    "taskID": "runecraft_law_rune",                   
+                    "category": "Runecrafting",
+                    "level": 54,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Law Rune",
+                        "item_ids": [563],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Death Rune",
+                    "taskID": "runecraft_death_rune",                   
+                    "category": "Runecrafting",
+                    "level": 65,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Death Rune",
+                        "item_ids": [560],
+                        "quantity": [1]
+                        }
+                    ]
+                },             
+                {
+                    "name": "Runecraft an Earth Rune",
+                    "taskID": "runecraft_earth_rune",
+                    "category": "Runecrafting",
+                    "level": 9,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Earth Rune",
+                            "item_ids": [557],
+                            "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Runecraft a Chaos Rune",
+                    "taskID": "Runecraft_chaos_runes",
+                    "category": "Runecrafting",
+                    "level": 35,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Chaos Rune",
+                        "item_ids": [562],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Water Rune",
+                    "taskID": "Runecraft_water_rune",
+                    "category": "Runecrafting",
+                    "level": 5,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Water Rune",
+                        "item_ids": [555],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Cosmic Rune",
+                    "taskID": "Runecraft_cosmic_rune",
+                    "category": "Runecrafting",
+                    "level": 27,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Cosmic Rune",
+                        "item_ids": [564],
+                        "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }

@@ -17,7 +17,7 @@
                     }
                 },
                 {
-                    "name": "Runecraft some Chaos Runes",
+                    "name": "Runecraft a Chaos Rune",
                     "taskID": "Runecraft_chaos_runes",
                     "category": "Runecrafting",
                     "level": 35,
@@ -115,6 +115,21 @@
                         {
                             "item": ["Abyssal Lantern Unlit"],
                             "item_ids": [26822],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Abyssal Needle",
+                    "taskID": "obtain_abyssal_needle",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Abyssal Needle"],
+                            "item_ids": [26813],
                             "quantity": [1]
                         }
                     ]
