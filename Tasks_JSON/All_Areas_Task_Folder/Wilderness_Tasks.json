@@ -450,6 +450,75 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [12087],
+            "neighbor_ids": [12088, 12343, 12086, 11831],
+            "Friendly_Name": "Black Knights' Fortress Overlook",
+            "tasks": [
+                {
+                    "name": "Defeat some Scorpions",
+                    "taskID": "defeat_scorpions",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Scorpion"],
+                        "npc_ids": [14940, 3024, 13001, 2480, 5242, 2479, 9044, 9030, 5372, 1226, 3027, 3026, 3025, 7022, 13967],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Scorpion in 27 Seconds",
+                    "taskID": "defeat_scorpion_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Scorpion"],
+                        "npc_ids": [14940, 3024, 13001, 2480, 5242, 2479, 9044, 9030, 5372, 1226, 3027, 3026, 3025, 7022, 13967],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [45]
+                    }
+                },
+                {
+                    "name": "Defeat a Scorpion in the First Hit",
+                    "taskID": "defeat_scorpion_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Scorpion"],
+                        "npc_ids": [14940, 3024, 13001, 2480, 5242, 2479, 9044, 9030, 5372, 1226, 3027, 3026, 3025, 7022, 13967],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                        
+                    }
+                },
+                {
+                    "name": "Obtain an Ensouled Scorpion Head",
+                    "taskID": "obtain_ensouled_scorpion_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Ensouled Scorpion Head",
+                            "item_ids": [13459, 13460],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
         }
     ]
 }
