@@ -50,7 +50,7 @@
                     }
                 },
                 {
-                    "name": "Defeat a Level 20 Dark Wizard 1 Hit",
+                    "name": "Defeat a Level 20 Dark Wizard in the First Hit",
                     "taskID": "defeat_level_20_dark_wizard_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
