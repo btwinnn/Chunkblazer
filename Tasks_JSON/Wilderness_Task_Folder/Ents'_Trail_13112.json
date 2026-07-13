@@ -140,22 +140,7 @@
                             "quantity": [1, 50]            
                         }
                     ]
-                },
-                {
-                    "name": "Equip a Rune Sword",
-                    "taskID": "equip_rune_sword",
-                    "category": "Attack",
-                    "level": 40,
-                    "completion_type": "EQUIP",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Rune Sword"],
-                            "item_ids": [1289]
-                        }
-                    ]
-                },
+                },              
                 {
                     "name": "Obtain a Slayer's Enchantment",
                     "taskID": "obtain_slayer's_enchantment",

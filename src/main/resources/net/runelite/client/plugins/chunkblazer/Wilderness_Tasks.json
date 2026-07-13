@@ -1188,7 +1188,7 @@
                     "taskID": "obtain_teleport_anchoring_scroll",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -1418,6 +1418,134 @@
                             "quantity": [1, 50]            
                         }
                     ]
+                },            
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [13368],
+            "neighbor_ids": [13369, 13624, 13367, 13112],
+            "Friendly_Name": "Pyre Cove",
+            "tasks": [
+                {
+                    "name": "Equip a Rune Med Helm",
+                    "taskID": "equip_rune_med_helm",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune med helm"],
+                            "item_ids": [1147]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Adamant Platebody",
+                    "taskID": "equip_adamant_platebody",
+                    "category": "Defence",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Platebody"],
+                            "item_ids": [1123]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Longsword",
+                    "taskID": "equip_rune_longsword",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Longsword"],
+                            "item_ids": [1303]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Teleport Anchoring Scroll",
+                    "taskID": "obtain_teleport_anchoring_scroll",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Teleport anchoring scroll"],
+                            "item_ids": [29455],
+                            "quantity": [1]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Obtain Adamant Seeds",
+                    "taskID": "obtain_adamant_seeds",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamant seeds"],
+                            "item_ids": [29458],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Longsword",
+                    "taskID": "equip_dragon_longsword",
+                    "category": ["Attack"],
+                    "level": [60],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Longsword"],
+                            "item_ids": [1305, 27859, 28033]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Dagger",
+                    "taskID": "equip_dragon_dagger",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Dagger"],
+                            "item_ids": [1215]
+                        }
+                    ]
                 },
                 {
                     "name": "Equip a Rune Sword",
@@ -1431,21 +1559,6 @@
                         {
                             "item": ["Rune Sword"],
                             "item_ids": [1289]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Slayer's Enchantment",
-                    "taskID": "obtain_slayer's_enchantment",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 3,
-                    "required_items": [
-                        {
-                            "item": ["Slayer's Enchantment"],
-                            "item_ids": [21257],
-                            "quantity": [1]
                         }
                     ]
                 }
