@@ -17,6 +17,20 @@
                     }                   
                 },
                 {
+                    "name": "Use the Level 72 Agility Chaos Temple Stepping Stone",
+                    "taskID": "agility_level_72_agility_stepping_stone_chaos_temple",
+                    "category": "Agility",
+                    "level": 72,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Stepping stone (Wilderness Chaos Temple)"],
+                        "object_id": [53237], 
+                        "quantity": [1]
+                    }
+                },
+                {
                     "name": "Obtain a Bird Nest",
                     "taskID": "obtain_bird_nest",
                     "category": "Obtain",
