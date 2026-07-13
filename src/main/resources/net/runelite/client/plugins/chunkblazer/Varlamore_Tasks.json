@@ -2306,6 +2306,7 @@
                     "taskID": "defeat_some_frost_naguas_on_task",
                     "category": "Slayer",
                     "completion_type": "SLAYER",
+                    "level": 48,
                     "base_points": 2,
                     "assignment_weight": 8,
                     "target_npc": {

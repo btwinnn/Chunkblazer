@@ -4339,6 +4339,562 @@
                 }
             ],
             "is_completed": false
-        }      
+        },
+        {
+            "region_id": [14894],
+            "neighbor_ids": [14895, 15150, 14893, 14639],
+            "Friendly_Name": "Mos Le'Harmless Cave",
+            "tasks": [
+                {
+                    "name": "Equip a Black Mask",
+                    "taskID": "equip_black_mask",
+                    "category": "Defence",
+                    "level": 10,
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Black mask"],
+                            "item_ids": [25275, 26780, 11783, 11774, 25266, 26771, 11782, 26779, 25274, 11781, 26778, 25273, 11780, 25272, 26777, 11779, 25271, 26776, 25270, 11778, 26775, 11777, 25269, 26774, 26773, 11776, 25268, 11775, 25267, 26772, 11784, 26781, 25276, 8919, 8901, 8917, 8915, 8913, 8911, 8909, 8907, 8905, 8903, 8921, 19639, 26675, 19641, 25179, 19643, 26676, 19645, 25181, 33066, 33072, 33068, 33070, 23073, 26680, 23075, 25189, 33338, 33443, 33439, 33441, 21264, 26678, 21266, 25185, 33340, 33449, 33445, 33447, 19647, 26677, 19649, 25183, 11864, 26674, 11865, 25177, 21888, 26679, 21890, 25187, 24370, 26681, 24444, 25191, 25910, 26684, 25912, 25914, 25898, 26682, 25900, 25902, 25904, 26683, 25906, 25908, 29816, 29822, 29818, 29820]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Cave Horror",
+                    "taskID": "defeat_cave_horror",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Cave Horror"],
+                        "npc_ids": [1051, 1049, 1050, 1047, 1048],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat an Albino Bat",
+                    "taskID": "defeat_albino_bat",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Albino Bat"],
+                        "npc_ids": [1039],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Equip a Rune Dagger",
+                    "taskID": "equip_rune_dagger",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Dagger"],
+                            "item_ids": [1213]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ensouled Horror Head",
+                    "taskID": "obtain_ensouled_horror_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Ensouled horror head"],
+                            "item_ids": [13487],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Albino Bat in the First Hit",
+                    "taskID": "defeat_albino_bat_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Albino Bat"],
+                        "npc_ids": [1039],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Cave Horror on Task",
+                    "taskID": "defeat_cave_horror",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "level": 58,
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Cave Horror"],
+                        "npc_ids": [1051, 1049, 1050, 1047, 1048],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Mix some Super Strength Potions",
+                    "taskID": "mix_super_strength_potions",
+                    "category": "Obtain_Set",
+                    "level": 55,
+                    "completion_type": "HERBLORE",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                     "required_items": [
+                        {
+                            "item": ["Super Strength Potion(3)", "Super Strength Potion(4)"],
+                            "item_ids": [157, 2440],
+                            "quantity": [50, 150]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Curved Bone",
+                    "taskID": "obtain_curved_bone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Curved Bone"],
+                            "item_ids": [10977],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Long Bone",
+                    "taskID": "obtain_long_bone",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Long Bone"],
+                            "item_ids": [10976],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [15151],
+            "neighbor_ids": [15152, 15407, 15150, 14895],
+            "Friendly_Name": "Trouble Brewing",
+            "tasks": [
+                {
+                    "name": "Obtain a Cutthroat Flag",
+                    "taskID": "obtain_cutthroat_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Cutthroat flag"],
+                            "item_ids": [8966],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Gilded Smile Flag",
+                    "taskID": "obtain_gilded_smile_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Gilded smile flag"],
+                            "item_ids": [8967],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bronze Fist Flag",
+                    "taskID": "obtain_bronze_fist_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Bronze fist flag"],
+                            "item_ids": [8968],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Lucky Shot Flag",
+                    "taskID": "obtain_lucky_shot_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Lucky shot flag"],
+                            "item_ids": [8969],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Treasure Flag",
+                    "taskID": "obtain_treasure_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Treasure flag"],
+                            "item_ids": [8970],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Phasmatys Flag",
+                    "taskID": "obtain_phasmatys_flag",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Phasmatys flag"],
+                            "item_ids": [8971],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain The Stuff",
+                    "taskID": "obtain_the_stuff",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["The stuff"],
+                            "item_ids": [8988],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Braindeath 'Rum'",
+                    "taskID": "obtain_braindeath_rum",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Braindeath 'rum'"],
+                            "item_ids": [7157],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [15148],
+            "neighbor_ids": [15149, 15404, 15147, 14892],
+            "Friendly_Name": "Harmony",
+            "tasks": [
+                {
+                    "name": "Plant some Watermelons",
+                    "taskID": "plant_watermelon_seed",
+                    "category": "Farming",
+                    "level": 47,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Watermelon Seed"],
+                            "item_ids": [5321],
+                            "quantity": [1]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Plant Snape Grass",
+                    "taskID": "plant_snape_grass",
+                    "category": "Farming",
+                    "level": 61,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Snape Grass Seed"],
+                            "item_ids": [22879],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Harralander Seed",
+                    "taskID": "plant_harralander",
+                    "category": "Farming",
+                    "level": 26,
+                    "completion_type": "FARMING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Harralander Seed"],
+                            "item_ids": [5294],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Ranarr Seed",
+                    "taskID": "plant_ranarr",
+                    "category": "Farming",
+                    "level": 32,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ranarr Seed"],
+                            "item_ids": [5295],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Toadflax Seed",
+                    "taskID": "plant_toadflax",
+                    "category": "Farming",
+                    "level": 38,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Toadflax Seed"],
+                            "item_ids": [5296],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Irit Seed",
+                    "taskID": "plant_irit",
+                    "category": "Farming",
+                    "level": 44,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Irit Seed"],
+                            "item_ids": [5297],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant an Avantoe Seed",
+                    "taskID": "plant_avantoe",
+                    "category": "Farming",
+                    "level": 50,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Avantoe Seed"],
+                            "item_ids": [5298],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Kwuarm Seed",
+                    "taskID": "plant_kwuarm",
+                    "category": "Farming",
+                    "level": 56,
+                    "completion_type": "FARMING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Kwuarm Seed"],
+                            "item_ids": [5299],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Snapdragon Seed",
+                    "taskID": "plant_snapdragon",
+                    "category": "Farming",
+                    "level": 62,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Snapdragon Seed"],
+                            "item_ids": [5300],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Cadantine Seed",
+                    "taskID": "plant_cadantine",
+                    "category": "Farming",
+                    "level": 67,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Cadantine Seed"],
+                            "item_ids": [5301],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Lantadyme Seed",
+                    "taskID": "plant_lantadyme",
+                    "category": "Farming",
+                    "level": 73,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Lantadyme Seed"],
+                            "item_ids": [5302],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Dwarf Weed Seed",
+                    "taskID": "plant_dwarf_weed",
+                    "category": "Farming",
+                    "level": 79,
+                    "completion_type": "FARMING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dwarf Weed Seed"],
+                            "item_ids": [5303],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Plant a Torstol Seed",
+                    "taskID": "plant_torstol",
+                    "category": "Farming",
+                    "level": 85,
+                    "completion_type": "FARMING",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Torstol Seed"],
+                            "item_ids": [5304],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Barrelchest Anchor",
+                    "taskID": "equip_barrelchest_anchor",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Barrelchest Anchor"],
+                            "item_ids": [10887]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Zombie Pirate",
+                    "taskID": "defeat_zombie_pirate",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Zombie pirate"],
+                        "npc_ids": [613, 614, 615, 616, 617, 618, 563, 564, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 565, 566, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 567, 568, 569, 570, 571, 572, 573, 574, 13489, 13490, 13491, 13492, 13493],
+                        "quantity": [1, 100]
+                    }
+                },
+                {
+                    "name": "Defeat a Sorebones",
+                    "taskID": "defeat_sorebones",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Sorebones"],
+                        "npc_ids": [562, 561],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Zombie Pirate in the First Hit",
+                    "taskID": "defeat_zombie_pirate_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Zombie pirate"],
+                        "npc_ids": [613, 614, 615, 616, 617, 618, 563, 564, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 565, 566, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 567, 568, 569, 570, 571, 572, 573, 574, 13489, 13490, 13491, 13492, 13493],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                }
+            ],
+            "is_completed": false
+        }     
     ]
 }        

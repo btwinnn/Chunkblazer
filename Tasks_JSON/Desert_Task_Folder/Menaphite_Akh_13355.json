@@ -98,6 +98,7 @@
                     "taskID": "defeat_desert_lizard_on_task",
                     "category": "Slayer",
                     "completion_type": "SLAYER",
+                    "level": 22,
                     "base_points": 1,
                     "assignment_weight": 8,
                     "target_npc": {

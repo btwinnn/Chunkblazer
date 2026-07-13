@@ -1,3 +1,1280 @@
 {
-    "Wilderness_Tasks": []
+    "Wilderness_Tasks": [
+        {
+            "region_id": [12855],
+            "neighbor_ids": [12856, 13111, 12854, 12599],
+            "Friendly_Name": "Wilderness Rats",
+            "tasks": [
+                {
+                    "name": "Defeat a Level 6 Giant Rat with nothing Equipped",
+                    "taskID": "defeat_level_6_giant_rat_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Rat"],
+                        "npc_ids": [2862, 2863, 2864],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                },
+                {
+                    "name": "Defeat a Level 6 Giant Rat",
+                    "taskID": "defeat_level_6_giant_rat",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Rat"],
+                        "npc_ids": [2862, 2863, 2864],
+                        "quantity": [1, 25]
+                    }                 
+                },
+                {
+                    "name": "Defeat a Level 6 Giant in the First Hit",
+                    "taskID": "defeat_level_6_giant_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Giant Rat"],
+                        "npc_ids": [2862, 2863, 2864],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                    
+                },
+                {
+                    "name": "Cook Cooked Meat",
+                    "taskID": "cook_cooked_meat",
+                    "category": "Cooking",
+                    "level": 1,
+                    "completion_type": "COOKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Cooked Meat",
+                            "item_ids": [2142]
+                        }
+                    ]
+                },
+                {
+                    "name": "Activate Burst of Strength",
+                    "taskID": "pray_burst_of_strength",
+                    "category": "Prayer",
+                    "level": 4,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 1
+                    }                   
+                },
+                {
+                    "name": "Activate Mystic Will",
+                    "taskID": "pray_mystic_will",
+                    "category": "Prayer",
+                    "level": 9,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 19
+                    }                   
+                },
+                {
+                    "name": "Activate Clarity of Thought",
+                    "taskID": "pray_clarity_thought",
+                    "category": "Prayer",
+                    "level": 7,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 2
+                    }                   
+                },
+                {
+                    "name": "Activate Sharp Eye",
+                    "taskID": "pray_sharp_eye",
+                    "category": "Prayer",
+                    "level": 8,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 18
+                    }                   
+                }                
+            ],                          
+            "is_completed": false
+        },
+        {
+            "region_id": [12599],
+            "neighbor_ids": [12600, 12855, 12598, 12343],
+            "Friendly_Name": "Wilderness Thugs",
+            "tasks": [
+                {
+                    "name": "Defeat a Thug with nothing Equipped",
+                    "taskID": "defeat_thug_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Thug"],
+                        "npc_ids": [525],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                },
+                {
+                    "name": "Defeat a Thug",
+                    "taskID": "defeat_thug",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Thug"],
+                        "npc_ids": [525],
+                        "quantity": [1, 25]
+                    }                 
+                },
+                {
+                    "name": "Defeat a Thug in the First Hit",
+                    "taskID": "defeat_thug_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Thug"],
+                        "npc_ids": [525],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                    
+                },               
+                {
+                    "name": "Activate Burst of Strength",
+                    "taskID": "pray_burst_of_strength",
+                    "category": "Prayer",
+                    "level": 4,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 1
+                    }                   
+                },
+                {
+                    "name": "Activate Mystic Will",
+                    "taskID": "pray_mystic_will",
+                    "category": "Prayer",
+                    "level": 9,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 19
+                    }                   
+                },
+                {
+                    "name": "Activate Clarity of Thought",
+                    "taskID": "pray_clarity_thought",
+                    "category": "Prayer",
+                    "level": 7,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 2
+                    }                   
+                },
+                {
+                    "name": "Activate Sharp Eye",
+                    "taskID": "pray_sharp_eye",
+                    "category": "Prayer",
+                    "level": 8,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 18
+                    }                   
+                }                
+            ],                          
+            "is_completed": false
+        },
+        {
+            "region_id": [12343],
+            "neighbor_ids": [12344, 12599, 12342, 12087],
+            "Friendly_Name": "The Abyss",
+            "tasks": [
+                {
+                    "name": "Obtain a Small Pouch",
+                    "taskID": "obtain_small_pouch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Small pouch"],
+                            "item_ids": [5509],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Medium Pouch",
+                    "taskID": "obtain_medium_pouch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Medium pouch"],
+                            "item_ids": [5510, 5511],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Large Pouch",
+                    "taskID": "obtain_large_pouch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Large pouch"],
+                            "item_ids": [5513, 5512],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Giant Pouch",
+                    "taskID": "obtain_giant_pouch",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Giant pouch"],
+                            "item_ids": [5514, 5515],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft an Air Rune",
+                    "taskID": "runecraft_air_rune",
+                    "category": "Runecrafting",
+                    "level": 1,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Air Rune",
+                            "item_ids": [556],
+                            "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Runecraft a Fire Rune",
+                    "taskID": "runecraft_fire_rune",
+                    "category": "Runecrafting",
+                    "level": 14,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Fire Rune",
+                            "item_ids": [554],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Nature Rune",
+                    "taskID": "runecraft_nature_rune",                   
+                    "category": "Runecrafting",
+                    "level": 44,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Nature Rune",
+                        "item_ids": [561],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Law Rune",
+                    "taskID": "runecraft_law_rune",                   
+                    "category": "Runecrafting",
+                    "level": 54,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Law Rune",
+                        "item_ids": [563],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Death Rune",
+                    "taskID": "runecraft_death_rune",                   
+                    "category": "Runecrafting",
+                    "level": 65,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Death Rune",
+                        "item_ids": [560],
+                        "quantity": [1]
+                        }
+                    ]
+                },             
+                {
+                    "name": "Runecraft an Earth Rune",
+                    "taskID": "runecraft_earth_rune",
+                    "category": "Runecrafting",
+                    "level": 9,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                            "item": "Earth Rune",
+                            "item_ids": [557],
+                            "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Runecraft a Chaos Rune",
+                    "taskID": "Runecraft_chaos_runes",
+                    "category": "Runecrafting",
+                    "level": 35,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Chaos Rune",
+                        "item_ids": [562],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Water Rune",
+                    "taskID": "Runecraft_water_rune",
+                    "category": "Runecrafting",
+                    "level": 5,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Water Rune",
+                        "item_ids": [555],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Runecraft a Cosmic Rune",
+                    "taskID": "Runecraft_cosmic_rune",
+                    "category": "Runecrafting",
+                    "level": 27,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Cosmic Rune",
+                        "item_ids": [564],
+                        "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12087],
+            "neighbor_ids": [12088, 12343, 12086, 11831],
+            "Friendly_Name": "Black Knights' Fortress Overlook",
+            "tasks": [
+                {
+                    "name": "Defeat some Scorpions",
+                    "taskID": "defeat_scorpions",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Scorpion"],
+                        "npc_ids": [14940, 3024, 13001, 2480, 5242, 2479, 9044, 9030, 5372, 1226, 3027, 3026, 3025, 7022, 13967],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Scorpion in 27 Seconds",
+                    "taskID": "defeat_scorpion_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Scorpion"],
+                        "npc_ids": [14940, 3024, 13001, 2480, 5242, 2479, 9044, 9030, 5372, 1226, 3027, 3026, 3025, 7022, 13967],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [45]
+                    }
+                },
+                {
+                    "name": "Defeat a Scorpion in the First Hit",
+                    "taskID": "defeat_scorpion_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Scorpion"],
+                        "npc_ids": [14940, 3024, 13001, 2480, 5242, 2479, 9044, 9030, 5372, 1226, 3027, 3026, 3025, 7022, 13967],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                        
+                    }
+                },
+                {
+                    "name": "Obtain an Ensouled Scorpion Head",
+                    "taskID": "obtain_ensouled_scorpion_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Ensouled Scorpion Head",
+                            "item_ids": [13459, 13460],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [11831],
+            "neighbor_ids": [11832, 12087, 11830, 11575],
+            "Friendly_Name": "Wilderness Dark Wizards",
+            "tasks": [
+                {
+                    "name": "Defeat a Level 7 Dark Wizard in 18 Seconds",
+                    "taskID": "defeat_level_7_dark_wizard_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Dark Wizard"],
+                        "npc_ids": [512, 5086, 5087],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [30]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 20 Dark Wizard",
+                    "taskID": "defeat_level_20_dark_wizard",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Dark Wizard Level 20"],
+                        "npc_ids": [510, 5088, 5089],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 20 Dark Wizard in 30 Seconds",
+                    "taskID": "defeat_level_20_dark_wizard_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Dark Wizard Level 20"],
+                        "npc_ids": [510, 5088, 5089],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [50]
+                    }
+                },
+                {
+                    "name": "Defeat some Dark Wizards",
+                    "taskID": "defeat_some_dark_wizards",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Dark Wizard"],
+                        "npc_ids": [512, 5086, 5087, 2058, 2059, 510, 5088, 5089, 2057, 2056],
+                        "quantity": [1, 50]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 20 Dark Wizard in the First Hit",
+                    "taskID": "defeat_level_20_dark_wizard_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Wizard"],
+                        "npc_ids": [510, 5088, 5089],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Activate Burst of Strength",
+                    "taskID": "pray_burst_of_strength",
+                    "category": "Prayer",
+                    "level": 4,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 1
+                    }                   
+                },
+                {
+                    "name": "Activate Mystic Will",
+                    "taskID": "pray_mystic_will",
+                    "category": "Prayer",
+                    "level": 9,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 19
+                    }                   
+                },
+                {
+                    "name": "Activate Clarity of Thought",
+                    "taskID": "pray_clarity_thought",
+                    "category": "Prayer",
+                    "level": 7,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 2
+                    }                   
+                },
+                {
+                    "name": "Activate Sharp Eye",
+                    "taskID": "pray_sharp_eye",
+                    "category": "Prayer",
+                    "level": 8,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 18
+                    }                   
+                }  
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [11832],
+            "neighbor_ids": [11833, 12088, 11831, 11576],
+            "Friendly_Name": "The Green Musketeers",
+            "tasks": [
+                {
+                    "name": "Defeat a Green Dragon",
+                    "taskID": "defeat_green_dragon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Brutal Green Dragon", "Baby green dragon", "Green dragon"],
+                        "npc_ids": [5194, 5872, 5873, 2918, 260, 261, 262, 263, 264, 8073, 8076, 8082, 7868, 7869, 7870],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Obtain an Ensouled Dragon Head",
+                    "taskID": "obtain_ensouled_dragon_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ensouled Dragon Head"],
+                            "item_ids": [13511, 13510],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Green Dragon in 27 Seconds",
+                    "taskID": "defeat_green_dragon_27s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                   "target_npc": {
+                        "npc": ["Brutal Green Dragon", "Baby green dragon", "Green dragon"],
+                        "npc_ids": [5194, 5872, 5873, 2918, 260, 261, 262, 263, 264, 8073, 8076, 8082, 7868, 7869, 7870],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [45]
+                    }
+                },
+                {
+                    "name": "Equip a Rune Dagger",
+                    "taskID": "equip_rune_dagger",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Dagger"],
+                            "item_ids": [1213]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Green Dragon in the First Hit",
+                    "taskID": "defeat_green_dragon_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                   "target_npc": {
+                        "npc": ["Brutal Green Dragon", "Baby green dragon", "Green dragon"],
+                        "npc_ids": [5194, 5872, 5873, 2918, 260, 261, 262, 263, 264, 8073, 8076, 8082, 7868, 7869, 7870],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Activate Superhuman Strength",
+                    "taskID": "pray_superhuman_strength",
+                    "category": "Prayer",
+                    "level": 13,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 4
+                    }                   
+                },
+                {
+                    "name": "Activate Improved Reflexes",
+                    "taskID": "pray_improved_reflexes",
+                    "category": "Prayer",
+                    "level": 16,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 5
+                    }                   
+                },
+                {
+                    "name": "Activate Rapid Restore",
+                    "taskID": "pray_rapid_restore",
+                    "category": "Prayer",
+                    "level": 19,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 6
+                    }                   
+                },
+                {
+                    "name": "Activate Rapid Heal",
+                    "taskID": "pray_rapid_heal",
+                    "category": "Prayer",
+                    "level": 22,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 7
+                    }                   
+                }  
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12088],
+            "neighbor_ids": [12089, 12344, 12087, 11832],
+            "Friendly_Name": "Dark Warriors' Fortress",
+            "tasks": [
+                {
+                    "name": "Defeat a Dark Warrior in the First Hit",
+                    "taskID": "Defeat_dark_warrior_first_hit",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Dark Warrior"],
+                        "npc_ids": [11111, 11110, 11109, 6606, 531]                     
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }                                      
+                },
+                {
+                    "name": "Defeat a Dark Warrior",
+                    "taskID": "Defeat_dark_warrior",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Dark Warrior"],
+                        "npc_ids": [11111, 11110, 11109, 6606, 531],
+                        "quantity":[1, 25]                     
+                    }                                     
+                },
+                {
+                    "name": "Runecraft a Chaos Rune",
+                    "taskID": "Runecraft_chaos_runes",
+                    "category": "Runecrafting",
+                    "level": 35,
+                    "completion_type": "RUNECRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Chaos Rune",
+                        "item_ids": [562],
+                        "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Level 145 Dark Warrior",
+                    "taskID": "Defeat_dark_warrior",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Dark Warrior"],
+                        "npc_ids": [6606],
+                        "quantity":[1, 10]                     
+                    }                                     
+                },
+                {
+                    "name": "Obtain a Larran's Key",
+                    "taskID": "obtain_larran's_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Larran's Key"],
+                            "item_ids": [23490],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Activate Superhuman Strength",
+                    "taskID": "pray_superhuman_strength",
+                    "category": "Prayer",
+                    "level": 13,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 4
+                    }                   
+                },
+                {
+                    "name": "Activate Improved Reflexes",
+                    "taskID": "pray_improved_reflexes",
+                    "category": "Prayer",
+                    "level": 16,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 5
+                    }                   
+                },
+                {
+                    "name": "Activate Rapid Restore",
+                    "taskID": "pray_rapid_restore",
+                    "category": "Prayer",
+                    "level": 19,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 6
+                    }                   
+                },
+                {
+                    "name": "Activate Rapid Heal",
+                    "taskID": "pray_rapid_heal",
+                    "category": "Prayer",
+                    "level": 22,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 7
+                    }                   
+                }  
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12600],
+            "neighbor_ids": [12601, 12856, 12599, 12344],
+            "Friendly_Name": "East Ferox Enclave",
+            "tasks": [
+                {
+                    "name": "Obtain a Swift Blade",
+                    "taskID": "obtain_swift_blade",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Swift blade"],
+                            "item_ids": [24219],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Guthixian Icon",
+                    "taskID": "obtain_guthixian_icon",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Guthixian icon"],
+                            "item_ids": [24217],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Saradomin's Tear",
+                    "taskID": "obtain_saradomins_tear",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Saradomin's tear"],
+                            "item_ids": [12804],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Armadyl Halo",
+                    "taskID": "obtain_armadyl_halo",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Armadyl halo"],
+                            "item_ids": [24147, 24194, 24192],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bandos Halo",
+                    "taskID": "obtain_bandos_halo",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Bandos halo"],
+                            "item_ids": [24149, 24197, 24195],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Seren Halo",
+                    "taskID": "obtain_seren_halo",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Seren halo"],
+                            "item_ids": [24151, 24200, 24198],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Halo",
+                    "taskID": "obtain_ancient_halo",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Ancient halo"],
+                            "item_ids": [24153, 24203, 24201],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Brassica Halo",
+                    "taskID": "obtain_brassica_halo",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Brassica halo"],
+                            "item_ids": [24155, 24206, 24204],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Mammoth",
+                    "taskID": "defeat_mammoth",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Mammoth"],
+                        "npc_ids": [6604],
+                        "quantity": [1, 25]
+                    }
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12856],
+            "neighbor_ids": [12857, 13112, 12855, 12600],
+            "Friendly_Name": "Chaos Temple",
+            "tasks": [
+                {
+                    "name": "Defeat an Elder Chaos Druid",
+                    "taskID": "defeat_elder_chaos_druid",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Elder Chaos druid"],
+                        "npc_ids": [6607],
+                        "quantity": [1, 50]
+                    }
+                },
+                {
+                    "name": "Obtain the Elder Chaos Set",
+                    "taskID": "obtain_elder_chaos_set",
+                    "category": "Obtain_Set",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Elder Chaos Hood"],
+                            "item_ids": [20595, 27119],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Elder Chaos Robe"],
+                            "item_ids": [20520, 27117],
+                            "quantity": [1]
+                        },
+                        {
+                            "item": ["Elder Chaos Top"],
+                            "item_ids": [20517, 27115],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ensouled Chaos Druid Head",
+                    "taskID": "obtain_ensouled_chaos_druid_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Ensouled chaos druid head"],
+                            "item_ids": [13472],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Med Helm",
+                    "taskID": "equip_rune_med_helm",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune med helm"],
+                            "item_ids": [1147]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Teleport Anchoring Scroll",
+                    "taskID": "obtain_teleport_anchoring_scroll",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Teleport anchoring scroll"],
+                            "item_ids": [29455],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Zombie Pirate Key",
+                    "taskID": "obtain_zombie_pirate_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Zombie pirate key"],
+                            "item_ids": [29449],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Adamant Seeds",
+                    "taskID": "obtain_adamant_seeds",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamant seeds"],
+                            "item_ids": [29458],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Longsword",
+                    "taskID": "equip_dragon_longsword",
+                    "category": ["Attack"],
+                    "level": [60],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Longsword"],
+                            "item_ids": [1305, 27859, 28033]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Dagger",
+                    "taskID": "equip_dragon_dagger",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Dagger"],
+                            "item_ids": [1215]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Sword",
+                    "taskID": "equip_rune_sword",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Rune Sword"],
+                            "item_ids": [1289]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }
+    ]
 }

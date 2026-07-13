@@ -3310,7 +3310,8 @@
                     "taskID": "defeat_basilisk_on_task",
                     "category": "Slayer",
                     "completion_type": "SLAYER",
-                    "base_points": 1,
+                    "level": 40,
+                    "base_points": 2,
                     "assignment_weight": 5,
                     "target_npc": {
                         "npc": ["Basilisk"],

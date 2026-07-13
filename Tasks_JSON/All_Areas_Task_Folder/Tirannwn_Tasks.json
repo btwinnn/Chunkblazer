@@ -113,6 +113,7 @@
                     "taskID": "defeat_warped_creature_on_task",
                     "category": "Slayer",
                     "completion_type": "SLAYER",
+                    "level": 56,
                     "base_points": 2,
                     "assignment_weight": 5,
                     "target_npc": {
@@ -1021,6 +1022,7 @@
                     "taskID": "defeat_kurask_on_task",
                     "category": "Slayer",
                     "completion_type": "SLAYER",
+                    "level": 70,
                     "base_points": 2,
                     "assignment_weight": 1,
                     "target_npc": {
