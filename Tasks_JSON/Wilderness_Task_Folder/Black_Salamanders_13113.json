@@ -1,0 +1,265 @@
+{
+            "region_id": [13113],
+            "neighbor_ids": [13114, 13369, 13112, 12857],
+            "Friendly_Name": "Black Salamanders",
+            "tasks": [
+                {
+                    "name": "Defeat a Hill Giant",
+                    "taskID": "defeat_hill_giant",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Hill Giant"],
+                        "npc_ids": [7261, 2098, 13502, 2099, 13503, 2100, 13504, 2101, 2102, 2103, 10374, 12849, 10375, 12850, 10376, 12848],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Hill Giant in 10 Seconds",
+                    "taskID": "defeat_hill_giant_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Hill Giant"],
+                        "npc_ids": [7261, 2098, 13502, 2099, 13503, 2100, 13504, 2101, 2102, 2103, 10374, 12849, 10375, 12850, 10376, 12848],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [17]
+                    }
+                },
+                {
+                    "name": "Defeat a Hill Giant with your Bare Fists",
+                    "taskID": "defeat_hill_giant_no_weapon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Hill Giant"],
+                        "npc_ids": [7261, 2098, 13502, 2099, 13503, 2100, 13504, 2101, 2102, 2103, 10374, 12849, 10375, 12850, 10376, 12848],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "must_be_empty_slots": ["WEAPON"]
+                    }
+                },
+                {
+                    "name": "Defeat a Hill Giant in the First Hit",
+                    "taskID": "defeat_hill_giant_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Hill Giant"],
+                        "npc_ids": [7261, 2098, 13502, 2099, 13503, 2100, 13504, 2101, 2102, 2103, 10374, 12849, 10375, 12850, 10376, 12848],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 19 Ghost in the First Hit",
+                    "taskID": "defeat_ghost_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Ghost"],
+                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 19 Ghost",
+                    "taskID": "defeat_a_ghost",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Ghost"],
+                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Activate Protect Item",
+                    "taskID": "pray_protect_item",
+                    "category": "Prayer",
+                    "level": 25,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 8
+                    }                   
+                },
+                {
+                    "name": "Activate Hawk Eye",
+                    "taskID": "pray_hawk_eye",
+                    "category": "Prayer",
+                    "level": 26,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 20
+                    }                   
+                },
+                {
+                    "name": "Activate Mystic Lore",
+                    "taskID": "pray_mystic_lore",
+                    "category": "Prayer",
+                    "level": 27,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 21
+                    }                   
+                },
+                {
+                    "name": "Activate Steel Skin",
+                    "taskID": "pray_steel_skin",
+                    "category": "Prayer",
+                    "level": 28,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 9
+                    }                   
+                },
+                {
+                    "name": "Cut a Diamond",
+                    "taskID": "cut_diamond",
+                    "category": "Crafting",
+                    "level": 43,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Diamond"],
+                            "item_ids": [1601],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cut a Ruby",
+                    "taskID": "cut_ruby",
+                    "category": "Crafting",
+                    "level": 34,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Ruby"],
+                            "item_ids": [1603],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Full Helm",
+                    "taskID": "equip_rune_rune_full_helm",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Full Helm"],
+                            "item_ids": [1163]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Equip a Rune Platebody",
+                    "taskID": "equip_rune_rune_platebody",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Platebody"],
+                            "item_ids": [1127]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Black Salamander",
+                    "taskID": "catch_black_salamander",
+                    "category": "Hunter",
+                    "level": 67,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                            "item": "Black salamander",
+                            "item_ids": [10148],
+                            "quantity": [25, 100]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Obtain a Larran's Key",
+                    "taskID": "obtain_larran's_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Larran's Key"],
+                            "item_ids": [23490],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                } 
+            ],
+            "is_completed": false
+        }
