@@ -2363,6 +2363,95 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [12089],
+            "neighbor_ids": [12090, 12345, 12088, 11833],
+            "Friendly_Name": "Wilderness Bandit Camp",
+            "tasks": [
+                {
+                    "name": "Defeat a Level 130 Bandit",
+                    "taskID": "defeat_bandit_130",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Bandit"],
+                        "npc_ids": [6605],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat Speedy Keith in the First Hit",
+                    "taskID": "defeat_speedy_keith_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Speedy Keith"],
+                        "npc_ids": [303],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat Black Heather in 9 Seconds",
+                    "taskID": "defeat_black_heather_9s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Black Heather"],
+                        "npc_ids": [301],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                },              
+                {
+                    "name": "Defeat Donny the Lad with nothing Equipped",
+                    "taskID": "defeat_donny_the_lad_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Donny the Lad"],
+                        "npc_ids": [302],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                },
+                {
+                    "name": "Cook a Plain Pizza",
+                    "taskID": "Cook_plain_pizza",
+                    "category": "Cooking",
+                    "level": 35,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Plain Pizza",
+                        "item_ids": [
+                            2289
+                        ],
+                        "quantity": 1
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
         }
     ]
 }
