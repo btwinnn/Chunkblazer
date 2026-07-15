@@ -4,12 +4,14 @@ import net.runelite.api.DecorativeObject;
 import net.runelite.api.GameObject;
 import net.runelite.api.GameState;
 import net.runelite.api.GroundObject;
+import net.runelite.api.MenuAction;
 import net.runelite.api.Skill;
 import net.runelite.api.WallObject;
 import net.runelite.api.events.DecorativeObjectSpawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GroundObjectSpawned;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
 import net.runelite.api.events.WallObjectSpawned;
 import net.runelite.client.chat.ChatMessageManager;
@@ -406,6 +408,137 @@ class ConstructionModuleTest extends AbstractTaskModuleTest
 
 		assertEquals(0, task.getCurrentProgress());
 		assertFalse(task.isCompleted());
+	}
+
+	/**
+	 * Mike's 2026-07-14 QA regression: STASH units are varbit multilocs — the
+	 * unbuilt marker and the built STASH are the same scene object re-dressed
+	 * by an impostor, so building one fires NO spawn event (his build XP
+	 * landed with "recent spawns: []"). The Build menu click on the watched
+	 * object id, followed by Construction XP, is the detection path.
+	 */
+	@Test
+	void stashBuildClickThenXpCredits_NoSpawnEverFires()
+	{
+		NuzlockeTask task = buildTask("Build a Medium STASH Unit at Catherby Shore",
+			"build_medium_stash_catherby_shore", STASH_OBJECT);
+		constructionModule.addActiveTask(task);
+
+		currentTick = 100;
+		constructionModule.onMenuOptionClicked(buildClick(STASH_OBJECT));
+		assertEquals(0, task.getCurrentProgress(), "click alone must not credit");
+
+		// Build animation runs; XP lands a few ticks later. No spawn event.
+		currentTick = 106;
+		gainConstructionXp(150);
+
+		assertEquals(1, task.getCurrentProgress());
+		assertTrue(task.isCompleted());
+		verify(completionCallback).onTaskCompleted(task, 1);
+	}
+
+	@Test
+	void stashClickWithoutXpNeverCredits()
+	{
+		// Misclick or missing materials: no Construction XP follows, and by the
+		// time some unrelated XP arrives the click has aged out of the window.
+		NuzlockeTask task = buildTask("Build a Medium STASH Unit at Catherby Shore",
+			"build_medium_stash_catherby_shore", STASH_OBJECT);
+		constructionModule.addActiveTask(task);
+
+		currentTick = 100;
+		constructionModule.onMenuOptionClicked(buildClick(STASH_OBJECT));
+		currentTick = 120; // click window is 12 ticks
+		gainConstructionXp(150);
+
+		assertEquals(0, task.getCurrentProgress());
+		assertFalse(task.isCompleted());
+	}
+
+	@Test
+	void buildClickOnUnwatchedObjectDoesNotCredit()
+	{
+		// A "Build" click on a POH hotspot (unwatched id) must not arm the
+		// STASH task.
+		NuzlockeTask task = buildTask("Build a Medium STASH Unit at Catherby Shore",
+			"build_medium_stash_catherby_shore", STASH_OBJECT);
+		constructionModule.addActiveTask(task);
+
+		currentTick = 100;
+		constructionModule.onMenuOptionClicked(buildClick(15361));
+		currentTick = 103;
+		gainConstructionXp(150);
+
+		assertEquals(0, task.getCurrentProgress());
+	}
+
+	@Test
+	void nonBuildClickOnWatchedObjectDoesNotCredit()
+	{
+		// "Search" on an already-built STASH followed by unrelated XP must not
+		// credit — only the Build verb arms the click path.
+		NuzlockeTask task = buildTask("Build a Medium STASH Unit at Catherby Shore",
+			"build_medium_stash_catherby_shore", STASH_OBJECT);
+		constructionModule.addActiveTask(task);
+
+		currentTick = 100;
+		MenuOptionClicked search = mock(MenuOptionClicked.class);
+		when(search.getMenuAction()).thenReturn(MenuAction.GAME_OBJECT_FIRST_OPTION);
+		lenient().when(search.getId()).thenReturn(STASH_OBJECT);
+		lenient().when(search.getMenuOption()).thenReturn("Search");
+		constructionModule.onMenuOptionClicked(search);
+
+		currentTick = 103;
+		gainConstructionXp(150);
+
+		assertEquals(0, task.getCurrentProgress());
+	}
+
+	@Test
+	void regionGateAppliesToBuildClickPath()
+	{
+		NuzlockeTask task = buildTask("Build an Easy STASH", "build_easy_stash_exam_centre", 28980);
+		constructionModule.addActiveTask(task);
+		when(chunkBlazerPlugin.findRegionForTask("build_easy_stash_exam_centre")).thenReturn(13363);
+		when(playerLocation.getRegionID()).thenReturn(11826); // wrong chunk
+
+		currentTick = 100;
+		constructionModule.onMenuOptionClicked(buildClick(28980));
+		currentTick = 103;
+		gainConstructionXp(150);
+
+		assertEquals(0, task.getCurrentProgress());
+		assertFalse(task.isCompleted());
+	}
+
+	@Test
+	void consumedBuildClickDoesNotDoubleCredit()
+	{
+		NuzlockeTask task = createTaskWithRequiredObject(
+			"Build two STASHes", "build_two_stashes", "CONSTRUCTION", 2, Arrays.asList(STASH_OBJECT));
+		task.setTargetQuantity(2);
+		constructionModule.addActiveTask(task);
+
+		currentTick = 100;
+		constructionModule.onMenuOptionClicked(buildClick(STASH_OBJECT));
+		currentTick = 104;
+		gainConstructionXp(150);
+		assertEquals(1, task.getCurrentProgress());
+
+		// A second XP drop inside the click window: the click was consumed.
+		currentTick = 108;
+		gainConstructionXp(300);
+		assertEquals(1, task.getCurrentProgress(), "consumed click must not credit twice");
+	}
+
+	private MenuOptionClicked buildClick(int objectId)
+	{
+		MenuOptionClicked event = mock(MenuOptionClicked.class);
+		when(event.getMenuAction()).thenReturn(MenuAction.GAME_OBJECT_FIRST_OPTION);
+		lenient().when(event.getId()).thenReturn(objectId);
+		lenient().when(event.getMenuOption()).thenReturn("Build");
+		lenient().when(event.getMenuTarget()).thenReturn("Inconspicuous bush");
+		return event;
 	}
 
 	@Test

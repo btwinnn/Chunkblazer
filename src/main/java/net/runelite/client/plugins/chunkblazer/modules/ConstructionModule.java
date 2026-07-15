@@ -2,6 +2,7 @@ package net.runelite.client.plugins.chunkblazer.modules;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,12 +14,14 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.GameState;
+import net.runelite.api.MenuAction;
 import net.runelite.api.Skill;
 import net.runelite.api.TileObject;
 import net.runelite.api.events.DecorativeObjectSpawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GroundObjectSpawned;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
 import net.runelite.api.events.WallObjectSpawned;
 import net.runelite.client.chat.ChatMessageManager;
@@ -63,6 +66,16 @@ import net.runelite.client.plugins.chunkblazer.RequiredObject;
  *       exists. Spawns within {@link #SCENE_LOAD_SUPPRESS_TICKS} of a
  *       {@link GameState#LOADING} transition are ignored so pre-existing
  *       furniture can't pair with an unrelated XP drop.</li>
+ *   <li><b>STASH units never spawn when built.</b> A STASH is a varbit
+ *       multiloc: the "inconspicuous bush" and the built STASH are the SAME
+ *       scene object re-dressed by an impostor, so building one fires no
+ *       spawn event at all (Mike's 2026-07-14 QA: build XP landed with
+ *       "recent spawns: []" — the only STASH spawns in the session were
+ *       scene-load replays). The build is detected instead by the player's
+ *       "Build" MENU CLICK on the watched object id followed by Construction
+ *       XP within {@link #BUILD_CLICK_WINDOW_TICKS} — the same
+ *       MenuOptionClicked-then-XP pattern AgilityModule uses, and clicks
+ *       carry the real runtime id even for varbit-morphed objects.</li>
  * </ul>
  */
 @Slf4j
@@ -89,6 +102,21 @@ public class ConstructionModule extends AbstractTaskModule
 	// far back the [CONSTRUCTION-DEBUG] id-capture dump looks on an XP gain.
 	private static final int DEBUG_RING_CAPACITY = 32;
 
+	// How long after a "Build" click on a watched object its Construction XP
+	// still confirms the build. Covers walking to the object plus the build
+	// animation — same allowance as AgilityModule's traversal timeout.
+	private static final int BUILD_CLICK_WINDOW_TICKS = 12;
+
+	// GameObject menu actions — same set as Agility/Thieving. Anything else
+	// (examine, walk, cancel) is ignored.
+	private static final Set<MenuAction> GAME_OBJECT_ACTIONS = EnumSet.of(
+		MenuAction.GAME_OBJECT_FIRST_OPTION,
+		MenuAction.GAME_OBJECT_SECOND_OPTION,
+		MenuAction.GAME_OBJECT_THIRD_OPTION,
+		MenuAction.GAME_OBJECT_FOURTH_OPTION,
+		MenuAction.GAME_OBJECT_FIFTH_OPTION
+	);
+
 	@Inject
 	private ChatMessageManager chatMessageManager;
 
@@ -109,6 +137,12 @@ public class ConstructionModule extends AbstractTaskModule
 	// routine task-list refreshes can land between the spawn and its XP (Mike,
 	// session_2026-05-15), and the re-registered task must still credit.
 	private final Map<Integer, Integer> recentWatchedSpawns = new ConcurrentHashMap<>();
+
+	// Recent "Build" clicks on WATCHED objects: objectId -> tick. The STASH
+	// path: varbit multilocs never spawn on build, so the interaction is the
+	// object discriminator. Survives onTaskCleared for the same reason as
+	// recentWatchedSpawns; ages out of BUILD_CLICK_WINDOW_TICKS lazily.
+	private final Map<Integer, Integer> recentBuildClicks = new ConcurrentHashMap<>();
 
 	// Tick of the most recent Construction XP gain (-1 = none yet). Lets a
 	// watched spawn that arrives AFTER the XP event still credit.
@@ -156,6 +190,7 @@ public class ConstructionModule extends AbstractTaskModule
 		taskRequiredObjectIds.clear();
 		watchedObjectIds.clear();
 		recentWatchedSpawns.clear();
+		recentBuildClicks.clear();
 		debugSpawnRing.clear();
 		lastXpGainTick = -1;
 		previousConstructionXp = -1;
@@ -289,6 +324,38 @@ public class ConstructionModule extends AbstractTaskModule
 		}
 	}
 
+	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked event)
+	{
+		if (activeTasks.isEmpty())
+		{
+			return;
+		}
+		if (!GAME_OBJECT_ACTIONS.contains(event.getMenuAction()))
+		{
+			return;
+		}
+		String option = event.getMenuOption();
+		if (option == null || !option.equalsIgnoreCase("Build"))
+		{
+			return;
+		}
+		int objectId = event.getId();
+
+		// Authoring aid: surface the REAL runtime object id for every Build
+		// click while a construction task is active — varbit multilocs (STASH
+		// units) often have wiki ids that don't line up with what the client
+		// reports, and the click id is the ground truth to author against.
+		log.info("[CONSTRUCTION-DEBUG] tick={} Build clicked: id={} target='{}' (watched={})",
+			getGameTick(), objectId, event.getMenuTarget(), watchedObjectIds.contains(objectId));
+
+		if (!watchedObjectIds.contains(objectId))
+		{
+			return;
+		}
+		recentBuildClicks.put(objectId, getGameTick());
+	}
+
 	private void recordSpawn(TileObject obj)
 	{
 		if (activeTasks.isEmpty())
@@ -383,21 +450,24 @@ public class ConstructionModule extends AbstractTaskModule
 					}
 				}
 			}
-			log.info("[CONSTRUCTION-DEBUG] tick={} construction xp with NO watched spawn in window; recent spawns: [{}]",
+			log.info("[CONSTRUCTION-DEBUG] tick={} construction xp with NO watched spawn/Build-click in window; recent spawns: [{}]",
 				lastXpGainTick, recent);
 		}
 	}
 
 	/**
-	 * Credit every active task whose finished object spawned within the match
-	 * window, subject to the region gate. Returns whether anything credited.
+	 * Credit every active task whose finished object spawned — or, for varbit
+	 * multilocs like STASH units that never spawn on build, whose watched
+	 * object was Build-clicked — within its window, subject to the region
+	 * gate. Returns whether anything credited.
 	 */
 	private boolean creditMatchingTasks()
 	{
 		int tick = getGameTick();
-		// Age out stale spawn memories first.
+		// Age out stale memories first.
 		recentWatchedSpawns.entrySet().removeIf(e -> tick - e.getValue() > MATCH_WINDOW_TICKS);
-		if (recentWatchedSpawns.isEmpty())
+		recentBuildClicks.entrySet().removeIf(e -> tick - e.getValue() > BUILD_CLICK_WINDOW_TICKS);
+		if (recentWatchedSpawns.isEmpty() && recentBuildClicks.isEmpty())
 		{
 			return false;
 		}
@@ -410,16 +480,20 @@ public class ConstructionModule extends AbstractTaskModule
 			{
 				continue;
 			}
-			Integer matchedObjectId = null;
+			Integer spawnMatch = null;
+			Integer clickMatch = null;
 			for (Integer objectId : taskObjects)
 			{
-				if (recentWatchedSpawns.containsKey(objectId))
+				if (spawnMatch == null && recentWatchedSpawns.containsKey(objectId))
 				{
-					matchedObjectId = objectId;
-					break;
+					spawnMatch = objectId;
+				}
+				if (clickMatch == null && recentBuildClicks.containsKey(objectId))
+				{
+					clickMatch = objectId;
 				}
 			}
-			if (matchedObjectId == null)
+			if (spawnMatch == null && clickMatch == null)
 			{
 				continue;
 			}
@@ -428,11 +502,19 @@ public class ConstructionModule extends AbstractTaskModule
 				continue;
 			}
 
-			// Consume the spawn so a later unrelated XP drop in the window
+			// Consume the evidence so a later unrelated XP drop in the window
 			// can't credit the same build twice.
-			recentWatchedSpawns.remove(matchedObjectId);
-			log.info("[CONSTRUCTION-DEBUG] tick={} crediting '{}': object {} built",
-				tick, task.getTaskId(), matchedObjectId);
+			if (spawnMatch != null)
+			{
+				recentWatchedSpawns.remove(spawnMatch);
+			}
+			if (clickMatch != null)
+			{
+				recentBuildClicks.remove(clickMatch);
+			}
+			int matchedObjectId = spawnMatch != null ? spawnMatch : clickMatch;
+			log.info("[CONSTRUCTION-DEBUG] tick={} crediting '{}': object {} built (via {})",
+				tick, task.getTaskId(), matchedObjectId, spawnMatch != null ? "spawn" : "Build click");
 			applyCredit(task, "Built: " + task.getName());
 			credited = true;
 		}
