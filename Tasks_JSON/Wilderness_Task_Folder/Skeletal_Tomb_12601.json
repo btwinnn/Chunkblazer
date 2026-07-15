@@ -1,0 +1,141 @@
+{
+            "region_id": [12601],
+            "neighbor_ids": [12602, 12857, 12600, 12345],
+            "Friendly_Name": "Skeletal Tomb",
+            "tasks": [
+                {
+                    "name": "Obtain a Carrallanger Teleport Tablet",
+                    "taskID": "obtain_carrallanger_teleport_tablet",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Carrallanger teleport"],
+                            "item_ids": [12776],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat Calvar'ion",
+                    "taskID": "defeat_calvarion",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Calvar'ion#Enraged"],
+                        "npc_ids": [11994],
+                        "quantity": [25, 100]
+                    }
+                },
+                {
+                    "name": "Equip a Dragon 2h Sword",
+                    "taskID": "equip_dragon_2h_sword",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon 2h Sword"],
+                            "item_ids": [7158]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Skull of Vet'ion",
+                    "taskID": "obtain_skull_of_vetion",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Skull of vet'ion"],
+                            "item_ids": [27673],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Ring of the Gods",
+                    "taskID": "obtain_ring_of_the_gods",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Ring of the Gods"],
+                            "item_ids": [12601, 26764, 13202, 25252],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Voidwaker Blade",
+                    "taskID": "obtain_voidwaker_blade",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Voidwaker blade"],
+                            "item_ids": [27684],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Larran's Key",
+                    "taskID": "obtain_larran's_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Larran's Key"],
+                            "item_ids": [23490],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Dragon Pickaxe",
+                    "taskID": "obtain_dragon_pickaxe",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Pickaxe"],
+                            "item_ids": [11920, 27695, 23677, 25376, 30351, 12797, 23680, 23682],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }
