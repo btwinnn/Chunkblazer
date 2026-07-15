@@ -1,61 +1,8 @@
 {
-            "region_id": [12856],
-            "neighbor_ids": [12857, 13112, 12855, 12600],
-            "Friendly_Name": "Chaos Temple",
+            "region_id": [13368],
+            "neighbor_ids": [13369, 13624, 13367, 13112],
+            "Friendly_Name": "Pyre Cove",
             "tasks": [
-                {
-                    "name": "Defeat an Elder Chaos Druid",
-                    "taskID": "defeat_elder_chaos_druid",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 2,
-                    "assignment_weight": 5,
-                    "target_npc": {
-                        "npc": ["Elder Chaos druid"],
-                        "npc_ids": [6607],
-                        "quantity": [1, 50]
-                    }
-                },
-                {
-                    "name": "Obtain the Elder Chaos Set",
-                    "taskID": "obtain_elder_chaos_set",
-                    "category": "Obtain_Set",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 3,
-                    "required_items": [
-                        {
-                            "item": ["Elder Chaos Hood"],
-                            "item_ids": [20595, 27119],
-                            "quantity": [1]
-                        },
-                        {
-                            "item": ["Elder Chaos Robe"],
-                            "item_ids": [20520, 27117],
-                            "quantity": [1]
-                        },
-                        {
-                            "item": ["Elder Chaos Top"],
-                            "item_ids": [20517, 27115],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Ensouled Chaos Druid Head",
-                    "taskID": "obtain_ensouled_chaos_druid_head",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Ensouled chaos druid head"],
-                            "item_ids": [13472],
-                            "quantity": [1]
-                        }
-                    ]
-                },
                 {
                     "name": "Equip a Rune Med Helm",
                     "taskID": "equip_rune_med_helm",
@@ -72,12 +19,42 @@
                     ]
                 },
                 {
+                    "name": "Equip an Adamant Platebody",
+                    "taskID": "equip_adamant_platebody",
+                    "category": "Defence",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Platebody"],
+                            "item_ids": [1123]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Longsword",
+                    "taskID": "equip_rune_longsword",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Longsword"],
+                            "item_ids": [1303]
+                        }
+                    ]
+                },
+                {
                     "name": "Obtain a Teleport Anchoring Scroll",
                     "taskID": "obtain_teleport_anchoring_scroll",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
-                    "assignment_weight": 5,
+                    "assignment_weight": 10,
                     "required_items": [
                         {
                             "item": ["Teleport anchoring scroll"],
@@ -85,22 +62,7 @@
                             "quantity": [1]
                         }
                     ]
-                },
-                {
-                    "name": "Obtain a Zombie Pirate Key",
-                    "taskID": "obtain_zombie_pirate_key",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 10,
-                    "required_items": [
-                        {
-                            "item": ["Zombie pirate key"],
-                            "item_ids": [29449],
-                            "quantity": [1]
-                        }
-                    ]
-                },
+                },              
                 {
                     "name": "Obtain Adamant Seeds",
                     "taskID": "obtain_adamant_seeds",

@@ -1188,7 +1188,7 @@
                     "taskID": "obtain_teleport_anchoring_scroll",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -1273,6 +1273,827 @@
                         }
                     ]
                 }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [13112],
+            "neighbor_ids": [13113, 13368, 13111, 12856],
+            "Friendly_Name": "Ents' Trail",
+            "tasks": [
+                {                           
+                    "name": "Defeat an Ent",
+                    "taskID": "defeat_Ent",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Ent"],
+                        "npc_ids": [9474, 6594, 7234],
+                        "quantity": [1, 25]
+                    }                   
+                },
+                {
+                    "name": "Use the Level 72 Agility Chaos Temple Stepping Stone",
+                    "taskID": "agility_level_72_agility_stepping_stone_chaos_temple",
+                    "category": "Agility",
+                    "level": 72,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Stepping stone (Wilderness Chaos Temple)"],
+                        "object_id": [53237], 
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Bird Nest",
+                    "taskID": "obtain_bird_nest",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                            {
+                                "item": ["Bird nest (Wyson)", "Bird nest (egg)#Blue egg", "Bird nest (egg)#Green egg", "Bird nest (egg)#Red egg", "Bird nest (empty)", "Bird nest (ring)", "Bird nest (seeds)"],
+                                "item_ids": [22800, 5072, 5071, 5070, 5075, 5074, 22798],
+                                "quantity": [1]
+                            }
+                        ]
+                }, 
+                {
+                    "name": "Burn some Oak Logs",
+                    "taskID": "burn_oak_logs",
+                    "category": "Firemaking",
+                    "level": 15,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Oak Logs",
+                        "item_ids": [1521],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn a Log",
+                    "taskID": "burn_log",
+                    "category": "Firemaking",
+                    "level": 1,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                        "item": "Logs",
+                        "item_ids": [1511],
+                        "quantity": [25, 60]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Willow Logs",
+                    "taskID": "burn_willow_logs",
+                    "category": "Firemaking",
+                    "level": 30,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Willow Logs",
+                        "item_ids": [1519],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Maple Logs",
+                    "taskID": "burn_maple_logs",
+                    "category": "Firemaking",
+                    "level": 45,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Maple Logs",
+                        "item_ids": [1517],
+                        "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Yew Logs",
+                    "taskID": "burn_yew_logs",
+                    "category": "Firemaking",
+                    "level": 60,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Yew Logs",
+                            "item_ids": [1515],
+                            "quantity": [1, 50]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
+                    "category": "Firemaking",
+                    "level": 75,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1, 50]            
+                        }
+                    ]
+                },            
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [13368],
+            "neighbor_ids": [13369, 13624, 13367, 13112],
+            "Friendly_Name": "Pyre Cove",
+            "tasks": [
+                {
+                    "name": "Equip a Rune Med Helm",
+                    "taskID": "equip_rune_med_helm",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune med helm"],
+                            "item_ids": [1147]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Adamant Platebody",
+                    "taskID": "equip_adamant_platebody",
+                    "category": "Defence",
+                    "level": 30,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Platebody"],
+                            "item_ids": [1123]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Longsword",
+                    "taskID": "equip_rune_longsword",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Longsword"],
+                            "item_ids": [1303]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Teleport Anchoring Scroll",
+                    "taskID": "obtain_teleport_anchoring_scroll",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Teleport anchoring scroll"],
+                            "item_ids": [29455],
+                            "quantity": [1]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Obtain Adamant Seeds",
+                    "taskID": "obtain_adamant_seeds",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamant seeds"],
+                            "item_ids": [29458],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Longsword",
+                    "taskID": "equip_dragon_longsword",
+                    "category": ["Attack"],
+                    "level": [60],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Longsword"],
+                            "item_ids": [1305, 27859, 28033]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Dagger",
+                    "taskID": "equip_dragon_dagger",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Dagger"],
+                            "item_ids": [1215]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Sword",
+                    "taskID": "equip_rune_sword",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Rune Sword"],
+                            "item_ids": [1289]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [13369],
+            "neighbor_ids": [13370, 13625, 13368, 13113],
+            "Friendly_Name": "The Green Coastline",
+            "tasks": [
+                {
+                    "name": "Defeat a Green Dragon",
+                    "taskID": "defeat_green_dragon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Brutal Green Dragon", "Baby green dragon", "Green dragon"],
+                        "npc_ids": [5194, 5872, 5873, 2918, 260, 261, 262, 263, 264, 8073, 8076, 8082, 7868, 7869, 7870],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Obtain an Ensouled Dragon Head",
+                    "taskID": "obtain_ensouled_dragon_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ensouled Dragon Head"],
+                            "item_ids": [13511, 13510],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Green Dragon in 27 Seconds",
+                    "taskID": "defeat_green_dragon_27s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                   "target_npc": {
+                        "npc": ["Brutal Green Dragon", "Baby green dragon", "Green dragon"],
+                        "npc_ids": [5194, 5872, 5873, 2918, 260, 261, 262, 263, 264, 8073, 8076, 8082, 7868, 7869, 7870],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [45]
+                    }
+                },
+                {
+                    "name": "Equip a Rune Dagger",
+                    "taskID": "equip_rune_dagger",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Dagger"],
+                            "item_ids": [1213]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Green Dragon in the First Hit",
+                    "taskID": "defeat_green_dragon_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                   "target_npc": {
+                        "npc": ["Brutal Green Dragon", "Baby green dragon", "Green dragon"],
+                        "npc_ids": [5194, 5872, 5873, 2918, 260, 261, 262, 263, 264, 8073, 8076, 8082, 7868, 7869, 7870],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Activate Protect Item",
+                    "taskID": "pray_protect_item",
+                    "category": "Prayer",
+                    "level": 25,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 8
+                    }                   
+                },
+                {
+                    "name": "Activate Hawk Eye",
+                    "taskID": "pray_hawk_eye",
+                    "category": "Prayer",
+                    "level": 26,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 20
+                    }                   
+                },
+                {
+                    "name": "Activate Mystic Lore",
+                    "taskID": "pray_mystic_lore",
+                    "category": "Prayer",
+                    "level": 27,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 21
+                    }                   
+                },
+                {
+                    "name": "Activate Steel Skin",
+                    "taskID": "pray_steel_skin",
+                    "category": "Prayer",
+                    "level": 28,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 9
+                    }                   
+                }  
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [13113],
+            "neighbor_ids": [13114, 13369, 13112, 12857],
+            "Friendly_Name": "Black Salamanders",
+            "tasks": [
+                {
+                    "name": "Defeat a Hill Giant",
+                    "taskID": "defeat_hill_giant",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Hill Giant"],
+                        "npc_ids": [7261, 2098, 13502, 2099, 13503, 2100, 13504, 2101, 2102, 2103, 10374, 12849, 10375, 12850, 10376, 12848],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Hill Giant in 10 Seconds",
+                    "taskID": "defeat_hill_giant_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Hill Giant"],
+                        "npc_ids": [7261, 2098, 13502, 2099, 13503, 2100, 13504, 2101, 2102, 2103, 10374, 12849, 10375, 12850, 10376, 12848],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [17]
+                    }
+                },
+                {
+                    "name": "Defeat a Hill Giant with your Bare Fists",
+                    "taskID": "defeat_hill_giant_no_weapon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Hill Giant"],
+                        "npc_ids": [7261, 2098, 13502, 2099, 13503, 2100, 13504, 2101, 2102, 2103, 10374, 12849, 10375, 12850, 10376, 12848],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "must_be_empty_slots": ["WEAPON"]
+                    }
+                },
+                {
+                    "name": "Defeat a Hill Giant in the First Hit",
+                    "taskID": "defeat_hill_giant_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Hill Giant"],
+                        "npc_ids": [7261, 2098, 13502, 2099, 13503, 2100, 13504, 2101, 2102, 2103, 10374, 12849, 10375, 12850, 10376, 12848],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 19 Ghost in the First Hit",
+                    "taskID": "defeat_ghost_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Ghost"],
+                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 19 Ghost",
+                    "taskID": "defeat_a_ghost",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Ghost"],
+                        "npc_ids": [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 472, 473, 474, 505, 506, 507, 7263, 7264],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Activate Protect Item",
+                    "taskID": "pray_protect_item",
+                    "category": "Prayer",
+                    "level": 25,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 8
+                    }                   
+                },
+                {
+                    "name": "Activate Hawk Eye",
+                    "taskID": "pray_hawk_eye",
+                    "category": "Prayer",
+                    "level": 26,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 20
+                    }                   
+                },
+                {
+                    "name": "Activate Mystic Lore",
+                    "taskID": "pray_mystic_lore",
+                    "category": "Prayer",
+                    "level": 27,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 21
+                    }                   
+                },
+                {
+                    "name": "Activate Steel Skin",
+                    "taskID": "pray_steel_skin",
+                    "category": "Prayer",
+                    "level": 28,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 9
+                    }                   
+                },
+                {
+                    "name": "Cut a Diamond",
+                    "taskID": "cut_diamond",
+                    "category": "Crafting",
+                    "level": 43,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Diamond"],
+                            "item_ids": [1601],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cut a Ruby",
+                    "taskID": "cut_ruby",
+                    "category": "Crafting",
+                    "level": 34,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Ruby"],
+                            "item_ids": [1603],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Full Helm",
+                    "taskID": "equip_rune_rune_full_helm",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Full Helm"],
+                            "item_ids": [1163]
+                        }
+                    ]
+                }, 
+                {
+                    "name": "Equip a Rune Platebody",
+                    "taskID": "equip_rune_rune_platebody",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Platebody"],
+                            "item_ids": [1127]
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Black Salamander",
+                    "taskID": "catch_black_salamander",
+                    "category": "Hunter",
+                    "level": 67,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                            "item": "Black salamander",
+                            "item_ids": [10148],
+                            "quantity": [25, 100]
+                            }
+                        ]             
+                },
+                {
+                    "name": "Obtain a Larran's Key",
+                    "taskID": "obtain_larran's_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Larran's Key"],
+                            "item_ids": [23490],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                } 
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12857],
+            "neighbor_ids": [12858, 13113, 12856, 12601],
+            "Friendly_Name": "Corporeal Beast",
+            "tasks": [
+                {
+                    "name": "Equip a Spirit Shield",
+                    "taskID": "equip_spirit_shield",
+                    "category": "Defence",
+                    "level": 45,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Spirit Shield"],
+                            "item_ids": [12829]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Blessed Spirit Shield",
+                    "taskID": "equip_spirit_shield",
+                    "category": "Defence",
+                    "level": 70,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Blessed Spirit Shield"],
+                            "item_ids": [12831]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat the Corporeal Beast",
+                    "taskID": "defeat_corporeal_beast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Corporeal Beast"],
+                        "npc_ids": [319],
+                        "quantity": [25, 100]
+                    }
+                },
+                {
+                    "name": "Obtain a Holy Elixir",
+                    "taskID": "obtain_holy_elixir",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Holy Elixir"],
+                            "item_ids": [12833],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Jar of Spirits",
+                    "taskID": "obtain_jar_of_spirits",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Jar of Spirits"],
+                            "item_ids": [25521],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Arcane Sigil",
+                    "taskID": "obtain_arcane_sigil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Arcane Sigil"],
+                            "item_ids": [25521],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Spectral Sigil",
+                    "taskID": "obtain_spectral_sigil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Spectral Sigil"],
+                            "item_ids": [12823],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Elysian Sigil",
+                    "taskID": "obtain_elysian_sigil",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Elysian Sigil"],
+                            "item_ids": [12819],
+                            "quantity": [1]
+                        }
+                    ]
+                } 
             ],
             "is_completed": false
         }
