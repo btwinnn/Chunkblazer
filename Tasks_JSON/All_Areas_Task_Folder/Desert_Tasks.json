@@ -3492,6 +3492,12 @@
         {
             "region_id": [13105],
             "Friendly_Name": "Al Kharid",
+            "neighbor_ids": [
+                13106,
+                13361,
+                13104,
+                12849
+            ],
             "tasks": [
                 {
                     "name": "Equip Iron Platelegs",
