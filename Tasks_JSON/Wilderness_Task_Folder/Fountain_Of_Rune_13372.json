@@ -1,0 +1,79 @@
+{
+            "region_id": [13372],
+            "neighbor_ids": [13373, 13628, 13371, 13116],
+            "Friendly_Name": "Fountain of Rune",
+            "tasks": [             
+                {
+                    "name": "Obtain an Amulet of Eternal Glory",
+                    "taskID": "obtain_eternal_glory",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Amulet of Eternal Glory"],
+                            "item_ids": [2719707670],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Activate Mystic Might",
+                    "taskID": "pray_mystic_might",
+                    "category": "Prayer",
+                    "level": 45,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 23
+                    }                   
+                },            
+                {
+                    "name": "Activate Redemption",
+                    "taskID": "pray_redemption",
+                    "category": "Prayer",
+                    "level": 52,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 16
+                    }                   
+                },
+                {
+                    "name": "Activate Retribution",
+                    "taskID": "pray_retribution",
+                    "category": "Prayer",
+                    "level": 46,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 15
+                    }
+                },
+                {
+                    "name": "Activate Smite",
+                    "taskID": "pray_smite",
+                    "category": "Prayer",
+                    "level": 52,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 17
+                    }
+                }
+            ],
+            "is_completed": false
+        }
