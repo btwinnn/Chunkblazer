@@ -320,22 +320,28 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	}
 
 	/**
-	 * Data/type bug: some "... on Task" tasks ship as completion_type NPC_Kill, not
-	 * SLAYER — e.g. "Defeat a Moss Giant on Task". The on-task gate only runs for
-	 * SLAYER, so these credit even with NO slayer assignment ("on Task" unenforced).
+	 * Mistype fail-safe: a "... on Task" task shipped as completion_type NPC_Kill
+	 * (an authoring slip — the data is clean as of 2026-07-14, but it happened
+	 * before) must STILL pass the on-task slayer gate. The gate now keys on the
+	 * task NAME as well as the type, so a mistype fails safe (gated) instead of
+	 * fail-open (free off-task credit).
 	 */
 	@Test
-	void testOnTaskTypedNpcKill_creditsOffTask_documentsBug() throws Exception
+	void testOnTaskTypedNpcKill_stillGatedByName() throws Exception
 	{
 		NuzlockeTask moss = createTaskWithNpc("Defeat a Moss Giant on Task", "slay_moss_giant", "NPC_KILL", 1, Arrays.asList(200));
 		npcKillModule.addActiveTask(moss);
 
-		// No slayer assignment — and the gate is skipped entirely for NPC_KILL, so
-		// getVarpValue(394) is never even read here.
+		// Off-task kill (no Slayer XP): must NOT credit despite the NPC_Kill type.
 		simulateKill(mockNpc(200, 1, "Moss Giant"));
+		assertEquals(0, moss.getCurrentProgress(),
+			"an 'on Task' task must be slayer-gated even when mistyped as NPC_KILL");
 
+		// On-task kill (Slayer XP in window): credits normally.
+		grantSlayerXp();
+		simulateKill(mockNpc(200, 1, "Moss Giant"));
 		assertEquals(1, moss.getCurrentProgress(),
-			"WRONG: an 'on Task' task typed NPC_KILL skips the slayer gate and credits off-task");
+			"the same mistyped task still credits when genuinely on task");
 	}
 
 	/**
