@@ -1918,66 +1918,7 @@
             "region_id": [11830],
             "Friendly_Name": "Ice Mountain Entrance",
             "neighbor_ids": [11829, 12086, 11831, 11574],
-            "tasks": [
-                 {
-                    "name": "Defeat The Whisperer",
-                    "taskID": "defeat_whisperer",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Whisperer",
-                    "target_npc": {
-                        "npc": ["Leviathan"],
-                        "npc_ids": [12206, 12207],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Defeat the Awakened Whisperer",
-                    "taskID": "defeat_awakened_whisperer",
-                    "category": "Combat",
-                    "completion_type": "NPC_Kill",
-                    "base_points": 5,
-                    "assignment_weight": 1,
-                    "boss": "The Whisperer",
-                    "target_npc": {
-                        "npc": ["Awakened Whisperer"],
-                        "npc_ids": [12204, 12205],
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "name": "Obtain a Bellator Vestige",
-                    "taskID": "obtain_bellator_vestige",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Whisperer",
-                    "required_items": [
-                        {
-                            "item": ["Bellator Vestige"],
-                            "item_ids": [28279]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain a Siren's Staff",
-                    "taskID": "obtain_siren's_staff",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 10,
-                    "boss": "The Whisperer",
-                    "required_items": [
-                        {
-                            "item": ["Siren's Staff"],
-                            "item_ids": [28323],
-                            "quantity": [1]
-                        }
-                    ]
-                },
+            "tasks": [               
                 {
                     "name": "Equip a Barronite Mace",
                     "taskID": "equip_barronite_mace",
@@ -2036,7 +1977,20 @@
                         "npc_ids": [4813, 3140],
                         "quantity": [1]
                     }
-                }              
+                },
+                {                           
+                    "name": "Defeat an Icefiend",
+                    "taskID": "defeat_icefiend",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Icefiend"],
+                        "npc_ids": [4813, 3140],
+                        "quantity": [1, 25]
+                    }
+                }             
                     ],
                     "optional_quests_unlocked": [
                         {
