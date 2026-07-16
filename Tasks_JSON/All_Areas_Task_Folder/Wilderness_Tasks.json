@@ -2150,7 +2150,7 @@
                     "taskID": "obtain_skull_of_vetion",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
+                    "base_points": 3,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -2234,6 +2234,1226 @@
                             "quantity": [1]
                         }
                     ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12345],
+            "neighbor_ids": [12346, 12601, 12344, 12089],
+            "Friendly_Name": "Hunter's End",
+            "tasks": [             
+                {
+                    "name": "Defeat Artio",
+                    "taskID": "defeat_artio",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Artio"],
+                        "npc_ids": [11992],
+                        "quantity": [25, 100]
+                    }
+                },
+                {
+                    "name": "Equip a Dragon 2h Sword",
+                    "taskID": "equip_dragon_2h_sword",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon 2h Sword"],
+                            "item_ids": [7158]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Claws of Callisto",
+                    "taskID": "obtain_claws_of_callisto",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Claws of Callisto"],
+                            "item_ids": [27667],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Tyrannical Ring",
+                    "taskID": "obtain_tyrannical_ring",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Tyrannical Ring"],
+                            "item_ids": [12603, 26765, 12691, 25254],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Voidwaker Hilt",
+                    "taskID": "obtain_voidwaker_hilt",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Voidwaker hilt"],
+                            "item_ids": [27681],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Larran's Key",
+                    "taskID": "obtain_larran's_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Larran's Key"],
+                            "item_ids": [23490],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Dragon Pickaxe",
+                    "taskID": "obtain_dragon_pickaxe",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Pickaxe"],
+                            "item_ids": [11920, 27695, 23677, 25376, 30351, 12797, 23680, 23682],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12089],
+            "neighbor_ids": [12090, 12345, 12088, 11833],
+            "Friendly_Name": "Wilderness Bandit Camp",
+            "tasks": [
+                {
+                    "name": "Defeat a Level 130 Bandit",
+                    "taskID": "defeat_bandit_130",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Bandit"],
+                        "npc_ids": [6605],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat Speedy Keith in the First Hit",
+                    "taskID": "defeat_speedy_keith_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Speedy Keith"],
+                        "npc_ids": [303],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Defeat Black Heather in 9 Seconds",
+                    "taskID": "defeat_black_heather_9s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Black Heather"],
+                        "npc_ids": [301],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [15]
+                    }
+                },              
+                {
+                    "name": "Defeat Donny the Lad with nothing Equipped",
+                    "taskID": "defeat_donny_the_lad_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Donny the Lad"],
+                        "npc_ids": [302],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                    
+                },
+                {
+                    "name": "Cook a Plain Pizza",
+                    "taskID": "Cook_plain_pizza",
+                    "category": "Cooking",
+                    "level": 35,
+                    "completion_type": "COOKING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                        "item": "Plain Pizza",
+                        "item_ids": [
+                            2289
+                        ],
+                        "quantity": 1
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [11833],
+            "neighbor_ids": [11834, 12089, 11832, 11577],
+            "Friendly_Name": "Crazy Archaeologist",
+            "tasks": [
+                {
+                    "name": "Defeat the Crazy Archaeologist",
+                    "taskID": "defeat_crazy_archaeologist",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Crazy Archaeologist"],
+                        "npc_ids": [6618],
+                        "quantity": [10, 50]
+                    }
+                },
+                {
+                    "name": "Defeat the Crazy Archaeologist in 54 Seconds",
+                    "taskID": "defeat_crazy_archaeologist_54s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Crazy Archaeologist"],
+                        "npc_ids": [6618],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [90]
+                    }
+                },
+                {
+                    "name": "Equip a Rune Crossbow",
+                    "taskID": "equip_rune_crossbow",
+                    "category": "Ranged",
+                    "level": 61,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Rune Crossbow"],
+                            "item_ids": [9185, 26486]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Equip a Red D'hide Body",
+                    "taskID": "equip_red_d'hide_body",
+                    "category": "Ranged",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Red D'hide Body"],
+                            "item_ids": [2501, 12327, 12331]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Fedora",
+                    "taskID": "obtain_fedora",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Fedora"],
+                            "item_ids": [11990],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Odium Shard 2",
+                    "taskID": "obtain_odium_shard_2",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Odium Shard 2"],
+                            "item_ids": [11929],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Malediction Shard 2",
+                    "taskID": "obtain_malediction_shard_2",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Malediction Shard 2"],
+                            "item_ids": [11932],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [11834],
+            "neighbor_ids": [11835, 12090, 11833, 11578],
+            "Friendly_Name": "The Forgotten Cemetery",
+            "tasks": [
+                {
+                    "name": "Defeat an Ankou",
+                    "taskID": "defeat_ankou",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Ankou"],
+                        "npc_ids": [2514, 2517, 2515, 2518, 2516, 2519, 6608, 7257, 7864, 7296],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat an Ankou on Task",
+                    "taskID": "defeat_ankou_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ankou"],
+                        "npc_ids": [2514, 2517, 2515, 2518, 2516, 2519, 6608, 7257, 7864, 7296],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat an Ankou in 24 Seconds",
+                    "taskID": "defeat_ankou_24s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Ankou"],
+                        "npc_ids": [2514, 2517, 2515, 2518, 2516, 2519, 6608, 7257, 7864, 7296],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Defeat an Ankou in the First Hit",
+                    "taskID": "defeat_ankou_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Ankou"],
+                        "npc_ids": [2514, 2517, 2515, 2518, 2516, 2519, 6608, 7257, 7864, 7296],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Forgotten Cemetery Teleport Tablet",
+                    "taskID": "obtain_forgotten_cemetery_teleport",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Forgotten Cemetery Teleport"],
+                            "item_ids": [19627],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Activate Protect from Missiles",
+                    "taskID": "pray_protect_from_missiles",
+                    "category": "Prayer",
+                    "level": 40,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 13
+                    }                   
+                },
+                {
+                    "name": "Activate Eagle Eye",
+                    "taskID": "pray_eagle_eye",
+                    "category": "Prayer",
+                    "level": 44,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 22
+                    }                   
+                },
+                {
+                    "name": "Activate Protect from Melee",
+                    "taskID": "pray_protect_from_melee",
+                    "category": "Prayer",
+                    "level": 43,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 14
+                    }                   
+                },
+                {
+                    "name": "Activate Protect from Magic",
+                    "taskID": "pray_protect_from_meagic",
+                    "category": "Prayer",
+                    "level": 37,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 12
+                    }                   
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12090],
+            "neighbor_ids": [12091, 12346, 12089, 11834],
+            "Friendly_Name": "Wilderness Godwars Dungeon",
+            "tasks": [
+                {
+                    "name": "Defeat a Spiritual Mage",
+                    "taskID": "defeat_spiritual_mage",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Spiritual mage"],
+                        "npc_ids": [3168, 2244, 2212, 3161, 11292],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Equip Dragon Boots",
+                    "taskID": "equip_dragon_boots",
+                    "category": "Defence",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon boots"],
+                            "item_ids": [11840, 28055, 22234, 22231]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ecumenical Key",
+                    "taskID": "obtain_ecumenical_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Ecumenical key"],
+                            "item_ids": [11942],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 60 Agility Jutting Wall",
+                    "taskID": "use_jutting_wall_60",
+                    "category": "Agility",
+                    "level": 60,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_object": {
+                        "object": ["Jutting wall"],
+                        "object_id": [26768],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Spiritual Mage on Task",
+                    "taskID": "defeat_spiritual_mage_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "level": 83,
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Spiritual mage"],
+                        "npc_ids": [3168, 2244, 2212, 3161, 11292],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant imp",
+                    "taskID": "defeat_revenant_imp",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Revenant imp"],
+                        "npc_ids": [7881],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant goblin",
+                    "taskID": "defeat_revenant_goblin",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Revenant goblin"],
+                        "npc_ids": [7931],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant pyrefiend",
+                    "taskID": "defeat_revenant_pyrefiend",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Revenant pyrefiend"],
+                        "npc_ids": [7932],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant hobgoblin",
+                    "taskID": "defeat_revenant_hobgoblin",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Revenant hobgoblin"],
+                        "npc_ids": [7933],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant cyclops",
+                    "taskID": "defeat_revenant_cyclops",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Revenant cyclops"],
+                        "npc_ids": [7934],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant hellhound",
+                    "taskID": "defeat_revenant_hellhound",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Revenant hellhound"],
+                        "npc_ids": [7935],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant demon",
+                    "taskID": "defeat_revenant_demon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Revenant demon"],
+                        "npc_ids": [7936],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant ork",
+                    "taskID": "defeat_revenant_ork",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Revenant ork"],
+                        "npc_ids": [7937],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant knight",
+                    "taskID": "defeat_revenant_knight",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Revenant knight"],
+                        "npc_ids": [7939],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant dragon",
+                    "taskID": "defeat_revenant_dragon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Revenant dragon"],
+                        "npc_ids": [7940],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat Revenant Maledictus",
+                    "taskID": "defeat_revenant_maledictus",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Revenant maledictus"],
+                        "npc_ids": [11246],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain an Amulet of Avarice",
+                    "taskID": "obtain_amulet_of_avarice",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Amulet of avarice"],
+                            "item_ids": [22557],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Craw's Bow",
+                    "taskID": "equip_craws_bow",
+                    "category": "Ranged",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Craw's bow"],
+                            "item_ids": [22550, 27655]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Thammaron's Sceptre",
+                    "taskID": "equip_thammarons_sceptre",
+                    "category": "Magic",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Thammaron's sceptre"],
+                            "item_ids": [22555, 27788, 27665, 27679]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Viggora's Chainmace",
+                    "taskID": "equip_viggoras_chainmace",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Viggora's chainmace"],
+                            "item_ids": [22545, 27660]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Emblem",
+                    "taskID": "obtain_ancient_emblem",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Ancient emblem"],
+                            "item_ids": [21807],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Totem",
+                    "taskID": "obtain_ancient_totem",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Ancient totem"],
+                            "item_ids": [21810],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Crystal",
+                    "taskID": "obtain_ancient_crystal",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 2,
+                    "required_items": [
+                        {
+                            "item": ["Ancient crystal"],
+                            "item_ids": [21804],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Statuette",
+                    "taskID": "obtain_ancient_statuette",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ancient statuette"],
+                            "item_ids": [21813],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Medallion",
+                    "taskID": "obtain_ancient_medallion",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ancient medallion"],
+                            "item_ids": [22299],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Effigy",
+                    "taskID": "obtain_ancient_effigy",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ancient effigy"],
+                            "item_ids": [22302],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Relic",
+                    "taskID": "obtain_ancient_relic",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ancient relic"],
+                            "item_ids": [22305],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bracelet of Ethereum",
+                    "taskID": "obtain_bracelet_of_ethereum",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Bracelet of ethereum"],
+                            "item_ids": [21817, 21816],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12346],
+            "neighbor_ids": [12347, 12602, 12345, 12090],
+            "Friendly_Name": "Hobgoblin Miners",
+            "tasks": [
+                {
+                    "name": "Mine some Iron Ore",
+                    "taskID": "mine_iron_ore",
+                    "category": "Mining",
+                    "level": 15,
+                    "completion_type": "MINING",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Iron Ore"],
+                            "item_ids": [440],
+                            "quantity": [25, 200]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Mithril Ore",
+                    "taskID": "mine_mithril",
+                    "category": "Mining",
+                    "level": 55,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Mithril Ore",
+                            "item_ids": [447],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat some Hobgoblins",
+                    "taskID": "defeat_hobgoblins",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hobgoblin"],
+                        "npc_ids": [3354, 132, 3049, 2241, 3050, 3286, 3289, 3287, 3288],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Hobgoblin in 15 Seconds",
+                    "taskID": "defeat_hobgoblin_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hobgoblin"],
+                        "npc_ids": [3354, 132, 3049, 2241, 3050, 3286, 3289, 3287, 3288],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [25]
+                    }
+                },
+                {
+                    "name": "Defeat a Hobgoblin in the First Hit",
+                    "taskID": "defeat_hobgoblin_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Hobgoblin"],
+                        "npc_ids": [3354, 132, 3049, 2241, 3050, 3286, 3289, 3287, 3288],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12602],
+            "neighbor_ids": [12603, 12858, 12601, 12346],
+            "Friendly_Name": "Web Chasm",
+            "tasks": [             
+                {
+                    "name": "Defeat Spindel",
+                    "taskID": "defeat_spindel",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Spindel"],
+                        "npc_ids": [11998],
+                        "quantity": [25, 100]
+                    }
+                },
+                {
+                    "name": "Equip a Dragon 2h Sword",
+                    "taskID": "equip_dragon_2h_sword",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon 2h Sword"],
+                            "item_ids": [7158]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain the Fangs of Venenatis",
+                    "taskID": "obtain_fangs_of_venenatis",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Fangs of Venenatis"],
+                            "item_ids": [27670],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Treasonous Ring",
+                    "taskID": "obtain_treasonous_ring",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Treasonous Ring"],
+                            "item_ids": [12605, 26766, 12692, 25256],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Voidwaker Gem",
+                    "taskID": "obtain_voidwaker_gem",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Voidwaker gem"],
+                            "item_ids": [27687],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Larran's Key",
+                    "taskID": "obtain_larran's_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Larran's Key"],
+                            "item_ids": [23490],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Dragon Pickaxe",
+                    "taskID": "obtain_dragon_pickaxe",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Pickaxe"],
+                            "item_ids": [11920, 27695, 23677, 25376, 30351, 12797, 23680, 23682],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12858],
+            "neighbor_ids": [12859, 13114, 12857, 12602],
+            "Friendly_Name": "Bone Yard",
+            "tasks": [             
+                {
+                    "name": "Defeat a Level 25 Skeleton",
+                    "taskID": "defeat_level_25_skeleton",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 25 Skeleton"],
+                        "npc_ids": [77, 78, 79, 80, 81],
+                        "quantity": [1, 25]
+                    }
+                }, 
+                {
+                    "name": "Defeat a Level 25 Skeleton with your Bare Fists",
+                    "taskID": "defeat_level_25_skeleton_no_weapon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Level 25 Skeleton"],
+                        "npc_ids": [77, 78, 79, 80, 81],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "must_be_empty_slots": ["WEAPON"]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 25 Skeleton in the First Hit",
+                    "taskID": "defeat_level_25_skeleton_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Level 25 Skeleton"],
+                        "npc_ids": [77, 78, 79, 80, 81],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Activate Protect from Missiles",
+                    "taskID": "pray_protect_from_missiles",
+                    "category": "Prayer",
+                    "level": 40,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 13
+                    }                   
+                },
+                {
+                    "name": "Activate Eagle Eye",
+                    "taskID": "pray_eagle_eye",
+                    "category": "Prayer",
+                    "level": 44,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 22
+                    }                   
+                },
+                {
+                    "name": "Activate Protect from Melee",
+                    "taskID": "pray_protect_from_melee",
+                    "category": "Prayer",
+                    "level": 43,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 14
+                    }                   
+                },
+                {
+                    "name": "Activate Protect from Magic",
+                    "taskID": "pray_protect_from_meagic",
+                    "category": "Prayer",
+                    "level": 37,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 12
+                    }                   
                 }
             ],
             "is_completed": false

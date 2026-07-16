@@ -1,0 +1,112 @@
+{
+            "region_id": [11833],
+            "neighbor_ids": [11834, 12089, 11832, 11577],
+            "Friendly_Name": "Crazy Archaeologist",
+            "tasks": [
+                {
+                    "name": "Defeat the Crazy Archaeologist",
+                    "taskID": "defeat_crazy_archaeologist",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Crazy Archaeologist"],
+                        "npc_ids": [6618],
+                        "quantity": [10, 50]
+                    }
+                },
+                {
+                    "name": "Defeat the Crazy Archaeologist in 54 Seconds",
+                    "taskID": "defeat_crazy_archaeologist_54s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Crazy Archaeologist"],
+                        "npc_ids": [6618],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [90]
+                    }
+                },
+                {
+                    "name": "Equip a Rune Crossbow",
+                    "taskID": "equip_rune_crossbow",
+                    "category": "Ranged",
+                    "level": 61,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Rune Crossbow"],
+                            "item_ids": [9185, 26486]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Equip a Red D'hide Body",
+                    "taskID": "equip_red_d'hide_body",
+                    "category": "Ranged",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Red D'hide Body"],
+                            "item_ids": [2501, 12327, 12331]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Fedora",
+                    "taskID": "obtain_fedora",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Fedora"],
+                            "item_ids": [11990],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Odium Shard 2",
+                    "taskID": "obtain_odium_shard_2",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Odium Shard 2"],
+                            "item_ids": [11929],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Malediction Shard 2",
+                    "taskID": "obtain_malediction_shard_2",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Malediction Shard 2"],
+                            "item_ids": [11932],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }

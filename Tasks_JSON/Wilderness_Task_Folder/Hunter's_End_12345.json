@@ -1,33 +1,18 @@
 {
-            "region_id": [12601],
-            "neighbor_ids": [12602, 12857, 12600, 12345],
-            "Friendly_Name": "Skeletal Tomb",
-            "tasks": [
+            "region_id": [12345],
+            "neighbor_ids": [12346, 12601, 12344, 12089],
+            "Friendly_Name": "Hunter's End",
+            "tasks": [             
                 {
-                    "name": "Obtain a Carrallanger Teleport Tablet",
-                    "taskID": "obtain_carrallanger_teleport_tablet",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Carrallanger teleport"],
-                            "item_ids": [12776],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Defeat Calvar'ion",
-                    "taskID": "defeat_calvarion",
+                    "name": "Defeat Artio",
+                    "taskID": "defeat_artio",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
+                    "base_points": 4,
                     "assignment_weight": 5,
                     "target_npc": {
-                        "npc": ["Calvar'ion#Enraged"],
-                        "npc_ids": [11994],
+                        "npc": ["Artio"],
+                        "npc_ids": [11992],
                         "quantity": [25, 100]
                     }
                 },
@@ -47,46 +32,46 @@
                     ]
                 },
                 {
-                    "name": "Obtain the Skull of Vet'ion",
-                    "taskID": "obtain_skull_of_vetion",
+                    "name": "Obtain the Claws of Callisto",
+                    "taskID": "obtain_claws_of_callisto",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 4,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Skull of vet'ion"],
-                            "item_ids": [27673],
+                            "item": ["Claws of Callisto"],
+                            "item_ids": [27667],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain a Ring of the Gods",
-                    "taskID": "obtain_ring_of_the_gods",
+                    "name": "Obtain a Tyrannical Ring",
+                    "taskID": "obtain_tyrannical_ring",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 4,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Ring of the Gods"],
-                            "item_ids": [12601, 26764, 13202, 25252],
+                            "item": ["Tyrannical Ring"],
+                            "item_ids": [12603, 26765, 12691, 25254],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain a Voidwaker Blade",
-                    "taskID": "obtain_voidwaker_blade",
+                    "name": "Obtain a Voidwaker Hilt",
+                    "taskID": "obtain_voidwaker_hilt",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 4,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Voidwaker blade"],
-                            "item_ids": [27684],
+                            "item": ["Voidwaker hilt"],
+                            "item_ids": [27681],
                             "quantity": [1]
                         }
                     ]
