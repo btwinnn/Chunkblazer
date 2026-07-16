@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Actor;
+import net.runelite.api.GameState;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
@@ -22,6 +24,7 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.events.ActorDeath;
+import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.InteractingChanged;
@@ -81,6 +84,28 @@ public class NPCKillModule extends AbstractTaskModule
 
 	// Time constraint tracking - track when combat started (first hitsplat)
 	private int combatStartTick = -1;
+
+	// ── Fight-integrity sensors for RESTRICTED kills (time/equipment) ─────
+	// A relog or world hop wipes client-side combat tracking, so a fight that
+	// resumes right after logging back in is only measured from its post-relog
+	// tail: pre-soften the NPC, relog, finish it "in 2.4s" or "with nothing
+	// equipped" (internal tester report, 2026-07-16). Restricted kills
+	// therefore require the fight to have STARTED at least a grace period
+	// after the session began.
+	private int lastLoginTick = -1;
+	private static final int FRESH_FIGHT_GRACE_TICKS = 50; // ~30s
+
+	// Previous game state, so scene loads (LOADING → LOGGED_IN on every region
+	// crossing) are NOT mistaken for fresh logins mid-fight.
+	private GameState previousGameState = null;
+
+	// Equip-constrained tasks whose constraint was violated at ANY point
+	// during the current fight. Checked on every hitsplat we land, not just
+	// the killing blow — "fight in full gear, unequip for the last hit" must
+	// not pass. Cleared when the target changes or the session restarts;
+	// deliberately NOT cleared on onTaskCleared (a mid-fight task-list
+	// refresh must not forgive a violation).
+	private final Set<String> equipViolatedTaskIds = ConcurrentHashMap.newKeySet();
 
 	// For boss KC verification
 	private int baselineKc = -1;
@@ -374,13 +399,15 @@ public class NPCKillModule extends AbstractTaskModule
 				currentTargetIndex = npc.getIndex();
 				damageDealtToTarget = 0;
 				combatStartTick = -1; // Reset combat timer for new target
+				equipViolatedTaskIds.clear(); // fresh fight, fresh equipment record
 			}
 			else
 			{
 				// Same target - just update reference
 				currentTarget = npc;
 			}
-			// Equipment constraints are checked per-task at kill time in onActorDeath
+			// Equipment constraints are validated per hitsplat (onHitsplatApplied)
+			// and re-checked at kill time in processNpcDeath.
 		}
 	}
 
@@ -398,6 +425,26 @@ public class NPCKillModule extends AbstractTaskModule
 			}
 		}
 		return false;
+	}
+
+	@Subscribe
+	public void onGameStateChanged(GameStateChanged event)
+	{
+		GameState state = event.getGameState();
+		// Only a REAL session start (login, world hop, reconnect) resets the
+		// fight sensors. LOADING → LOGGED_IN fires on every region crossing
+		// and must not touch a fight in progress.
+		if (state == GameState.LOGGED_IN && previousGameState != GameState.LOADING)
+		{
+			lastLoginTick = client.getTickCount();
+			currentTarget = null;
+			currentTargetIndex = -1;
+			damageDealtToTarget = 0;
+			combatStartTick = -1;
+			equipViolatedTaskIds.clear();
+			pendingDeaths.clear();
+		}
+		previousGameState = state;
 	}
 
 	@Subscribe
@@ -421,6 +468,27 @@ public class NPCKillModule extends AbstractTaskModule
 				if (combatStartTick < 0)
 				{
 					combatStartTick = client.getTickCount();
+				}
+
+				// Validate equipment constraints on EVERY hit we land, not
+				// just the killing blow — otherwise "fight in full gear,
+				// unequip for the last hit" passes the kill-time check. A
+				// violation taints the task for the rest of THIS fight
+				// (cleared on target change).
+				for (NuzlockeTask task : activeTasks)
+				{
+					TaskConstraints c = task.getConstraints();
+					if (c != null && c.hasEquipmentConstraints()
+						&& !equipViolatedTaskIds.contains(task.getTaskId()))
+					{
+						String violation = validateEquipmentForTask(task);
+						if (violation != null)
+						{
+							equipViolatedTaskIds.add(task.getTaskId());
+							log.info("[NPCKILL-DEBUG] equipment violated mid-fight for '{}': {}",
+								task.getTaskId(), violation);
+						}
+					}
 				}
 
 				// Track animation for verification
@@ -765,11 +833,36 @@ public class NPCKillModule extends AbstractTaskModule
 
 			if (!dropOnlyTask)
 			{
+				// Fight-integrity gate for RESTRICTED kills: a relog/world hop
+				// wipes combat tracking, so a fight resumed right after logging
+				// back in is only measured from its post-relog tail. Testers
+				// pre-softened an NPC, relogged, and finished it "in 2.4s" /
+				// "with nothing equipped". Restricted kills must belong to a
+				// fight that STARTED at least FRESH_FIGHT_GRACE_TICKS after
+				// the session began.
+				if ((hasTimeConstraint || hasEquipConstraint)
+					&& lastLoginTick >= 0 && combatStartTick >= 0
+					&& combatStartTick - lastLoginTick < FRESH_FIGHT_GRACE_TICKS)
+				{
+					sendTaskFailure(task,
+						"Restricted kill must be a fresh fight — wait ~30s after logging in, then fight it start to finish");
+					continue; // Skip this task, don't credit the kill
+				}
+
 				// Varbit constraint check (e.g., no cannon during timed tasks)
 				String varbitViolation = validateVarbitConstraintForTask(task);
 				if (varbitViolation != null)
 				{
 					sendTaskFailure(task, varbitViolation);
+					continue; // Skip this task, don't credit the kill
+				}
+
+				// Equipment violated at ANY point during this fight (recorded
+				// per hitsplat) — unequipping before the killing blow doesn't
+				// launder the earlier hits.
+				if (hasEquipConstraint && equipViolatedTaskIds.contains(task.getTaskId()))
+				{
+					sendTaskFailure(task, "Equipment: restricted gear was worn during the fight");
 					continue; // Skip this task, don't credit the kill
 				}
 

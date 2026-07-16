@@ -1,15 +1,21 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
 import net.runelite.api.Actor;
+import net.runelite.api.GameState;
+import net.runelite.api.InventoryID;
+import net.runelite.api.Item;
+import net.runelite.api.ItemContainer;
 import net.runelite.api.NPC;
 import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ActorDeath;
+import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.StatChanged;
 import net.runelite.api.Hitsplat;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
+import net.runelite.client.plugins.chunkblazer.TaskConstraints;
 import net.runelite.client.plugins.chunkblazer.api.ChunkBlazerApiClient;
 import net.runelite.client.plugins.chunkblazer.verification.VarPlayerVerificationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -297,6 +303,120 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 
 		assertEquals(1, cowTask.getCurrentProgress(),
 			"an on-task slayer kill (Slayer XP awarded) credits the task");
+	}
+
+	// --- Relog / restricted-kill integrity (internal tester report, 2026-07-16) --
+
+	private NuzlockeTask speedTask(int npcId, int maxTicks)
+	{
+		NuzlockeTask t = createTaskWithNpc("Defeat a Mugger in 16 Seconds", "defeat_mugger_fast", "NPC_KILL", 1, Arrays.asList(npcId));
+		TaskConstraints c = new TaskConstraints();
+		c.setTimeInTicks(maxTicks);
+		t.setConstraints(c);
+		return t;
+	}
+
+	private GameStateChanged gameState(GameState s)
+	{
+		GameStateChanged e = new GameStateChanged();
+		e.setGameState(s);
+		return e;
+	}
+
+	/**
+	 * The relog exploit: soften the NPC, log out/in (combat tracking resets),
+	 * finish it — the measured fight is only the post-relog tail, so the speed
+	 * window passes. Restricted kills must belong to a fight STARTED a grace
+	 * period after the session began.
+	 */
+	@Test
+	void testSpeedKill_rejectedWhenFightStartsRightAfterRelog() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 10);
+		npcKillModule.addActiveTask(task);
+
+		// Session began at tick 95; fight "started" at 98 (3 ticks later).
+		// Elapsed fight time is 2 ticks, so the TIME check alone would pass —
+		// only the fresh-fight gate can refuse this kill.
+		injectField(npcKillModule, "lastLoginTick", 95);
+		injectField(npcKillModule, "combatStartTick", 98);
+		simulateKill(mockNpc(200, 1, "Mugger"));
+
+		assertEquals(0, task.getCurrentProgress(),
+			"a speed kill finished right after a relog must not credit");
+	}
+
+	@Test
+	void testSpeedKill_creditsWhenFightStartsWellAfterLogin() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 10);
+		npcKillModule.addActiveTask(task);
+
+		injectField(npcKillModule, "lastLoginTick", 30);  // logged in 70 ticks ago
+		injectField(npcKillModule, "combatStartTick", 98); // fresh 2-tick fight
+		simulateKill(mockNpc(200, 1, "Mugger"));
+
+		assertEquals(1, task.getCurrentProgress(), "a genuinely fresh fast kill credits");
+	}
+
+	@Test
+	void testRegionCrossingDoesNotResetFightIntegrity() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 10);
+		npcKillModule.addActiveTask(task);
+		injectField(npcKillModule, "lastLoginTick", 30);
+		injectField(npcKillModule, "combatStartTick", 98);
+
+		// A region crossing fires LOADING → LOGGED_IN. It must NOT count as a
+		// fresh login (that would wipe an in-progress fight and reject the kill).
+		npcKillModule.onGameStateChanged(gameState(GameState.LOADING));
+		npcKillModule.onGameStateChanged(gameState(GameState.LOGGED_IN));
+
+		simulateKill(mockNpc(200, 1, "Mugger"));
+		assertEquals(1, task.getCurrentProgress(),
+			"LOADING -> LOGGED_IN is a region crossing, not a relog");
+	}
+
+	/**
+	 * The unequip variant: gear worn at ANY point during the fight must fail an
+	 * equipment-restricted kill — removing it just before the killing blow (or
+	 * around a relog) must not launder the earlier hits.
+	 */
+	@Test
+	void testEquipRestriction_violationMidFightNotLaunderedByUnequip() throws Exception
+	{
+		NuzlockeTask task = createTaskWithNpc("Defeat a Mugger with No Equipment", "defeat_mugger_naked", "NPC_KILL", 1, Arrays.asList(200));
+		TaskConstraints c = new TaskConstraints();
+		c.setEquipNothing(true);
+		task.setConstraints(c);
+		npcKillModule.addActiveTask(task);
+
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		injectField(npcKillModule, "currentTarget", mugger);
+		injectField(npcKillModule, "currentTargetIndex", 1);
+
+		// A mid-fight hit lands while a weapon is equipped.
+		ItemContainer equipment = mock(ItemContainer.class);
+		Item weapon = mock(Item.class);
+		lenient().when(weapon.getId()).thenReturn(1333);
+		lenient().when(equipment.getItems()).thenReturn(new Item[]{weapon});
+		when(client.getItemContainer(InventoryID.EQUIPMENT)).thenReturn(equipment);
+
+		HitsplatApplied hit = mock(HitsplatApplied.class);
+		when(hit.getActor()).thenReturn(mugger);
+		when(hit.getHitsplat()).thenReturn(hitsplat);
+		when(hitsplat.isMine()).thenReturn(true);
+		lenient().when(hitsplat.getAmount()).thenReturn(5);
+		npcKillModule.onHitsplatApplied(hit);
+
+		// Unequip everything before the killing blow. (lenient: the fix rejects
+		// at the mid-fight taint check BEFORE re-reading equipment, so this
+		// stub going unused is itself evidence the gate fired early.)
+		lenient().when(client.getItemContainer(InventoryID.EQUIPMENT)).thenReturn(null);
+
+		simulateKill(mugger);
+		assertEquals(0, task.getCurrentProgress(),
+			"restricted gear worn mid-fight must not be laundered by unequipping for the killing blow");
 	}
 
 	/**
