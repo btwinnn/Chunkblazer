@@ -1,0 +1,345 @@
+{
+            "region_id": [12347],
+            "neighbor_ids": [12348, 12603, 12346, 12091],
+            "Friendly_Name": "Revenant Caves",
+            "tasks": [
+                {
+                    "name": "Use an Agility Jump Shortcut in the Revenant Caves",
+                    "taskID": "revenant_cave_jump_shortcut",
+                    "category": "Agility",
+                    "level": 65,
+                    "completion_type": "AGILITY",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_object": {
+                        "object": ["Pillar (Revenant Caves)#Easy"],
+                        "object_id": [31561], 
+                        "quantity": [1]
+                    }
+                },             
+                {
+                    "name": "Defeat a Revenant imp",
+                    "taskID": "defeat_revenant_imp",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Revenant imp"],
+                        "npc_ids": [7881],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant goblin",
+                    "taskID": "defeat_revenant_goblin",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Revenant goblin"],
+                        "npc_ids": [7931],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant pyrefiend",
+                    "taskID": "defeat_revenant_pyrefiend",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Revenant pyrefiend"],
+                        "npc_ids": [7932],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant hobgoblin",
+                    "taskID": "defeat_revenant_hobgoblin",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Revenant hobgoblin"],
+                        "npc_ids": [7933],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant cyclops",
+                    "taskID": "defeat_revenant_cyclops",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Revenant cyclops"],
+                        "npc_ids": [7934],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant hellhound",
+                    "taskID": "defeat_revenant_hellhound",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Revenant hellhound"],
+                        "npc_ids": [7935],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant demon",
+                    "taskID": "defeat_revenant_demon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Revenant demon"],
+                        "npc_ids": [7936],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant ork",
+                    "taskID": "defeat_revenant_ork",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Revenant ork"],
+                        "npc_ids": [7937],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant knight",
+                    "taskID": "defeat_revenant_knight",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Revenant knight"],
+                        "npc_ids": [7939],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Revenant dragon",
+                    "taskID": "defeat_revenant_dragon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Revenant dragon"],
+                        "npc_ids": [7940],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat Revenant Maledictus",
+                    "taskID": "defeat_revenant_maledictus",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Revenant maledictus"],
+                        "npc_ids": [11246],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain an Amulet of Avarice",
+                    "taskID": "obtain_amulet_of_avarice",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Amulet of avarice"],
+                            "item_ids": [22557],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Craw's Bow",
+                    "taskID": "equip_craws_bow",
+                    "category": "Ranged",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Craw's bow"],
+                            "item_ids": [22550, 27655]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Thammaron's Sceptre",
+                    "taskID": "equip_thammarons_sceptre",
+                    "category": "Magic",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Thammaron's sceptre"],
+                            "item_ids": [22555, 27788, 27665, 27679]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Viggora's Chainmace",
+                    "taskID": "equip_viggoras_chainmace",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Viggora's chainmace"],
+                            "item_ids": [22545, 27660]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Emblem",
+                    "taskID": "obtain_ancient_emblem",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Ancient emblem"],
+                            "item_ids": [21807],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Totem",
+                    "taskID": "obtain_ancient_totem",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Ancient totem"],
+                            "item_ids": [21810],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Crystal",
+                    "taskID": "obtain_ancient_crystal",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 2,
+                    "required_items": [
+                        {
+                            "item": ["Ancient crystal"],
+                            "item_ids": [21804],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Statuette",
+                    "taskID": "obtain_ancient_statuette",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ancient statuette"],
+                            "item_ids": [21813],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Medallion",
+                    "taskID": "obtain_ancient_medallion",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ancient medallion"],
+                            "item_ids": [22299],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Effigy",
+                    "taskID": "obtain_ancient_effigy",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ancient effigy"],
+                            "item_ids": [22302],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ancient Relic",
+                    "taskID": "obtain_ancient_relic",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ancient relic"],
+                            "item_ids": [22305],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Bracelet of Ethereum",
+                    "taskID": "obtain_bracelet_of_ethereum",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Bracelet of ethereum"],
+                            "item_ids": [21817, 21816],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }
