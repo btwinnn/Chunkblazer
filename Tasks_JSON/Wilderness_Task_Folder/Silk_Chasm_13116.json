@@ -1,32 +1,32 @@
 {
-            "region_id": [12859],
-            "neighbor_ids": [12860, 13115, 12858, 12603],
-            "Friendly_Name": "Vet'ion's Rest",
-            "tasks": [               
+            "region_id": [13116],
+            "neighbor_ids": [13116, 13371, 13114, 12859],
+            "Friendly_Name": "Silk Chasm",
+            "tasks": [             
                 {
-                    "name": "Defeat Vet'ion",
-                    "taskID": "defeat_vet'ion",
+                    "name": "Defeat Venenatis",
+                    "taskID": "defeat_venenatis",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 5,
                     "assignment_weight": 10,
                     "target_npc": {
-                        "npc": ["Vet'ion#Enraged"],
-                        "npc_ids": [6612],
+                        "npc": ["Venenatis"],
+                        "npc_ids": [6610],
                         "quantity": [25, 100]
                     }
                 },
                 {
-                    "name": "Defeat a Greater Skeleton Hellhound",
-                    "taskID": "defeat_greater_skeleton_hellhound",
+                    "name": "Defeat Venenatis' Spiderlings",
+                    "taskID": "defeat_venenatis_spiderling",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
-                    "assignment_weight": 5,
+                    "base_points": 1,
+                    "assignment_weight": 3,
                     "target_npc": {
-                        "npc": ["Greater Skeleton Hellhound (Vet'ion)"],
-                        "npc_ids": [6614],
-                        "quantity": [50, 150]
+                        "npc": ["Venenatis"],
+                        "npc_ids": [12000],
+                        "quantity": [25, 100]
                     }
                 },
                 {
@@ -45,46 +45,46 @@
                     ]
                 },
                 {
-                    "name": "Obtain the Skull of Vet'ion",
-                    "taskID": "obtain_skull_of_vetion",
+                    "name": "Obtain the Fangs of Venenatis",
+                    "taskID": "obtain_fangs_of_venenatis",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Skull of vet'ion"],
-                            "item_ids": [27673],
+                            "item": ["Fangs of Venenatis"],
+                            "item_ids": [27670],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain a Ring of the Gods",
-                    "taskID": "obtain_ring_of_the_gods",
+                    "name": "Obtain a Treasonous Ring",
+                    "taskID": "obtain_treasonous_ring",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Ring of the Gods"],
-                            "item_ids": [12601, 26764, 13202, 25252],
+                            "item": ["Treasonous Ring"],
+                            "item_ids": [12605, 26766, 12692, 25256],
                             "quantity": [1]
                         }
                     ]
                 },
                 {
-                    "name": "Obtain a Voidwaker Blade",
-                    "taskID": "obtain_voidwaker_blade",
+                    "name": "Obtain a Voidwaker Gem",
+                    "taskID": "obtain_voidwaker_gem",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
                     "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
-                            "item": ["Voidwaker blade"],
-                            "item_ids": [27684],
+                            "item": ["Voidwaker gem"],
+                            "item_ids": [27687],
                             "quantity": [1]
                         }
                     ]
@@ -133,20 +133,6 @@
                             "quantity": [1]
                         }
                     ]
-                },
-                {
-                    "name": "Use the Level 74 Agility Lava Dragon Stepping Stone",
-                    "taskID": "agility_level_74_agility_stepping_stone_lava_dragon",
-                    "category": "Agility",
-                    "level": 74,
-                    "completion_type": "AGILITY",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_object": {
-                        "object": ["Stepping stone (Lava Dragon Isle)"],
-                        "object_id": [14918], 
-                        "quantity": [1]
-                    }
                 }
             ],
             "is_completed": false
