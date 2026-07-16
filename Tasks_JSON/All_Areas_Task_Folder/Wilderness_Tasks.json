@@ -3708,6 +3708,140 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [13371],
+            "neighbor_ids": [13372, 13627, 13370, 13115],
+            "Friendly_Name": "Wilderness Chaos Altar",
+            "tasks": [
+                {
+                    "name": "Activate Piety",
+                    "taskID": "pray_piety",
+                    "category": "Prayer",
+                    "level": 70,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 5,
+                    "assignment_weight": 10,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 26
+                    }                   
+                }, 
+                {
+                    "name": "Activate Chivalry",
+                    "taskID": "pray_chivalry",
+                    "category": "Prayer",
+                    "level": 60,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 25
+                    }
+                },
+                {
+                    "name": "Activate Redemption",
+                    "taskID": "pray_redemption",
+                    "category": "Prayer",
+                    "level": 52,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 16
+                    }
+                },
+                {
+                    "name": "Activate Retribution",
+                    "taskID": "pray_retribution",
+                    "category": "Prayer",
+                    "level": 46,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 15
+                    }
+                },
+                {
+                    "name": "Activate Smite",
+                    "taskID": "pray_smite",
+                    "category": "Prayer",
+                    "level": 52,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 17
+                    }
+                },
+                {
+                            "name": "Activate Eagle Eye",
+                            "taskID": "pray_eagle_eye",
+                            "category": "Prayer",
+                            "level": 44,
+                            "completion_type": "VARBIT_CHECK",
+                            "base_points": 2,
+                            "assignment_weight": 5,
+                            "constraints": {
+                                "varbit_id": 4101,
+                                "varbit_boolean": 1,
+                                "varbit_bit": 22
+                            }
+                        },
+                        {
+                            "name": "Activate Protect from Missiles",
+                            "taskID": "pray_protect_from_missiles",
+                            "category": "Prayer",
+                            "level": 40,
+                            "completion_type": "VARBIT_CHECK",
+                            "base_points": 2,
+                            "assignment_weight": 3,
+                            "constraints": {
+                                "varbit_id": 4101,
+                                "varbit_boolean": 1,
+                                "varbit_bit": 13
+                            }
+                        },
+                        {
+                    "name": "Activate Protect from Melee",
+                    "taskID": "pray_protect_from_melee",
+                    "category": "Prayer",
+                    "level": 43,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 14
+                    }                   
+                },
+                {
+                    "name": "Activate Protect from Magic",
+                    "taskID": "pray_protect_from_meagic",
+                    "category": "Prayer",
+                    "level": 37,
+                    "completion_type": "VARBIT_CHECK",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "constraints": {
+                        "varbit_id": 4101,
+                        "varbit_boolean": 1,
+                        "varbit_bit": 12
+                    }                   
+                }
+            ],
+            "is_completed": false
         }
     ]
 }
