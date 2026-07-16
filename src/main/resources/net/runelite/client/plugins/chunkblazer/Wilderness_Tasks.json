@@ -3638,6 +3638,76 @@
                 }
             ],
             "is_completed": false
+        },
+        {
+            "region_id": [13371],
+            "neighbor_ids": [13372, 13627, 13370, 13115],
+            "Friendly_Name": "Dark Crab Coast",
+            "tasks": [
+                {
+                    "name": "Catch a Raw Dark Crab",
+                    "taskID": "catch_raw_dark_crab",
+                    "category": "Fishing",
+                    "level": 85,
+                    "completion_type": "FISHING",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Raw dark crab"],
+                            "item_ids": [11934],
+                            "quantity": [25, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Dark Crab",
+                    "taskID": "cook_dark_crab",
+                    "category": "Cooking",
+                    "level": 90,
+                    "completion_type": "COOKING",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dark crab"],
+                            "item_ids": [11936],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Wilderness Crab Teleport Tablet",
+                    "taskID": "obtain_wilderness_crab_teleport",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Wilderness crabs teleport"],
+                            "item_ids": [24251],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain some Dark Fishing Bait",
+                    "taskID": "obtain_dark_fishing_bait",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dark fishing bait"],
+                            "item_ids": [11940],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
         }
     ]
 }
