@@ -166,11 +166,20 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 			}
 			else
 			{
-				// Update progress from server
-				currentProgress = response.getVerifiedProgress();
-				if (activeTask != null)
+				// The per-event ack is a RECEIPT, not a verification: the
+				// server's event endpoints hardcode verifiedProgress=1 (they
+				// record the event and answer OK). Treating that as
+				// authoritative stomped local progress back to 1 after every
+				// kill — Cruk's 25-pirate task ping-ponged 1<->2 forever
+				// (session_2026-07-15), and the save no-oped because the
+				// stored value never changed. Server-ahead catch-up is
+				// allowed; REGRESSION is not — locally observed progress wins
+				// until a real sync says otherwise.
+				int verified = response.getVerifiedProgress();
+				if (activeTask != null && verified > activeTask.getCurrentProgress())
 				{
-					activeTask.setCurrentProgress(currentProgress);
+					currentProgress = verified;
+					activeTask.setCurrentProgress(verified);
 				}
 			}
 		}

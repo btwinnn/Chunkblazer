@@ -300,6 +300,46 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	}
 
 	/**
+	 * Cruk's 25-pirate regression (session_2026-07-15 22:02): the server's
+	 * event endpoints return a hardcoded verifiedProgress=1 receipt, and the
+	 * async ack used to OVERWRITE local progress with it — every kill after
+	 * the second stomped progress back to 1 and the task ping-ponged 1<->2
+	 * forever. An ack may only ever RAISE local progress, never lower it.
+	 */
+	@Test
+	void testEventAck_neverRegressesLocalProgress() throws Exception
+	{
+		NuzlockeTask pirates = createTaskWithNpc("Defeat a Pirate", "defeat_pirate", "NPC_KILL", 25, Arrays.asList(522));
+		// First addActiveTask also sets the legacy activeTask pointer the ack path uses.
+		npcKillModule.addActiveTask(pirates);
+
+		// Two kills land locally.
+		simulateKill(mockNpc(522, 1, "Pirate"));
+		simulateKill(mockNpc(522, 2, "Pirate"));
+		assertEquals(2, pirates.getCurrentProgress());
+
+		// The kill-report ack arrives with the hardcoded receipt value.
+		java.lang.reflect.Method m = findMethod(npcKillModule.getClass(), "handleVerificationResponse",
+			net.runelite.client.plugins.chunkblazer.api.TaskVerificationResponse.class);
+		m.setAccessible(true);
+		m.invoke(npcKillModule, net.runelite.client.plugins.chunkblazer.api.TaskVerificationResponse.builder()
+			.success(true).taskCompleted(false).verifiedProgress(1).build());
+
+		assertEquals(2, pirates.getCurrentProgress(),
+			"a verifiedProgress=1 receipt must not stomp locally observed progress");
+
+		// Third kill continues from 2, not from a stomped 1.
+		simulateKill(mockNpc(522, 3, "Pirate"));
+		assertEquals(3, pirates.getCurrentProgress());
+
+		// A genuinely AHEAD server value is still allowed to catch us up.
+		m.invoke(npcKillModule, net.runelite.client.plugins.chunkblazer.api.TaskVerificationResponse.builder()
+			.success(true).taskCompleted(false).verifiedProgress(7).build());
+		assertEquals(7, pirates.getCurrentProgress(),
+			"a server value ahead of local progress may raise it");
+	}
+
+	/**
 	 * Mike's goblin regression (session_2026-07-15): onTaskCleared() fires on
 	 * ROUTINE task-list refreshes and used to reset the Slayer XP sensor, so
 	 * the next (single!) Slayer XP event was swallowed as a baseline and a
