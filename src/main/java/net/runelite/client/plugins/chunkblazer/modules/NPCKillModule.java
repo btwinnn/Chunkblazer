@@ -719,7 +719,7 @@ public class NPCKillModule extends AbstractTaskModule
 			// kills don't, so a Slayer XP gain in this kill's tick window proves the
 			// dead NPC was the assigned creature. (Old check was SLAYER_COUNT>0, which
 			// credited the right monster even while assigned to a different one.)
-			if (SLAYER_TYPE.equalsIgnoreCase(task.getCompletionType()))
+			if (requiresOnTaskGate(task))
 			{
 				if (!wasOnTaskKill())
 				{
@@ -1030,6 +1030,24 @@ public class NPCKillModule extends AbstractTaskModule
 	 * HEAD=0, CAPE=1, AMULET=2, WEAPON=3, BODY=4, SHIELD=5, LEGS=7, GLOVES=9, BOOTS=10, RING=12, AMMO=13
 	 */
 	private static final int[] VALID_EQUIPMENT_SLOTS = {0, 1, 2, 3, 4, 5, 7, 9, 10, 12, 13};
+
+	/**
+	 * Whether this task's kill must pass the on-task slayer gate. True for
+	 * SLAYER-typed tasks, and ALSO for any task whose NAME promises "on Task" —
+	 * an "on Task" task mistyped as NPC_Kill used to skip the gate entirely and
+	 * credit off-task kills. The data has been cleaned (no mistypes remain as
+	 * of 2026-07-14), but the name check makes a future authoring slip fail
+	 * SAFE (gated) instead of fail OPEN (free credit).
+	 */
+	private static boolean requiresOnTaskGate(NuzlockeTask task)
+	{
+		if (SLAYER_TYPE.equalsIgnoreCase(task.getCompletionType()))
+		{
+			return true;
+		}
+		String name = task.getName();
+		return name != null && name.toLowerCase().contains("on task");
+	}
 
 	/**
 	 * True if the kill currently being processed was an on-task slayer kill — i.e.
