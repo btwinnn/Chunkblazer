@@ -95,9 +95,15 @@ public class NPCKillModule extends AbstractTaskModule
 	private int lastLoginTick = -1;
 	private static final int FRESH_FIGHT_GRACE_TICKS = 50; // ~30s
 
-	// Previous game state, so scene loads (LOADING → LOGGED_IN on every region
-	// crossing) are NOT mistaken for fresh logins mid-fight.
-	private GameState previousGameState = null;
+	// Armed by any pre-login state (LOGIN_SCREEN / LOGGING_IN / HOPPING /
+	// CONNECTION_LOST) and consumed by the next LOGGED_IN. This is how a real
+	// session start is told apart from a region crossing: a REAL login goes
+	// LOGIN_SCREEN → LOGGING_IN → LOADING → LOGGED_IN (Cruk's relog log,
+	// session_2026-07-16), so the naive "previous state != LOADING" guard
+	// classified every genuine login as a region crossing and never armed the
+	// fresh-fight gate. Region crossings (LOGGED_IN → LOADING → LOGGED_IN)
+	// never pass through a pre-login state, so they can't arm this flag.
+	private boolean sessionStartPending = false;
 
 	// Equip-constrained tasks whose constraint was violated at ANY point
 	// during the current fight. Checked on every hitsplat we land, not just
@@ -106,6 +112,17 @@ public class NPCKillModule extends AbstractTaskModule
 	// deliberately NOT cleared on onTaskCleared (a mid-fight task-list
 	// refresh must not forgive a violation).
 	private final Set<String> equipViolatedTaskIds = ConcurrentHashMap.newKeySet();
+
+	// True once ANOTHER player has dealt damage to the current target during
+	// this fight — i.e. a Hitsplat.isOthers() splat landed on it. Restricted
+	// (time/equipment) kills require EXCLUSIVE damage: closes the shared-spawn
+	// / friend-softens-it variant of the relog cheat (a busy-world passer-by
+	// or a duo partner providing part of the fight). isOthers() matches only
+	// the DAMAGE_OTHER* family, so our OWN cannon (renders DAMAGE_ME) and our
+	// own poison/venom/burn (distinct types) never trip it. Reset on target
+	// change / session start; NOT on onTaskCleared (a routine refresh must not
+	// launder a contested fight). Does NOT affect plain "defeat X" kills.
+	private boolean currentTargetContested = false;
 
 	// For boss KC verification
 	private int baselineKc = -1;
@@ -400,6 +417,7 @@ public class NPCKillModule extends AbstractTaskModule
 				damageDealtToTarget = 0;
 				combatStartTick = -1; // Reset combat timer for new target
 				equipViolatedTaskIds.clear(); // fresh fight, fresh equipment record
+				currentTargetContested = false; // fresh fight, no other-damage yet
 			}
 			else
 			{
@@ -430,21 +448,34 @@ public class NPCKillModule extends AbstractTaskModule
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged event)
 	{
-		GameState state = event.getGameState();
-		// Only a REAL session start (login, world hop, reconnect) resets the
-		// fight sensors. LOADING → LOGGED_IN fires on every region crossing
-		// and must not touch a fight in progress.
-		if (state == GameState.LOGGED_IN && previousGameState != GameState.LOADING)
+		switch (event.getGameState())
 		{
-			lastLoginTick = client.getTickCount();
-			currentTarget = null;
-			currentTargetIndex = -1;
-			damageDealtToTarget = 0;
-			combatStartTick = -1;
-			equipViolatedTaskIds.clear();
-			pendingDeaths.clear();
+			case LOGIN_SCREEN:
+			case LOGIN_SCREEN_AUTHENTICATOR:
+			case LOGGING_IN:
+			case HOPPING:
+			case CONNECTION_LOST:
+				// The session ended or is restarting — the NEXT LOGGED_IN is a
+				// fresh session, no matter how many LOADING states come between.
+				sessionStartPending = true;
+				break;
+			case LOGGED_IN:
+				if (sessionStartPending)
+				{
+					sessionStartPending = false;
+					lastLoginTick = client.getTickCount();
+					currentTarget = null;
+					currentTargetIndex = -1;
+					damageDealtToTarget = 0;
+					combatStartTick = -1;
+					equipViolatedTaskIds.clear();
+					currentTargetContested = false;
+					pendingDeaths.clear();
+				}
+				break;
+			default:
+				break;
 		}
-		previousGameState = state;
 	}
 
 	@Subscribe
@@ -458,6 +489,16 @@ public class NPCKillModule extends AbstractTaskModule
 		// Track damage dealt to our target
 		if (event.getActor() == currentTarget)
 		{
+			// Another player damaging our target contests the fight — restricted
+			// (time/equipment) kills require EXCLUSIVE damage. isOthers() is the
+			// DAMAGE_OTHER* family only, so our own cannon/poison never trips it.
+			if (event.getHitsplat().isOthers() && !currentTargetContested)
+			{
+				currentTargetContested = true;
+				log.info("[NPCKILL-DEBUG] target contested by another player's damage (index={})",
+					currentTargetIndex);
+			}
+
 			// Only count damage from the player
 			if (event.getHitsplat().isMine())
 			{
@@ -846,6 +887,18 @@ public class NPCKillModule extends AbstractTaskModule
 				{
 					sendTaskFailure(task,
 						"Restricted kill must be a fresh fight — wait ~30s after logging in, then fight it start to finish");
+					continue; // Skip this task, don't credit the kill
+				}
+
+				// Exclusive-damage gate for RESTRICTED kills: another player
+				// helping (a duo partner, or a busy-world passer-by softening a
+				// shared spawn) invalidates a speed/equipment attempt — you must
+				// solo it. Recorded per-fight in onHitsplatApplied via
+				// Hitsplat.isOthers(). Plain "defeat X" kills are unaffected.
+				if ((hasTimeConstraint || hasEquipConstraint) && currentTargetContested)
+				{
+					sendTaskFailure(task,
+						"Restricted kill must be solo — another player damaged this monster");
 					continue; // Skip this task, don't credit the kill
 				}
 

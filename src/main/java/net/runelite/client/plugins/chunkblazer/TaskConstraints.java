@@ -12,6 +12,21 @@ import java.util.List;
 @JsonAdapter(TaskConstraints.TaskConstraintsDeserializer.class)
 public class TaskConstraints
 {
+	// ── AUTHORING RULE for RESTRICTED kills (time_in_ticks / equipment) ──────
+	// These constraints are verified client-side from the local player's own
+	// combat tracking, which enforces "you SOLOED it fast / while restricted",
+	// not merely "you landed the killing blow". NPCKillModule requires the
+	// fight to be a fresh session (relog gate) AND to have no other-player
+	// damage (exclusive-damage gate). Therefore:
+	//   • Only put time/equipment constraints on SOLOABLE overworld monsters
+	//     a player can guarantee they fight alone.
+	//   • NEVER on raid/team bosses (Verzik, Olm, ToA, GWD, Nex, Corp, etc.):
+	//     the client can't see damage dealt on other players' clients, so the
+	//     "fight" it measures is only your slice — both a false-pass hole and
+	//     unfixable client-side. Author those as plain "defeat X" (KC-verified
+	//     for tracked bosses).
+	//   • Shared/multi-combat spawns are risky even solo (a passer-by's stray
+	//     hit voids the attempt) — prefer instanced or low-traffic targets.
 	@SerializedName("time_in_ticks")
 	private Integer timeInTicks;
 

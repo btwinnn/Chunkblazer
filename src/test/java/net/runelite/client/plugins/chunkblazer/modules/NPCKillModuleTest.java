@@ -359,6 +359,114 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		assertEquals(1, task.getCurrentProgress(), "a genuinely fresh fast kill credits");
 	}
 
+	private void fireMyHitsplat(NPC target, int dmg)
+	{
+		HitsplatApplied e = mock(HitsplatApplied.class);
+		Hitsplat h = mock(Hitsplat.class);
+		when(e.getActor()).thenReturn(target);
+		when(e.getHitsplat()).thenReturn(h);
+		lenient().when(h.isOthers()).thenReturn(false);
+		when(h.isMine()).thenReturn(true);
+		lenient().when(h.getAmount()).thenReturn(dmg);
+		npcKillModule.onHitsplatApplied(e);
+	}
+
+	private void fireOtherPlayerHitsplat(NPC target)
+	{
+		HitsplatApplied e = mock(HitsplatApplied.class);
+		Hitsplat h = mock(Hitsplat.class);
+		when(e.getActor()).thenReturn(target);
+		when(e.getHitsplat()).thenReturn(h);
+		when(h.isOthers()).thenReturn(true);   // DAMAGE_OTHER* — another player
+		lenient().when(h.isMine()).thenReturn(false);
+		npcKillModule.onHitsplatApplied(e);
+	}
+
+	/**
+	 * Exclusive-damage rule: a restricted (speed/equipment) kill on a monster
+	 * ANOTHER player also damaged must not credit — closes the shared-spawn /
+	 * duo-partner variant of the relog cheat (friend softens it, you last-hit).
+	 */
+	@Test
+	void testRestrictedKill_rejectedWhenAnotherPlayerDamagedTarget() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 10);
+		npcKillModule.addActiveTask(task);
+
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		injectField(npcKillModule, "currentTarget", mugger);
+		injectField(npcKillModule, "currentTargetIndex", 1);
+
+		fireMyHitsplat(mugger, 5);       // our fight starts (combatStartTick = now)
+		fireOtherPlayerHitsplat(mugger); // someone else damages it → contested
+
+		simulateKill(mugger);
+		assertEquals(0, task.getCurrentProgress(),
+			"a restricted kill on a monster another player damaged must not credit");
+	}
+
+	@Test
+	void testRestrictedKill_soloDamageStillCredits() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 10);
+		npcKillModule.addActiveTask(task);
+
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		injectField(npcKillModule, "currentTarget", mugger);
+		injectField(npcKillModule, "currentTargetIndex", 1);
+
+		fireMyHitsplat(mugger, 5); // only our damage — no contest
+		simulateKill(mugger);
+		assertEquals(1, task.getCurrentProgress(), "a solo restricted kill credits normally");
+	}
+
+	@Test
+	void testExclusiveDamage_doesNotAffectPlainKillTasks() throws Exception
+	{
+		// A plain "defeat X" task (no time/equip constraint) credits even if
+		// another player also hit the monster — exclusivity is only for
+		// restricted kills.
+		NuzlockeTask task = createTaskWithNpc("Defeat a Mugger", "defeat_mugger", "NPC_KILL", 1, Arrays.asList(200));
+		npcKillModule.addActiveTask(task);
+
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		injectField(npcKillModule, "currentTarget", mugger);
+		injectField(npcKillModule, "currentTargetIndex", 1);
+
+		fireMyHitsplat(mugger, 5);
+		fireOtherPlayerHitsplat(mugger); // contested, but this task doesn't care
+		simulateKill(mugger);
+		assertEquals(1, task.getCurrentProgress(),
+			"a plain defeat task credits regardless of who else damaged the monster");
+	}
+
+	/**
+	 * Cruk's green dragon (session_2026-07-16): a REAL login fires
+	 * LOGIN_SCREEN → LOGGING_IN → LOADING → LOGGED_IN — the LOADING right
+	 * before LOGGED_IN is part of the LOGIN, and the old "previous state !=
+	 * LOADING" guard classified every genuine relog as a region crossing, so
+	 * the fresh-fight gate never armed and his one-shot "in 0.0s" credited a
+	 * 27-second speed task.
+	 */
+	@Test
+	void testRealLoginSequence_armsFreshFightGate() throws Exception
+	{
+		NuzlockeTask task = speedTask(264, 45); // Defeat a Green Dragon in 27 Seconds
+		npcKillModule.addActiveTask(task);
+
+		npcKillModule.onGameStateChanged(gameState(GameState.LOGIN_SCREEN));
+		npcKillModule.onGameStateChanged(gameState(GameState.LOGGING_IN));
+		npcKillModule.onGameStateChanged(gameState(GameState.LOADING));
+		npcKillModule.onGameStateChanged(gameState(GameState.LOGGED_IN)); // arms lastLoginTick
+
+		// The one-shot lands immediately after the relog.
+		injectField(npcKillModule, "combatStartTick", 100);
+		simulateKill(mockNpc(264, 1, "Green dragon"));
+
+		assertEquals(0, task.getCurrentProgress(),
+			"a kill right after a REAL relog (LOADING precedes LOGGED_IN) must be gated");
+	}
+
 	@Test
 	void testRegionCrossingDoesNotResetFightIntegrity() throws Exception
 	{
