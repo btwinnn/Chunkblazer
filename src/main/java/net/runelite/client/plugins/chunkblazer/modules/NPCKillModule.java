@@ -192,6 +192,24 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	@Override
+	public void addActiveTask(NuzlockeTask task)
+	{
+		super.addActiveTask(task);
+		// Seed the Slayer XP baseline on the MULTI-task registration path too
+		// (registerActiveTask → addActiveTask — onTaskAssigned below is only
+		// the legacy single-task path). Without this, a (re)registered task
+		// starts with previousSlayerXp = -1 and the first Slayer XP event gets
+		// swallowed as the baseline instead of arming the on-task gate.
+		clientThread.invokeLater(() ->
+		{
+			if (previousSlayerXp < 0 && client.getLocalPlayer() != null)
+			{
+				previousSlayerXp = client.getSkillExperience(Skill.SLAYER);
+			}
+		});
+	}
+
+	@Override
 	public void onTaskAssigned(NuzlockeTask task)
 	{
 		super.onTaskAssigned(task);
@@ -235,10 +253,17 @@ public class NPCKillModule extends AbstractTaskModule
 		combatStartTick = -1;
 		baselineKc = -1;
 		currentBossName = null;
-		previousSlayerXp = -1;
-		lastSlayerXpGainTick = -1;
 		pendingDropKills.clear();
 		pendingDeaths.clear();
+		// IMPORTANT: do NOT reset previousSlayerXp / lastSlayerXpGainTick here.
+		// onTaskCleared() fires on ROUTINE task-list refreshes (chunk unlocks,
+		// task rolls, region changes — constantly during play), and resetting
+		// the Slayer XP sensor made onStatChanged swallow the NEXT Slayer XP
+		// gain as a "first sighting" baseline. A single on-task kill produces
+		// exactly ONE Slayer XP event, so the on-task gate refused genuinely
+		// on-task kills every time (Mike's goblin, session_2026-07-15). The
+		// sensor is player-state, not task-state — same lesson as the
+		// ConstructionModule spawn sensor. Hard reset lives in shutDown().
 	}
 
 	@Override

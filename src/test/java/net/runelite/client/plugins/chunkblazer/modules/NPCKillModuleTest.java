@@ -253,11 +253,14 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		return null;
 	}
 
-	/** Simulate an ON-TASK kill: a Slayer XP gain at the current tick (off-task
-	 *  kills award none). First event sets the baseline, second registers the gain. */
+	/** Simulate an ON-TASK kill: a SINGLE Slayer XP gain at the current tick,
+	 *  exactly as the game emits it (off-task kills award none). The baseline
+	 *  comes from addActiveTask's seeding (mocked getSkillExperience = 0), NOT
+	 *  from a sacrificial first event — the old two-event version of this
+	 *  helper was papering over the swallowed-baseline bug that refused
+	 *  single on-task kills in production. */
 	private void grantSlayerXp()
 	{
-		npcKillModule.onStatChanged(new StatChanged(Skill.SLAYER, 1000, 50, 50));
 		npcKillModule.onStatChanged(new StatChanged(Skill.SLAYER, 1010, 50, 50));
 	}
 
@@ -294,6 +297,31 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 
 		assertEquals(1, cowTask.getCurrentProgress(),
 			"an on-task slayer kill (Slayer XP awarded) credits the task");
+	}
+
+	/**
+	 * Mike's goblin regression (session_2026-07-15): onTaskCleared() fires on
+	 * ROUTINE task-list refreshes and used to reset the Slayer XP sensor, so
+	 * the next (single!) Slayer XP event was swallowed as a baseline and a
+	 * genuinely on-task kill was refused. The sensor must survive refreshes.
+	 */
+	@Test
+	void testSlayerGate_survivesRoutineTaskListRefresh() throws Exception
+	{
+		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 1, Arrays.asList(3034));
+		npcKillModule.addActiveTask(goblin);
+
+		// Routine refresh mid-session: clearTask() → onTaskCleared() → re-register.
+		// Happens constantly (chunk unlocks, task rolls, region changes).
+		npcKillModule.onTaskCleared();
+		npcKillModule.addActiveTask(goblin);
+
+		// ONE on-task kill = ONE Slayer XP event. Must credit.
+		grantSlayerXp();
+		simulateKill(mockNpc(3034, 1, "Goblin"));
+
+		assertEquals(1, goblin.getCurrentProgress(),
+			"a single on-task kill right after a task-list refresh must credit");
 	}
 
 	/**
