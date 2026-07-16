@@ -1,0 +1,118 @@
+{
+            "region_id": [12603],
+            "neighbor_ids": [12604, 12859, 12602, 12347],
+            "Friendly_Name": "Black Chinchompas",
+            "tasks": [
+                {
+                    "name": "Catch a Black Chinchompa",
+                    "taskID": "catch_black_chinchimpa",
+                    "category": "Hunter",
+                    "level": 73,
+                    "completion_type": "HUNTER",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                            {
+                            "item": "Black Chinchompa",
+                            "item_ids": [11959],
+                            "quantity": [50, 250]
+                            }                   
+                        ]             
+                },
+                {
+                    "name": "Obtain a Mossy Key",
+                    "taskID": "obtain_mossy_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Mossy Key"],
+                            "item_ids": [22374],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Moss Giant",
+                    "taskID": "defeat_moss_giant",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Moss Giant on Task",
+                    "taskID": "defeat_moss_giant_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Moss Giant in 24 Seconds",
+                    "taskID": "defeat_moss_giant_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [40]
+                    }
+                },
+                {
+                    "name": "Defeat a Moss Guardian with nothing Equipped",
+                    "taskID": "defeat_moss_guardian_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Moss Guardian"],
+                        "npc_ids": [891],
+                        "quantity": [1]
+                    },
+
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }                   
+                },
+                {
+                    "name": "Defeat a Moss Giant for some Ranarr Seeds",
+                    "taskID": "Defeat_moss_giant_for_ranarr_seeds",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "target_npc": {
+                        "npc": ["Moss Giant"],
+                        "npc_ids": [8736, 2090, 2091, 2092, 2093, 7262, 14422, 12844, 12845, 12846, 12847, 3851, 3852]                     
+                    },
+                    "constraints": [
+                        {
+                        "dropped_item": "Ranarr Seed",
+                        "dropped_item_id": [5295],
+                        "quantity": [1, 3]
+                        }
+                    ] 
+                }
+            ],
+            "is_completed": false
+        }
