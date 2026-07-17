@@ -30,6 +30,22 @@
                     }
                 },
                 {
+                    "name": "Mine some Runite Ore",
+                    "taskID": "mine_rune_ore",
+                    "category": "Mining",
+                    "level": 85,
+                    "completion_type": "MINING",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Runite Ore"],
+                            "item_ids": [451],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
                     "name": "Obtain a Dragon Pickaxe",
                     "taskID": "obtain_dragon_pickaxe",
                     "category": "Obtain",
