@@ -10,6 +10,7 @@ import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ActorDeath;
 import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.StatChanged;
 import net.runelite.api.Hitsplat;
@@ -74,7 +75,19 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		// what these tests are about).
 		lenient().when(apiClient.reportNpcKill(any())).thenReturn(new java.util.concurrent.CompletableFuture<>());
 		// A positive, stable game tick so the on-task Slayer-XP window math works.
-		lenient().when(client.getTickCount()).thenReturn(100);
+		setTick(100);
+
+		// The restricted-kill freshness check samples NPC health each tick.
+		lenient().when(client.getNpcs()).thenReturn(java.util.Collections.emptyList());
+	}
+
+	/** The game tick these tests are "at". Kills, XP and drains are sequenced against it. */
+	private int now;
+
+	private void setTick(int tick)
+	{
+		now = tick;
+		lenient().when(client.getTickCount()).thenReturn(tick);
 	}
 
 	private void injectField(Object target, String fieldName, Object value) throws Exception
@@ -231,17 +244,63 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		return npc;
 	}
 
+	/**
+	 * Drive a death through the REAL event path: ActorDeath queues it, GameTick drains
+	 * it. Going through the events (rather than reaching in and calling processNpcDeath)
+	 * is what lets these tests see the tick-ordering bugs — an on-task kill's Slayer XP
+	 * arrives on a LATER tick than the death, and only the drain loop knows to wait.
+	 *
+	 * The fight record is seeded via a hitsplat, exactly as the game does it. Note
+	 * there is no interaction anywhere here: damage is the only thing that creates a
+	 * stake in an NPC now, which is precisely why cannon kills work.
+	 */
 	private void simulateKill(NPC npc) throws Exception
 	{
-		// Pretend the combat tracker confirmed we damaged THIS npc instance.
-		injectField(npcKillModule, "currentTarget", npc);
-		injectField(npcKillModule, "currentTargetIndex", npc.getIndex());
-		injectField(npcKillModule, "damageDealtToTarget", 10);
-
-		java.lang.reflect.Method m = findMethod(npcKillModule.getClass(), "processNpcDeath", NPC.class);
-		m.setAccessible(true);
-		m.invoke(npcKillModule, npc);
+		fireMyHitsplat(npc, 10);
+		killAndDrain(npc);
 	}
+
+	/** ActorDeath + the GameTick drain, without seeding any damage of our own. */
+	private void killAndDrain(NPC npc)
+	{
+		ActorDeath death = mock(ActorDeath.class);
+		when(death.getActor()).thenReturn(npc);
+		npcKillModule.onActorDeath(death);
+		npcKillModule.onGameTick(new GameTick());
+	}
+
+	/** Advance the clock by n ticks and pump a GameTick, so held deaths can resolve. */
+	private void advance(int ticks)
+	{
+		setTick(now + ticks);
+		npcKillModule.onGameTick(new GameTick());
+	}
+
+	/**
+	 * An ON-TASK slayer kill, sequenced the way the game actually does it: the NPC
+	 * dies, and the Slayer XP lands on a LATER tick (Mike's goblin — kill at 14:57:04,
+	 * XP at 14:57:05). The old helper granted XP BEFORE the kill, which quietly
+	 * encoded the very bug it was meant to guard: the gate only looked backwards, so
+	 * XP-then-kill passed in the test while kill-then-XP failed in production.
+	 */
+	private void simulateOnTaskKill(NPC npc)
+	{
+		fireMyHitsplat(npc, 10);
+		killAndDrain(npc);  // death is HELD here — its evidence hasn't arrived yet
+		setTick(now + 1);
+		grantSlayerXp();    // ...and lands a tick later
+		npcKillModule.onGameTick(new GameTick());
+	}
+
+	/** An OFF-TASK kill: no Slayer XP ever arrives, so the hold times out. */
+	private void simulateOffTaskKill(NPC npc)
+	{
+		fireMyHitsplat(npc, 10);
+		killAndDrain(npc);
+		advance(ON_TASK_WAIT_TICKS);
+	}
+
+	private static final int ON_TASK_WAIT_TICKS = 2;
 
 	private java.lang.reflect.Method findMethod(Class<?> clazz, String name, Class<?>... params)
 	{
@@ -259,8 +318,8 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		return null;
 	}
 
-	/** Simulate an ON-TASK kill: a SINGLE Slayer XP gain at the current tick,
-	 *  exactly as the game emits it (off-task kills award none). The baseline
+	/** Simulate a SINGLE Slayer XP gain at the current tick, exactly as the game
+	 *  emits it for an on-task kill (off-task kills award none). The baseline
 	 *  comes from addActiveTask's seeding (mocked getSkillExperience = 0), NOT
 	 *  from a sacrificial first event — the old two-event version of this
 	 *  helper was papering over the swallowed-baseline bug that refused
@@ -282,7 +341,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		npcKillModule.addActiveTask(cowTask);
 
 		// No Slayer XP gain → off-task (assigned to something other than cows, or no task).
-		simulateKill(mockNpc(100, 1, "Cow"));
+		simulateOffTaskKill(mockNpc(100, 1, "Cow"));
 
 		assertEquals(0, cowTask.getCurrentProgress(),
 			"a SLAYER task must not credit an off-task kill (no Slayer XP awarded)");
@@ -298,11 +357,61 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		NuzlockeTask cowTask = createTaskWithNpc("Defeat a Cow on Task", "slay_cow", "SLAYER", 1, Arrays.asList(100));
 		npcKillModule.addActiveTask(cowTask);
 
-		grantSlayerXp(); // on task: the kill awards Slayer XP
-		simulateKill(mockNpc(100, 1, "Cow"));
+		simulateOnTaskKill(mockNpc(100, 1, "Cow"));
 
 		assertEquals(1, cowTask.getCurrentProgress(),
 			"an on-task slayer kill (Slayer XP awarded) credits the task");
+	}
+
+	/**
+	 * Mike's goblin (session_2026-07-16 14:57:04): he WAS on a goblin task (11
+	 * remaining) and still got "Not on a slayer task for this monster". The Slayer XP
+	 * arrives the tick AFTER the death — the log shows the verdict at :04 and the XP
+	 * at :05 — but the gate only looked backwards, so it judged the kill on evidence
+	 * that had not been sent yet and refused every genuine on-task kill.
+	 *
+	 * This is the ordering the old fixture had backwards, so it is spelled out
+	 * explicitly rather than hidden in a helper: XP strictly AFTER the death.
+	 */
+	@Test
+	void testSlayerGate_waitsForXpThatArrivesAfterTheDeath() throws Exception
+	{
+		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 11, Arrays.asList(3034));
+		npcKillModule.addActiveTask(goblin);
+
+		NPC npc = mockNpc(3034, 1, "Goblin");
+		fireMyHitsplat(npc, 10);
+		killAndDrain(npc); // tick 100: the goblin dies
+
+		assertEquals(0, goblin.getCurrentProgress(),
+			"the verdict must not be reached yet — the XP that decides it hasn't arrived");
+
+		setTick(101);
+		grantSlayerXp();   // tick 101: Slayer XP lands, as in Mike's log
+		npcKillModule.onGameTick(new GameTick());
+
+		assertEquals(1, goblin.getCurrentProgress(),
+			"an on-task kill must credit once its Slayer XP arrives on the following tick");
+	}
+
+	/**
+	 * The flip side: waiting for XP must not become a free pass. If it never arrives,
+	 * the hold expires and the kill is ruled off-task.
+	 */
+	@Test
+	void testSlayerGate_holdExpiresAndRulesOffTask() throws Exception
+	{
+		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 1, Arrays.asList(3034));
+		npcKillModule.addActiveTask(goblin);
+
+		NPC npc = mockNpc(3034, 1, "Goblin");
+		fireMyHitsplat(npc, 10);
+		killAndDrain(npc);
+		advance(1);
+		advance(1); // no XP ever arrives
+
+		assertEquals(0, goblin.getCurrentProgress(),
+			"a held death whose Slayer XP never arrives must be ruled off task");
 	}
 
 	// --- Relog / restricted-kill integrity (internal tester report, 2026-07-16) --
@@ -335,12 +444,16 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		NuzlockeTask task = speedTask(200, 10);
 		npcKillModule.addActiveTask(task);
 
-		// Session began at tick 95; fight "started" at 98 (3 ticks later).
-		// Elapsed fight time is 2 ticks, so the TIME check alone would pass —
-		// only the fresh-fight gate can refuse this kill.
+		// Session began at tick 95; fight starts at 98 (3 ticks later) and the mugger
+		// dies at 100. Elapsed fight time is 2 ticks, so the TIME check alone would
+		// pass — only the fresh-fight gate can refuse this kill.
 		injectField(npcKillModule, "lastLoginTick", 95);
-		injectField(npcKillModule, "combatStartTick", 98);
-		simulateKill(mockNpc(200, 1, "Mugger"));
+
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		setTick(98);
+		fireMyHitsplat(mugger, 5); // combat starts here
+		setTick(100);
+		killAndDrain(mugger);
 
 		assertEquals(0, task.getCurrentProgress(),
 			"a speed kill finished right after a relog must not credit");
@@ -352,11 +465,41 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		NuzlockeTask task = speedTask(200, 10);
 		npcKillModule.addActiveTask(task);
 
-		injectField(npcKillModule, "lastLoginTick", 30);  // logged in 70 ticks ago
-		injectField(npcKillModule, "combatStartTick", 98); // fresh 2-tick fight
-		simulateKill(mockNpc(200, 1, "Mugger"));
+		injectField(npcKillModule, "lastLoginTick", 30); // logged in 70 ticks ago
+
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		setTick(98);
+		fireMyHitsplat(mugger, 5); // fresh 2-tick fight
+		setTick(100);
+		killAndDrain(mugger);
 
 		assertEquals(1, task.getCurrentProgress(), "a genuinely fresh fast kill credits");
+	}
+
+	/**
+	 * Mike's note (2026-07-16): "some timed tasks are longer than 30s". A flat 30s
+	 * grace leaves a task with a longer limit exposed — the fight can start after the
+	 * grace and still be finished entirely with damage dealt before the relog. The
+	 * grace must be at least the task's own limit.
+	 */
+	@Test
+	void testFreshFightGrace_scalesToTasksOwnTimeLimit() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 100); // 60s limit — longer than the 30s grace
+		npcKillModule.addActiveTask(task);
+
+		injectField(npcKillModule, "lastLoginTick", 100);
+
+		// Fight starts 60 ticks (36s) after login: past the flat 30s grace, but well
+		// inside this task's own 60s window.
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		setTick(160);
+		fireMyHitsplat(mugger, 5);
+		setTick(162);
+		killAndDrain(mugger);
+
+		assertEquals(0, task.getCurrentProgress(),
+			"the grace must cover the task's own time limit, not a flat 30s");
 	}
 
 	private void fireMyHitsplat(NPC target, int dmg)
@@ -394,13 +537,10 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		npcKillModule.addActiveTask(task);
 
 		NPC mugger = mockNpc(200, 1, "Mugger");
-		injectField(npcKillModule, "currentTarget", mugger);
-		injectField(npcKillModule, "currentTargetIndex", 1);
-
 		fireMyHitsplat(mugger, 5);       // our fight starts (combatStartTick = now)
 		fireOtherPlayerHitsplat(mugger); // someone else damages it → contested
 
-		simulateKill(mugger);
+		killAndDrain(mugger);
 		assertEquals(0, task.getCurrentProgress(),
 			"a restricted kill on a monster another player damaged must not credit");
 	}
@@ -412,11 +552,8 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		npcKillModule.addActiveTask(task);
 
 		NPC mugger = mockNpc(200, 1, "Mugger");
-		injectField(npcKillModule, "currentTarget", mugger);
-		injectField(npcKillModule, "currentTargetIndex", 1);
-
 		fireMyHitsplat(mugger, 5); // only our damage — no contest
-		simulateKill(mugger);
+		killAndDrain(mugger);
 		assertEquals(1, task.getCurrentProgress(), "a solo restricted kill credits normally");
 	}
 
@@ -430,12 +567,9 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		npcKillModule.addActiveTask(task);
 
 		NPC mugger = mockNpc(200, 1, "Mugger");
-		injectField(npcKillModule, "currentTarget", mugger);
-		injectField(npcKillModule, "currentTargetIndex", 1);
-
 		fireMyHitsplat(mugger, 5);
 		fireOtherPlayerHitsplat(mugger); // contested, but this task doesn't care
-		simulateKill(mugger);
+		killAndDrain(mugger);
 		assertEquals(1, task.getCurrentProgress(),
 			"a plain defeat task credits regardless of who else damaged the monster");
 	}
@@ -457,10 +591,9 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		npcKillModule.onGameStateChanged(gameState(GameState.LOGIN_SCREEN));
 		npcKillModule.onGameStateChanged(gameState(GameState.LOGGING_IN));
 		npcKillModule.onGameStateChanged(gameState(GameState.LOADING));
-		npcKillModule.onGameStateChanged(gameState(GameState.LOGGED_IN)); // arms lastLoginTick
+		npcKillModule.onGameStateChanged(gameState(GameState.LOGGED_IN)); // arms lastLoginTick at 100
 
 		// The one-shot lands immediately after the relog.
-		injectField(npcKillModule, "combatStartTick", 100);
 		simulateKill(mockNpc(264, 1, "Green dragon"));
 
 		assertEquals(0, task.getCurrentProgress(),
@@ -473,14 +606,18 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		NuzlockeTask task = speedTask(200, 10);
 		npcKillModule.addActiveTask(task);
 		injectField(npcKillModule, "lastLoginTick", 30);
-		injectField(npcKillModule, "combatStartTick", 98);
+
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		setTick(98);
+		fireMyHitsplat(mugger, 5); // a fight is under way
 
 		// A region crossing fires LOADING → LOGGED_IN. It must NOT count as a
-		// fresh login (that would wipe an in-progress fight and reject the kill).
+		// fresh login (that would wipe the in-progress fight and reject the kill).
 		npcKillModule.onGameStateChanged(gameState(GameState.LOADING));
 		npcKillModule.onGameStateChanged(gameState(GameState.LOGGED_IN));
 
-		simulateKill(mockNpc(200, 1, "Mugger"));
+		setTick(100);
+		killAndDrain(mugger);
 		assertEquals(1, task.getCurrentProgress(),
 			"LOADING -> LOGGED_IN is a region crossing, not a relog");
 	}
@@ -500,8 +637,6 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		npcKillModule.addActiveTask(task);
 
 		NPC mugger = mockNpc(200, 1, "Mugger");
-		injectField(npcKillModule, "currentTarget", mugger);
-		injectField(npcKillModule, "currentTargetIndex", 1);
 
 		// A mid-fight hit lands while a weapon is equipped.
 		ItemContainer equipment = mock(ItemContainer.class);
@@ -522,7 +657,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		// stub going unused is itself evidence the gate fired early.)
 		lenient().when(client.getItemContainer(InventoryID.EQUIPMENT)).thenReturn(null);
 
-		simulateKill(mugger);
+		killAndDrain(mugger);
 		assertEquals(0, task.getCurrentProgress(),
 			"restricted gear worn mid-fight must not be laundered by unequipping for the killing blow");
 	}
@@ -585,8 +720,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		npcKillModule.addActiveTask(goblin);
 
 		// ONE on-task kill = ONE Slayer XP event. Must credit.
-		grantSlayerXp();
-		simulateKill(mockNpc(3034, 1, "Goblin"));
+		simulateOnTaskKill(mockNpc(3034, 1, "Goblin"));
 
 		assertEquals(1, goblin.getCurrentProgress(),
 			"a single on-task kill right after a task-list refresh must credit");
@@ -607,8 +741,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		npcKillModule.addActiveTask(a);
 		npcKillModule.addActiveTask(b);
 
-		grantSlayerXp();
-		simulateKill(mockNpc(14704, 1, "Custodian Stalker"));
+		simulateOnTaskKill(mockNpc(14704, 1, "Custodian Stalker"));
 
 		assertEquals(1, a.getCurrentProgress());
 		assertEquals(1, b.getCurrentProgress(),
@@ -629,15 +762,116 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		npcKillModule.addActiveTask(moss);
 
 		// Off-task kill (no Slayer XP): must NOT credit despite the NPC_Kill type.
-		simulateKill(mockNpc(200, 1, "Moss Giant"));
+		simulateOffTaskKill(mockNpc(200, 1, "Moss Giant"));
 		assertEquals(0, moss.getCurrentProgress(),
 			"an 'on Task' task must be slayer-gated even when mistyped as NPC_KILL");
 
 		// On-task kill (Slayer XP in window): credits normally.
-		grantSlayerXp();
-		simulateKill(mockNpc(200, 1, "Moss Giant"));
+		simulateOnTaskKill(mockNpc(200, 2, "Moss Giant"));
 		assertEquals(1, moss.getCurrentProgress(),
 			"the same mistyped task still credits when genuinely on task");
+	}
+
+	// --- Cannon kills (Mike + Cruk, 2026-07-16) ---------------------------------
+
+	/**
+	 * Mike: "defeating a scorpion with a cannon does not count towards anything."
+	 * Tracking used to hang off onInteractingChanged, so an NPC the player never
+	 * clicked had no fight record, every hitsplat on it was dropped, and the death
+	 * was rejected for 0 damage — silently. (In his log the cannon kills produce no
+	 * [NPCKILL-DEBUG] line at all, while his three manual kills each produce one.)
+	 * A cannonball is our damage, so it is our kill.
+	 */
+	@Test
+	void testCannonOnlyKill_credits() throws Exception
+	{
+		NuzlockeTask task = createTaskWithNpc("Defeat some Scorpions", "defeat_scorpions", "NPC_KILL", 5, Arrays.asList(3024));
+		npcKillModule.addActiveTask(task);
+
+		// No interaction ever — just our cannonball landing on it.
+		NPC scorpion = mockNpc(3024, 1, "Scorpion");
+		fireMyHitsplat(scorpion, 8);
+		killAndDrain(scorpion);
+
+		assertEquals(1, task.getCurrentProgress(),
+			"a kill dealt entirely by our own cannon must credit a plain defeat task");
+	}
+
+	/**
+	 * Cruk: "had a task to kill a scorpion in one hit, a cannonball hit it for 90% of
+	 * its hp, i finished off the last 10% with whip and it counted as 'one hit'."
+	 *
+	 * "One hit" tasks are authored as a 1-tick time limit (see defeat_scorpion_first_hit
+	 * in his log: "max allowed is 1 ticks"), and the clock used to start at the first
+	 * hit the plugin could SEE — which excluded the cannon. Cannon damage now starts
+	 * the clock like any other damage of ours, so the real fight length is measured.
+	 */
+	@Test
+	void testCannonSoftenedThenFinished_doesNotPassAsAOneHitKill() throws Exception
+	{
+		NuzlockeTask task = speedTask(3024, 1); // "Defeat a Scorpion in the First Hit"
+		npcKillModule.addActiveTask(task);
+
+		NPC scorpion = mockNpc(3024, 1, "Scorpion");
+		setTick(100);
+		fireMyHitsplat(scorpion, 9);  // cannonball takes it to 10% — the clock starts HERE
+		setTick(110);
+		fireMyHitsplat(scorpion, 1);  // whip finishes it, 10 ticks later
+		killAndDrain(scorpion);
+
+		assertEquals(0, task.getCurrentProgress(),
+			"cannon-softening then finishing must not read as a one-hit kill");
+	}
+
+	/**
+	 * The same cheat with the cannon replaced by anything else that chipped the NPC
+	 * first (another player's cannon, a passing NPC, a previous session). If it wasn't
+	 * at full health when we first hit it, a restricted kill can't be judged.
+	 */
+	@Test
+	void testRestrictedKill_rejectedWhenMonsterWasAlreadyDamaged() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 10);
+		npcKillModule.addActiveTask(task);
+
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		// It is already on 20% health at the end of the previous tick.
+		lenient().when(mugger.getHealthRatio()).thenReturn(6);
+		lenient().when(mugger.getHealthScale()).thenReturn(30);
+		lenient().when(client.getNpcs()).thenReturn(java.util.Collections.singletonList(mugger));
+		npcKillModule.onGameTick(new GameTick()); // sample health
+
+		setTick(101);
+		fireMyHitsplat(mugger, 5); // our first hit lands on a pre-softened monster
+		killAndDrain(mugger);
+
+		assertEquals(0, task.getCurrentProgress(),
+			"a restricted kill must start from full health");
+	}
+
+	/**
+	 * The freshness gate must not refuse honest kills: a monster at full health when
+	 * we open on it credits normally, even though it is obviously damaged by the time
+	 * it dies.
+	 */
+	@Test
+	void testRestrictedKill_fullHealthMonsterStillCredits() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 10);
+		npcKillModule.addActiveTask(task);
+
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		lenient().when(mugger.getHealthRatio()).thenReturn(30); // untouched
+		lenient().when(mugger.getHealthScale()).thenReturn(30);
+		lenient().when(client.getNpcs()).thenReturn(java.util.Collections.singletonList(mugger));
+		npcKillModule.onGameTick(new GameTick());
+
+		setTick(101);
+		fireMyHitsplat(mugger, 5);
+		killAndDrain(mugger);
+
+		assertEquals(1, task.getCurrentProgress(),
+			"opening on a full-health monster is exactly what the gate is meant to allow");
 	}
 
 	/**
@@ -654,8 +888,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		npcKillModule.addActiveTask(ogre);
 		npcKillModule.addActiveTask(ogress);
 
-		grantSlayerXp();
-		simulateKill(mockNpc(7989, 1, "Ogress"));
+		simulateOnTaskKill(mockNpc(7989, 1, "Ogress"));
 
 		assertEquals(1, ogress.getCurrentProgress(), "the specific Ogress task credits");
 		assertEquals(0, ogre.getCurrentProgress(), "the broad Ogre superset task must NOT also credit");

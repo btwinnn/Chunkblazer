@@ -1,6 +1,7 @@
 package net.runelite.client.plugins.chunkblazer.modules;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Actor;
 import net.runelite.api.GameState;
+import net.runelite.api.Hitsplat;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
@@ -27,7 +29,6 @@ import net.runelite.api.events.ActorDeath;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
-import net.runelite.api.events.InteractingChanged;
 import net.runelite.api.events.ItemSpawned;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
@@ -58,10 +59,20 @@ public class NPCKillModule extends AbstractTaskModule
 
 	// On-task slayer kills award Slayer XP; off-task kills award none. So a Slayer
 	// XP gain in the same tick window as a kill means the dead NPC was the player's
-	// ASSIGNED monster — a name-agnostic "on the right task" signal. The kill's XP
-	// event fires during the tick; deaths are processed at end-of-tick (onGameTick),
-	// so the gain is already recorded by then. A small window covers timing skew.
+	// ASSIGNED monster — a name-agnostic "on the right task" signal.
+	//
+	// TIMING (Mike's goblin, session_2026-07-16 14:57:04): the XP arrives AFTER the
+	// death, not during its tick. The log is unambiguous — the kill is confirmed and
+	// the verdict sent at 14:57:04, and the Slayer XP / SLAYER_COUNT decrement land at
+	// 14:57:05. An earlier version of this comment claimed the gain was "already
+	// recorded" by end-of-tick and the gate only looked BACKWARDS, so a genuinely
+	// on-task kill was refused every time. No backwards window can fix that — widening
+	// it only reaches further into the past, where the evidence still isn't. So
+	// on-task-gated deaths are HELD (see heldDeaths) until the XP arrives or the wait
+	// expires. The window then covers skew in either direction.
 	private static final int SLAYER_XP_WINDOW_TICKS = 2;
+	// How long a gated death waits for its Slayer XP before we rule it off-task.
+	private static final int ON_TASK_WAIT_TICKS = 2;
 	private int previousSlayerXp = -1;
 	private int lastSlayerXpGainTick = -1;
 
@@ -74,16 +85,95 @@ public class NPCKillModule extends AbstractTaskModule
 	@Inject
 	private ChunkBlazerConfig config;
 
-	// Track the NPC we're currently fighting
-	private NPC currentTarget;
-	private int currentTargetIndex = -1; // Track by index to avoid reference issues
-	private int damageDealtToTarget;
-	private int lastKillingBlowAnimation;
+	// ── Fights we have a stake in, keyed by NPC index ────────────────────
+	// One record per NPC we have personally damaged. This REPLACED a single
+	// currentTarget/damageDealtToTarget/combatStartTick triple that was only ever
+	// populated from onInteractingChanged — i.e. it required the player to have
+	// manually clicked the NPC. Two consequences, both reported by testers on
+	// 2026-07-16 and both visible in session_2026-07-16_14-49-35:
+	//
+	//   1. A CANNON kill involves no interaction, so no target was ever set, every
+	//      hitsplat was dropped, and the death was rejected for having 0 damage.
+	//      Cannon kills produced no [NPCKILL-DEBUG] line at all — the plugin never
+	//      saw them (Mike: "killed some goblins with a cannon — did not get [any]
+	//      message from these"). Cannon-only kills credited nothing.
+	//   2. Worse, cannon damage did not start the clock. Cruk chunked a scorpion to
+	//      10% with a cannon and finished it with a whip: combat "started" at the
+	//      whip hit, so a 1-tick "in the First Hit" task (that is how those are
+	//      authored — see defeat_scorpion_first_hit, max allowed 1 tick) passed.
+	//      Cannon-softening laundered every timed task.
+	//
+	// Keying by index rather than holding one target is what makes cannon safe: a
+	// cannon hits several NPCs per tick, and a single slot would thrash between them
+	// and mis-attribute damage. A record is created by the FIRST hitsplat WE land,
+	// whatever the source (melee, cannon, thrall, poison), so the fight timer starts
+	// at the first damage we are responsible for.
+	private final Map<Integer, FightRecord> fights = new ConcurrentHashMap<>();
 
-	// Equipment constraints are now checked per-task at kill time (no global flag needed)
+	// Records with no hit for this long are dropped so the map can't grow without
+	// bound in a long session. Abandoning a fight for ~60s and coming back starts a
+	// NEW record — which fails the startedFresh check below, so this can't be used
+	// to launder a partly-damaged NPC.
+	private static final int FIGHT_RECORD_TTL_TICKS = 100; // ~60s
 
-	// Time constraint tracking - track when combat started (first hitsplat)
-	private int combatStartTick = -1;
+	/**
+	 * Everything we know about one fight: our damage, when it started, whether it
+	 * stayed solo, and whether the NPC was untouched when we got to it. Snapshotted
+	 * out of {@link #fights} at death so a late decision (the on-task hold) can't be
+	 * corrupted by index reuse.
+	 */
+	private static class FightRecord
+	{
+		final int npcIndex;
+		int damage;
+		int combatStartTick = -1;
+		int lastHitTick = -1;
+		int killingBlowAnimation;
+
+		// True once ANOTHER player has damaged this NPC (a Hitsplat.isOthers() splat).
+		// Restricted (time/equipment) kills require EXCLUSIVE damage: closes the
+		// shared-spawn / friend-softens-it variant of the relog cheat. isOthers()
+		// matches only the DAMAGE_OTHER* family, so our OWN cannon (renders DAMAGE_ME)
+		// and our own poison/venom/burn (distinct types) never trip it. Does NOT
+		// affect plain "defeat X" kills.
+		boolean contested;
+
+		// True if the NPC was at full health (or had never shown a health bar) when we
+		// landed our FIRST hit on it. See wasAtFullHealth().
+		boolean startedFresh = true;
+
+		// Equip-constrained tasks whose constraint was violated at ANY point during
+		// this fight. Checked on every hitsplat we land, not just the killing blow —
+		// "fight in full gear, unequip for the last hit" must not pass.
+		final Set<String> equipViolatedTaskIds = new HashSet<>();
+
+		FightRecord(int npcIndex)
+		{
+			this.npcIndex = npcIndex;
+		}
+	}
+
+	// ── Health of each NPC as of the END of the previous tick ─────────────
+	// Read by wasAtFullHealth() when we land our first hit. It must be a snapshot,
+	// not a live read: hitsplat and health-bar packets both arrive within a tick with
+	// no guaranteed order, so reading getHealthRatio() inside onHitsplatApplied could
+	// see our OWN hit already applied and call a genuinely fresh NPC pre-damaged —
+	// which would reject every legitimate speed kill. Sampling at GameTick (after
+	// that tick's hitsplats, before the next tick's) gives a clean "before we hit it"
+	// reading. Only maintained while a restricted task is active.
+	private final Map<Integer, HealthSample> healthAtPreviousTick = new ConcurrentHashMap<>();
+
+	private static class HealthSample
+	{
+		final int ratio;
+		final int scale;
+
+		HealthSample(int ratio, int scale)
+		{
+			this.ratio = ratio;
+			this.scale = scale;
+		}
+	}
 
 	// ── Fight-integrity sensors for RESTRICTED kills (time/equipment) ─────
 	// A relog or world hop wipes client-side combat tracking, so a fight that
@@ -95,6 +185,17 @@ public class NPCKillModule extends AbstractTaskModule
 	private int lastLoginTick = -1;
 	private static final int FRESH_FIGHT_GRACE_TICKS = 50; // ~30s
 
+	// The grace must also cover the task's OWN time limit. With a flat 30s, a task
+	// allowing 60s could be satisfied by a fight that started 31s after login — i.e.
+	// entirely inside the window the gate is supposed to protect (Mike, 2026-07-16:
+	// "some timed tasks are longer than 30s"). Scaling to the limit means a restricted
+	// fight always starts after any pre-login damage could still be counted as ours.
+	private static int freshFightGraceTicks(TaskConstraints constraints)
+	{
+		int limit = (constraints != null && constraints.hasTimeLimit()) ? constraints.getTimeInTicks() : 0;
+		return Math.max(FRESH_FIGHT_GRACE_TICKS, limit);
+	}
+
 	// Armed by any pre-login state (LOGIN_SCREEN / LOGGING_IN / HOPPING /
 	// CONNECTION_LOST) and consumed by the next LOGGED_IN. This is how a real
 	// session start is told apart from a region crossing: a REAL login goes
@@ -104,25 +205,6 @@ public class NPCKillModule extends AbstractTaskModule
 	// fresh-fight gate. Region crossings (LOGGED_IN → LOADING → LOGGED_IN)
 	// never pass through a pre-login state, so they can't arm this flag.
 	private boolean sessionStartPending = false;
-
-	// Equip-constrained tasks whose constraint was violated at ANY point
-	// during the current fight. Checked on every hitsplat we land, not just
-	// the killing blow — "fight in full gear, unequip for the last hit" must
-	// not pass. Cleared when the target changes or the session restarts;
-	// deliberately NOT cleared on onTaskCleared (a mid-fight task-list
-	// refresh must not forgive a violation).
-	private final Set<String> equipViolatedTaskIds = ConcurrentHashMap.newKeySet();
-
-	// True once ANOTHER player has dealt damage to the current target during
-	// this fight — i.e. a Hitsplat.isOthers() splat landed on it. Restricted
-	// (time/equipment) kills require EXCLUSIVE damage: closes the shared-spawn
-	// / friend-softens-it variant of the relog cheat (a busy-world passer-by
-	// or a duo partner providing part of the fight). isOthers() matches only
-	// the DAMAGE_OTHER* family, so our OWN cannon (renders DAMAGE_ME) and our
-	// own poison/venom/burn (distinct types) never trip it. Reset on target
-	// change / session start; NOT on onTaskCleared (a routine refresh must not
-	// launder a contested fight). Does NOT affect plain "defeat X" kills.
-	private boolean currentTargetContested = false;
 
 	// For boss KC verification
 	private int baselineKc = -1;
@@ -144,11 +226,37 @@ public class NPCKillModule extends AbstractTaskModule
 
 	// NPC deaths queued for end-of-tick processing.
 	// Why: ActorDeath can fire BEFORE the killing blow's HitsplatApplied on same-tick
-	// kills (one-shots, low-HP NPCs like Highwayman/Man). At ActorDeath time damage is
-	// still 0 and combatStartTick is still -1, so the kill gets rejected and the time
-	// constraint can't be evaluated. Draining this list in onGameTick ensures all
+	// kills (one-shots, low-HP NPCs like Highwayman/Man). At ActorDeath time the fight
+	// record may not exist yet, so the kill would be rejected for 0 damage and the time
+	// constraint couldn't be evaluated. Draining this list in onGameTick ensures all
 	// same-tick hitsplats have been processed before we decide.
 	private final List<NPC> pendingDeaths = new ArrayList<>();
+
+	// Deaths whose credit decision needs the on-task slayer gate, parked until their
+	// Slayer XP arrives (it lands the tick AFTER the death — see SLAYER_XP_WINDOW_TICKS)
+	// or ON_TASK_WAIT_TICKS expires. Only gated deaths wait; everything else is decided
+	// at end-of-tick as before.
+	private final List<DeathRecord> heldDeaths = new ArrayList<>();
+
+	/**
+	 * A death with its fight already resolved out of {@link #fights}, plus the tick it
+	 * happened on. Carrying deathTick matters for held deaths: elapsed fight time must
+	 * be measured to the DEATH, not to whenever we get around to deciding, or the wait
+	 * for Slayer XP would inflate every speed kill by the length of the wait.
+	 */
+	private static class DeathRecord
+	{
+		final NPC npc;
+		final FightRecord fight;
+		final int deathTick;
+
+		DeathRecord(NPC npc, FightRecord fight, int deathTick)
+		{
+			this.npc = npc;
+			this.fight = fight;
+			this.deathTick = deathTick;
+		}
+	}
 
 	/**
 	 * Tracks a kill that's pending verification via dropped item.
@@ -157,17 +265,19 @@ public class NPCKillModule extends AbstractTaskModule
 	{
 		final NuzlockeTask task;
 		final NPC killedNpc;
+		final FightRecord fight;
 		final WorldPoint deathLocation;
 		final int deathTick;
 		final List<Integer> requiredItemIds;
 		final int requiredQuantity;
 		int collectedQuantity = 0;
 
-		PendingDropKill(NuzlockeTask task, NPC npc, WorldPoint location, int tick,
+		PendingDropKill(NuzlockeTask task, NPC npc, FightRecord fight, WorldPoint location, int tick,
 						List<Integer> requiredItemIds, int requiredQuantity)
 		{
 			this.task = task;
 			this.killedNpc = npc;
+			this.fight = fight;
 			this.deathLocation = location;
 			this.deathTick = tick;
 			this.requiredItemIds = requiredItemIds;
@@ -223,14 +333,13 @@ public class NPCKillModule extends AbstractTaskModule
 	public void shutDown()
 	{
 		eventBus.unregister(this);
-		currentTarget = null;
-		currentTargetIndex = -1;
-		damageDealtToTarget = 0;
-		combatStartTick = -1;
+		fights.clear();
+		healthAtPreviousTick.clear();
 		previousSlayerXp = -1;
 		lastSlayerXpGainTick = -1;
 		pendingDropKills.clear();
 		pendingDeaths.clear();
+		heldDeaths.clear();
 	}
 
 	@Override
@@ -255,10 +364,6 @@ public class NPCKillModule extends AbstractTaskModule
 	public void onTaskAssigned(NuzlockeTask task)
 	{
 		super.onTaskAssigned(task);
-		currentTarget = null;
-		currentTargetIndex = -1;
-		damageDealtToTarget = 0;
-		combatStartTick = -1;
 
 		// Baseline Slayer XP so the first on-task kill after assignment registers a
 		// gain (rather than being swallowed as the baseline). Guarded for tests/off-thread.
@@ -289,14 +394,18 @@ public class NPCKillModule extends AbstractTaskModule
 	public void onTaskCleared()
 	{
 		super.onTaskCleared();
-		currentTarget = null;
-		currentTargetIndex = -1;
-		damageDealtToTarget = 0;
-		combatStartTick = -1;
 		baselineKc = -1;
 		currentBossName = null;
 		pendingDropKills.clear();
 		pendingDeaths.clear();
+		heldDeaths.clear();
+		// IMPORTANT: do NOT clear `fights` here, for the same reason the Slayer XP
+		// sensor below survives. onTaskCleared() fires on ROUTINE refreshes, and a
+		// fight in progress is player-state, not task-state: wiping it mid-fight
+		// would restart the combat timer (handing out free speed kills) and forgive
+		// an equipment violation already recorded for this fight. Hard reset lives
+		// in shutDown() and on session start.
+		//
 		// IMPORTANT: do NOT reset previousSlayerXp / lastSlayerXpGainTick here.
 		// onTaskCleared() fires on ROUTINE task-list refreshes (chunk unlocks,
 		// task rolls, region changes — constantly during play), and resetting
@@ -320,18 +429,68 @@ public class NPCKillModule extends AbstractTaskModule
 	{
 		int currentTick = client.getTickCount();
 
+		// Deaths held for their Slayer XP. Decide as soon as the XP lands; give up
+		// (and rule off-task) once the wait expires.
+		if (!heldDeaths.isEmpty())
+		{
+			Iterator<DeathRecord> held = heldDeaths.iterator();
+			while (held.hasNext())
+			{
+				DeathRecord death = held.next();
+				boolean xpArrived = lastSlayerXpGainTick >= death.deathTick;
+				boolean waitExpired = currentTick - death.deathTick >= ON_TASK_WAIT_TICKS;
+				if (xpArrived || waitExpired)
+				{
+					held.remove();
+					processNpcDeath(death);
+				}
+			}
+		}
+
 		// Drain deaths queued from this tick's ActorDeath events. By now any same-tick
-		// HitsplatApplied for the killing blow has been processed, so damageDealtToTarget
-		// and combatStartTick are correct.
+		// HitsplatApplied for the killing blow has been processed, so the fight record
+		// is complete. Resolve the record HERE rather than at ActorDeath (the killing
+		// blow may not have landed yet then) but before anything else can reuse the
+		// index for a new NPC.
 		if (!pendingDeaths.isEmpty())
 		{
 			List<NPC> toProcess = new ArrayList<>(pendingDeaths);
 			pendingDeaths.clear();
 			for (NPC deadNpc : toProcess)
 			{
-				processNpcDeath(deadNpc);
+				FightRecord fight = fights.remove(deadNpc.getIndex());
+
+				// STRICT CHECK: only credit kills where we damaged THIS NPC instance.
+				// A record exists only because one of our own hitsplats created it.
+				if (fight == null || fight.damage <= 0)
+				{
+					continue;
+				}
+
+				DeathRecord death = new DeathRecord(deadNpc, fight, currentTick);
+
+				// The on-task gate needs Slayer XP that has not arrived yet — park it.
+				if (needsOnTaskWait(deadNpc))
+				{
+					heldDeaths.add(death);
+				}
+				else
+				{
+					processNpcDeath(death);
+				}
 			}
 		}
+
+		// Drop fights we have not touched in a while so the map can't grow unbounded.
+		if (!fights.isEmpty())
+		{
+			fights.values().removeIf(f -> currentTick - f.lastHitTick > FIGHT_RECORD_TTL_TICKS);
+		}
+
+		// Sample NPC health for the NEXT tick's first-hit freshness check. Done last,
+		// so the sample reflects the end of this tick — i.e. the state of the world
+		// BEFORE any hit we land next tick. Only needed while a restricted task is up.
+		sampleNpcHealth();
 
 		// Check for expired pending drop kills
 		if (!pendingDropKills.isEmpty())
@@ -379,70 +538,71 @@ public class NPCKillModule extends AbstractTaskModule
 		previousSlayerXp = xp;
 	}
 
-	@Subscribe
-	public void onInteractingChanged(InteractingChanged event)
-	{
-		Actor source = event.getSource();
-		Actor target = event.getTarget();
+	// NOTE: there is deliberately no onInteractingChanged handler any more. Tracking
+	// used to hang off it, which meant a fight only existed if the player had CLICKED
+	// the NPC — the root of both cannon bugs (see the `fights` field). Damage is the
+	// signal now: if one of our hitsplats landed on it, we have a stake in it, however
+	// it was delivered.
 
-		// Only track player interactions with NPCs
-		if (source != client.getLocalPlayer() || !(target instanceof NPC))
+	/**
+	 * Record every NPC's health as of the end of this tick, for next tick's
+	 * first-hit freshness check. Skipped entirely unless a restricted (time or
+	 * equipment) task is active, since nothing else consults it.
+	 */
+	private void sampleNpcHealth()
+	{
+		if (!hasRestrictedTask())
 		{
+			if (!healthAtPreviousTick.isEmpty())
+			{
+				healthAtPreviousTick.clear();
+			}
 			return;
 		}
 
-		NPC npc = (NPC) target;
-
-		// IMPORTANT: Only track combat-capable NPCs or task target NPCs
-		// This prevents resetting tracking when talking to shopkeepers, random events, etc.
-		boolean isCombatNpc = npc.getCombatLevel() > 0;
-		boolean isTaskTarget = isNpcTaskTarget(npc.getId());
-
-		if (!isCombatNpc && !isTaskTarget)
+		healthAtPreviousTick.clear();
+		for (NPC npc : client.getNpcs())
 		{
-			return; // Don't reset tracking for non-combat NPCs
-		}
-
-		// Always track the current target if we have any active tasks
-		if (!activeTasks.isEmpty())
-		{
-			// Only reset tracking if switching to a NEW target
-			boolean isSameTarget = (currentTargetIndex == npc.getIndex());
-
-			if (!isSameTarget)
+			if (npc != null)
 			{
-				// New target - reset everything
-				currentTarget = npc;
-				currentTargetIndex = npc.getIndex();
-				damageDealtToTarget = 0;
-				combatStartTick = -1; // Reset combat timer for new target
-				equipViolatedTaskIds.clear(); // fresh fight, fresh equipment record
-				currentTargetContested = false; // fresh fight, no other-damage yet
+				healthAtPreviousTick.put(npc.getIndex(),
+					new HealthSample(npc.getHealthRatio(), npc.getHealthScale()));
 			}
-			else
-			{
-				// Same target - just update reference
-				currentTarget = npc;
-			}
-			// Equipment constraints are validated per hitsplat (onHitsplatApplied)
-			// and re-checked at kill time in processNpcDeath.
 		}
 	}
 
-	/**
-	 * Check if an NPC ID is a target for any active task.
-	 */
-	private boolean isNpcTaskTarget(int npcId)
+	private boolean hasRestrictedTask()
 	{
 		for (NuzlockeTask task : activeTasks)
 		{
-			TargetNpc targetNpc = task.getTargetNpc();
-			if (targetNpc != null && targetNpc.matchesNpcId(npcId))
+			TaskConstraints c = task.getConstraints();
+			if (c != null && (c.hasTimeLimit() || c.hasEquipmentConstraints()))
 			{
 				return true;
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Was this NPC undamaged when we first hit it? Consults the END-OF-PREVIOUS-TICK
+	 * health sample, never a live read — our own hit may already be reflected in the
+	 * live value by the time HitsplatApplied fires, which would make every legitimate
+	 * speed kill look pre-softened.
+	 *
+	 * A ratio of -1 means no health bar is being shown, i.e. nobody has touched it.
+	 * No sample at all (just spawned, or the first tick a restricted task is active)
+	 * is treated as fresh: this gate exists to catch a specific cheat, and it must
+	 * fail OPEN on missing evidence rather than refuse honest kills.
+	 */
+	private boolean wasAtFullHealth(NPC npc)
+	{
+		HealthSample sample = healthAtPreviousTick.get(npc.getIndex());
+		if (sample == null || sample.ratio < 0)
+		{
+			return true;
+		}
+		return sample.scale <= 0 || sample.ratio >= sample.scale;
 	}
 
 	@Subscribe
@@ -464,13 +624,10 @@ public class NPCKillModule extends AbstractTaskModule
 				{
 					sessionStartPending = false;
 					lastLoginTick = client.getTickCount();
-					currentTarget = null;
-					currentTargetIndex = -1;
-					damageDealtToTarget = 0;
-					combatStartTick = -1;
-					equipViolatedTaskIds.clear();
-					currentTargetContested = false;
+					fights.clear();
+					healthAtPreviousTick.clear();
 					pendingDeaths.clear();
+					heldDeaths.clear();
 				}
 				break;
 			default:
@@ -481,64 +638,84 @@ public class NPCKillModule extends AbstractTaskModule
 	@Subscribe
 	public void onHitsplatApplied(HitsplatApplied event)
 	{
-		if (currentTarget == null)
+		if (!(event.getActor() instanceof NPC))
 		{
 			return;
 		}
 
-		// Track damage dealt to our target
-		if (event.getActor() == currentTarget)
+		NPC npc = (NPC) event.getActor();
+		Hitsplat hitsplat = event.getHitsplat();
+		int index = npc.getIndex();
+
+		// Another player damaging an NPC we're fighting contests it — restricted
+		// (time/equipment) kills require EXCLUSIVE damage. isOthers() is the
+		// DAMAGE_OTHER* family only, so our own cannon/poison never trips it. Only
+		// meaningful for NPCs we have a stake in; if they hit it BEFORE we ever did,
+		// the fight simply won't start fresh and the freshness gate refuses it.
+		if (hitsplat.isOthers())
 		{
-			// Another player damaging our target contests the fight — restricted
-			// (time/equipment) kills require EXCLUSIVE damage. isOthers() is the
-			// DAMAGE_OTHER* family only, so our own cannon/poison never trips it.
-			if (event.getHitsplat().isOthers() && !currentTargetContested)
+			FightRecord fight = fights.get(index);
+			if (fight != null && !fight.contested)
 			{
-				currentTargetContested = true;
-				log.info("[NPCKILL-DEBUG] target contested by another player's damage (index={})",
-					currentTargetIndex);
+				fight.contested = true;
+				log.info("[NPCKILL-DEBUG] fight contested by another player's damage (index={})", index);
 			}
+			return;
+		}
 
-			// Only count damage from the player
-			if (event.getHitsplat().isMine())
+		if (!hitsplat.isMine())
+		{
+			return;
+		}
+
+		// OUR damage — however it was delivered. A cannonball, a thrall, or a whip all
+		// give us a stake in this NPC and all start the clock. No prior interaction
+		// required: that requirement is exactly what made cannon kills invisible.
+		int tick = client.getTickCount();
+		FightRecord fight = fights.get(index);
+		if (fight == null)
+		{
+			fight = new FightRecord(index);
+			// Freshness is decided ONCE, on the first hit we land, from the previous
+			// tick's health sample. Later hits obviously find it damaged — by us.
+			fight.startedFresh = wasAtFullHealth(npc);
+			fight.combatStartTick = tick;
+			fights.put(index, fight);
+
+			if (!fight.startedFresh)
 			{
-				int damage = event.getHitsplat().getAmount();
-				damageDealtToTarget += damage;
+				log.info("[NPCKILL-DEBUG] fight started on an already-damaged NPC (index={} name='{}')",
+					index, npc.getName());
+			}
+		}
 
-				// Track combat start tick (first hitsplat on this target)
-				if (combatStartTick < 0)
-				{
-					combatStartTick = client.getTickCount();
-				}
+		fight.damage += hitsplat.getAmount();
+		fight.lastHitTick = tick;
 
-				// Validate equipment constraints on EVERY hit we land, not
-				// just the killing blow — otherwise "fight in full gear,
-				// unequip for the last hit" passes the kill-time check. A
-				// violation taints the task for the rest of THIS fight
-				// (cleared on target change).
-				for (NuzlockeTask task : activeTasks)
+		// Validate equipment constraints on EVERY hit we land, not just the killing
+		// blow — otherwise "fight in full gear, unequip for the last hit" passes the
+		// kill-time check. A violation taints the task for the rest of THIS fight.
+		for (NuzlockeTask task : activeTasks)
+		{
+			TaskConstraints c = task.getConstraints();
+			if (c != null && c.hasEquipmentConstraints()
+				&& !fight.equipViolatedTaskIds.contains(task.getTaskId()))
+			{
+				String violation = validateEquipmentForTask(task);
+				if (violation != null)
 				{
-					TaskConstraints c = task.getConstraints();
-					if (c != null && c.hasEquipmentConstraints()
-						&& !equipViolatedTaskIds.contains(task.getTaskId()))
-					{
-						String violation = validateEquipmentForTask(task);
-						if (violation != null)
-						{
-							equipViolatedTaskIds.add(task.getTaskId());
-							log.info("[NPCKILL-DEBUG] equipment violated mid-fight for '{}': {}",
-								task.getTaskId(), violation);
-						}
-					}
-				}
-
-				// Track animation for verification
-				Player player = client.getLocalPlayer();
-				if (player != null)
-				{
-					lastKillingBlowAnimation = player.getAnimation();
+					fight.equipViolatedTaskIds.add(task.getTaskId());
+					log.info("[NPCKILL-DEBUG] equipment violated mid-fight for '{}': {}",
+						task.getTaskId(), violation);
 				}
 			}
+		}
+
+		// Track animation for verification
+		Player player = client.getLocalPlayer();
+		if (player != null)
+		{
+			fight.killingBlowAnimation = player.getAnimation();
 		}
 	}
 
@@ -608,7 +785,7 @@ public class NPCKillModule extends AbstractTaskModule
 				sendTaskProgress(pending.task, details);
 
 				// Credit the kill
-				sendKillReport(pending.killedNpc, pending.task);
+				sendKillReport(pending.killedNpc, pending.task, pending.fight);
 				incrementTaskProgress(pending.task, 1);
 
 				it.remove();
@@ -799,49 +976,50 @@ public class NPCKillModule extends AbstractTaskModule
 		NPC npc = (NPC) actor;
 
 		// Defer to onGameTick. ActorDeath can fire BEFORE the killing blow's
-		// HitsplatApplied on same-tick kills (one-shots, low-HP NPCs), so damage
-		// and combatStartTick are still 0/-1 here. Processing on the next GameTick
-		// drain ensures hitsplats from this tick are counted first.
+		// HitsplatApplied on same-tick kills (one-shots, low-HP NPCs), so the fight
+		// record may not exist yet. Processing on the GameTick drain ensures hitsplats
+		// from this tick are counted first.
 		pendingDeaths.add(npc);
 	}
 
-	private void processNpcDeath(NPC npc)
+	/**
+	 * Does any task this NPC could credit need the on-task slayer gate? Such deaths
+	 * wait for their Slayer XP rather than being decided immediately.
+	 */
+	private boolean needsOnTaskWait(NPC npc)
+	{
+		for (NuzlockeTask task : findMatchingTasks(npc))
+		{
+			if (requiresOnTaskGate(task))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void processNpcDeath(DeathRecord death)
 	{
 		if (activeTasks.isEmpty())
 		{
 			return;
 		}
 
-		// STRICT CHECK: Only credit kills where we damaged THIS SPECIFIC NPC
-		// Must match by index (unique per NPC instance) AND have dealt damage
-		boolean wasOurKill = (currentTargetIndex == npc.getIndex()) && (damageDealtToTarget > 0);
-
-		// Also check by reference as backup (same object in memory)
-		if (!wasOurKill && currentTarget == npc && damageDealtToTarget > 0)
-		{
-			wasOurKill = true;
-		}
-
-		if (!wasOurKill)
-		{
-			return;
-		}
+		NPC npc = death.npc;
+		FightRecord fight = death.fight;
 
 		// Diagnostic for collecting real runtime NPC ids in-game: the wiki id often
 		// differs from / is incomplete vs what the client reports (level/spawn/hue
 		// variants). If a kill doesn't credit a task you expected, grep this line
 		// for the actual id and add it to the task's npc_ids.
-		log.info("[NPCKILL-DEBUG] confirmed kill: id={} name='{}'", npc.getId(), npc.getName());
+		log.info("[NPCKILL-DEBUG] confirmed kill: id={} name='{}' damage={} fresh={} contested={}",
+			npc.getId(), npc.getName(), fight.damage, fight.startedFresh, fight.contested);
 
 		// Check all active tasks for a match
 		List<NuzlockeTask> matchingTasks = mostSpecificMatches(findMatchingTasks(npc));
 
 		if (matchingTasks.isEmpty())
 		{
-			// Reset tracking anyway
-			currentTarget = null;
-			currentTargetIndex = -1;
-			damageDealtToTarget = 0;
 			return;
 		}
 
@@ -855,7 +1033,7 @@ public class NPCKillModule extends AbstractTaskModule
 			// credited the right monster even while assigned to a different one.)
 			if (requiresOnTaskGate(task))
 			{
-				if (!wasOnTaskKill())
+				if (!wasOnTaskKill(death.deathTick))
 				{
 					sendTaskFailure(task, "Not on a slayer task for this monster");
 					continue; // Skip this task, don't credit the kill
@@ -874,19 +1052,37 @@ public class NPCKillModule extends AbstractTaskModule
 
 			if (!dropOnlyTask)
 			{
-				// Fight-integrity gate for RESTRICTED kills: a relog/world hop
-				// wipes combat tracking, so a fight resumed right after logging
-				// back in is only measured from its post-relog tail. Testers
-				// pre-softened an NPC, relogged, and finished it "in 2.4s" /
-				// "with nothing equipped". Restricted kills must belong to a
-				// fight that STARTED at least FRESH_FIGHT_GRACE_TICKS after
-				// the session began.
-				if ((hasTimeConstraint || hasEquipConstraint)
-					&& lastLoginTick >= 0 && combatStartTick >= 0
-					&& combatStartTick - lastLoginTick < FRESH_FIGHT_GRACE_TICKS)
+				// Full-health gate for RESTRICTED kills: the fight must start on an
+				// UNTOUCHED monster. This is what stops softening it with a cannon
+				// (or letting anything else chip it) and then landing the "first
+				// hit" that the timer measures from — Cruk's scorpion, 2026-07-16.
+				if ((hasTimeConstraint || hasEquipConstraint) && !fight.startedFresh)
 				{
 					sendTaskFailure(task,
-						"Restricted kill must be a fresh fight — wait ~30s after logging in, then fight it start to finish");
+						"Restricted kill must start from full health — this monster was already damaged when you first hit it");
+					continue; // Skip this task, don't credit the kill
+				}
+
+				// Fight-integrity gate for RESTRICTED kills: a relog/world hop wipes
+				// combat tracking, so a fight resumed right after logging back in is
+				// only measured from its post-relog tail. Testers pre-softened an NPC,
+				// relogged, and finished it "in 2.4s" / "with nothing equipped".
+				// Restricted kills must belong to a fight that STARTED at least a grace
+				// period after the session began.
+				//
+				// This is NOT made redundant by the full-health gate above: a relog
+				// also clears the client's health bars, so a pre-softened NPC reports
+				// ratio -1 ("untouched") on the first hit after logging back in and
+				// would sail through freshness. The two gates cover different halves
+				// of the same cheat — keep both.
+				int grace = freshFightGraceTicks(constraints);
+				if ((hasTimeConstraint || hasEquipConstraint)
+					&& lastLoginTick >= 0 && fight.combatStartTick >= 0
+					&& fight.combatStartTick - lastLoginTick < grace)
+				{
+					sendTaskFailure(task, String.format(
+						"Restricted kill must be a fresh fight — wait ~%.0fs after logging in, then fight it start to finish",
+						grace * 0.6));
 					continue; // Skip this task, don't credit the kill
 				}
 
@@ -895,7 +1091,7 @@ public class NPCKillModule extends AbstractTaskModule
 				// shared spawn) invalidates a speed/equipment attempt — you must
 				// solo it. Recorded per-fight in onHitsplatApplied via
 				// Hitsplat.isOthers(). Plain "defeat X" kills are unaffected.
-				if ((hasTimeConstraint || hasEquipConstraint) && currentTargetContested)
+				if ((hasTimeConstraint || hasEquipConstraint) && fight.contested)
 				{
 					sendTaskFailure(task,
 						"Restricted kill must be solo — another player damaged this monster");
@@ -913,7 +1109,7 @@ public class NPCKillModule extends AbstractTaskModule
 				// Equipment violated at ANY point during this fight (recorded
 				// per hitsplat) — unequipping before the killing blow doesn't
 				// launder the earlier hits.
-				if (hasEquipConstraint && equipViolatedTaskIds.contains(task.getTaskId()))
+				if (hasEquipConstraint && fight.equipViolatedTaskIds.contains(task.getTaskId()))
 				{
 					sendTaskFailure(task, "Equipment: restricted gear was worn during the fight");
 					continue; // Skip this task, don't credit the kill
@@ -929,7 +1125,7 @@ public class NPCKillModule extends AbstractTaskModule
 				}
 
 				// Time constraint check - validate kill was fast enough
-				String timeViolation = validateTimeConstraintForTask(task);
+				String timeViolation = validateTimeConstraintForTask(task, fight, death.deathTick);
 				if (timeViolation != null)
 				{
 					sendTaskFailure(task, "Time: " + timeViolation);
@@ -952,18 +1148,19 @@ public class NPCKillModule extends AbstractTaskModule
 				if (foundQuantity >= requiredQuantity)
 				{
 					// Send progress to chatbox
-					String details = String.format("Killed %s and received %s drop", npc.getName(), dropName) + killTimeSuffix();
+					String details = String.format("Killed %s and received %s drop", npc.getName(), dropName)
+						+ killTimeSuffix(fight, death.deathTick);
 					sendTaskProgress(task, details);
 
 					// Credit the kill immediately
-					sendKillReport(npc, task);
+					sendKillReport(npc, task, fight);
 					incrementTaskProgress(task, 1);
 					continue;
 				}
 
 				// Item not found yet - add to pending and wait for ItemSpawned event
 				PendingDropKill pending = new PendingDropKill(
-					task, npc, deathLocation, client.getTickCount(),
+					task, npc, fight, deathLocation, death.deathTick,
 					requiredItemIds, requiredQuantity);
 				pending.collectedQuantity = foundQuantity; // Track what we already found
 				pendingDropKills.put(task.getTaskId(), pending);
@@ -974,21 +1171,18 @@ public class NPCKillModule extends AbstractTaskModule
 
 			// No drop constraint - credit the kill immediately
 			// Send progress to chatbox
-			String details = String.format("Killed %s", npc.getName()) + killTimeSuffix();
+			String details = String.format("Killed %s", npc.getName()) + killTimeSuffix(fight, death.deathTick);
 			sendTaskProgress(task, details);
 
 			// Send kill report to server
-			sendKillReport(npc, task);
+			sendKillReport(npc, task, fight);
 
 			// Increment progress on the task
 			incrementTaskProgress(task, 1);
 		}
 
-		// Reset tracking
-		currentTarget = null;
-		currentTargetIndex = -1;
-		damageDealtToTarget = 0;
-		combatStartTick = -1;
+		// No tracking to reset: the fight record was removed from `fights` when the
+		// death was drained, and dies with this DeathRecord.
 	}
 
 	/**
@@ -1090,7 +1284,7 @@ public class NPCKillModule extends AbstractTaskModule
 	/**
 	 * Send a kill report to the server for verification.
 	 */
-	private void sendKillReport(NPC npc, NuzlockeTask task)
+	private void sendKillReport(NPC npc, NuzlockeTask task, FightRecord fight)
 	{
 		Player player = client.getLocalPlayer();
 		if (player == null || task == null)
@@ -1112,8 +1306,8 @@ public class NPCKillModule extends AbstractTaskModule
 			.timestamp(System.currentTimeMillis())
 			.playerCombatLevel(player.getCombatLevel())
 			.playerCurrentHp(client.getBoostedSkillLevel(net.runelite.api.Skill.HITPOINTS))
-			.killingBlowAnimationId(lastKillingBlowAnimation)
-			.damageDealt(damageDealtToTarget)
+			.killingBlowAnimationId(fight.killingBlowAnimation)
+			.damageDealt(fight.damage)
 			.equipmentIds(getEquipmentIds())
 			.lootReceived(new ArrayList<>());
 
@@ -1221,17 +1415,20 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	/**
-	 * True if the kill currently being processed was an on-task slayer kill — i.e.
-	 * a Slayer XP gain landed within SLAYER_XP_WINDOW_TICKS of now. Off-task kills
-	 * award no Slayer XP, so this distinguishes "killed my assigned monster" from
-	 * "killed a monster that merely matches the task while assigned to something
-	 * else". SLAYER_COUNT (varp 394) is intentionally no longer used — it only
-	 * told us the player had *an* assignment, not *which* one.
+	 * True if the kill that happened on deathTick was an on-task slayer kill — i.e. a
+	 * Slayer XP gain landed within SLAYER_XP_WINDOW_TICKS of the DEATH, in either
+	 * direction. Off-task kills award no Slayer XP, so this distinguishes "killed my
+	 * assigned monster" from "killed a monster that merely matches the task while
+	 * assigned to something else". SLAYER_COUNT (varp 394) is intentionally not used —
+	 * it only told us the player had *an* assignment, not *which* one.
+	 *
+	 * Compares against deathTick, NOT the current tick: gated deaths are held until
+	 * the XP arrives, so "now" drifts away from the kill while we wait.
 	 */
-	private boolean wasOnTaskKill()
+	private boolean wasOnTaskKill(int deathTick)
 	{
-		int tick = client.getTickCount();
-		return lastSlayerXpGainTick > 0 && (tick - lastSlayerXpGainTick) <= SLAYER_XP_WINDOW_TICKS;
+		return lastSlayerXpGainTick > 0
+			&& Math.abs(lastSlayerXpGainTick - deathTick) <= SLAYER_XP_WINDOW_TICKS;
 	}
 
 	/**
@@ -1387,7 +1584,7 @@ public class NPCKillModule extends AbstractTaskModule
 	 * @param task The task with potential time constraints
 	 * @return null if valid (or no constraint), or a string describing the violation
 	 */
-	private String validateTimeConstraintForTask(NuzlockeTask task)
+	private String validateTimeConstraintForTask(NuzlockeTask task, FightRecord fight, int deathTick)
 	{
 		TaskConstraints constraints = task.getConstraints();
 
@@ -1397,15 +1594,17 @@ public class NPCKillModule extends AbstractTaskModule
 		}
 
 		int allowedTicks = constraints.getTimeInTicks();
-		int currentTick = client.getTickCount();
 
 		// Check if we have a valid combat start tick
-		if (combatStartTick < 0)
+		if (fight.combatStartTick < 0)
 		{
 			return "Time constraint failed - no combat start recorded";
 		}
 
-		int elapsedTicks = currentTick - combatStartTick;
+		// Measured to the DEATH, not to now: a death held for its Slayer XP is decided
+		// a couple of ticks late, and charging the player for that wait would fail
+		// speed kills that were actually in time.
+		int elapsedTicks = deathTick - fight.combatStartTick;
 		double elapsedSeconds = elapsedTicks * 0.6;
 
 		if (elapsedTicks > allowedTicks)
@@ -1424,13 +1623,13 @@ public class NPCKillModule extends AbstractTaskModule
 	 * message so players see the kill time on success too — mirroring the time the
 	 * failure message already reports. 1 game tick = 0.6 seconds.
 	 */
-	private String killTimeSuffix()
+	private String killTimeSuffix(FightRecord fight, int deathTick)
 	{
-		if (combatStartTick < 0)
+		if (fight.combatStartTick < 0)
 		{
 			return "";
 		}
-		int elapsedTicks = client.getTickCount() - combatStartTick;
+		int elapsedTicks = deathTick - fight.combatStartTick;
 		if (elapsedTicks < 0)
 		{
 			return "";
