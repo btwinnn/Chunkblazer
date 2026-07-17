@@ -6,7 +6,7 @@
                 {
                     "name": "Obtain a Mystic Air, Water, Earth, and Fire Staff",
                     "taskID": "obtain_mystic_air_water_earth_fire_staff",
-                    "category": "Obtain",
+                    "category": "Obtain_Set",
                     "completion_type": "OBTAIN",
                     "base_points": 1,
                     "assignment_weight": 10,
