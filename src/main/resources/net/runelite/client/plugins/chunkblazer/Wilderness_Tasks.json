@@ -2542,7 +2542,7 @@
                     "required_items": [
                         {
                             "item": ["Odium Shard 2"],
-                            "item_ids": [11929],
+                            "item_ids": [11929, 11926, 12807],
                             "quantity": [1]
                         }
                     ]
@@ -2557,7 +2557,7 @@
                     "required_items": [
                         {
                             "item": ["Malediction Shard 2"],
-                            "item_ids": [11932],
+                            "item_ids": [11932, 12806, 11924],
                             "quantity": [1]
                         }
                     ]
@@ -5635,7 +5635,7 @@
                     "required_items": [
                         {
                             "item": ["Odium Shard 1"],
-                            "item_ids": [11928],
+                            "item_ids": [11928, 11926, 12807],
                             "quantity": [1]
                         }
                     ]
@@ -5650,7 +5650,7 @@
                     "required_items": [
                         {
                             "item": ["Malediction Shard 1"],
-                            "item_ids": [11931],
+                            "item_ids": [11931, 12806, 11924],
                             "quantity": [1]
                         }
                     ]
@@ -6713,7 +6713,7 @@
                     "required_items": [
                         {
                             "item": ["Odium Shard 3"],
-                            "item_ids": [11930],
+                            "item_ids": [11930, 11926, 12807],
                             "quantity": [1]
                         }
                     ]
@@ -6728,7 +6728,7 @@
                     "required_items": [
                         {
                             "item": ["Malediction Shard 3"],
-                            "item_ids": [11933],
+                            "item_ids": [11933, 12806, 11924],
                             "quantity": [1]
                         }
                     ]
@@ -7008,6 +7008,74 @@
                         {
                             "item": ["Rune 2H Sword"],
                             "item_ids": [1319]
+                        }
+                    ]
+                }               
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [13373],
+            "neighbor_ids": [13374, 13629, 13372, 13117],
+            "Friendly_Name": "Blighted Volcano",
+            "tasks": [
+                {
+                    "name": "Equip an Odium Ward",
+                    "taskID": "equip_odium_ward",
+                    "category": "Defence",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Odium Ward"],
+                            "item_ids": [11926, 12807]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Equip a Malediction Ward",
+                    "taskID": "equip_malediction_ward",
+                    "category": "Defence",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Malediction Ward"],
+                            "item_ids": [12806, 11924]
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Hard STASH Unit in the Blighted Volcano",
+                "taskID": "build_hard_stash_blighted_volcano",
+                "category": "Construction",
+                "level": 55,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,                
+                "required_finished_object": [
+                        {
+                        "object": "Hard STASH Unit (Inconspicuous Rocks)",
+                        "object_id": [29020]
+                        }
+                    ]
+                },             
+                {
+                    "name": "Obtain a Gold Ring",
+                    "taskID": "obtain_gold_ring",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Gold Ring"],
+                            "item_ids": [1635],
+                            "quantity": [1]
                         }
                     ]
                 }               
