@@ -385,7 +385,10 @@ public class SkillModule extends AbstractTaskModule
 			.totalLevel(client.getTotalLevel())
 			.build();
 
+		// This report's taskId IS activeTask's (see the builder above), so the ack
+		// belongs to activeTask — unlike NPCKillModule, which reports per matching task.
+		NuzlockeTask reportedTask = activeTask;
 		apiClient.reportSkillChange(report)
-			.thenAccept(this::handleVerificationResponse);
+			.thenAccept(response -> handleVerificationResponse(response, reportedTask));
 	}
 }

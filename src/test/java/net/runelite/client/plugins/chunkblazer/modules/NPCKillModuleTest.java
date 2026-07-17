@@ -13,6 +13,7 @@ import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.StatChanged;
+import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.Hitsplat;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.plugins.chunkblazer.NuzlockeTask;
@@ -683,10 +684,10 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 
 		// The kill-report ack arrives with the hardcoded receipt value.
 		java.lang.reflect.Method m = findMethod(npcKillModule.getClass(), "handleVerificationResponse",
-			net.runelite.client.plugins.chunkblazer.api.TaskVerificationResponse.class);
+			net.runelite.client.plugins.chunkblazer.api.TaskVerificationResponse.class, NuzlockeTask.class);
 		m.setAccessible(true);
 		m.invoke(npcKillModule, net.runelite.client.plugins.chunkblazer.api.TaskVerificationResponse.builder()
-			.success(true).taskCompleted(false).verifiedProgress(1).build());
+			.success(true).taskCompleted(false).verifiedProgress(1).build(), pirates);
 
 		assertEquals(2, pirates.getCurrentProgress(),
 			"a verifiedProgress=1 receipt must not stomp locally observed progress");
@@ -697,7 +698,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 
 		// A genuinely AHEAD server value is still allowed to catch us up.
 		m.invoke(npcKillModule, net.runelite.client.plugins.chunkblazer.api.TaskVerificationResponse.builder()
-			.success(true).taskCompleted(false).verifiedProgress(7).build());
+			.success(true).taskCompleted(false).verifiedProgress(7).build(), pirates);
 		assertEquals(7, pirates.getCurrentProgress(),
 			"a server value ahead of local progress may raise it");
 	}
@@ -872,6 +873,112 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 
 		assertEquals(1, task.getCurrentProgress(),
 			"opening on a full-health monster is exactly what the gate is meant to allow");
+	}
+
+	// --- Cannon on restricted tasks (Cruk, session_2026-07-16_20-00-46) ----------
+
+	/** Fire the cannon: VarPlayer 3 (cannonballs left) drops by one. */
+	private void fireCannonball(int ballsLeft)
+	{
+		VarbitChanged e = mock(VarbitChanged.class);
+		lenient().when(e.getVarpId()).thenReturn(3);
+		lenient().when(e.getValue()).thenReturn(ballsLeft);
+		npcKillModule.onVarbitChanged(e);
+	}
+
+	/**
+	 * A cannon fires up to 4 balls in ONE tick, so it genuinely one-shots small NPCs:
+	 * Cruk's scorpion took 17 damage and died on the tick it was first hit, honestly
+	 * satisfying "Defeat a Scorpion in the First Hit". The timer cannot refuse a kill
+	 * that really was that fast — only an explicit no-cannon rule can.
+	 */
+	@Test
+	void testCannonKill_rejectedOnRestrictedTask() throws Exception
+	{
+		NuzlockeTask task = speedTask(3024, 1); // "Defeat a Scorpion in the First Hit"
+		npcKillModule.addActiveTask(task);
+
+		fireCannonball(60); // baseline: cannon loaded
+		NPC scorpion = mockNpc(3024, 1, "Scorpion");
+		fireCannonball(59); // a ball leaves the barrel...
+		fireMyHitsplat(scorpion, 17); // ...and lands, killing it outright
+		killAndDrain(scorpion);
+
+		assertEquals(0, task.getCurrentProgress(),
+			"a cannon kill must not credit a restricted task");
+	}
+
+	/**
+	 * The rule is scoped to RESTRICTED tasks. Cruk and Mike explicitly want the cannon
+	 * to keep counting for plain "defeat X" kills.
+	 */
+	@Test
+	void testCannonKill_stillCreditsPlainDefeatTask() throws Exception
+	{
+		NuzlockeTask task = createTaskWithNpc("Defeat some Scorpions", "defeat_scorpions", "NPC_KILL", 5, Arrays.asList(3024));
+		npcKillModule.addActiveTask(task);
+
+		fireCannonball(60);
+		NPC scorpion = mockNpc(3024, 1, "Scorpion");
+		fireCannonball(59);
+		fireMyHitsplat(scorpion, 17);
+		killAndDrain(scorpion);
+
+		assertEquals(1, task.getCurrentProgress(),
+			"a plain defeat task still credits a cannon kill");
+	}
+
+	/**
+	 * Loading the cannon (balls go UP) is not firing, and a stale shot from an earlier
+	 * fight must not taint a later honest one.
+	 */
+	@Test
+	void testRestrictedKill_creditsWhenCannonDidNotFireDuringTheFight() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 10);
+		npcKillModule.addActiveTask(task);
+
+		fireCannonball(30);
+		fireCannonball(29); // fired long before this fight
+		fireCannonball(60); // reloaded — an increase is not a shot
+
+		setTick(200);
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		fireMyHitsplat(mugger, 5);
+		setTick(202);
+		killAndDrain(mugger);
+
+		assertEquals(1, task.getCurrentProgress(),
+			"a restricted kill with no cannon fire during the fight credits normally");
+	}
+
+	// --- Server ack routing (Cruk's phantom highwayman, 2026-07-16 20:04) --------
+
+	/**
+	 * Cruk killed a SCORPION and 'Defeat a Highwayman in 24 Seconds' ticked itself off
+	 * — no kill, no chat message. Every kill report's ack was applied to `activeTask`,
+	 * the legacy pointer set to whichever task registered FIRST, instead of the task
+	 * the report was about. The server hardcodes verifiedProgress=1, so one scorpion
+	 * silently completed an unrelated 1-of-1 task.
+	 */
+	@Test
+	void testAck_appliesToReportedTaskNotWhicheverRegisteredFirst() throws Exception
+	{
+		// Registered first → this is what `activeTask` points at.
+		NuzlockeTask highwayman = createTaskWithNpc("Defeat a Highwayman in 24 Seconds", "defeat_highwayman_fast", "NPC_KILL", 1, Arrays.asList(2234));
+		npcKillModule.addActiveTask(highwayman);
+		NuzlockeTask scorpions = createTaskWithNpc("Defeat some Scorpions", "defeat_scorpions", "NPC_KILL", 5, Arrays.asList(3024));
+		npcKillModule.addActiveTask(scorpions);
+
+		// A scorpion dies; its ack comes back with the hardcoded receipt value.
+		java.lang.reflect.Method m = findMethod(npcKillModule.getClass(), "handleVerificationResponse",
+			net.runelite.client.plugins.chunkblazer.api.TaskVerificationResponse.class, NuzlockeTask.class);
+		m.setAccessible(true);
+		m.invoke(npcKillModule, net.runelite.client.plugins.chunkblazer.api.TaskVerificationResponse.builder()
+			.success(true).taskCompleted(false).verifiedProgress(1).build(), scorpions);
+
+		assertEquals(0, highwayman.getCurrentProgress(),
+			"a scorpion's ack must not tick off the highwayman task");
 	}
 
 	/**

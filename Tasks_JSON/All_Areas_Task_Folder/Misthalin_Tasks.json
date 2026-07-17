@@ -3490,14 +3490,7 @@
                     
                     "constraints": {
                         "time_in_ticks": [36],
-                         "equippable_slots": ["WEAPON"],
-                         "prohibited_active_varbits": [
-                                {
-                                    "varbit_id": 57,
-                                    "must_be_value": 0,
-                                    "fail_message": "Cannon use is prohibited for timed combat tasks."
-                                }
-                            ]
+                         "equippable_slots": ["WEAPON"]
                         }
                 },
                 {

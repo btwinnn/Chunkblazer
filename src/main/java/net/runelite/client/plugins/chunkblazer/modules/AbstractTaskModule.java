@@ -151,17 +151,32 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 	}
 
 	/**
-	 * Handle the server verification response.
+	 * Handle the server verification response for the task the report was ABOUT.
+	 *
+	 * `reportedTask` is not optional. The old signature had no task parameter and
+	 * applied the ack to `activeTask` — the legacy single-task pointer, which
+	 * addActiveTask() sets to whichever task happened to register FIRST. So every
+	 * ack, for every kill, landed on one arbitrary task:
+	 *
+	 *   Cruk, session_2026-07-16_20-00-46 — he killed a SCORPION at 20:01:47, which
+	 *   sent three kill reports (one per matching task). Each came back with the
+	 *   hardcoded verifiedProgress=1 and each raised progress on the module's first
+	 *   registered task, 'Defeat a Highwayman in 24 Seconds'. It ticked itself off
+	 *   with no kill and no chat message (incrementTaskProgress was never called),
+	 *   and only ChunkBlazerPlugin's PROGRESS REGRESSION guard caught it at login.
+	 *
+	 * The raise-only rule below was the earlier half of this fix; it stopped an ack
+	 * LOWERING the wrong task but still let it raise one. Routing is the other half.
 	 */
-	protected void handleVerificationResponse(TaskVerificationResponse response)
+	protected void handleVerificationResponse(TaskVerificationResponse response, NuzlockeTask reportedTask)
 	{
 		if (response.isSuccess())
 		{
 			if (response.isTaskCompleted())
 			{
-				if (completionCallback != null && activeTask != null)
+				if (completionCallback != null && reportedTask != null)
 				{
-					completionCallback.onServerVerified(activeTask, response.getPointsAwarded());
+					completionCallback.onServerVerified(reportedTask, response.getPointsAwarded());
 				}
 			}
 			else
@@ -176,10 +191,13 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 				// allowed; REGRESSION is not — locally observed progress wins
 				// until a real sync says otherwise.
 				int verified = response.getVerifiedProgress();
-				if (activeTask != null && verified > activeTask.getCurrentProgress())
+				if (reportedTask != null && verified > reportedTask.getCurrentProgress())
 				{
-					currentProgress = verified;
-					activeTask.setCurrentProgress(verified);
+					reportedTask.setCurrentProgress(verified);
+					if (reportedTask == activeTask)
+					{
+						currentProgress = verified;
+					}
 				}
 			}
 		}

@@ -25,14 +25,7 @@
                     },
                     
                     "constraints": {
-                        "time_in_ticks": [20],
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for timed combat tasks."
-                            }
-                        ]
+                        "time_in_ticks": [20]
                     }
                 },
                 {
@@ -63,15 +56,7 @@
 
                     "constraints": {                       
                         "equip_nothing": "TRUE"
-                    },
-
-                        "prohibited_active_varbits": [
-                            {
-                                "varbit_id": 57,
-                                "must_be_value": 0,
-                                "fail_message": "Cannon use is prohibited for equipment combat tasks."
-                            }
-                        ]                                      
+                    }                                      
                 },
                 {
                     "name": "Defeat a Grizzly Bear on Task",

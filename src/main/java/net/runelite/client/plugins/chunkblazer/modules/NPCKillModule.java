@@ -31,6 +31,7 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.ItemSpawned;
 import net.runelite.api.events.StatChanged;
+import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
@@ -75,6 +76,35 @@ public class NPCKillModule extends AbstractTaskModule
 	private static final int ON_TASK_WAIT_TICKS = 2;
 	private int previousSlayerXp = -1;
 	private int lastSlayerXpGainTick = -1;
+
+	// ── Cannon detection for RESTRICTED kills ────────────────────────────
+	// VarPlayer 3 is the remaining cannonball count — the same value RuneLite's own
+	// CannonPlugin reads as `cballsLeft` (verified by disassembly, 2026-07-16). A
+	// DECREASE means our cannon just fired. That is the only clean, first-party
+	// signal available: a cannonball's hitsplat is an ordinary DAMAGE_ME splat with
+	// nothing to distinguish it from a whip hit.
+	//
+	// Why a rule is needed at all, when the fight timer now starts at the cannon's
+	// first hit: a cannon fires up to 4 balls in ONE tick, so it genuinely one-shots
+	// small NPCs. Cruk's scorpion (session_2026-07-16_20-00-46) took 17 damage and
+	// died in the same tick it was first hit — a real 0-tick kill that satisfied
+	// "Defeat a Scorpion in the First Hit" honestly. No timing logic can refuse that;
+	// only an explicit "no cannon" rule can.
+	//
+	// NOTE: this REPLACES the `varbit_id: 57` constraint that 35 tasks carried with
+	// the message "Cannon use is prohibited for timed combat tasks". Varbit 57 is
+	// BOARDGAMES_DRAUGHTS_MUSTTAKE — a draughts board game — so it read 0 forever and
+	// the constraint never once blocked a cannon. Those dead constraints have been
+	// removed from the task JSON; the rule now lives here and covers EVERY restricted
+	// task automatically rather than the 35 that happened to be authored with it.
+	private static final int CANNONBALL_VARP = 3;
+	private int previousCannonballs = -1;
+	private int lastCannonFiredTick = -1;
+
+	// A ball is FIRED a tick or so before its hitsplat lands, so the shot that opens
+	// a cannon fight can precede combatStartTick. Look back this far past the fight's
+	// start when deciding whether a cannon was involved.
+	private static final int CANNON_FIRE_LOOKBACK_TICKS = 2;
 
 	@Inject
 	private VarPlayerVerificationService varPlayerService;
@@ -337,6 +367,8 @@ public class NPCKillModule extends AbstractTaskModule
 		healthAtPreviousTick.clear();
 		previousSlayerXp = -1;
 		lastSlayerXpGainTick = -1;
+		previousCannonballs = -1;
+		lastCannonFiredTick = -1;
 		pendingDropKills.clear();
 		pendingDeaths.clear();
 		heldDeaths.clear();
@@ -516,6 +548,44 @@ public class NPCKillModule extends AbstractTaskModule
 		}
 	}
 
+	/**
+	 * Watch the cannonball counter (VarPlayer 3). A drop means our cannon fired.
+	 * VarbitChanged carries varp changes too — getVarpId() identifies them.
+	 */
+	@Subscribe
+	public void onVarbitChanged(VarbitChanged event)
+	{
+		if (event.getVarpId() != CANNONBALL_VARP)
+		{
+			return;
+		}
+
+		int balls = event.getValue();
+		// First sighting is a baseline, not a shot — otherwise loading the cannon or
+		// logging in would look like firing. Same swallowed-baseline discipline as
+		// the Slayer XP sensor.
+		if (previousCannonballs >= 0 && balls < previousCannonballs)
+		{
+			lastCannonFiredTick = client.getTickCount();
+		}
+		previousCannonballs = balls;
+	}
+
+	/**
+	 * Did our cannon fire during this fight? True if a ball left the barrel between
+	 * the fight's start (less a little lookback for shot-to-hitsplat travel) and the
+	 * kill. Another player's cannon can't trip this — it doesn't touch our varp.
+	 */
+	private boolean cannonFiredDuring(FightRecord fight, int deathTick)
+	{
+		if (lastCannonFiredTick < 0 || fight.combatStartTick < 0)
+		{
+			return false;
+		}
+		return lastCannonFiredTick >= fight.combatStartTick - CANNON_FIRE_LOOKBACK_TICKS
+			&& lastCannonFiredTick <= deathTick;
+	}
+
 	@Subscribe
 	public void onStatChanged(StatChanged event)
 	{
@@ -628,6 +698,11 @@ public class NPCKillModule extends AbstractTaskModule
 					healthAtPreviousTick.clear();
 					pendingDeaths.clear();
 					heldDeaths.clear();
+					// Re-baseline the cannonball sensor: the varp is re-sent on login,
+					// and treating that first value as a shot would fail the next
+					// restricted kill for a cannon that never fired.
+					previousCannonballs = -1;
+					lastCannonFiredTick = -1;
 				}
 				break;
 			default:
@@ -1052,6 +1127,17 @@ public class NPCKillModule extends AbstractTaskModule
 
 			if (!dropOnlyTask)
 			{
+				// No-cannon gate for RESTRICTED kills. A cannon fires up to 4 balls
+				// per tick and genuinely one-shots small NPCs, so a cannon speed kill
+				// is fast for real — the timer can't tell it apart from skill. See
+				// the CANNONBALL_VARP comment for why this is a code rule rather
+				// than the (inert) per-task varbit constraint it replaces.
+				if ((hasTimeConstraint || hasEquipConstraint) && cannonFiredDuring(fight, death.deathTick))
+				{
+					sendTaskFailure(task, "Cannon use is prohibited for restricted tasks — kill it without your cannon firing");
+					continue; // Skip this task, don't credit the kill
+				}
+
 				// Full-health gate for RESTRICTED kills: the fight must start on an
 				// UNTOUCHED monster. This is what stops softening it with a cannon
 				// (or letting anything else chip it) and then landing the "first
@@ -1311,8 +1397,10 @@ public class NPCKillModule extends AbstractTaskModule
 			.equipmentIds(getEquipmentIds())
 			.lootReceived(new ArrayList<>());
 
+		// The ack must be applied to THIS task — the one whose taskId went out in the
+		// report above — not to whatever activeTask points at. See Cruk's highwayman.
 		apiClient.reportNpcKill(builder.build())
-			.thenAccept(this::handleVerificationResponse);
+			.thenAccept(response -> handleVerificationResponse(response, task));
 	}
 
 	/**
