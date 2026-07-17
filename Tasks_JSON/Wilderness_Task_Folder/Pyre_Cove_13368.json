@@ -36,7 +36,7 @@
                 {
                     "name": "Equip a Rune Longsword",
                     "taskID": "equip_rune_longsword",
-                    "category": "Defence",
+                    "category": "Attack",
                     "level": 40,
                     "completion_type": "EQUIP",
                     "base_points": 2,

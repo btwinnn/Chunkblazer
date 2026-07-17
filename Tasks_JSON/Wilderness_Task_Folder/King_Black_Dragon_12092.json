@@ -1,0 +1,125 @@
+{
+            "region_id": [12092],
+            "neighbor_ids": [12093, 12348, 12091, 11836],
+            "Friendly_Name": "King Black Dragon",
+            "tasks": [             
+                {
+                    "name": "Defeat the King Black Dragon",
+                    "taskID": "defeat_king_black_dragon",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["King Black Dragon"],
+                        "npc_ids": [239, 2642],
+                        "quantity": [25, 100]
+                    }
+                },
+                {
+                    "name": "Defeat the King Black Dragon in 36 Seconds",
+                    "taskID": "defeat_king_black_dragon_36s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["King Black Dragon"],
+                        "npc_ids": [239, 2642],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Obtain a Dragon Pickaxe",
+                    "taskID": "obtain_dragon_pickaxe",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Pickaxe"],
+                            "item_ids": [11920, 27695, 23677, 25376, 30351, 12797, 23680, 23682],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Med Helm",
+                    "taskID": "equip_dragon_med_helm",
+                    "category": "Defence",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon med helm"],
+                            "item_ids": [1149, 28057]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch a Rune Crossbow",
+                    "taskID": "fletch_rune_crossbow",
+                    "category": "Fletching",
+                    "level": 69,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Rune Crossbow"],
+                            "item_ids": [9185],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain KBD Heads",
+                    "taskID": "obtain_kbd_heads",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["KBD Heads"],
+                            "item_ids": [7980],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragonfire Shield",
+                    "taskID": "equip_dragonfire_shield",
+                    "category": "Defence",
+                    "level": 75,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Dragonfire Shield"],
+                            "item_ids": [11283, 11284]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Longsword",
+                    "taskID": "equip_rune_longsword",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Longsword"],
+                            "item_ids": [1303]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        }
