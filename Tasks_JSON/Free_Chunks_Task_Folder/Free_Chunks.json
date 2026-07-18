@@ -1094,7 +1094,541 @@
     "region_id": [14393],
     "Friendly_Name": "Fossil's Child",
     "neighbor_ids": [14394, 14649, 14392, 14137]
+},
+{
+    "region_id": [13625],
+    "Friendly_Name": "Bleakwater Bay",
+    "neighbor_ids": [13626, 13881, 13624, 13369]
+},
+{
+    "region_id": [13370],
+    "Friendly_Name": "Wilderness Barrens",
+    "neighbor_ids": [13371, 13626, 13369, 13114]
+},
+{
+    "region_id": [13627],
+    "Friendly_Name": "Wilderness Coast",
+    "neighbor_ids": [13628, 13883, 13626, 13371]
+},
+{
+    "region_id": [13628],
+    "Friendly_Name": "The Cinderwaters",
+    "neighbor_ids": [13629, 13884, 13627, 13372]
+},
+{
+    "region_id": [13629],
+    "Friendly_Name": "The Cinderwaters",
+    "neighbor_ids": [13630, 13885, 13628, 13373]
+},
+{
+    "region_id": [13630],
+    "Friendly_Name": "Daimon's Crater",
+    "neighbor_ids": [13631, 13886, 13629, 13374]
+},
+{
+    "region_id": [13631],
+    "Friendly_Name": "Daimon's Ward",
+    "neighbor_ids": [13632, 13887, 13630, 13375]
+},
+{
+    "region_id": [13632],
+    "Friendly_Name": "Frozen Temple",
+    "neighbor_ids": [13633, 13888, 13631, 13376]
+},
+{
+    "region_id": [13886],
+    "Friendly_Name": "Tower of Bounty",
+    "neighbor_ids": [13887, 14142, 13885, 13630]
+},
+{
+    "region_id": [13887],
+    "Friendly_Name": "Tower of Bounty",
+    "neighbor_ids": [13888, 14143, 13886, 13631]
+},
+{
+    "region_id": [13888],
+    "Friendly_Name": "Daimon's Crater",
+    "neighbor_ids": [13889, 14144, 13887, 13632]
+},
+{
+    "region_id": [14143],
+    "Friendly_Name": "Lithkren Coast",
+    "neighbor_ids": [14144, 14399, 14142, 13887]
+},
+{
+    "region_id": [14398],
+    "Friendly_Name": "Ancient Reef",
+    "neighbor_ids": [14399, 14654, 14397, 14142]
+},
+{
+    "region_id": [14141],
+    "Friendly_Name": "Untamed Ocean",
+    "neighbor_ids": [14142, 14397, 14140, 13885]
+},
+{
+    "region_id": [11326],
+    "Friendly_Name": "Weiss Coast",
+    "neighbor_ids": [11327, 11582, 11325, 11070]
+},
+{
+    "region_id": [11838],
+    "Friendly_Name": "Weiss Melt",
+    "neighbor_ids": [11839, 12094, 11837, 11582]
+},
+{
+    "region_id": [12094],
+    "Friendly_Name": "Searing Coast",
+    "neighbor_ids": [12095, 12350, 12093, 11838]
+},
+{
+    "region_id": [12350],
+    "Friendly_Name": "Searing Coast",
+    "neighbor_ids": [12351, 12606, 12349, 12094]
+},
+{
+    "region_id": [12606],
+    "Friendly_Name": "Searing Coast",
+    "neighbor_ids": [12607, 12862, 12605, 12350]
+},
+{
+    "region_id": [12862],
+    "Friendly_Name": "Searing Coast",
+    "neighbor_ids": [12863, 13118, 12861, 12606]
+},
+{
+    "region_id": [13118],
+    "Friendly_Name": "Fiend's Passage",
+    "neighbor_ids": [13119, 13374, 13117, 12862]
+},
+{
+    "region_id": [13374],
+    "Friendly_Name": "Daimon's Crater",
+    "neighbor_ids": [13375, 13630, 13373, 13118]
+},
+{
+    "region_id": [13375],
+    "Friendly_Name": "Huntsman's Wood",
+    "neighbor_ids": [13376, 13631, 13374, 13119]
+},
+{
+    "region_id": [13376],
+    "Friendly_Name": "Daimon's Crater",
+    "neighbor_ids": [13377, 13632, 13375, 13120]
+},
+{
+    "region_id": [11069],
+    "Friendly_Name": "Weissmere",
+    "neighbor_ids": [11070, 11325, 11068, 10813]
+},
+{
+    "region_id": [10815],
+    "Friendly_Name": "Shiverwake Expanse",
+    "neighbor_ids": [10816, 11071, 10814, 10559]
+},
+{
+    "region_id": [10814],
+    "Friendly_Name": "Shiverwake Expanse",
+    "neighbor_ids": [10815, 11070, 10813, 10558]
+},
+{
+    "region_id": [10813],
+    "Friendly_Name": "Weissmere",
+    "neighbor_ids": [10814, 11069, 10812, 10557]
+},
+{
+    "region_id": [10812],
+    "Friendly_Name": "Trollbergs",
+    "neighbor_ids": [10813, 11068, 10811, 10556]
+},
+{
+    "region_id": [10560],
+    "Friendly_Name": "Penguin Coast",
+    "neighbor_ids": [10561, 10816, 10559, 10304]
+},
+{
+    "region_id": [10559],
+    "Friendly_Name": "Penguin Tip",
+    "neighbor_ids": [10560, 10815, 10558, 10303]
+},
+{
+    "region_id": [10558],
+    "Friendly_Name": "Penguin Operations",
+    "neighbor_ids": [10559, 10814, 10557, 10302]
+},
+{
+    "region_id": [10557],
+    "Friendly_Name": "Penguin Coast",
+    "neighbor_ids": [10558, 10813, 10556, 10301]
+},
+{
+    "region_id": [10556],
+    "Friendly_Name": "Idestia Strait",
+    "neighbor_ids": [10557, 10812, 10555, 10300]
+},
+{
+    "region_id": [10555],
+    "Friendly_Name": "Idestia Strait",
+    "neighbor_ids": [10556, 10811, 10554, 10299]
+},
+{
+    "region_id": [10303],
+    "Friendly_Name": "Penguin Coast",
+    "neighbor_ids": [10304, 10559, 10302, 10047]
+},
+{
+    "region_id": [10302],
+    "Friendly_Name": "Stoneheart Sea",
+    "neighbor_ids": [10303, 10558, 10301, 10046]
+},
+{
+    "region_id": [10301],
+    "Friendly_Name": "Etceteria Coast",
+    "neighbor_ids": [10302, 10557, 10300, 10045]
+},
+{
+    "region_id": [10299],
+    "Friendly_Name": "Etceteria Coast",
+    "neighbor_ids": [10300, 10555, 10298, 10043]
+},
+{
+    "region_id": [10298],
+    "Friendly_Name": "Fremensund",
+    "neighbor_ids": [10299, 10554, 10297, 10042]
+},
+{
+    "region_id": [10046],
+    "Friendly_Name": "Stoneheart Sea",
+    "neighbor_ids": [10047, 10302, 10045, 9790]
+},
+{
+    "region_id": [10045],
+    "Friendly_Name": "Miscellania Coast",
+    "neighbor_ids": [10046, 10301, 10044, 9789]
+},
+{
+    "region_id": [10043],
+    "Friendly_Name": "V's Belt",
+    "neighbor_ids": [10044, 10299, 10042, 9787]
+},
+{
+    "region_id": [10041],
+    "Friendly_Name": "Waterbirth Channel",
+    "neighbor_ids": [10042, 10297, 10040, 9785]
+},
+{
+    "region_id": [9791],
+    "Friendly_Name": "Northern Ocean",
+    "neighbor_ids": [9792, 10047, 9790, 9535]
+},
+{
+    "region_id": [9789],
+    "Friendly_Name": "Kannski Tides",
+    "neighbor_ids": [9790, 10045, 9788, 9533]
+},
+{
+    "region_id": [9788],
+    "Friendly_Name": "V's Belt",
+    "neighbor_ids": [9789, 10044, 9787, 9532]
+},
+{
+    "region_id": [9787],
+    "Friendly_Name": "V's Belt",
+    "neighbor_ids": [9788, 10043, 9786, 9531]
+},
+{
+    "region_id": [9786],
+    "Friendly_Name": "Waterbirth Bay",
+    "neighbor_ids": [9787, 10042, 9785, 9530]
+},
+{
+    "region_id": [9785],
+    "Friendly_Name": "Waterbirth Channel",
+    "neighbor_ids": [9786, 10041, 9784, 9529]
+},
+{
+    "region_id": [9784],
+    "Friendly_Name": "Grandroot Bay",
+    "neighbor_ids": [9785, 10040, 9783, 9528]
+},
+{
+    "region_id": [9534],
+    "Friendly_Name": "Jormungand's Coast",
+    "neighbor_ids": [9535, 9790, 9533, 9278]
+},
+{
+    "region_id": [9533],
+    "Friendly_Name": "Kannski Tides",
+    "neighbor_ids": [9534, 9789, 9532, 9277]
+},
+{
+    "region_id": [9530],
+    "Friendly_Name": "Fremennik Strait",
+    "neighbor_ids": [9531, 9786, 9529, 9274]
+},
+{
+    "region_id": [9529],
+    "Friendly_Name": "Piscatoris Coast",
+    "neighbor_ids": [9540, 9795, 9538, 9283]
+},
+{
+    "region_id": [9279],
+    "Friendly_Name": "Vorkath Coast",
+    "neighbor_ids": [9280, 9535, 9278, 9023]
+},
+{
+    "region_id": [9278],
+    "Friendly_Name": "Northern Ocean",
+    "neighbor_ids": [9279, 9534, 9277, 9022]
+},
+{
+    "region_id": [9277],
+    "Friendly_Name": "Kannski Tides",
+    "neighbor_ids": [9278, 9533, 9276, 9021]
+},
+{
+    "region_id": [9274],
+    "Friendly_Name": "Fremennik Strait",
+    "neighbor_ids": [9275, 9530, 9273, 9018]
+},
+{
+    "region_id": [9024],
+    "Friendly_Name": "Vorkath Coast",
+    "neighbor_ids": [9025, 9280, 9023, 8768]
+},
+{
+    "region_id": [9022],
+    "Friendly_Name": "Vorkath's Maw",
+    "neighbor_ids": [9023, 9278, 9021, 8766]
+},
+{
+    "region_id": [9021],
+    "Friendly_Name": "Northern Ocean",
+    "neighbor_ids": [9022, 9277, 9020, 8765]
+},
+{
+    "region_id": [9020],
+    "Friendly_Name": "Neitiznot Coast",
+    "neighbor_ids": [9021, 9276, 9019, 8764]
+},
+{
+    "region_id": [9019],
+    "Friendly_Name": "Neitiznot Coast",
+    "neighbor_ids": [9020, 9275, 9018, 8763]
+},
+{
+    "region_id": [9018],
+    "Friendly_Name": "Fremennik Strait",
+    "neighbor_ids": [9019, 9274, 9017, 8762]
+},
+{
+    "region_id": [8767],
+    "Friendly_Name": "Vorkath Coast",
+    "neighbor_ids": [8768, 9023, 8766, 8511]
+},
+{
+    "region_id": [8766],
+    "Friendly_Name": "Lunar Sea",
+    "neighbor_ids": [8767, 9022, 8765, 8510]
+},
+{
+    "region_id": [8765],
+    "Friendly_Name": "Lunar Bay",
+    "neighbor_ids": [8766, 9021, 8764, 8509]
+},
+{
+    "region_id": [8764],
+    "Friendly_Name": "Lunar Bay",
+    "neighbor_ids": [8765, 9020, 8763, 8508]
+},
+{
+    "region_id": [8763],
+    "Friendly_Name": "Pirates' Cove",
+    "neighbor_ids": [8764, 9019, 8762, 8507]
+},
+{
+    "region_id": [8762],
+    "Friendly_Name": "Pirates' Booty",
+    "neighbor_ids": [8763, 9018, 8761, 8506]
+},
+{
+    "region_id": [8510],
+    "Friendly_Name": "Lunar Coast",
+    "neighbor_ids": [8511, 8766, 8509, 8254]
+},
+{
+    "region_id": [8507],
+    "Friendly_Name": "Moonshadow",
+    "neighbor_ids": [8508, 8763, 8506, 8251]
+},
+{
+    "region_id": [8254],
+    "Friendly_Name": "Lunar Coast",
+    "neighbor_ids": [8255, 8510, 8253, 7998]
+},
+{
+    "region_id": [8253],
+    "Friendly_Name": "Lunar Isle",
+    "neighbor_ids": [8254, 8509, 8252, 7997]
+},
+{
+    "region_id": [8252],
+    "Friendly_Name": "Lunar Isle",
+    "neighbor_ids": [8253, 8508, 8251, 7996]
+},
+{
+    "region_id": [8251],
+    "Friendly_Name": "Moonshadow",
+    "neighbor_ids": [8252, 8507, 8250, 7995]
+},
+{
+    "region_id": [7997],
+    "Friendly_Name": "Winter's Edge",
+    "neighbor_ids": [7998, 8253, 7996, 7741]
+},
+{
+    "region_id": [7996],
+    "Friendly_Name": "Lunar Coast",
+    "neighbor_ids": [7997, 8252, 7995, 7740]
+},
+{
+    "region_id": [9017],
+    "Friendly_Name": "Piscatoris Coast",
+    "neighbor_ids": [9018, 9273, 9016, 8761]
+},
+{
+    "region_id": [8760],
+    "Friendly_Name": "Piscatoris Sea",
+    "neighbor_ids": [8761, 9016, 8759, 8504]
+},
+{
+    "region_id": [9015],
+    "Friendly_Name": "Piscatoris Coast",
+    "neighbor_ids": [9016, 9271, 9014, 8759]
+},
+{
+    "region_id": [9527],
+    "Friendly_Name": "Grandroot Mouth",
+    "neighbor_ids": [9528, 9783, 9526, 9271]
+},
+{
+    "region_id": [9783],
+    "Friendly_Name": "Glough's Crashed Airship",
+    "neighbor_ids": [9784, 10039, 9782, 9527]
+},
+{
+    "region_id": [10295],
+    "Friendly_Name": "Vesmjos",
+    "neighbor_ids": [10296, 10551, 10294, 10039]
+},
+{
+    "region_id": [9014],
+    "Friendly_Name": "Eagles' View",
+    "neighbor_ids": [9015, 9270, 9013, 8758]
+},
+{
+    "region_id": [9269],
+    "Friendly_Name": "Arandar Mountains",
+    "neighbor_ids": [9270, 9525, 9268, 9013]
+},
+{
+    "region_id": [9523],
+    "Friendly_Name": "Arandar Mountains",
+    "neighbor_ids": [9524, 9779, 9522, 9267]
+},
+{
+    "region_id": [9522],
+    "Friendly_Name": "Arandar Mountains",
+    "neighbor_ids": [9523, 9778, 9521, 9266]
+},
+{
+    "region_id": [9521],
+    "Friendly_Name": "Arandar Mountains",
+    "neighbor_ids": [9522, 9777, 9520, 9265]
+},
+{
+    "region_id": [9520],
+    "Friendly_Name": "Castle Wars",
+    "neighbor_ids": [9521, 9776, 9519, 9264]
+},
+{
+    "region_id": [8240],
+    "Friendly_Name": "Tyras Coast",
+    "neighbor_ids": [8241, 8496, 8239, 7984]
+},
+{
+    "region_id": [8497],
+    "Friendly_Name": "Porth Neigwl",
+    "neighbor_ids": [8498, 8753, 8496, 8241]
+},
+{
+    "region_id": [8498],
+    "Friendly_Name": "Porth Neigwl",
+    "neighbor_ids": [8499, 8754, 8497, 8242]
+},
+{
+    "region_id": [8495],
+    "Friendly_Name": "Zul-Egil",
+    "neighbor_ids": [8496, 8751, 8494, 8239]
+},
+{
+    "region_id": [8752],
+    "Friendly_Name": "Poison Waste",
+    "neighbor_ids": [8753, 9008, 8751, 8496]
+},
+{
+    "region_id": [9008],
+    "Friendly_Name": "Poison Waste",
+    "neighbor_ids": [9009, 9264, 9007, 8752]
+},
+{
+    "region_id": [9007],
+    "Friendly_Name": "Snake Shrine",
+    "neighbor_ids": [9008, 9263, 9006, 8751]
+},
+{
+    "region_id": [11581],
+    "Friendly_Name": "Ghorrock Temple",
+    "neighbor_ids": [11582, 11837, 11580, 11325]
+},
+{
+    "region_id": [11580],
+    "Friendly_Name": "Frozen Wastes",
+    "neighbor_ids": [11581, 11836, 11579, 11324]
+},
+{
+    "region_id": [11579],
+    "Friendly_Name": "Frozen Wastes",
+    "neighbor_ids": [11580, 11835, 11578, 11323]
+},
+{
+    "region_id": [11324],
+    "Friendly_Name": "Frozen Fortress",
+    "neighbor_ids": [11325, 11580, 11323, 11068]
+},
+{
+    "region_id": [13367],
+    "Friendly_Name": "Coward's Inlet",
+    "neighbor_ids": [13368, 13623, 13366, 13111]
+},
+{
+    "region_id": [13111],
+    "Friendly_Name": "Jolly Boar's Warning",
+    "neighbor_ids": [13112, 13367, 13110, 12855]
+},
+{
+    "region_id": [12344],
+    "Friendly_Name": "The Old Nite Monument",
+    "neighbor_ids": [12345, 12600, 12343, 12088]
+},
+{
+    "region_id": [12091],
+    "Friendly_Name": "Chaos Sprint",
+    "neighbor_ids": [12092, 12347, 12090, 11835]
+},
+{
+    "region_id": [12604],
+    "Friendly_Name": "Sniping Spiders",
+    "neighbor_ids": [12605, 12860, 12603, 12348]
 }
-
     ]
 }
