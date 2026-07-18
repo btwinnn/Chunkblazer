@@ -48,14 +48,7 @@
                             }
                         ]
                 },
-                {
-                    "name": "Use the Lumber Yard Hot Air Balloon",
-                    "taskID": "travel_lumber_yard_hot_air_balloon",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
+                
                 {
                     "name": "Fletch an Oak Shortbow(u)",
                     "taskID": "fletch_oak_shortbow(u)",

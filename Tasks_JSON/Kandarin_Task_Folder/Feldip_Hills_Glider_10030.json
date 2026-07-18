@@ -3,14 +3,7 @@
             "Friendly_Name": "Feldip Hills Glider",
             "neighbor_ids": [10031, 10286, 10029, 9774],
             "tasks": [
-                {
-                    "name": "Use the Glider to Travel to the Feldip Hills",
-                    "taskID": "glider_feldip_hills",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
+                
                 {
                     "name": "Defeat some Level 64 Wolves",
                     "taskID": "defeat_level_64_wolves",

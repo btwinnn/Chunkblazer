@@ -6035,14 +6035,7 @@
                         }
                     ]
                 },
-                {
-                    "name": "Use the Hot Air Balloon to Travel to Castle Wars",
-                    "taskID": "balloon_castle_wars",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
+                
                 {
                 "name": "Build a Medium STASH Unit at Castle Wars",
                 "taskID": "build_medium_stash_castle_wars",
@@ -6400,14 +6393,6 @@
                     "constraints": {
                         "time_in_ticks": [25]
                     }
-                },
-                {
-                    "name": "Use the Spirit Tree to Teleport to the Tree Gnome Village",
-                    "taskID": "spirit_tree_teleport_to_tree_gnome_village",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 8
                 }                                                                                   
             ],
                 "optional_quests_unlocked": [
@@ -6457,14 +6442,7 @@
                         "quantity": [1, 10]
                     }
                 },
-                {
-                    "name": "Use the Spirit Tree to Teleport to the Battlefield",
-                    "taskID": "spirit_tree_teleport_to_battlefield",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 8
-                },              
+                              
                 {
                     "name": "Defeat a Mounted Terrorbird Gnome",
                     "taskID": "defeat_mounted_terrorbird_gnome_fast",
@@ -7069,14 +7047,7 @@
             "Friendly_Name": "Tree Gnome Stronghold South East",
             "neighbor_ids": [9782, 10037, 9780, 9525],
             "tasks": [
-                {
-                    "name": "Use the Spirit Tree to Teleport to the Tree Gnome Stronghold",
-                    "taskID": "spirit_tree_teleport_to_tree_gnome_stronghold",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 8
-                },
+                
                 {
                     "name": "Use the Gnome Agility Course",
                     "taskID": "complete_gnome_agility",
@@ -7670,22 +7641,8 @@
             "Friendly_Name": "The Grand Tree",
             "neighbor_ids": [9783, 10038, 9781, 9526],
             "tasks": [
-                {
-                    "name": "Use the Glider to Travel to The Grand Tree",
-                    "taskID": "glider_grand_tree",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
-                {
-                    "name": "Use the Hot Air Balloon to Travel to The Grand Tree",
-                    "taskID": "balloon_grand_tree",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
+                
+                
                 {
                     "name": "Make a Fruit Blast",
                     "taskID": "cook_fruit_blast",
@@ -8867,14 +8824,7 @@
             "Friendly_Name": "Arandar Gate",
             "neighbor_ids": [9525, 9780, 9523, 9268],
             "tasks": [
-                {
-                    "name": "Travel into the Arandar Mountain Pass",
-                    "taskID": "arandar_mountain_pass",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 10
-                },
+                
                 {
                     "name": "Defeat a Grizzly Bear in 12 Seconds",
                     "taskID": "defeat_grizzly_bear_fast",

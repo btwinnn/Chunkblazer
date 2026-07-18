@@ -3,14 +3,7 @@
             "Friendly_Name": "Arandar Gate",
             "neighbor_ids": [9525, 9780, 9523, 9268],
             "tasks": [
-                {
-                    "name": "Travel into the Arandar Mountain Pass",
-                    "taskID": "arandar_mountain_pass",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 10
-                },
+                
                 {
                     "name": "Defeat a Grizzly Bear in 12 Seconds",
                     "taskID": "defeat_grizzly_bear_fast",

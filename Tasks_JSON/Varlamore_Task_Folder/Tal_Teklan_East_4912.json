@@ -142,14 +142,6 @@
                             "item_ids": [9978]
                             }
                         ]             
-                },
-                {
-                    "name": "Travel to Tal Teklan via Quetzal",
-                    "taskID": "travel_tal_teklan_quetzal",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
                 }                                                  
             ],           
             "is_completed": false
