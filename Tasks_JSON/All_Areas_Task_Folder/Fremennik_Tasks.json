@@ -177,7 +177,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2503,
+                        "y": 3636,
+                        "plane": 0
+                    }
                 }          
             ],
             "optional_quests_unlocked": [
@@ -802,7 +807,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                   "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2780,
+                        "y": 3613,
+                        "plane": 0
+                    }
                 }                       
             ],          
             "is_completed": false           
@@ -1049,7 +1059,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2744,
+                        "y": 3719,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Obtain Condensed Gold",
@@ -2039,7 +2054,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2513,
+                        "y": 3884,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Use Fairy Ring Code AJS",
@@ -2047,7 +2067,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2500,
+                        "y": 3896,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Cook a Bass",
