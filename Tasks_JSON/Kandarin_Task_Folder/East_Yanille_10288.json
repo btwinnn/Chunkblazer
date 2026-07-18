@@ -4,17 +4,18 @@
             "neighbor_ids": [10289, 10544, 10287, 10032],
             "tasks": [
                 {
-                    "task_name": "Picklock the door to the basement of Yanille Agility Dungeon",
-                    "taskID": "picklock_door_basement_yanille_agility_dungeon",
-                    "completion_type": "VARP_CHECK",
-                    "base_points": 4,
-                    "assignment_weight": 5,
-                    "constraints": 
-                    {
-                        "varp_id": 1197,
-                        "bit_index": 7,
-                        "expected_value": 1
-                    }                
+                    "name": "Use the Level 16 Agility Underwall Yanille Shortcut",
+                    "taskID": "agility_level_16_underwall_yanille_shortcut",
+                    "category": "Agility",
+                    "level": 16,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Underwall tunnel (Yanille)#Castle wall", "Underwall tunnel (Yanille)#Hole"],
+                        "object_id": [16519, 16520], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Smith a Mithril Dagger",

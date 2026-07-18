@@ -3715,18 +3715,18 @@
             "neighbor_ids": [10289, 10544, 10287, 10032],
             "tasks": [
                 {
-                    "task_name": "Picklock the door to the basement of Yanille Agility Dungeon",
-                    "taskID": "picklock_door_basement_yanille_agility_dungeon",
-                    "category": "Thieving",
-                    "completion_type": "VARP_CHECK",
-                    "base_points": 4,
-                    "assignment_weight": 5,
-                    "constraints": 
-                    {
-                        "varp_id": 1197,
-                        "bit_index": 7,
-                        "expected_value": 1
-                    }                
+                    "name": "Use the Level 16 Agility Underwall Yanille Shortcut",
+                    "taskID": "agility_level_16_underwall_yanille_shortcut",
+                    "category": "Agility",
+                    "level": 16,
+                    "completion_type": "AGILITY",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_object": {
+                        "object": ["Underwall tunnel (Yanille)#Castle wall", "Underwall tunnel (Yanille)#Hole"],
+                        "object_id": [16519, 16520], 
+                        "quantity": [1]
+                    }
                 },
                 {
                     "name": "Smith a Mithril Dagger",
@@ -3930,29 +3930,15 @@
             "neighbor_ids": [10033, 10288, 10031, 9776],
             "tasks": [
                 {
-                    "name": "Use the Level 16 Agility Underwall Yanille Shortcut",
-                    "taskID": "agility_level_16_underwall_yanille_shortcut",
+                    "name": "Use the Level 39 Agility West Yanille Wall Grapple Shortcut",
+                    "taskID": "agility_level_39_west_yanille_wall_grapple_shortcut",
                     "category": "Agility",
-                    "level": 16,
-                    "completion_type": "AGILITY",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_object": {
-                        "object": ["Underwall tunnel (Yanille)#Castle wall", "Underwall tunnel (Yanille)#Hole"],
-                        "object_id": [16519, 16520], 
-                        "quantity": [1]
-                    }
-                },
-                {
-                    "task_name": "Use the Level 39 Agility South Yanille Wall Grapple",
-                    "taskID": "grapple_shortcut_south_yanille_wall",
-                    "category":"Agility",
-                    "leve": 39,
+                    "level": 39,
                     "completion_type": "AGILITY",
                     "base_points": 2,
-                    "assignment_weight": 8,
+                    "assignment_weight": 5,
                     "required_object": {
-                        "object": ["Wall (Yanille)#Grappled Wall)"],
+                        "object": ["Wall (Yanille)#Grappled Wall"],
                         "object_id": [17047], 
                         "quantity": [1]
                     }
