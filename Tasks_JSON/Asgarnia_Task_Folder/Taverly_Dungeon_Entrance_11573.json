@@ -162,48 +162,6 @@
                     ]
                 },
                 {
-                "name": "Complete the Cerberus Combat Achievements",
-                "taskID": "complete_cerberus_CAs",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 5,
-                "assignment_weight": 10,
-                "varbit_boolean": 1, 
-                "boss": "Cerberus",                 
-                "constraints": [                   
-                        {                       
-                        "varbit_id": 55,              
-                        "description": "Unrequired Antifire",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 51,              
-                        "description": "Cerberus Veteran",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 54,             
-                        "description": "Ghost Buster",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 56,              
-                        "description": "Anti-Bite Mechanics",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 52,             
-                        "description": "Cerberus Master",
-                        "tier": "Master"
-                        },
-                        {                       
-                        "varbit_id": 53,            
-                        "description": "Arooo No More",
-                        "tier": "Master"
-                        }                      
-                    ]
-                },
-                {
                     "name": "Obtain an Uncut Dragonstone",
                     "taskID": "obtain_uncut_dragonstone",
                     "category": "Obtain",

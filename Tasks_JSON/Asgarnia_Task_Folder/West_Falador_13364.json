@@ -72,48 +72,6 @@
                     }
                 },
                 {
-                "name": "Complete the Giant Mole Combat Achievements",
-                "taskID": "complete_giant_mole_CAs",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 4,
-                "assignment_weight": 10,
-                "varbit_boolean": 1, 
-                "boss": "Cerberus",                 
-                "constraints": [                   
-                        {                       
-                        "varbit_id": 177,              
-                        "description": "Giant Mole Novice",
-                        "tier": "Easy"
-                        },
-                        {                       
-                        "varbit_id": 182,              
-                        "description": "Avoiding those Little Arms",
-                        "tier": "Medium"
-                        },
-                        {                       
-                        "varbit_id": 178,             
-                        "description": "Giant Mole Champion",
-                        "tier": "Medium"
-                        },
-                        {                       
-                        "varbit_id": 179,              
-                        "description": "Why are you Running?",
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 181,             
-                        "description": "Whack-a-Mole",
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 180,            
-                        "description": "Hard Hitter",
-                        "tier": "Elite"
-                        }                      
-                    ]
-                },
-                {
                     "name": "Plant a Willow Sapling",
                     "taskID": "plant_willow_sapling",
                     "category": "Farming",

@@ -190,26 +190,6 @@
           ]
         }
       ]
-    },
-    {
-      "name": "Spread some Fiendish Ashes",
-      "taskID": "spread_fiend_ashes",
-      "category": "Prayer",
-      "level": 1,
-      "completion_type": "PRAYER",
-      "base_points": 1,
-      "assignment_weight": 10,
-      "required_items": [
-        {
-          "item": "Fiendish Ashes",
-          "item_ids": [
-            25766
-          ],
-          "quantity": [
-            1
-          ]
-        }
-      ]
     }
   ],
   "is_completed": false

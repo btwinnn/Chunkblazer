@@ -540,5 +540,85 @@
     "Friendly_Name": "Breakbone Strait",
     "neighbor_ids": [9517, 9772, 9515, 9260]
 },
+{
+    "region_id": [9771],
+    "Friendly_Name": "Mythic Coast",
+    "neighbor_ids": [9772, 10027, 9770, 9515]
+},
+{
+    "region_id": [10027],
+    "Friendly_Name": "Mythic Coast",
+    "neighbor_ids": [10028, 10283, 10026, 9771]
+},
+{
+    "region_id": [10283],
+    "Friendly_Name": "Mythic Coast",
+    "neighbor_ids": [10284, 10539, 10282, 10027]
+},
+{
+    "region_id": [10539],
+    "Friendly_Name": "Oo'glog Channel",
+    "neighbor_ids": [10540, 10795, 10538, 10283]
+},
+{
+    "region_id": [10538],
+    "Friendly_Name": "Ape Atoll Coast",
+    "neighbor_ids": [10539, 10794, 10537, 10282]
+},
+{
+    "region_id": [10281],
+    "Friendly_Name": "Void Coast",
+    "neighbor_ids": [10282, 10537, 10280, 10025]
+},
+{
+    "region_id": [10280],
+    "Friendly_Name": "Void Coast",
+    "neighbor_ids": [10281, 10536, 10279, 10024]
+},
+{
+    "region_id": [10536],
+    "Friendly_Name": "Pest Control",
+    "neighbor_ids": [10537, 10792, 10535, 10280]
+},
+{
+    "region_id": [10535],
+    "Friendly_Name": "Void Coast",
+    "neighbor_ids": [10536, 10791, 10534, 10279]
+},
+{
+    "region_id": [10792],
+    "Friendly_Name": "Void Coast",
+    "neighbor_ids": [10793, 11048, 10791, 10536]
+},
+{
+    "region_id": [10793],
+    "Friendly_Name": "Simian Sea",
+    "neighbor_ids": [10794, 11049, 10792, 10537]
+},
+{
+    "region_id": [11049],
+    "Friendly_Name": "Simian Sea",
+    "neighbor_ids": [11050, 11305, 11048, 10793]
+},
+{
+    "region_id": [11306],
+    "Friendly_Name": "Arrow Passage",
+    "neighbor_ids": [11307, 11562, 11305, 11050]
+},
+{
+    "region_id": [11563],
+    "Friendly_Name": "Ardent Ocean",
+    "neighbor_ids": [11564, 11819, 11562, 11307]
+},
+{
+    "region_id": [11818],
+    "Friendly_Name": "Crash Coast",
+    "neighbor_ids": [11819, 12074, 11817, 11562]
+},
+{
+    "region_id": [11561],
+    "Friendly_Name": "Crash Coast",
+    "neighbor_ids": [11562, 11817, 11560, 11305]
+}
     ]
 }

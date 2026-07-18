@@ -532,23 +532,7 @@
                         "npc_ids": [9855],
                         "quantity": [1]
                     }
-                },
-                {
-                    "name": "Bury some Bones",
-                    "taskID": "bury_bones",
-                    "category": "Prayer",
-                    "level": 1,
-                    "completion_type": "PRAYER",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": "Bones",
-                            "item_ids": [526],
-                            "quantity": [5, 50]
-                        }
-                    ]
-                },
+                },               
                 {
                     "name": "Cook some Meat",
                     "taskID": "Cook_meat",
