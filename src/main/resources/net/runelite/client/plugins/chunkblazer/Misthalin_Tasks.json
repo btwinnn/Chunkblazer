@@ -309,7 +309,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat a Cow 7 Seconds",
+                    "name": "Defeat a Cow in 7 Seconds",
                     "taskID": "defeat_cow_fast",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
