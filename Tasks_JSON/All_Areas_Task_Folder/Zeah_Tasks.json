@@ -709,7 +709,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 1826,
+                        "y": 3540,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Plant some Grape Seeds",
@@ -8329,7 +8334,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 1302,
+                        "y": 3762,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Craft a Snakeskin Shield",
@@ -9089,7 +9099,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 1295,
+                        "y": 3493,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Defeat a Grizzly Bear in the First Hit",
