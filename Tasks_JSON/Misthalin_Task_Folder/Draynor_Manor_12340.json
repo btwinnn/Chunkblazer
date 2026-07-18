@@ -41,7 +41,7 @@
                     "assignment_weight": 5,
                     "target_npc": {
                         "npc": ["Killerwatt"],
-                        "npc_ids": [469],
+                        "npc_ids": [469, 470],
                         "quantity": [1]
                     }          
                 },

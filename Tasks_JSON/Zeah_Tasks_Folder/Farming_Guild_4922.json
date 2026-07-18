@@ -20,48 +20,6 @@
                     ]
                 },
                 {
-                "name": "Complete the Hespori Combat Achievements",
-                "taskID": "complete_hespori_CAs",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 5,
-                "assignment_weight": 10,
-                "varbit_boolean": 1, 
-                "boss": "Hespori",                 
-                "constraints": [                   
-                        {                       
-                        "varbit_id": 125,                                   
-                        "description": "Weed Whacker", 
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 124,                                   
-                        "description": "Hesporisn't", 
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 123,                                   
-                        "description": "Hespori Adept", 
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 126,                                   
-                        "description": "Plant-Based Diet", 
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 127,                                   
-                        "description": "Hespori Speed-Trialist", 
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 128,                                   
-                        "description": "Hespori Speed-Chaser", 
-                        "tier": "Master"
-                        }                                               
-                    ]
-                },
-                {
                     "name": "Plant a Palm Tree Sapling",
                     "taskID": "plant_palm_tree_sapling",
                     "category": "Farming",

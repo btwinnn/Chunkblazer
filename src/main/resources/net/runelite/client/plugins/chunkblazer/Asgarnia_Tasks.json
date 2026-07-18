@@ -505,74 +505,7 @@
                         "npc_ids": [468, 465, 466, 467],
                         "quantity": [1, 25]
                     }
-                },
-                {
-                "name": "Complete the Royal Titans Combat Achievements",
-                "taskID": "complete_royal_titan_CAs",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 4,
-                "assignment_weight": 10,
-                "varbit_boolean": 1, 
-                "boss": "Royal Titans",                 
-                "constraints": [                   
-                        {                       
-                        "varbit_id": 591,                                   
-                        "description": "One by one", 
-                        "tier": "Easy"
-                        },
-                        {                       
-                        "varbit_id": 597,              
-                        "description": "Let them fight",
-                        "tier": "Easy"
-                        },
-                        {                       
-                        "varbit_id": 594,             
-                        "description": "Elemental Company",
-                        "tier": "Easy"
-                        },
-                        {                       
-                        "varbit_id": 590,              
-                        "description": "Royal Titan Adept",
-                        "tier": "Medium"
-                        },
-                        {                       
-                        "varbit_id": 598,             
-                        "description": "It takes too long",
-                        "tier": "Medium"
-                        },
-                        {                       
-                        "varbit_id": 589,            
-                        "description": "Royal Titan Champion",
-                        "tier": "Medium"
-                        },
-                        {                       
-                        "varbit_id": 593,             
-                        "description": "Titan Killer",
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 595,           
-                        "description": "I need room",
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 592,             
-                        "description": "Royal Titan Speed-Runner",
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 588,             
-                        "description": "Perfect Royal Titans",
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 596,             
-                        "description": "No time to pray",
-                        "tier": "Elite"
-                        }
-                    ]
-                },
+                },              
                 {                           
                     "name": "Defeat the Royal Titans",
                     "taskID": "defeat_royal_titans",
@@ -1071,49 +1004,7 @@
                             "item_ids": [13233]
                         }
                     ]
-                },
-                {
-                "name": "Complete the Cerberus Combat Achievements",
-                "taskID": "complete_cerberus_CAs",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 5,
-                "assignment_weight": 10,
-                "varbit_boolean": 1, 
-                "boss": "Cerberus",                 
-                "constraints": [                   
-                        {                       
-                        "varbit_id": 55,              
-                        "description": "Unrequired Antifire",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 51,              
-                        "description": "Cerberus Veteran",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 54,             
-                        "description": "Ghost Buster",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 56,              
-                        "description": "Anti-Bite Mechanics",
-                        "tier": "Elite"
-                        },
-                        {                       
-                        "varbit_id": 52,             
-                        "description": "Cerberus Master",
-                        "tier": "Master"
-                        },
-                        {                       
-                        "varbit_id": 53,            
-                        "description": "Arooo No More",
-                        "tier": "Master"
-                        }                      
-                    ]
-                },
+                },           
                 {
                     "name": "Obtain an Uncut Dragonstone",
                     "taskID": "obtain_uncut_dragonstone",
@@ -1218,49 +1109,7 @@
                     "constraints": {
                         "equippable_slots": ["WEAPON"]
                     }
-                },
-                {
-                "name": "Complete the Giant Mole Combat Achievements",
-                "taskID": "complete_giant_mole_CAs",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 4,
-                "assignment_weight": 10,
-                "varbit_boolean": 1, 
-                "boss": "Cerberus",                 
-                "constraints": [                   
-                        {                       
-                        "varbit_id": 177,              
-                        "description": "Giant Mole Novice",
-                        "tier": "Easy"
-                        },
-                        {                       
-                        "varbit_id": 182,              
-                        "description": "Avoiding those Little Arms",
-                        "tier": "Medium"
-                        },
-                        {                       
-                        "varbit_id": 178,             
-                        "description": "Giant Mole Champion",
-                        "tier": "Medium"
-                        },
-                        {                       
-                        "varbit_id": 179,              
-                        "description": "Why are you Running?",
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 181,             
-                        "description": "Whack-a-Mole",
-                        "tier": "Hard"
-                        },
-                        {                       
-                        "varbit_id": 180,            
-                        "description": "Hard Hitter",
-                        "tier": "Elite"
-                        }                      
-                    ]
-                },
+                },             
                 {
                     "name": "Plant a Willow Sapling",
                     "taskID": "plant_willow_sapling",

@@ -2542,7 +2542,7 @@
                     "required_items": [
                         {
                             "item": ["Odium Shard 2"],
-                            "item_ids": [11929],
+                            "item_ids": [11929, 11926, 12807],
                             "quantity": [1]
                         }
                     ]
@@ -2557,7 +2557,7 @@
                     "required_items": [
                         {
                             "item": ["Malediction Shard 2"],
-                            "item_ids": [11932],
+                            "item_ids": [11932, 12806, 11924],
                             "quantity": [1]
                         }
                     ]
@@ -5543,6 +5543,1542 @@
                         }
                     ]
                 }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [11836],
+            "neighbor_ids": [11837, 12092, 11835, 11580],
+            "Friendly_Name": "Chaos Fanatic",
+            "tasks": [
+                {
+                    "name": "Defeat the Chaos Fanatic",
+                    "taskID": "defeat_chaos_fanatic",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Chaos Fanatic"],
+                        "npc_ids": [6619],
+                        "quantity": [10, 50]
+                    }
+                },
+                {
+                    "name": "Defeat the Chaos Fanatic in 54 Seconds",
+                    "taskID": "defeat_chaos_fanatic_54s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Chaos Fanatic"],
+                        "npc_ids": [6619],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [90]
+                    }
+                },
+                {
+                    "name": "Equip an Ancient Staff",
+                    "taskID": "equip_ancient_staff",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "category": ["Attack", "Magic"],
+                    "level": [50, 50],
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Ancient Staff"],
+                            "item_ids": [4675]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Equip a Splitbark Body",
+                    "taskID": "equip_splitbark_body",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Splitbark Body"],
+                            "item_ids": [3387]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Splitbark Legs",
+                    "taskID": "equip_splitbark_legs",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Splitbark Legs"],
+                            "item_ids": [3389]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Odium Shard 1",
+                    "taskID": "obtain_odium_shard_1",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Odium Shard 1"],
+                            "item_ids": [11928, 11926, 12807],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Malediction Shard 1",
+                    "taskID": "obtain_malediction_shard_1",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Malediction Shard 1"],
+                            "item_ids": [11931, 12806, 11924],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Larran's Key",
+                    "taskID": "obtain_larran's_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Larran's Key"],
+                            "item_ids": [23490],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [11837],
+            "neighbor_ids": [11838, 12093, 11836, 11581],
+            "Friendly_Name": "Frozen Waste Plateau",
+            "tasks": [
+                {
+                    "name": "Use the Wilderness Agility Course",
+                    "taskID": "complete_wilderness_agility",
+                    "category": "Agility",
+                    "level": 52,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 10,
+                    "required_object": {
+                        "object": ["Rocks (Wilderness Agility Course)"],
+                        "object_id": [23640], 
+                        "quantity": [1, 20]
+                    }
+                },
+                {
+                    "name": "Mine some Runite Ore",
+                    "taskID": "mine_rune_ore",
+                    "category": "Mining",
+                    "level": 85,
+                    "completion_type": "MINING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Runite Ore"],
+                            "item_ids": [451],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Ice Giant",
+                    "taskID": "defeat_ice_giant",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Ice Giant"],
+                        "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797, 7878, 7879, 7880],
+                        "quantity": [1, 25]
+                    }
+                },              
+                {
+                    "name": "Defeat an Ice Warrior on Task",
+                    "taskID": "defeat_ice_warrior_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Warrior"],
+                        "npc_ids": [2842, 2851, 2841, 13802],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 53 Ice Giant on Task",
+                    "taskID": "defeat_level_53_ice_giant_on_task",
+                    "category": "Slayer",
+                    "completion_type": "SLAYER",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Giant"],
+                        "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797],
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Defeat a Level 53 Ice Giant with Nothing Equipped",
+                    "taskID": "defeat_level_53_ice_giant_naked",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Giant"],
+                        "npc_ids": [2085, 2086, 2087, 2088, 2089, 13796, 13797],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "equip_nothing": "TRUE"
+                    }
+                },
+                {
+                    "name": "Defeat an Ice Warrior",
+                    "taskID": "defeat_ice_warrior",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Warrior"],
+                        "npc_ids": [2842, 2851, 2841, 13802],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Obtain a Larran's Key",
+                    "taskID": "obtain_larran's_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Larran's Key"],
+                            "item_ids": [23490],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat an Ice Spider",
+                    "taskID": "defeat_ice_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Spider"],
+                        "npc_ids": [3022, 13798, 10722],
+                        "quantity": [1, 10]
+                    }
+                },
+                {
+                    "name": "Defeat an Ice Spider in 12 Seconds",
+                    "taskID": "defeat_ice_spider_12s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "target_npc": {
+                        "npc": ["Ice Spider"],
+                        "npc_ids": [3022, 13798, 10722],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [20]
+                    }
+                },
+                {
+                    "name": "Defeat an Ice Warrior in the First Hit",
+                    "taskID": "defeat_ice_warrior_first_hit",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 5,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Ice Warrior"],
+                        "npc_ids": [2842, 2851, 2841, 13802],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [1]
+                    }
+                },
+                {
+                    "name": "Equip a Rune Chainbody",
+                    "taskID": "equip_rune_chainbody",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Rune Chainbody"],
+                            "item_ids": [1113]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Kiteshield",
+                    "taskID": "equip_rune_kiteshield",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rune Kiteshield"],
+                            "item_ids": [1201]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ice Plateau Teleport Tablet",
+                    "taskID": "obtain_ice_plateau_teleport",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Ice Plateau Teleport Tablet"],
+                            "item_ids": [24963],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12093],
+            "neighbor_ids": [12094, 12349, 12092, 11837],
+            "Friendly_Name": "Pirates' Hideout",
+            "tasks": [
+                {
+                    "name": "Equip a Dagon'hai Hat",
+                    "taskID": "equip_dagon'hai_hat",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 70,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Dagon'hai hat", "Dagon'hai hat (or)"],
+                            "item_ids": [24288, 27123]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dagon'hai Robe Bottom",
+                    "taskID": "equip_dagon'hai_robe_bottom",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 70,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Dagon'hai robe bottom", "Dagon'hai robe bottom (or)"],
+                            "item_ids": [24294, 27127]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dagon'hai Robe Top",
+                    "taskID": "equip_dagon'hai_robe_top",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 70,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Dagon'hai robe top", "Dagon'hai robe top (or)"],
+                            "item_ids": [24291, 27125]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Defeat a Pirate",
+                    "taskID": "defeat_pirate",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Pirate"],
+                        "npc_ids": [4926, 522, 6994, 4043, 4044, 4045, 4046, 4047, 4048, 4049, 4050, 4051, 4052, 521, 6993, 524, 6995, 1447],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Defeat a Pirate in 15 Seconds",
+                    "taskID": "defeat_pirate_15_seconds",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Pirate"],
+                        "npc_ids": [4926, 522, 6994, 4043, 4044, 4045, 4046, 4047, 4048, 4049, 4050, 4051, 4052, 521, 6993, 524, 6995, 1447],
+                        "quantity": 1
+                    },
+                    "constraints": {
+                        "time_in_ticks": [25]                       
+                    }
+                },
+                {
+                    "name": "Defeat a Chaos Dwarf",
+                    "taskID": "defeat_chaos_dwarf",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Chaos Dwarf"],
+                        "npc_ids": [291],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Obtain a Muddy Key",
+                    "taskID": "obtain_muddy_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Muddy Key"],
+                            "item_ids": [991],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Larran's Key",
+                    "taskID": "obtain_larran's_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Larran's Key"],
+                            "item_ids": [23490],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Defeat a Fire Giant",
+                    "taskID": "defeat_fire_giant",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Fire Giant"],
+                        "npc_ids": [7252, 7251, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083, 2084],
+                        "quantity": [1, 25]
+                    }
+                },             
+                {
+                    "name": "Defeat a Fire Giant in 12 Seconds",
+                    "taskID": "defeat_fire_giant_fast",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Fire Giant"],
+                        "npc_ids": [7252, 7251, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083, 2084],
+                        "quantity": [1]
+                    },
+                    
+                    "constraints": {
+                        "time_in_ticks": [20]
+                    }
+                },
+                {
+                    "name": "Defeat a Shadow Spider",
+                    "taskID": "defeat_shadow_spider",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Shadow Spider"],
+                        "npc_ids": [3016],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Mix some Ranging Potions",
+                    "taskID": "mix_ranging_potions",
+                    "category": "Obtain_Set",
+                    "level": 72,
+                    "completion_type": "HERBLORE",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                     "required_items": [
+                        {
+                            "item": ["Ranging Potion(3)", "Ranging Potion(4)"],
+                            "item_ids": [169, 2444],
+                            "quantity": [50, 150]
+                        }
+                    ]
+                },
+                {
+                    "name": "Use the Level 46 Agility Deep Wilderness Dungeon Narrow Crevice",
+                    "taskID": "agility_level_46_agility_deep_wilderness_dungeon_narrow_crevice",
+                    "category": "Agility",
+                    "level": 46,
+                    "completion_type": "AGILITY",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "required_object": {
+                        "object": ["Crevice (Deep Wilderness Dungeon)"],
+                        "object_id": [19043], 
+                        "quantity": [1]
+                    }
+                },
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Mithril Ore",
+                    "taskID": "mine_mithril",
+                    "category": "Mining",
+                    "level": 55,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Mithril Ore",
+                            "item_ids": [447],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cut a Diamond",
+                    "taskID": "cut_diamond",
+                    "category": "Crafting",
+                    "level": 43,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Diamond"],
+                            "item_ids": [1601],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cut a Ruby",
+                    "taskID": "cut_ruby",
+                    "category": "Crafting",
+                    "level": 34,
+                    "completion_type": "CRAFTING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Ruby"],
+                            "item_ids": [1603],
+                            "quantity": [1]
+                        }
+                    ]
+                } 
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12349],
+            "neighbor_ids": [12350, 12605, 12348, 12093],
+            "Friendly_Name": "Mage Arena",
+            "tasks": [
+                {
+                    "name": "Equip a Saradomin Cape",
+                    "taskID": "equip_saradomin_cape",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Saradomin Cape"],
+                            "item_ids": [2412, 21791, 24248, 24236]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Guthix Cape",
+                    "taskID": "equip_guthix_cape",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Guthix Cape"],
+                            "item_ids": [2413, 21793, 24249, 24240]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Zamorak Cape",
+                    "taskID": "equip_zamorak_cape",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Zamorak Cape"],
+                            "item_ids": [2414, 21795, 24250, 24244]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Equip an Imbued Saradomin Cape",
+                    "taskID": "equip_imbued_saradomin_cape",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 75,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Imbued Saradomin Cape"],
+                            "item_ids": [21791, 24248, 24236]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Imbued Guthix Cape",
+                    "taskID": "equip_imbued_guthix_cape",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 75,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Imbued Guthix Cape"],
+                            "item_ids": [21793, 24249, 24240]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip an Imbued Zamorak Cape",
+                    "taskID": "equip_imbued_zamorak_cape",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 75,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Imbued Zamorak Cape"],
+                            "item_ids": [21795, 24250, 24244]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Saradomin Staff",
+                    "taskID": "equip_saradomin_staff",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Saradomin Staff"],
+                            "item_ids": [2415]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Guthix Staff",
+                    "taskID": "equip_guthix_staff",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Guthix Staff"],
+                            "item_ids": [2416]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Zamorak Staff",
+                    "taskID": "equip_zamorak_staff",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "category": "Magic",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Zamorak Staff"],
+                            "item_ids": [2417]
+                        }
+                    ]
+                } 
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12605],
+            "neighbor_ids": [12606, 12861, 12604, 12349],
+            "Friendly_Name": "Wilderness Resource Area",
+            "tasks": [
+                {
+                    "name": "Mine some Coal",
+                    "taskID": "mine_coal",
+                    "category": "Mining",
+                    "level": 30,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                        "item": "Coal",
+                        "item_ids": [453],
+                        "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Gold Ore",
+                    "taskID": "mine_gold",
+                    "category": "Mining",
+                    "level": 40,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": "Gold Ore",
+                            "item_ids": [444],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Mithril Ore",
+                    "taskID": "mine_mithril",
+                    "category": "Mining",
+                    "level": 55,
+                    "completion_type": "MINING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Mithril Ore",
+                            "item_ids": [447],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },               
+                {
+                    "name": "Mine some Adamantite Ore",
+                    "taskID": "mine_adamantite_ore",
+                    "category": "Mining",
+                    "level": 70,
+                    "completion_type": "MINING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Adamantite Ore"],
+                            "item_ids": [449],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mine some Runite Ore",
+                    "taskID": "mine_rune_ore",
+                    "category": "Mining",
+                    "level": 85,
+                    "completion_type": "MINING",
+                    "base_points": 4,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Runite Ore"],
+                            "item_ids": [451],
+                            "quantity": [1, 25]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt a Runite Bar",
+                    "taskID": "smelt_runite_bar",
+                    "category": "Smithing",
+                    "level": 85,
+                    "completion_type": "SMITHING",
+                    "base_points": 4,
+                    "assignment_weight": 1,
+                    "required_items": [
+                        {
+                            "item": ["Runite Bar"],
+                            "item_ids": [2363],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt a Mithril Bar",
+                    "taskID": "smith_mithril_bar",
+                    "category": "Smithing",
+                    "level": 50,
+                    "completion_type": "SMITHING",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": "Mithril Bar",
+                            "item_ids": [2359],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smelt an Adamantite Bar", 
+                    "taskID": "smith_adamantite_bar",
+                    "category": "Smithing",
+                    "level": 70,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Adamantite Bar",
+                            "item_ids": [2361],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Chop some Magic Trees",
+                    "taskID": "chop_magic_trees",
+                    "category": "Woodcutting",
+                    "level": 75,
+                    "completion_type": "WOODCUTTING",
+                    "base_points": 3,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Burn some Magic Logs",
+                    "taskID": "burn_magic_logs",
+                    "category": "Firemaking",
+                    "level": 75,
+                    "completion_type": "FIREMAKING",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": "Magic Logs",
+                            "item_ids": [1513],
+                            "quantity": [1, 50]            
+                        }
+                    ]
+                },
+                {
+                    "name": "Catch a Raw Dark Crab",
+                    "taskID": "catch_raw_dark_crab",
+                    "category": "Fishing",
+                    "level": 85,
+                    "completion_type": "FISHING",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Raw dark crab"],
+                            "item_ids": [11934],
+                            "quantity": [25, 100]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cook a Dark Crab",
+                    "taskID": "cook_dark_crab",
+                    "category": "Cooking",
+                    "level": 90,
+                    "completion_type": "COOKING",
+                    "base_points": 5,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dark crab"],
+                            "item_ids": [11936],
+                            "quantity": [1, 50]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smith a Rune Scimitar",
+                    "taskID": "smith_rune_scimitar",
+                    "category": "Smithing",
+                    "level": 90,
+                    "completion_type": "SMITHING",
+                    "base_points": 5,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                                "item": ["Rune Scimitar"],
+                                "item_ids": [1333],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Smith a Rune Dagger",
+                    "taskID": "smith_rune_dagger",
+                    "category": "Smithing",
+                    "level": 85,
+                    "completion_type": "SMITHING",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                                "item": ["Rune Dagger"],
+                                "item_ids": [1213],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Smith an Adamant Chainbody",
+                    "taskID": "smith_adamant_chainbody",
+                    "category": "Smithing",
+                    "level": 81,
+                    "completion_type": "SMITHING",
+                    "base_points": 4,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                                "item": ["Adamant Chainbody"],
+                                "item_ids": [1111],
+                                "quantity": [1]
+                            }
+                        ]
+                },
+                {
+                    "name": "Defeat a Magic Axe",
+                    "taskID": "defeat_magic_axe",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 1,
+                    "target_npc": {
+                        "npc": ["Magic Axe"],
+                        "npc_ids": [7269, 2844],
+                        "quantity": [1, 25]
+                    }
+                },
+                {
+                    "name": "Smith an Adamant Full Helm",
+                    "taskID": "smith_adamant_full_helm",
+                    "category": "Smithing",
+                    "level": 77,
+                    "completion_type": "SMITHING",
+                    "base_points": 3,
+                    "assignment_weight": 3,
+                    "required_items": [
+                            {
+                                "item": ["Adamant Full Helm"],
+                                "item_ids": [1161],
+                                "quantity": [1]
+                            }
+                        ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [12861],
+            "neighbor_ids": [12862, 13117, 12860, 12605],
+            "Friendly_Name": "Scorpia",
+            "tasks": [
+                {
+                    "name": "Defeat Scorpia",
+                    "taskID": "defeat_scorpia",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Scorpia"],
+                        "npc_ids": [6615],
+                        "quantity": [10, 50]
+                    }
+                },
+                {
+                    "name": "Defeat Scorpia's Guardian",
+                    "taskID": "defeat_scorpia's_guardian",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "target_npc": {
+                        "npc": ["Scorpia's Guardian"],
+                        "npc_ids": [6617],
+                        "quantity": [25, 75]
+                    }
+                },
+                {
+                    "name": "Defeat Scorpia in 54 Seconds",
+                    "taskID": "defeat_scorpia_54s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Scorpia"],
+                        "npc_ids": [6615],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [90]
+                    }
+                },
+                {
+                    "name": "Equip a Dragon 2h Sword",
+                    "taskID": "equip_dragon_2h_sword",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon 2h Sword"],
+                            "item_ids": [7158]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Equip a Rune Chainbody",
+                    "taskID": "equip_rune_chainbody",
+                    "base_points": 2,
+                    "assignment_weight": 5,
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "required_items": [
+                        {
+                            "item": ["Rune Chainbody"],
+                            "item_ids": [1113]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Kiteshield",
+                    "taskID": "equip_rune_kiteshield",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rune Kiteshield"],
+                            "item_ids": [1201]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Odium Shard 3",
+                    "taskID": "obtain_odium_shard_3",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Odium Shard 3"],
+                            "item_ids": [11930, 11926, 12807],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Malediction Shard 3",
+                    "taskID": "obtain_malediction_shard_3",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Malediction Shard 3"],
+                            "item_ids": [11933, 12806, 11924],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Larran's Key",
+                    "taskID": "obtain_larran's_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Larran's Key"],
+                            "item_ids": [23490],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Scimitar",
+                    "taskID": "equip_dragon_scimitar",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Scimitar"],
+                            "item_ids": [4587]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain an Ensouled Scorpion Head",
+                    "taskID": "obtain_ensouled_scorpion_head",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": "Ensouled Scorpion Head",
+                            "item_ids": [13459, 13460],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune 2H Sword",
+                    "taskID": "equip_rune_2h_sword",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rune 2H Sword"],
+                            "item_ids": [1319]
+                        }
+                    ]
+                },
+                {
+                    "name": "Fletch some Onyx Bolts",
+                    "taskID": "fletch_onyx_bolts",
+                    "category": "Fletching",
+                    "level": 73,
+                    "completion_type": "FLETCHING",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Onyx Bolts", "Dragon Onyx Bolts"],
+                            "item_ids": [9342, 21973],
+                            "quantity": [1]
+                        }
+                    ]
+                }
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [13117],
+            "neighbor_ids": [13118, 13373, 13116, 12861],
+            "Friendly_Name": "Rogues' Castle",
+            "tasks": [
+                {
+                    "name": "Defeat the Chaos Elemental",
+                    "taskID": "defeat_chaos_elemental",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "target_npc": {
+                        "npc": ["Chaos Elemental"],
+                        "npc_ids": [2054],
+                        "quantity": [1, 25]
+                    }
+                },            
+                {
+                    "name": "Defeat Chaos Elemental in 54 Seconds",
+                    "taskID": "defeat_chaos_elemental_54s",
+                    "category": "Combat",
+                    "completion_type": "NPC_Kill",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "target_npc": {
+                        "npc": ["Chaos Elemental"],
+                        "npc_ids": [2054],
+                        "quantity": [1]
+                    },
+                    "constraints": {
+                        "time_in_ticks": [90]
+                    }
+                },
+                {
+                    "name": "Equip a Dragon 2h Sword",
+                    "taskID": "equip_dragon_2h_sword",
+                    "category": "Attack",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon 2h Sword"],
+                            "item_ids": [7158]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Obtain a Dragon Pickaxe",
+                    "taskID": "obtain_dragon_pickaxe",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Pickaxe"],
+                            "item_ids": [11920, 27695, 23677, 25376, 30351, 12797, 23680, 23682],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Kiteshield",
+                    "taskID": "equip_rune_kiteshield",
+                    "category": "Defence",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Rune Kiteshield"],
+                            "item_ids": [1201]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip Dragon Platelegs",
+                    "taskID": "equip_dragon_platelegs",
+                    "category": "Defence",
+                    "level": [60],
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Platelegs"],
+                            "item_ids": [4087]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Dragon Plateskirt",
+                    "taskID": "equip_dragon_plateskirt",
+                    "completion_type": "EQUIP",
+                    "category": ["Defence"],
+                    "level": [60],
+                    "base_points": 3,
+                    "assignment_weight": 10,
+                    "required_items": [
+                        {
+                            "item": ["Dragon Plateskirt"],
+                            "item_ids": [4585, 28063, 12416]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Larran's Key",
+                    "taskID": "obtain_larran's_key",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Larran's Key"],
+                            "item_ids": [23490],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain a Slayer's Enchantment",
+                    "taskID": "obtain_slayer's_enchantment",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Slayer's Enchantment"],
+                            "item_ids": [21257],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune Dart",
+                    "taskID": "equip_rune_dart",
+                    "category": "Ranged",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune Dart"],
+                            "item_ids": [811]
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtain Weapon Poison++",
+                    "taskID": "obtain_weapon_poison++",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 4,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": "Weapon Poison++",
+                            "item_ids": [5940],
+                            "quantity": [1]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Rune 2H Sword",
+                    "taskID": "equip_rune_2h_sword",
+                    "category": "Attack",
+                    "level": 40,
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Rune 2H Sword"],
+                            "item_ids": [1319]
+                        }
+                    ]
+                }               
+            ],
+            "is_completed": false
+        },
+        {
+            "region_id": [13373],
+            "neighbor_ids": [13374, 13629, 13372, 13117],
+            "Friendly_Name": "Blighted Volcano",
+            "tasks": [
+                {
+                    "name": "Equip an Odium Ward",
+                    "taskID": "equip_odium_ward",
+                    "category": "Defence",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Odium Ward"],
+                            "item_ids": [11926, 12807]
+                        }
+                    ]
+                },              
+                {
+                    "name": "Equip a Malediction Ward",
+                    "taskID": "equip_malediction_ward",
+                    "category": "Defence",
+                    "level": 60,
+                    "completion_type": "EQUIP",
+                    "base_points": 3,
+                    "assignment_weight": 5,
+                    "required_items": [
+                        {
+                            "item": ["Malediction Ward"],
+                            "item_ids": [12806, 11924]
+                        }
+                    ]
+                },
+                {
+                "name": "Build a Hard STASH Unit in the Blighted Volcano",
+                "taskID": "build_hard_stash_blighted_volcano",
+                "category": "Construction",
+                "level": 55,
+                "completion_type": "CONSTRUCTION",
+                "base_points": 2,
+                "assignment_weight": 8,                
+                "required_finished_object": [
+                        {
+                        "object": "Hard STASH Unit (Inconspicuous Rocks)",
+                        "object_id": [29020]
+                        }
+                    ]
+                },             
+                {
+                    "name": "Obtain a Gold Ring",
+                    "taskID": "obtain_gold_ring",
+                    "category": "Obtain",
+                    "completion_type": "OBTAIN",
+                    "base_points": 1,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Gold Ring"],
+                            "item_ids": [1635],
+                            "quantity": [1]
+                        }
+                    ]
+                }               
             ],
             "is_completed": false
         }

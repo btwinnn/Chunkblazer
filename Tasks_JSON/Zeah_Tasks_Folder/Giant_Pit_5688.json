@@ -43,22 +43,6 @@
                     }
                 },
                 {
-                "name": "Complete the Combat Achievement: Into the Den of Giants",
-                "taskID": "complete_into_the_den_of_giants_CA",
-                "category": "Unlock",
-                "completion_type": "VARBIT_CHECK",
-                "base_points": 1,
-                "assignment_weight": 10,
-                "varbit_boolean": 1,                 
-                "constraints": [                   
-                        {                       
-                        "varbit_id": 398,              
-                        "description": "Into the Den of Giants",
-                        "tier": "Easy"
-                        }
-                    ]
-                },
-                {
                     "name": "Defeat a Fire Giant with your Bare Fists",
                     "taskID": "defeat_fire_giant_no_weapon",
                     "category": "Combat",
