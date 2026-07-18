@@ -132,7 +132,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 3447,
+                        "y": 3470,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Obtain a Salve Graveyard Teleport Tablet",
@@ -870,7 +875,12 @@
                         "category": "Travel",
                         "completion_type": "TRAVEL",
                         "base_points": 2,
-                        "assignment_weight": 5
+                        "assignment_weight": 1,
+                        "target_location": {
+                            "x": 3597,
+                            "y": 3495,
+                            "plane": 0
+                        }
                     },
                     {
                         "name": "Defeat a Feral Vampyre",
@@ -1645,7 +1655,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 3469,
+                        "y": 3431,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Catch a Slimy Eel",
@@ -3186,7 +3201,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 3410,
+                        "y": 3324,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Use the Level 50 Agility Salve River Stepping Stone",

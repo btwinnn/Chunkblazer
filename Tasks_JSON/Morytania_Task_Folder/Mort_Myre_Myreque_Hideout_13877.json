@@ -37,7 +37,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+    "target_location": {
+        "x": 3469,
+        "y": 3431,
+        "plane": 0
+    }
                 },
                 {
                     "name": "Catch a Slimy Eel",
