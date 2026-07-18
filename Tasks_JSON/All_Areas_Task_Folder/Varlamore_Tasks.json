@@ -1132,7 +1132,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 1429,
+                        "y": 3324,
+                        "plane": 0
+                    }
                 }
             ],                 
             "is_completed": false
@@ -5892,7 +5897,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 1651,
+                        "y": 3010,
+                        "plane": 0
+                    }
                 },
                 {                           
                     "name": "Cook some Sweetcorn",
@@ -7463,7 +7473,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 1359,
+                        "y": 2941,
+                        "plane": 0
+                    }
                 }, 
                 {
                     "name": "Obtain an Apprentice Potion Pack",
