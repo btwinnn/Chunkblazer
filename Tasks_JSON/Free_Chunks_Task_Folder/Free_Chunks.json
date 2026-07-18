@@ -619,6 +619,132 @@
     "region_id": [11561],
     "Friendly_Name": "Crash Coast",
     "neighbor_ids": [11562, 11817, 11560, 11305]
+},
+{
+    "region_id": [11307],
+    "Friendly_Name": "Marim Coast",
+    "neighbor_ids": [11308, 11563, 11306, 11051]
+},
+{
+    "region_id": [10540],
+    "Friendly_Name": "Oo'glog Channel",
+    "neighbor_ids": [10541, 10796, 10539, 10284]
+},
+{
+    "region_id": [10796],
+    "Friendly_Name": "Marim Coast",
+    "neighbor_ids": [10797, 11052, 10795, 10540]
+},
+{
+    "region_id": [11052],
+    "Friendly_Name": "Marim Coast",
+    "neighbor_ids": [11053, 11308, 11051, 10796]
+},
+{
+    "region_id": [11308],
+    "Friendly_Name": "Kharazi Strait",
+    "neighbor_ids": [11309, 11564, 11307, 11052]
+},
+{
+    "region_id": [11564],
+    "Friendly_Name": "Rock Island Prison",
+    "neighbor_ids": [11565, 11820, 11563, 11308]
+},
+{
+    "region_id": [11820],
+    "Friendly_Name": "The Storm Tempor",
+    "neighbor_ids": [11821, 12076, 11819, 11564]
+},
+{
+    "region_id": [12076],
+    "Friendly_Name": "Tempoross Cove",
+    "neighbor_ids": [12077, 12332, 12075, 11820]
+},
+{
+    "region_id": [12332],
+    "Friendly_Name": "The Storm Tempor",
+    "neighbor_ids": [12333, 12588, 12331, 12076]
+},
+{
+    "region_id": [10541],
+    "Friendly_Name": "Feldip Gulf",
+    "neighbor_ids": [10542, 10797, 10540, 10285]
+},
+{
+    "region_id": [10797],
+    "Friendly_Name": "Feldip Gulf",
+    "neighbor_ids": [10798, 11053, 10796, 10541]
+},
+{
+    "region_id": [10798],
+    "Friendly_Name": "Feldip Gulf",
+    "neighbor_ids": [10799, 11054, 10797, 10542]
+},
+{
+    "region_id": [10799],
+    "Friendly_Name": "Tai Bwo Wannai Coast",
+    "neighbor_ids": [10800, 11055, 10798, 10543]
+},
+{
+    "region_id": [10543],
+    "Friendly_Name": "Gu'tanoth Bay",
+    "neighbor_ids": [10544, 10799, 10542, 10287]
+},
+{
+    "region_id": [10800],
+    "Friendly_Name": "Strait of Khazard",
+    "neighbor_ids": [10801, 11056, 10799, 10544]
+},
+{
+    "region_id": [11822],
+    "Friendly_Name": "Karamja Glider",
+    "neighbor_ids": [11823, 12078, 11821, 11566]
+},
+{
+    "region_id": [12078],
+    "Friendly_Name": "The Pandemonium",
+    "neighbor_ids": [12079, 12334, 12077, 11822]
+},
+{
+    "region_id": [12334],
+    "Friendly_Name": "Kharidian Sea",
+    "neighbor_ids": [12335, 12590, 12333, 12078]
+},
+{
+    "region_id": [12077],
+    "Friendly_Name": "The Storm Tempor",
+    "neighbor_ids": [12078, 12333, 12076, 11821]
+},
+{
+    "region_id": [12333],
+    "Friendly_Name": "The Storm Tempor",
+    "neighbor_ids": [12334, 12589, 12332, 12077]
+},
+{
+    "region_id": [11819],
+    "Friendly_Name": "The Storm Tempor",
+    "neighbor_ids": [11820, 12075, 11818, 11563]
+},
+{
+    "region_id": [12075],
+    "Friendly_Name": "The Storm Tempor",
+    "neighbor_ids": [12076, 12331, 12074, 11819]
+},
+{
+    "region_id": [12331],
+    "Friendly_Name": "The Storm Tempor",
+    "neighbor_ids": [12332, 12587, 12330, 12075]
+},
+{
+    "region_id": [11059],
+    "Friendly_Name": "Fishing Platform",
+    "neighbor_ids": [11060, 11315, 11058, 10803]
+},
+{
+    "region_id": [11060],
+    "Friendly_Name": "West Entrana",
+    "neighbor_ids": [11061, 11316, 11059, 10804]
 }
+
     ]
 }
