@@ -744,6 +744,356 @@
     "region_id": [11060],
     "Friendly_Name": "West Entrana",
     "neighbor_ids": [11061, 11316, 11059, 10804]
+},
+{
+    "region_id": [12587],
+    "Friendly_Name": "Menaphos Outskirts",
+    "neighbor_ids": [12588, 12843, 12586, 12331]
+},
+{
+    "region_id": [12843],
+    "Friendly_Name": "Menaphos Gate",
+    "neighbor_ids": [12844, 13099, 12842, 12587]
+},
+{
+    "region_id": [12586],
+    "Friendly_Name": "Menaphos",
+    "neighbor_ids": [12587, 12842, 12585, 12330]
+},
+{
+    "region_id": [12842],
+    "Friendly_Name": "Menaphos",
+    "neighbor_ids": [12843, 13098, 12841, 12586]
+},
+{
+    "region_id": [13097],
+    "Friendly_Name": "Bay of Elidinis",
+    "neighbor_ids": [13098, 13353, 13096, 12841]
+},
+{
+    "region_id": [13353],
+    "Friendly_Name": "Bay of Elidinis",
+    "neighbor_ids": [13354, 13609, 13352, 13097]
+},
+{
+    "region_id": [13610],
+    "Friendly_Name": "Jaltevas Ring",
+    "neighbor_ids": [13611, 13866, 13609, 13354]
+},
+{
+    "region_id": [13867],
+    "Friendly_Name": "Scabaras' Shallows",
+    "neighbor_ids": [13868, 14123, 13866, 13611]
+},
+{
+    "region_id": [13868],
+    "Friendly_Name": "Scabaras' Shallows",
+    "neighbor_ids": [13869, 14124, 13867, 13612]
+},
+{
+    "region_id": [13869],
+    "Friendly_Name": "Scabaras' Shallows",
+    "neighbor_ids": [13870, 14125, 13868, 13613]
+},
+{
+    "region_id": [14126],
+    "Friendly_Name": "Uzer Channel",
+    "neighbor_ids": [14127, 14382, 14125, 13870]
+},
+{
+    "region_id": [14127],
+    "Friendly_Name": "Uzer Channel",
+    "neighbor_ids": [14128, 14383, 14126, 13871]
+},
+{
+    "region_id": [14128],
+    "Friendly_Name": "Sanctuary's End",
+    "neighbor_ids": [14129, 14384, 14127, 13872]
+},
+{
+    "region_id": [14381],
+    "Friendly_Name": "Uzer Channel",
+    "neighbor_ids": [14382, 14637, 14380, 14125]
+},
+{
+    "region_id": [14636],
+    "Friendly_Name": "Eastern Ocean",
+    "neighbor_ids": [14637, 14892, 14635, 14380]
+},
+{
+    "region_id": [14892],
+    "Friendly_Name": "Eastern Ocean",
+    "neighbor_ids": [14893, 15148, 14891, 14636]
+},
+{
+    "region_id": [15147],
+    "Friendly_Name": "Eastern Ocean",
+    "neighbor_ids": [15148, 15403, 15146, 14891]
+},
+{
+    "region_id": [15404],
+    "Friendly_Name": "Eastern Ocean",
+    "neighbor_ids": [15405, 15660, 15403, 15148]
+},
+{
+    "region_id": [15405],
+    "Friendly_Name": "Eastern Ocean",
+    "neighbor_ids": [15406, 15661, 15404, 15149]
+},
+{
+    "region_id": [15149],
+    "Friendly_Name": "Eastern Ocean",
+    "neighbor_ids": [15150, 15405, 15148, 14893]
+},
+{
+    "region_id": [15150],
+    "Friendly_Name": "Trouble Brewing",
+    "neighbor_ids": [15151, 15406, 15149, 14894]
+},
+{
+    "region_id": [15406],
+    "Friendly_Name": "Mos Le'Water",
+    "neighbor_ids": [15407, 15662, 15405, 15150]
+},
+{
+    "region_id": [15407],
+    "Friendly_Name": "Mos Le'Water",
+    "neighbor_ids": [15408, 15663, 15406, 15151]
+},
+{
+    "region_id": [15152],
+    "Friendly_Name": "Murkshore Sea",
+    "neighbor_ids": [15153, 15408, 15151, 14896]
+},
+{
+    "region_id": [14896],
+    "Friendly_Name": "Murkshore Sea",
+    "neighbor_ids": [14897, 15152, 14895, 14640]
+},
+{
+    "region_id": [14640],
+    "Friendly_Name": "Murkshore Sea",
+    "neighbor_ids": [14641, 14896, 14639, 14384]
+},
+{
+    "region_id": [14384],
+    "Friendly_Name": "Murkshore Sea",
+    "neighbor_ids": [14385, 14640, 14383, 14128]
+},
+{
+    "region_id": [14383],
+    "Friendly_Name": "Uzer Channel",
+    "neighbor_ids": [14384, 14639, 14382, 14127]
+},
+{
+    "region_id": [14382],
+    "Friendly_Name": "Uzer Channel",
+    "neighbor_ids": [14383, 14638, 14381, 14126]
+},
+{
+    "region_id": [13101],
+    "Friendly_Name": "Kharidian Desert",
+    "neighbor_ids": [13102, 13357, 13100, 12845]
+},
+{
+    "region_id": [13357],
+    "Friendly_Name": "Kharidian Desert",
+    "neighbor_ids": [13358, 13613, 13356, 13101]
+},
+{
+    "region_id": [12846],
+    "Friendly_Name": "Desert Mirrors",
+    "neighbor_ids": [12847, 13102, 12845, 12590]
+},
+{
+    "region_id": [13359],
+    "Friendly_Name": "River Elid",
+    "neighbor_ids": [13360, 13615, 13358, 13103]
+},
+{
+    "region_id": [13360],
+    "Friendly_Name": "River Elid",
+    "neighbor_ids": [13361, 13616, 13359, 13104]
+},
+{
+    "region_id": [13617],
+    "Friendly_Name": "Citharede Abbey",
+    "neighbor_ids": [13618, 13873, 13616, 13361]
+},
+{
+    "region_id": [13362],
+    "Friendly_Name": "Emir's Arena",
+    "neighbor_ids": [13363, 13618, 13361, 13106]
+},
+{
+    "region_id": [14641],
+    "Friendly_Name": "Icyene Graveyard",
+    "neighbor_ids": [14642, 14897, 14640, 14385]
+},
+{
+    "region_id": [14130],
+    "Friendly_Name": "Vampyre Training Grounds",
+    "neighbor_ids": [14131, 14386, 14129, 13874]
+},
+{
+    "region_id": [14386],
+    "Friendly_Name": "Meiyerditch",
+    "neighbor_ids": [14387, 14642, 14385, 14130]
+},
+{
+    "region_id": [14898],
+    "Friendly_Name": "Slepe Sound",
+    "neighbor_ids": [14899, 15154, 14897, 14642]
+},
+{
+    "region_id": [15155],
+    "Friendly_Name": "Hallowed Sea",
+    "neighbor_ids": [15156, 15411, 15154, 14899]
+},
+{
+    "region_id": [15156],
+    "Friendly_Name": "Hallowed Sea",
+    "neighbor_ids": [15157, 15412, 15155, 14900]
+},
+{
+    "region_id": [14901],
+    "Friendly_Name": "Gravewater Bay",
+    "neighbor_ids": [14902, 15157, 14900, 14645]
+},
+{
+    "region_id": [14387],
+    "Friendly_Name": "Meiyerditch",
+    "neighbor_ids": [14388, 14643, 14386, 14131]
+},
+{
+    "region_id": [14643],
+    "Friendly_Name": "Slepey Road",
+    "neighbor_ids": [14644, 14899, 14642, 14387]
+},
+{
+    "region_id": [14902],
+    "Friendly_Name": "Gravewater Bay",
+    "neighbor_ids": [14903, 15158, 14901, 14646]
+},
+{
+    "region_id": [15158],
+    "Friendly_Name": "Gravewater Bay",
+    "neighbor_ids": [15159, 15414, 15157, 14902]
+},
+{
+    "region_id": [14903],
+    "Friendly_Name": "Haunted Coast",
+    "neighbor_ids": [14904, 15159, 14902, 14647]
+},
+{
+    "region_id": [15159],
+    "Friendly_Name": "Dragontooth Island",
+    "neighbor_ids": [15160, 15415, 15158, 14903]
+},
+{
+    "region_id": [15415],
+    "Friendly_Name": "Dragon's Maw",
+    "neighbor_ids": [15416, 15671, 15414, 15159]
+},
+{
+    "region_id": [13624],
+    "Friendly_Name": "Bleakwater Bay",
+    "neighbor_ids": [13625, 13880, 13623, 13368]
+},
+{
+    "region_id": [13880],
+    "Friendly_Name": "Bleakwater Bay",
+    "neighbor_ids": [13881, 14136, 13879, 13624]
+},
+{
+    "region_id": [14136],
+    "Friendly_Name": "Haunted Coast",
+    "neighbor_ids": [14137, 14392, 14135, 13880]
+},
+{
+    "region_id": [14392],
+    "Friendly_Name": "Haunted Coast",
+    "neighbor_ids": [14393, 14648, 14391, 14136]
+},
+{
+    "region_id": [14648],
+    "Friendly_Name": "Echoing Rift",
+    "neighbor_ids": [14649, 14904, 14647, 14392]
+},
+{
+    "region_id": [14904],
+    "Friendly_Name": "Echoing Rift",
+    "neighbor_ids": [14905, 15160, 14903, 14648]
+},
+{
+    "region_id": [15160],
+    "Friendly_Name": "Echoing Rift",
+    "neighbor_ids": [15161, 15416, 15159, 14904]
+},
+{
+    "region_id": [14905],
+    "Friendly_Name": "Echoing Rift",
+    "neighbor_ids": [14906, 15161, 14904, 14649]
+},
+{
+    "region_id": [15161],
+    "Friendly_Name": "Echoing Rift",
+    "neighbor_ids": [15162, 15417, 15160, 14905]
+},
+{
+    "region_id": [14906],
+    "Friendly_Name": "Nested Valley",
+    "neighbor_ids": [14907, 15162, 14905, 14650]
+},
+{
+    "region_id": [15418],
+    "Friendly_Name": "The Precipice",
+    "neighbor_ids": [15419, 15674, 15417, 15162]
+},
+{
+    "region_id": [15419],
+    "Friendly_Name": "The Precipice",
+    "neighbor_ids": [15420, 15675, 15418, 15163]
+},
+{
+    "region_id": [15164],
+    "Friendly_Name": "House on the Hill",
+    "neighbor_ids": [15165, 15420, 15163, 14908]
+},
+{
+    "region_id": [14909],
+    "Friendly_Name": "Fossil Channel",
+    "neighbor_ids": [14910, 15165, 14908, 14653]
+},
+{
+    "region_id": [14653],
+    "Friendly_Name": "Fossil Channel",
+    "neighbor_ids": [14654, 14909, 14652, 14397]
+},
+{
+    "region_id": [14397],
+    "Friendly_Name": "Untamed Ocean",
+    "neighbor_ids": [14398, 14653, 14396, 14141]
+},
+{
+    "region_id": [14396],
+    "Friendly_Name": "Untamed Ocean",
+    "neighbor_ids": [14397, 14652, 14395, 14140]
+},
+{
+    "region_id": [14395],
+    "Friendly_Name": "Fossil's Tear",
+    "neighbor_ids": [14396, 14651, 14394, 14139]
+},
+{
+    "region_id": [14394],
+    "Friendly_Name": "Wyvern's Wake",
+    "neighbor_ids": [14395, 14650, 14393, 14138]
+},
+{
+    "region_id": [14393],
+    "Friendly_Name": "Fossil's Child",
+    "neighbor_ids": [14394, 14649, 14392, 14137]
 }
 
     ]
