@@ -82,7 +82,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 3082,
+                        "y": 3206,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Obtain a Secateurs Blade",

@@ -1677,7 +1677,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 3082,
+                        "y": 3206,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Obtain a Secateurs Blade",
@@ -1829,7 +1834,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 3108,
+                        "y": 3149,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Obtain a Splitbark Set",
@@ -4513,7 +4523,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2267,
+                        "y": 2976,
+                        "plane": 0
+                    }
                 }
             ],
             "is_completed": false
