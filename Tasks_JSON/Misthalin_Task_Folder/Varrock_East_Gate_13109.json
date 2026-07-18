@@ -3,22 +3,8 @@
             "Friendly_Name": "Varrock East Gate",
             "neighbor_ids": [12853, 13108, 13365, 13110],
             "tasks": [
-                {
-                    "name": "Travel to Varlamore",
-                    "taskID": "travel_varlamore",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 10
-                },
-                {
-                    "name": "Travel through the Varrock Museum 153 Kudos Gate",
-                    "taskID": "travel_varrock_kudos_gate",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
+                
+                
                 {
                     "name": "Steal from a Tea Stall",
                     "taskID": "steal_tea_stall",

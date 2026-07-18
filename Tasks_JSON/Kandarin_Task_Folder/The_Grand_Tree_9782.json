@@ -3,22 +3,8 @@
             "Friendly_Name": "The Grand Tree",
             "neighbor_ids": [9783, 10038, 9781, 9526],
             "tasks": [
-                {
-                    "name": "Use the Glider to Travel to The Grand Tree",
-                    "taskID": "glider_grand_tree",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
-                {
-                    "name": "Use the Hot Air Balloon to Travel to The Grand Tree",
-                    "taskID": "balloon_grand_tree",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
+                
+                
                 {
                     "name": "Make a Fruit Blast",
                     "taskID": "cook_fruit_blast",

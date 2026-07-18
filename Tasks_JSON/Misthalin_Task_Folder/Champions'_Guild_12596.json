@@ -106,14 +106,7 @@
                         }
                     ]
                 },
-                {
-                    "name": "Enter the Sourhog Cave",
-                    "taskID": "enter_sourhog_cave",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
+                
                 {
                     "name": "Defeat a Sourhog",
                     "taskID": "defeat_sourhog",

@@ -1158,14 +1158,7 @@
                         }
                     ]
                 },
-                {
-                    "name": "Enter the Sourhog Cave",
-                    "taskID": "enter_sourhog_cave",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 1,
-                    "assignment_weight": 8
-                },
+                
                 {
                     "name": "Defeat a Sourhog",
                     "taskID": "defeat_sourhog",
@@ -2491,22 +2484,8 @@
             "Friendly_Name": "Varrock East Gate",
             "neighbor_ids": [12853, 13108, 13365, 13110],
             "tasks": [
-                {
-                "name": "Travel to Varlamore",
-                "taskID": "travel_varlamore",
-                "category": "Travel",
-                "completion_type": "TRAVEL",
-                "base_points": 1,
-                "assignment_weight": 10
-                },
-                {
-                "name": "Travel through the Varrock Museum 153 Kudos Gate",
-                "taskID": "travel_varrock_kudos_gate",
-                "category": "Travel",
-                "completion_type": "TRAVEL",
-                "base_points": 1,
-                "assignment_weight": 8
-                },
+                
+                
                 {
                     "name": "Steal from a Tea Stall",
                     "taskID": "steal_tea_stall",
@@ -3314,22 +3293,8 @@
             "Friendly_Name": "Grand Exchange",
             "neighbor_ids": [12342, 12597, 12854, 12599],
             "tasks": [
-                {
-                    "name": "Use a Minecart to travel to Keldagrim",
-                    "taskID": "minecart_keldagrim",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 8
-                },
-                {
-                    "name": "Use the Spirit Tree at the Grand Exchange",
-                    "taskID": "spirit_tree_teleport_to_GE",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 8
-                },
+                
+                
                 {
                     "name": "Use the Level 21 Agility Underwall Tunnel",
                     "taskID": "agility_level_21_underwall_tunnel",
@@ -3579,14 +3544,7 @@
                             }
                         ]
                 },
-                {
-                    "name": "Use the Lumber Yard Hot Air Balloon",
-                    "taskID": "travel_lumber_yard_hot_air_balloon",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
+                
                 {
                     "name": "Fletch an Oak Shortbow(u)",
                     "taskID": "fletch_oak_shortbow(u)",

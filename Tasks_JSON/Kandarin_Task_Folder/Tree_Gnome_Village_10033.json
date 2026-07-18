@@ -163,14 +163,6 @@
                     "constraints": {
                         "time_in_ticks": [25]
                     }
-                },
-                {
-                    "name": "Use the Spirit Tree to Teleport to the Tree Gnome Village",
-                    "taskID": "spirit_tree_teleport_to_tree_gnome_village",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 8
                 }                                                                                   
             ],
                 "optional_quests_unlocked": [

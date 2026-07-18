@@ -2615,14 +2615,7 @@
                         "quantity": [1]
                     }
                 },
-                {
-                    "name": "Use the Glider to Travel to White Wolf Mountain",
-                    "taskID": "glider_white_wolf_mountain",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
+                
                 {
                     "name": "Defeat a White Wolf on Task",
                     "taskID": "defeat_white_wolf_on_task",

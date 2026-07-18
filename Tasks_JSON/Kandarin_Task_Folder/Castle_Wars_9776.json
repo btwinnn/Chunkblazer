@@ -108,14 +108,7 @@
                         }
                     ]
                 },
-                {
-                    "name": "Use the Hot Air Balloon to Travel to Castle Wars",
-                    "taskID": "balloon_castle_wars",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                },
+                
                 {
                 "name": "Build a Medium STASH Unit at Castle Wars",
                 "taskID": "build_medium_stash_castle_wars",

@@ -886,14 +886,7 @@
                         }
                     ]
                 },
-        {
-          "name": "Use the Glider in Al Kharid",
-          "taskID": "glider_al_kharid",
-          "category": "Travel",
-          "completion_type": "TRAVEL",
-          "base_points": 2,
-          "assignment_weight": 5
-        },
+        
         {
           "name": "Pickpocket a Man or Woman",
           "taskID": "pickpocket_man",

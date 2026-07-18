@@ -33,14 +33,7 @@
                         "quantity": [1, 10]
                     }
                 },
-                {
-                    "name": "Use the Spirit Tree to Teleport to the Battlefield",
-                    "taskID": "spirit_tree_teleport_to_battlefield",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 8
-                },              
+                              
                 {
                     "name": "Defeat a Mounted Terrorbird Gnome",
                     "taskID": "defeat_mounted_terrorbird_gnome_fast",
