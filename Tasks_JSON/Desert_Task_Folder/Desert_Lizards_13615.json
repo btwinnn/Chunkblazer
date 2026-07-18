@@ -5,11 +5,16 @@
             "tasks": [
                 {
                     "name": "Use Fairy Ring Code DLQ",
-                    "taskID": "fairy_ring_DKQ",
+                    "taskID": "fairy_ring_DLQ",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 5,
+                        "target_location": {
+                            "x": 3423,
+                            "y": 3016,
+                            "plane": 0
+                        }
                 },
                 {
                     "name": "Defeat a Desert Lizard",

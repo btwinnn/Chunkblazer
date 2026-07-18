@@ -55,7 +55,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+    "target_location": {
+        "x": 3251,
+        "y": 3095,
+        "plane": 0
+    }
                 },
                 {
                     "name": "Obtain a Tenti Pineapple",
