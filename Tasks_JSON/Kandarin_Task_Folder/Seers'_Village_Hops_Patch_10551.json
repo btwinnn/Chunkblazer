@@ -130,39 +130,7 @@
                             "quantity": [1]
                         }
                     ]
-                },
-                {
-                    "name": "Plant some Hemp Seeds",
-                    "taskID": "plant_hemp",
-                    "category": "Farming",
-                    "level": 37,
-                    "completion_type": "FARMING",
-                    "base_points": 1,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Hemp Seed"],
-                            "item_ids": [31543],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Plant some Cotton Seeds",
-                    "taskID": "plant_cotton",
-                    "category": "Farming",
-                    "level": 71,
-                    "completion_type": "FARMING",
-                    "base_points": 3,
-                    "assignment_weight": 5,
-                    "required_items": [
-                        {
-                            "item": ["Cotton Seed"],
-                            "item_ids": [31545],
-                            "quantity": [1]
-                        }
-                    ]
-                }              
+                }                            
             ],                                  
                     "is_completed": false
         }
