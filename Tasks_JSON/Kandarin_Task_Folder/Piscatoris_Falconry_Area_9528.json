@@ -94,15 +94,7 @@
                             "item_ids": [10127]
                             }                           
                         ]             
-                },
-                {
-                    "name": "Use Fairy Ring Code AKQ",
-                    "taskID": "fairy_ring_AKQ",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                }                                                                    
+                }                                                                                 
             ],                                                                                                              
             "is_completed": false
         }

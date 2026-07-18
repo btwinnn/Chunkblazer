@@ -83,7 +83,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+    "target_location": {
+        "x": 2644,
+        "y": 3495,
+        "plane": 0
+    }
                 }                     
             ],                 
                     "is_completed": false

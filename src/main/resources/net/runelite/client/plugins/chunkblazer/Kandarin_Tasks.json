@@ -1146,12 +1146,17 @@
                     }
                 },
                 {
-                    "name": "Use Fairy Ring Code DKR",
-                    "taskID": "fairy_ring_DKR",
+                    "name": "Use Fairy Ring Code BLR",
+                    "taskID": "fairy_ring_BLR",
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2740,
+                        "y": 3351,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Mine some Iron Ore",
@@ -2018,7 +2023,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2644,
+                        "y": 3495,
+                        "plane": 0
+                    }
                 }                     
             ],                 
                     "is_completed": false
@@ -2337,7 +2347,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2705,
+                        "y": 3576,
+                        "plane": 0
+                    }
                 }                          
             ],                 
                 "is_completed": false
@@ -3569,7 +3584,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2658,
+                        "y": 3230,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Obtain a Yellow Bead",
@@ -4113,7 +4133,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2528,
+                        "y": 3127,
+                        "plane": 0
+                    }
                 }
             ],
                 "optional_quests_unlocked": [
@@ -4540,7 +4565,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2682,
+                        "y": 3081,
+                        "plane": 0
+                    }
                 }                              
             ],                          
             "is_completed": false
@@ -4663,7 +4693,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2571,
+                        "y": 2956,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Fletch a Comp Ogre Bow",
@@ -9171,7 +9206,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2319,
+                        "y": 3619,
+                        "plane": 0
+                    }
                 }                                                                    
             ],                                                                                                              
             "is_completed": false
@@ -9272,15 +9312,7 @@
                             "item_ids": [10127]
                             }                           
                         ]             
-                },
-                {
-                    "name": "Use Fairy Ring Code AKQ",
-                    "taskID": "fairy_ring_AKQ",
-                    "category": "Travel",
-                    "completion_type": "TRAVEL",
-                    "base_points": 2,
-                    "assignment_weight": 5
-                }                                                                    
+                }                                                                                  
             ],                                                                                                              
             "is_completed": false
         },
@@ -9747,7 +9779,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2740,
+                        "y": 2738,
+                        "plane": 0
+                    }
                 }
             ],
             "is_completed": false
@@ -10217,7 +10254,12 @@
                     "category": "Travel",
                     "completion_type": "TRAVEL",
                     "base_points": 2,
-                    "assignment_weight": 5
+                    "assignment_weight": 1,
+                    "target_location": {
+                        "x": 2385,
+                        "y": 3035,
+                        "plane": 0
+                    }
                 },
                 {
                     "name": "Defeat a Smoke Devil",
