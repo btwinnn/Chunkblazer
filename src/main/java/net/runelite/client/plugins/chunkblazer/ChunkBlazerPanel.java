@@ -1521,7 +1521,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		ButtonGroup modeGroup = new ButtonGroup();
 
 		casualRadio = new JRadioButton("Casual Mode");
-		casualRadio.setToolTipText("Any account, Casual leaderboard");
+		casualRadio.setToolTipText("Start anywhere. Play on any account. Featured on the casual leaderboard.");
 		casualRadio.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		casualRadio.setForeground(Color.WHITE);
 		casualRadio.setSelected(true);
@@ -1529,22 +1529,28 @@ public class ChunkBlazerPanel extends PluginPanel
 		modeGroup.add(casualRadio);
 		modePanel.add(casualRadio);
 
-		JLabel casualDesc = new JLabel("   Any account, Casual leaderboard");
+		// Fixed-width table keeps the blurb inside CONTENT_WIDTH; Swing's CSS
+		// subset ignores width on div/body/p, so a table is the reliable wrap.
+		JLabel casualDesc = new JLabel("<html><table width='190' cellpadding='0' cellspacing='0'><tr><td>"
+			+ "Start anywhere. Play on any account. Featured on the casual leaderboard."
+			+ "</td></tr></table></html>");
 		casualDesc.setFont(FontManager.getRunescapeSmallFont());
 		casualDesc.setForeground(Color.LIGHT_GRAY);
 		casualDesc.setAlignmentX(LEFT_ALIGNMENT);
 		modePanel.add(casualDesc);
 		modePanel.add(Box.createVerticalStrut(5));
 
-		nuzlockeRadio = new JRadioButton("Full Nuzlocke");
-		nuzlockeRadio.setToolTipText("Level 3 start, Lumbridge, Nuzlocke leaderboard");
+		nuzlockeRadio = new JRadioButton("Competitive");
+		nuzlockeRadio.setToolTipText("Featured on the main page of the leaderboard and website. You must start on a fresh level 3 account.");
 		nuzlockeRadio.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		nuzlockeRadio.setForeground(Color.WHITE);
 		nuzlockeRadio.setAlignmentX(LEFT_ALIGNMENT);
 		modeGroup.add(nuzlockeRadio);
 		modePanel.add(nuzlockeRadio);
 
-		JLabel nuzlockeDesc = new JLabel("   Level 3 start, Nuzlocke leaderboard");
+		JLabel nuzlockeDesc = new JLabel("<html><table width='190' cellpadding='0' cellspacing='0'><tr><td>"
+			+ "Featured on the main page of the leaderboard and website. You must start on a fresh level 3 account."
+			+ "</td></tr></table></html>");
 		nuzlockeDesc.setFont(FontManager.getRunescapeSmallFont());
 		nuzlockeDesc.setForeground(Color.LIGHT_GRAY);
 		nuzlockeDesc.setAlignmentX(LEFT_ALIGNMENT);

@@ -1220,7 +1220,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			// Without the server we can't authoritatively verify eligibility.
 			// Fail closed rather than locking an unchecked account into Nuzlocke.
-			addPluginChatMessage("Full Nuzlocke needs a connection to the ChunkBlazer server to verify your account. Try again when online.");
+			addPluginChatMessage("Competitive mode needs a connection to the ChunkBlazer server to verify your account. Try again when online.");
 			return;
 		}
 
@@ -1230,7 +1230,7 @@ public class ChunkBlazerPlugin extends Plugin
 			EligibilitySnapshot snapshot = buildEligibilitySnapshot();
 			if (snapshot == null)
 			{
-				addPluginChatMessage("Log in fully before selecting Full Nuzlocke.");
+				addPluginChatMessage("Log in fully before selecting Competitive.");
 				return;
 			}
 
@@ -1247,7 +1247,7 @@ public class ChunkBlazerPlugin extends Plugin
 					else
 					{
 						pendingNuzlockeSnapshot = null;
-						addPluginChatMessage("Sorry, your account does not meet the Nuzlocke requirements, "
+						addPluginChatMessage("Sorry, your account does not meet the Competitive requirements, "
 							+ "please create a new account or play Casual Mode.");
 					}
 				});
@@ -1303,7 +1303,7 @@ public class ChunkBlazerPlugin extends Plugin
 					pendingNuzlockeSnapshot = null;
 					if (snap != null)
 					{
-						addPluginChatMessage("Your account meets the Nuzlocke requirements — locking it in!");
+						addPluginChatMessage("Your account meets the Competitive requirements — locking it in!");
 						commitModeLock(GameMode.NUZLOCKE, snap);
 					}
 					return;
@@ -1316,8 +1316,8 @@ public class ChunkBlazerPlugin extends Plugin
 				}
 				String nonce = start.getNonce();
 				pendingVerificationNonce = nonce;
-				addPluginChatMessage("Your account meets the Nuzlocke requirements! Type " + nonce
-					+ " in public chat and hit Enter to lock in Full Nuzlocke.");
+				addPluginChatMessage("Your account meets the Competitive requirements! Type " + nonce
+					+ " in public chat and hit Enter to lock in Competitive.");
 				panel.showVerificationPrompt(nonce);
 			});
 	}
@@ -1359,7 +1359,7 @@ public class ChunkBlazerPlugin extends Plugin
 					{
 						if (mode == GameMode.NUZLOCKE)
 						{
-							addPluginChatMessage("Full Nuzlocke locked in. Good luck — there's no going back!");
+							addPluginChatMessage("Competitive locked in. Good luck — there's no going back!");
 						}
 					}
 					else if (response.isAlreadyLocked())
@@ -1649,7 +1649,7 @@ public class ChunkBlazerPlugin extends Plugin
 					if (snap != null)
 					{
 						pendingNuzlockeSnapshot = null;
-						addPluginChatMessage("Account verified! Locking in Full Nuzlocke...");
+						addPluginChatMessage("Account verified! Locking in Competitive...");
 						commitModeLock(GameMode.NUZLOCKE, snap);
 					}
 					else

@@ -26,7 +26,7 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "gameMode",
 		name = "Game Mode",
-		description = "Current game mode (Casual or Nuzlocke)",
+		description = "Current game mode (Casual or Competitive)",
 		position = 1,
 		hidden = true
 	)
