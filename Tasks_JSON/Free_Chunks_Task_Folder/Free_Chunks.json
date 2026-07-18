@@ -449,6 +449,96 @@
     "region_id": [9268],
     "Friendly_Name": "Arandar Mountains",
     "neighbor_ids": [9269, 9524, 9267, 9012, 8756, 8755, 9011]
-}
+},
+{
+    "region_id": [8238],
+    "Friendly_Name": "Isle of Souls Coast",
+    "neighbor_ids": [8239, 8494, 8237, 7982]
+},
+{
+    "region_id": [8237],
+    "Friendly_Name": "Isle of Souls Coast",
+    "neighbor_ids": [8238, 8493, 8236, 7981]
+},
+{
+    "region_id": [8236],
+    "Friendly_Name": "Isle of Souls Coast",
+    "neighbor_ids": [8237, 8492, 8235, 7980]
+},
+{
+    "region_id": [8235],
+    "Friendly_Name": "Soul Bay",
+    "neighbor_ids": [8236, 8491, 8234, 7979]
+},
+{
+    "region_id": [8490],
+    "Friendly_Name": "Soul Bay",
+    "neighbor_ids": [8491, 8746, 8489, 8234]
+},
+{
+    "region_id": [8746],
+    "Friendly_Name": "Sea of Souls",
+    "neighbor_ids": [8747, 9002, 8745, 8490]
+},
+{
+    "region_id": [9002],
+    "Friendly_Name": "Sea of Souls",
+    "neighbor_ids": [9003, 9258, 9001, 8746]
+},
+{
+    "region_id": [9259],
+    "Friendly_Name": "Tear of the Soul",
+    "neighbor_ids": [9260, 9515, 9258, 9003]
+},
+{
+    "region_id": [9260],
+    "Friendly_Name": "Isle of Souls Coast",
+    "neighbor_ids": [9261, 9516, 9259, 9004]
+},
+{
+    "region_id": [9262],
+    "Friendly_Name": "Backwater",
+    "neighbor_ids": [9263, 9518, 9261, 9006]
+},
+{
+    "region_id": [8493],
+    "Friendly_Name": "Avatar of Creation",
+    "neighbor_ids": [8494, 8749, 8492, 8237]
+},
+{
+    "region_id": [8749],
+    "Friendly_Name": "Soul Obelisk",
+    "neighbor_ids": [8750, 9005, 8748, 8493]
+},
+{
+    "region_id": [9005],
+    "Friendly_Name": "Avatar of Destruction",
+    "neighbor_ids": [9006, 9261, 9004, 8749]
+},
+{
+    "region_id": [8492],
+    "Friendly_Name": "Soul Path",
+    "neighbor_ids": [8493, 8748, 8491, 8236]
+},
+{
+    "region_id": [9774],
+    "Friendly_Name": "Feldip Coast",
+    "neighbor_ids": [9775, 10030, 9773, 9518]
+},
+{
+    "region_id": [9518],
+    "Friendly_Name": "Breakbone Strait",
+    "neighbor_ids": [9519, 9774, 9517, 9262]
+},
+{
+    "region_id": [9517],
+    "Friendly_Name": "Breakbone Strait",
+    "neighbor_ids": [9518, 9773, 9516, 9261]
+},
+{
+    "region_id": [9516],
+    "Friendly_Name": "Breakbone Strait",
+    "neighbor_ids": [9517, 9772, 9515, 9260]
+},
     ]
 }
