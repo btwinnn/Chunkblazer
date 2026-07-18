@@ -7462,67 +7462,7 @@
                             "quantity": [1]
                         }
                     ]
-                },
-                {
-                    "name": "Equip a Dust Battlestaff",
-                    "taskID": "equip_dust_battlestaff",
-                    "category": "Attack",
-                    "level": 30,
-                    "completion_type": "EQUIP",
-                    "base_points": 5,
-                    "assignment_weight": 3,
-                    "required_items": [
-                        {
-                            "item": ["Dust Battlestaff"],
-                            "item_ids": [20736]
-                        }
-                    ]
-                },
-                {
-                    "name": "Equip a Mist Battlestaff",
-                    "taskID": "equip_mist_battlestaff",
-                    "category": "Attack",
-                    "level": 30,
-                    "completion_type": "EQUIP",
-                    "base_points": 5,
-                    "assignment_weight": 3,
-                    "required_items": [
-                        {
-                            "item": ["Mist Battlestaff"],
-                            "item_ids": [20730]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Imbued Heart",
-                    "taskID": "obtain_imbued_heart",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 1,
-                    "required_items": [
-                        {
-                            "item": ["Imbued Heart"],
-                            "item_ids": [20724],
-                            "quantity": [1]
-                        }
-                    ]
-                },
-                {
-                    "name": "Obtain an Eternal Gem",
-                    "taskID": "obtain_eternal_gem",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 5,
-                    "assignment_weight": 1,
-                    "required_items": [
-                        {
-                            "item": ["Eternal Gem"],
-                            "item_ids": [21270],
-                            "quantity": [1]
-                        }
-                    ]
-                }              
+                }             
             ],                              
             "is_completed": false
         },
