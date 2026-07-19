@@ -191,6 +191,11 @@ public class ChunkBlazerPlugin extends Plugin
 	private final List<NuzlockeChunk> allChunks = new ArrayList<>();
 	private final Map<Integer, NuzlockeChunk> chunksByRegionId = new HashMap<>();
 
+	// Area/chunk label used for tasks that belong to no chunk by design. Kept in
+	// one place because it appears in the Completed Tasks area filter, the chunk
+	// column of the completed cards, and the area-bucket lookup.
+	public static final String GLOBAL_AREA_NAME = "Global";
+
 	// taskIDs belonging to the Global Tasks pool. Lets region-oriented code tell
 	// "this task has no chunk by design" apart from "this task's chunk is
 	// missing", which otherwise both surface as region -1.
@@ -3485,9 +3490,10 @@ public class ChunkBlazerPlugin extends Plugin
 				int regionId = findRegionForTask(taskId);
 				// Global tasks belong to no chunk, so findRegionForTask returns
 				// -1 and getRegionName renders "Unknown Region (-1)". Label them
-				// for what they are instead of showing a broken region.
+				// for what they are instead of showing a broken region. Same
+				// string as the area bucket so the Area and Chunk filters agree.
 				String regionName = globalTaskIds.contains(taskId)
-					? "Global Task"
+					? GLOBAL_AREA_NAME
 					: getRegionName(regionId);
 				completedTasks.add(new CompletedTaskInfo(taskId, regionId, regionName, task));
 			}
@@ -3571,7 +3577,42 @@ public class ChunkBlazerPlugin extends Plugin
 				}
 			}
 		}
+
+		// Global tasks live in no chunk, so scanning allChunks alone left their
+		// categories (Quest, and later Progression/Mystery) out of the Completed
+		// Tasks category filter even though the tasks themselves were listed.
+		for (NuzlockeTask task : globalTasks)
+		{
+			if (task.getCategory() != null && !task.getCategory().isEmpty())
+			{
+				categories.add(task.getCategory());
+			}
+		}
+
 		return categories;
+	}
+
+	/** Whether this taskID belongs to the chunk-independent Global Tasks pool. */
+	public boolean isGlobalTask(String taskId)
+	{
+		return taskId != null && globalTaskIds.contains(taskId);
+	}
+
+	/**
+	 * Area bucket for a completed task, for the Completed Tasks area filter.
+	 *
+	 * Global tasks have no chunk, so getAreaForRegionId(-1) returns null and any
+	 * specific area selection would silently drop every one of them. They get
+	 * their own bucket instead. Shared by the filter and the combo population so
+	 * the two can't disagree about what's in an area.
+	 */
+	public String getAreaForCompletedTask(String taskId, int regionId)
+	{
+		if (isGlobalTask(taskId))
+		{
+			return GLOBAL_AREA_NAME;
+		}
+		return getAreaForRegionId(regionId);
 	}
 
 	/**
@@ -3598,7 +3639,7 @@ public class ChunkBlazerPlugin extends Plugin
 		Set<String> areas = new java.util.TreeSet<>();
 		for (CompletedTaskInfo info : getCompletedTasksWithInfo())
 		{
-			String area = getAreaForRegionId(info.getRegionId());
+			String area = getAreaForCompletedTask(info.getTaskId(), info.getRegionId());
 			if (area != null && !area.isEmpty())
 			{
 				areas.add(area);

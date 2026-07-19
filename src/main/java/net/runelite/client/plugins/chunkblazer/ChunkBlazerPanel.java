@@ -4176,7 +4176,10 @@ public class ChunkBlazerPanel extends PluginPanel
 				}
 				if (!"All".equals(filterArea))
 				{
-					String area = plugin.getAreaForRegionId(info.getRegionId());
+					// Global tasks have no chunk; getAreaForRegionId(-1) is null,
+					// so they need the shared bucket lookup or every specific
+					// area selection would silently hide them.
+					String area = plugin.getAreaForCompletedTask(info.getTaskId(), info.getRegionId());
 					if (area == null || !filterArea.equals(area))
 					{
 						return false;
