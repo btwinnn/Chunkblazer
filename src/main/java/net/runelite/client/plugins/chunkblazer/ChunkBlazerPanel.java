@@ -8,8 +8,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -48,6 +52,37 @@ public class ChunkBlazerPanel extends PluginPanel
 	// pack tighter than the 80px rolled-task rows but are not fixed height —
 	// a long quest name wraps. Height matches the Completed Tasks section.
 	private static final int MAX_GLOBAL_TASKS_HEIGHT = MAX_COMPLETED_TASKS_HEIGHT;
+
+	/**
+	 * Display labels for the Global Tasks type filter, keyed by the raw
+	 * NuzlockeTask.category in the JSON.
+	 *
+	 * The combo is populated from the categories actually present in the pool,
+	 * so a new global task type shows up in the filter with no code change. This
+	 * map only overrides the wording where the category and the label differ
+	 * (category "Quest" reads better as "Quests" in a filter). Anything not
+	 * listed falls back to the raw category, which is why this is not naive
+	 * pluralisation — "Mystery" must not become "Mysterys".
+	 */
+	private static final Map<String, String> GLOBAL_TYPE_DISPLAY_NAMES = createGlobalTypeDisplayNames();
+
+	private static Map<String, String> createGlobalTypeDisplayNames()
+	{
+		Map<String, String> names = new HashMap<>();
+		names.put("Quest", "Quests");
+		names.put("Progression", "Progression");
+		names.put("Mystery", "Mystery Tasks");
+		return names;
+	}
+
+	private static String globalTypeDisplayName(String category)
+	{
+		if (category == null || category.isEmpty())
+		{
+			return "Other";
+		}
+		return GLOBAL_TYPE_DISPLAY_NAMES.getOrDefault(category, category);
+	}
 
 	private ChunkBlazerPlugin plugin;
 
@@ -137,6 +172,11 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JLabel globalTasksCollapsedLabel;
 	private JLabel globalTasksSectionTitle;
 	private JCheckBox globalTasksHideCompleted;
+	private JComboBox<String> globalTasksTypeCombo;
+	// Underlying NuzlockeTask.category to filter on, or "All". Stored rather than
+	// read off the combo because the combo shows display names (see
+	// GLOBAL_TYPE_DISPLAY_NAMES) which do not always equal the category.
+	private String globalTasksSelectedType = "All";
 	private boolean isRefreshingFilters = false; // Prevent event loops during filter refresh
 
 	// Active Tasks Components
@@ -918,8 +958,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		globalTasksFilterPanel.setLayout(new BoxLayout(globalTasksFilterPanel, BoxLayout.Y_AXIS));
 		globalTasksFilterPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		globalTasksFilterPanel.setAlignmentX(LEFT_ALIGNMENT);
-		globalTasksFilterPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 55));
-		globalTasksFilterPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 55));
+		globalTasksFilterPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 105));
+		globalTasksFilterPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 105));
 		globalTasksFilterPanel.setVisible(false);
 
 		JPanel searchRow = new JPanel(new BorderLayout(5, 0));
@@ -956,6 +996,36 @@ public class ChunkBlazerPanel extends PluginPanel
 		searchRow.add(globalTasksSearchField, BorderLayout.CENTER);
 
 		globalTasksFilterPanel.add(searchRow);
+		globalTasksFilterPanel.add(Box.createVerticalStrut(5));
+
+		// Type filter — Quests today; Progression and Mystery later. Populated
+		// from the categories present in the pool, so new types need no code.
+		JPanel typeRow = new JPanel(new BorderLayout(2, 0));
+		typeRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		typeRow.setAlignmentX(LEFT_ALIGNMENT);
+		typeRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 45));
+		typeRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 45));
+
+		JLabel typeLabel = new JLabel("Type:");
+		typeLabel.setFont(FontManager.getRunescapeSmallFont());
+		typeLabel.setForeground(Color.LIGHT_GRAY);
+		typeRow.add(typeLabel, BorderLayout.NORTH);
+
+		globalTasksTypeCombo = new JComboBox<>(new String[]{"All"});
+		globalTasksTypeCombo.setFont(FontManager.getRunescapeSmallFont());
+		globalTasksTypeCombo.setToolTipText("Filter global tasks by type");
+		globalTasksTypeCombo.addActionListener(e ->
+		{
+			if (isRefreshingFilters)
+			{
+				return;
+			}
+			globalTasksSelectedType = selectedGlobalTypeCategory();
+			updateGlobalTasksContent();
+		});
+		typeRow.add(globalTasksTypeCombo, BorderLayout.CENTER);
+
+		globalTasksFilterPanel.add(typeRow);
 		globalTasksFilterPanel.add(Box.createVerticalStrut(3));
 
 		globalTasksHideCompleted = new JCheckBox("Hide completed");
@@ -1003,6 +1073,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		if (globalTasksExpanded)
 		{
+			refreshGlobalTasksTypes();
 			updateGlobalTasksContent();
 
 			int height = MAX_GLOBAL_TASKS_HEIGHT;
@@ -1031,6 +1102,78 @@ public class ChunkBlazerPanel extends PluginPanel
 	{
 		globalTasksSearchText = globalTasksSearchField.getText().toLowerCase().trim();
 		updateGlobalTasksContent();
+	}
+
+	/**
+	 * Map the combo's current display label back to the underlying task
+	 * category, since the two differ for some types ("Quests" -> "Quest").
+	 */
+	private String selectedGlobalTypeCategory()
+	{
+		Object selected = globalTasksTypeCombo.getSelectedItem();
+		if (selected == null || "All".equals(selected))
+		{
+			return "All";
+		}
+
+		String label = selected.toString();
+		for (NuzlockeTask task : plugin.getGlobalTasks())
+		{
+			if (label.equals(globalTypeDisplayName(task.getCategory())))
+			{
+				return task.getCategory() != null ? task.getCategory() : "All";
+			}
+		}
+		return "All";
+	}
+
+	/**
+	 * Rebuild the type combo from the categories actually present in the pool.
+	 * Preserves the current selection where possible so a refresh doesn't reset
+	 * the player's filter.
+	 */
+	private void refreshGlobalTasksTypes()
+	{
+		if (globalTasksTypeCombo == null || plugin == null)
+		{
+			return;
+		}
+
+		Set<String> categories = new TreeSet<>();
+		for (NuzlockeTask task : plugin.getGlobalTasks())
+		{
+			if (task.getCategory() != null && !task.getCategory().isEmpty())
+			{
+				categories.add(task.getCategory());
+			}
+		}
+
+		isRefreshingFilters = true;
+		try
+		{
+			String previous = globalTasksSelectedType;
+
+			globalTasksTypeCombo.removeAllItems();
+			globalTasksTypeCombo.addItem("All");
+			for (String category : categories)
+			{
+				globalTasksTypeCombo.addItem(globalTypeDisplayName(category));
+			}
+
+			if (previous != null && !"All".equals(previous) && categories.contains(previous))
+			{
+				globalTasksTypeCombo.setSelectedItem(globalTypeDisplayName(previous));
+			}
+			else
+			{
+				globalTasksTypeCombo.setSelectedItem("All");
+				globalTasksSelectedType = "All";
+			}
+		}
+		finally
+		{
+			isRefreshingFilters = false;
+		}
 	}
 
 	/**
@@ -1082,6 +1225,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		if (globalTasksExpanded)
 		{
+			refreshGlobalTasksTypes();
 			updateGlobalTasksContent();
 		}
 	}
@@ -1101,7 +1245,10 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		Set<String> completedIds = plugin.getCompletedTaskIdSet();
 		boolean hideCompleted = globalTasksHideCompleted != null && globalTasksHideCompleted.isSelected();
-		int shown = 0;
+		final String filterType = globalTasksSelectedType != null ? globalTasksSelectedType : "All";
+
+		List<NuzlockeTask> matching = new ArrayList<>();
+		int matchingPoints = 0;
 
 		for (NuzlockeTask task : plugin.getGlobalTasks())
 		{
@@ -1110,6 +1257,15 @@ public class ChunkBlazerPanel extends PluginPanel
 			if (hideCompleted && done)
 			{
 				continue;
+			}
+
+			if (!"All".equals(filterType))
+			{
+				String category = task.getCategory() != null ? task.getCategory() : "";
+				if (!filterType.equals(category))
+				{
+					continue;
+				}
 			}
 
 			if (!globalTasksSearchText.isEmpty())
@@ -1121,9 +1277,29 @@ public class ChunkBlazerPanel extends PluginPanel
 				}
 			}
 
+			matching.add(task);
+			matchingPoints += task.getBasePoints();
+		}
+
+		int shown = matching.size();
+
+		if (shown > 0)
+		{
+			// Mirrors the Completed Tasks summary line, and makes it obvious the
+			// list is filtered rather than empty/broken.
+			JLabel summary = new JLabel("Showing " + shown + " tasks (" + matchingPoints + " pts)");
+			summary.setFont(FontManager.getRunescapeSmallFont());
+			summary.setForeground(FLAME);
+			summary.setAlignmentX(LEFT_ALIGNMENT);
+			globalTasksContentPanel.add(summary);
+			globalTasksContentPanel.add(Box.createVerticalStrut(5));
+		}
+
+		for (NuzlockeTask task : matching)
+		{
+			boolean done = task.isCompleted() || completedIds.contains(task.getTaskId());
 			globalTasksContentPanel.add(createGlobalTaskRow(task, done));
 			globalTasksContentPanel.add(Box.createVerticalStrut(4));
-			shown++;
 		}
 
 		if (shown == 0)
