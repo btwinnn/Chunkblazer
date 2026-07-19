@@ -45,7 +45,18 @@ public class QuestCheckModule extends AbstractTaskModule
 	private static final String QUEST_TYPE = "QUEST_CHECK";
 
 	// Minimum game ticks between full sweeps of the pool. See SWEEP COST above.
-	private static final int SWEEP_INTERVAL_TICKS = 5;
+	// 25 ticks = ~15s. The plugin backfills every already-finished quest in one
+	// batch at registration, so this sweep only has to notice quests finished
+	// DURING play — which is not latency-critical, and a slower poll keeps the
+	// steady-state script cost negligible.
+	private static final int SWEEP_INTERVAL_TICKS = 25;
+
+	// Hard cap on completions fired per sweep. The plugin's backfill should mean
+	// at most one or two quests ever complete in the same sweep, but a single
+	// completion runs an expensive per-task pipeline (config writes + a full
+	// Swing rebuild of the panel), and firing ~150 of them in one tick is what
+	// hard-locked the client on 2026-07-19. Leftovers roll into the next sweep.
+	private static final int MAX_COMPLETIONS_PER_SWEEP = 5;
 
 	// Chat colors for ChunkBlazer messages (matches VarbitCheckModule).
 	private static final String COLOR_BLUE = "3366ff";
@@ -207,30 +218,41 @@ public class QuestCheckModule extends AbstractTaskModule
 			return;
 		}
 
+		int completions = 0;
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
-			checkTaskCompletion(task);
+			if (checkTaskCompletion(task))
+			{
+				completions++;
+				if (completions >= MAX_COMPLETIONS_PER_SWEEP)
+				{
+					// Anything still finished gets picked up next sweep.
+					requestSweep();
+					return;
+				}
+			}
 		}
 	}
 
-	private void checkTaskCompletion(NuzlockeTask task)
+	/** @return true if this call completed the task. */
+	private boolean checkTaskCompletion(NuzlockeTask task)
 	{
 		if (task.isCompleted())
 		{
 			activeTasks.remove(task);
 			taskQuests.remove(task.getTaskId());
-			return;
+			return false;
 		}
 
 		Quest quest = taskQuests.get(task.getTaskId());
 		if (quest == null)
 		{
-			return;
+			return false;
 		}
 
 		if (quest.getState(client) != QuestState.FINISHED)
 		{
-			return;
+			return false;
 		}
 
 		task.setCurrentProgress(1);
@@ -247,6 +269,7 @@ public class QuestCheckModule extends AbstractTaskModule
 		// into the completed set, and the next loadActiveTasks() won't re-register it.
 		activeTasks.remove(task);
 		taskQuests.remove(task.getTaskId());
+		return true;
 	}
 
 	private void sendTaskSuccess(NuzlockeTask task)

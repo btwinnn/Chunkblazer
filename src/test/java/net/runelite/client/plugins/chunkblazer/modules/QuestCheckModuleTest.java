@@ -337,6 +337,40 @@ class QuestCheckModuleTest extends AbstractTaskModuleTest
 		verify(completionCallback, times(1)).onTaskCompleted(task, 1);
 	}
 
+	/**
+	 * Regression guard for the 2026-07-19 client freeze: ~150 quest tasks all
+	 * completed in one sweep, and each completion runs an expensive per-task
+	 * pipeline on the client thread (config writes + a full Swing rebuild).
+	 * A single sweep must never fire more than the cap.
+	 */
+	@Test
+	void sweepCapsCompletionsPerPass()
+	{
+		lenient().when(client.getGameState()).thenReturn(GameState.LOGGED_IN);
+		lenient().when(client.getIntStack()).thenReturn(STACK_FINISHED);
+
+		// 20 already-finished quests registered at once.
+		String[] quests = {
+			"COOKS_ASSISTANT", "DRAGON_SLAYER_I", "DEMON_SLAYER", "IMP_CATCHER",
+			"SHEEP_SHEARER", "RUNE_MYSTERIES", "DORICS_QUEST", "WITCHS_POTION",
+			"THE_RESTLESS_GHOST", "PIRATES_TREASURE", "GOBLIN_DIPLOMACY",
+			"BLACK_KNIGHTS_FORTRESS", "VAMPYRE_SLAYER", "ERNEST_THE_CHICKEN",
+			"PRINCE_ALI_RESCUE", "SHIELD_OF_ARRAV", "MISTHALIN_MYSTERY",
+			"X_MARKS_THE_SPOT", "BELOW_ICE_MOUNTAIN", "THE_CORSAIR_CURSE",
+		};
+		for (int i = 0; i < quests.length; i++)
+		{
+			questCheckModule.addActiveTask(questTask("quest_" + i, quests[i]));
+		}
+
+		// Exactly one sweep.
+		questCheckModule.onVarbitChanged(new VarbitChanged());
+		lenient().when(client.getTickCount()).thenReturn(1000);
+		questCheckModule.onGameTick(new GameTick());
+
+		verify(completionCallback, atMost(5)).onTaskCompleted(any(), anyInt());
+	}
+
 	@Test
 	void handlesQuestCheckCompletionType()
 	{

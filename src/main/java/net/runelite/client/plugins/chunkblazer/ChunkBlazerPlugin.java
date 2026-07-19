@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import java.util.Collection;
 import net.runelite.api.GameState;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MessageNode;
@@ -180,6 +181,11 @@ public class ChunkBlazerPlugin extends Plugin
 	// module manager separately in registerGlobalTasks().
 	@Getter
 	private final List<NuzlockeTask> globalTasks = new ArrayList<>();
+
+	// loadActiveTasks() runs from ~9 places and the quest backfill is deferred
+	// to the client thread, so without this a burst of reloads queues a pile of
+	// overlapping backfills.
+	private volatile boolean questBackfillInFlight;
 
 	private final List<NuzlockeChunk> allChunks = new ArrayList<>();
 	private final Map<Integer, NuzlockeChunk> chunksByRegionId = new HashMap<>();
@@ -1189,9 +1195,66 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void registerGlobalTasks(Set<String> completedTaskIds)
 	{
+		if (globalTasks.isEmpty() || questBackfillInFlight)
+		{
+			return;
+		}
+
+		questBackfillInFlight = true;
+
+		// Quest state is read with a client script, so this has to be on the
+		// client thread AND after login. Returning false reschedules for the
+		// next tick, so this survives being called from the login flow.
+		clientThread.invokeLater(() ->
+		{
+			if (client.getGameState() != GameState.LOGGED_IN)
+			{
+				return false;
+			}
+
+			try
+			{
+				backfillAndRegisterGlobalTasks();
+			}
+			finally
+			{
+				questBackfillInFlight = false;
+			}
+			return true;
+		});
+	}
+
+	/**
+	 * Split the Global Tasks pool into "already finished before we ever looked"
+	 * and "still to do", then settle the first group in ONE batch.
+	 *
+	 * WHY THE BATCH EXISTS (2026-07-19, froze the client): letting the module
+	 * detect these normally meant ~150 tasks firing completionCallback in a
+	 * single sweep, and each one runs the full single-task pipeline —
+	 * completeTask() does a config write for points, another for the completed
+	 * list, then panel.updateCompletedTasks(), which calls
+	 * getCompletedTasksWithInfo() and re-scans every completed id through
+	 * findTaskById + findRegionForTask, plus a full Swing rebuild of the active
+	 * task list. That is quadratic in the number of completions and it all runs
+	 * on the client thread, so a developed account hard-locked on login.
+	 *
+	 * A player who already did the quests also does not want 150 popups.
+	 * Backfilled quests are therefore silent: points are summed and written
+	 * once, the completed list is written once, and the panel refreshes once.
+	 * Only quests finished DURING play reach the module and get the normal
+	 * per-task celebration.
+	 */
+	private void backfillAndRegisterGlobalTasks()
+	{
+		Set<String> completedTaskIds = getCompletedTaskIds();
+
+		List<String> backfilledIds = new ArrayList<>();
+		int backfilledPoints = 0;
+
 		for (NuzlockeTask task : globalTasks)
 		{
-			if (task.getTaskId() == null || completedTaskIds.contains(task.getTaskId()))
+			String taskId = task.getTaskId();
+			if (taskId == null || completedTaskIds.contains(taskId))
 			{
 				continue;
 			}
@@ -1203,7 +1266,62 @@ public class ChunkBlazerPlugin extends Plugin
 			task.setCurrentProgress(0);
 			task.setCompleted(false);
 
+			if (isQuestFinished(task))
+			{
+				task.setCurrentProgress(1);
+				task.setCompleted(true);
+				completedTaskCache.put(taskId, task);
+				backfilledIds.add(taskId);
+				backfilledPoints += task.getBasePoints();
+				continue;
+			}
+
 			taskModuleManager.registerActiveTask(task);
+		}
+
+		if (backfilledIds.isEmpty())
+		{
+			return;
+		}
+
+		// One write each, instead of two per task.
+		addPoints(backfilledPoints);
+		markTasksCompleted(backfilledIds);
+
+		addPluginChatMessage("Global Tasks: " + backfilledIds.size()
+			+ " quests already complete (+" + backfilledPoints + " points).");
+
+		if (panel != null)
+		{
+			panel.updateStats();
+			panel.updateCompletedTasks();
+			panel.updateGlobalTasks();
+		}
+	}
+
+	/**
+	 * Whether the quest named by a QUEST_CHECK task is already FINISHED.
+	 * Client thread only — getState() runs a script.
+	 */
+	private boolean isQuestFinished(NuzlockeTask task)
+	{
+		TaskConstraints constraints = task.getConstraints();
+		String questName = constraints != null ? constraints.getQuest() : null;
+		if (questName == null || questName.isEmpty())
+		{
+			return false;
+		}
+
+		try
+		{
+			return net.runelite.api.Quest.valueOf(questName).getState(client)
+				== net.runelite.api.QuestState.FINISHED;
+		}
+		catch (IllegalArgumentException e)
+		{
+			// Unknown constant — task data newer than the API we build against.
+			// QuestCheckModule logs this by name; stay quiet here.
+			return false;
 		}
 	}
 
@@ -3174,6 +3292,32 @@ public class ChunkBlazerPlugin extends Plugin
 			configManager.setConfiguration("chunkblazer", "currentTaskQuantity", 1);
 			configManager.setConfiguration("chunkblazer", "currentTaskProgress", 0);
 		}
+	}
+
+	/**
+	 * Append many task ids to the completed list in a SINGLE config write.
+	 * markTaskCompleted() per task means one read + one write each, which is
+	 * what made the Global Tasks backfill unusable — see
+	 * backfillAndRegisterGlobalTasks().
+	 */
+	private void markTasksCompleted(Collection<String> taskIds)
+	{
+		if (taskIds == null || taskIds.isEmpty())
+		{
+			return;
+		}
+
+		String completed = config.completedTasks();
+		StringBuilder sb = new StringBuilder(completed == null ? "" : completed);
+		for (String taskId : taskIds)
+		{
+			if (sb.length() > 0)
+			{
+				sb.append(',');
+			}
+			sb.append(taskId);
+		}
+		configManager.setConfiguration("chunkblazer", "completedTasks", sb.toString());
 	}
 
 	private void markTaskCompleted(String taskId)
