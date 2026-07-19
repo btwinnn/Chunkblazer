@@ -26,6 +26,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import java.util.Collection;
+import java.util.Collections;
 import net.runelite.api.GameState;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MessageNode;
@@ -189,6 +190,17 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private final List<NuzlockeChunk> allChunks = new ArrayList<>();
 	private final Map<Integer, NuzlockeChunk> chunksByRegionId = new HashMap<>();
+
+	// taskId -> task, across every chunk plus the Global Tasks pool. Rebuilt by
+	// rebuildTaskIndex() whenever task data is (re)loaded.
+	//
+	// This exists because findTaskById() used to LINEAR SCAN allChunks — ~404
+	// chunks x ~12 tasks = ~5,000 string compares per lookup, with the cache
+	// checked only after the scan failed. getCompletedTasksWithInfo() calls it
+	// once per completed id and the panel calls that on every refresh, so the
+	// cost was completedCount x 5,000 per repaint. Survivable at 41 completed
+	// tasks; it hard-locked the client at ~200 (see backfillAndRegisterGlobalTasks).
+	private final Map<String, NuzlockeTask> tasksById = new HashMap<>();
 	// Region IDs listed in Free_Chunks.json: 0-cost, unlock-on-demand chunks that
 	// behave exactly like charter ports (yellow-unlockable, unlock by walking in /
 	// clicking) EXCEPT they have no tasks, so nothing rolls on unlock. NOTE:
@@ -1084,6 +1096,51 @@ public class ChunkBlazerPlugin extends Plugin
 
 		// Global (chunk-independent) task pool — quests.
 		loadGlobalTasks();
+
+		// Both sources are loaded; index them for O(1) findTaskById.
+		rebuildTaskIndex();
+	}
+
+	/**
+	 * Rebuild the taskId -> task index from allChunks + globalTasks.
+	 *
+	 * Call after ANY change to either collection. Both are only populated by
+	 * loadChunkData()/loadGlobalTasks(), which run once at startup, so this has
+	 * a single call site today — but a stale index silently returns the wrong
+	 * task, so keep them adjacent if that ever changes.
+	 *
+	 * Duplicate taskIDs across chunks are expected (e.g. cook_tuna exists in both
+	 * Mistrock and the Fishing Guild). First-wins here matches what the old
+	 * linear scan returned, so behaviour is unchanged.
+	 */
+	private void rebuildTaskIndex()
+	{
+		tasksById.clear();
+
+		for (NuzlockeChunk chunk : allChunks)
+		{
+			if (chunk.getTasks() == null)
+			{
+				continue;
+			}
+			for (NuzlockeTask task : chunk.getTasks())
+			{
+				if (task.getTaskId() != null)
+				{
+					tasksById.putIfAbsent(task.getTaskId(), task);
+				}
+			}
+		}
+
+		// Global tasks live in no chunk, so the old scan never found them —
+		// meaning quest tasks could not resolve for the Completed Tasks panel.
+		for (NuzlockeTask task : globalTasks)
+		{
+			if (task.getTaskId() != null)
+			{
+				tasksById.putIfAbsent(task.getTaskId(), task);
+			}
+		}
 	}
 
 	/**
@@ -1248,7 +1305,7 @@ public class ChunkBlazerPlugin extends Plugin
 	{
 		Set<String> completedTaskIds = getCompletedTaskIds();
 
-		List<String> backfilledIds = new ArrayList<>();
+		List<NuzlockeTask> backfilled = new ArrayList<>();
 		int backfilledPoints = 0;
 
 		for (NuzlockeTask task : globalTasks)
@@ -1270,8 +1327,7 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				task.setCurrentProgress(1);
 				task.setCompleted(true);
-				completedTaskCache.put(taskId, task);
-				backfilledIds.add(taskId);
+				backfilled.add(task);
 				backfilledPoints += task.getBasePoints();
 				continue;
 			}
@@ -1279,24 +1335,16 @@ public class ChunkBlazerPlugin extends Plugin
 			taskModuleManager.registerActiveTask(task);
 		}
 
-		if (backfilledIds.isEmpty())
+		if (backfilled.isEmpty())
 		{
 			return;
 		}
 
-		// One write each, instead of two per task.
-		addPoints(backfilledPoints);
-		markTasksCompleted(backfilledIds);
+		// One batch: two config writes and one panel refresh for the whole set.
+		completeTasks(backfilled);
 
-		addPluginChatMessage("Global Tasks: " + backfilledIds.size()
+		addPluginChatMessage("Global Tasks: " + backfilled.size()
 			+ " quests already complete (+" + backfilledPoints + " points).");
-
-		if (panel != null)
-		{
-			panel.updateStats();
-			panel.updateCompletedTasks();
-			panel.updateGlobalTasks();
-		}
 	}
 
 	/**
@@ -2659,19 +2707,11 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private NuzlockeTask findTaskById(String taskId)
 	{
-		// First check allChunks (primary source)
-		for (NuzlockeChunk chunk : allChunks)
+		// Indexed lookup over allChunks + globalTasks (the old primary source).
+		NuzlockeTask indexed = tasksById.get(taskId);
+		if (indexed != null)
 		{
-			if (chunk.getTasks() != null)
-			{
-				for (NuzlockeTask task : chunk.getTasks())
-				{
-					if (taskId.equals(task.getTaskId()))
-					{
-						return task;
-					}
-				}
-			}
+			return indexed;
 		}
 
 		// Fallback to completed task cache
@@ -3247,35 +3287,79 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private void completeTask(NuzlockeTask task)
 	{
-		// Cache the task before removing from active list (for completed tasks lookup)
-		completedTaskCache.put(task.getTaskId(), task);
+		completeTasks(Collections.singletonList(task));
+	}
 
-		// Add points for completing the task
-		addPoints(task.getBasePoints());
-
-		// Mark as completed
-		markTaskCompleted(task.getTaskId());
-
-		// Remove from active tasks
-		activeTasks.remove(task);
-		if (activeTask == task)
+	/**
+	 * Complete one or many tasks, doing the expensive settle-up work ONCE.
+	 *
+	 * The per-task work (cache, remove from active) scales linearly and is
+	 * cheap. The settle-up work does NOT: two config writes plus five panel
+	 * rebuilds, and updateCompletedTasks() re-resolves every completed id.
+	 * Looping completeTask() over a batch therefore costs 2N config writes and
+	 * 5N rebuilds — that is what froze the client when ~150 quest tasks
+	 * completed in one tick (2026-07-19).
+	 *
+	 * Any future task source that can satisfy many tasks at once — skill-level
+	 * thresholds, retroactive unlocks — must come through here rather than
+	 * looping the single-task version.
+	 */
+	private void completeTasks(Collection<NuzlockeTask> tasks)
+	{
+		if (tasks == null || tasks.isEmpty())
 		{
-			activeTask = activeTasks.isEmpty() ? null : activeTasks.get(0);
+			return;
 		}
 
-		// Clear progress data for this task
+		List<String> completedIds = new ArrayList<>(tasks.size());
+		int totalPoints = 0;
+
+		for (NuzlockeTask task : tasks)
+		{
+			if (task == null || task.getTaskId() == null)
+			{
+				continue;
+			}
+
+			// Cache the task before removing from active list (for completed tasks lookup)
+			completedTaskCache.put(task.getTaskId(), task);
+			completedIds.add(task.getTaskId());
+			totalPoints += task.getBasePoints();
+
+			// Remove from active tasks
+			activeTasks.remove(task);
+			if (activeTask == task)
+			{
+				activeTask = activeTasks.isEmpty() ? null : activeTasks.get(0);
+			}
+
+			if (panel != null)
+			{
+				// Clear selected task if it was the completed one
+				panel.clearSelectedTaskIfMatch(task);
+			}
+		}
+
+		if (completedIds.isEmpty())
+		{
+			return;
+		}
+
+		// --- settle up once, regardless of batch size ---
+		addPoints(totalPoints);
+		markTasksCompleted(completedIds);
+
+		// Clear progress data for these tasks
 		saveActiveTasks();
 
-
-		// Clear selected task if it was the completed one
-		panel.clearSelectedTaskIfMatch(task);
-
-		// Update all panel sections
-		panel.updateStats();
-		panel.updateTaskDisplay();
-		panel.updateCompletedTasks();
-		panel.updateGlobalTasks();
-		panel.updateTaskList();
+		if (panel != null)
+		{
+			panel.updateStats();
+			panel.updateTaskDisplay();
+			panel.updateCompletedTasks();
+			panel.updateGlobalTasks();
+			panel.updateTaskList();
+		}
 	}
 
 	private void saveCurrentTask()
