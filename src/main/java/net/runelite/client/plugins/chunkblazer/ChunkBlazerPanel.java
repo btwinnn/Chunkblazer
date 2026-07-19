@@ -52,11 +52,11 @@ public class ChunkBlazerPanel extends PluginPanel
 	// pack tighter than the 80px rolled-task rows but are not fixed height —
 	// a long quest name wraps. Height matches the Completed Tasks section.
 	private static final int MAX_GLOBAL_TASKS_HEIGHT = MAX_COMPLETED_TASKS_HEIGHT;
-	// Unlocked-chunk chips are small and wrap several per row, so this shows
-	// roughly 5-6 rows before scrolling. Without a cap the expanded list grew
-	// with the unlock count (101 chips ran to thousands of px) and swamped the
+	// Unlocked chunks render as two-line cards like the task sections, so this
+	// shows roughly 6 before scrolling. Without a cap the expanded list grew
+	// with the unlock count (101 entries ran to thousands of px) and swamped the
 	// side panel — every other section here is a fixed-height scroll area.
-	private static final int MAX_UNLOCKED_CHUNKS_HEIGHT = 150;
+	private static final int MAX_UNLOCKED_CHUNKS_HEIGHT = TASK_ITEM_HEIGHT * 3;
 
 	/**
 	 * Display labels for the Global Tasks type filter, keyed by the raw
@@ -1640,35 +1640,35 @@ public class ChunkBlazerPanel extends PluginPanel
 			}
 			else
 			{
-				// Compact wrapping "chips" instead of one chunk per row, so a long unlock
-				// list stays tight and modern-looking as it grows.
-				JPanel chipWrap = new JPanel(new WrapLayout(FlowLayout.LEFT, 4, 4));
-				chipWrap.setOpaque(false);
-				chipWrap.setAlignmentX(LEFT_ALIGNMENT);
+				// One card per chunk, same shape as the Global Tasks / Completed
+				// Tasks cards so the whole panel reads as one system.
+				JPanel chunkList = new JPanel();
+				chunkList.setLayout(new BoxLayout(chunkList, BoxLayout.Y_AXIS));
+				chunkList.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+				chunkList.setAlignmentX(LEFT_ALIGNMENT);
 				for (String n : names)
 				{
-					chipWrap.add(makeChunkChip(n));
+					chunkList.add(createUnlockedChunkRow(n));
+					chunkList.add(Box.createVerticalStrut(4));
 				}
 
-				// Fixed-height scroll area, matching the task sections. WrapLayout
-				// walks up to the first ancestor with a non-zero width, which is
-				// the viewport, so the chips still wrap to the panel width.
-				JScrollPane chipScroll = new JScrollPane(chipWrap);
-				chipScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-				chipScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-				chipScroll.setBorder(null);
-				chipScroll.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-				chipScroll.getViewport().setBackground(ColorScheme.DARKER_GRAY_COLOR);
-				chipScroll.setAlignmentX(LEFT_ALIGNMENT);
-				chipScroll.getVerticalScrollBar().setUnitIncrement(16);
+				// Fixed-height scroll area, matching the task sections.
+				JScrollPane chunkScroll = new JScrollPane(chunkList);
+				chunkScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+				chunkScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+				chunkScroll.setBorder(null);
+				chunkScroll.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+				chunkScroll.getViewport().setBackground(ColorScheme.DARKER_GRAY_COLOR);
+				chunkScroll.setAlignmentX(LEFT_ALIGNMENT);
+				chunkScroll.getVerticalScrollBar().setUnitIncrement(16);
 
 				int height = Math.min(MAX_UNLOCKED_CHUNKS_HEIGHT,
-					Math.max(30, chipWrap.getPreferredSize().height + 8));
-				chipScroll.setMinimumSize(new Dimension(CONTENT_WIDTH, height));
-				chipScroll.setPreferredSize(new Dimension(CONTENT_WIDTH, height));
-				chipScroll.setMaximumSize(new Dimension(CONTENT_WIDTH, height));
+					Math.max(40, chunkList.getPreferredSize().height + 8));
+				chunkScroll.setMinimumSize(new Dimension(CONTENT_WIDTH, height));
+				chunkScroll.setPreferredSize(new Dimension(CONTENT_WIDTH, height));
+				chunkScroll.setMaximumSize(new Dimension(CONTENT_WIDTH, height));
 
-				unlockedListPanel.add(chipScroll);
+				unlockedListPanel.add(chunkScroll);
 			}
 		}
 		else if (!names.isEmpty())
@@ -3641,6 +3641,18 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 		else
 		{
+			// Summary line, matching Completed Tasks and Global Tasks. Points here
+			// are what's STILL ON OFFER (base_points of tasks not yet done), not
+			// points banked — these tasks are by definition incomplete.
+			int availablePoints = filteredTasks.stream().mapToInt(NuzlockeTask::getBasePoints).sum();
+			JLabel summaryLabel = new JLabel(
+				"Showing " + filteredTasks.size() + " tasks (" + availablePoints + " pts available)");
+			summaryLabel.setFont(FontManager.getRunescapeSmallFont());
+			summaryLabel.setForeground(FLAME);
+			summaryLabel.setAlignmentX(LEFT_ALIGNMENT);
+			activeTasksContentPanel.add(summaryLabel);
+			activeTasksContentPanel.add(Box.createVerticalStrut(5));
+
 			int taskNumber = 1;
 			for (NuzlockeTask task : filteredTasks)
 			{
@@ -3756,6 +3768,51 @@ public class ChunkBlazerPanel extends PluginPanel
 	 * tooltip. Laid out by {@link WrapLayout} so chips flow and wrap instead of stacking
 	 * one-per-row.
 	 */
+	/**
+	 * One unlocked-chunk card, mirroring the Global Tasks / Completed Tasks card
+	 * shape so the side panel reads as one system.
+	 *
+	 * Green rather than the tasks' navy: an unlocked chunk is something you own
+	 * outright, not something in progress, and the green keeps it from reading
+	 * as another task list at a glance.
+	 *
+	 * Input is "Chunk Name (regionId)" from getUnlockedChunkDisplayNames(); the
+	 * id is split onto the info line so the name can wrap on its own.
+	 */
+	private JPanel createUnlockedChunkRow(String fullText)
+	{
+		String name = fullText;
+		String region = null;
+		int paren = fullText.lastIndexOf(" (");
+		if (paren > 0 && fullText.endsWith(")"))
+		{
+			name = fullText.substring(0, paren);
+			region = fullText.substring(paren + 2, fullText.length() - 1);
+		}
+
+		JPanel card = createCardPanel(new Color(26, 46, 32), new Color(58, 96, 66));
+		card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+		// Left inset (12) clears the accent bar, same as the task cards.
+		card.setBorder(new EmptyBorder(5, 12, 6, 6));
+		card.setAlignmentX(LEFT_ALIGNMENT);
+		card.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, Integer.MAX_VALUE));
+
+		WrappingTextLabel nameLabel = new WrappingTextLabel(
+			"✓ " + name,
+			FontManager.getRunescapeSmallFont(),
+			new Color(120, 215, 120),
+			TASK_TEXT_WRAP_WIDTH);
+		card.add(nameLabel);
+
+		JLabel infoLabel = new JLabel(region != null ? "Chunk " + region : "Unlocked");
+		infoLabel.setFont(FontManager.getRunescapeSmallFont());
+		infoLabel.setForeground(new Color(150, 190, 150));
+		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
+		card.add(infoLabel);
+
+		return card;
+	}
+
 	private JLabel makeChunkChip(String fullText)
 	{
 		String label = fullText.replaceAll("\\s*\\([^)]*\\)\\s*$", "");

@@ -49,6 +49,22 @@ public abstract class AbstractTaskModuleTest
 	protected AbstractTaskModule.TaskCompletionCallback completionCallback;
 
 	/**
+	 * Work handed to clientThread.invokeLater(BooleanSupplier) that declined to
+	 * run yet. Drained by {@link #tickClientThread()}.
+	 */
+	protected final List<java.util.function.BooleanSupplier> pendingClientThreadWork = new java.util.ArrayList<>();
+
+	/**
+	 * Advance the simulated client thread one tick: retry any deferred work,
+	 * dropping whatever now reports done. Use after changing client state that a
+	 * readiness gate is waiting on (e.g. the inventory container appearing).
+	 */
+	protected void tickClientThread()
+	{
+		pendingClientThreadWork.removeIf(java.util.function.BooleanSupplier::getAsBoolean);
+	}
+
+	/**
 	 * Common setup for all module tests.
 	 * Uses lenient stubbing to avoid UnnecessaryStubbingException.
 	 */
@@ -60,6 +76,26 @@ public abstract class AbstractTaskModuleTest
 			runnable.run();
 			return null;
 		}).when(clientThread).invokeLater(any(Runnable.class));
+
+		// The BooleanSupplier form retries on later ticks until it returns true.
+		// Modules use it to wait for the login sync (ObtainModule's snapshot/XP
+		// seed). Try it once now; if it declines, park it so a test can advance
+		// the world and then call tickClientThread() — otherwise a deferred seed
+		// could never run and a test would pass for the wrong reason.
+		lenient().doAnswer(invocation -> {
+			java.util.function.BooleanSupplier supplier = invocation.getArgument(0);
+			if (!supplier.getAsBoolean())
+			{
+				pendingClientThreadWork.add(supplier);
+			}
+			return null;
+		}).when(clientThread).invokeLater(any(java.util.function.BooleanSupplier.class));
+
+		// Default the login-readiness probes to "fully logged in and synced" so
+		// existing tests behave as before. The cold-start race is covered
+		// explicitly in ObtainModuleTest.
+		lenient().when(client.getGameState()).thenReturn(net.runelite.api.GameState.LOGGED_IN);
+		lenient().when(client.getSkillExperience(net.runelite.api.Skill.HITPOINTS)).thenReturn(1154);
 
 		// Setup local player
 		lenient().when(client.getLocalPlayer()).thenReturn(localPlayer);

@@ -384,4 +384,64 @@ class ObtainModuleTest extends AbstractTaskModuleTest
 		assertEquals(rolled, item.getRequiredQuantity(),
 			"second call to getRequiredQuantity must return the cached roll");
 	}
+
+	/**
+	 * FullOfSodium's cold-start bug (reported by AzSki, 2026-07-19): log out,
+	 * CLOSE the client, log back in, and a "Runecraft a Law Rune" task completes
+	 * from runes the player merely held. Confirmed on Earth, Law, Blood, Nature —
+	 * all quantity-1 tasks.
+	 *
+	 * Traced sequence before the fix:
+	 *   1. addActiveTask's deferred seed ran while the client was still empty:
+	 *      the inventory container was null (snapshot {563=0}) and
+	 *      getSkillExperience returned 0 (previousXp seeded to 0).
+	 *   2. The login StatChanged then arrived with the real Runecraft XP. Because
+	 *      previousXp was 0 rather than NULL, it cleared the "first sighting"
+	 *      guard in onStatChanged and read as a genuine gain.
+	 *   3. That flagged skillsXpGainedThisTick, so the 28 runes already in the
+	 *      inventory scored as a delta from the 0 snapshot -> +1 -> complete.
+	 *
+	 * Both halves had to be wrong at once, which is why it only reproduced on a
+	 * cold client — a warm relog keeps previousXp in memory.
+	 *
+	 * The fix makes the seed wait for the login sync. Removing that readiness
+	 * gate makes this test fail with progress=1, completed=true.
+	 */
+	@Test
+	void coldStartDoesNotCreditRunesAlreadyHeld()
+	{
+		NuzlockeTask task = createTestTask("Runecraft a Law Rune", "runecraft_law_rune", "RUNECRAFTING", 1);
+		RequiredItem law = new RequiredItem();
+		law.setItemIds(Arrays.asList(563));
+		law.setRolledQuantity(1);
+		task.setRequiredItems(Collections.singletonList(law));
+
+		// COLD START: logged in, but nothing has synced — no inventory container
+		// and the skill table still reads zero.
+		lenient().when(client.getItemContainer(InventoryID.INVENTORY)).thenReturn(null);
+		lenient().when(client.getSkillExperience(Skill.RUNECRAFT)).thenReturn(0);
+
+		obtainModule.addActiveTask(task);
+
+		// The login sync lands: real Runecraft XP, and an inventory that happens
+		// to hold a stack of law runes bought from another player.
+		Item runes = mock(Item.class);
+		lenient().when(runes.getId()).thenReturn(563);
+		lenient().when(runes.getQuantity()).thenReturn(28);
+		lenient().when(inventoryContainer.getItems()).thenReturn(new Item[]{runes});
+		lenient().when(client.getItemContainer(InventoryID.INVENTORY)).thenReturn(inventoryContainer);
+		lenient().when(client.getSkillExperience(Skill.RUNECRAFT)).thenReturn(284838);
+
+		// The deferred seed now runs against a synced client: snapshot records the
+		// 28 runes, and the XP baseline is the player's real XP.
+		tickClientThread();
+
+		obtainModule.onStatChanged(new StatChanged(Skill.RUNECRAFT, 284838, 60, 60));
+		obtainModule.onItemContainerChanged(
+			new ItemContainerChanged(InventoryID.INVENTORY.getId(), inventoryContainer));
+
+		assertEquals(0, task.getCurrentProgress(),
+			"holding runes at login must not count as crafting them");
+		assertFalse(task.isCompleted(), "cold start must not auto-complete a runecraft task");
+	}
 }

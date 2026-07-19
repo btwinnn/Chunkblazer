@@ -843,6 +843,9 @@ public class ChunkBlazerPlugin extends Plugin
 			unlocked = unlocked + "," + regionId;
 		}
 		configManager.setConfiguration("chunkblazer", "unlockedChunks", unlocked);
+		// Persist immediately — see persistUnlockNow(). An unlock that only
+		// lives in memory is lost if the client doesn't shut down cleanly.
+		persistUnlockNow();
 
 
 		if (!wasAlreadyUnlocked)
@@ -3364,6 +3367,9 @@ public class ChunkBlazerPlugin extends Plugin
 		// Clear progress data for these tasks
 		saveActiveTasks();
 
+		// Points + completed list just changed; get them onto disk.
+		flushConfigToDisk();
+
 		if (panel != null)
 		{
 			panel.updateStats();
@@ -3865,6 +3871,60 @@ public class ChunkBlazerPlugin extends Plugin
 		return completed.split(",").length;
 	}
 
+	/**
+	 * Force RuneLite to write config to DISK now, instead of whenever its timer
+	 * next fires.
+	 *
+	 * ConfigManager only persists on a schedule and on a clean shutdown:
+	 *
+	 *   scheduleWithFixedDelay(this::sendConfig,
+	 *       30 + (int)(5 * 60 * Math.random()),   // first flush: 30-330s
+	 *       5 * 60, TimeUnit.SECONDS);            // then every 5 minutes
+	 *   ... plus @Subscribe onClientShutdown -> sendConfig()
+	 *
+	 * So a setConfiguration() call lives in memory for up to five minutes. If the
+	 * client dies without a clean ClientShutdown — killed, crashed, force-closed —
+	 * that write is lost with no error anywhere. Cruk hit this: he unlocked East
+	 * Falador (12084, force-unlocked) and Air Altar (11827, walked into), closed
+	 * the client, and both were locked again on the next login. His session log
+	 * showed no unlockedChunks write at all, because the value never reached disk.
+	 *
+	 * Progress-losing state (unlocks, points, completed tasks) is therefore
+	 * flushed explicitly. These are infrequent, player-visible events, so the
+	 * extra disk write is cheap next to silently losing a chunk unlock.
+	 */
+	/**
+	 * Make a just-happened chunk unlock durable in BOTH places, immediately.
+	 *
+	 * An unlock previously survived only if the player lived long enough for two
+	 * independent timers: RuneLite's config flush (up to 5 minutes) and our
+	 * server sync (every 30s). Cruk lost East Falador (12084) and Air Altar
+	 * (11827) in exactly that window — the DB showed neither region, and his
+	 * next sync then overwrote the server's copy with the truncated list, since
+	 * unlock sync is DELETE-then-INSERT with the client authoritative.
+	 *
+	 * syncToServer() self-guards on apiEnabled/LOGGED_IN and does its network I/O
+	 * asynchronously, so this is safe to call straight from an unlock handler.
+	 */
+	private void persistUnlockNow()
+	{
+		flushConfigToDisk();
+		syncToServer();
+	}
+
+	private void flushConfigToDisk()
+	{
+		try
+		{
+			configManager.sendConfig();
+		}
+		catch (Exception e)
+		{
+			// Never let a persistence hiccup break the unlock/completion flow.
+			log.warn("Failed to flush ChunkBlazer config to disk", e);
+		}
+	}
+
 	private void addPoints(int points)
 	{
 		int current = config.totalPoints();
@@ -4160,6 +4220,8 @@ public class ChunkBlazerPlugin extends Plugin
 			unlockedSet.add(String.valueOf(r));
 		}
 		configManager.setConfiguration("chunkblazer", "unlockedChunks", String.join(",", unlockedSet));
+		// Points were just spent for this — never let it evaporate on a crash.
+		persistUnlockNow();
 
 
 		// Auto-roll tasks for the new region

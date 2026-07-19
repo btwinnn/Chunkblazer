@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
+import net.runelite.api.GameState;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
@@ -220,8 +221,39 @@ public class ObtainModule extends AbstractTaskModule
 			// stockpiled in the bank) counts immediately.
 			final List<Slot> slotsRef = slots;
 			final Skill xpSkill = skillForCompletionType(task.getCompletionType());
+			// invokeLater(BooleanSupplier): returning false retries next tick.
+			//
+			// THIS MUST NOT RUN BEFORE THE LOGIN SYNC COMPLETES. Both values seeded
+			// below are read straight off the client, and at LOGGED_IN neither the
+			// inventory container nor the skill table is necessarily populated yet.
+			// Seeding from an empty client produced a false completion on every cold
+			// start (FullOfSodium, 2026-07-19: "log out, CLOSE the client, log back
+			// in" completed runecraft tasks for runes he already held):
+			//
+			//   1. snapshotInventoryCounts() saw a null/empty inventory -> snapshot 0
+			//      for every watched item.
+			//   2. getSkillExperience() returned 0 -> previousXp seeded to 0.
+			//   3. The login StatChanged then arrived with the player's real XP.
+			//      Because previousXp was 0 rather than null, it passed the
+			//      "first sighting" guard in onStatChanged and looked like a
+			//      genuine gain of the player's entire lifetime XP, which flagged
+			//      skillsXpGainedThisTick.
+			//   4. The real inventory arrived; delta vs the 0 snapshot equalled
+			//      everything held, and the XP flag from (3) let it be credited.
+			//
+			// Both halves had to be wrong for the bug to fire, which is why it only
+			// reproduced on a cold client (a warm relog keeps previousXp in memory).
 			clientThread.invokeLater(() ->
 			{
+				if (client.getGameState() != GameState.LOGGED_IN
+					|| client.getItemContainer(InventoryID.INVENTORY) == null
+					// Hitpoints XP is never 0 on a real account (a fresh level 3 has
+					// 1154), so this is a cheap probe for "the skill table has synced".
+					|| client.getSkillExperience(Skill.HITPOINTS) <= 0)
+				{
+					return false;
+				}
+
 				inventoryHeldSnapshot.put(task.getTaskId(), snapshotInventoryCounts(slotsRef));
 				if (xpSkill == null)
 				{
@@ -239,6 +271,7 @@ public class ObtainModule extends AbstractTaskModule
 					// consumes the single action it needs and never completes.
 					previousXp.put(xpSkill, client.getSkillExperience(xpSkill));
 				}
+				return true;
 			});
 		}
 		catch (Exception e)
