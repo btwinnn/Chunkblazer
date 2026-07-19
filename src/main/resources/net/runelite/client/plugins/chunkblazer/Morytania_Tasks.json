@@ -4385,7 +4385,7 @@
                     "taskID": "defeat_cave_horror",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 10,
                     "target_npc": {
                         "npc": ["Cave Horror"],

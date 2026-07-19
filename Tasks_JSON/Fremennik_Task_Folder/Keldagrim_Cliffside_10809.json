@@ -21,7 +21,7 @@
                     "taskID": "defeat_black_unicorn_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 3,
                     "target_npc": {
                         "npc": ["Black Unicorn"],

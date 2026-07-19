@@ -58,7 +58,7 @@
                     "taskID": "defeat_bryophyta",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 2,
+                    "base_points": 3,
                     "assignment_weight": 10,
                     "boss": "Bryophyta",
                     "target_npc": {

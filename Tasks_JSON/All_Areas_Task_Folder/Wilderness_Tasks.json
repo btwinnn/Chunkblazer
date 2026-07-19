@@ -825,7 +825,7 @@
                 {
                     "name": "Defeat a Dark Warrior",
                     "taskID": "Defeat_dark_warrior",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 8,
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1982,7 +1982,7 @@
                     "category": "Defence",
                     "level": 45,
                     "completion_type": "EQUIP",
-                    "base_points": 2,
+                    "base_points": 3,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -2150,7 +2150,7 @@
                     "taskID": "obtain_skull_of_vetion",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -2165,7 +2165,7 @@
                     "taskID": "obtain_ring_of_the_gods",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -2180,7 +2180,7 @@
                     "taskID": "obtain_voidwaker_blade",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -2225,7 +2225,7 @@
                     "taskID": "obtain_dragon_pickaxe",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [
                         {
@@ -2276,7 +2276,7 @@
                     "taskID": "obtain_claws_of_callisto",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 4,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -2291,7 +2291,7 @@
                     "taskID": "obtain_tyrannical_ring",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 4,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -2306,7 +2306,7 @@
                     "taskID": "obtain_voidwaker_hilt",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 4,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -2351,7 +2351,7 @@
                     "taskID": "obtain_dragon_pickaxe",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [
                         {
@@ -3261,7 +3261,7 @@
                     "taskID": "obtain_fangs_of_venenatis",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -3276,7 +3276,7 @@
                     "taskID": "obtain_treasonous_ring",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -3291,7 +3291,7 @@
                     "taskID": "obtain_voidwaker_gem",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -3336,7 +3336,7 @@
                     "taskID": "obtain_dragon_pickaxe",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [
                         {
@@ -5457,7 +5457,7 @@
                     "taskID": "obtain_dragon_pickaxe",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [
                         {
@@ -6881,7 +6881,7 @@
                     "taskID": "obtain_dragon_pickaxe",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 4,
+                    "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [
                         {

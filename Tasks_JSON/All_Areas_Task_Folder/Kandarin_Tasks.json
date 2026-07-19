@@ -2224,7 +2224,7 @@
                     "taskID": "obtain_hard_reward_casket",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 2,
+                    "base_points": 3,
                     "assignment_weight": 8,
                     "required_items": [
                         {
@@ -7422,7 +7422,7 @@
                     "category": "Combat",
                     "level": 50,
                     "completion_type": "NPC_Kill",
-                    "base_points": 2,
+                    "base_points": 3,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Bloodveld"],

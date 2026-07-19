@@ -446,7 +446,7 @@
                             "taskID": "defeat_grizzly_bear_first_hit",
                             "category": "Combat",
                             "completion_type": "NPC_Kill",
-                            "base_points": 2,
+                            "base_points": 3,
                             "assignment_weight": 8,
                             "target_npc": {
                                 "npc": ["Grizzly Bear"],
@@ -1479,7 +1479,7 @@
                     "category": "Prayer",
                     "level": 70,
                     "completion_type": "VARBIT_CHECK",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 10,
                     "constraints": {
                         "varbit_id": 4101,

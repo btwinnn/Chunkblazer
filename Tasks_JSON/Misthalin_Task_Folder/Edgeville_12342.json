@@ -8,7 +8,7 @@
                     "taskID": "defeat_obor",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 2,
+                    "base_points": 4,
                     "assignment_weight": 10,
                     "boss": "Obor",
                     "target_npc": {
@@ -22,7 +22,7 @@
                     "taskID": "defeat_obor",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
+                    "base_points": 4,
                     "assignment_weight": 8,
                     "boss": "Obor",
                     "target_npc": {
@@ -40,7 +40,7 @@
                     "taskID": "defeat_obor",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
+                    "base_points": 4,
                     "assignment_weight": 8,
                     "boss": "Obor",
                     "target_npc": {
@@ -58,7 +58,7 @@
                     "taskID": "defeat_obor",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
+                    "base_points": 4,
                     "assignment_weight": 8,
                     "boss": "Obor",
                     "target_npc": {

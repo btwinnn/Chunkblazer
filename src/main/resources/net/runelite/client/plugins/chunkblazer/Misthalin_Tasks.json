@@ -3156,7 +3156,7 @@
                     "taskID": "defeat_obor",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 2,
+                    "base_points": 4,
                     "assignment_weight": 10,
                     "boss": "Obor",
                     "target_npc": {
@@ -3170,7 +3170,7 @@
                     "taskID": "defeat_obor",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
+                    "base_points": 4,
                     "assignment_weight": 8,
                     "boss": "Obor",
                     "target_npc": {
@@ -3188,7 +3188,7 @@
                     "taskID": "defeat_obor",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
+                    "base_points": 4,
                     "assignment_weight": 8,
                     "boss": "Obor",
                     "target_npc": {
@@ -3206,7 +3206,7 @@
                     "taskID": "defeat_obor",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 3,
+                    "base_points": 4,
                     "assignment_weight": 8,
                     "boss": "Obor",
                     "target_npc": {
@@ -3395,7 +3395,7 @@
                     "taskID": "defeat_bryophyta",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 2,
+                    "base_points": 3,
                     "assignment_weight": 10,
                     "boss": "Bryophyta",
                     "target_npc": {
@@ -6368,7 +6368,7 @@
                     "taskID": "obtain_dragon_pickaxe",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [
                         {

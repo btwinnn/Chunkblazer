@@ -53,7 +53,7 @@
                     "category": "Farming",
                     "level": 36,
                     "completion_type": "FARMING",
-                    "base_points": 2,
+                    "base_points": 3,
                     "assignment_weight": 8,
                     "required_items": [
                         {
@@ -83,7 +83,7 @@
                     "category": "Cooking",
                     "level": 35,
                     "completion_type": "COOKING",
-                    "base_points": 2,
+                    "base_points": 3,
                     "assignment_weight": 8,
                     "required_items": [
                         {

@@ -53,7 +53,7 @@
                     "taskID": "obtain_hard_reward_casket",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 2,
+                    "base_points": 3,
                     "assignment_weight": 8,
                     "required_items": [
                         {

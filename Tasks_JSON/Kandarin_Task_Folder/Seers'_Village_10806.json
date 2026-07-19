@@ -9,7 +9,7 @@
                     "category": "Agility",
                     "level": 60,
                     "completion_type": "AGILITY",
-                    "base_points": 3,
+                    "base_points": 2,
                     "assignment_weight": 10,
                     "required_object": {
                         "object": ["Seers' Rooftop Edge"],

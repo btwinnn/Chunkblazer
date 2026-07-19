@@ -1419,7 +1419,7 @@
                     "taskID": "defeat_fox_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "base_points": 3,
                     "assignment_weight": 8,
                     "target_npc": {
                         "npc": ["Fox"],

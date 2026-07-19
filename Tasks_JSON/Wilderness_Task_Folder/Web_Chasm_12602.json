@@ -36,7 +36,7 @@
                     "taskID": "obtain_fangs_of_venenatis",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -51,7 +51,7 @@
                     "taskID": "obtain_treasonous_ring",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -66,7 +66,7 @@
                     "taskID": "obtain_voidwaker_gem",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 5,
                     "required_items": [
                         {
@@ -111,7 +111,7 @@
                     "taskID": "obtain_dragon_pickaxe",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 3,
+                    "base_points": 5,
                     "assignment_weight": 10,
                     "required_items": [
                         {

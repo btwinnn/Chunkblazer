@@ -9,7 +9,7 @@
                     "category": "Defence",
                     "level": 45,
                     "completion_type": "EQUIP",
-                    "base_points": 2,
+                    "base_points": 3,
                     "assignment_weight": 5,
                     "required_items": [
                         {

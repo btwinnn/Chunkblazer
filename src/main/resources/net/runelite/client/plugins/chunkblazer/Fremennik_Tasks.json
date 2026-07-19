@@ -911,7 +911,7 @@
                     "taskID": "defeat_black_unicorn_first_hit",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 3,
                     "target_npc": {
                         "npc": ["Black Unicorn"],
@@ -2639,7 +2639,7 @@
                     "category": "Crafting",
                     "level": 30,
                     "completion_type": "CRAFTING",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 3,
                     "required_items": [
                         {
@@ -2950,7 +2950,7 @@
                     "taskID": "obtain_ensouled_troll_head",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 10,
                     "required_items": [
                         {
@@ -3151,7 +3151,7 @@
                     "taskID": "obtain_ensouled_troll_head",
                     "category": "Obtain",
                     "completion_type": "OBTAIN",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 10,
                     "required_items": [
                         {
@@ -3190,7 +3190,7 @@
                     "taskID": "defeat_basilisk",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 3,
                     "target_npc": {
                         "npc": ["Basilisk"],
@@ -3456,7 +3456,7 @@
                             "taskID": "defeat_suqah",
                             "category": "Combat",
                             "completion_type": "NPC_Kill",
-                            "base_points": 1,
+                            "base_points": 2,
                             "assignment_weight": 8,
                             "target_npc": {
                                 "npc": ["Suqah"],
@@ -3469,7 +3469,7 @@
                             "taskID": "defeat_suqah_12_seconds",
                             "category": "Combat",
                             "completion_type": "NPC_Kill",
-                            "base_points": 1,
+                            "base_points": 2,
                             "assignment_weight": 5,
                             "target_npc": {
                                 "npc": ["Suqah"],

@@ -52,7 +52,7 @@
                     "category": "Crafting",
                     "level": 30,
                     "completion_type": "CRAFTING",
-                    "base_points": 1,
+                    "base_points": 2,
                     "assignment_weight": 3,
                     "required_items": [
                         {
