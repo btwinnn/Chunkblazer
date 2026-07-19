@@ -52,6 +52,11 @@ public class ChunkBlazerPanel extends PluginPanel
 	// pack tighter than the 80px rolled-task rows but are not fixed height —
 	// a long quest name wraps. Height matches the Completed Tasks section.
 	private static final int MAX_GLOBAL_TASKS_HEIGHT = MAX_COMPLETED_TASKS_HEIGHT;
+	// Unlocked-chunk chips are small and wrap several per row, so this shows
+	// roughly 5-6 rows before scrolling. Without a cap the expanded list grew
+	// with the unlock count (101 chips ran to thousands of px) and swamped the
+	// side panel — every other section here is a fixed-height scroll area.
+	private static final int MAX_UNLOCKED_CHUNKS_HEIGHT = 150;
 
 	/**
 	 * Display labels for the Global Tasks type filter, keyed by the raw
@@ -1640,13 +1645,40 @@ public class ChunkBlazerPanel extends PluginPanel
 				JPanel chipWrap = new JPanel(new WrapLayout(FlowLayout.LEFT, 4, 4));
 				chipWrap.setOpaque(false);
 				chipWrap.setAlignmentX(LEFT_ALIGNMENT);
-				chipWrap.setMaximumSize(new Dimension(CONTENT_WIDTH, Integer.MAX_VALUE));
 				for (String n : names)
 				{
 					chipWrap.add(makeChunkChip(n));
 				}
-				unlockedListPanel.add(chipWrap);
+
+				// Fixed-height scroll area, matching the task sections. WrapLayout
+				// walks up to the first ancestor with a non-zero width, which is
+				// the viewport, so the chips still wrap to the panel width.
+				JScrollPane chipScroll = new JScrollPane(chipWrap);
+				chipScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+				chipScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+				chipScroll.setBorder(null);
+				chipScroll.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+				chipScroll.getViewport().setBackground(ColorScheme.DARKER_GRAY_COLOR);
+				chipScroll.setAlignmentX(LEFT_ALIGNMENT);
+				chipScroll.getVerticalScrollBar().setUnitIncrement(16);
+
+				int height = Math.min(MAX_UNLOCKED_CHUNKS_HEIGHT,
+					Math.max(30, chipWrap.getPreferredSize().height + 8));
+				chipScroll.setMinimumSize(new Dimension(CONTENT_WIDTH, height));
+				chipScroll.setPreferredSize(new Dimension(CONTENT_WIDTH, height));
+				chipScroll.setMaximumSize(new Dimension(CONTENT_WIDTH, height));
+
+				unlockedListPanel.add(chipScroll);
 			}
+		}
+		else if (!names.isEmpty())
+		{
+			// Collapsed hint, matching the other collapsible sections.
+			JLabel collapsed = new JLabel("Click to view " + names.size() + " unlocked chunks");
+			collapsed.setFont(FontManager.getRunescapeSmallFont());
+			collapsed.setForeground(Color.GRAY);
+			collapsed.setAlignmentX(LEFT_ALIGNMENT);
+			unlockedListPanel.add(collapsed);
 		}
 
 		unlockedListPanel.setVisible(true);

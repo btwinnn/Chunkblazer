@@ -3563,7 +3563,10 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	public Set<String> getAllCategories()
 	{
-		Set<String> categories = new HashSet<>();
+		// TreeSet, not HashSet: this backs the Category filter combos, and a
+		// HashSet's iteration order made them list in an arbitrary order while
+		// the Active Tasks combos (already TreeSet-backed) listed A-Z.
+		Set<String> categories = new java.util.TreeSet<>();
 		for (NuzlockeChunk chunk : allChunks)
 		{
 			if (chunk.getTasks() != null)
@@ -3620,7 +3623,9 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	public Set<String> getCompletedTaskRegions()
 	{
-		Set<String> regions = new HashSet<>();
+		// TreeSet to match getActiveTaskRegions() — the Completed Tasks chunk
+		// filter was the odd one out, listing chunks in hash order.
+		Set<String> regions = new java.util.TreeSet<>();
 		for (CompletedTaskInfo info : getCompletedTasksWithInfo())
 		{
 			if (info.getRegionName() != null && !info.getRegionName().equals("Unknown Region"))
