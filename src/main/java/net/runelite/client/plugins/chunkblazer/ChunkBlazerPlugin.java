@@ -299,8 +299,12 @@ public class ChunkBlazerPlugin extends Plugin
 					// Play region-specific completion sound
 					if (config.playTaskCompletionSound())
 					{
+						// Pass the area through even when null: Global Tasks belong
+						// to no chunk, so getTaskArea() is always null for them and
+						// this guard silently muted every quest completion. The
+						// sound manager falls back to a default folder instead.
 						String area = getTaskArea(task);
-						if (soundManager != null && area != null)
+						if (soundManager != null)
 						{
 							soundManager.playRandomSoundForArea(area);
 						}

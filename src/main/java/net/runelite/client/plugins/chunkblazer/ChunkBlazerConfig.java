@@ -5,6 +5,7 @@ import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.Range;
 import net.runelite.client.config.ConfigSection;
 import net.runelite.client.config.Keybind;
 
@@ -268,6 +269,21 @@ public interface ChunkBlazerConfig extends Config
 	default boolean playTaskCompletionSound()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "taskCompletionSoundVolume",
+		name = "Task Sound Volume",
+		description = "Volume of the task completion sound (0 = silent, 100 = full)",
+		section = displaySection,
+		position = 4
+	)
+	@Range(min = 0, max = 100)
+	default int taskCompletionSoundVolume()
+	{
+		// Was hardcoded at 3%, which is effectively inaudible over game audio —
+		// the sounds played fine, nobody could hear them.
+		return 25;
 	}
 
 	@ConfigItem(

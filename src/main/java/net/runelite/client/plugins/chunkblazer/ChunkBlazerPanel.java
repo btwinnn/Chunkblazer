@@ -188,6 +188,12 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JPanel selectedTaskPanel;
 	private JLabel activeTasksSectionTitle;
 	private JTextField activeTasksSearchField;
+	// Tier (points) filters. 0 = All; otherwise the base_points value to match.
+	private JComboBox<String> activeTasksTierCombo;
+	private int activeTasksSelectedTier = 0;
+	private JComboBox<String> completedTasksTierCombo;
+	private int completedTasksSelectedTier = 0;
+
 	private JComboBox<String> activeTasksCategoryCombo;
 	private JComboBox<String> activeTasksRegionCombo;
 	private JComboBox<String> activeTasksAreaCombo;
@@ -710,8 +716,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		completedTasksFilterPanel.setLayout(new BoxLayout(completedTasksFilterPanel, BoxLayout.Y_AXIS));
 		completedTasksFilterPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		completedTasksFilterPanel.setAlignmentX(LEFT_ALIGNMENT);
-		completedTasksFilterPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 135));
-		completedTasksFilterPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 135));
+		completedTasksFilterPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 185));
+		completedTasksFilterPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 185));
 		completedTasksFilterPanel.setVisible(false);
 
 		// Search text field
@@ -835,6 +841,34 @@ public class ChunkBlazerPanel extends PluginPanel
 		filterRow.add(regionPanel);
 
 		completedTasksFilterPanel.add(filterRow);
+		completedTasksFilterPanel.add(Box.createVerticalStrut(5));
+
+		// Tier (points) filter — mirrors the card colours.
+		JPanel cTierRow = new JPanel(new BorderLayout(2, 0));
+		cTierRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		cTierRow.setAlignmentX(LEFT_ALIGNMENT);
+		cTierRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 45));
+		cTierRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 45));
+
+		JLabel cTierLabel = new JLabel("Tier:");
+		cTierLabel.setFont(FontManager.getRunescapeSmallFont());
+		cTierLabel.setForeground(Color.LIGHT_GRAY);
+		cTierRow.add(cTierLabel, BorderLayout.NORTH);
+
+		completedTasksTierCombo = new JComboBox<>(TIER_NAMES);
+		completedTasksTierCombo.setFont(FontManager.getRunescapeSmallFont());
+		completedTasksTierCombo.setToolTipText("Filter completed tasks by point value");
+		completedTasksTierCombo.addActionListener(e ->
+		{
+			if (!isRefreshingFilters)
+			{
+				completedTasksSelectedTier = tierPointsForLabel(completedTasksTierCombo.getSelectedItem());
+				updateCompletedTasksContent();
+			}
+		});
+		cTierRow.add(completedTasksTierCombo, BorderLayout.CENTER);
+
+		completedTasksFilterPanel.add(cTierRow);
 		completedTasksFilterPanel.add(Box.createVerticalStrut(5));
 
 		panel.add(completedTasksFilterPanel);
@@ -1343,10 +1377,11 @@ public class ChunkBlazerPanel extends PluginPanel
 	 */
 	private JPanel createGlobalTaskRow(NuzlockeTask task, boolean done)
 	{
-		// Same navy card as the completed items; dimmed when already done.
+		// Tier colour by points, settled back once complete.
+		int pts = task.getBasePoints();
 		JPanel card = createCardPanel(
-			done ? new Color(28, 36, 54) : new Color(34, 42, 62),
-			done ? new Color(54, 66, 92) : new Color(70, 84, 116));
+			done ? dim(tierFill(pts), 0.30f) : tierFill(pts),
+			done ? dim(tierBorder(pts), 0.25f) : tierBorder(pts));
 		card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 		// Left inset (12) clears the orange accent bar.
 		card.setBorder(new EmptyBorder(5, 12, 6, 6));
@@ -2397,6 +2432,34 @@ public class ChunkBlazerPanel extends PluginPanel
 		filterRow.add(regionPanel);
 
 		activeTasksFilterPanel.add(filterRow);
+		activeTasksFilterPanel.add(Box.createVerticalStrut(4));
+
+		// Tier (points) filter — mirrors the card colours.
+		JPanel tierRow = new JPanel(new BorderLayout(2, 0));
+		tierRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		tierRow.setAlignmentX(LEFT_ALIGNMENT);
+		tierRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 40));
+		tierRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 40));
+
+		JLabel tierLabel = new JLabel("Tier:");
+		tierLabel.setFont(FontManager.getRunescapeSmallFont());
+		tierLabel.setForeground(Color.LIGHT_GRAY);
+		tierRow.add(tierLabel, BorderLayout.NORTH);
+
+		activeTasksTierCombo = new JComboBox<>(TIER_NAMES);
+		activeTasksTierCombo.setFont(FontManager.getRunescapeSmallFont());
+		activeTasksTierCombo.setToolTipText("Filter active tasks by point value");
+		activeTasksTierCombo.addActionListener(e ->
+		{
+			if (!isRefreshingFilters)
+			{
+				activeTasksSelectedTier = tierPointsForLabel(activeTasksTierCombo.getSelectedItem());
+				updateActiveTasksDisplay();
+			}
+		});
+		tierRow.add(activeTasksTierCombo, BorderLayout.CENTER);
+
+		activeTasksFilterPanel.add(tierRow);
 		activeTasksFilterPanel.add(Box.createVerticalStrut(4));
 
 		taskPanel.add(activeTasksFilterPanel);
@@ -3585,7 +3648,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		final String filterRegion = activeTasksSelectedRegion != null ? activeTasksSelectedRegion : "All";
 		final String filterArea = activeTasksSelectedArea != null ? activeTasksSelectedArea : "All";
 
-		// Filter tasks based on search text, category, region, and area
+		// Filter tasks based on search text, category, region, area, and tier
+		final int filterTier = activeTasksSelectedTier;
 		List<NuzlockeTask> filteredTasks = allTasks.stream()
 			.filter(task ->
 			{
@@ -3625,6 +3689,11 @@ public class ChunkBlazerPanel extends PluginPanel
 					{
 						return false;
 					}
+				}
+				// Tier filter — 0 means All.
+				if (filterTier > 0 && task.getBasePoints() != filterTier)
+				{
+					return false;
 				}
 				return true;
 			})
@@ -3722,6 +3791,86 @@ public class ChunkBlazerPanel extends PluginPanel
 	 * by the completed- and chunk-task rows so every task box has one consistent look.
 	 * (The active-task card paints its own variant because it also needs hover/selection.)
 	 */
+	/**
+	 * Card backdrop by task VALUE, matching the in-game task banners:
+	 * 1pt blue, 2pt green, 3pt purple, 4pt red, 5pt gold.
+	 *
+	 * Colour carries the tier at a glance, so it has to be consistent across
+	 * every task list in the panel — Active, Completed, Chunk and Global all
+	 * call these rather than hardcoding their own navy.
+	 *
+	 * Values are muted rather than saturated: white body text sits on top of
+	 * these, and the panel background is near-black, so a bright fill would
+	 * both hurt contrast and fight the rest of the UI.
+	 */
+	/**
+	 * Tier labels for the points filters. Index = base_points, so TIER_NAMES[3]
+	 * is the 3pt tier. Order follows the OSRS combat-achievement convention
+	 * (Easy < Medium < Hard < Elite < Master) and pairs with tierFill(): 1 blue,
+	 * 2 green, 3 purple, 4 red, 5 gold.
+	 */
+	private static final String[] TIER_NAMES = {"All", "Easy", "Medium", "Hard", "Elite", "Master"};
+
+	/** Combo label -> base_points, or 0 for "All"/unknown. */
+	private static int tierPointsForLabel(Object label)
+	{
+		if (label == null)
+		{
+			return 0;
+		}
+		for (int i = 1; i < TIER_NAMES.length; i++)
+		{
+			if (TIER_NAMES[i].equals(label.toString()))
+			{
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	private static Color tierFill(int basePoints)
+	{
+		switch (basePoints)
+		{
+			case 1:  return new Color(52, 84, 104);   // blue   — Novice
+			case 2:  return new Color(52, 92, 50);    // green  — Intermediate
+			case 3:  return new Color(88, 56, 100);   // purple — Hard
+			case 4:  return new Color(112, 52, 50);   // red    — Master
+			case 5:  return new Color(122, 96, 34);   // gold   — Elite
+			default: return new Color(30, 40, 60);    // unscored/unknown: old navy
+		}
+	}
+
+	private static Color tierBorder(int basePoints)
+	{
+		switch (basePoints)
+		{
+			case 1:  return new Color(86, 128, 152);
+			case 2:  return new Color(88, 136, 84);
+			case 3:  return new Color(132, 92, 148);
+			case 4:  return new Color(160, 88, 84);
+			case 5:  return new Color(176, 142, 60);
+			default: return new Color(60, 74, 100);
+		}
+	}
+
+	/** Blend toward black — used to settle completed//already-assigned cards back. */
+	private static Color dim(Color c, float amount)
+	{
+		float k = 1f - Math.max(0f, Math.min(1f, amount));
+		return new Color(Math.round(c.getRed() * k), Math.round(c.getGreen() * k), Math.round(c.getBlue() * k));
+	}
+
+	/** Blend toward white — used for hover / selection. */
+	private static Color lighten(Color c, float amount)
+	{
+		float k = Math.max(0f, Math.min(1f, amount));
+		return new Color(
+			Math.round(c.getRed()   + (255 - c.getRed())   * k),
+			Math.round(c.getGreen() + (255 - c.getGreen()) * k),
+			Math.round(c.getBlue()  + (255 - c.getBlue())  * k));
+	}
+
 	private JPanel createCardPanel(Color fill, Color border)
 	{
 		JPanel card = new JPanel()
@@ -3959,8 +4108,9 @@ public class ChunkBlazerPanel extends PluginPanel
 					new java.awt.geom.RoundRectangle2D.Float(0.5f, 0.5f, w - 1.5f, h - 1.5f, arc, arc);
 				// ChunkBlazer navy backdrop (matches the News & Updates header) so the
 				// card pops off the near-black panel; brightens on hover / selection.
-				g2.setColor(isSelected ? new Color(44, 56, 82)
-					: (hovered[0] ? new Color(40, 52, 76) : new Color(30, 40, 60)));
+				Color tier = tierFill(task.getBasePoints());
+				g2.setColor(isSelected ? lighten(tier, 0.22f)
+					: (hovered[0] ? lighten(tier, 0.12f) : tier));
 				g2.fill(box);
 				// Flame-orange left accent bar, clipped to the rounded shape.
 				java.awt.Shape oldClip = g2.getClip();
@@ -3968,7 +4118,7 @@ public class ChunkBlazerPanel extends PluginPanel
 				g2.setColor(FLAME);
 				g2.fillRect(0, 0, 5, h);
 				g2.setClip(oldClip);
-				g2.setColor(isSelected ? FLAME : new Color(60, 74, 100));
+				g2.setColor(isSelected ? FLAME : tierBorder(task.getBasePoints()));
 				g2.setStroke(new java.awt.BasicStroke(isSelected ? 1.6f : 1f));
 				g2.draw(box);
 				g2.dispose();
@@ -4230,6 +4380,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		final String filterRegion = selectedRegion != null ? selectedRegion : "All";
 		final String filterArea = selectedArea != null ? selectedArea : "All";
 		final String filterText = completedTasksSearchText != null ? completedTasksSearchText : "";
+		final int filterTier = completedTasksSelectedTier;
 
 		List<CompletedTaskInfo> filteredTasks = allTasks.stream()
 			.filter(info ->
@@ -4262,6 +4413,10 @@ public class ChunkBlazerPanel extends PluginPanel
 					{
 						return false;
 					}
+				}
+				if (filterTier > 0 && info.getPoints() != filterTier)
+				{
+					return false;
 				}
 				if (!"All".equals(filterArea))
 				{
@@ -4329,7 +4484,10 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JPanel createEnhancedCompletedTaskItem(CompletedTaskInfo info)
 	{
 		// Shared navy card look; dimmed slightly since these are already done.
-		JPanel itemPanel = createCardPanel(new Color(28, 36, 54), new Color(54, 66, 92));
+		// Tier colour, settled back a little because it's already done.
+		JPanel itemPanel = createCardPanel(
+			dim(tierFill(info.getPoints()), 0.30f),
+			dim(tierBorder(info.getPoints()), 0.25f));
 		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
 		// Left inset (12) clears the orange accent bar.
 		itemPanel.setBorder(new EmptyBorder(5, 12, 6, 6));
@@ -4519,20 +4677,23 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Shared navy card; brighter + flame border when active, dimmed when already done.
 		Color cardFill;
 		Color cardBorder;
+		// Tier colour carries the points; state is carried by brightness and, for
+		// the active task, the flame border — so both read at once.
+		int tierPts = task.getBasePoints();
 		if (isActive)
 		{
-			cardFill = new Color(44, 56, 82);
+			cardFill = lighten(tierFill(tierPts), 0.12f);
 			cardBorder = FLAME;
 		}
 		else if (isAssigned)
 		{
-			cardFill = new Color(26, 32, 46);
-			cardBorder = new Color(50, 60, 80);
+			cardFill = dim(tierFill(tierPts), 0.40f);
+			cardBorder = dim(tierBorder(tierPts), 0.35f);
 		}
 		else
 		{
-			cardFill = new Color(30, 40, 60);
-			cardBorder = new Color(60, 74, 100);
+			cardFill = tierFill(tierPts);
+			cardBorder = tierBorder(tierPts);
 		}
 		JPanel itemPanel = createCardPanel(cardFill, cardBorder);
 		itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));

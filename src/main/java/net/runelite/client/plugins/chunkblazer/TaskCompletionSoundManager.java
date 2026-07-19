@@ -24,6 +24,9 @@ public class TaskCompletionSoundManager
 {
 	private static final String SOUNDS_BASE_PATH = "Task_Complete_Region_Sounds/";
 
+	// Used when a task's area has no sound folder of its own.
+	private static final String DEFAULT_SOUND_FOLDER = "Misthalin_Sounds";
+
 	// Map of area names to their sound folder names
 	private static final Map<String, String> AREA_TO_FOLDER = new HashMap<>();
 
@@ -38,8 +41,14 @@ public class TaskCompletionSoundManager
 		AREA_TO_FOLDER.put("Fremennik Province", "Fremmy_Sounds");
 		AREA_TO_FOLDER.put("Tirannwn", "Tirannwn_Sounds");
 		AREA_TO_FOLDER.put("Wilderness", "Wilderness_Sounds");
-		AREA_TO_FOLDER.put("Kourend", "Kourend_Sounds");
-		AREA_TO_FOLDER.put("Great Kourend", "Kourend_Sounds");
+		// The area name comes from the task FILENAME (Zeah_Tasks.json -> "Zeah"),
+		// so "Zeah" is the key that actually gets looked up. The sound folder was
+		// renamed Kourend_Sounds -> Zeah_Sounds but this map wasn't, so every Zeah
+		// task completed in silence. Kourend aliases kept in case an area is ever
+		// named that way.
+		AREA_TO_FOLDER.put("Zeah", "Zeah_Sounds");
+		AREA_TO_FOLDER.put("Kourend", "Zeah_Sounds");
+		AREA_TO_FOLDER.put("Great Kourend", "Zeah_Sounds");
 		AREA_TO_FOLDER.put("Desert", "Desert_Sounds");
 		AREA_TO_FOLDER.put("Kharidian Desert", "Desert_Sounds");
 		AREA_TO_FOLDER.put("Varlamore", "Varlamore_Sounds");
@@ -153,7 +162,7 @@ public class TaskCompletionSoundManager
 			"Void_Knight_Defeated..._(Pest_Control).wav"
 		));
 
-		areaSoundFiles.put("Kourend_Sounds", List.of(
+		areaSoundFiles.put("Zeah_Sounds", List.of(
 			"Commence_The_Fight!_(Duel_Arena).wav",
 			"Hosidius_Entrance_(POH).wav",
 			"Lucky_Win_(Death_Plateau).wav",
@@ -189,12 +198,11 @@ public class TaskCompletionSoundManager
 	 */
 	public void playRandomSoundForArea(String area)
 	{
-		if (area == null || area.isEmpty())
-		{
-			return;
-		}
-
-		String folder = AREA_TO_FOLDER.get(area);
+		// A null/empty area is normal for Global Tasks (quests belong to no
+		// chunk), so play the fallback rather than nothing.
+		String folder = (area == null || area.isEmpty())
+			? DEFAULT_SOUND_FOLDER
+			: AREA_TO_FOLDER.get(area);
 		if (folder == null)
 		{
 			// Try to find a partial match
@@ -209,7 +217,10 @@ public class TaskCompletionSoundManager
 			}
 			if (folder == null)
 			{
-				return;
+				// No mapping (Charter, Starter Area, and the chunk-independent
+				// Global Tasks, which have no area at all). Falling back beats
+				// silence — a missing map entry should degrade, not mute.
+				folder = DEFAULT_SOUND_FOLDER;
 			}
 		}
 
@@ -297,8 +308,11 @@ public class TaskCompletionSoundManager
 			if (currentClip.isControlSupported(FloatControl.Type.MASTER_GAIN))
 			{
 				FloatControl volume = (FloatControl) currentClip.getControl(FloatControl.Type.MASTER_GAIN);
-				// Convert percentage to decibels (-80 to 6 dB range typically)
-				float volumePercent = 0.03f; // 3% volume baseline
+				// Convert percentage to decibels (-80 to 6 dB range typically).
+				// 0.03f (3%) was hardcoded here, which works out to -30dB — the
+				// clip really did play, it was just inaudible. Now player-tunable.
+				int configured = config != null ? config.taskCompletionSoundVolume() : 25;
+				float volumePercent = Math.max(0.001f, Math.min(1.0f, configured / 100.0f));
 				float dB = (float) (Math.log(volumePercent) / Math.log(10.0) * 20.0);
 				volume.setValue(Math.max(volume.getMinimum(), Math.min(volume.getMaximum(), dB)));
 			}
