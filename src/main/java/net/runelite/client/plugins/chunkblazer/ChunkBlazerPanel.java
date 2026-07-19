@@ -3793,7 +3793,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	 */
 	/**
 	 * Card backdrop by task VALUE, matching the in-game task banners:
-	 * 1pt blue, 2pt green, 3pt purple, 4pt red, 5pt gold.
+	 * 1pt blue, 2pt green, 3pt purple, 4pt gold (Elite), 5pt red (Master).
 	 *
 	 * Colour carries the tier at a glance, so it has to be consistent across
 	 * every task list in the panel — Active, Completed, Chunk and Global all
@@ -3807,7 +3807,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	 * Tier labels for the points filters. Index = base_points, so TIER_NAMES[3]
 	 * is the 3pt tier. Order follows the OSRS combat-achievement convention
 	 * (Easy < Medium < Hard < Elite < Master) and pairs with tierFill(): 1 blue,
-	 * 2 green, 3 purple, 4 red, 5 gold.
+	 * 2 green, 3 purple, 4 gold, 5 red.
 	 */
 	private static final String[] TIER_NAMES = {"All", "Easy", "Medium", "Hard", "Elite", "Master"};
 
@@ -3835,8 +3835,8 @@ public class ChunkBlazerPanel extends PluginPanel
 			case 1:  return new Color(52, 84, 104);   // blue   — Novice
 			case 2:  return new Color(52, 92, 50);    // green  — Intermediate
 			case 3:  return new Color(88, 56, 100);   // purple — Hard
-			case 4:  return new Color(112, 52, 50);   // red    — Master
-			case 5:  return new Color(122, 96, 34);   // gold   — Elite
+			case 4:  return new Color(122, 96, 34);   // gold   — Elite
+			case 5:  return new Color(112, 52, 50);   // red    — Master
 			default: return new Color(30, 40, 60);    // unscored/unknown: old navy
 		}
 	}
@@ -3848,8 +3848,8 @@ public class ChunkBlazerPanel extends PluginPanel
 			case 1:  return new Color(86, 128, 152);
 			case 2:  return new Color(88, 136, 84);
 			case 3:  return new Color(132, 92, 148);
-			case 4:  return new Color(160, 88, 84);
-			case 5:  return new Color(176, 142, 60);
+			case 4:  return new Color(176, 142, 60);  // gold  — Elite
+			case 5:  return new Color(160, 88, 84);   // red   — Master
 			default: return new Color(60, 74, 100);
 		}
 	}
