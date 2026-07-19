@@ -191,6 +191,11 @@ public class ChunkBlazerPlugin extends Plugin
 	private final List<NuzlockeChunk> allChunks = new ArrayList<>();
 	private final Map<Integer, NuzlockeChunk> chunksByRegionId = new HashMap<>();
 
+	// taskIDs belonging to the Global Tasks pool. Lets region-oriented code tell
+	// "this task has no chunk by design" apart from "this task's chunk is
+	// missing", which otherwise both surface as region -1.
+	private final Set<String> globalTaskIds = new HashSet<>();
+
 	// taskId -> task, across every chunk plus the Global Tasks pool. Rebuilt by
 	// rebuildTaskIndex() whenever task data is (re)loaded.
 	//
@@ -1116,6 +1121,7 @@ public class ChunkBlazerPlugin extends Plugin
 	private void rebuildTaskIndex()
 	{
 		tasksById.clear();
+		globalTaskIds.clear();
 
 		for (NuzlockeChunk chunk : allChunks)
 		{
@@ -1139,6 +1145,7 @@ public class ChunkBlazerPlugin extends Plugin
 			if (task.getTaskId() != null)
 			{
 				tasksById.putIfAbsent(task.getTaskId(), task);
+				globalTaskIds.add(task.getTaskId());
 			}
 		}
 	}
@@ -3476,7 +3483,12 @@ public class ChunkBlazerPlugin extends Plugin
 			if (task != null)
 			{
 				int regionId = findRegionForTask(taskId);
-				String regionName = getRegionName(regionId);
+				// Global tasks belong to no chunk, so findRegionForTask returns
+				// -1 and getRegionName renders "Unknown Region (-1)". Label them
+				// for what they are instead of showing a broken region.
+				String regionName = globalTaskIds.contains(taskId)
+					? "Global Task"
+					: getRegionName(regionId);
 				completedTasks.add(new CompletedTaskInfo(taskId, regionId, regionName, task));
 			}
 		}

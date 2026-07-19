@@ -44,10 +44,10 @@ public class ChunkBlazerPanel extends PluginPanel
 	private static final int MAX_TASK_LIST_HEIGHT = TASK_ITEM_HEIGHT * VISIBLE_TASK_COUNT; // Show 5 items
 	private static final int MAX_ACTIVE_TASKS_HEIGHT = TASK_ITEM_HEIGHT * 4; // Max height for active tasks (4 items)
 	private static final int MAX_COMPLETED_TASKS_HEIGHT = TASK_ITEM_HEIGHT * VISIBLE_TASK_COUNT; // Show 5 items
-	// Global task rows are single-line (name + points, no progress bar), so they
-	// pack far tighter than the 80px rolled-task rows.
-	private static final int GLOBAL_TASK_ROW_HEIGHT = 18;
-	private static final int MAX_GLOBAL_TASKS_HEIGHT = GLOBAL_TASK_ROW_HEIGHT * 14; // ~14 rows visible
+	// Global task cards are two lines (wrapped name + "Quest +N pts"), so they
+	// pack tighter than the 80px rolled-task rows but are not fixed height —
+	// a long quest name wraps. Height matches the Completed Tasks section.
+	private static final int MAX_GLOBAL_TASKS_HEIGHT = MAX_COMPLETED_TASKS_HEIGHT;
 
 	private ChunkBlazerPlugin plugin;
 
@@ -1122,7 +1122,7 @@ public class ChunkBlazerPanel extends PluginPanel
 			}
 
 			globalTasksContentPanel.add(createGlobalTaskRow(task, done));
-			globalTasksContentPanel.add(Box.createVerticalStrut(2));
+			globalTasksContentPanel.add(Box.createVerticalStrut(4));
 			shown++;
 		}
 
@@ -1145,33 +1145,49 @@ public class ChunkBlazerPanel extends PluginPanel
 	}
 
 	/**
-	 * One compact row per global task.
+	 * One card per global task, matching the Completed Tasks card style.
 	 *
-	 * Deliberately lighter than createActiveTaskItem: that builds a custom-painted
-	 * panel with a wrapping label, a progress bar and recursive mouse handlers per
-	 * row, which is fine for 4 rolled tasks but not for ~200. Quest tasks are also
-	 * pass/fail, so there is no progress bar to draw.
+	 * The first version put the name and the points on one BorderLayout row
+	 * (name CENTER, points EAST). Quest names are long, and a plain JLabel
+	 * reports its full text width as its preferred size, so the row grew wider
+	 * than the viewport and — with HORIZONTAL_SCROLLBAR_NEVER — the points label
+	 * was pushed off the right edge and clipped ("5p"). WrappingTextLabel is
+	 * bounded to TASK_TEXT_WRAP_WIDTH and wraps instead of growing, and the
+	 * points now sit on their own line, so nothing can be cut off.
+	 *
+	 * Still deliberately lighter than createActiveTaskItem, which adds a
+	 * progress bar and recursive mouse handlers per row — fine for 4 rolled
+	 * tasks, wasteful for ~200. Quest tasks are pass/fail, so there is no
+	 * progress to draw.
 	 */
 	private JPanel createGlobalTaskRow(NuzlockeTask task, boolean done)
 	{
-		JPanel row = new JPanel(new BorderLayout(4, 0));
-		row.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-		row.setAlignmentX(LEFT_ALIGNMENT);
-		row.setPreferredSize(new Dimension(CONTENT_WIDTH, GLOBAL_TASK_ROW_HEIGHT));
-		row.setMaximumSize(new Dimension(CONTENT_WIDTH, GLOBAL_TASK_ROW_HEIGHT));
+		// Same navy card as the completed items; dimmed when already done.
+		JPanel card = createCardPanel(
+			done ? new Color(28, 36, 54) : new Color(34, 42, 62),
+			done ? new Color(54, 66, 92) : new Color(70, 84, 116));
+		card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+		// Left inset (12) clears the orange accent bar.
+		card.setBorder(new EmptyBorder(5, 12, 6, 6));
+		card.setAlignmentX(LEFT_ALIGNMENT);
+		card.setMaximumSize(new Dimension(CONTENT_WIDTH - 10, Integer.MAX_VALUE));
 
-		JLabel name = new JLabel((done ? "✓ " : "") + task.getName());
-		name.setFont(FontManager.getRunescapeSmallFont());
-		name.setForeground(done ? new Color(120, 200, 120) : Color.WHITE);
-		name.setToolTipText(task.getName());
-		row.add(name, BorderLayout.CENTER);
+		WrappingTextLabel nameLabel = new WrappingTextLabel(
+			(done ? "✓ " : "") + task.getName(),
+			FontManager.getRunescapeSmallFont(),
+			done ? new Color(100, 200, 100) : Color.WHITE,
+			TASK_TEXT_WRAP_WIDTH);
+		card.add(nameLabel);
 
-		JLabel points = new JLabel(task.getBasePoints() + "pt");
-		points.setFont(FontManager.getRunescapeSmallFont());
-		points.setForeground(done ? new Color(90, 140, 90) : new Color(255, 200, 80));
-		row.add(points, BorderLayout.EAST);
+		// Info line mirrors the completed cards: "Quest  +2 pts".
+		String category = task.getCategory() != null ? task.getCategory() : "Global";
+		JLabel infoLabel = new JLabel(category + "  +" + task.getBasePoints() + " pts");
+		infoLabel.setFont(FontManager.getRunescapeSmallFont());
+		infoLabel.setForeground(done ? new Color(170, 130, 60) : Color.ORANGE);
+		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
+		card.add(infoLabel);
 
-		return row;
+		return card;
 	}
 
 	private void refreshCompletedTasksFilters()
