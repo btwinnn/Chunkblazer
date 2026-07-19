@@ -129,5 +129,17 @@ public class PlayerLoginResponse
 
 		@SerializedName("verified_at")
 		private String verifiedAt;
+
+		/**
+		 * Whether the server authorizes this account to use the Dev Controls
+		 * panel. Server-issued on purpose: those tools write directly to local
+		 * task state, and a dev-granted task is a real catalog task, so the
+		 * server's Tier-0 points recompute agrees with the client and never
+		 * flags it. Gating this client-side would leave every player an
+		 * unobservable self-grant. Defaults false, so an old or malformed
+		 * response denies the tools.
+		 */
+		@SerializedName("is_dev")
+		private boolean isDev;
 	}
 }

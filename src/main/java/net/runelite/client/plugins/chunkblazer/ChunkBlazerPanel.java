@@ -16,6 +16,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -43,6 +44,10 @@ public class ChunkBlazerPanel extends PluginPanel
 	private static final int MAX_TASK_LIST_HEIGHT = TASK_ITEM_HEIGHT * VISIBLE_TASK_COUNT; // Show 5 items
 	private static final int MAX_ACTIVE_TASKS_HEIGHT = TASK_ITEM_HEIGHT * 4; // Max height for active tasks (4 items)
 	private static final int MAX_COMPLETED_TASKS_HEIGHT = TASK_ITEM_HEIGHT * VISIBLE_TASK_COUNT; // Show 5 items
+	// Global task rows are single-line (name + points, no progress bar), so they
+	// pack far tighter than the 80px rolled-task rows.
+	private static final int GLOBAL_TASK_ROW_HEIGHT = 18;
+	private static final int MAX_GLOBAL_TASKS_HEIGHT = GLOBAL_TASK_ROW_HEIGHT * 14; // ~14 rows visible
 
 	private ChunkBlazerPlugin plugin;
 
@@ -116,6 +121,22 @@ public class ChunkBlazerPanel extends PluginPanel
 	private String selectedArea = "All";
 	private JPanel completedTasksFilterPanel;
 	private JLabel completedCollapsedLabel;
+
+	// --- Global Tasks (chunk-independent quest pool) ---
+	// Deliberately has no area/chunk filter combos: these tasks belong to no
+	// region, so getTaskRegionName/getTaskArea return null for all of them and
+	// any region filter would hide the entire section.
+	private JPanel globalTasksPanel;
+	private JPanel globalTasksContentPanel;
+	private JScrollPane globalTasksScrollPane;
+	private JToggleButton globalTasksToggle;
+	private boolean globalTasksExpanded = false;
+	private JTextField globalTasksSearchField;
+	private String globalTasksSearchText = "";
+	private JPanel globalTasksFilterPanel;
+	private JLabel globalTasksCollapsedLabel;
+	private JLabel globalTasksSectionTitle;
+	private JCheckBox globalTasksHideCompleted;
 	private boolean isRefreshingFilters = false; // Prevent event loops during filter refresh
 
 	// Active Tasks Components
@@ -250,6 +271,14 @@ public class ChunkBlazerPanel extends PluginPanel
 		mainPanel.add(completedTasksPanel);
 		mainPanel.add(Box.createVerticalStrut(8));
 
+		// Global Tasks Section — chunk-independent quest pool, free for every
+		// account. Sits above the region task list because it's always relevant,
+		// regardless of which chunks the player owns.
+		globalTasksPanel = createGlobalTasksSection();
+		setupSectionPanel(globalTasksPanel);
+		mainPanel.add(globalTasksPanel);
+		mainPanel.add(Box.createVerticalStrut(8));
+
 		// Task List Section (Region Tasks)
 		taskListPanel = createTaskListSection();
 		setupSectionPanel(taskListPanel);
@@ -263,9 +292,14 @@ public class ChunkBlazerPanel extends PluginPanel
 		mainPanel.add(unlockedListPanel);
 		mainPanel.add(Box.createVerticalStrut(8));
 
-		// Dev/Test Controls Section (at the bottom, collapsible)
+		// Dev/Test Controls Section (at the bottom, collapsible). Built for every
+		// client but hidden until the server says this account is a dev — the panel
+		// is constructed before login, so it starts hidden and updatePanel() reveals
+		// it once the login response lands. The plugin-side devToolsDenied() guard
+		// is what actually enforces this; hiding is just the UI half.
 		devControlsPanel = createDevControlsSection();
 		setupSectionPanel(devControlsPanel);
+		devControlsPanel.setVisible(false);
 		mainPanel.add(devControlsPanel);
 
 		// Add vertical glue at the bottom to push content up and prevent shrinking
@@ -830,6 +864,314 @@ public class ChunkBlazerPanel extends PluginPanel
 	{
 		completedTasksSearchText = completedTasksSearchField.getText().toLowerCase().trim();
 		updateCompletedTasksContent();
+	}
+
+	// ------------------------------------------------------------------
+	// Global Tasks — the chunk-independent quest pool. Every account has all
+	// of these from load; there is no rolling, no unlock and no region gate.
+	// ------------------------------------------------------------------
+
+	private JPanel createGlobalTasksSection()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		panel.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(new Color(190, 150, 60)),
+			new EmptyBorder(6, 6, 6, 6)
+		));
+		panel.setAlignmentX(LEFT_ALIGNMENT);
+
+		JPanel headerRow = new JPanel(new BorderLayout(5, 0));
+		headerRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		headerRow.setAlignmentX(LEFT_ALIGNMENT);
+		headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
+		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
+
+		// Held as a field rather than found by walking the header's children —
+		// the index-hunting pattern used elsewhere breaks the moment the header
+		// layout changes.
+		globalTasksSectionTitle = new JLabel("Global Tasks");
+		globalTasksSectionTitle.setFont(FontManager.getRunescapeBoldFont());
+		globalTasksSectionTitle.setForeground(new Color(255, 200, 80));
+		headerRow.add(globalTasksSectionTitle, BorderLayout.WEST);
+
+		globalTasksToggle = new JToggleButton();
+		setToggleArrow(globalTasksToggle, globalTasksExpanded);
+		globalTasksToggle.setFont(new Font("Arial", Font.PLAIN, 10));
+		globalTasksToggle.setPreferredSize(new Dimension(30, 20));
+		globalTasksToggle.setMaximumSize(new Dimension(30, 20));
+		globalTasksToggle.setToolTipText("Expand/collapse global tasks");
+		globalTasksToggle.addActionListener(e ->
+		{
+			globalTasksExpanded = globalTasksToggle.isSelected();
+			setToggleArrow(globalTasksToggle, globalTasksExpanded);
+			updateGlobalTasksVisibility();
+		});
+		headerRow.add(globalTasksToggle, BorderLayout.EAST);
+
+		panel.add(headerRow);
+		panel.add(sectionDivider());
+		panel.add(Box.createVerticalStrut(5));
+
+		globalTasksFilterPanel = new JPanel();
+		globalTasksFilterPanel.setLayout(new BoxLayout(globalTasksFilterPanel, BoxLayout.Y_AXIS));
+		globalTasksFilterPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		globalTasksFilterPanel.setAlignmentX(LEFT_ALIGNMENT);
+		globalTasksFilterPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 55));
+		globalTasksFilterPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 55));
+		globalTasksFilterPanel.setVisible(false);
+
+		JPanel searchRow = new JPanel(new BorderLayout(5, 0));
+		searchRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		searchRow.setAlignmentX(LEFT_ALIGNMENT);
+		searchRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
+		searchRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
+
+		JLabel searchLabel = new JLabel("Search:");
+		searchLabel.setFont(FontManager.getRunescapeSmallFont());
+		searchLabel.setForeground(Color.LIGHT_GRAY);
+		searchRow.add(searchLabel, BorderLayout.WEST);
+
+		globalTasksSearchField = new JTextField();
+		globalTasksSearchField.setToolTipText("Search global tasks by name");
+		globalTasksSearchField.getDocument().addDocumentListener(new DocumentListener()
+		{
+			@Override
+			public void insertUpdate(DocumentEvent e)
+			{
+				onGlobalTasksFilterChanged();
+			}
+			@Override
+			public void removeUpdate(DocumentEvent e)
+			{
+				onGlobalTasksFilterChanged();
+			}
+			@Override
+			public void changedUpdate(DocumentEvent e)
+			{
+				onGlobalTasksFilterChanged();
+			}
+		});
+		searchRow.add(globalTasksSearchField, BorderLayout.CENTER);
+
+		globalTasksFilterPanel.add(searchRow);
+		globalTasksFilterPanel.add(Box.createVerticalStrut(3));
+
+		globalTasksHideCompleted = new JCheckBox("Hide completed");
+		globalTasksHideCompleted.setFont(FontManager.getRunescapeSmallFont());
+		globalTasksHideCompleted.setForeground(Color.LIGHT_GRAY);
+		globalTasksHideCompleted.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		globalTasksHideCompleted.setAlignmentX(LEFT_ALIGNMENT);
+		globalTasksHideCompleted.addActionListener(e -> updateGlobalTasksContent());
+		globalTasksFilterPanel.add(globalTasksHideCompleted);
+
+		panel.add(globalTasksFilterPanel);
+
+		globalTasksContentPanel = new JPanel();
+		globalTasksContentPanel.setLayout(new BoxLayout(globalTasksContentPanel, BoxLayout.Y_AXIS));
+		globalTasksContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		globalTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+
+		globalTasksScrollPane = new JScrollPane(globalTasksContentPanel);
+		globalTasksScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		globalTasksScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		globalTasksScrollPane.setBorder(null);
+		globalTasksScrollPane.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		globalTasksScrollPane.getViewport().setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		globalTasksScrollPane.setAlignmentX(LEFT_ALIGNMENT);
+		globalTasksScrollPane.setVisible(false);
+		// Rows are compact single-line labels, so scroll a sensible amount per notch.
+		globalTasksScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+		panel.add(globalTasksScrollPane);
+
+		globalTasksCollapsedLabel = new JLabel("Click to view global tasks");
+		globalTasksCollapsedLabel.setFont(FontManager.getRunescapeSmallFont());
+		globalTasksCollapsedLabel.setForeground(Color.GRAY);
+		globalTasksCollapsedLabel.setAlignmentX(LEFT_ALIGNMENT);
+		panel.add(globalTasksCollapsedLabel);
+
+		return panel;
+	}
+
+	private void updateGlobalTasksVisibility()
+	{
+		globalTasksFilterPanel.setVisible(globalTasksExpanded);
+		globalTasksScrollPane.setVisible(globalTasksExpanded);
+		globalTasksCollapsedLabel.setVisible(!globalTasksExpanded);
+
+		if (globalTasksExpanded)
+		{
+			updateGlobalTasksContent();
+
+			int height = MAX_GLOBAL_TASKS_HEIGHT;
+			globalTasksScrollPane.setMinimumSize(new Dimension(CONTENT_WIDTH, height));
+			globalTasksScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, height));
+			globalTasksScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, height));
+		}
+		else
+		{
+			globalTasksScrollPane.setMinimumSize(new Dimension(CONTENT_WIDTH, 0));
+			globalTasksScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, 0));
+			globalTasksScrollPane.setMaximumSize(new Dimension(CONTENT_WIDTH, 0));
+		}
+
+		globalTasksPanel.revalidate();
+		globalTasksPanel.repaint();
+
+		if (globalTasksPanel.getParent() != null)
+		{
+			globalTasksPanel.getParent().revalidate();
+			globalTasksPanel.getParent().repaint();
+		}
+	}
+
+	private void onGlobalTasksFilterChanged()
+	{
+		globalTasksSearchText = globalTasksSearchField.getText().toLowerCase().trim();
+		updateGlobalTasksContent();
+	}
+
+	/**
+	 * Refresh the Global Tasks header/summary, and rebuild the list only when the
+	 * section is expanded.
+	 *
+	 * The lazy gate matters more here than in the other sections: this pool is
+	 * ~200 tasks, and every rebuild tears down and reconstructs a component per
+	 * row. This method is called from updatePanel() only — deliberately NOT from
+	 * updateTaskDisplay(), which fires on every progress event.
+	 */
+	public void updateGlobalTasks()
+	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(this::updateGlobalTasks);
+			return;
+		}
+
+		if (globalTasksPanel == null || plugin == null)
+		{
+			return;
+		}
+
+		List<NuzlockeTask> tasks = plugin.getGlobalTasks();
+		Set<String> completedIds = plugin.getCompletedTaskIdSet();
+
+		int total = tasks.size();
+		int done = 0;
+		for (NuzlockeTask t : tasks)
+		{
+			if (t.isCompleted() || completedIds.contains(t.getTaskId()))
+			{
+				done++;
+			}
+		}
+
+		if (globalTasksSectionTitle != null)
+		{
+			globalTasksSectionTitle.setText("Global Tasks (" + done + "/" + total + ")");
+		}
+
+		if (globalTasksCollapsedLabel != null)
+		{
+			globalTasksCollapsedLabel.setText(total > 0
+				? "Click to view " + total + " global tasks"
+				: "No global tasks loaded");
+		}
+
+		if (globalTasksExpanded)
+		{
+			updateGlobalTasksContent();
+		}
+	}
+
+	private void updateGlobalTasksContent()
+	{
+		if (globalTasksContentPanel == null || plugin == null)
+		{
+			return;
+		}
+
+		// Preserve scroll position so a rebuild doesn't snap a player who is
+		// halfway down a 200-row list back to the top.
+		final java.awt.Point savedViewPos = globalTasksScrollPane.getViewport().getViewPosition();
+
+		globalTasksContentPanel.removeAll();
+
+		Set<String> completedIds = plugin.getCompletedTaskIdSet();
+		boolean hideCompleted = globalTasksHideCompleted != null && globalTasksHideCompleted.isSelected();
+		int shown = 0;
+
+		for (NuzlockeTask task : plugin.getGlobalTasks())
+		{
+			boolean done = task.isCompleted() || completedIds.contains(task.getTaskId());
+
+			if (hideCompleted && done)
+			{
+				continue;
+			}
+
+			if (!globalTasksSearchText.isEmpty())
+			{
+				String name = task.getName() == null ? "" : task.getName().toLowerCase();
+				if (!name.contains(globalTasksSearchText))
+				{
+					continue;
+				}
+			}
+
+			globalTasksContentPanel.add(createGlobalTaskRow(task, done));
+			globalTasksContentPanel.add(Box.createVerticalStrut(2));
+			shown++;
+		}
+
+		if (shown == 0)
+		{
+			JLabel empty = new JLabel(plugin.getGlobalTasks().isEmpty()
+				? "No global tasks loaded"
+				: "No tasks match the filter");
+			empty.setFont(FontManager.getRunescapeSmallFont());
+			empty.setForeground(Color.GRAY);
+			empty.setAlignmentX(LEFT_ALIGNMENT);
+			globalTasksContentPanel.add(empty);
+		}
+
+		globalTasksContentPanel.revalidate();
+		globalTasksContentPanel.repaint();
+
+		SwingUtilities.invokeLater(() ->
+			globalTasksScrollPane.getViewport().setViewPosition(savedViewPos));
+	}
+
+	/**
+	 * One compact row per global task.
+	 *
+	 * Deliberately lighter than createActiveTaskItem: that builds a custom-painted
+	 * panel with a wrapping label, a progress bar and recursive mouse handlers per
+	 * row, which is fine for 4 rolled tasks but not for ~200. Quest tasks are also
+	 * pass/fail, so there is no progress bar to draw.
+	 */
+	private JPanel createGlobalTaskRow(NuzlockeTask task, boolean done)
+	{
+		JPanel row = new JPanel(new BorderLayout(4, 0));
+		row.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		row.setAlignmentX(LEFT_ALIGNMENT);
+		row.setPreferredSize(new Dimension(CONTENT_WIDTH, GLOBAL_TASK_ROW_HEIGHT));
+		row.setMaximumSize(new Dimension(CONTENT_WIDTH, GLOBAL_TASK_ROW_HEIGHT));
+
+		JLabel name = new JLabel((done ? "✓ " : "") + task.getName());
+		name.setFont(FontManager.getRunescapeSmallFont());
+		name.setForeground(done ? new Color(120, 200, 120) : Color.WHITE);
+		name.setToolTipText(task.getName());
+		row.add(name, BorderLayout.CENTER);
+
+		JLabel points = new JLabel(task.getBasePoints() + "pt");
+		points.setFont(FontManager.getRunescapeSmallFont());
+		points.setForeground(done ? new Color(90, 140, 90) : new Color(255, 200, 80));
+		row.add(points, BorderLayout.EAST);
+
+		return row;
 	}
 
 	private void refreshCompletedTasksFilters()
@@ -2852,7 +3194,12 @@ public class ChunkBlazerPanel extends PluginPanel
 			// Always-on gameplay sections simply follow login state.
 			statsPanel.setVisible(loggedIn);
 			completedTasksPanel.setVisible(loggedIn);
+			globalTasksPanel.setVisible(loggedIn);
 			taskListPanel.setVisible(loggedIn);
+
+			// Dev Controls need BOTH a login and the server's is_dev verdict. Set
+			// before the !loggedIn early-return below so logging out hides it too.
+			devControlsPanel.setVisible(loggedIn && plugin.isDevAuthorized());
 
 			if (!loggedIn)
 			{
@@ -2878,6 +3225,7 @@ public class ChunkBlazerPanel extends PluginPanel
 			updateStats();
 			updateTaskDisplay();
 			updateCompletedTasks();
+			updateGlobalTasks();
 			updateTaskList();
 			updateUnlockedListSection();
 		});

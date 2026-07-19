@@ -156,11 +156,30 @@ public class ChunkBlazerPlugin extends Plugin
 	private boolean worldMapUnlockKeyPressed;
 
 	// --- Plugin State ---
+
+	// Server verdict on whether this account may use the Dev Controls panel,
+	// from the is_dev flag in the login response. Deliberately a transient field
+	// and NOT a config entry: config is user-editable from the RuneLite profile
+	// file, so persisting it there would recreate the very self-grant this
+	// closes. Defaults false and resets on logout, so an unreachable server or
+	// an old build denies the tools rather than opening them.
+	@Getter
+	private volatile boolean devAuthorized;
+
 	@Getter
 	private NuzlockeTask activeTask; // Legacy single task for backward compatibility
 
 	@Getter
 	private final List<NuzlockeTask> activeTasks = new CopyOnWriteArrayList<>(); // All active tasks for current region (thread-safe)
+
+	// The "Global Tasks" pool: quest tasks that belong to no chunk, are free for
+	// every account, and are available from the moment the plugin loads. Kept
+	// OUT of activeTasks on purpose — activeTasks is the per-chunk rolled set
+	// that the Active Tasks panel section renders, and ~200 quest rows would
+	// swamp it. These get their own panel section and are registered with the
+	// module manager separately in registerGlobalTasks().
+	@Getter
+	private final List<NuzlockeTask> globalTasks = new ArrayList<>();
 
 	private final List<NuzlockeChunk> allChunks = new ArrayList<>();
 	private final Map<Integer, NuzlockeChunk> chunksByRegionId = new HashMap<>();
@@ -480,6 +499,10 @@ public class ChunkBlazerPlugin extends Plugin
 			activeTask = null;
 			lastRegionId = -1;
 			pendingServerLogin = false;
+			// Drop dev authorization with the session. Without this it would carry
+			// over to whichever account logs in next on this client, handing a
+			// normal account the dev tools until its own login response arrived.
+			devAuthorized = false;
 			// Real logout — reset the dedupe flag so the NEXT LOGGED_IN
 			// (which is a fresh game session) re-runs loginToServer.
 			serverLoginDone = false;
@@ -1052,6 +1075,136 @@ public class ChunkBlazerPlugin extends Plugin
 
 		// Free (0-cost) chunk registry — dungeons etc. that unlock for free.
 		loadFreeChunks();
+
+		// Global (chunk-independent) task pool — quests.
+		loadGlobalTasks();
+	}
+
+	/**
+	 * Load the Global Tasks pool (Quest_Tasks.json): QUEST_CHECK tasks that are
+	 * free for every account and belong to no chunk.
+	 *
+	 * The file is deliberately wrapped in the same region-group shape the normal
+	 * task files use ({"Quest_Tasks":[{"region_id":[], "tasks":[...]}]}) with an
+	 * EMPTY region_id, so the Go server's catalog loader — which unmarshals every
+	 * data file as map[string][]regionGroup — can embed it with no server-side
+	 * change. A flat {"quest_tasks":[...]} array would parse there without error
+	 * and silently load zero tasks, which would make every quest award 0 points.
+	 *
+	 * Loaded into `globalTasks` only. These are NOT added to allChunks or
+	 * chunksByRegionId: they have no region, and registering them there would
+	 * make findRegionForTask/getTaskArea return garbage.
+	 */
+	private void loadGlobalTasks()
+	{
+		globalTasks.clear();
+
+		String file = "Quest_Tasks.json";
+		String alt = flipJsonExtensionCase(file);
+		String abs = "/net/runelite/client/plugins/chunkblazer/";
+		String[] candidates = { file, abs + file, alt, abs + alt };
+
+		InputStream is = null;
+		for (String path : candidates)
+		{
+			is = getClass().getResourceAsStream(path);
+			if (is != null)
+			{
+				break;
+			}
+		}
+		if (is == null)
+		{
+			log.error("FAILED to find Global Tasks file: {} (tried {})",
+				file, java.util.Arrays.toString(candidates));
+			return;
+		}
+
+		try
+		{
+			String json = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+			Type mapType = new TypeToken<Map<String, List<NuzlockeChunk>>>()
+			{
+			}.getType();
+			Map<String, List<NuzlockeChunk>> data = gson.fromJson(json, mapType);
+
+			if (data == null || data.isEmpty())
+			{
+				log.error("Global Tasks file parsed to nothing");
+				return;
+			}
+
+			for (List<NuzlockeChunk> groups : data.values())
+			{
+				if (groups == null)
+				{
+					continue;
+				}
+				for (NuzlockeChunk group : groups)
+				{
+					if (group == null || group.getTasks() == null)
+					{
+						continue;
+					}
+					globalTasks.addAll(group.getTasks());
+				}
+			}
+
+			if (globalTasks.isEmpty())
+			{
+				// Loud, because the failure is otherwise invisible: the section
+				// just renders empty and no quest ever awards a point.
+				log.error("Global Tasks file loaded but contained ZERO tasks — check the region-group wrapper");
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("Failed to load Global Tasks: {}", e.getMessage(), e);
+		}
+		finally
+		{
+			try
+			{
+				is.close();
+			}
+			catch (Exception ignored)
+			{
+			}
+		}
+	}
+
+	/**
+	 * Register the Global Tasks pool with the module manager.
+	 *
+	 * MUST be called from loadActiveTasks(), after taskModuleManager.clearTask().
+	 * clearTask() wipes EVERY module's active list, and loadActiveTasks() runs on
+	 * login, chunk unlock, config change, reset and mode switch — so registering
+	 * the pool once at startup would leave it silently dead after the player's
+	 * first chunk unlock.
+	 *
+	 * Already-completed quest tasks are skipped here. Without that filter the
+	 * module would re-detect every finished quest on each reload and fire
+	 * completeTask() again, re-awarding base_points every login and appending a
+	 * duplicate id to the completedTasks config string each time.
+	 */
+	private void registerGlobalTasks(Set<String> completedTaskIds)
+	{
+		for (NuzlockeTask task : globalTasks)
+		{
+			if (task.getTaskId() == null || completedTaskIds.contains(task.getTaskId()))
+			{
+				continue;
+			}
+
+			// Quest tasks are pass/fail, never counted. targetQuantity is a
+			// transient defaulting to 0, and a 0 target reads as "already done"
+			// to progress comparisons elsewhere, so pin it explicitly.
+			task.setTargetQuantity(1);
+			task.setCurrentProgress(0);
+			task.setCompleted(false);
+
+			taskModuleManager.registerActiveTask(task);
+		}
 	}
 
 	/**
@@ -1752,6 +1905,12 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 		PlayerLoginResponse.PlayerData pdata = response.getPlayer();
+
+		// Dev-tool authorization, straight off the login response. Set outside the
+		// clientThread hop so the panel's next repaint sees it, and always assigned
+		// (not just when true) so a demoted account loses the tools on next login.
+		devAuthorized = pdata != null && pdata.isDev();
+
 		clientThread.invokeLater(() ->
 		{
 			String rsn = getPlayerName();
@@ -2094,7 +2253,7 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	public void devUnlockRegions(String csv)
 	{
-		if (csv == null)
+		if (devToolsDenied("unlockRegions") || csv == null)
 		{
 			return;
 		}
@@ -2249,6 +2408,11 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			taskModuleManager.registerActiveTask(task);
 		}
+
+		// Re-register the chunk-independent Global Tasks pool. This has to happen
+		// on every load, not once at startup, because clearTask() above emptied
+		// every module's active list — see registerGlobalTasks().
+		registerGlobalTasks(completedTaskIds);
 
 		// Set first task as "active" for backward compatibility
 		activeTask = activeTasks.isEmpty() ? null : activeTasks.get(0);
@@ -2792,9 +2956,27 @@ public class ChunkBlazerPlugin extends Plugin
 
 	}
 
+	/**
+	 * Guard for every dev tool that mutates progress. Hiding the panel is the
+	 * primary gate; this is the backstop, because the panel is only UI and these
+	 * methods are public. A dev-granted task is indistinguishable from an earned
+	 * one at sync time — it's a real catalog task, so the server's points
+	 * recompute matches the client and Tier-0 anti-cheat stays silent — so an
+	 * ungated call here is an invisible self-grant.
+	 */
+	private boolean devToolsDenied(String action)
+	{
+		if (devAuthorized)
+		{
+			return false;
+		}
+		log.warn("[CHUNKBLAZER] refused dev action '{}': account not authorized by server", action);
+		return true;
+	}
+
 	public void devCompleteActiveTask()
 	{
-		if (activeTask == null)
+		if (devToolsDenied("completeActiveTask") || activeTask == null)
 		{
 			return;
 		}
@@ -2807,7 +2989,7 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	public void devCompleteSpecificTask(NuzlockeTask task)
 	{
-		if (task == null)
+		if (devToolsDenied("completeSpecificTask") || task == null)
 		{
 			return;
 		}
@@ -2823,12 +3005,21 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public void devAddPoints(int points)
 	{
+		if (devToolsDenied("addPoints"))
+		{
+			return;
+		}
+
 		int current = config.totalPoints();
 		configManager.setConfiguration("chunkblazer", "totalPoints", current + points);
 	}
 
 	public void devResetTasks()
 	{
+		if (devToolsDenied("resetTasks"))
+		{
+			return;
+		}
 
 		// Clear rolled tasks for current region only
 		int currentRegion = getCurrentRegionId();
@@ -2904,6 +3095,11 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public void devResetAll()
 	{
+		if (devToolsDenied("resetAll"))
+		{
+			return;
+		}
+
 		// Reset tasks
 		configManager.setConfiguration("chunkblazer", "regionRolledTasks", "");
 		configManager.setConfiguration("chunkblazer", "assignedTasks", "");
@@ -2960,6 +3156,7 @@ public class ChunkBlazerPlugin extends Plugin
 		panel.updateStats();
 		panel.updateTaskDisplay();
 		panel.updateCompletedTasks();
+		panel.updateGlobalTasks();
 		panel.updateTaskList();
 	}
 
@@ -2991,6 +3188,16 @@ public class ChunkBlazerPlugin extends Plugin
 			completed = completed + "," + taskId;
 		}
 		configManager.setConfiguration("chunkblazer", "completedTasks", completed);
+	}
+
+	/**
+	 * Public view of the persisted completed-task id set, for the panel. Global
+	 * Tasks are not held in activeTasks, so the panel can't infer their done
+	 * state from the active list the way the rolled sections do.
+	 */
+	public Set<String> getCompletedTaskIdSet()
+	{
+		return getCompletedTaskIds();
 	}
 
 	private Set<String> getCompletedTaskIds()

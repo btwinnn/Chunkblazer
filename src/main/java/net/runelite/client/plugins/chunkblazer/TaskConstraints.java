@@ -98,6 +98,13 @@ public class TaskConstraints
 	@SerializedName("prohibited_active_varbits")
 	private List<VarbitConstraint> prohibitedActiveVarbits;
 
+	// net.runelite.api.Quest enum constant name for QUEST_CHECK tasks, e.g.
+	// "DRAGON_SLAYER_II". No varp id or expected value is stored alongside it:
+	// Quest.getState() resolves the per-quest varp and its finished threshold
+	// internally, so the constant name is the whole configuration.
+	@SerializedName("quest")
+	private String quest;
+
 	// Direct varbit/varp ID for VARBIT_CHECK and VARP_CHECK tasks
 	@SerializedName("varbit_id")
 	private Integer varbitId;
@@ -293,6 +300,14 @@ public class TaskConstraints
 			}
 			constraints.setDroppedItemIds(readIntArray(obj, "dropped_item_id"));
 			constraints.setDroppedItemQuantity(readFlexibleInt(obj, "quantity"));
+
+			// Quest enum constant name for QUEST_CHECK tasks. This deserializer is
+			// a whitelist — a field not read here is silently dropped, so the
+			// read must exist or constraints.quest is always null at runtime.
+			if (obj.has("quest") && obj.get("quest").isJsonPrimitive())
+			{
+				constraints.setQuest(obj.get("quest").getAsString());
+			}
 
 			// Handle direct varbit_id and varp_id for VARBIT_CHECK/VARP_CHECK tasks
 			constraints.setVarbitId(readFlexibleInt(obj, "varbit_id"));
