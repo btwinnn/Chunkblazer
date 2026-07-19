@@ -146,21 +146,6 @@
                             "quantity": [1]
                         }
                     ]
-                },
-                {
-                    "name": "Obtain an Explorer's Ring 1",
-                    "taskID": "obtain_explorer's_ring_1",
-                    "category": "Obtain",
-                    "completion_type": "OBTAIN",
-                    "base_points": 1,
-                    "assignment_weight": 8,
-                    "required_items": [
-                        {
-                            "item": ["Explorer's Ring 1"],
-                            "item_ids": [13125],
-                            "quantity": [1]
-                        }
-                    ]
                 }
             ],
             "optional_quests_unlocked": [
