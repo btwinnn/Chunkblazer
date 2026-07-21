@@ -2189,8 +2189,25 @@ public class ChunkBlazerPlugin extends Plugin
 					else
 					{
 						pendingNuzlockeSnapshot = null;
+
+						// Surface the server's specific reason. It already computes
+						// one ("Hitpoints must be level 10", "combat level must be
+						// 3 (yours is N)", …) and swallowing it left a genuinely
+						// fresh account with no way to tell a real disqualification
+						// from a bad reading — which is exactly the position we
+						// were in on 2026-07-21 with the account "ChunkBlazer".
+						String reason = resp != null ? resp.getReason() : null;
 						addPluginChatMessage("Sorry, your account does not meet the Competitive requirements, "
-							+ "please create a new account or play Casual Mode.");
+							+ "please create a new account or play Casual Mode."
+							+ (reason == null || reason.isEmpty() ? "" : " (" + reason + ")"));
+
+						// Log what we actually SENT as well. If the reason looks
+						// wrong for the account, the snapshot is the thing to
+						// distrust — client-side reads can be unhydrated.
+						log.warn("[CHUNKBLAZER] Competitive eligibility refused: reason='{}' "
+								+ "submitted combat={} questPoints={} totalLevel={} skills={}",
+							reason, snapshot.getCombatLevel(), snapshot.getQuestPoints(),
+							snapshot.getTotalLevel(), snapshot.getSkills());
 					}
 				});
 		});
