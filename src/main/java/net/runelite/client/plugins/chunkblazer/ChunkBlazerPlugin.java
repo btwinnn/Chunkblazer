@@ -16,6 +16,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -516,12 +517,24 @@ public class ChunkBlazerPlugin extends Plugin
 			// Last-chance sync before localPlayer becomes inaccessible. Build the
 			// request right here (still on the event-bus thread, client state
 			// still readable) and fire-and-forget the HTTP call.
-			PlayerSyncRequest finalSync = buildSyncRequest();
+			//
+			// Skipped entirely if the server's record was never merged this
+			// session (login failed, or the player logged straight back out):
+			// local would then hold only the bootstrap, and this sync is
+			// destructive, so it would erase the account's real progress. Losing
+			// one session's unsynced play is recoverable; erasing the server copy
+			// is not.
+			PlayerSyncRequest finalSync = serverStateMerged ? buildSyncRequest() : null;
 			if (finalSync != null && config.apiEnabled())
 			{
 				apiClient.syncPlayerState(finalSync)
 					.thenAccept(resp -> log.info("Logout sync: success={}",
 						resp != null && resp.isSuccess()));
+			}
+			else if (!serverStateMerged)
+			{
+				log.warn("[CHUNKBLAZER] skipping logout sync — server state was never "
+					+ "merged this session, so local progress is not authoritative");
 			}
 			// Logout beacon — tells the server we're offline now so it can snapshot
 			// this just-ended session's hi-scores immediately instead of waiting for
@@ -542,6 +555,8 @@ public class ChunkBlazerPlugin extends Plugin
 			cachedBaselineOwner = null;
 			lastSkillSample = null;
 			stableSkillSamples = 0;
+			// Every session must re-merge before it is allowed to sync.
+			serverStateMerged = false;
 			// Real logout — reset the dedupe flag so the NEXT LOGGED_IN
 			// (which is a fresh game session) re-runs loginToServer.
 			serverLoginDone = false;
@@ -2632,6 +2647,13 @@ public class ChunkBlazerPlugin extends Plugin
 	 * baseline — it re-captures at whatever its levels are on return, which is
 	 * more restrictive than the original and therefore the safe direction.
 	 */
+	// False until the server's record for this session has been merged into local
+	// config. Sync is DESTRUCTIVE and client-authoritative, so pushing before the
+	// merge would overwrite the server with whatever half-bootstrapped state the
+	// client happens to hold — which is how a clean profile wiped 14 unlocked
+	// chunks on 2026-07-21. Reset on logout so every session must earn it again.
+	private volatile boolean serverStateMerged;
+
 	private static final String[] ACCOUNT_STATE_KEYS = {
 		"unlockedChunks", "completedTasks", "assignedTasks", "regionRolledTasks",
 		"currentTaskId", "currentTaskQuantity", "currentTaskProgress",
@@ -2742,6 +2764,55 @@ public class ChunkBlazerPlugin extends Plugin
 		taskModuleManager.clearTask();
 	}
 
+	/**
+	 * Union the server's unlocked regions into local config. Order-independent
+	 * and lossless in both directions — see the call site for why that matters.
+	 */
+	private void mergeUnlockedRegionsFromServer(PlayerLoginResponse.PlayerData pdata)
+	{
+		if (pdata == null || pdata.getUnlockedRegions() == null || pdata.getUnlockedRegions().isEmpty())
+		{
+			return;
+		}
+
+		// LinkedHashSet: stable order so an unchanged merge doesn't rewrite config.
+		Set<String> merged = new LinkedHashSet<>(getUnlockedRegionIds());
+		int before = merged.size();
+		for (Integer region : pdata.getUnlockedRegions())
+		{
+			merged.add(String.valueOf(region));
+		}
+		if (merged.size() == before)
+		{
+			return;
+		}
+
+		configManager.setConfiguration("chunkblazer", "unlockedChunks", String.join(",", merged));
+		log.info("[CHUNKBLAZER] restored {} unlocked chunk(s) from the server (had {}, now {})",
+			merged.size() - before, before, merged.size());
+	}
+
+	/** Union the server's completed tasks into local config. */
+	private void mergeCompletedTasksFromServer(PlayerLoginResponse.PlayerData pdata)
+	{
+		if (pdata == null || pdata.getCompletedTasks() == null || pdata.getCompletedTasks().isEmpty())
+		{
+			return;
+		}
+
+		Set<String> merged = new LinkedHashSet<>(getCompletedTaskIds());
+		int before = merged.size();
+		merged.addAll(pdata.getCompletedTasks());
+		if (merged.size() == before)
+		{
+			return;
+		}
+
+		configManager.setConfiguration("chunkblazer", "completedTasks", String.join(",", merged));
+		log.info("[CHUNKBLAZER] restored {} completed task(s) from the server (had {}, now {})",
+			merged.size() - before, before, merged.size());
+	}
+
 	private void hydrateFromLoginResponse(PlayerLoginResponse response)
 	{
 		if (response == null || !response.isSuccess())
@@ -2793,38 +2864,32 @@ public class ChunkBlazerPlugin extends Plugin
 				}
 			}
 
-			// 2. Unlocked regions — hydrate only when local is empty
-			if (pdata != null && pdata.getUnlockedRegions() != null && !pdata.getUnlockedRegions().isEmpty())
-			{
-				String localChunks = config.unlockedChunks();
-				if (localChunks == null || localChunks.trim().isEmpty())
-				{
-					String csv = pdata.getUnlockedRegions().stream()
-						.map(String::valueOf)
-						.collect(Collectors.joining(","));
-					configManager.setConfiguration("chunkblazer", "unlockedChunks", csv);
-				}
-			}
+			// 2 & 3. Unlocked regions and completed tasks — MERGED, not
+			// "overwrite only when local is empty".
+			//
+			// The old rule could never fire on a real reinstall, which is the
+			// case it existed for. By the time a login response arrives, the
+			// plugin has already bootstrapped local state: startUp() and every
+			// loadActiveTasks() call ensureStartingChunkUnlocked() (writing the
+			// Lumbridge region), and the Global Tasks backfill has written the
+			// already-finished quests. Local was therefore never empty, hydration
+			// always skipped, and the account was left holding ONLY the
+			// bootstrap — 1 chunk instead of 15 (observed 2026-07-21 moving
+			// SeaShantyBoy to a clean profile). The destructive sync then pushed
+			// that back over the server record.
+			//
+			// A union is immune to that ordering entirely: it doesn't care
+			// whether the bootstrap ran first, and it can't lose either side, so
+			// progress made offline (or before a failed sync) survives a login
+			// just as server-side progress survives a reinstall.
+			mergeUnlockedRegionsFromServer(pdata);
+			mergeCompletedTasksFromServer(pdata);
 
-			// 3. Completed tasks — hydrate only when local is empty
-			if (pdata != null && pdata.getCompletedTasks() != null && !pdata.getCompletedTasks().isEmpty())
-			{
-				String localTasks = config.completedTasks();
-				if (localTasks == null || localTasks.trim().isEmpty())
-				{
-					String csv = String.join(",", pdata.getCompletedTasks());
-					configManager.setConfiguration("chunkblazer", "completedTasks", csv);
-				}
-			}
-
-			// 4. Points — hydrate only when local has none. Needed for the same
-			// reason as the two above, and specifically after an account switch:
-			// reconcileAccountState() clears the points along with everything
-			// else, so without this the account would read 0 despite having its
-			// completed tasks restored. The server recomputes the authoritative
-			// total from the task list on every sync (Tier-0), so this only has
-			// to make the CLIENT display agree.
-			if (pdata != null && pdata.getTotalPoints() > 0 && config.totalPoints() <= 0)
+			// 4. Points — take the higher of the two. The server recomputes the
+			// authoritative total from the task list on every sync (Tier-0), so
+			// this only has to stop the CLIENT display reading low after a
+			// reinstall or an account switch.
+			if (pdata != null && pdata.getTotalPoints() > config.totalPoints())
 			{
 				configManager.setConfiguration("chunkblazer", "totalPoints", pdata.getTotalPoints());
 			}
@@ -2842,6 +2907,11 @@ public class ChunkBlazerPlugin extends Plugin
 				panel.updateModeDisplay();
 				panel.updatePanel();
 			}
+
+			// Set LAST, and only on this path: local now contains everything the
+			// server knew about, so it is finally safe to let a destructive sync
+			// push local state back. Until this flips, syncToServer() no-ops.
+			serverStateMerged = true;
 		});
 	}
 
@@ -2945,6 +3015,13 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		if (client.getGameState() != GameState.LOGGED_IN)
 		{
+			return;
+		}
+		if (!serverStateMerged)
+		{
+			// The login response hasn't been merged yet. Syncing now would push
+			// bootstrap-only local state (1 chunk, backfilled quests) over the
+			// account's real server record. Skip; the next tick retries.
 			return;
 		}
 		clientThread.invoke(() ->
