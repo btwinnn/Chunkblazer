@@ -295,7 +295,7 @@ public class ChunkBlazerPlugin extends Plugin
 				// Show animated task completion popup
 				if (taskCompletionAnimationOverlay != null && task != null)
 				{
-					String regionName = getTaskRegionName(task);
+					String regionName = getTaskCompletionLabel(task);
 					taskCompletionAnimationOverlay.showTaskCompletion(task, task.getBasePoints(), regionName);
 
 					// Play region-specific completion sound
@@ -4561,6 +4561,34 @@ public class ChunkBlazerPlugin extends Plugin
 		if (regionId > 0)
 		{
 			return getRegionName(regionId);
+		}
+		return null;
+	}
+
+	/**
+	 * Label for the completion popup's "Region Assigned" slot.
+	 *
+	 * Global Tasks belong to no chunk, so getTaskRegionName() is always null for
+	 * them and the popup fell back to "Unknown" — every quest and every skill
+	 * rung completed under the same meaningless label. They report their pool
+	 * instead ("Quest", "Progression"), which is the same wording the side panel
+	 * uses on the global task cards.
+	 *
+	 * Deliberately separate from getTaskRegionName(): that one feeds the chunk
+	 * filters, which must keep returning null for chunkless tasks or the filter
+	 * dropdowns would list "Quest" as a chunk.
+	 */
+	public String getTaskCompletionLabel(NuzlockeTask task)
+	{
+		String regionName = getTaskRegionName(task);
+		if (regionName != null)
+		{
+			return regionName;
+		}
+		if (task != null && isGlobalTask(task.getTaskId())
+			&& task.getCategory() != null && !task.getCategory().isEmpty())
+		{
+			return task.getCategory();
 		}
 		return null;
 	}
