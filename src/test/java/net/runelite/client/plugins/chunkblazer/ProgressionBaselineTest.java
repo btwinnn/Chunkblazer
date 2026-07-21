@@ -267,6 +267,90 @@ class ProgressionBaselineTest
 			"an uncaptured baseline must refuse to pay, not pay by default");
 	}
 
+	// --- Panel visibility -------------------------------------------------
+
+	private NuzlockeTask rung(String skill, int level)
+	{
+		NuzlockeTask t = new NuzlockeTask();
+		t.setTaskId("progression_" + skill.toLowerCase() + "_" + level);
+		t.setCompletionType("SKILL_THRESHOLD");
+		TaskConstraints c = new TaskConstraints();
+		c.setRequiredSkill(skill);
+		c.setRequiredLevel(level);
+		t.setConstraints(c);
+		return t;
+	}
+
+	@SuppressWarnings("unchecked")
+	private java.util.List<NuzlockeTask> setGlobalTasksAndGetVisible(java.util.List<NuzlockeTask> all) throws Exception
+	{
+		Field f = ChunkBlazerPlugin.class.getDeclaredField("globalTasks");
+		f.setAccessible(true);
+		java.util.List<NuzlockeTask> backing = (java.util.List<NuzlockeTask>) f.get(plugin);
+		backing.clear();
+		backing.addAll(all);
+		return plugin.getVisibleGlobalTasks();
+	}
+
+	/**
+	 * SeaShantyBoy's real baseline: 99 Attack, 73 Thieving. Every Attack rung and
+	 * the Thieving rungs up to 70 are already cleared and must not be listed —
+	 * otherwise ~200 permanently-unearnable entries bury the live ones.
+	 */
+	@Test
+	void rungsAlreadyClearedAreHiddenFromThePanel() throws Exception
+	{
+		when(config.progressionBaseline()).thenReturn("ATTACK:99,THIEVING:73");
+
+		java.util.List<NuzlockeTask> visible = setGlobalTasksAndGetVisible(java.util.Arrays.asList(
+			rung("ATTACK", 10), rung("ATTACK", 99),
+			rung("THIEVING", 70), rung("THIEVING", 80), rung("THIEVING", 99)));
+
+		java.util.Set<String> ids = new java.util.HashSet<>();
+		for (NuzlockeTask t : visible)
+		{
+			ids.add(t.getTaskId());
+		}
+
+		assertFalse(ids.contains("progression_attack_10"), "99 Attack — cleared long ago");
+		assertFalse(ids.contains("progression_attack_99"), "99 Attack — already at the cap");
+		assertFalse(ids.contains("progression_thieving_70"), "73 Thieving is past the 70 rung");
+		assertTrue(ids.contains("progression_thieving_80"), "80 Thieving is still earnable");
+		assertTrue(ids.contains("progression_thieving_99"), "99 Thieving is still earnable");
+	}
+
+	/** Quests and other global tasks are never touched by the Progression filter. */
+	@Test
+	void nonProgressionGlobalTasksAreAlwaysVisible() throws Exception
+	{
+		when(config.progressionBaseline()).thenReturn("ATTACK:99");
+
+		NuzlockeTask quest = new NuzlockeTask();
+		quest.setTaskId("quest_dragon_slayer");
+		quest.setCompletionType("QUEST_CHECK");
+
+		java.util.List<NuzlockeTask> visible =
+			setGlobalTasksAndGetVisible(java.util.Arrays.asList(quest, rung("ATTACK", 10)));
+
+		assertEquals(1, visible.size());
+		assertEquals("quest_dragon_slayer", visible.get(0).getTaskId());
+	}
+
+	/**
+	 * Before the baseline exists the filter has nothing to judge against, and
+	 * hiding on an empty baseline would blank the whole tier.
+	 */
+	@Test
+	void everythingIsVisibleBeforeTheBaselineIsCaptured() throws Exception
+	{
+		when(config.progressionBaseline()).thenReturn("");
+
+		java.util.List<NuzlockeTask> visible =
+			setGlobalTasksAndGetVisible(java.util.Arrays.asList(rung("ATTACK", 10), rung("ATTACK", 20)));
+
+		assertEquals(2, visible.size(), "no baseline yet — show everything rather than blanking the tier");
+	}
+
 	// --- Self-healing repair ----------------------------------------------
 
 	@Test

@@ -1422,6 +1422,13 @@ public class ChunkBlazerPlugin extends Plugin
 
 		if (backfilled.isEmpty())
 		{
+			// Nothing to settle, but the baseline may have been captured just
+			// now — the panel was built before it existed and would still be
+			// listing every unearnable rung. Repaint so they drop out.
+			if (panel != null)
+			{
+				panel.updateGlobalTasks();
+			}
 			return;
 		}
 
@@ -1439,6 +1446,56 @@ public class ChunkBlazerPlugin extends Plugin
 	private boolean isProgressionTask(NuzlockeTask task)
 	{
 		return PROGRESSION_TYPE.equalsIgnoreCase(task.getCompletionType());
+	}
+
+	// Parsed form of config.progressionBaseline(). Cached because the panel asks
+	// about visibility once per task per repaint (239 progression rungs), and the
+	// value is immutable once frozen. Invalidated wherever the config string is
+	// written — capture and repair.
+	private volatile Map<String, Integer> cachedProgressionBaseline;
+
+	private Map<String, Integer> progressionBaselineCached()
+	{
+		Map<String, Integer> cached = cachedProgressionBaseline;
+		if (cached == null)
+		{
+			cached = parseProgressionBaseline(config.progressionBaseline());
+			cachedProgressionBaseline = cached;
+		}
+		return cached;
+	}
+
+	/**
+	 * The Global Tasks the UI should show. Progression rungs at or below the
+	 * frozen baseline are omitted: the account cleared those levels before
+	 * ChunkBlazer ever saw it, so they can never be earned and listing ~200
+	 * permanently-unearnable entries would bury the ones that are live.
+	 *
+	 * <p>Only visibility — eligibility is decided in
+	 * {@link #backfillAndRegisterGlobalTasks()}, which is what actually stops
+	 * them scoring. Both read the same baseline, so they can't disagree.
+	 */
+	public List<NuzlockeTask> getVisibleGlobalTasks()
+	{
+		Map<String, Integer> baseline = progressionBaselineCached();
+		if (baseline.isEmpty())
+		{
+			// Baseline not captured yet (pre-login). Hiding on an empty baseline
+			// would blank the whole Progression tier; show it and let the next
+			// repaint after capture filter properly.
+			return globalTasks;
+		}
+
+		List<NuzlockeTask> visible = new ArrayList<>(globalTasks.size());
+		for (NuzlockeTask task : globalTasks)
+		{
+			if (isProgressionTask(task) && !isProgressionRungEligible(task, baseline))
+			{
+				continue;
+			}
+			visible.add(task);
+		}
+		return visible;
 	}
 
 	/**
@@ -1586,6 +1643,7 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		configManager.setConfiguration("chunkblazer", "progressionBaseline", sb.toString());
+		cachedProgressionBaseline = baseline;
 		log.info("[CHUNKBLAZER] Progression baseline captured for this account: {}", sb);
 		return baseline;
 	}
@@ -1653,6 +1711,7 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		configManager.setConfiguration("chunkblazer", "progressionBaseline", "");
+		cachedProgressionBaseline = null;
 		if (removed > 0)
 		{
 			configManager.setConfiguration("chunkblazer", "completedTasks", String.join(",", keep));

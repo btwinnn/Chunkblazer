@@ -1156,7 +1156,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 
 		String label = selected.toString();
-		for (NuzlockeTask task : plugin.getGlobalTasks())
+		for (NuzlockeTask task : plugin.getVisibleGlobalTasks())
 		{
 			if (label.equals(globalTypeDisplayName(task.getCategory())))
 			{
@@ -1179,7 +1179,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 
 		Set<String> categories = new TreeSet<>();
-		for (NuzlockeTask task : plugin.getGlobalTasks())
+		for (NuzlockeTask task : plugin.getVisibleGlobalTasks())
 		{
 			if (task.getCategory() != null && !task.getCategory().isEmpty())
 			{
@@ -1237,7 +1237,7 @@ public class ChunkBlazerPanel extends PluginPanel
 			return;
 		}
 
-		List<NuzlockeTask> tasks = plugin.getGlobalTasks();
+		List<NuzlockeTask> tasks = plugin.getVisibleGlobalTasks();
 		Set<String> completedIds = plugin.getCompletedTaskIdSet();
 
 		int total = tasks.size();
@@ -1289,7 +1289,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		List<NuzlockeTask> matching = new ArrayList<>();
 		int matchingPoints = 0;
 
-		for (NuzlockeTask task : plugin.getGlobalTasks())
+		for (NuzlockeTask task : plugin.getVisibleGlobalTasks())
 		{
 			boolean done = task.isCompleted() || completedIds.contains(task.getTaskId());
 
@@ -1343,7 +1343,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		if (shown == 0)
 		{
-			JLabel empty = new JLabel(plugin.getGlobalTasks().isEmpty()
+			JLabel empty = new JLabel(plugin.getVisibleGlobalTasks().isEmpty()
 				? "No global tasks loaded"
 				: "No tasks match the filter");
 			empty.setFont(FontManager.getRunescapeSmallFont());
