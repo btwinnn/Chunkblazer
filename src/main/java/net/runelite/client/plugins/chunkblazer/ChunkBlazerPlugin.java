@@ -2935,14 +2935,27 @@ public class ChunkBlazerPlugin extends Plugin
 			mergeUnlockedRegionsFromServer(pdata);
 			mergeCompletedTasksFromServer(pdata);
 
-			// 4. Points — take the higher of the two. The server recomputes the
-			// authoritative total from the task list on every sync (Tier-0), so
-			// this only has to stop the CLIENT display reading low after a
-			// reinstall or an account switch.
-			if (pdata != null && pdata.getTotalPoints() > config.totalPoints())
+			// 4. Points.
+			//
+			// The server's total_points is lifetime EARNED; the client's
+			// totalPoints is a spendable BALANCE. Writing one into the other is
+			// what handed a real player 939 phantom points on 2026-07-21 — it
+			// silently erased every chunk purchase they had made, and could
+			// never self-correct because the server holds no balance.
+			//
+			// So nothing is copied. Earned is recomputed from the task list we
+			// just merged, spend is reconciled by taking the higher of the two
+			// (it only ever grows — you cannot un-unlock a chunk — so the
+			// maximum is the correct merge and is safe across profiles), and
+			// the balance falls out of the two.
+			deriveInitialPointsSpent();
+			if (pdata != null && pdata.getPointsSpent() > config.pointsSpent())
 			{
-				configManager.setConfiguration("chunkblazer", "totalPoints", pdata.getTotalPoints());
+				log.info("[CHUNKBLAZER] restored points spent from the server (had {}, now {})",
+					config.pointsSpent(), pdata.getPointsSpent());
+				configManager.setConfiguration("chunkblazer", "pointsSpent", pdata.getPointsSpent());
 			}
+			recomputePointsBalance();
 
 			// Rebuild the in-memory active-task list from the just-hydrated config
 			// (unlocked regions / completed tasks). Without this, a fresh install or
@@ -3133,7 +3146,11 @@ public class ChunkBlazerPlugin extends Plugin
 			.unlockedRegions(unlocked)
 			.activeTaskId(activeTask != null ? activeTask.getTaskId() : null)
 			.activeTaskProgress(0)
+			// clientPoints is the BALANCE, kept for the Tier-0 mismatch check;
+			// pointsSpent is what actually needs preserving server-side, since
+			// the balance is derived and the server has no concept of spending.
 			.clientPoints(config.totalPoints())
+			.pointsSpent(config.pointsSpent())
 			.completedTasks(completed)
 			.timestamp(System.currentTimeMillis())
 			.clientVersion("1.0.0")
@@ -4741,6 +4758,110 @@ public class ChunkBlazerPlugin extends Plugin
 		configManager.setConfiguration("chunkblazer", "totalPoints", current + points);
 	}
 
+	// --- Points: earned, spent, balance ------------------------------------
+	//
+	// `totalPoints` is the SPENDABLE BALANCE — unlocking a chunk decrements it,
+	// and it gates whether an unlock is affordable. The SERVER's total_points is
+	// a different quantity: lifetime EARNED, recomputed from the completed task
+	// list (tasks.Catalog#Recompute), with no notion of spending.
+	//
+	// Conflating them cost a real player 939 phantom points on 2026-07-21: login
+	// hydration wrote the server's EARNED total straight into the client's
+	// BALANCE, discarding every chunk purchase they had ever made. It could not
+	// self-correct, because the server has no balance to correct it from.
+	//
+	// So the balance is no longer a stored running total that drifts. It is
+	// DERIVED:
+	//
+	//     balance = earned(completed tasks) - spent
+	//
+	// `earned` recomputes from the task list exactly as the server does, so the
+	// two agree by construction and any accumulated drift heals itself. `spent`
+	// is the only stored quantity, and it is monotonic — you cannot un-unlock a
+	// chunk — which is what makes it safe to reconcile across profiles by taking
+	// the maximum.
+	//
+	// Spend can NOT be derived from the unlocked-chunk list: the starting chunk
+	// and the Casual first-pick are granted free via unlockRegionFree() yet have
+	// a non-zero unlock_cost, and nothing records which chunks were paid for.
+	// That is why it has to be tracked as it happens.
+
+	/** Lifetime points earned, summed over completed tasks — mirrors the server. */
+	private int computeEarnedPoints()
+	{
+		int earned = 0;
+		for (String taskId : getCompletedTaskIds())
+		{
+			NuzlockeTask task = findTaskById(taskId);
+			if (task != null)
+			{
+				// Unknown ids are skipped, exactly as the server's Recompute does,
+				// so catalog drift moves both sides the same way.
+				earned += task.getBasePoints();
+			}
+		}
+		return earned;
+	}
+
+	/**
+	 * Recompute and persist the spendable balance. Safe to call any time; it is
+	 * a pure function of the completed task list and the spend counter.
+	 */
+	private void recomputePointsBalance()
+	{
+		int earned = computeEarnedPoints();
+		int spent = config.pointsSpent();
+		int balance = Math.max(0, earned - spent);
+
+		if (balance != config.totalPoints())
+		{
+			log.info("[CHUNKBLAZER] points balance recomputed: earned {} - spent {} = {} (was {})",
+				earned, spent, balance, config.totalPoints());
+			configManager.setConfiguration("chunkblazer", "totalPoints", balance);
+		}
+	}
+
+	/** Record a paid chunk unlock and refresh the balance. */
+	private void recordPointsSpent(int cost)
+	{
+		if (cost <= 0)
+		{
+			return;
+		}
+		configManager.setConfiguration("chunkblazer", "pointsSpent", config.pointsSpent() + cost);
+		recomputePointsBalance();
+	}
+
+	/**
+	 * One-time derivation of the spend counter for accounts that predate it.
+	 *
+	 * <p>Their balance already reflects everything they ever spent, so
+	 * {@code spent = earned - balance} recovers it exactly — no guessing at which
+	 * chunks were free. Runs only when no spend has been recorded and the balance
+	 * is genuinely below what they earned; a balance at or above earned means
+	 * nothing was spent, or the balance was inflated by the hydration bug, and in
+	 * both cases 0 is the right starting point (the real value then arrives from
+	 * the server, which holds the higher, monotonic figure).
+	 */
+	private void deriveInitialPointsSpent()
+	{
+		if (config.pointsSpent() > 0)
+		{
+			return;
+		}
+		int earned = computeEarnedPoints();
+		int balance = config.totalPoints();
+		if (earned <= 0 || balance >= earned)
+		{
+			return;
+		}
+
+		int spent = earned - balance;
+		configManager.setConfiguration("chunkblazer", "pointsSpent", spent);
+		log.info("[CHUNKBLAZER] derived points spent for this account: earned {} - balance {} = {}",
+			earned, balance, spent);
+	}
+
 	// --- Boss Tokens (secondary currency) ---
 
 	/** Current Boss Token balance. New players start with 2 (config default). */
@@ -5010,8 +5131,10 @@ public class ChunkBlazerPlugin extends Plugin
 		// unlockRegionFree and the jingle-playback path that reads it.
 		boolean wasAlreadyUnlocked = false;
 
-		// Deduct points
-		configManager.setConfiguration("chunkblazer", "totalPoints", currentPoints - cost);
+		// Charge for the unlock. Recorded as SPEND rather than written straight
+		// into the balance, so the balance stays derivable (earned - spent) and
+		// survives a reinstall or a profile switch — see recomputePointsBalance().
+		recordPointsSpent(cost);
 
 		// Add to unlocked list. Unlock EVERY region of this chunk, not just the
 		// clicked one — a chunk can span multiple regions (e.g. a surface area AND

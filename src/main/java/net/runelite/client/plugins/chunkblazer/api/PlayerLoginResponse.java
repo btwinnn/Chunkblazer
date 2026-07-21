@@ -111,8 +111,17 @@ public class PlayerLoginResponse
 		@SerializedName("locked_at")
 		private String lockedAt;
 
+		/** Lifetime points EARNED, recomputed server-side from the task list. */
 		@SerializedName("total_points")
 		private int totalPoints;
+
+		/**
+		 * Points spent unlocking chunks. Client-reported and monotonic, so it is
+		 * reconciled by taking the maximum. The spendable balance is never sent —
+		 * it is derived on the client as earned minus this.
+		 */
+		@SerializedName("points_spent")
+		private int pointsSpent;
 
 		@SerializedName("unlocked_regions")
 		private List<Integer> unlockedRegions = new ArrayList<>();

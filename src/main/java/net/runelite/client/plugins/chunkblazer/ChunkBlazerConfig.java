@@ -61,6 +61,19 @@ public interface ChunkBlazerConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "pointsSpent",
+		name = "Points Spent",
+		description = "Running total of points spent unlocking chunks. Points EARNED is derived "
+			+ "from the completed task list; the spendable balance is earned minus this.",
+		position = 4,
+		hidden = true
+	)
+	default int pointsSpent()
+	{
+		return 0;
+	}
+
+	@ConfigItem(
 		keyName = "accountStateOwner",
 		name = "Account State Owner",
 		description = "RSN hash of the account whose progress is currently stored in this "

@@ -52,6 +52,14 @@ public class PlayerSyncRequest
 	/** Client-side points (for verification) */
 	private int clientPoints;
 
+	/**
+	 * Points spent unlocking chunks. Mirrored to the server purely so it survives
+	 * a reinstall / new profile — the server does not spend anything itself. Its
+	 * total_points remains lifetime EARNED; the spendable balance is derived on
+	 * the client as earned minus this.
+	 */
+	private int pointsSpent;
+
 	/** All task IDs the player has completed (overwrite-sync on server). */
 	private List<String> completedTasks;
 
