@@ -61,6 +61,20 @@ public interface ChunkBlazerConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "accountStateOwner",
+		name = "Account State Owner",
+		description = "RSN hash of the account whose progress is currently stored in this "
+			+ "RuneLite profile. Logging in as a different account clears that state so the "
+			+ "server can repopulate it for the new account.",
+		position = 4,
+		hidden = true
+	)
+	default String accountStateOwner()
+	{
+		return "";
+	}
+
+	@ConfigItem(
 		keyName = "progressionBaseline",
 		name = "Progression Baseline",
 		description = "Per-skill levels captured when this account was first seen. "

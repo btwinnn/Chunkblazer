@@ -2622,6 +2622,126 @@ public class ChunkBlazerPlugin extends Plugin
 	 * Unlocked regions: written if server has any and local is empty.
 	 * Completed tasks: same rule.
 	 */
+	/**
+	 * Keys holding progress that belongs to ONE account. Cleared together when a
+	 * different account logs in on this RuneLite profile.
+	 *
+	 * <p>Everything here except {@code progressionBaseline} is mirrored on the
+	 * server and comes straight back via {@link #hydrateFromLoginResponse}. The
+	 * baseline is client-only, so a switch costs the departing account its frozen
+	 * baseline — it re-captures at whatever its levels are on return, which is
+	 * more restrictive than the original and therefore the safe direction.
+	 */
+	private static final String[] ACCOUNT_STATE_KEYS = {
+		"unlockedChunks", "completedTasks", "assignedTasks", "regionRolledTasks",
+		"currentTaskId", "currentTaskQuantity", "currentTaskProgress",
+		"totalPoints", "bossTokens", "taskProgressData", "progressionBaseline",
+	};
+
+	/**
+	 * Stop one account's progress leaking into another's.
+	 *
+	 * <p>ChunkBlazer's progress lives in RuneLite config, which is scoped to the
+	 * PROFILE, not the account. Before this, an alt logging in on the same
+	 * profile would find the main's completed tasks still sitting there;
+	 * {@link #hydrateFromLoginResponse} only fills state in when local is EMPTY,
+	 * so it skipped, and the next sync — which is destructive and
+	 * client-authoritative — wrote the main's progress over the alt's server
+	 * record. Silent, and it destroyed the alt's real data.
+	 *
+	 * <p>So the profile records WHOSE progress it currently holds. On a
+	 * mismatch, the old account's state is cleared and hydration (running
+	 * immediately after this) repopulates from the server record of the account
+	 * actually logging in.
+	 *
+	 * <p>Only ever called from a SUCCESSFUL login response, which matters: the
+	 * wipe is safe precisely because the server has just told us the authoritative
+	 * state for this account. It must never run off a failed or offline login,
+	 * or it would discard progress with nothing to restore it from.
+	 *
+	 * <p>Not a substitute for per-account config (RuneLite's
+	 * {@code setRSProfileConfiguration}) — that would let two accounts coexist on
+	 * one profile. This keeps the plugin's existing one-account-at-a-time model
+	 * and just stops it corrupting data.
+	 */
+	private void reconcileAccountState(String rsn)
+	{
+		String owner = hashRsn(rsn);
+		String stored = config.accountStateOwner();
+
+		if (owner.equals(stored))
+		{
+			return;
+		}
+
+		if (stored == null || stored.isEmpty())
+		{
+			// First login after this shipped — there is no owner tag yet, and the
+			// local progress is almost always this player's own, so the default
+			// is to ADOPT it. Wiping on sight would delete every existing
+			// player's progress on upgrade.
+			//
+			// accountModeHash is the one pre-existing per-account tag (format
+			// "<rsnHash>:<MODE>"), so when it IS present it settles the question
+			// without guessing: a mismatch proves the resident state belongs to a
+			// different account, and adopting it would let this account sync over
+			// that account's server record — the exact corruption this method
+			// exists to stop. Absent (mode never locked) → fall through to adopt.
+			if (localStateBelongsToAnotherAccount(owner))
+			{
+				log.warn("[CHUNKBLAZER] untagged local progress belongs to a different account "
+					+ "(per accountModeHash) — clearing it rather than letting {} adopt it", rsn);
+				clearAccountState(owner);
+				addPluginChatMessage("Different account detected — loading " + rsn + "'s progress.");
+				return;
+			}
+
+			configManager.setConfiguration("chunkblazer", "accountStateOwner", owner);
+			return;
+		}
+
+		log.warn("[CHUNKBLAZER] account switch detected on this RuneLite profile — "
+			+ "clearing the previous account's local progress so {}'s own state can load "
+			+ "from the server", rsn);
+
+		clearAccountState(owner);
+		addPluginChatMessage("Different account detected — loading " + rsn + "'s progress.");
+	}
+
+	/**
+	 * Whether the progress sitting in this profile demonstrably belongs to some
+	 * other account, judged by {@code accountModeHash} ("&lt;rsnHash&gt;:&lt;MODE&gt;").
+	 * Only ever returns true on a POSITIVE mismatch — an absent or malformed tag
+	 * yields false, so the caller adopts rather than destroys progress it can't
+	 * prove is foreign.
+	 */
+	private boolean localStateBelongsToAnotherAccount(String owner)
+	{
+		String modeHash = config.accountModeHash();
+		if (modeHash == null || !modeHash.contains(":"))
+		{
+			return false;
+		}
+		return !modeHash.startsWith(owner);
+	}
+
+	/** Drop every per-account key plus the in-memory mirrors, and take ownership. */
+	private void clearAccountState(String owner)
+	{
+		for (String key : ACCOUNT_STATE_KEYS)
+		{
+			configManager.unsetConfiguration("chunkblazer", key);
+		}
+		configManager.setConfiguration("chunkblazer", "accountStateOwner", owner);
+
+		activeTasks.clear();
+		activeTask = null;
+		completedTaskCache.clear();
+		cachedProgressionBaseline = null;
+		cachedBaselineOwner = null;
+		taskModuleManager.clearTask();
+	}
+
 	private void hydrateFromLoginResponse(PlayerLoginResponse response)
 	{
 		if (response == null || !response.isSuccess())
@@ -2642,6 +2762,13 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				return;
 			}
+
+			// MUST run before the hydrate steps below. If this login is a
+			// different account than the one whose state is sitting in config,
+			// that state is cleared here so the "hydrate only when local is
+			// empty" rules below actually fire and repopulate from THIS account's
+			// server record.
+			reconcileAccountState(rsn);
 
 			// 1. Mode lock reconciliation, both directions.
 			if (response.isModeLocked() && response.getGameMode() != null && !isModeLocked())
@@ -2688,6 +2815,18 @@ public class ChunkBlazerPlugin extends Plugin
 					String csv = String.join(",", pdata.getCompletedTasks());
 					configManager.setConfiguration("chunkblazer", "completedTasks", csv);
 				}
+			}
+
+			// 4. Points — hydrate only when local has none. Needed for the same
+			// reason as the two above, and specifically after an account switch:
+			// reconcileAccountState() clears the points along with everything
+			// else, so without this the account would read 0 despite having its
+			// completed tasks restored. The server recomputes the authoritative
+			// total from the task list on every sync (Tier-0), so this only has
+			// to make the CLIENT display agree.
+			if (pdata != null && pdata.getTotalPoints() > 0 && config.totalPoints() <= 0)
+			{
+				configManager.setConfiguration("chunkblazer", "totalPoints", pdata.getTotalPoints());
 			}
 
 			// Rebuild the in-memory active-task list from the just-hydrated config
