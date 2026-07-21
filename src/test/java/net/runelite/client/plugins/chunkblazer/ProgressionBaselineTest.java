@@ -45,6 +45,11 @@ class ProgressionBaselineTest
 	@Mock
 	private Client client;
 
+	@Mock
+	private net.runelite.api.Player player;
+
+	private static final String ACCOUNT = "SeaShantyBoy";
+
 	private ChunkBlazerPlugin plugin;
 
 	@BeforeEach
@@ -54,6 +59,25 @@ class ProgressionBaselineTest
 		setField(plugin, "config", config);
 		setField(plugin, "configManager", configManager);
 		setField(plugin, "client", client);
+
+		// Baselines are tagged with the owning account's RSN hash, so the tests
+		// need a logged-in player for any of that to resolve.
+		lenient().when(player.getName()).thenReturn(ACCOUNT);
+		lenient().when(client.getLocalPlayer()).thenReturn(player);
+	}
+
+	/** Config value as it is actually stored: "<rsnHash>|SKILL:lvl,...". */
+	private String owned(String csv)
+	{
+		return hashOf(ACCOUNT) + "|" + csv;
+	}
+
+	private static String hashOf(String rsn)
+	{
+		return com.google.common.hash.Hashing.sha256()
+			.hashString(rsn.toLowerCase().trim(), java.nio.charset.StandardCharsets.UTF_8)
+			.toString()
+			.substring(0, 16);
 	}
 
 	private static void setField(Object target, String name, Object value) throws Exception
@@ -212,7 +236,7 @@ class ProgressionBaselineTest
 	@Test
 	void anExistingBaselineIsNeverRecaptured() throws Exception
 	{
-		when(config.progressionBaseline()).thenReturn("HITPOINTS:42,THIEVING:31");
+		when(config.progressionBaseline()).thenReturn(owned("HITPOINTS:42,THIEVING:31"));
 
 		Map<String, Integer> baseline = ensureBaseline();
 
@@ -300,7 +324,7 @@ class ProgressionBaselineTest
 	@Test
 	void rungsAlreadyClearedAreHiddenFromThePanel() throws Exception
 	{
-		when(config.progressionBaseline()).thenReturn("ATTACK:99,THIEVING:73");
+		when(config.progressionBaseline()).thenReturn(owned("ATTACK:99,THIEVING:73"));
 
 		java.util.List<NuzlockeTask> visible = setGlobalTasksAndGetVisible(java.util.Arrays.asList(
 			rung("ATTACK", 10), rung("ATTACK", 99),
@@ -323,7 +347,7 @@ class ProgressionBaselineTest
 	@Test
 	void nonProgressionGlobalTasksAreAlwaysVisible() throws Exception
 	{
-		when(config.progressionBaseline()).thenReturn("ATTACK:99");
+		when(config.progressionBaseline()).thenReturn(owned("ATTACK:99"));
 
 		NuzlockeTask quest = new NuzlockeTask();
 		quest.setTaskId("quest_dragon_slayer");
@@ -351,12 +375,69 @@ class ProgressionBaselineTest
 		assertEquals(2, visible.size(), "no baseline yet — show everything rather than blanking the tier");
 	}
 
+	// --- Account scoping --------------------------------------------------
+
+	/**
+	 * ChunkBlazer config is per RuneLite PROFILE, not per account. Without an
+	 * owner tag a maxed main's baseline would be inherited by the next account
+	 * to log in — and since eligibility is threshold > baseline, a fresh level 3
+	 * would inherit 99s and be locked out of the whole ladder, silently. The
+	 * inverse of the original bug and just as damaging.
+	 */
+	@Test
+	void anotherAccountsBaselineIsNotInherited() throws Exception
+	{
+		when(config.progressionBaseline()).thenReturn(hashOf("SomeOtherMain") + "|ATTACK:99,THIEVING:99");
+
+		Map<String, Integer> baseline = ensureBaseline();
+
+		assertTrue(baseline.isEmpty(),
+			"a baseline tagged for a different account must not be adopted");
+	}
+
+	/** An untagged value predates tagging — re-capture rather than adopt blindly. */
+	@Test
+	void anUntaggedLegacyBaselineIsNotAdopted() throws Exception
+	{
+		when(config.progressionBaseline()).thenReturn("ATTACK:99,THIEVING:99");
+
+		assertTrue(ensureBaseline().isEmpty(),
+			"an untagged baseline has no known owner — re-capture for this account");
+	}
+
+	@Test
+	void capturedBaselineIsTaggedWithTheAccount() throws Exception
+	{
+		when(config.progressionBaseline()).thenReturn("");
+		when(client.getGameState()).thenReturn(GameState.LOGGED_IN);
+		stubAllSkills(50);
+		lenient().when(client.getRealSkillLevel(Skill.HITPOINTS)).thenReturn(50);
+
+		ensureBaseline();
+
+		ArgumentCaptor<String> written = ArgumentCaptor.forClass(String.class);
+		verify(configManager).setConfiguration(eq("chunkblazer"), eq("progressionBaseline"), written.capture());
+		assertTrue(written.getValue().startsWith(hashOf(ACCOUNT) + "|"),
+			"stored baseline must name its owning account: " + written.getValue());
+	}
+
+	/** No RSN yet means no way to tag it — wait rather than write an orphan. */
+	@Test
+	void noBaselineIsWrittenBeforeTheRsnIsKnown() throws Exception
+	{
+		lenient().when(config.progressionBaseline()).thenReturn("");
+		when(client.getLocalPlayer()).thenReturn(null);
+
+		assertTrue(ensureBaseline().isEmpty());
+		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("progressionBaseline"), any());
+	}
+
 	// --- Self-healing repair ----------------------------------------------
 
 	@Test
 	void repairClearsABogusZeroBaselineAndUncompletesProgressionTasks()
 	{
-		when(config.progressionBaseline()).thenReturn("HITPOINTS:0,THIEVING:0");
+		when(config.progressionBaseline()).thenReturn(owned("HITPOINTS:0,THIEVING:0"));
 		when(config.completedTasks()).thenReturn(
 			"progression_thieving_10,defeat_mugger,progression_attack_20");
 		when(config.totalPoints()).thenReturn(100);
@@ -390,7 +471,7 @@ class ProgressionBaselineTest
 			boolean hydrated = s.ordinal() <= Skill.FLETCHING.ordinal();
 			sb.append(s.name()).append(':').append(hydrated ? 99 : 0);
 		}
-		when(config.progressionBaseline()).thenReturn(sb.toString());
+		when(config.progressionBaseline()).thenReturn(owned(sb.toString()));
 		when(config.completedTasks()).thenReturn("progression_construction_50,defeat_mugger");
 		when(config.totalPoints()).thenReturn(100);
 
@@ -411,7 +492,7 @@ class ProgressionBaselineTest
 			}
 			sane.append(s.name()).append(':').append(s == Skill.SAILING ? 0 : 80);
 		}
-		when(config.progressionBaseline()).thenReturn(sane.toString());
+		when(config.progressionBaseline()).thenReturn(owned(sane.toString()));
 
 		plugin.migrateRepairBogusProgressionBaseline();
 

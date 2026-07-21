@@ -535,6 +535,13 @@ public class ChunkBlazerPlugin extends Plugin
 			// over to whichever account logs in next on this client, handing a
 			// normal account the dev tools until its own login response arrived.
 			devAuthorized = false;
+			// Same reasoning for the cached Progression baseline: it is parsed
+			// for one account, and the next one to log in must re-read (and, if
+			// the stored baseline isn't theirs, capture their own).
+			cachedProgressionBaseline = null;
+			cachedBaselineOwner = null;
+			lastSkillSample = null;
+			stableSkillSamples = 0;
 			// Real logout — reset the dedupe flag so the NEXT LOGGED_IN
 			// (which is a fresh game session) re-runs loginToServer.
 			serverLoginDone = false;
@@ -1448,21 +1455,68 @@ public class ChunkBlazerPlugin extends Plugin
 		return PROGRESSION_TYPE.equalsIgnoreCase(task.getCompletionType());
 	}
 
+	// Separates the owning account's RSN hash from the skill CSV. Plugin config
+	// is per RuneLite PROFILE, not per account, so a stored baseline has to name
+	// whose it is — see progressionBaselineOwner().
+	private static final String BASELINE_OWNER_SEP = "|";
+
 	// Parsed form of config.progressionBaseline(). Cached because the panel asks
 	// about visibility once per task per repaint (239 progression rungs), and the
-	// value is immutable once frozen. Invalidated wherever the config string is
-	// written — capture and repair.
+	// value is immutable once frozen. cachedBaselineOwner records which account
+	// it was parsed for, so hopping accounts can't reuse the wrong one.
 	private volatile Map<String, Integer> cachedProgressionBaseline;
+	private volatile String cachedBaselineOwner;
 
-	private Map<String, Integer> progressionBaselineCached()
+	/** RSN hash of the account currently logged in, or null if not known yet. */
+	private String currentAccountHash()
 	{
-		Map<String, Integer> cached = cachedProgressionBaseline;
-		if (cached == null)
+		String rsn = getPlayerName();
+		return (rsn == null || rsn.isEmpty()) ? null : hashRsn(rsn);
+	}
+
+	/**
+	 * This account's frozen baseline, or empty when there isn't one FOR THIS
+	 * ACCOUNT.
+	 *
+	 * <p>ChunkBlazer config lives on the RuneLite profile, so every account
+	 * signed in through the same profile reads the same string. Without an owner
+	 * tag a maxed main's baseline would be inherited by the next account to log
+	 * in — and since eligibility is {@code threshold > baseline}, a fresh level 3
+	 * would inherit 99s and be locked out of the ENTIRE ladder permanently. That
+	 * is the exact inverse of the original bug and just as silent. The existing
+	 * {@code accountModeHash} solves the same problem the same way.
+	 *
+	 * <p>A value with no owner tag predates this and is treated as belonging to
+	 * nobody, so it is re-captured for whoever is logged in — always the safe
+	 * direction, since a re-capture can only ever be more restrictive.
+	 */
+	private Map<String, Integer> progressionBaselineForCurrentAccount()
+	{
+		String owner = currentAccountHash();
+		if (owner == null)
 		{
-			cached = parseProgressionBaseline(config.progressionBaseline());
-			cachedProgressionBaseline = cached;
+			return new HashMap<>();
 		}
-		return cached;
+
+		if (owner.equals(cachedBaselineOwner) && cachedProgressionBaseline != null)
+		{
+			return cachedProgressionBaseline;
+		}
+
+		String raw = config.progressionBaseline();
+		Map<String, Integer> parsed = new HashMap<>();
+		if (raw != null && raw.contains(BASELINE_OWNER_SEP))
+		{
+			int sep = raw.indexOf(BASELINE_OWNER_SEP);
+			if (owner.equals(raw.substring(0, sep)))
+			{
+				parsed = parseProgressionBaseline(raw.substring(sep + 1));
+			}
+		}
+
+		cachedProgressionBaseline = parsed;
+		cachedBaselineOwner = owner;
+		return parsed;
 	}
 
 	/**
@@ -1477,7 +1531,7 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	public List<NuzlockeTask> getVisibleGlobalTasks()
 	{
-		Map<String, Integer> baseline = progressionBaselineCached();
+		Map<String, Integer> baseline = progressionBaselineForCurrentAccount();
 		if (baseline.isEmpty())
 		{
 			// Baseline not captured yet (pre-login). Hiding on an empty baseline
@@ -1611,7 +1665,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private Map<String, Integer> ensureProgressionBaseline()
 	{
-		Map<String, Integer> baseline = parseProgressionBaseline(config.progressionBaseline());
+		Map<String, Integer> baseline = progressionBaselineForCurrentAccount();
 		if (!baseline.isEmpty())
 		{
 			return baseline;
@@ -1630,6 +1684,15 @@ public class ChunkBlazerPlugin extends Plugin
 			return baseline;
 		}
 
+		// Whose baseline this is. Without an RSN we cannot tag it, and an untagged
+		// baseline would be silently inherited by the next account on this
+		// profile — so wait rather than write one.
+		String owner = currentAccountHash();
+		if (owner == null)
+		{
+			return baseline;
+		}
+
 		StringBuilder sb = new StringBuilder();
 		for (Skill skill : Skill.values())
 		{
@@ -1642,9 +1705,11 @@ public class ChunkBlazerPlugin extends Plugin
 			sb.append(skill.name()).append(':').append(level);
 		}
 
-		configManager.setConfiguration("chunkblazer", "progressionBaseline", sb.toString());
+		configManager.setConfiguration("chunkblazer", "progressionBaseline",
+			owner + BASELINE_OWNER_SEP + sb);
 		cachedProgressionBaseline = baseline;
-		log.info("[CHUNKBLAZER] Progression baseline captured for this account: {}", sb);
+		cachedBaselineOwner = owner;
+		log.info("[CHUNKBLAZER] Progression baseline captured for {}: {}", getPlayerName(), sb);
 		return baseline;
 	}
 
@@ -1682,7 +1747,24 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
-		Map<String, Integer> baseline = parseProgressionBaseline(raw);
+		// Split off the owner tag. Untagged values predate account tagging and
+		// are still repaired (they belong to whoever is here); a value tagged for
+		// a DIFFERENT account is left alone — it isn't ours to clean up, and that
+		// account repairs its own on its next login.
+		String csv = raw;
+		int sep = raw.indexOf(BASELINE_OWNER_SEP);
+		if (sep >= 0)
+		{
+			String owner = raw.substring(0, sep);
+			String me = currentAccountHash();
+			if (me != null && !me.equals(owner))
+			{
+				return;
+			}
+			csv = raw.substring(sep + 1);
+		}
+
+		Map<String, Integer> baseline = parseProgressionBaseline(csv);
 		if (!isBaselineImpossible(baseline))
 		{
 			return; // sane baseline, nothing to do
@@ -1712,6 +1794,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 		configManager.setConfiguration("chunkblazer", "progressionBaseline", "");
 		cachedProgressionBaseline = null;
+		cachedBaselineOwner = null;
 		if (removed > 0)
 		{
 			configManager.setConfiguration("chunkblazer", "completedTasks", String.join(",", keep));
