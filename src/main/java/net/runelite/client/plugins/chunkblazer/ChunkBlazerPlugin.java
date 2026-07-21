@@ -50,6 +50,7 @@ import lombok.Setter;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ProfileChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
@@ -571,6 +572,55 @@ public class ChunkBlazerPlugin extends Plugin
 			// gameplay sections behind being in-game).
 			panel.updatePanel();
 		}
+	}
+
+	/**
+	 * A RuneLite config PROFILE switch swaps this plugin's entire local state —
+	 * unlocked chunks, completed tasks, points, the Progression baseline — with
+	 * no game login and no GameState change at all.
+	 *
+	 * <p>That makes it as significant as a login and it was being ignored. The
+	 * damage (observed 2026-07-21): {@code serverStateMerged} had been earned by
+	 * the PREVIOUS profile's login, so it stayed true across the switch, and the
+	 * 30-second sync then pushed the newly-swapped-in profile's state — a
+	 * bootstrap-only 1 chunk — straight over a server record holding 15.
+	 * Switching profiles to compare them silently destroyed the good one.
+	 *
+	 * <p>So a switch revokes the merge and re-runs the server login, which
+	 * re-merges for whatever profile is now active. Until that completes, sync
+	 * is blocked.
+	 */
+	@Subscribe
+	public void onProfileChanged(ProfileChanged event)
+	{
+		revokeSyncAuthorityForProfileSwitch();
+
+		loadActiveTasks();
+		if (panel != null)
+		{
+			panel.updatePanel();
+		}
+	}
+
+	/**
+	 * The safety-critical half of a profile switch, kept separate from the
+	 * reload so it cannot be broken by a failure in it — and so it is testable
+	 * without standing up the whole plugin.
+	 */
+	void revokeSyncAuthorityForProfileSwitch()
+	{
+		log.info("[CHUNKBLAZER] RuneLite profile changed — revoking sync authority until "
+			+ "this profile has merged the server's record");
+
+		serverStateMerged = false;
+		serverLoginDone = false;
+		cachedProgressionBaseline = null;
+		cachedBaselineOwner = null;
+
+		// Re-login so hydration merges the server record into THIS profile.
+		// Consumed on the next GameTick once the RSN is readable; harmless when
+		// logged out, since that tick never comes until there is a player.
+		pendingServerLogin = true;
 	}
 
 	@Subscribe

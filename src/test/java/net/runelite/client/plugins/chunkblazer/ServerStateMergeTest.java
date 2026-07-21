@@ -214,10 +214,53 @@ class ServerStateMergeTest
 	@Test
 	void syncIsBlockedUntilTheServerStateHasBeenMerged() throws Exception
 	{
+		assertFalse(serverStateMerged(),
+			"a fresh session must start un-merged so no sync can fire before login is processed");
+	}
+
+	/**
+	 * A RuneLite profile switch swaps the plugin's whole local state with no
+	 * game login. Observed 2026-07-21: the merge flag earned by the PREVIOUS
+	 * profile's login survived the switch, so the 30s sync pushed the
+	 * newly-active profile's 1-chunk bootstrap over a server record holding 15.
+	 * Merely comparing two profiles destroyed the good one.
+	 */
+	@Test
+	void aProfileSwitchRevokesSyncAuthority() throws Exception
+	{
+		setServerStateMerged(true);
+
+		plugin.revokeSyncAuthorityForProfileSwitch();
+
+		assertFalse(serverStateMerged(),
+			"a profile switch must block syncing until the new profile merges the server record");
+	}
+
+	/** The switch must also queue a re-login, or the merge would never happen. */
+	@Test
+	void aProfileSwitchQueuesAServerRelogin() throws Exception
+	{
+		setServerStateMerged(true);
+
+		plugin.revokeSyncAuthorityForProfileSwitch();
+
+		Field f = ChunkBlazerPlugin.class.getDeclaredField("pendingServerLogin");
+		f.setAccessible(true);
+		assertTrue((Boolean) f.get(plugin),
+			"without a queued re-login the new profile would never merge and could never sync again");
+	}
+
+	private boolean serverStateMerged() throws Exception
+	{
 		Field f = ChunkBlazerPlugin.class.getDeclaredField("serverStateMerged");
 		f.setAccessible(true);
+		return (Boolean) f.get(plugin);
+	}
 
-		assertFalse((Boolean) f.get(plugin),
-			"a fresh session must start un-merged so no sync can fire before login is processed");
+	private void setServerStateMerged(boolean value) throws Exception
+	{
+		Field f = ChunkBlazerPlugin.class.getDeclaredField("serverStateMerged");
+		f.setAccessible(true);
+		f.set(plugin, value);
 	}
 }
