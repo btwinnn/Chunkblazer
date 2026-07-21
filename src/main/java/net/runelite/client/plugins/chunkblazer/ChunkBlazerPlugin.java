@@ -1318,6 +1318,17 @@ public class ChunkBlazerPlugin extends Plugin
 				return false;
 			}
 
+			// LOGGED_IN is NOT enough: the skill table is still zeroed for a few
+			// ticks after it fires (same race as the null localPlayer name). The
+			// Progression baseline is captured from that table and then FROZEN,
+			// so reading it early doesn't just delay a feature — it permanently
+			// records every skill as 0, which makes every rung look earnable and
+			// retroactively pays out the whole ladder. Wait for real data.
+			if (!isSkillDataReady())
+			{
+				return false;
+			}
+
 			try
 			{
 				backfillAndRegisterGlobalTasks();
@@ -1449,6 +1460,21 @@ public class ChunkBlazerPlugin extends Plugin
 	 *
 	 * <p>Client thread only — reads live skill data.
 	 */
+	/**
+	 * Whether the client's skill table actually holds this account's levels yet.
+	 *
+	 * <p>GameState.LOGGED_IN fires BEFORE the skill table is populated — for a
+	 * few ticks every skill reads 0. Hitpoints is the reliable probe because no
+	 * account can be below 10: an account is either at 10+ HP or the data isn't
+	 * loaded. (Seen for real on 2026-07-21: the baseline froze at all-zeros and
+	 * handed a maxed account the entire 671-point ladder.)
+	 */
+	private boolean isSkillDataReady()
+	{
+		return client.getGameState() == GameState.LOGGED_IN
+			&& client.getRealSkillLevel(Skill.HITPOINTS) >= 10;
+	}
+
 	private Map<String, Integer> ensureProgressionBaseline()
 	{
 		Map<String, Integer> baseline = parseProgressionBaseline(config.progressionBaseline());
@@ -1457,11 +1483,15 @@ public class ChunkBlazerPlugin extends Plugin
 			return baseline;
 		}
 
-		if (client.getGameState() != GameState.LOGGED_IN)
+		if (!isSkillDataReady())
 		{
-			// Don't freeze a baseline off garbage skill data. Returning empty
-			// means every rung reads as ineligible for now; the next call after
-			// login captures for real.
+			// Don't freeze a baseline off garbage skill data — that mistake is
+			// permanent and pays out the whole ladder. Returning empty means
+			// every rung reads as ineligible for now; a later call captures for
+			// real. Belt to the caller's braces: registerGlobalTasks already
+			// reschedules until isSkillDataReady(), so this should be
+			// unreachable, but the cost of being wrong here is far too high to
+			// rely on one gate.
 			return baseline;
 		}
 
@@ -1480,6 +1510,76 @@ public class ChunkBlazerPlugin extends Plugin
 		configManager.setConfiguration("chunkblazer", "progressionBaseline", sb.toString());
 		log.info("[CHUNKBLAZER] Progression baseline captured for this account: {}", sb);
 		return baseline;
+	}
+
+	/**
+	 * Undo the all-zeros baseline bug (2026-07-21).
+	 *
+	 * <p>The first build of Progression captured the baseline on LOGGED_IN, before
+	 * the skill table was populated, so it froze every skill at 0. With a 0
+	 * baseline every rung is "above baseline", and the already-reached check then
+	 * completed all 239 of them — handing established accounts the full ladder
+	 * retroactively, which is precisely what Progression is designed not to do.
+	 *
+	 * <p>A baseline is provably bogus when it records Hitpoints below 10: no
+	 * account can be there. When we see one, clear it and un-complete every
+	 * progression task (refunding the points they wrongly paid) so the next
+	 * capture — now correctly gated on {@link #isSkillDataReady()} — redoes it
+	 * honestly. Legitimately earned progression tasks are lost too, but they were
+	 * only ever earnable in the seconds since this build shipped, and re-earning
+	 * one costs a level-up we can detect again.
+	 *
+	 * <p>Self-healing rather than a one-shot: it keys off the impossible value,
+	 * so it repairs any client that ran the bad build whenever it next loads,
+	 * and no-ops forever after.
+	 */
+	public void migrateRepairBogusProgressionBaseline()
+	{
+		String raw = config.progressionBaseline();
+		if (raw == null || raw.trim().isEmpty())
+		{
+			return;
+		}
+
+		Map<String, Integer> baseline = parseProgressionBaseline(raw);
+		Integer hp = baseline.get(Skill.HITPOINTS.name());
+		if (hp != null && hp >= 10)
+		{
+			return; // sane baseline, nothing to do
+		}
+
+		// Drop every progression_* id from the completed set and refund its points.
+		Set<String> completed = getCompletedTaskIds();
+		int refunded = 0;
+		int removed = 0;
+		List<String> keep = new ArrayList<>();
+		for (String id : completed)
+		{
+			if (id.startsWith("progression_"))
+			{
+				NuzlockeTask task = findTaskById(id);
+				if (task != null)
+				{
+					refunded += task.getBasePoints();
+				}
+				removed++;
+			}
+			else
+			{
+				keep.add(id);
+			}
+		}
+
+		configManager.setConfiguration("chunkblazer", "progressionBaseline", "");
+		if (removed > 0)
+		{
+			configManager.setConfiguration("chunkblazer", "completedTasks", String.join(",", keep));
+			addPoints(-refunded);
+			completedTaskCache.keySet().removeIf(id -> id.startsWith("progression_"));
+		}
+
+		log.warn("[CHUNKBLAZER] repaired a bogus all-zeros Progression baseline: "
+			+ "cleared baseline, un-completed {} progression tasks, refunded {} points", removed, refunded);
 	}
 
 	private Map<String, Integer> parseProgressionBaseline(String csv)
@@ -2718,6 +2818,7 @@ public class ChunkBlazerPlugin extends Plugin
 		// start chunk can never end up locked or task-less. Idempotent + cheap.
 		ensureStartingChunkUnlocked();
 		migrateStripSeededCharterChunks();
+		migrateRepairBogusProgressionBaseline();
 
 		activeTasks.clear();
 		taskModuleManager.clearTask(); // Clear module state to prevent duplicates
