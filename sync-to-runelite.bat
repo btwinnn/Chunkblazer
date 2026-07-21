@@ -48,11 +48,14 @@ set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\cli
 :: Files the plugin actually loads at runtime (must match
 :: ChunkBlazerPlugin.TASK_JSON_FILES). If you add a new task
 :: JSON to TASK_JSON_FILES, add it here too.
-:: Quest_Tasks.json is the exception: it is NOT in TASK_JSON_FILES (it has its
-:: own loader, loadGlobalTasks(), because it is chunk-independent) but it still
-:: has to be staged from the authoring tree to resources like any other data
-:: file, or edits made in Tasks_JSON\Quest_Tasks_Folder never reach the client.
-set TASK_JSONS=Misthalin_Tasks.json Asgarnia_Tasks.json Kandarin_Tasks.json Karamja_Tasks.json Desert_Tasks.json Varlamore_Tasks.json Zeah_Tasks.json Fremennik_Tasks.json Tirannwn_Tasks.json Morytania_Tasks.json Wilderness_Tasks.json Quest_Tasks.json
+:: The GLOBAL task files are the exception: Quest_Tasks.json and
+:: Progression_Tasks.json are NOT in TASK_JSON_FILES (they share their own
+:: loader, loadGlobalTasks(), because they are chunk-independent) but they
+:: still have to be staged from the authoring tree to resources like any other
+:: data file, or edits there never reach the client. Omitting one is silent:
+:: the file simply isn't on the classpath, loadGlobalTaskFile logs a miss, and
+:: that whole tier stops existing in-game while everything else looks fine.
+set TASK_JSONS=Misthalin_Tasks.json Asgarnia_Tasks.json Kandarin_Tasks.json Karamja_Tasks.json Desert_Tasks.json Varlamore_Tasks.json Zeah_Tasks.json Fremennik_Tasks.json Tirannwn_Tasks.json Morytania_Tasks.json Wilderness_Tasks.json Quest_Tasks.json Progression_Tasks.json
 
 :: Subfolders under Tasks_JSON\ that may contain TASK_JSONS files.
 :: Searched in priority order — first match wins. The trailing "."
