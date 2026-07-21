@@ -57,8 +57,12 @@ public class TaskConstraints
 	@SerializedName("no_food")
 	private Boolean noFood;
 
-	@SerializedName("solo_only")
-	private Boolean soloOnly;
+	// NOTE: there is deliberately no `solo_only` field. One existed here and was
+	// never read by any module, so authoring it bought no enforcement while
+	// reading like it did. Solo exclusivity is implied by a time or equipment
+	// constraint (see NPCKillModule's contested/startedFresh gates); the inverse
+	// — an encounter fought in a team — is the task-level `group_content` flag.
+
 
 	// Equipment constraints
 	@SerializedName("no_equipment")
@@ -275,7 +279,6 @@ public class TaskConstraints
 			// Handle boolean fields
 			constraints.setNoPrayer(readFlexibleBoolean(obj, "no_prayer"));
 			constraints.setNoFood(readFlexibleBoolean(obj, "no_food"));
-			constraints.setSoloOnly(readFlexibleBoolean(obj, "solo_only"));
 			constraints.setNoEquipment(readFlexibleBoolean(obj, "no_equipment"));
 			constraints.setEquipNothing(readFlexibleBoolean(obj, "equip_nothing"));
 

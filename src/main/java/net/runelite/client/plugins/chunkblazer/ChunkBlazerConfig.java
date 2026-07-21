@@ -61,6 +61,19 @@ public interface ChunkBlazerConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "progressionBaseline",
+		name = "Progression Baseline",
+		description = "Per-skill levels captured when this account was first seen. "
+			+ "Progression tasks only pay for levels gained after this point.",
+		position = 4,
+		hidden = true
+	)
+	default String progressionBaseline()
+	{
+		return "";
+	}
+
+	@ConfigItem(
 		keyName = "assignedTasks",
 		name = "Assigned Tasks",
 		description = "Comma-separated list of all tasks ever assigned (cannot be reassigned)",

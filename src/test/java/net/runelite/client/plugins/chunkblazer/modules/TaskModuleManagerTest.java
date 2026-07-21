@@ -60,6 +60,9 @@ class TaskModuleManagerTest
 	@Mock
 	private QuestCheckModule questCheckModule;
 
+	@Mock
+	private ProgressionModule progressionModule;
+
 	@InjectMocks
 	private TaskModuleManager taskModuleManager;
 
@@ -79,6 +82,7 @@ class TaskModuleManagerTest
 		injectField(taskModuleManager, "varbitCheckModule", varbitCheckModule);
 		injectField(taskModuleManager, "npcDialogueModule", npcDialogueModule);
 		injectField(taskModuleManager, "questCheckModule", questCheckModule);
+		injectField(taskModuleManager, "progressionModule", progressionModule);
 
 		// Setup module completion types
 		when(npcKillModule.getCompletionType()).thenReturn("NPC_KILL");
@@ -93,6 +97,7 @@ class TaskModuleManagerTest
 		when(varbitCheckModule.getCompletionType()).thenReturn("VARBIT_CHECK");
 		when(npcDialogueModule.getCompletionType()).thenReturn("NPC_DIALOGUE");
 		when(questCheckModule.getCompletionType()).thenReturn("QUEST_CHECK");
+		when(progressionModule.getCompletionType()).thenReturn("SKILL_THRESHOLD");
 
 		// Initialize the manager
 		taskModuleManager.initialize();

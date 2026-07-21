@@ -146,6 +146,14 @@ public class NPCKillModule extends AbstractTaskModule
 	// to launder a partly-damaged NPC.
 	private static final int FIGHT_RECORD_TTL_TICKS = 100; // ~60s
 
+	// Group encounters (raids, Nex) have long mechanic phases — shielded bosses,
+	// forced movement, a support role — where a player legitimately lands no hits
+	// for minutes. At the solo TTL their fight record would be evicted and the
+	// eventual kill would credit nothing, since processNpcDeath needs damage > 0.
+	// Applied only while a group_content task is active, so solo eviction (and the
+	// laundering it prevents) is untouched.
+	private static final int GROUP_FIGHT_RECORD_TTL_TICKS = 1000; // ~10 min
+
 	/**
 	 * Everything we know about one fight: our damage, when it started, whether it
 	 * stayed solo, and whether the NPC was untouched when we got to it. Snapshotted
@@ -514,9 +522,14 @@ public class NPCKillModule extends AbstractTaskModule
 		}
 
 		// Drop fights we have not touched in a while so the map can't grow unbounded.
+		// The window widens while a group_content task is active — see
+		// GROUP_FIGHT_RECORD_TTL_TICKS. It's keyed on having such a task at all
+		// rather than per-NPC because the record is evicted before we know which
+		// task the eventual kill would credit.
 		if (!fights.isEmpty())
 		{
-			fights.values().removeIf(f -> currentTick - f.lastHitTick > FIGHT_RECORD_TTL_TICKS);
+			final int ttl = hasGroupContentTask() ? GROUP_FIGHT_RECORD_TTL_TICKS : FIGHT_RECORD_TTL_TICKS;
+			fights.values().removeIf(f -> currentTick - f.lastHitTick > ttl);
 		}
 
 		// Sample NPC health for the NEXT tick's first-hit freshness check. Done last,
@@ -639,6 +652,19 @@ public class NPCKillModule extends AbstractTaskModule
 					new HealthSample(npc.getHealthRatio(), npc.getHealthScale()));
 			}
 		}
+	}
+
+	/** True if any active task is group content — see GROUP_FIGHT_RECORD_TTL_TICKS. */
+	private boolean hasGroupContentTask()
+	{
+		for (NuzlockeTask task : activeTasks)
+		{
+			if (task.isGroupContent())
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean hasRestrictedTask()
@@ -1121,6 +1147,16 @@ public class NPCKillModule extends AbstractTaskModule
 			boolean hasEquipConstraint = constraints != null && constraints.hasEquipmentConstraints();
 			boolean hasVarbitConstraint = constraints != null && constraints.hasVarbitConstraints();
 
+			// Group content (raids, Nex, group bosses) is exempt from the solo-only
+			// gates below. A teammate's hitsplat sets `contested`, and the boss is
+			// only at full health for whoever lands the encounter's first hit, so
+			// those gates would make a group task impossible rather than hard. Task
+			// JSON carrying group_content alongside a time/equipment constraint is
+			// rejected at load (NuzlockeTask#getGroupContentSchemaError), so this is
+			// the belt to that braces — it keeps a task that slipped through
+			// completable instead of silently unwinnable.
+			boolean soloGated = (hasTimeConstraint || hasEquipConstraint) && !task.isGroupContent();
+
 			// If task ONLY has dropped_item constraint (no time/equipment/varbit constraints),
 			// skip time and equipment checks - only verify the drop
 			boolean dropOnlyTask = hasDropConstraint && !hasTimeConstraint && !hasEquipConstraint && !hasVarbitConstraint;
@@ -1132,7 +1168,7 @@ public class NPCKillModule extends AbstractTaskModule
 				// is fast for real — the timer can't tell it apart from skill. See
 				// the CANNONBALL_VARP comment for why this is a code rule rather
 				// than the (inert) per-task varbit constraint it replaces.
-				if ((hasTimeConstraint || hasEquipConstraint) && cannonFiredDuring(fight, death.deathTick))
+				if (soloGated && cannonFiredDuring(fight, death.deathTick))
 				{
 					sendTaskFailure(task, "Cannon use is prohibited for restricted tasks — kill it without your cannon firing");
 					continue; // Skip this task, don't credit the kill
@@ -1142,7 +1178,7 @@ public class NPCKillModule extends AbstractTaskModule
 				// UNTOUCHED monster. This is what stops softening it with a cannon
 				// (or letting anything else chip it) and then landing the "first
 				// hit" that the timer measures from — Cruk's scorpion, 2026-07-16.
-				if ((hasTimeConstraint || hasEquipConstraint) && !fight.startedFresh)
+				if (soloGated && !fight.startedFresh)
 				{
 					sendTaskFailure(task,
 						"Restricted kill must start from full health — this monster was already damaged when you first hit it");
@@ -1162,7 +1198,7 @@ public class NPCKillModule extends AbstractTaskModule
 				// would sail through freshness. The two gates cover different halves
 				// of the same cheat — keep both.
 				int grace = freshFightGraceTicks(constraints);
-				if ((hasTimeConstraint || hasEquipConstraint)
+				if (soloGated
 					&& lastLoginTick >= 0 && fight.combatStartTick >= 0
 					&& fight.combatStartTick - lastLoginTick < grace)
 				{
@@ -1177,7 +1213,7 @@ public class NPCKillModule extends AbstractTaskModule
 				// shared spawn) invalidates a speed/equipment attempt — you must
 				// solo it. Recorded per-fight in onHitsplatApplied via
 				// Hitsplat.isOthers(). Plain "defeat X" kills are unaffected.
-				if ((hasTimeConstraint || hasEquipConstraint) && fight.contested)
+				if (soloGated && fight.contested)
 				{
 					sendTaskFailure(task,
 						"Restricted kill must be solo — another player damaged this monster");

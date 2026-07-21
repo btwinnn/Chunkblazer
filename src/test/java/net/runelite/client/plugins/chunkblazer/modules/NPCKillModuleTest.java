@@ -558,6 +558,87 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		assertEquals(1, task.getCurrentProgress(), "a solo restricted kill credits normally");
 	}
 
+	// --- Group content (raids, Nex, group bosses) ------------------------------
+
+	/**
+	 * The reason group_content exists: in a team, a teammate's hitsplat sets
+	 * `contested` on essentially every encounter, so a group task carrying a
+	 * time/equipment constraint would be impossible rather than hard. The flag
+	 * exempts the solo-only gates. Constraint + flag is rejected at load, but the
+	 * runtime must stay completable if such a task ever slips through.
+	 */
+	@Test
+	void testGroupContentTask_creditsDespiteAnotherPlayerDamage() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 10);
+		task.setGroupContent(true);
+		npcKillModule.addActiveTask(task);
+
+		NPC boss = mockNpc(200, 1, "Mugger");
+		fireMyHitsplat(boss, 5);
+		fireOtherPlayerHitsplat(boss); // a teammate helps — expected in group content
+		killAndDrain(boss);
+
+		assertEquals(1, task.getCurrentProgress(),
+			"a group_content kill must credit even though another player damaged the boss");
+	}
+
+	/**
+	 * The other unsatisfiable gate: only the player landing the encounter's very
+	 * first hit ever sees the boss at full health.
+	 */
+	@Test
+	void testGroupContentTask_creditsWhenBossAlreadyDamaged() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 10);
+		task.setGroupContent(true);
+		npcKillModule.addActiveTask(task);
+
+		NPC boss = mockNpc(200, 1, "Mugger");
+		fireOtherPlayerHitsplat(boss); // team engages before we land a hit
+		fireMyHitsplat(boss, 5);       // we join a boss that is no longer fresh
+		killAndDrain(boss);
+
+		assertEquals(1, task.getCurrentProgress(),
+			"a group_content kill must credit even though the boss was already damaged");
+	}
+
+	/**
+	 * group_content widens WHO ELSE may damage the boss; it never grants credit
+	 * for a kill the player took no part in. The damage > 0 check is always on.
+	 */
+	@Test
+	void testGroupContentTask_stillRequiresOurOwnDamage() throws Exception
+	{
+		NuzlockeTask task = createTaskWithNpc("Defeat Nex", "defeat_nex", "NPC_KILL", 1, Arrays.asList(200));
+		task.setGroupContent(true);
+		npcKillModule.addActiveTask(task);
+
+		NPC boss = mockNpc(200, 1, "Mugger");
+		fireOtherPlayerHitsplat(boss); // the team kills it; we never hit it
+		killAndDrain(boss);
+
+		assertEquals(0, task.getCurrentProgress(),
+			"group_content must not credit a kill the player never damaged");
+	}
+
+	/** Solo tasks must be completely unaffected by the flag's existence. */
+	@Test
+	void testSoloTask_stillRejectsContestedKill() throws Exception
+	{
+		NuzlockeTask task = speedTask(200, 10);
+		task.setGroupContent(false);
+		npcKillModule.addActiveTask(task);
+
+		NPC mugger = mockNpc(200, 1, "Mugger");
+		fireMyHitsplat(mugger, 5);
+		fireOtherPlayerHitsplat(mugger);
+		killAndDrain(mugger);
+
+		assertEquals(0, task.getCurrentProgress(),
+			"group_content=false must leave the solo exclusivity gate intact");
+	}
+
 	@Test
 	void testExclusiveDamage_doesNotAffectPlainKillTasks() throws Exception
 	{

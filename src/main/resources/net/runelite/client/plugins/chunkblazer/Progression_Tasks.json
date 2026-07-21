@@ -1,0 +1,2878 @@
+{
+    "Progression_Tasks": [
+        {
+            "region_id": [],
+            "Friendly_Name": "Progression",
+            "tasks": [
+                {
+                    "name": "Reach Level 10 Attack",
+                    "taskID": "progression_attack_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "ATTACK",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Attack",
+                    "taskID": "progression_attack_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "ATTACK",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Attack",
+                    "taskID": "progression_attack_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "ATTACK",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Attack",
+                    "taskID": "progression_attack_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "ATTACK",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Attack",
+                    "taskID": "progression_attack_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "ATTACK",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Attack",
+                    "taskID": "progression_attack_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "ATTACK",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Attack",
+                    "taskID": "progression_attack_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "ATTACK",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Attack",
+                    "taskID": "progression_attack_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "ATTACK",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Attack",
+                    "taskID": "progression_attack_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "ATTACK",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Attack",
+                    "taskID": "progression_attack_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "ATTACK",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Strength",
+                    "taskID": "progression_strength_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "STRENGTH",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Strength",
+                    "taskID": "progression_strength_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "STRENGTH",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Strength",
+                    "taskID": "progression_strength_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "STRENGTH",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Strength",
+                    "taskID": "progression_strength_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "STRENGTH",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Strength",
+                    "taskID": "progression_strength_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "STRENGTH",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Strength",
+                    "taskID": "progression_strength_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "STRENGTH",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Strength",
+                    "taskID": "progression_strength_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "STRENGTH",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Strength",
+                    "taskID": "progression_strength_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "STRENGTH",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Strength",
+                    "taskID": "progression_strength_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "STRENGTH",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Strength",
+                    "taskID": "progression_strength_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "STRENGTH",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Defence",
+                    "taskID": "progression_defence_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "DEFENCE",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Defence",
+                    "taskID": "progression_defence_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "DEFENCE",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Defence",
+                    "taskID": "progression_defence_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "DEFENCE",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Defence",
+                    "taskID": "progression_defence_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "DEFENCE",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Defence",
+                    "taskID": "progression_defence_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "DEFENCE",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Defence",
+                    "taskID": "progression_defence_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "DEFENCE",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Defence",
+                    "taskID": "progression_defence_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "DEFENCE",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Defence",
+                    "taskID": "progression_defence_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "DEFENCE",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Defence",
+                    "taskID": "progression_defence_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "DEFENCE",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Defence",
+                    "taskID": "progression_defence_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "DEFENCE",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Hitpoints",
+                    "taskID": "progression_hitpoints_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "HITPOINTS",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Hitpoints",
+                    "taskID": "progression_hitpoints_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "HITPOINTS",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Hitpoints",
+                    "taskID": "progression_hitpoints_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "HITPOINTS",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Hitpoints",
+                    "taskID": "progression_hitpoints_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "HITPOINTS",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Hitpoints",
+                    "taskID": "progression_hitpoints_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "HITPOINTS",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Hitpoints",
+                    "taskID": "progression_hitpoints_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "HITPOINTS",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Hitpoints",
+                    "taskID": "progression_hitpoints_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "HITPOINTS",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Hitpoints",
+                    "taskID": "progression_hitpoints_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "HITPOINTS",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Hitpoints",
+                    "taskID": "progression_hitpoints_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "HITPOINTS",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Ranged",
+                    "taskID": "progression_ranged_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "RANGED",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Ranged",
+                    "taskID": "progression_ranged_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "RANGED",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Ranged",
+                    "taskID": "progression_ranged_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "RANGED",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Ranged",
+                    "taskID": "progression_ranged_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "RANGED",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Ranged",
+                    "taskID": "progression_ranged_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "RANGED",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Ranged",
+                    "taskID": "progression_ranged_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "RANGED",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Ranged",
+                    "taskID": "progression_ranged_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "RANGED",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Ranged",
+                    "taskID": "progression_ranged_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "RANGED",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Ranged",
+                    "taskID": "progression_ranged_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "RANGED",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Ranged",
+                    "taskID": "progression_ranged_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "RANGED",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Prayer",
+                    "taskID": "progression_prayer_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "PRAYER",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Prayer",
+                    "taskID": "progression_prayer_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "PRAYER",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Prayer",
+                    "taskID": "progression_prayer_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "PRAYER",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Prayer",
+                    "taskID": "progression_prayer_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "PRAYER",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Prayer",
+                    "taskID": "progression_prayer_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "PRAYER",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Prayer",
+                    "taskID": "progression_prayer_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "PRAYER",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Prayer",
+                    "taskID": "progression_prayer_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "PRAYER",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Prayer",
+                    "taskID": "progression_prayer_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "PRAYER",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Prayer",
+                    "taskID": "progression_prayer_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "PRAYER",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Prayer",
+                    "taskID": "progression_prayer_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "PRAYER",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Magic",
+                    "taskID": "progression_magic_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "MAGIC",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Magic",
+                    "taskID": "progression_magic_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "MAGIC",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Magic",
+                    "taskID": "progression_magic_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "MAGIC",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Magic",
+                    "taskID": "progression_magic_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "MAGIC",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Magic",
+                    "taskID": "progression_magic_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "MAGIC",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Magic",
+                    "taskID": "progression_magic_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "MAGIC",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Magic",
+                    "taskID": "progression_magic_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "MAGIC",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Magic",
+                    "taskID": "progression_magic_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "MAGIC",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Magic",
+                    "taskID": "progression_magic_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "MAGIC",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Magic",
+                    "taskID": "progression_magic_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "MAGIC",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Cooking",
+                    "taskID": "progression_cooking_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "COOKING",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Cooking",
+                    "taskID": "progression_cooking_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "COOKING",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Cooking",
+                    "taskID": "progression_cooking_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "COOKING",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Cooking",
+                    "taskID": "progression_cooking_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "COOKING",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Cooking",
+                    "taskID": "progression_cooking_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "COOKING",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Cooking",
+                    "taskID": "progression_cooking_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "COOKING",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Cooking",
+                    "taskID": "progression_cooking_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "COOKING",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Cooking",
+                    "taskID": "progression_cooking_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "COOKING",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Cooking",
+                    "taskID": "progression_cooking_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "COOKING",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Cooking",
+                    "taskID": "progression_cooking_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "COOKING",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Woodcutting",
+                    "taskID": "progression_woodcutting_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "WOODCUTTING",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Woodcutting",
+                    "taskID": "progression_woodcutting_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "WOODCUTTING",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Woodcutting",
+                    "taskID": "progression_woodcutting_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "WOODCUTTING",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Woodcutting",
+                    "taskID": "progression_woodcutting_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "WOODCUTTING",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Woodcutting",
+                    "taskID": "progression_woodcutting_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "WOODCUTTING",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Woodcutting",
+                    "taskID": "progression_woodcutting_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "WOODCUTTING",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Woodcutting",
+                    "taskID": "progression_woodcutting_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "WOODCUTTING",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Woodcutting",
+                    "taskID": "progression_woodcutting_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "WOODCUTTING",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Woodcutting",
+                    "taskID": "progression_woodcutting_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "WOODCUTTING",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Woodcutting",
+                    "taskID": "progression_woodcutting_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "WOODCUTTING",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Fletching",
+                    "taskID": "progression_fletching_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "FLETCHING",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Fletching",
+                    "taskID": "progression_fletching_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "FLETCHING",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Fletching",
+                    "taskID": "progression_fletching_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "FLETCHING",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Fletching",
+                    "taskID": "progression_fletching_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "FLETCHING",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Fletching",
+                    "taskID": "progression_fletching_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "FLETCHING",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Fletching",
+                    "taskID": "progression_fletching_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "FLETCHING",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Fletching",
+                    "taskID": "progression_fletching_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "FLETCHING",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Fletching",
+                    "taskID": "progression_fletching_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "FLETCHING",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Fletching",
+                    "taskID": "progression_fletching_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "FLETCHING",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Fletching",
+                    "taskID": "progression_fletching_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "FLETCHING",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Fishing",
+                    "taskID": "progression_fishing_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "FISHING",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Fishing",
+                    "taskID": "progression_fishing_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "FISHING",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Fishing",
+                    "taskID": "progression_fishing_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "FISHING",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Fishing",
+                    "taskID": "progression_fishing_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "FISHING",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Fishing",
+                    "taskID": "progression_fishing_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "FISHING",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Fishing",
+                    "taskID": "progression_fishing_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "FISHING",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Fishing",
+                    "taskID": "progression_fishing_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "FISHING",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Fishing",
+                    "taskID": "progression_fishing_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "FISHING",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Fishing",
+                    "taskID": "progression_fishing_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "FISHING",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Fishing",
+                    "taskID": "progression_fishing_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "FISHING",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Firemaking",
+                    "taskID": "progression_firemaking_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "FIREMAKING",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Firemaking",
+                    "taskID": "progression_firemaking_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "FIREMAKING",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Firemaking",
+                    "taskID": "progression_firemaking_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "FIREMAKING",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Firemaking",
+                    "taskID": "progression_firemaking_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "FIREMAKING",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Firemaking",
+                    "taskID": "progression_firemaking_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "FIREMAKING",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Firemaking",
+                    "taskID": "progression_firemaking_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "FIREMAKING",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Firemaking",
+                    "taskID": "progression_firemaking_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "FIREMAKING",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Firemaking",
+                    "taskID": "progression_firemaking_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "FIREMAKING",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Firemaking",
+                    "taskID": "progression_firemaking_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "FIREMAKING",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Firemaking",
+                    "taskID": "progression_firemaking_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "FIREMAKING",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Crafting",
+                    "taskID": "progression_crafting_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "CRAFTING",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Crafting",
+                    "taskID": "progression_crafting_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "CRAFTING",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Crafting",
+                    "taskID": "progression_crafting_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "CRAFTING",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Crafting",
+                    "taskID": "progression_crafting_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "CRAFTING",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Crafting",
+                    "taskID": "progression_crafting_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "CRAFTING",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Crafting",
+                    "taskID": "progression_crafting_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "CRAFTING",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Crafting",
+                    "taskID": "progression_crafting_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "CRAFTING",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Crafting",
+                    "taskID": "progression_crafting_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "CRAFTING",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Crafting",
+                    "taskID": "progression_crafting_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "CRAFTING",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Crafting",
+                    "taskID": "progression_crafting_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "CRAFTING",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Smithing",
+                    "taskID": "progression_smithing_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "SMITHING",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Smithing",
+                    "taskID": "progression_smithing_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "SMITHING",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Smithing",
+                    "taskID": "progression_smithing_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "SMITHING",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Smithing",
+                    "taskID": "progression_smithing_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "SMITHING",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Smithing",
+                    "taskID": "progression_smithing_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "SMITHING",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Smithing",
+                    "taskID": "progression_smithing_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "SMITHING",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Smithing",
+                    "taskID": "progression_smithing_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "SMITHING",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Smithing",
+                    "taskID": "progression_smithing_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "SMITHING",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Smithing",
+                    "taskID": "progression_smithing_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "SMITHING",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Smithing",
+                    "taskID": "progression_smithing_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "SMITHING",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Mining",
+                    "taskID": "progression_mining_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "MINING",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Mining",
+                    "taskID": "progression_mining_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "MINING",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Mining",
+                    "taskID": "progression_mining_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "MINING",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Mining",
+                    "taskID": "progression_mining_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "MINING",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Mining",
+                    "taskID": "progression_mining_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "MINING",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Mining",
+                    "taskID": "progression_mining_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "MINING",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Mining",
+                    "taskID": "progression_mining_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "MINING",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Mining",
+                    "taskID": "progression_mining_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "MINING",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Mining",
+                    "taskID": "progression_mining_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "MINING",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Mining",
+                    "taskID": "progression_mining_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "MINING",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Herblore",
+                    "taskID": "progression_herblore_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "HERBLORE",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Herblore",
+                    "taskID": "progression_herblore_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "HERBLORE",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Herblore",
+                    "taskID": "progression_herblore_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "HERBLORE",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Herblore",
+                    "taskID": "progression_herblore_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "HERBLORE",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Herblore",
+                    "taskID": "progression_herblore_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "HERBLORE",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Herblore",
+                    "taskID": "progression_herblore_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "HERBLORE",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Herblore",
+                    "taskID": "progression_herblore_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "HERBLORE",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Herblore",
+                    "taskID": "progression_herblore_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "HERBLORE",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Herblore",
+                    "taskID": "progression_herblore_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "HERBLORE",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Herblore",
+                    "taskID": "progression_herblore_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "HERBLORE",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Agility",
+                    "taskID": "progression_agility_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "AGILITY",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Agility",
+                    "taskID": "progression_agility_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "AGILITY",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Agility",
+                    "taskID": "progression_agility_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "AGILITY",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Agility",
+                    "taskID": "progression_agility_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "AGILITY",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Agility",
+                    "taskID": "progression_agility_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "AGILITY",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Agility",
+                    "taskID": "progression_agility_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "AGILITY",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Agility",
+                    "taskID": "progression_agility_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "AGILITY",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Agility",
+                    "taskID": "progression_agility_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "AGILITY",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Agility",
+                    "taskID": "progression_agility_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "AGILITY",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Agility",
+                    "taskID": "progression_agility_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "AGILITY",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Thieving",
+                    "taskID": "progression_thieving_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "THIEVING",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Thieving",
+                    "taskID": "progression_thieving_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "THIEVING",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Thieving",
+                    "taskID": "progression_thieving_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "THIEVING",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Thieving",
+                    "taskID": "progression_thieving_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "THIEVING",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Thieving",
+                    "taskID": "progression_thieving_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "THIEVING",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Thieving",
+                    "taskID": "progression_thieving_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "THIEVING",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Thieving",
+                    "taskID": "progression_thieving_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "THIEVING",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Thieving",
+                    "taskID": "progression_thieving_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "THIEVING",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Thieving",
+                    "taskID": "progression_thieving_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "THIEVING",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Thieving",
+                    "taskID": "progression_thieving_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "THIEVING",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Slayer",
+                    "taskID": "progression_slayer_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "SLAYER",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Slayer",
+                    "taskID": "progression_slayer_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "SLAYER",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Slayer",
+                    "taskID": "progression_slayer_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "SLAYER",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Slayer",
+                    "taskID": "progression_slayer_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "SLAYER",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Slayer",
+                    "taskID": "progression_slayer_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "SLAYER",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Slayer",
+                    "taskID": "progression_slayer_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "SLAYER",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Slayer",
+                    "taskID": "progression_slayer_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "SLAYER",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Slayer",
+                    "taskID": "progression_slayer_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "SLAYER",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Slayer",
+                    "taskID": "progression_slayer_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "SLAYER",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Slayer",
+                    "taskID": "progression_slayer_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "SLAYER",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Farming",
+                    "taskID": "progression_farming_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "FARMING",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Farming",
+                    "taskID": "progression_farming_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "FARMING",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Farming",
+                    "taskID": "progression_farming_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "FARMING",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Farming",
+                    "taskID": "progression_farming_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "FARMING",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Farming",
+                    "taskID": "progression_farming_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "FARMING",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Farming",
+                    "taskID": "progression_farming_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "FARMING",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Farming",
+                    "taskID": "progression_farming_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "FARMING",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Farming",
+                    "taskID": "progression_farming_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "FARMING",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Farming",
+                    "taskID": "progression_farming_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "FARMING",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Farming",
+                    "taskID": "progression_farming_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "FARMING",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Runecrafting",
+                    "taskID": "progression_runecraft_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "RUNECRAFT",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Runecrafting",
+                    "taskID": "progression_runecraft_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "RUNECRAFT",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Runecrafting",
+                    "taskID": "progression_runecraft_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "RUNECRAFT",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Runecrafting",
+                    "taskID": "progression_runecraft_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "RUNECRAFT",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Runecrafting",
+                    "taskID": "progression_runecraft_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "RUNECRAFT",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Runecrafting",
+                    "taskID": "progression_runecraft_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "RUNECRAFT",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Runecrafting",
+                    "taskID": "progression_runecraft_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "RUNECRAFT",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Runecrafting",
+                    "taskID": "progression_runecraft_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "RUNECRAFT",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Runecrafting",
+                    "taskID": "progression_runecraft_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "RUNECRAFT",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Runecrafting",
+                    "taskID": "progression_runecraft_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "RUNECRAFT",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Hunter",
+                    "taskID": "progression_hunter_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "HUNTER",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Hunter",
+                    "taskID": "progression_hunter_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "HUNTER",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Hunter",
+                    "taskID": "progression_hunter_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "HUNTER",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Hunter",
+                    "taskID": "progression_hunter_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "HUNTER",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Hunter",
+                    "taskID": "progression_hunter_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "HUNTER",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Hunter",
+                    "taskID": "progression_hunter_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "HUNTER",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Hunter",
+                    "taskID": "progression_hunter_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "HUNTER",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Hunter",
+                    "taskID": "progression_hunter_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "HUNTER",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Hunter",
+                    "taskID": "progression_hunter_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "HUNTER",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Hunter",
+                    "taskID": "progression_hunter_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "HUNTER",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Construction",
+                    "taskID": "progression_construction_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "CONSTRUCTION",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Construction",
+                    "taskID": "progression_construction_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "CONSTRUCTION",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Construction",
+                    "taskID": "progression_construction_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "CONSTRUCTION",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Construction",
+                    "taskID": "progression_construction_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "CONSTRUCTION",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Construction",
+                    "taskID": "progression_construction_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "CONSTRUCTION",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Construction",
+                    "taskID": "progression_construction_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "CONSTRUCTION",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Construction",
+                    "taskID": "progression_construction_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "CONSTRUCTION",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Construction",
+                    "taskID": "progression_construction_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "CONSTRUCTION",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Construction",
+                    "taskID": "progression_construction_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "CONSTRUCTION",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Construction",
+                    "taskID": "progression_construction_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "CONSTRUCTION",
+                        "required_level": 99
+                    }
+                },
+                {
+                    "name": "Reach Level 10 Sailing",
+                    "taskID": "progression_sailing_10",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 10,
+                    "constraints": {
+                        "required_skill": "SAILING",
+                        "required_level": 10
+                    }
+                },
+                {
+                    "name": "Reach Level 20 Sailing",
+                    "taskID": "progression_sailing_20",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 1,
+                    "level": 20,
+                    "constraints": {
+                        "required_skill": "SAILING",
+                        "required_level": 20
+                    }
+                },
+                {
+                    "name": "Reach Level 30 Sailing",
+                    "taskID": "progression_sailing_30",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 30,
+                    "constraints": {
+                        "required_skill": "SAILING",
+                        "required_level": 30
+                    }
+                },
+                {
+                    "name": "Reach Level 40 Sailing",
+                    "taskID": "progression_sailing_40",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 40,
+                    "constraints": {
+                        "required_skill": "SAILING",
+                        "required_level": 40
+                    }
+                },
+                {
+                    "name": "Reach Level 50 Sailing",
+                    "taskID": "progression_sailing_50",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 2,
+                    "level": 50,
+                    "constraints": {
+                        "required_skill": "SAILING",
+                        "required_level": 50
+                    }
+                },
+                {
+                    "name": "Reach Level 60 Sailing",
+                    "taskID": "progression_sailing_60",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 60,
+                    "constraints": {
+                        "required_skill": "SAILING",
+                        "required_level": 60
+                    }
+                },
+                {
+                    "name": "Reach Level 70 Sailing",
+                    "taskID": "progression_sailing_70",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 3,
+                    "level": 70,
+                    "constraints": {
+                        "required_skill": "SAILING",
+                        "required_level": 70
+                    }
+                },
+                {
+                    "name": "Reach Level 80 Sailing",
+                    "taskID": "progression_sailing_80",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 4,
+                    "level": 80,
+                    "constraints": {
+                        "required_skill": "SAILING",
+                        "required_level": 80
+                    }
+                },
+                {
+                    "name": "Reach Level 90 Sailing",
+                    "taskID": "progression_sailing_90",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 90,
+                    "constraints": {
+                        "required_skill": "SAILING",
+                        "required_level": 90
+                    }
+                },
+                {
+                    "name": "Reach Level 99 Sailing",
+                    "taskID": "progression_sailing_99",
+                    "category": "Progression",
+                    "completion_type": "SKILL_THRESHOLD",
+                    "base_points": 5,
+                    "level": 99,
+                    "constraints": {
+                        "required_skill": "SAILING",
+                        "required_level": 99
+                    }
+                }
+            ]
+        }
+    ]
+}

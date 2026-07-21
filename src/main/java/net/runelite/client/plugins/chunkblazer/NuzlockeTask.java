@@ -30,6 +30,31 @@ public class NuzlockeTask
 
 	private Integer level;
 
+	/**
+	 * Marks a task as GROUP content (raids, Nex, group bosses) — an encounter a
+	 * player is expected to fight alongside others.
+	 *
+	 * <p>Two things follow from it in {@code NPCKillModule}:
+	 * <ul>
+	 *   <li>The solo-only gates (contested / startedFresh / cannon / relog-grace)
+	 *       are skipped. They exist for solo speed-and-gear challenges and are
+	 *       unsatisfiable in a team: a teammate's hitsplat sets {@code contested},
+	 *       and the boss is only at full health for whoever lands the very first
+	 *       hit of the encounter.</li>
+	 *   <li>The fight record's idle TTL is extended, so a long mechanic phase
+	 *       where you land no hits doesn't discard your stake in the kill.</li>
+	 * </ul>
+	 *
+	 * <p>The always-on {@code damage > 0} check still applies — you must have
+	 * personally damaged the NPC that died. This flag widens who may ALSO have
+	 * hit it; it never grants credit for a kill you took no part in.
+	 *
+	 * <p>Authoring a group task WITH a time or equipment constraint is a
+	 * contradiction and is rejected at load — see {@link #getGroupContentSchemaError()}.
+	 */
+	@SerializedName("group_content")
+	private Boolean groupContent;
+
 	@SerializedName("is_unlocked")
 	private Boolean isUnlocked;
 
@@ -72,6 +97,42 @@ public class NuzlockeTask
 	public int getLevelRequirement()
 	{
 		return level != null ? level : 1;
+	}
+
+	/**
+	 * True when this task is group content. Null-safe: absent means solo, so
+	 * every existing task keeps today's behaviour.
+	 */
+	public boolean isGroupContent()
+	{
+		return groupContent != null && groupContent;
+	}
+
+	/**
+	 * Validates the group_content flag against the rest of the task, and returns
+	 * a human-readable problem or null when the task is consistent.
+	 *
+	 * <p>Time and equipment constraints turn on the solo-only gates, which a
+	 * group encounter can never satisfy — the task would look authored-and-live
+	 * but be impossible to complete, failing with a baffling "must be solo"
+	 * message. That combination is a schema error, not a hard challenge, so it's
+	 * caught at load rather than in-game.
+	 */
+	public String getGroupContentSchemaError()
+	{
+		if (!isGroupContent() || constraints == null)
+		{
+			return null;
+		}
+		if (constraints.hasTimeLimit())
+		{
+			return "group_content tasks cannot have a time limit (the solo-only gates it enables can't be met in a team)";
+		}
+		if (constraints.hasEquipmentConstraints())
+		{
+			return "group_content tasks cannot have equipment constraints (the solo-only gates they enable can't be met in a team)";
+		}
+		return null;
 	}
 
 	public boolean isLocked()
@@ -124,6 +185,7 @@ public class NuzlockeTask
 
 			// Boolean field (with null check)
 			task.setIsUnlocked(getBooleanOrNull(obj, "is_unlocked"));
+			task.setGroupContent(getBooleanOrNull(obj, "group_content"));
 
 			// Handle required_items - can be array or single object
 			if (obj.has("required_items"))

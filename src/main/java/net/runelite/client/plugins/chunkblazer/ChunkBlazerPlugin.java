@@ -1145,6 +1145,7 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				if (task.getTaskId() != null)
 				{
+					warnOnSchemaError(task);
 					tasksById.putIfAbsent(task.getTaskId(), task);
 				}
 			}
@@ -1156,9 +1157,26 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			if (task.getTaskId() != null)
 			{
+				warnOnSchemaError(task);
 				tasksById.putIfAbsent(task.getTaskId(), task);
 				globalTaskIds.add(task.getTaskId());
 			}
+		}
+	}
+
+	/**
+	 * Surface authoring mistakes that would make a task silently uncompletable.
+	 * Logged rather than thrown: one bad task must not stop the other ~2400 from
+	 * loading, and the player still sees the task (it just can't be finished) —
+	 * the point is that the mistake is visible in the log at startup instead of
+	 * being discovered by whoever wastes an evening attempting it.
+	 */
+	private void warnOnSchemaError(NuzlockeTask task)
+	{
+		String problem = task.getGroupContentSchemaError();
+		if (problem != null)
+		{
+			log.warn("[CHUNKBLAZER] task schema error in '{}': {}", task.getTaskId(), problem);
 		}
 	}
 
@@ -1181,7 +1199,24 @@ public class ChunkBlazerPlugin extends Plugin
 	{
 		globalTasks.clear();
 
-		String file = "Quest_Tasks.json";
+		// Quest_Tasks = the quest pool; Progression_Tasks = the per-skill level
+		// ladder. Both are region-independent and both land in globalTasks; the
+		// only thing that distinguishes them downstream is completion_type.
+		for (String file : new String[]{ "Quest_Tasks.json", "Progression_Tasks.json" })
+		{
+			loadGlobalTaskFile(file);
+		}
+
+		if (globalTasks.isEmpty())
+		{
+			// Loud, because the failure is otherwise invisible: the section
+			// just renders empty and no global task ever awards a point.
+			log.error("Global Tasks loaded but contained ZERO tasks — check the region-group wrapper");
+		}
+	}
+
+	private void loadGlobalTaskFile(String file)
+	{
 		String alt = flipJsonExtensionCase(file);
 		String abs = "/net/runelite/client/plugins/chunkblazer/";
 		String[] candidates = { file, abs + file, alt, abs + alt };
@@ -1212,10 +1247,11 @@ public class ChunkBlazerPlugin extends Plugin
 
 			if (data == null || data.isEmpty())
 			{
-				log.error("Global Tasks file parsed to nothing");
+				log.error("Global Tasks file {} parsed to nothing", file);
 				return;
 			}
 
+			int before = globalTasks.size();
 			for (List<NuzlockeChunk> groups : data.values())
 			{
 				if (groups == null)
@@ -1231,17 +1267,11 @@ public class ChunkBlazerPlugin extends Plugin
 					globalTasks.addAll(group.getTasks());
 				}
 			}
-
-			if (globalTasks.isEmpty())
-			{
-				// Loud, because the failure is otherwise invisible: the section
-				// just renders empty and no quest ever awards a point.
-				log.error("Global Tasks file loaded but contained ZERO tasks — check the region-group wrapper");
-			}
+			log.debug("Global Tasks: loaded {} from {}", globalTasks.size() - before, file);
 		}
 		catch (Exception e)
 		{
-			log.error("Failed to load Global Tasks: {}", e.getMessage(), e);
+			log.error("Failed to load Global Tasks from {}: {}", file, e.getMessage(), e);
 		}
 		finally
 		{
@@ -1324,8 +1354,14 @@ public class ChunkBlazerPlugin extends Plugin
 	{
 		Set<String> completedTaskIds = getCompletedTaskIds();
 
+		// Freeze the Progression baseline before any SKILL_THRESHOLD task is
+		// considered. First call captures live levels; later calls return what
+		// was captured then.
+		Map<String, Integer> progressionBaseline = ensureProgressionBaseline();
+
 		List<NuzlockeTask> backfilled = new ArrayList<>();
 		int backfilledPoints = 0;
+		int progressionSkipped = 0;
 
 		for (NuzlockeTask task : globalTasks)
 		{
@@ -1335,14 +1371,28 @@ public class ChunkBlazerPlugin extends Plugin
 				continue;
 			}
 
-			// Quest tasks are pass/fail, never counted. targetQuantity is a
+			// Progression is NOT retroactive: a rung at or below the frozen
+			// baseline was already cleared before this account was tracked, so
+			// it is dropped entirely — never registered, never shown, never
+			// scored. Only rungs above the baseline are live.
+			if (isProgressionTask(task) && !isProgressionRungEligible(task, progressionBaseline))
+			{
+				progressionSkipped++;
+				continue;
+			}
+
+			// Global tasks are pass/fail, never counted. targetQuantity is a
 			// transient defaulting to 0, and a 0 target reads as "already done"
 			// to progress comparisons elsewhere, so pin it explicitly.
 			task.setTargetQuantity(1);
 			task.setCurrentProgress(0);
 			task.setCompleted(false);
 
-			if (isQuestFinished(task))
+			// Already-satisfied global tasks settle in one batch. For quests that
+			// means "finished before we looked"; for Progression it means a rung
+			// ABOVE the baseline that was crossed while the plugin was off — real
+			// forward progress we simply didn't witness, so it still pays.
+			if (isQuestFinished(task) || isProgressionRungReached(task))
 			{
 				task.setCurrentProgress(1);
 				task.setCompleted(true);
@@ -1354,6 +1404,11 @@ public class ChunkBlazerPlugin extends Plugin
 			taskModuleManager.registerActiveTask(task);
 		}
 
+		if (progressionSkipped > 0)
+		{
+			log.debug("Progression: {} rungs at or below the frozen baseline — not eligible", progressionSkipped);
+		}
+
 		if (backfilled.isEmpty())
 		{
 			return;
@@ -1363,7 +1418,139 @@ public class ChunkBlazerPlugin extends Plugin
 		completeTasks(backfilled);
 
 		addPluginChatMessage("Global Tasks: " + backfilled.size()
-			+ " quests already complete (+" + backfilledPoints + " points).");
+			+ " already complete (+" + backfilledPoints + " points).");
+	}
+
+	// --- Progression baseline ---------------------------------------------
+
+	private static final String PROGRESSION_TYPE = "SKILL_THRESHOLD";
+
+	private boolean isProgressionTask(NuzlockeTask task)
+	{
+		return PROGRESSION_TYPE.equalsIgnoreCase(task.getCompletionType());
+	}
+
+	/**
+	 * The frozen per-skill levels this account had when ChunkBlazer first saw it.
+	 * Progression rungs at or below these never pay — that is the whole
+	 * "no retroactive points for an established account" rule.
+	 *
+	 * <p>Captured ONCE and then never rewritten. Two consequences worth knowing:
+	 * <ul>
+	 *   <li>A fresh account baselines at all 1s (Hitpoints 10), so the entire
+	 *       ladder is live for it. The Hitpoints level-10 rung isn't in the task
+	 *       data at all, since every account spawns having cleared it.</li>
+	 *   <li>If the stored baseline is ever lost, the next login re-captures at
+	 *       CURRENT levels. That is strictly more restrictive than the original —
+	 *       it can cost a player rungs they were working toward, but it can never
+	 *       hand out points that weren't earned. Failing in that direction is
+	 *       deliberate.</li>
+	 * </ul>
+	 *
+	 * <p>Client thread only — reads live skill data.
+	 */
+	private Map<String, Integer> ensureProgressionBaseline()
+	{
+		Map<String, Integer> baseline = parseProgressionBaseline(config.progressionBaseline());
+		if (!baseline.isEmpty())
+		{
+			return baseline;
+		}
+
+		if (client.getGameState() != GameState.LOGGED_IN)
+		{
+			// Don't freeze a baseline off garbage skill data. Returning empty
+			// means every rung reads as ineligible for now; the next call after
+			// login captures for real.
+			return baseline;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for (Skill skill : Skill.values())
+		{
+			int level = client.getRealSkillLevel(skill);
+			baseline.put(skill.name(), level);
+			if (sb.length() > 0)
+			{
+				sb.append(',');
+			}
+			sb.append(skill.name()).append(':').append(level);
+		}
+
+		configManager.setConfiguration("chunkblazer", "progressionBaseline", sb.toString());
+		log.info("[CHUNKBLAZER] Progression baseline captured for this account: {}", sb);
+		return baseline;
+	}
+
+	private Map<String, Integer> parseProgressionBaseline(String csv)
+	{
+		Map<String, Integer> baseline = new HashMap<>();
+		if (csv == null || csv.trim().isEmpty())
+		{
+			return baseline;
+		}
+		for (String entry : csv.split(","))
+		{
+			String[] parts = entry.trim().split(":");
+			if (parts.length != 2)
+			{
+				continue;
+			}
+			try
+			{
+				baseline.put(parts[0].trim().toUpperCase(), Integer.parseInt(parts[1].trim()));
+			}
+			catch (NumberFormatException ignored)
+			{
+				// Malformed entry — treat that skill as unbaselined (ineligible).
+			}
+		}
+		return baseline;
+	}
+
+	/**
+	 * Is this Progression rung above the frozen baseline, i.e. still earnable?
+	 * A skill missing from the baseline reads as NOT eligible: that only happens
+	 * when the baseline hasn't been captured yet, and refusing to pay is the safe
+	 * direction (the rung becomes live on the next login once the baseline exists).
+	 */
+	private boolean isProgressionRungEligible(NuzlockeTask task, Map<String, Integer> baseline)
+	{
+		TaskConstraints c = task.getConstraints();
+		if (c == null || c.getRequiredSkill() == null)
+		{
+			return false;
+		}
+		Integer base = baseline.get(c.getRequiredSkill().toUpperCase());
+		return base != null && c.getRequiredLevel() > base;
+	}
+
+	/**
+	 * Whether an ELIGIBLE Progression rung has already been reached — the player
+	 * levelled past it while the plugin was off. Callers must have filtered on
+	 * {@link #isProgressionRungEligible} first; this only asks about the level.
+	 * Real level, never boosted.
+	 */
+	private boolean isProgressionRungReached(NuzlockeTask task)
+	{
+		if (!isProgressionTask(task) || client.getGameState() != GameState.LOGGED_IN)
+		{
+			return false;
+		}
+		TaskConstraints c = task.getConstraints();
+		if (c == null || c.getRequiredSkill() == null)
+		{
+			return false;
+		}
+		try
+		{
+			return client.getRealSkillLevel(Skill.valueOf(c.getRequiredSkill().toUpperCase()))
+				>= c.getRequiredLevel();
+		}
+		catch (IllegalArgumentException e)
+		{
+			return false;
+		}
 	}
 
 	/**
