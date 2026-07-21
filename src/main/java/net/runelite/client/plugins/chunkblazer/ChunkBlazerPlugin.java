@@ -1318,13 +1318,13 @@ public class ChunkBlazerPlugin extends Plugin
 				return false;
 			}
 
-			// LOGGED_IN is NOT enough: the skill table is still zeroed for a few
-			// ticks after it fires (same race as the null localPlayer name). The
-			// Progression baseline is captured from that table and then FROZEN,
-			// so reading it early doesn't just delay a feature — it permanently
-			// records every skill as 0, which makes every rung look earnable and
-			// retroactively pays out the whole ladder. Wait for real data.
-			if (!isSkillDataReady())
+			// LOGGED_IN is NOT enough, and neither is a single-skill probe: the
+			// table hydrates skill by skill over several ticks. The Progression
+			// baseline is read from it and then FROZEN, so reading it early
+			// doesn't merely delay a feature — it permanently records the
+			// not-yet-loaded skills as 0, which makes their rungs look earnable
+			// and pays out the ladder retroactively. Wait for the whole table.
+			if (!isSkillDataSettled())
 			{
 				return false;
 			}
@@ -1460,19 +1460,96 @@ public class ChunkBlazerPlugin extends Plugin
 	 *
 	 * <p>Client thread only — reads live skill data.
 	 */
+	// How many consecutive identical readings of the skill table before we trust
+	// it. Completeness (below) is the real gate; this is the backstop for the one
+	// skill completeness can't assert on — see SAILING in isSkillDataComplete().
+	private static final int REQUIRED_STABLE_SKILL_SAMPLES = 3;
+
+	private int[] lastSkillSample;
+	private int stableSkillSamples;
+
 	/**
-	 * Whether the client's skill table actually holds this account's levels yet.
+	 * Whether the client's skill table holds this account's real levels.
 	 *
-	 * <p>GameState.LOGGED_IN fires BEFORE the skill table is populated — for a
-	 * few ticks every skill reads 0. Hitpoints is the reliable probe because no
-	 * account can be below 10: an account is either at 10+ HP or the data isn't
-	 * loaded. (Seen for real on 2026-07-21: the baseline froze at all-zeros and
-	 * handed a maxed account the entire 671-point ladder.)
+	 * <p>The table hydrates INCREMENTALLY, in {@link Skill} enum order, over
+	 * several ticks after GameState.LOGGED_IN. Both halves of this were learned
+	 * the hard way on 2026-07-21:
+	 * <ol>
+	 *   <li>LOGGED_IN alone → the whole table read 0, baseline froze at all
+	 *       zeros, and a maxed account was handed the entire 671-point ladder.</li>
+	 *   <li>Hitpoints-only probe → Hitpoints is 4th in the enum, so it goes
+	 *       valid while everything from Fishing (11th) onward is still 0. The
+	 *       baseline froze half-real, and the late skills paid out retroactively.</li>
+	 * </ol>
+	 *
+	 * <p>The correct invariant is not a timer: <b>no OSRS skill can be below 1</b>,
+	 * so a 0 anywhere means that entry hasn't loaded. Checking EVERY skill is
+	 * therefore complete and deterministic — it waits exactly as long as the
+	 * client needs, which is what makes it safe on a slow machine or connection
+	 * where a fixed delay would be a guess.
+	 *
+	 * <p>Sailing is the one exception: if it isn't live in this client build it
+	 * reads 0 forever, and requiring it would stall capture permanently. It is
+	 * excluded from the completeness test but still covered by the stability
+	 * test, so a Sailing value that is merely LATE (it hydrates last) still
+	 * blocks capture until it settles.
 	 */
-	private boolean isSkillDataReady()
+	private boolean isSkillDataComplete()
 	{
-		return client.getGameState() == GameState.LOGGED_IN
-			&& client.getRealSkillLevel(Skill.HITPOINTS) >= 10;
+		if (client.getGameState() != GameState.LOGGED_IN)
+		{
+			return false;
+		}
+		if (client.getRealSkillLevel(Skill.HITPOINTS) < 10)
+		{
+			return false;
+		}
+		for (Skill skill : Skill.values())
+		{
+			if (skill == Skill.SAILING)
+			{
+				continue;
+			}
+			if (client.getRealSkillLevel(skill) < 1)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Complete AND unchanged for {@link #REQUIRED_STABLE_SKILL_SAMPLES}
+	 * consecutive readings. Advances internal state, so it must only be driven
+	 * from the retry loop in {@link #registerGlobalTasks}.
+	 */
+	private boolean isSkillDataSettled()
+	{
+		if (!isSkillDataComplete())
+		{
+			lastSkillSample = null;
+			stableSkillSamples = 0;
+			return false;
+		}
+
+		Skill[] skills = Skill.values();
+		int[] now = new int[skills.length];
+		for (int i = 0; i < skills.length; i++)
+		{
+			now[i] = client.getRealSkillLevel(skills[i]);
+		}
+
+		if (java.util.Arrays.equals(now, lastSkillSample))
+		{
+			stableSkillSamples++;
+		}
+		else
+		{
+			stableSkillSamples = 0;
+		}
+		lastSkillSample = now;
+
+		return stableSkillSamples >= REQUIRED_STABLE_SKILL_SAMPLES;
 	}
 
 	private Map<String, Integer> ensureProgressionBaseline()
@@ -1483,15 +1560,16 @@ public class ChunkBlazerPlugin extends Plugin
 			return baseline;
 		}
 
-		if (!isSkillDataReady())
+		if (!isSkillDataComplete())
 		{
-			// Don't freeze a baseline off garbage skill data — that mistake is
-			// permanent and pays out the whole ladder. Returning empty means
-			// every rung reads as ineligible for now; a later call captures for
-			// real. Belt to the caller's braces: registerGlobalTasks already
-			// reschedules until isSkillDataReady(), so this should be
-			// unreachable, but the cost of being wrong here is far too high to
-			// rely on one gate.
+			// Don't freeze a baseline off a half-loaded skill table — that
+			// mistake is permanent and pays out the ladder. Returning empty
+			// means every rung reads as ineligible for now; a later call
+			// captures for real. Belt to the caller's braces:
+			// registerGlobalTasks already reschedules until the table settles,
+			// so this should be unreachable — but this bug shipped twice, so
+			// one gate is not enough. Uses the stateless completeness check so
+			// calling it here can't disturb the caller's stability counter.
 			return baseline;
 		}
 
@@ -1513,25 +1591,30 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Undo the all-zeros baseline bug (2026-07-21).
+	 * Undo a baseline frozen from a half-loaded skill table (2026-07-21).
 	 *
-	 * <p>The first build of Progression captured the baseline on LOGGED_IN, before
-	 * the skill table was populated, so it froze every skill at 0. With a 0
-	 * baseline every rung is "above baseline", and the already-reached check then
-	 * completed all 239 of them — handing established accounts the full ladder
-	 * retroactively, which is precisely what Progression is designed not to do.
+	 * <p>Two builds got this wrong in two different ways, and this repairs both:
+	 * <ul>
+	 *   <li>Captured on LOGGED_IN → every skill 0.</li>
+	 *   <li>Captured on a Hitpoints-only probe → the first ten skills real, the
+	 *       rest still 0 (the table hydrates in enum order).</li>
+	 * </ul>
+	 * Either way a 0 makes every rung of that skill "above baseline", and the
+	 * already-reached check pays them all out — exactly what Progression exists
+	 * to prevent.
 	 *
-	 * <p>A baseline is provably bogus when it records Hitpoints below 10: no
-	 * account can be there. When we see one, clear it and un-complete every
-	 * progression task (refunding the points they wrongly paid) so the next
-	 * capture — now correctly gated on {@link #isSkillDataReady()} — redoes it
-	 * honestly. Legitimately earned progression tasks are lost too, but they were
-	 * only ever earnable in the seconds since this build shipped, and re-earning
-	 * one costs a level-up we can detect again.
+	 * <p>The tell is an impossible value, not a version marker: <b>no OSRS skill
+	 * can be below 1</b>, and no account below 10 Hitpoints. Sailing is exempt
+	 * because it legitimately reads 0 when not live. Any baseline containing
+	 * such a value is cleared, and every progression task is un-completed with
+	 * its points refunded, so the next capture redoes it honestly. Legitimately
+	 * earned rungs are lost with them — acceptable, because they were only
+	 * earnable in the minutes since this shipped and re-earning one just needs
+	 * the level-up to be seen again.
 	 *
-	 * <p>Self-healing rather than a one-shot: it keys off the impossible value,
-	 * so it repairs any client that ran the bad build whenever it next loads,
-	 * and no-ops forever after.
+	 * <p>Self-healing rather than one-shot: keyed off the impossible value, so
+	 * it repairs any client that ran either bad build whenever it next loads,
+	 * then no-ops forever.
 	 */
 	public void migrateRepairBogusProgressionBaseline()
 	{
@@ -1542,8 +1625,7 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		Map<String, Integer> baseline = parseProgressionBaseline(raw);
-		Integer hp = baseline.get(Skill.HITPOINTS.name());
-		if (hp != null && hp >= 10)
+		if (!isBaselineImpossible(baseline))
 		{
 			return; // sane baseline, nothing to do
 		}
@@ -1580,6 +1662,34 @@ public class ChunkBlazerPlugin extends Plugin
 
 		log.warn("[CHUNKBLAZER] repaired a bogus all-zeros Progression baseline: "
 			+ "cleared baseline, un-completed {} progression tasks, refunded {} points", removed, refunded);
+	}
+
+	/**
+	 * True if this baseline records a level no account can actually have, which
+	 * means it was frozen from a partly-loaded skill table. Sailing is exempt: it
+	 * reads 0 when the skill isn't live, which is legitimate. A skill missing
+	 * entirely also counts as impossible — a complete capture writes all of them.
+	 */
+	private boolean isBaselineImpossible(Map<String, Integer> baseline)
+	{
+		if (baseline.isEmpty())
+		{
+			return false;
+		}
+		for (Skill skill : Skill.values())
+		{
+			if (skill == Skill.SAILING)
+			{
+				continue;
+			}
+			Integer level = baseline.get(skill.name());
+			int floor = skill == Skill.HITPOINTS ? 10 : 1;
+			if (level == null || level < floor)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private Map<String, Integer> parseProgressionBaseline(String csv)

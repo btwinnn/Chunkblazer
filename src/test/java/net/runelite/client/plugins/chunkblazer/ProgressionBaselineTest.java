@@ -83,9 +83,18 @@ class ProgressionBaselineTest
 		return m.invoke(plugin, args);
 	}
 
-	private boolean isSkillDataReady() throws Exception
+	private boolean isSkillDataComplete() throws Exception
 	{
-		return (Boolean) invoke("isSkillDataReady", new Class<?>[]{});
+		return (Boolean) invoke("isSkillDataComplete", new Class<?>[]{});
+	}
+
+	/** Stub the whole skill table, then override individual skills per test. */
+	private void stubAllSkills(int level)
+	{
+		for (Skill s : Skill.values())
+		{
+			lenient().when(client.getRealSkillLevel(s)).thenReturn(level);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -107,7 +116,7 @@ class ProgressionBaselineTest
 		when(client.getGameState()).thenReturn(GameState.LOGGED_IN);
 		when(client.getRealSkillLevel(Skill.HITPOINTS)).thenReturn(0);
 
-		assertDoesNotThrow(() -> assertFalse(isSkillDataReady(),
+		assertDoesNotThrow(() -> assertFalse(isSkillDataComplete(),
 			"a 0 Hitpoints reading means the skill table hasn't loaded"));
 	}
 
@@ -116,17 +125,53 @@ class ProgressionBaselineTest
 	{
 		when(client.getGameState()).thenReturn(GameState.LOGIN_SCREEN);
 
-		assertDoesNotThrow(() -> assertFalse(isSkillDataReady()));
+		assertDoesNotThrow(() -> assertFalse(isSkillDataComplete()));
 	}
 
 	@Test
-	void skillDataIsReadyAtTenHitpoints()
+	void skillDataIsReadyForAFreshAccount()
 	{
 		when(client.getGameState()).thenReturn(GameState.LOGGED_IN);
-		when(client.getRealSkillLevel(Skill.HITPOINTS)).thenReturn(10);
+		stubAllSkills(1);
+		lenient().when(client.getRealSkillLevel(Skill.HITPOINTS)).thenReturn(10);
 
-		assertDoesNotThrow(() -> assertTrue(isSkillDataReady(),
-			"a freshly created account sits at exactly 10 Hitpoints and is valid"));
+		assertDoesNotThrow(() -> assertTrue(isSkillDataComplete(),
+			"a brand new account is all 1s with 10 Hitpoints — a complete, valid table"));
+	}
+
+	/**
+	 * THE SECOND INCIDENT (2026-07-21, same night). A Hitpoints-only probe passed
+	 * because Hitpoints is 4th in the Skill enum, while the table hydrates in
+	 * enum order — everything from Fishing (11th) onward still read 0. The
+	 * baseline froze half-real and the late skills paid out retroactively.
+	 */
+	@Test
+	void skillDataIsNotCompleteWhilstLaterSkillsAreStillZero()
+	{
+		when(client.getGameState()).thenReturn(GameState.LOGGED_IN);
+		stubAllSkills(99);
+		// Exactly the observed cutoff: hydrated through FLETCHING, zero after.
+		for (Skill s : new Skill[]{ Skill.FISHING, Skill.FIREMAKING, Skill.CRAFTING,
+			Skill.SMITHING, Skill.MINING, Skill.HERBLORE, Skill.AGILITY, Skill.THIEVING,
+			Skill.SLAYER, Skill.FARMING, Skill.RUNECRAFT, Skill.HUNTER, Skill.CONSTRUCTION })
+		{
+			lenient().when(client.getRealSkillLevel(s)).thenReturn(0);
+		}
+
+		assertDoesNotThrow(() -> assertFalse(isSkillDataComplete(),
+			"a partly hydrated table must not be trusted — no OSRS skill can be 0"));
+	}
+
+	/** Sailing reads 0 when the skill isn't live; that must not stall capture. */
+	@Test
+	void sailingAtZeroDoesNotBlockCompleteness()
+	{
+		when(client.getGameState()).thenReturn(GameState.LOGGED_IN);
+		stubAllSkills(99);
+		lenient().when(client.getRealSkillLevel(Skill.SAILING)).thenReturn(0);
+
+		assertDoesNotThrow(() -> assertTrue(isSkillDataComplete(),
+			"Sailing is exempt — requiring it would stall capture forever when not live"));
 	}
 
 	/**
@@ -151,8 +196,8 @@ class ProgressionBaselineTest
 	{
 		when(config.progressionBaseline()).thenReturn("");
 		when(client.getGameState()).thenReturn(GameState.LOGGED_IN);
-		when(client.getRealSkillLevel(any(Skill.class))).thenReturn(70);
-		when(client.getRealSkillLevel(Skill.HITPOINTS)).thenReturn(75);
+		stubAllSkills(70);
+		lenient().when(client.getRealSkillLevel(Skill.HITPOINTS)).thenReturn(75);
 
 		Map<String, Integer> baseline = ensureBaseline();
 
@@ -242,10 +287,47 @@ class ProgressionBaselineTest
 			"every progression_* id must be dropped, non-progression tasks kept");
 	}
 
+	/**
+	 * The second corruption shape: Hitpoints is real, so the original
+	 * Hitpoints-only repair check would have skipped it, leaving the late skills
+	 * baselined at 0 and still paying out.
+	 */
+	@Test
+	void repairAlsoCatchesAPartiallyHydratedBaseline()
+	{
+		StringBuilder sb = new StringBuilder();
+		for (Skill s : Skill.values())
+		{
+			if (sb.length() > 0)
+			{
+				sb.append(',');
+			}
+			// Real through FLETCHING, zero afterwards — the observed shape.
+			boolean hydrated = s.ordinal() <= Skill.FLETCHING.ordinal();
+			sb.append(s.name()).append(':').append(hydrated ? 99 : 0);
+		}
+		when(config.progressionBaseline()).thenReturn(sb.toString());
+		when(config.completedTasks()).thenReturn("progression_construction_50,defeat_mugger");
+		when(config.totalPoints()).thenReturn(100);
+
+		plugin.migrateRepairBogusProgressionBaseline();
+
+		verify(configManager).setConfiguration("chunkblazer", "progressionBaseline", "");
+	}
+
 	@Test
 	void repairIsANoOpForASaneBaseline()
 	{
-		when(config.progressionBaseline()).thenReturn("HITPOINTS:99,THIEVING:80");
+		StringBuilder sane = new StringBuilder();
+		for (Skill s : Skill.values())
+		{
+			if (sane.length() > 0)
+			{
+				sane.append(',');
+			}
+			sane.append(s.name()).append(':').append(s == Skill.SAILING ? 0 : 80);
+		}
+		when(config.progressionBaseline()).thenReturn(sane.toString());
 
 		plugin.migrateRepairBogusProgressionBaseline();
 
