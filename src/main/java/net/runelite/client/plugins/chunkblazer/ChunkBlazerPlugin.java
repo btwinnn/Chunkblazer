@@ -2457,6 +2457,17 @@ public class ChunkBlazerPlugin extends Plugin
 
 		if (removed > 0)
 		{
+			// Declares itself for the same reason the progression repair does: on
+			// the wire this is indistinguishable from a wipe, and there are 27
+			// charter regions to shed against a median account holding 5 chunks.
+			//
+			// This one fails WORSE than the others if refused, because the
+			// completion flag below is set unconditionally and the migration never
+			// re-runs: the server would keep the charter chunks, the next login's
+			// union would restore them locally, and the strip would silently undo
+			// itself permanently rather than retrying.
+			declareIntentionalReset("charter seed strip removed "
+				+ removed + " charter chunk(s)");
 			setAccountState("unlockedChunks", String.join(",", kept));
 		}
 		configManager.setConfiguration("chunkblazer", CHARTER_SEED_STRIPPED_KEY, "true");
