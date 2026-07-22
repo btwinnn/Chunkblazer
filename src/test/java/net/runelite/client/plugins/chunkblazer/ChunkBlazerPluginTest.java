@@ -99,10 +99,16 @@ class ChunkBlazerPluginTest
 		plugin.migrateStripSeededCharterChunks();
 
 		// unlockedChunks rewritten WITHOUT the charter region, keeping the rest.
-		ArgumentCaptor<String> written = ArgumentCaptor.forClass(String.class);
+		//
+		// Captured as Object, not String: per-account writes now go through
+		// setAccountState(String, Object), which binds to ConfigManager's generic
+		// setConfiguration(String, String, T) overload rather than the all-String
+		// one. Both stringify into the same ConfigData, so this is purely about
+		// naming the overload Mockito should watch.
+		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
 		verify(configManager).setConfiguration(eq("chunkblazer"), eq("unlockedChunks"), written.capture());
-		assertTrue(written.getValue().contains(String.valueOf(NON_CHARTER_REGION)));
-		assertFalse(written.getValue().contains(String.valueOf(CHARTER_REGION)));
+		assertTrue(String.valueOf(written.getValue()).contains(String.valueOf(NON_CHARTER_REGION)));
+		assertFalse(String.valueOf(written.getValue()).contains(String.valueOf(CHARTER_REGION)));
 
 		// Flag set so the migration never runs again.
 		verify(configManager).setConfiguration("chunkblazer", "charterSeedStripped", "true");

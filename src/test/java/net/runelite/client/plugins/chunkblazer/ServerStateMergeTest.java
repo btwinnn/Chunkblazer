@@ -108,9 +108,14 @@ class ServerStateMergeTest
 
 	private Set<String> capturedCsv(String key)
 	{
-		ArgumentCaptor<String> written = ArgumentCaptor.forClass(String.class);
+		// Object, not String: per-account writes route through
+		// setAccountState(String, Object), which binds ConfigManager's generic
+		// setConfiguration(String, String, T) overload rather than the all-String
+		// one. Same ConfigData, same stringification — this just names the
+		// overload Mockito watches.
+		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
 		verify(configManager).setConfiguration(eq("chunkblazer"), eq(key), written.capture());
-		return new LinkedHashSet<>(Arrays.asList(written.getValue().split(",")));
+		return new LinkedHashSet<>(Arrays.asList(String.valueOf(written.getValue()).split(",")));
 	}
 
 	/**

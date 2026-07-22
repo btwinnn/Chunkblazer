@@ -51,6 +51,7 @@ import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ProfileChanged;
+import net.runelite.client.events.RuneScapeProfileChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
@@ -280,8 +281,15 @@ public class ChunkBlazerPlugin extends Plugin
 		// Load task data from JSON
 		loadChunkData();
 
-		// Ensure the free starting chunk is unlocked
-		ensureStartingChunkUnlocked();
+		// The starting-chunk bootstrap deliberately does NOT run here.
+		//
+		// startUp() happens at client launch, long before anyone has logged in,
+		// so at this point RuneLite cannot say which account the write would
+		// belong to. Writing progress then is the root cause of the cross-account
+		// corruption this refactor exists to remove, and once the store moves to
+		// RSProfile the write would not land at all. It now runs from
+		// onRuneScapeProfileChanged(), which fires exactly when the account
+		// becomes known — and again on every account switch.
 
 		// Initialize task module manager
 		taskModuleManager.initialize();
@@ -595,6 +603,46 @@ public class ChunkBlazerPlugin extends Plugin
 	{
 		revokeSyncAuthorityForProfileSwitch();
 
+		loadActiveTasks();
+		if (panel != null)
+		{
+			panel.updatePanel();
+		}
+	}
+
+	/**
+	 * "We now know which account is playing" — and, on a switch, "we now know it
+	 * is a different one". Posted by ConfigManager whenever the RS profile key
+	 * changes, including the null → real transition at login and the real → null
+	 * transition at logout.
+	 *
+	 * <p>This replaces {@code startUp()} as the trigger for the starting-chunk
+	 * bootstrap. startUp() runs at client launch with no account available; this
+	 * runs at the first moment a per-account write is meaningful, which is the
+	 * whole point. It is also the switch signal, so the reload below rebuilds the
+	 * panel against the newly-active account rather than leaving the previous
+	 * one's tasks on screen.
+	 *
+	 * <p>Guards on {@code newProfile} rather than calling the bootstrap
+	 * unconditionally: the logout edge fires this too, and bootstrapping into a
+	 * null profile is exactly the account-less write being eliminated.
+	 */
+	@Subscribe
+	public void onRuneScapeProfileChanged(RuneScapeProfileChanged event)
+	{
+		if (!isAccountStateAvailable())
+		{
+			log.debug("[CHUNKBLAZER] RS profile cleared (logout) — dropping in-memory task state");
+			loadActiveTasks(); // clears, since state is unavailable
+			if (panel != null)
+			{
+				panel.updatePanel();
+			}
+			return;
+		}
+
+		log.info("[CHUNKBLAZER] RS profile available — bootstrapping account state");
+		ensureStartingChunkUnlocked();
 		loadActiveTasks();
 		if (panel != null)
 		{
@@ -918,7 +966,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			unlocked = unlocked + "," + regionId;
 		}
-		configManager.setConfiguration("chunkblazer", "unlockedChunks", unlocked);
+		setAccountState("unlockedChunks", unlocked);
 		// Persist immediately — see persistUnlockNow(). An unlock that only
 		// lives in memory is lost if the client doesn't shut down cleanly.
 		persistUnlockNow();
@@ -981,7 +1029,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 		if (needsUpdate)
 		{
-			configManager.setConfiguration("chunkblazer", "unlockedChunks", newUnlocked.toString());
+			setAccountState("unlockedChunks", newUnlocked.toString());
 		}
 
 		// Pre-roll tasks for the starting chunk so they're ready immediately.
@@ -1770,7 +1818,7 @@ public class ChunkBlazerPlugin extends Plugin
 			sb.append(skill.name()).append(':').append(level);
 		}
 
-		configManager.setConfiguration("chunkblazer", "progressionBaseline",
+		setAccountState("progressionBaseline",
 			owner + BASELINE_OWNER_SEP + sb);
 		cachedProgressionBaseline = baseline;
 		cachedBaselineOwner = owner;
@@ -1857,12 +1905,12 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 
-		configManager.setConfiguration("chunkblazer", "progressionBaseline", "");
+		setAccountState("progressionBaseline", "");
 		cachedProgressionBaseline = null;
 		cachedBaselineOwner = null;
 		if (removed > 0)
 		{
-			configManager.setConfiguration("chunkblazer", "completedTasks", String.join(",", keep));
+			setAccountState("completedTasks", String.join(",", keep));
 			addPoints(-refunded);
 			completedTaskCache.keySet().removeIf(id -> id.startsWith("progression_"));
 		}
@@ -2298,8 +2346,8 @@ public class ChunkBlazerPlugin extends Plugin
 		String rsnHash = hashRsn(rsn);
 		String modeKey = rsnHash + ":" + mode.name();
 
-		configManager.setConfiguration("chunkblazer", "accountModeHash", modeKey);
-		configManager.setConfiguration("chunkblazer", "gameMode", mode);
+		setAccountState("accountModeHash", modeKey);
+		setAccountState("gameMode", mode);
 
 
 		// Mirror the lock to the server. Local config is the immediate source of
@@ -2402,7 +2450,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 		if (removed > 0)
 		{
-			configManager.setConfiguration("chunkblazer", "unlockedChunks", String.join(",", kept));
+			setAccountState("unlockedChunks", String.join(",", kept));
 		}
 		configManager.setConfiguration("chunkblazer", CHARTER_SEED_STRIPPED_KEY, "true");
 	}
@@ -2721,11 +2769,77 @@ public class ChunkBlazerPlugin extends Plugin
 	// chunks on 2026-07-21. Reset on logout so every session must earn it again.
 	private volatile boolean serverStateMerged;
 
+	private static final String CONFIG_GROUP = "chunkblazer";
+
+	// pointsSpent was added by the points-balance work AFTER this array was
+	// written, and was never added here. clearAccountState() therefore wiped an
+	// alt's EARNED points while leaving the main's SPEND in place — and the
+	// balance is (earned - spent), so the alt was clamped to 0 and could not
+	// unlock anything until it had out-earned the main's total spending.
 	private static final String[] ACCOUNT_STATE_KEYS = {
 		"unlockedChunks", "completedTasks", "assignedTasks", "regionRolledTasks",
 		"currentTaskId", "currentTaskQuantity", "currentTaskProgress",
-		"totalPoints", "bossTokens", "taskProgressData", "progressionBaseline",
+		"totalPoints", "pointsSpent", "bossTokens", "taskProgressData",
+		"progressionBaseline",
 	};
+
+	// --- Per-account state accessors ---------------------------------------
+
+	/**
+	 * Whether RuneLite can currently tell us WHICH account is playing.
+	 *
+	 * <p>Backed by {@code ConfigManager.getRSProfileKey()}, which is derived from
+	 * {@code client.getAccountHash()} and is null whenever no account is logged
+	 * in. This is the gate that makes per-account storage possible at all:
+	 * {@code setRSProfileConfiguration} SILENTLY DISCARDS writes issued while it
+	 * is null — no exception, no return value, the data simply never lands.
+	 *
+	 * <p>Note this goes null on LOGOUT too, not just before the first login, and
+	 * it is driven by {@code AccountHashChanged}/{@code WorldChanged}, which are
+	 * not ordered against our own {@code GameStateChanged} handling. Anything
+	 * that reads per-account state on the way out (notably the destructive
+	 * logout sync) must not assume it is still available.
+	 */
+	private boolean isAccountStateAvailable()
+	{
+		return configManager != null && configManager.getRSProfileKey() != null;
+	}
+
+	/**
+	 * Read one per-account value.
+	 *
+	 * <p>Still profile-scoped storage at this stage — the point of routing every
+	 * caller through here first is that switching the backing store to
+	 * {@code getRSProfileConfiguration} becomes a one-line change in this method
+	 * rather than an edit to ~50 scattered call sites.
+	 */
+	private String getAccountState(String key)
+	{
+		return configManager.getConfiguration(CONFIG_GROUP, key);
+	}
+
+	/**
+	 * Write one per-account value.
+	 *
+	 * <p>Deliberately WARNS AND WRITES when no account is known, rather than
+	 * refusing. Storage is still profile-scoped, so the write does land; the
+	 * warning exists to enumerate — from a real session's log rather than from
+	 * guesswork — every code path that writes progress before RuneLite can say
+	 * whose it is. Each one of those is a write that would silently vanish the
+	 * moment the backing store moves to RSProfile.
+	 *
+	 * <p>When the store moves, this becomes a hard refusal.
+	 */
+	private void setAccountState(String key, Object value)
+	{
+		if (!isAccountStateAvailable())
+		{
+			log.warn("[CHUNKBLAZER] per-account write '{}' issued with no RS profile available — "
+				+ "harmless today (storage is still profile-scoped) but this write would be "
+				+ "SILENTLY DISCARDED once the store moves to RSProfile. Gate this caller.", key);
+		}
+		configManager.setConfiguration(CONFIG_GROUP, key, value);
+	}
 
 	/**
 	 * Stop one account's progress leaking into another's.
@@ -2854,7 +2968,7 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
-		configManager.setConfiguration("chunkblazer", "unlockedChunks", String.join(",", merged));
+		setAccountState("unlockedChunks", String.join(",", merged));
 		log.info("[CHUNKBLAZER] restored {} unlocked chunk(s) from the server (had {}, now {})",
 			merged.size() - before, before, merged.size());
 	}
@@ -2875,7 +2989,7 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
-		configManager.setConfiguration("chunkblazer", "completedTasks", String.join(",", merged));
+		setAccountState("completedTasks", String.join(",", merged));
 		log.info("[CHUNKBLAZER] restored {} completed task(s) from the server (had {}, now {})",
 			merged.size() - before, before, merged.size());
 	}
@@ -2914,8 +3028,8 @@ public class ChunkBlazerPlugin extends Plugin
 				// Server has a lock we don't — adopt it (e.g. fresh install on a new machine).
 				GameMode serverMode = response.getGameMode();
 				String modeKey = hashRsn(rsn) + ":" + serverMode.name();
-				configManager.setConfiguration("chunkblazer", "accountModeHash", modeKey);
-				configManager.setConfiguration("chunkblazer", "gameMode", serverMode);
+				setAccountState("accountModeHash", modeKey);
+				setAccountState("gameMode", serverMode);
 			}
 			else if (isModeLocked() && !response.isModeLocked())
 			{
@@ -2970,7 +3084,7 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				log.info("[CHUNKBLAZER] restored points spent from the server (had {}, now {})",
 					config.pointsSpent(), pdata.getPointsSpent());
-				configManager.setConfiguration("chunkblazer", "pointsSpent", pdata.getPointsSpent());
+				setAccountState("pointsSpent", pdata.getPointsSpent());
 			}
 			recomputePointsBalance();
 
@@ -3362,6 +3476,24 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void loadActiveTasks()
 	{
+		// Nothing may be loaded — and above all nothing may be WRITTEN — until
+		// RuneLite can say whose account this is. This method both bootstraps
+		// (ensureStartingChunkUnlocked, the two migrations) and rolls tasks, so
+		// running it account-less writes progress that belongs to nobody and
+		// then attributes it to whoever logs in next.
+		//
+		// The in-memory task state is cleared rather than left standing, so the
+		// previous account's tasks cannot linger in the panel across a logout or
+		// an account switch.
+		if (!isAccountStateAvailable())
+		{
+			log.debug("[CHUNKBLAZER] loadActiveTasks skipped — no account known yet");
+			activeTasks.clear();
+			activeTask = null;
+			taskModuleManager.clearTask();
+			return;
+		}
+
 		// The default starting chunk (Lumbridge / 12850) is unlocked with tasks
 		// rolled for EVERY account, no matter what — it's the universal starting
 		// point. Casual mode lets a player additionally unlock the chunk they're
@@ -3911,7 +4043,7 @@ public class ChunkBlazerPlugin extends Plugin
 			sb.append(entry.getKey()).append(':').append(String.join(",", entry.getValue()));
 		}
 
-		configManager.setConfiguration("chunkblazer", "regionRolledTasks", sb.toString());
+		setAccountState("regionRolledTasks", sb.toString());
 	}
 
 	// --- Assigned Tasks Management ---
@@ -3940,7 +4072,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			assigned = assigned + "," + taskId;
 		}
-		configManager.setConfiguration("chunkblazer", "assignedTasks", assigned);
+		setAccountState("assignedTasks", assigned);
 	}
 
 	public void rerollTask()
@@ -3955,10 +4087,10 @@ public class ChunkBlazerPlugin extends Plugin
 
 		// DEV: Clear globally assigned tasks so reroll can get fresh tasks
 		// This bypasses the "no duplicate tasks globally" rule for testing
-		configManager.setConfiguration("chunkblazer", "assignedTasks", "");
+		setAccountState("assignedTasks", "");
 
 		// Clear task progress data
-		configManager.setConfiguration("chunkblazer", "taskProgressData", "");
+		setAccountState("taskProgressData", "");
 
 		// Clear module state
 		taskModuleManager.clearTask();
@@ -4028,7 +4160,7 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		int current = config.totalPoints();
-		configManager.setConfiguration("chunkblazer", "totalPoints", current + points);
+		setAccountState("totalPoints", current + points);
 	}
 
 	public void devResetTasks()
@@ -4048,13 +4180,13 @@ public class ChunkBlazerPlugin extends Plugin
 		// Log current state before clearing
 
 		// Clear completed tasks
-		configManager.setConfiguration("chunkblazer", "completedTasks", "");
+		setAccountState("completedTasks", "");
 		// Clear task progress data
-		configManager.setConfiguration("chunkblazer", "taskProgressData", "");
+		setAccountState("taskProgressData", "");
 		// Clear assigned tasks
-		configManager.setConfiguration("chunkblazer", "assignedTasks", "");
+		setAccountState("assignedTasks", "");
 		// Also clear rolled tasks for ALL regions to fully reset
-		configManager.setConfiguration("chunkblazer", "regionRolledTasks", "");
+		setAccountState("regionRolledTasks", "");
 
 		// Verify the clear worked
 
@@ -4107,7 +4239,7 @@ public class ChunkBlazerPlugin extends Plugin
 				}
 			}
 		}
-		configManager.setConfiguration("chunkblazer", "regionRolledTasks", newData.toString());
+		setAccountState("regionRolledTasks", newData.toString());
 	}
 
 	public void devResetAll()
@@ -4118,10 +4250,10 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		// Reset tasks
-		configManager.setConfiguration("chunkblazer", "regionRolledTasks", "");
-		configManager.setConfiguration("chunkblazer", "assignedTasks", "");
-		configManager.setConfiguration("chunkblazer", "completedTasks", "");
-		configManager.setConfiguration("chunkblazer", "taskProgressData", "");
+		setAccountState("regionRolledTasks", "");
+		setAccountState("assignedTasks", "");
+		setAccountState("completedTasks", "");
+		setAccountState("taskProgressData", "");
 		taskModuleManager.clearTask();
 		activeTask = null;
 		activeTasks.clear();
@@ -4129,15 +4261,15 @@ public class ChunkBlazerPlugin extends Plugin
 		saveCurrentTask();
 
 		// Reset points
-		configManager.setConfiguration("chunkblazer", "totalPoints", 0);
+		setAccountState("totalPoints", 0);
 
 		// Reset unlocked chunks to the free starting chunk only. Every other
 		// chunk must be unlocked with points after reset.
-		configManager.setConfiguration("chunkblazer", "unlockedChunks", String.valueOf(DEFAULT_START_REGION));
+		setAccountState("unlockedChunks", String.valueOf(DEFAULT_START_REGION));
 
 		// Reset game mode lock
-		configManager.setConfiguration("chunkblazer", "accountModeHash", "");
-		configManager.setConfiguration("chunkblazer", "gameMode", GameMode.CASUAL);
+		setAccountState("accountModeHash", "");
+		setAccountState("gameMode", GameMode.CASUAL);
 
 
 		// Re-roll and load tasks for the now-only starting chunk so the panel populates.
@@ -4228,15 +4360,15 @@ public class ChunkBlazerPlugin extends Plugin
 	{
 		if (activeTask != null)
 		{
-			configManager.setConfiguration("chunkblazer", "currentTaskId", activeTask.getTaskId());
-			configManager.setConfiguration("chunkblazer", "currentTaskQuantity", activeTask.getTargetQuantity());
-			configManager.setConfiguration("chunkblazer", "currentTaskProgress", activeTask.getCurrentProgress());
+			setAccountState("currentTaskId", activeTask.getTaskId());
+			setAccountState("currentTaskQuantity", activeTask.getTargetQuantity());
+			setAccountState("currentTaskProgress", activeTask.getCurrentProgress());
 		}
 		else
 		{
-			configManager.setConfiguration("chunkblazer", "currentTaskId", "");
-			configManager.setConfiguration("chunkblazer", "currentTaskQuantity", 1);
-			configManager.setConfiguration("chunkblazer", "currentTaskProgress", 0);
+			setAccountState("currentTaskId", "");
+			setAccountState("currentTaskQuantity", 1);
+			setAccountState("currentTaskProgress", 0);
 		}
 	}
 
@@ -4263,7 +4395,7 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 			sb.append(taskId);
 		}
-		configManager.setConfiguration("chunkblazer", "completedTasks", sb.toString());
+		setAccountState("completedTasks", sb.toString());
 	}
 
 	private void markTaskCompleted(String taskId)
@@ -4277,7 +4409,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			completed = completed + "," + taskId;
 		}
-		configManager.setConfiguration("chunkblazer", "completedTasks", completed);
+		setAccountState("completedTasks", completed);
 	}
 
 	/**
@@ -4709,7 +4841,7 @@ public class ChunkBlazerPlugin extends Plugin
 			if (sb.length() > 0) sb.append(',');
 			sb.append(entry.getKey()).append(':').append(entry.getValue()[0]).append(':').append(entry.getValue()[1]);
 		}
-		configManager.setConfiguration("chunkblazer", "taskProgressData", sb.toString());
+		setAccountState("taskProgressData", sb.toString());
 	}
 
 	private void saveActiveTasks()
@@ -4800,7 +4932,7 @@ public class ChunkBlazerPlugin extends Plugin
 	private void addPoints(int points)
 	{
 		int current = config.totalPoints();
-		configManager.setConfiguration("chunkblazer", "totalPoints", current + points);
+		setAccountState("totalPoints", current + points);
 	}
 
 	// --- Points: earned, spent, balance ------------------------------------
@@ -4862,7 +4994,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			log.info("[CHUNKBLAZER] points balance recomputed: earned {} - spent {} = {} (was {})",
 				earned, spent, balance, config.totalPoints());
-			configManager.setConfiguration("chunkblazer", "totalPoints", balance);
+			setAccountState("totalPoints", balance);
 		}
 	}
 
@@ -4873,7 +5005,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return;
 		}
-		configManager.setConfiguration("chunkblazer", "pointsSpent", config.pointsSpent() + cost);
+		setAccountState("pointsSpent", config.pointsSpent() + cost);
 		recomputePointsBalance();
 	}
 
@@ -4902,7 +5034,7 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		int spent = earned - balance;
-		configManager.setConfiguration("chunkblazer", "pointsSpent", spent);
+		setAccountState("pointsSpent", spent);
 		log.info("[CHUNKBLAZER] derived points spent for this account: earned {} - balance {} = {}",
 			earned, balance, spent);
 	}
@@ -4924,7 +5056,7 @@ public class ChunkBlazerPlugin extends Plugin
 	public void addBossTokens(int amount)
 	{
 		int updated = Math.max(0, config.bossTokens() + amount);
-		configManager.setConfiguration("chunkblazer", "bossTokens", updated);
+		setAccountState("bossTokens", updated);
 		if (panel != null)
 		{
 			panel.updateStats();
@@ -4943,7 +5075,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return false;
 		}
-		configManager.setConfiguration("chunkblazer", "bossTokens", current - 1);
+		setAccountState("bossTokens", current - 1);
 		if (panel != null)
 		{
 			panel.updateStats();
@@ -5197,7 +5329,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			unlockedSet.add(String.valueOf(r));
 		}
-		configManager.setConfiguration("chunkblazer", "unlockedChunks", String.join(",", unlockedSet));
+		setAccountState("unlockedChunks", String.join(",", unlockedSet));
 		// Points were just spent for this — never let it evaporate on a crash.
 		persistUnlockNow();
 

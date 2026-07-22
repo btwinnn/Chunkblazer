@@ -228,9 +228,9 @@ class ProgressionBaselineTest
 		assertEquals(75, baseline.get("HITPOINTS"));
 		assertEquals(70, baseline.get("THIEVING"));
 
-		ArgumentCaptor<String> written = ArgumentCaptor.forClass(String.class);
+		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
 		verify(configManager).setConfiguration(eq("chunkblazer"), eq("progressionBaseline"), written.capture());
-		assertTrue(written.getValue().contains("HITPOINTS:75"), written.getValue());
+		assertTrue(String.valueOf(written.getValue()).contains("HITPOINTS:75"), String.valueOf(written.getValue()));
 	}
 
 	@Test
@@ -415,9 +415,9 @@ class ProgressionBaselineTest
 
 		ensureBaseline();
 
-		ArgumentCaptor<String> written = ArgumentCaptor.forClass(String.class);
+		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
 		verify(configManager).setConfiguration(eq("chunkblazer"), eq("progressionBaseline"), written.capture());
-		assertTrue(written.getValue().startsWith(hashOf(ACCOUNT) + "|"),
+		assertTrue(String.valueOf(written.getValue()).startsWith(hashOf(ACCOUNT) + "|"),
 			"stored baseline must name its owning account: " + written.getValue());
 	}
 
@@ -444,11 +444,11 @@ class ProgressionBaselineTest
 
 		plugin.migrateRepairBogusProgressionBaseline();
 
-		verify(configManager).setConfiguration("chunkblazer", "progressionBaseline", "");
+		verify(configManager).setConfiguration("chunkblazer", "progressionBaseline", (Object) "");
 
-		ArgumentCaptor<String> written = ArgumentCaptor.forClass(String.class);
+		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
 		verify(configManager).setConfiguration(eq("chunkblazer"), eq("completedTasks"), written.capture());
-		assertEquals("defeat_mugger", written.getValue(),
+		assertEquals("defeat_mugger", String.valueOf(written.getValue()),
 			"every progression_* id must be dropped, non-progression tasks kept");
 	}
 
@@ -477,7 +477,7 @@ class ProgressionBaselineTest
 
 		plugin.migrateRepairBogusProgressionBaseline();
 
-		verify(configManager).setConfiguration("chunkblazer", "progressionBaseline", "");
+		verify(configManager).setConfiguration("chunkblazer", "progressionBaseline", (Object) "");
 	}
 
 	@Test
