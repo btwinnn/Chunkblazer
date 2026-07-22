@@ -1910,6 +1910,13 @@ public class ChunkBlazerPlugin extends Plugin
 		cachedBaselineOwner = null;
 		if (removed > 0)
 		{
+			// This is a repair, not a bug, but on the wire it is indistinguishable
+			// from one — a large slice of completed tasks vanishing. Unflagged it
+			// would be refused, the server would keep the bogus completions, and the
+			// next login's union would restore them and re-trigger this repair on a
+			// loop.
+			declareIntentionalReset("progression baseline repair dropped "
+				+ removed + " progression task(s)");
 			setAccountState("completedTasks", String.join(",", keep));
 			addPoints(-refunded);
 			completedTaskCache.keySet().removeIf(id -> id.startsWith("progression_"));
@@ -3225,14 +3232,47 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				return;
 			}
+			boolean declaredReset = req.isIntentionalReset();
 			apiClient.syncPlayerState(req)
 				.thenAccept(resp ->
 				{
-					if (resp != null && resp.isSuccess())
+					// Only retire the reset declaration once the server has actually
+					// accepted it. Clearing it on send would strand a reset behind one
+					// dropped request: the retry would arrive without the flag, be
+					// refused as a destructive drop, and the next login's union would
+					// restore everything the player asked to clear.
+					if (resp != null && resp.isSuccess() && declaredReset)
 					{
+						pendingIntentionalReset = false;
+						log.info("[CHUNKBLAZER] intentional reset accepted by the server");
 					}
 				});
 		});
+	}
+
+	/**
+	 * Set when the player deliberately destroys their own progress, and carried
+	 * until a sync carrying it succeeds.
+	 *
+	 * <p>Sticky because the destruction and the sync are minutes apart: a reset
+	 * edits local config, and the next periodic sync (or the logout sync) is what
+	 * the server actually sees. Without this the server cannot tell a deliberate
+	 * reset from the client bugs its drop guard exists to stop — they are the same
+	 * shape on the wire.
+	 */
+	private volatile boolean pendingIntentionalReset;
+
+	/**
+	 * Declare that progress about to be destroyed is being destroyed ON PURPOSE.
+	 *
+	 * <p>Call this from operations the player asked for, never to force a refused
+	 * sync through — a refusal means the guard is doing its job.
+	 */
+	private void declareIntentionalReset(String reason)
+	{
+		pendingIntentionalReset = true;
+		log.warn("[CHUNKBLAZER] intentional reset declared ({}) — the next sync will be "
+			+ "allowed to drop progress server-side", reason);
 	}
 
 	/**
@@ -3283,6 +3323,7 @@ public class ChunkBlazerPlugin extends Plugin
 			.clientPoints(config.totalPoints())
 			.pointsSpent(config.pointsSpent())
 			.completedTasks(completed)
+			.intentionalReset(pendingIntentionalReset)
 			.timestamp(System.currentTimeMillis())
 			.clientVersion("1.0.0")
 			.build();
@@ -4170,6 +4211,12 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
+		// Dev accounts are already exempt from the server's drop guard, but say it
+		// anyway: the exemption is a property of the account, this is a property of
+		// the operation, and only the second one stays true if the account is ever
+		// demoted.
+		declareIntentionalReset("devResetTasks");
+
 		// Clear rolled tasks for current region only
 		int currentRegion = getCurrentRegionId();
 		if (currentRegion > 0)
@@ -4248,6 +4295,11 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return;
 		}
+
+		// The most destructive operation the plugin has — it drops every task AND
+		// every chunk but the starting one. Exactly the shape the server's drop
+		// guard refuses, so it has to declare itself.
+		declareIntentionalReset("devResetAll");
 
 		// Reset tasks
 		setAccountState("regionRolledTasks", "");
