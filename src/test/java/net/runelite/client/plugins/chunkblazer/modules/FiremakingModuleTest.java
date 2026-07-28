@@ -4,7 +4,11 @@ import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.Skill;
+import net.runelite.api.Tile;
+import net.runelite.api.TileItem;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.ItemDespawned;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.game.ItemManager;
@@ -334,6 +338,138 @@ class FiremakingModuleTest extends AbstractTaskModuleTest
 
 		assertTrue(task.isCompleted(), "burning the target count must complete the task");
 		verify(completionCallback).onTaskCompleted(eq(task), anyInt());
+	}
+
+	// ---- Lighting logs on the ground -------------------------------------
+	//
+	// Sequences below are taken from Mike's 2026-07-28 session, where two burns
+	// were lost because the drop-to-light gap outran the match window.
+
+	/** A log despawning off the ground {@code distance} tiles from the player. */
+	private void groundLogDespawns(int logId, int distance)
+	{
+		WorldPoint playerAt = new WorldPoint(3200, 3200, 0);
+		lenient().when(localPlayer.getWorldLocation()).thenReturn(playerAt);
+
+		TileItem tileItem = mock(TileItem.class);
+		lenient().when(tileItem.getId()).thenReturn(logId);
+		lenient().when(tileItem.getQuantity()).thenReturn(1);
+
+		Tile tile = mock(Tile.class);
+		lenient().when(tile.getWorldLocation())
+			.thenReturn(new WorldPoint(3200 + distance, 3200, 0));
+
+		firemakingModule.onItemDespawned(new ItemDespawned(tile, tileItem));
+	}
+
+	/**
+	 * THE ground-lighting regression: a log that was never in the inventory.
+	 * Nothing is ever consumed, so the old rule had no signal at all.
+	 */
+	@Test
+	void lightingALogAlreadyOnTheGroundCredits()
+	{
+		NuzlockeTask task = startBurnTask(LOGS, 10, 0);
+
+		groundLogDespawns(LOGS, 0);
+		gainFiremakingXp(40);
+
+		assertEquals(1, task.getCurrentProgress(),
+			"a log lit off the ground must credit even though none left the inventory");
+	}
+
+	/**
+	 * Mike's burn #3: dropped at 10:29:32, fire caught 10:29:44. The drop's
+	 * consumption has long expired, so the despawn is the only signal left.
+	 */
+	@Test
+	void slowLightOfAnOwnDroppedLogStillCredits()
+	{
+		NuzlockeTask task = startBurnTask(LOGS, 10, 27);
+
+		inventoryNowHolds(LOGS, 26);   // dropped
+		currentTick += 20;             // twelve seconds of walking/lighting
+		groundLogDespawns(LOGS, 0);    // fire catches
+		gainFiremakingXp(40);
+
+		assertEquals(1, task.getCurrentProgress(),
+			"a slow light must credit once, via the despawn");
+	}
+
+	/**
+	 * Mike's burn #1: dropped and lit immediately. Both signals fire for ONE
+	 * log — the inventory consumption is still live, so the despawn must not
+	 * add a second credit.
+	 */
+	@Test
+	void quickDropThenLightCreditsOnlyOnce()
+	{
+		NuzlockeTask task = startBurnTask(LOGS, 10, 27);
+
+		inventoryNowHolds(LOGS, 26);   // dropped
+		currentTick += 2;              // two seconds later
+		groundLogDespawns(LOGS, 0);    // fire catches
+		gainFiremakingXp(40);
+
+		assertEquals(1, task.getCurrentProgress(),
+			"drop + despawn describe one log, not two");
+	}
+
+	/** Someone else's log vanishing across the room is not our burn. */
+	@Test
+	void distantGroundDespawnIsIgnored()
+	{
+		NuzlockeTask task = startBurnTask(LOGS, 10, 0);
+
+		groundLogDespawns(LOGS, 12);
+		gainFiremakingXp(40);
+
+		assertEquals(0, task.getCurrentProgress(),
+			"a despawn far from the player must not credit");
+	}
+
+	/** A ground log of the wrong type still doesn't advance the task. */
+	@Test
+	void groundDespawnOfUnwatchedLogTypeIsIgnored()
+	{
+		NuzlockeTask task = startBurnTask(LOGS, 10, 0);
+
+		groundLogDespawns(OAK_LOGS, 0);
+		gainFiremakingXp(60);
+
+		assertEquals(0, task.getCurrentProgress());
+	}
+
+	/** Picking a log up produces a despawn but no Firemaking XP — no credit. */
+	@Test
+	void groundDespawnWithoutXpCreditsNothing()
+	{
+		NuzlockeTask task = startBurnTask(LOGS, 10, 0);
+
+		groundLogDespawns(LOGS, 0);
+
+		assertEquals(0, task.getCurrentProgress());
+	}
+
+	/**
+	 * One XP gain must pay for exactly one credit. Previously a burn's XP kept
+	 * crediting any consumption that landed inside its window, so a log dropped
+	 * just after a burn scored on the previous burn's XP.
+	 */
+	@Test
+	void oneXpGainCreditsOnlyOnce()
+	{
+		NuzlockeTask task = startBurnTask(LOGS, 10, 27);
+
+		inventoryNowHolds(LOGS, 26);
+		gainFiremakingXp(40);          // burn #1 credits
+		assertEquals(1, task.getCurrentProgress());
+
+		currentTick += 2;
+		inventoryNowHolds(LOGS, 25);   // dropped, not yet lit
+
+		assertEquals(1, task.getCurrentProgress(),
+			"a drop must not score on the previous burn's XP");
 	}
 
 	/** Bonfire ordering must complete a task too, not just score the first log. */

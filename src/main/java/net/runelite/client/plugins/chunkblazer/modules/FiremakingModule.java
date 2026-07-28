@@ -14,8 +14,10 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
+import net.runelite.api.Player;
 import net.runelite.api.Skill;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.ItemDespawned;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
@@ -56,6 +58,14 @@ import net.runelite.client.plugins.chunkblazer.RequiredItem;
  *       accumulate forever, so logs banked, dropped or sold were still sitting
  *       in the map when the next real burn landed and were credited alongside
  *       it. Consumption older than the window is now discarded instead.</li>
+ *   <li><b>Logs can be lit on the ground.</b> A tinderbox works on a log lying
+ *       on the floor, so the log never passes through the inventory and there
+ *       is no consumption to pair with. The ground item's despawn — which lands
+ *       on the same tick the fire catches — stands in. See
+ *       {@link #onItemDespawned}.</li>
+ *   <li><b>One XP gain pays for one credit.</b> {@code lastFiremakingXpTick} is
+ *       cleared once it has credited something, so a single burn's XP cannot go
+ *       on crediting unrelated consumption for the rest of its window.</li>
  * </ul>
  */
 @Slf4j
@@ -76,6 +86,11 @@ public class FiremakingModule extends AbstractTaskModule
 	// minutes earlier cannot ride along on an unrelated burn. Matches
 	// ConstructionModule/FarmingModule's window.
 	private static final int MATCH_WINDOW_TICKS = 5;
+
+	// How close a despawning ground log must be to count as one the player just
+	// lit. The fire appears under or beside them; anything further is someone
+	// else's item vanishing in the loaded scene.
+	private static final int GROUND_LIGHT_MAX_DISTANCE = 2;
 
 	@Inject
 	private ItemManager itemManager;
@@ -111,18 +126,29 @@ public class FiremakingModule extends AbstractTaskModule
 	// Lets consumption that arrives AFTER its XP still complete the pair.
 	private int lastFiremakingXpTick = -1;
 
-	/** One watched-log consumption, stamped with the tick it happened on. */
+	/** Where a burn candidate's log came from. */
+	private enum BurnSource
+	{
+		/** The log left the player's inventory (tinderbox, bonfire add, or a drop). */
+		INVENTORY,
+		/** A log on the ground vanished next to the player as the fire caught. */
+		GROUND
+	}
+
+	/** One watched-log burn candidate, stamped with the tick it happened on. */
 	private static final class PendingBurn
 	{
 		private final int itemId;
 		private final int quantity;
 		private final int tick;
+		private final BurnSource source;
 
-		private PendingBurn(int itemId, int quantity, int tick)
+		private PendingBurn(int itemId, int quantity, int tick, BurnSource source)
 		{
 			this.itemId = itemId;
 			this.quantity = quantity;
 			this.tick = tick;
+			this.source = source;
 		}
 	}
 
@@ -302,7 +328,7 @@ public class FiremakingModule extends AbstractTaskModule
 
 				// Hold the consumption until a Firemaking XP gain confirms it
 				// was a burn rather than a bank/drop/sale.
-				pendingBurns.add(new PendingBurn(watchedItemId, consumed, tick));
+				pendingBurns.add(new PendingBurn(watchedItemId, consumed, tick, BurnSource.INVENTORY));
 			}
 		}
 
@@ -317,6 +343,70 @@ public class FiremakingModule extends AbstractTaskModule
 			&& tick - lastFiremakingXpTick <= MATCH_WINDOW_TICKS)
 		{
 			creditPendingBurns("consumption after XP");
+		}
+	}
+
+	/**
+	 * Lighting logs that are lying on the ground.
+	 *
+	 * <p>A tinderbox works on a log on the floor — the log never has to pass
+	 * through the inventory. The ground item simply vanishes as the fire catches,
+	 * so inventory consumption cannot see the burn at all and the task scored
+	 * nothing. That covers logs dropped by someone else, and also your OWN
+	 * dropped logs whenever lighting took longer than {@link #MATCH_WINDOW_TICKS}
+	 * — Mike's 2026-07-28 session lost two burns exactly that way (dropped
+	 * 10:29:32, fire caught 10:29:44; twelve seconds is far outside the window,
+	 * so the drop had long expired by the time the XP landed).
+	 *
+	 * <p>The despawn lands on the SAME tick the fire catches, which makes it a
+	 * tighter pairing for the XP than the drop ever was.
+	 */
+	@Subscribe
+	public void onItemDespawned(ItemDespawned event)
+	{
+		if (activeTasks.isEmpty() || watchedItemIds.isEmpty())
+		{
+			return;
+		}
+
+		int itemId = itemManager.canonicalize(event.getItem().getId());
+		if (!watchedItemIds.contains(itemId))
+		{
+			return;
+		}
+
+		// Only logs vanishing at arm's length are ours to claim. Without this a
+		// stranger's ground item despawning anywhere in the loaded scene could
+		// pair with our own bonfire XP.
+		Player local = client.getLocalPlayer();
+		if (local == null || local.getWorldLocation() == null
+			|| event.getTile().getWorldLocation().distanceTo(local.getWorldLocation()) > GROUND_LIGHT_MAX_DISTANCE)
+		{
+			return;
+		}
+
+		int tick = getGameTick();
+		expirePendingBurns();
+
+		// If the log leaving our inventory is still live, this despawn is that
+		// same log hitting the floor a moment ago and being lit now — one burn,
+		// not two. Once that consumption has expired it can no longer credit
+		// anything, so the despawn becomes the only signal and must stand in.
+		for (PendingBurn pending : pendingBurns)
+		{
+			if (pending.itemId == itemId && pending.source == BurnSource.INVENTORY)
+			{
+				return;
+			}
+		}
+
+		// Always one: lighting consumes a single log, and logs do not stack, so
+		// a despawned stack quantity is never the number burned.
+		pendingBurns.add(new PendingBurn(itemId, 1, tick, BurnSource.GROUND));
+
+		if (lastFiremakingXpTick >= 0 && tick - lastFiremakingXpTick <= MATCH_WINDOW_TICKS)
+		{
+			creditPendingBurns("ground light after XP");
 		}
 	}
 
@@ -378,6 +468,14 @@ public class FiremakingModule extends AbstractTaskModule
 			burned.merge(pending.itemId, pending.quantity, Integer::sum);
 		}
 		pendingBurns.clear();
+
+		// Spend the XP gain that paid for this credit. Without it one XP drop
+		// keeps crediting every later consumption inside its window: a log
+		// dropped shortly after a burn scored immediately, on the PREVIOUS
+		// burn's XP. That netted out only because a drop was always followed by
+		// a light — and it would double-count outright now that the ground
+		// despawn credits the same log again when the fire finally catches.
+		lastFiremakingXpTick = -1;
 
 		log.info("[FIREMAKING-DEBUG] burn credited ({}): {} at tick {}",
 			trigger, burned, getGameTick());
