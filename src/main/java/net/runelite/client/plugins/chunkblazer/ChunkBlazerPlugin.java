@@ -1001,6 +1001,10 @@ public class ChunkBlazerPlugin extends Plugin
 	 * are visible on the world map but must be unlocked with points like any
 	 * other chunk. In casual mode players can also unlock the chunk they're
 	 * standing on. Idempotent — safe to call on every startup.
+	 *
+	 * <p>This also guarantees {@code unlockedChunks} EXISTS on disk, not merely
+	 * that it reads as containing the start region — see
+	 * {@link #isUnlockedChunksPersisted()} for why those differ and what breaks.
 	 */
 	public void ensureStartingChunkUnlocked()
 	{
@@ -1024,6 +1028,15 @@ public class ChunkBlazerPlugin extends Plugin
 				newUnlocked.append(",");
 			}
 			newUnlocked.append(DEFAULT_START_REGION);
+			needsUpdate = true;
+		}
+		else if (!isUnlockedChunksPersisted())
+		{
+			// The start region reads as unlocked ONLY because the config
+			// interface default supplied it. Nothing is on disk, so external
+			// readers see an empty unlock set. Force the write.
+			log.debug("[CHUNKBLAZER] unlockedChunks absent from disk — seeding start region {}",
+				DEFAULT_START_REGION);
 			needsUpdate = true;
 		}
 
@@ -2834,6 +2847,39 @@ public class ChunkBlazerPlugin extends Plugin
 	private String getAccountState(String key)
 	{
 		return configManager.getConfiguration(CONFIG_GROUP, key);
+	}
+
+	/**
+	 * Whether {@code unlockedChunks} actually EXISTS in stored config, as opposed
+	 * to being conjured by {@link ChunkBlazerConfig#unlockedChunks()}'s interface
+	 * default of {@code "12850"}.
+	 *
+	 * <p>Those two states are indistinguishable through the typed accessor, and
+	 * that gap shipped a bug. {@link #clearAccountState} unsets the key on an
+	 * account switch; {@link #mergeUnlockedRegionsFromServer} then returns early
+	 * for an account the server has no regions for (i.e. every brand-new one), so
+	 * nothing rewrites it. {@code config.unlockedChunks()} still answered
+	 * {@code "12850"} from the default, so {@link #ensureStartingChunkUnlocked}
+	 * concluded there was nothing to do and never persisted anything.
+	 *
+	 * <p>Inside this plugin that was invisible — the default is a faithful stand-in
+	 * for "only the start chunk". But the standalone ChunkBlazer GPU addon reads
+	 * the key RAW across the repo boundary
+	 * ({@code configManager.getConfiguration("chunkblazer", "unlockedChunks")}),
+	 * gets {@code null}, and greys the entire world including Lumbridge. Bruh
+	 * Blazer hit exactly this on 2026-07-27: cleared at 21:11:03, rendered fully
+	 * grey, and only corrected at 21:16:47 when his first real unlock finally
+	 * wrote a concrete value. A second account in the same session never saw it,
+	 * because the server had regions for it and the merge wrote them immediately.
+	 *
+	 * <p>So the invariant is stronger than "the start region reads as unlocked":
+	 * the key must be ON DISK for out-of-process readers. Anything that consumes
+	 * this value without our config defaults needs that.
+	 */
+	private boolean isUnlockedChunksPersisted()
+	{
+		String raw = getAccountState("unlockedChunks");
+		return raw != null && !raw.trim().isEmpty();
 	}
 
 	/**
