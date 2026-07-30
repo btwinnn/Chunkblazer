@@ -109,7 +109,7 @@
                 {
                     "name": "Mix an Agility Potion",
                     "taskID": "mix_agility_potion",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 34,
                     "completion_type": "HERBLORE",
                     "base_points": 2,

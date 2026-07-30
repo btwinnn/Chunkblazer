@@ -123,7 +123,7 @@
                 {
                     "name": "Mix some Super Defence Potions",
                     "taskID": "mix_super_defence_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 66,
                     "completion_type": "HERBLORE",
                     "base_points": 3,

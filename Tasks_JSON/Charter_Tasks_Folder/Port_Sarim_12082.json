@@ -69,7 +69,7 @@
                 {
                     "name": "Mix some Attack Potions",
                     "taskID": "mix_attack_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -120,7 +120,7 @@
                 {
                     "name": "Mix some Energy Potions",
                     "taskID": "mix_energy_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 26,
                     "completion_type": "HERBLORE",
                     "base_points": 1,

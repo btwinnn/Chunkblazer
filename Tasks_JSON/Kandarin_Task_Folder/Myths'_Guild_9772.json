@@ -54,7 +54,7 @@
                 {
                     "name": "Mix some Anti-firebreath Potions",
                     "taskID": "mix_anti-firebreath_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 69,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -70,7 +70,7 @@
                 {
                     "name": "Mix some Super Antifire Potions",
                     "taskID": "mix_super_antifire_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 92,
                     "completion_type": "HERBLORE",
                     "base_points": 5,

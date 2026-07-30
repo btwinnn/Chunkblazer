@@ -135,7 +135,7 @@
                 {
                     "name": "Mix some Extended Anti-Venom+",
                     "taskID": "mix_extended_antivenom_plus",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 94,
                     "completion_type": "HERBLORE",
                     "base_points": 5,
@@ -151,7 +151,7 @@
                 {
                     "name": "Mix some Ranging Potions",
                     "taskID": "mix_ranging_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -167,7 +167,7 @@
                 {
                     "name": "Mix some Super Restore Potions",
                     "taskID": "mix_super_restore_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 63,
                     "completion_type": "HERBLORE",
                     "base_points": 3,

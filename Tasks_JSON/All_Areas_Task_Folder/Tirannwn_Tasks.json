@@ -1753,7 +1753,7 @@
                 {
                     "name": "Mix some Super Restore Potions",
                     "taskID": "mix_super_restore_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 63,
                     "completion_type": "HERBLORE",
                     "base_points": 3,

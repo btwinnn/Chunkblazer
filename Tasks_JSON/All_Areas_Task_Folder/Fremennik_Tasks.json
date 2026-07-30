@@ -732,7 +732,7 @@
                 {
                     "name": "Mix some Super Defence Potions",
                     "taskID": "mix_super_defence_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 66,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -1249,7 +1249,7 @@
                 {
                     "name": "Mix some Hunter Potions",
                     "taskID": "mix_hunter_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 53,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -1950,7 +1950,7 @@
                 {
                     "name": "Mix a Super Strength Potion",
                     "taskID": "mix_super_strength_potion",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 55,
                     "completion_type": "HERBLORE",
                     "base_points": 2,

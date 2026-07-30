@@ -21,7 +21,7 @@
                 {
                     "name": "Mix some Hunter Potions",
                     "taskID": "mix_hunter_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 53,
                     "completion_type": "HERBLORE",
                     "base_points": 2,

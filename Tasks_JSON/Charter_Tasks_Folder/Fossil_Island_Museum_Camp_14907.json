@@ -113,7 +113,7 @@
         {
             "name": "Mix some Prayer Potions",
             "taskID": "mix_prayer_potions",
-            "category": "Obtain_Set",
+            "category": "Herblore_Set",
             "level": 38,
             "completion_type": "HERBLORE",
             "base_points": 2,

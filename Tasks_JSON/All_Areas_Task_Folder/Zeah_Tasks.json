@@ -400,7 +400,7 @@
                 {
                     "name": "Mix some Prayer Potions",
                     "taskID": "mix_prayer_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 38,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -808,7 +808,7 @@
                 {
                     "name": "Mix some Ranging Potions",
                     "taskID": "mix_ranging_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -1793,7 +1793,7 @@
                 {
                     "name": "Mix some Anti-Poison Potions",
                     "taskID": "mix_anti-poisons",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -3044,7 +3044,7 @@
                 {
                     "name": "Mix some Anti-Poison Potions",
                     "taskID": "mix_anti-poisons",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
                     "base_points": 1,

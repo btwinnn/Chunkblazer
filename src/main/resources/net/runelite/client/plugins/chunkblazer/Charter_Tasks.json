@@ -1860,7 +1860,7 @@
                                             {
                                                 "name":  "Mix some Anti-Poison Potions",
                                                 "taskID":  "mix_anti-poisons",
-                                                "category":  "Obtain_Set",
+                                                "category":  "Herblore_Set",
                                                 "level":  5,
                                                 "completion_type":  "HERBLORE",
                                                 "base_points":  1,
@@ -2037,7 +2037,7 @@
                                             {
                                                 "name":  "Mix some Prayer Potions",
                                                 "taskID":  "mix_prayer_potions",
-                                                "category":  "Obtain_Set",
+                                                "category":  "Herblore_Set",
                                                 "level":  38,
                                                 "completion_type":  "HERBLORE",
                                                 "base_points":  2,
@@ -2370,7 +2370,7 @@
                                             {
                                                 "name":  "Mix some Prayer Potions",
                                                 "taskID":  "mix_prayer_potions",
-                                                "category":  "Obtain_Set",
+                                                "category":  "Herblore_Set",
                                                 "level":  38,
                                                 "completion_type":  "HERBLORE",
                                                 "base_points":  2,
@@ -2645,7 +2645,7 @@
                                             {
                                                 "name":  "Mix an Agility Potion",
                                                 "taskID":  "mix_agility_potion",
-                                                "category":  "Obtain_Set",
+                                                "category":  "Herblore_Set",
                                                 "level":  34,
                                                 "completion_type":  "HERBLORE",
                                                 "base_points":  2,
@@ -4178,45 +4178,39 @@
                                                                    ]
                                             },
                                             {
-                                                "name":  "Equip an Adamant Battleaxe",
-                                                "taskID":  "equip_adamant_battleaxe",
-                                                "category":  "Attack",
-                                                "completion_type":  "EQUIP",
-                                                "base_points":  2,
-                                                "assignment_weight":  3,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Adamant Battleaxe"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            1371
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
-                                            {
-                                                "name":  "Equip a Black Battleaxe",
-                                                "taskID":  "equip_black_battleaxe",
-                                                "category":  "Attack",
-                                                "completion_type":  "EQUIP",
-                                                "base_points":  2,
-                                                "assignment_weight":  8,
-                                                "required_items":  [
-                                                                       {
-                                                                           "item":  [
-                                                                                        "Black Battleaxe"
-                                                                                    ],
-                                                                           "item_ids":  [
-                                                                                            1367
-                                                                                        ]
-                                                                       }
-                                                                   ]
-                                            },
+                    "name": "Equip an Adamant Battleaxe",
+                    "taskID": "equip_adamant_battleaxe",
+                    "category": "Attack",
+                    "completion_type": "EQUIP",
+                    "base_points": 2,
+                    "level": 30,
+                    "assignment_weight": 3,
+                    "required_items": [
+                        {
+                            "item": ["Adamant Battleaxe"],
+                            "item_ids": [1371]
+                        }
+                    ]
+                },
+                {
+                    "name": "Equip a Black Battleaxe",
+                    "taskID": "equip_black_battleaxe",
+                    "category": "Attack",
+                    "completion_type": "EQUIP",
+                    "base_points": 1,
+                    "level": 10,
+                    "assignment_weight": 8,
+                    "required_items": [
+                        {
+                            "item": ["Black Battleaxe"],
+                            "item_ids": [1367]
+                        }
+                    ]
+                },
                                             {
                                                 "name":  "Mix some Attack Potions",
                                                 "taskID":  "mix_attack_potions",
-                                                "category":  "Obtain_Set",
+                                                "category":  "Herblore_Set",
                                                 "level":  3,
                                                 "completion_type":  "HERBLORE",
                                                 "base_points":  1,
@@ -4286,7 +4280,7 @@
                                             {
                                                 "name":  "Mix some Energy Potions",
                                                 "taskID":  "mix_energy_potions",
-                                                "category":  "Obtain_Set",
+                                                "category":  "Herblore_Set",
                                                 "level":  26,
                                                 "completion_type":  "HERBLORE",
                                                 "base_points":  1,

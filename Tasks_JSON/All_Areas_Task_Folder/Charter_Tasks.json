@@ -1365,7 +1365,7 @@
                 {
                     "name": "Mix some Anti-Poison Potions",
                     "taskID": "mix_anti-poisons",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -1498,7 +1498,7 @@
                 {
                     "name": "Mix some Prayer Potions",
                     "taskID": "mix_prayer_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 38,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -1704,7 +1704,7 @@
                 {
                     "name": "Mix some Prayer Potions",
                     "taskID": "mix_prayer_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 38,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -1905,7 +1905,7 @@
                 {
                     "name": "Mix an Agility Potion",
                     "taskID": "mix_agility_potion",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 34,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -2940,6 +2940,7 @@
                     "category": "Attack",
                     "completion_type": "EQUIP",
                     "base_points": 2,
+                    "level": 30,
                     "assignment_weight": 3,
                     "required_items": [
                         {
@@ -2953,7 +2954,8 @@
                     "taskID": "equip_black_battleaxe",
                     "category": "Attack",
                     "completion_type": "EQUIP",
-                    "base_points": 2,
+                    "base_points": 1,
+                    "level": 10,
                     "assignment_weight": 8,
                     "required_items": [
                         {
@@ -2965,7 +2967,7 @@
                 {
                     "name": "Mix some Attack Potions",
                     "taskID": "mix_attack_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -3013,7 +3015,7 @@
                 {
                     "name": "Mix some Energy Potionss",
                     "taskID": "mix_energy_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 26,
                     "completion_type": "HERBLORE",
                     "base_points": 1,

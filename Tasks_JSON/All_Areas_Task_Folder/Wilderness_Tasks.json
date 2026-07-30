@@ -4824,7 +4824,7 @@
                 {
                     "name": "Mix some Extended Antifire",
                     "taskID": "mix_extended_antifire",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 84,
                     "completion_type": "HERBLORE",
                     "base_points": 4,
@@ -4840,7 +4840,7 @@
                 {
                     "name": "Mix some Extended Super Antifire",
                     "taskID": "mix_extended_super_antifire",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 98,
                     "completion_type": "HERBLORE",
                     "base_points": 5,
@@ -5890,7 +5890,7 @@
                 {
                     "name": "Mix some Ranging Potions",
                     "taskID": "mix_ranging_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
                     "base_points": 3,

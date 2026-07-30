@@ -149,7 +149,7 @@
                 {
                     "name": "Mix a Goading Potion",
                     "taskID": "mix_goading_potion",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 54,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -164,7 +164,7 @@
                 {
                     "name": "Mix a Prayer Regeneration Potion",
                     "taskID": "mix_prayer_regeneration_potion",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 58,
                     "completion_type": "HERBLORE",
                     "base_points": 3,

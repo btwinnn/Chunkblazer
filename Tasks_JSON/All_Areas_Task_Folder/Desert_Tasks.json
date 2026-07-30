@@ -648,8 +648,8 @@
                 {
                     "name": "Mix some Combat Potions",
                     "taskID": "mix_combat_potions",
-                    "category": "Obtain_Set",
-                    "completion_type": "HEBLORE",
+                    "category": "Herblore_Set",
+                    "completion_type": "HERBLORE",
                     "base_points": 2,
                     "assignment_weight": 36,
                     "required_items": [
@@ -2396,8 +2396,8 @@
                 {
                     "name": "Mix some Combat Potions",
                     "taskID": "mix_combat_potions",
-                    "category": "Obtain_Set",
-                    "completion_type": "HEBLORE",
+                    "category": "Herblore_Set",
+                    "completion_type": "HERBLORE",
                     "base_points": 2,
                     "assignment_weight": 36,
                     "required_items": [

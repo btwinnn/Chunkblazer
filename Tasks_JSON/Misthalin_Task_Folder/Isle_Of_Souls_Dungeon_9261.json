@@ -119,7 +119,7 @@
                 {
                     "name": "Mix some Antifire Potions",
                     "taskID": "mix_antifire_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 69,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -135,7 +135,7 @@
                 {
                     "name": "Mix a Weapon Poison",
                     "taskID": "mix_weapon_poison",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 60,
                     "completion_type": "HERBLORE",
                     "base_points": 3,

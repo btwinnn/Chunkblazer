@@ -107,7 +107,7 @@
                 {
                     "name": "Mix some Super Strength Potions",
                     "taskID": "mix_super_strength_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 55,
                     "completion_type": "HERBLORE",
                     "base_points": 2,

@@ -35,7 +35,7 @@
                 {
                     "name": "Mix some Super Energy Potions",
                     "taskID": "mix_super_energy_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 52,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -51,7 +51,7 @@
                 {
                     "name": "Mix some Attack Potions",
                     "taskID": "mix_attack_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
                     "base_points": 1,

@@ -2131,7 +2131,7 @@
                 {
                     "name": "Mix some Anti-Poison Potions",
                     "taskID": "mix_anti-poisons",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -4278,7 +4278,7 @@
                 {
                     "name": "Mix some Antifire Potions",
                     "taskID": "mix_antifire_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 69,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -4294,7 +4294,7 @@
                 {
                     "name": "Mix a Weapon Poison",
                     "taskID": "mix_weapon_poison",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 60,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -4653,7 +4653,7 @@
                 {
                     "name": "Mix some Anti-Poison Potions",
                     "taskID": "mix_anti-poisons",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -6208,7 +6208,7 @@
                 {
                     "name": "Mix some Compost Potions",
                     "taskID": "mix_compost_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 22,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -6509,7 +6509,7 @@
                 {
                     "name": "Mix some Defence Potions",
                     "taskID": "mix_defence_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 30,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -6525,7 +6525,7 @@
                 {
                     "name": "Mix some Super Defence Potions",
                     "taskID": "mix_super_defence_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 66,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
