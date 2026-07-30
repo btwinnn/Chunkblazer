@@ -18,6 +18,7 @@ color 0A
 ::         Current canonical homes:
 ::           Misthalin/Asgarnia/Kandarin/Varlamore/Zeah_Tasks.json
 ::                                   -> All_Areas_Task_Folder\
+::           Free_Chunks.json        -> Free_Chunks_Task_Folder\
 ::         If a JSON moves to a new subfolder, just add it to
 ::         JSON_SEARCH_DIRS — no need to rewrite the loop.
 ::   [2/3] src\main\java\...   -> runelite\runelite-client\...\java\
@@ -55,13 +56,18 @@ set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\cli
 :: data file, or edits there never reach the client. Omitting one is silent:
 :: the file simply isn't on the classpath, loadGlobalTaskFile logs a miss, and
 :: that whole tier stops existing in-game while everything else looks fine.
-set TASK_JSONS=Misthalin_Tasks.json Asgarnia_Tasks.json Kandarin_Tasks.json Karamja_Tasks.json Desert_Tasks.json Varlamore_Tasks.json Zeah_Tasks.json Fremennik_Tasks.json Tirannwn_Tasks.json Morytania_Tasks.json Wilderness_Tasks.json Quest_Tasks.json Progression_Tasks.json
+:: Free_Chunks.json is the same kind of exception: not in TASK_JSON_FILES (it
+:: has its own loader, loadFreeChunks()), but it MUST be staged here. It was
+:: omitted from this list until 2026-07-30, so three commits' worth of authoring
+:: (236 of 325 free chunks) sat in Tasks_JSON and never reached the client while
+:: the shipped copy stayed frozen at its 2026-07-04 state.
+set TASK_JSONS=Misthalin_Tasks.json Asgarnia_Tasks.json Kandarin_Tasks.json Karamja_Tasks.json Desert_Tasks.json Varlamore_Tasks.json Zeah_Tasks.json Fremennik_Tasks.json Tirannwn_Tasks.json Morytania_Tasks.json Wilderness_Tasks.json Quest_Tasks.json Progression_Tasks.json Free_Chunks.json
 
 :: Subfolders under Tasks_JSON\ that may contain TASK_JSONS files.
 :: Searched in priority order — first match wins. The trailing "."
 :: means "Tasks_JSON top-level itself" (legacy path before the
 :: per-area subfolder reorg, kept for back-compat).
-set JSON_SEARCH_DIRS=All_Areas_Task_Folder Quest_Tasks_Folder .
+set JSON_SEARCH_DIRS=All_Areas_Task_Folder Quest_Tasks_Folder Free_Chunks_Task_Folder .
 
 echo ========================================
 echo    Sync ChunkBlazer -^> RuneLite
@@ -80,7 +86,11 @@ if not exist "%RUNELITE_DIR%" (
 )
 
 :: ---- Regenerate charter aggregate from per-port folder ------------------
-echo [0/3] Rebuilding Charter_Tasks.json + Free_Chunks.json from Charter_Tasks_Folder...
+:: NOTE: this rebuilds Charter_Tasks.json ONLY. build-charter-tasks.ps1
+:: deliberately does not touch Free_Chunks.json (charter ports are opened by
+:: seeding, not by the free list — see its header). Free_Chunks.json is staged
+:: in [1/3] like any other authored data file.
+echo [0/3] Rebuilding Charter_Tasks.json from Charter_Tasks_Folder...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%CHUNKBLAZER_DIR%\Tasks_JSON\build-charter-tasks.ps1"
 if %ERRORLEVEL% NEQ 0 (
     echo ERROR: charter aggregation failed.
