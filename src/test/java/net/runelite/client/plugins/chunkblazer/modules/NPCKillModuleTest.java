@@ -301,7 +301,18 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		advance(ON_TASK_WAIT_TICKS);
 	}
 
-	private static final int ON_TASK_WAIT_TICKS = 2;
+	/** Must track NPCKillModule.ON_TASK_WAIT_TICKS — a stale value here makes the
+	 *  off-task tests pass vacuously (the death is still held, not yet ruled). */
+	private static final int ON_TASK_WAIT_TICKS = 6;
+
+	/** Simulate the SLAYER_COUNT varp (394) moving — a DECREASE is an on-task kill. */
+	private void setSlayerCount(int remaining)
+	{
+		VarbitChanged e = mock(VarbitChanged.class);
+		lenient().when(e.getVarpId()).thenReturn(394);
+		lenient().when(e.getValue()).thenReturn(remaining);
+		npcKillModule.onVarbitChanged(e);
+	}
 
 	private java.lang.reflect.Method findMethod(Class<?> clazz, String name, Class<?>... params)
 	{
@@ -408,11 +419,123 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		NPC npc = mockNpc(3034, 1, "Goblin");
 		fireMyHitsplat(npc, 10);
 		killAndDrain(npc);
-		advance(1);
-		advance(1); // no XP ever arrives
+		for (int i = 0; i < ON_TASK_WAIT_TICKS; i++)
+		{
+			advance(1); // no evidence ever arrives
+		}
 
 		assertEquals(0, goblin.getCurrentProgress(),
 			"a held death whose Slayer XP never arrives must be ruled off task");
+	}
+
+	/**
+	 * Cruk's goblin task (session_2026-07-30 16:17–16:20). He was demonstrably on
+	 * task — the in-game counter ran 17 → 0 — yet only 11 of 17 kills credited; the
+	 * other 6 were refused with "Not on a slayer task for this monster". The evidence
+	 * delay is not a fixed one tick: for those 6 the SLAYER_COUNT decrement landed
+	 * AFTER the verdict. A 2-tick hold simply lost the race about a third of the time.
+	 */
+	@Test
+	void testSlayerGate_creditsWhenEvidenceArrivesSeveralTicksLate() throws Exception
+	{
+		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 19, Arrays.asList(3031));
+		npcKillModule.addActiveTask(goblin);
+
+		NPC npc = mockNpc(3031, 1, "Goblin");
+		fireMyHitsplat(npc, 10);
+		killAndDrain(npc); // tick 100: the goblin dies
+
+		advance(1);
+		advance(1);
+		assertEquals(0, goblin.getCurrentProgress(),
+			"still waiting — the evidence that decides this kill hasn't arrived");
+
+		setTick(103);
+		grantSlayerXp(); // three ticks after the death, as in Cruk's log
+		npcKillModule.onGameTick(new GameTick());
+
+		assertEquals(1, goblin.getCurrentProgress(),
+			"an on-task kill must credit even when its Slayer evidence is several ticks late");
+	}
+
+	/**
+	 * The SLAYER_COUNT decrement alone is sufficient evidence. It moves only for a
+	 * kill of the ASSIGNED monster, and it does not always land on the same tick as
+	 * the Slayer XP — accepting either is what closes the race.
+	 */
+	@Test
+	void testSlayerGate_creditsOnSlayerCountDecrementAlone() throws Exception
+	{
+		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 19, Arrays.asList(3031));
+		npcKillModule.addActiveTask(goblin);
+
+		setSlayerCount(17); // baseline: 17 goblins remaining
+
+		NPC npc = mockNpc(3031, 1, "Goblin");
+		fireMyHitsplat(npc, 10);
+		killAndDrain(npc);
+
+		setTick(102);
+		setSlayerCount(16); // the counter ticks down — no Slayer XP event at all
+		npcKillModule.onGameTick(new GameTick());
+
+		assertEquals(1, goblin.getCurrentProgress(),
+			"a SLAYER_COUNT decrement in the kill's window proves the kill was on task");
+	}
+
+	/**
+	 * The counter's FIRST sighting is a baseline, not a kill — it is re-sent on login.
+	 * Without that guard, logging in mid-task would hand a free credit to the next
+	 * matching kill.
+	 */
+	@Test
+	void testSlayerGate_firstSlayerCountSightingIsNotAKill() throws Exception
+	{
+		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 19, Arrays.asList(3031));
+		npcKillModule.addActiveTask(goblin);
+
+		NPC npc = mockNpc(3031, 1, "Goblin");
+		fireMyHitsplat(npc, 10);
+		killAndDrain(npc);
+
+		setTick(101);
+		setSlayerCount(9); // first sighting ever — a baseline, whatever its value
+		for (int i = 0; i < ON_TASK_WAIT_TICKS; i++)
+		{
+			advance(1);
+		}
+
+		assertEquals(0, goblin.getCurrentProgress(),
+			"the first SLAYER_COUNT value seen is a baseline and must not credit a kill");
+	}
+
+	/**
+	 * A held death must survive a routine task-list refresh. onTaskCleared() fires on
+	 * every loadActiveTasks() — chunk unlocks, region changes, and the re-register
+	 * that follows each progress save — and it used to clear heldDeaths, dropping the
+	 * kill silently: no credit, no failure message, no log line. Survivable at a
+	 * 2-tick hold; not at six.
+	 */
+	@Test
+	void testSlayerGate_heldDeathSurvivesRoutineRefresh() throws Exception
+	{
+		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 19, Arrays.asList(3031));
+		npcKillModule.addActiveTask(goblin);
+
+		NPC npc = mockNpc(3031, 1, "Goblin");
+		fireMyHitsplat(npc, 10);
+		killAndDrain(npc); // held, waiting for evidence
+
+		// Routine refresh lands mid-hold: clearTask() → onTaskCleared() → re-register.
+		npcKillModule.onTaskCleared();
+		npcKillModule.addActiveTask(goblin);
+
+		setTick(102);
+		grantSlayerXp();
+		npcKillModule.onGameTick(new GameTick());
+
+		assertEquals(1, goblin.getCurrentProgress(),
+			"a refresh mid-hold must not throw away a kill that was on task");
 	}
 
 	// --- Relog / restricted-kill integrity (internal tester report, 2026-07-16) --
