@@ -172,7 +172,7 @@
       }
     },
     {
-      "name": "Defeat some Level 22 Skeletons",
+      "name": "Defeat a Level 22 Skeleton",
       "taskID": "defeat_level_22_skeletons",
       "category": "Combat",
       "completion_type": "NPC_Kill",

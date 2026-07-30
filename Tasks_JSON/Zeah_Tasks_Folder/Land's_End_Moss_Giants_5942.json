@@ -64,7 +64,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Chickens",
+                    "name": "Defeat a Chicken",
                     "taskID": "defeat_chickens",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

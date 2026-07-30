@@ -19,7 +19,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Ice Trolls in Troll Country",
+                    "name": "Defeat an Ice Troll in Troll Country",
                     "taskID": "defeat_ice_trolls_ice_gate",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

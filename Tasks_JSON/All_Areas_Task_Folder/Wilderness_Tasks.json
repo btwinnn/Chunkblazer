@@ -457,7 +457,7 @@
             "Friendly_Name": "Black Knights' Fortress Overlook",
             "tasks": [
                 {
-                    "name": "Defeat some Scorpions",
+                    "name": "Defeat a Scorpion",
                     "taskID": "defeat_scorpions",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -573,7 +573,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Dark Wizards",
+                    "name": "Defeat a Dark Wizard",
                     "taskID": "defeat_some_dark_wizards",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3174,7 +3174,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Hobgoblins",
+                    "name": "Defeat a Hobgoblin",
                     "taskID": "defeat_hobgoblins",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

@@ -63,7 +63,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Black Bears",
+                    "name": "Defeat a Black Bear",
                     "taskID": "defeat_some_black_bears",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

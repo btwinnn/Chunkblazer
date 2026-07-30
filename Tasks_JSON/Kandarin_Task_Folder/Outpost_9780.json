@@ -64,7 +64,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Hobgoblins",
+                    "name": "Defeat a Hobgoblin",
                     "taskID": "defeat_hobgoblins",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

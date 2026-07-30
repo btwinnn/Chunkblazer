@@ -5,7 +5,7 @@
             "tasks": [
                 
                 {
-                    "name": "Defeat some Level 64 Wolves",
+                    "name": "Defeat a Level 64 Wolf",
                     "taskID": "defeat_level_64_wolves",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

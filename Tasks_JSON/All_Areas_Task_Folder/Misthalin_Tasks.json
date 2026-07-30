@@ -1289,7 +1289,7 @@
                     }          
                 },
                 {
-                    "name": "Defeat some Level 1 Rats",
+                    "name": "Defeat a Level 1 Rat",
                     "taskID": "defeat_rats",
                     "category": "Combat",
                     "level": 1,
@@ -2048,7 +2048,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Dark Wizards",
+                    "name": "Defeat a Dark Wizard",
                     "taskID": "defeat_some_dark_wizards",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2159,7 +2159,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Black Bears",
+                    "name": "Defeat a Black Bear",
                     "taskID": "defeat_some_black_bears",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3040,7 +3040,7 @@
                         ]
                 },
                 {
-                    "name": "Defeat some Level 10 Barbarians",
+                    "name": "Defeat a Level 10 Barbarian",
                     "taskID": "defeat_level_10_barbarians",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3086,7 +3086,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Minotaurs",
+                    "name": "Defeat a Minotaur",
                     "taskID": "defeat_minotaurs",
                     "category": "Combat",
                     "completion_type": "NPC_KILL",
@@ -3697,7 +3697,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Armoured Zombies",
+                    "name": "Defeat an Armoured Zombie",
                     "taskID": "defeat_armoured_zombies",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3773,7 +3773,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Level 6 Bats",
+                    "name": "Defeat a Level 6 Bat",
                     "taskID": "defeat_bats",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3974,7 +3974,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Sand Crabs",
+                    "name": "Defeat a Sand Crab",
                     "taskID": "defeat_sand_crabs",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

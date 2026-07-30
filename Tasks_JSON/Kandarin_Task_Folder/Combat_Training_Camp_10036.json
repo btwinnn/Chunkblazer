@@ -20,7 +20,7 @@
                         ]
                 },
                 {                           
-                    "name": "Defeat some Level 63 Ogres",
+                    "name": "Defeat a Level 63 Ogre",
                     "taskID": "defeat_level_63_ogres",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

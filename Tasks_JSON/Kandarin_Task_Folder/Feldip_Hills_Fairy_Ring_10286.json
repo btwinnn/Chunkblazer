@@ -49,7 +49,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Chompy Birds",
+                    "name": "Defeat a Chompy Bird",
                     "taskID": "defeat_chompy_birds",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

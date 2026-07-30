@@ -46,7 +46,7 @@
                     }          
                 },
                 {
-                    "name": "Defeat some Level 1 Rats",
+                    "name": "Defeat a Level 1 Rat",
                     "taskID": "defeat_rats",
                     "category": "Combat",
                     "level": 1,

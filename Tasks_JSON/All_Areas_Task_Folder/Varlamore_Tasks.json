@@ -2279,7 +2279,7 @@
             "neighbor_ids": [6451, 6706, 6449, 6194],
             "tasks": [
                 {
-                    "name": "Defeat some Frost Naguas",
+                    "name": "Defeat a Frost Nagua",
                     "taskID": "defeat_some_frost_naguas",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2292,7 +2292,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Frost Naguas on Task",
+                    "name": "Defeat a Frost Nagua on Task",
                     "taskID": "defeat_some_frost_naguas_on_task",
                     "category": "Slayer",
                     "completion_type": "SLAYER",
@@ -2488,7 +2488,7 @@
             "neighbor_ids": [5427, 5682, 5425, 5170],
             "tasks": [
                 {
-                    "name": "Defeat some Level 64 Wolves",
+                    "name": "Defeat a Level 64 Wolf",
                     "taskID": "defeat_level_64_wolves",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -6615,7 +6615,7 @@
             "neighbor_ids": [6702, 6957, 6700, 6445],
             "tasks": [
                  {
-                    "name": "Defeat some Scorpions",
+                    "name": "Defeat a Scorpion",
                     "taskID": "defeat_scorpions",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -8023,7 +8023,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Grizzly Bears",
+                    "name": "Defeat a Grizzly Bear",
                     "taskID": "defeat_grizzly_bears",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

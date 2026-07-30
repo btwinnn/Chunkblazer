@@ -458,7 +458,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Scorpions",
+                    "name": "Defeat a Scorpion",
                     "taskID": "defeat_scorpions",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -471,7 +471,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Hobgoblins",
+                    "name": "Defeat a Hobgoblin",
                     "taskID": "defeat_hobgoblins",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -932,7 +932,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Scorpions",
+                    "name": "Defeat a Scorpion",
                     "taskID": "defeat_scorpions",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1350,7 +1350,7 @@
             "neighbor_ids": [11055, 11310, 11053, 10798],
             "tasks": [
                 {
-                    "name": "Defeat some Scorpions",
+                    "name": "Defeat a Scorpion",
                     "taskID": "defeat_scorpions",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

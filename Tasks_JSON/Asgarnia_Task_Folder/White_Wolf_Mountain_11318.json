@@ -103,7 +103,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some White Wolves",
+                    "name": "Defeat a White Wolf",
                     "taskID": "defeat_white_wolves",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

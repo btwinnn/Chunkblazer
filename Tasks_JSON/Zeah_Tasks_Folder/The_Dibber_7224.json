@@ -180,7 +180,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Unicorn Foal",
+                    "name": "Defeat a Unicorn Foal",
                     "taskID": "defeat_unicorn_foal",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -273,7 +273,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Hobgoblins",
+                    "name": "Defeat a Hobgoblin",
                     "taskID": "defeat_hobgoblins",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

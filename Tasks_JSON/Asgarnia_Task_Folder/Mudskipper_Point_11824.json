@@ -4,7 +4,7 @@
             "neighbor_ids": [11823, 12080, 11568, 11825],
             "tasks": [
                 {
-                    "name": "Defeat some Skeletal Wyverns",
+                    "name": "Defeat a Skeletal Wyvern",
                     "taskID": "defeat_skeletal_wyvern",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

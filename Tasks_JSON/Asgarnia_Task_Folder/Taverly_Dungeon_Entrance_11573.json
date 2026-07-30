@@ -44,7 +44,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Black Knights",
+                    "name": "Defeat a Black Knight",
                     "taskID": "defeat_some_black_knights",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

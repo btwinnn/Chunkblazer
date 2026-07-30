@@ -4,7 +4,7 @@
             "neighbor_ids": [11319, 11576, 11321, 11064],
             "tasks": [
                 {
-                    "name": "Defeat some Trolls",
+                    "name": "Defeat a Troll",
                     "taskID": "defeat_troll",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

@@ -3583,7 +3583,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Al Kharid Warriors",
+                    "name": "Defeat an Al Kharid Warrior",
                     "taskID": "defeat_al_kharid_warrior",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3691,7 +3691,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Scorpions",
+                    "name": "Defeat a Scorpion",
                     "taskID": "defeat_scorpions",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

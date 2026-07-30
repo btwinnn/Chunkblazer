@@ -1125,7 +1125,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Level 22 Skeletons",
+                    "name": "Defeat a Level 22 Skeleton",
                     "taskID": "defeat_level_22_skeletons",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3139,7 +3139,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Black Knights",
+                    "name": "Defeat a Black Knight",
                     "taskID": "defeat_some_black_knights",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
