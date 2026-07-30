@@ -61,7 +61,7 @@
                     }                   
                 },
                 {
-                    "name": "Defeat some Khazard Troopers",
+                    "name": "Defeat a Khazard Trooper",
                     "taskID": "defeat_khazard_troopers",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

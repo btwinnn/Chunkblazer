@@ -63,7 +63,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Ogress'",
+                    "name": "Defeat an Ogress'",
                     "taskID": "defeat_ogress",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

@@ -479,7 +479,7 @@
             "neighbor_ids": [11823, 12080, 11568, 11825],
             "tasks": [
                 {
-                    "name": "Defeat some Skeletal Wyverns",
+                    "name": "Defeat a Skeletal Wyvern",
                     "taskID": "defeat_skeletal_wyvern",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -731,7 +731,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Hobgoblins",
+                    "name": "Defeat a Hobgoblin",
                     "taskID": "defeat_hobgoblins",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -873,7 +873,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Black Knights",
+                    "name": "Defeat a Black Knight",
                     "taskID": "defeat_some_black_knights",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1866,7 +1866,7 @@
                 
                 
                 {
-                    "name": "Defeat some Dark Wizards",
+                    "name": "Defeat a Dark Wizard",
                     "taskID": "defeat_some_dark_wizards",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1932,7 +1932,7 @@
                     ]
                 },
                 {                           
-                    "name": "Defeat some Monks",
+                    "name": "Defeat a Monk",
                     "taskID": "defeat_monk",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1988,12 +1988,12 @@
                         ]
                 },
                 {
-                    "name": "Defeat some Black Knights",
-                    "taskID": "defeat_black_knight",
+                    "name": "Defeat a Black Knight",
+                    "taskID": "defeat_some_black_knights",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
                     "base_points": 1,
-                    "assignment_weight": 8,
+                    "assignment_weight": 3,
                     "target_npc": {
                         "npc": ["Black Knight"],
                         "npc_ids": [11953, 517, 4331, 11952, 516],
@@ -2646,7 +2646,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some White Wolves",
+                    "name": "Defeat a White Wolf",
                     "taskID": "defeat_white_wolves",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -2674,7 +2674,7 @@
             "neighbor_ids": [11319, 11576, 11321, 11064],
             "tasks": [
                 {
-                    "name": "Defeat some Trolls",
+                    "name": "Defeat a Troll",
                     "taskID": "defeat_troll",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3152,7 +3152,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Ice Trolls in Troll Country",
+                    "name": "Defeat an Ice Troll in Troll Country",
                     "taskID": "defeat_ice_trolls_ice_gate",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

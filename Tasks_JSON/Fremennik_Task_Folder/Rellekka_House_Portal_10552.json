@@ -4,7 +4,7 @@
             "neighbor_ids": [10553, 10808, 10551, 10296],
             "tasks": [
                 {
-                    "name": "Defeat some Level 64 Wolves",
+                    "name": "Defeat a Level 64 Wolf",
                     "taskID": "defeat_level_64_wolves",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

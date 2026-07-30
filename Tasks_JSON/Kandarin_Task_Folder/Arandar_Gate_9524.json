@@ -22,7 +22,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Grizzly Bears",
+                    "name": "Defeat a Grizzly Bear",
                     "taskID": "defeat_grizzly_bears",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

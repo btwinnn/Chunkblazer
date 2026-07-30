@@ -51,7 +51,7 @@
                         ]
                 },
                 {
-                    "name": "Defeat some Level 10 Barbarians",
+                    "name": "Defeat a Level 10 Barbarian",
                     "taskID": "defeat_level_10_barbarians",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -97,7 +97,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Minotaurs",
+                    "name": "Defeat a Minotaur",
                     "taskID": "defeat_minotaurs",
                     "category": "Combat",
                     "completion_type": "NPC_KILL",

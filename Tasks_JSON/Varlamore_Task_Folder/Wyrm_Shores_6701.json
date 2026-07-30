@@ -4,7 +4,7 @@
             "neighbor_ids": [6702, 6957, 6700, 6445],
             "tasks": [
                  {
-                    "name": "Defeat some Scorpions",
+                    "name": "Defeat a Scorpion",
                     "taskID": "defeat_scorpions",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

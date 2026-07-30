@@ -36,7 +36,7 @@
             ]
         },
         {
-            "name": "Defeat some Sand Crabs",
+            "name": "Defeat a Sand Crab",
             "taskID": "defeat_sand_crabs",
             "category": "Combat",
             "completion_type": "NPC_Kill",
