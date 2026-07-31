@@ -1469,7 +1469,7 @@
                 {
                     "name": "Mix some Strength Potions",
                     "taskID": "mix_strength_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 12,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -1538,7 +1538,7 @@
                 {
                     "name": "Mix some Super Energy Potions",
                     "taskID": "mix_super_energy_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 52,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -1554,7 +1554,7 @@
                 {
                     "name": "Mix some Attack Potions",
                     "taskID": "mix_attack_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -1710,7 +1710,7 @@
                 {
                     "name": "Mix some Super Energy Potions",
                     "taskID": "mix_super_energy_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 52,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -1726,7 +1726,7 @@
                 {
                     "name": "Mix some Attack Potions",
                     "taskID": "mix_attack_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -1966,7 +1966,7 @@
                 {
                     "name": "Mix some Super Energy Potions",
                     "taskID": "mix_super_energy_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 52,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -1982,7 +1982,7 @@
                 {
                     "name": "Mix some Attack Potions",
                     "taskID": "mix_attack_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -2063,7 +2063,7 @@
                 {
                     "name": "Mix some Super Energy Potions",
                     "taskID": "mix_super_energy_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 52,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -2320,7 +2320,7 @@
                 {
                     "name": "Mix some Extended Anti-Venom+",
                     "taskID": "mix_extended_antivenom_plus",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 94,
                     "completion_type": "HERBLORE",
                     "base_points": 5,
@@ -2336,7 +2336,7 @@
                 {
                     "name": "Mix some Ranging Potions",
                     "taskID": "mix_ranging_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -2352,7 +2352,7 @@
                 {
                     "name": "Mix some Super Restore Potions",
                     "taskID": "mix_super_restore_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 63,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -3013,7 +3013,7 @@
                 {
                     "name": "Mix some Super Energy Potions",
                     "taskID": "mix_super_energy_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 52,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -3029,7 +3029,7 @@
                 {
                     "name": "Mix some Attack Potions",
                     "taskID": "mix_attack_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -3112,7 +3112,7 @@
                 {
                     "name": "Mix some Super Energy Potions",
                     "taskID": "mix_super_energy_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 52,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -3128,7 +3128,7 @@
                 {
                     "name": "Mix some Attack Potions",
                     "taskID": "mix_attack_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 3,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -4469,7 +4469,7 @@
                 {
                     "name": "Mix some Super Strength Potions",
                     "taskID": "mix_super_strength_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 55,
                     "completion_type": "HERBLORE",
                     "base_points": 2,

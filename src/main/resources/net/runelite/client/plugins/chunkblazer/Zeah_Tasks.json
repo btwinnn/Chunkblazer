@@ -400,7 +400,7 @@
                 {
                     "name": "Mix some Prayer Potions",
                     "taskID": "mix_prayer_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 38,
                     "completion_type": "HERBLORE",
                     "base_points": 2,
@@ -542,7 +542,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Unicorn Foal",
+                    "name": "Defeat a Unicorn Foal",
                     "taskID": "defeat_unicorn_foal",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -635,7 +635,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Hobgoblins",
+                    "name": "Defeat a Hobgoblin",
                     "taskID": "defeat_hobgoblins",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -808,7 +808,7 @@
                 {
                     "name": "Mix some Ranging Potions",
                     "taskID": "mix_ranging_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
@@ -1074,7 +1074,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Sand Crabs",
+                    "name": "Defeat a Sand Crab",
                     "taskID": "defeat_sand_crabs",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -1793,7 +1793,7 @@
                 {
                     "name": "Mix some Anti-Poison Potions",
                     "taskID": "mix_anti-poisons",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -3044,7 +3044,7 @@
                 {
                     "name": "Mix some Anti-Poison Potions",
                     "taskID": "mix_anti-poisons",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 5,
                     "completion_type": "HERBLORE",
                     "base_points": 1,
@@ -3126,7 +3126,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Chickens",
+                    "name": "Defeat a Chicken",
                     "taskID": "defeat_chickens",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",

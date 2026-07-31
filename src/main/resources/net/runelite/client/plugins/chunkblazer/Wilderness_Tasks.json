@@ -457,7 +457,7 @@
             "Friendly_Name": "Black Knights' Fortress Overlook",
             "tasks": [
                 {
-                    "name": "Defeat some Scorpions",
+                    "name": "Defeat a Scorpion",
                     "taskID": "defeat_scorpions",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -573,7 +573,7 @@
                     }
                 },
                 {
-                    "name": "Defeat some Dark Wizards",
+                    "name": "Defeat a Dark Wizard",
                     "taskID": "defeat_some_dark_wizards",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -3174,7 +3174,7 @@
                     ]
                 },
                 {
-                    "name": "Defeat some Hobgoblins",
+                    "name": "Defeat a Hobgoblin",
                     "taskID": "defeat_hobgoblins",
                     "category": "Combat",
                     "completion_type": "NPC_Kill",
@@ -4824,7 +4824,7 @@
                 {
                     "name": "Mix some Extended Antifire",
                     "taskID": "mix_extended_antifire",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 84,
                     "completion_type": "HERBLORE",
                     "base_points": 4,
@@ -4840,7 +4840,7 @@
                 {
                     "name": "Mix some Extended Super Antifire",
                     "taskID": "mix_extended_super_antifire",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 98,
                     "completion_type": "HERBLORE",
                     "base_points": 5,
@@ -5890,7 +5890,7 @@
                 {
                     "name": "Mix some Ranging Potions",
                     "taskID": "mix_ranging_potions",
-                    "category": "Obtain_Set",
+                    "category": "Herblore_Set",
                     "level": 72,
                     "completion_type": "HERBLORE",
                     "base_points": 3,
