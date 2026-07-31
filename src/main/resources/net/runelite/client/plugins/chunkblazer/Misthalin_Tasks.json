@@ -589,7 +589,7 @@
                     "required_items": [
                         {
                             "item": "Ensouled Goblin Head",
-                            "item_ids": [13447]
+                            "item_ids": [13447, 13448]
                         }
                     ]
                 },
