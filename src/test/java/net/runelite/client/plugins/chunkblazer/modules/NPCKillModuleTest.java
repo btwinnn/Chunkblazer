@@ -510,6 +510,101 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	}
 
 	/**
+	 * Rats and cows die fast, and a six-tick window is wide enough to cover several
+	 * of them. Each kill brings its OWN evidence, so a rapid on-task streak must
+	 * credit every kill — this is the case the widened window has to not break.
+	 */
+	@Test
+	void testSlayerGate_rapidOnTaskKills_allCredit() throws Exception
+	{
+		NuzlockeTask rats = createTaskWithNpc("Defeat a Rat on Task", "defeat_rat_on_task", "SLAYER", 5, Arrays.asList(2854));
+		npcKillModule.addActiveTask(rats);
+
+		setSlayerCount(30); // baseline
+
+		int remaining = 30;
+		for (int i = 0; i < 5; i++)
+		{
+			NPC rat = mockNpc(2854, 1, "Rat");
+			fireMyHitsplat(rat, 10);
+			killAndDrain(rat);          // one kill every two ticks
+			setTick(now + 1);
+			setSlayerCount(--remaining); // its own counter decrement
+			npcKillModule.onGameTick(new GameTick());
+			setTick(now + 1);
+			npcKillModule.onGameTick(new GameTick());
+		}
+
+		assertEquals(5, rats.getCurrentProgress(),
+			"every kill in a fast on-task streak brings its own evidence and must credit");
+	}
+
+	/**
+	 * The flip side, and the reason evidence is CLAIMED rather than just looked at:
+	 * kills that land in the seconds AFTER the slayer task finishes are off task, but
+	 * the last on-task signal is still inside a six-tick window. Without consumption
+	 * that one signal would pay out for every extra rat killed in the next 3.6s.
+	 */
+	@Test
+	void testSlayerGate_killsAfterTaskEnds_doNotReuseTheLastSignal() throws Exception
+	{
+		NuzlockeTask rats = createTaskWithNpc("Defeat a Rat on Task", "defeat_rat_on_task", "SLAYER", 5, Arrays.asList(2854));
+		npcKillModule.addActiveTask(rats);
+
+		setSlayerCount(1); // last one of the assignment
+
+		NPC last = mockNpc(2854, 1, "Rat");
+		fireMyHitsplat(last, 10);
+		killAndDrain(last);
+		setTick(now + 1);
+		setSlayerCount(0);  // task complete — the final decrement
+		npcKillModule.onGameTick(new GameTick());
+
+		assertEquals(1, rats.getCurrentProgress(), "the final on-task kill credits");
+
+		// Two more rats, killed immediately after, are off task — no new evidence.
+		for (int i = 0; i < 2; i++)
+		{
+			setTick(now + 1);
+			NPC extra = mockNpc(2854, 1, "Rat");
+			fireMyHitsplat(extra, 10);
+			killAndDrain(extra);
+			for (int t = 0; t < ON_TASK_WAIT_TICKS; t++)
+			{
+				advance(1);
+			}
+		}
+
+		assertEquals(1, rats.getCurrentProgress(),
+			"kills after the task ended must not be credited by the last kill's evidence");
+	}
+
+	/**
+	 * One kill, one credit — even when the same death satisfies two gated tasks the
+	 * evidence must only be claimed once, or the second task would be refused for
+	 * lack of evidence its own kill produced.
+	 */
+	@Test
+	void testSlayerGate_oneKillCreditsTwoGatedTasksOnOneSignal() throws Exception
+	{
+		NuzlockeTask a = createTaskWithNpc("Defeat a Rat on Task", "defeat_rat_on_task_a", "SLAYER", 5, Arrays.asList(2854));
+		NuzlockeTask b = createTaskWithNpc("Defeat a Rat on Task", "defeat_rat_on_task_b", "SLAYER", 5, Arrays.asList(2854));
+		npcKillModule.addActiveTask(a);
+		npcKillModule.addActiveTask(b);
+
+		NPC rat = mockNpc(2854, 1, "Rat");
+		fireMyHitsplat(rat, 10);
+		killAndDrain(rat);
+		setTick(now + 1);
+		grantSlayerXp();
+		npcKillModule.onGameTick(new GameTick());
+
+		assertEquals(1, a.getCurrentProgress(), "first gated task credits");
+		assertEquals(1, b.getCurrentProgress(),
+			"a second gated task matching the same kill must not be starved of evidence");
+	}
+
+	/**
 	 * A held death must survive a routine task-list refresh. onTaskCleared() fires on
 	 * every loadActiveTasks() — chunk unlocks, region changes, and the re-register
 	 * that follows each progress save — and it used to clear heldDeaths, dropping the

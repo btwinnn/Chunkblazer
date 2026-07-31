@@ -98,6 +98,23 @@ public class NPCKillModule extends AbstractTaskModule
 	private int previousSlayerCount = -1;
 	private int lastSlayerCountDropTick = -1;
 
+	// ── On-task evidence, as a CONSUMABLE queue of tick numbers ───────────
+	// One on-task kill produces exactly one entry, and a gated death CLAIMS one.
+	// A bare "was there a signal near this death" timestamp check can't survive
+	// fast kills once the window is six ticks wide: killing rats or cows in quick
+	// succession puts several deaths inside one signal's window, and every one of
+	// them would read that single signal as its own evidence. Two ways that pays
+	// out credit nobody earned — kills landing in the 3.6s after a slayer task
+	// FINISHES (the last on-task signal is still in range), and a gated task for
+	// monster X being credited by the evidence from your actual assignment to Y
+	// when both die close together. Claiming makes evidence one-kill-one-credit.
+	//
+	// Pairing: the counter decrement and the Slayer XP for the SAME kill land on
+	// the same tick, so whichever arrives first creates the entry and the other
+	// tops up rather than duplicating. Multi-kills are handled honestly because
+	// the counter drops by the number killed, not by one.
+	private final List<Integer> onTaskSignalTicks = new ArrayList<>();
+
 	// ── Cannon detection for RESTRICTED kills ────────────────────────────
 	// VarPlayer 3 is the remaining cannonball count — the same value RuneLite's own
 	// CannonPlugin reads as `cballsLeft` (verified by disassembly, 2026-07-16). A
@@ -398,6 +415,7 @@ public class NPCKillModule extends AbstractTaskModule
 		lastSlayerXpGainTick = -1;
 		previousSlayerCount = -1;
 		lastSlayerCountDropTick = -1;
+		onTaskSignalTicks.clear();
 		previousCannonballs = -1;
 		lastCannonFiredTick = -1;
 		pendingDropKills.clear();
@@ -510,8 +528,7 @@ public class NPCKillModule extends AbstractTaskModule
 				DeathRecord death = held.next();
 				// Either signal ends the wait — they don't reliably land on the same
 				// tick, and waiting for a specific one is what lost Cruk's kills.
-				boolean evidenceArrived = lastSlayerXpGainTick >= death.deathTick
-					|| lastSlayerCountDropTick >= death.deathTick;
+				boolean evidenceArrived = hasSignalAtOrAfter(death.deathTick);
 				boolean waitExpired = currentTick - death.deathTick >= ON_TASK_WAIT_TICKS;
 				if (evidenceArrived || waitExpired)
 				{
@@ -553,6 +570,16 @@ public class NPCKillModule extends AbstractTaskModule
 					processNpcDeath(death);
 				}
 			}
+		}
+
+		// Retire on-task evidence nothing can still claim. A death held from tick D is
+		// decided by D + ON_TASK_WAIT_TICKS at the latest and reaches back
+		// SLAYER_XP_WINDOW_TICKS, so a signal stays claimable for the sum of the two.
+		// Anything older is unclaimed evidence for a kill that was never gated.
+		if (!onTaskSignalTicks.isEmpty())
+		{
+			onTaskSignalTicks.removeIf(
+				t -> currentTick - t > SLAYER_XP_WINDOW_TICKS + ON_TASK_WAIT_TICKS);
 		}
 
 		// Drop fights we have not touched in a while so the map can't grow unbounded.
@@ -611,7 +638,13 @@ public class NPCKillModule extends AbstractTaskModule
 			// First sighting is a baseline, not a kill — the varp is re-sent on login.
 			if (previousSlayerCount >= 0 && remaining < previousSlayerCount)
 			{
-				lastSlayerCountDropTick = client.getTickCount();
+				int tick = client.getTickCount();
+				// The counter is authoritative on HOW MANY died: a multi-kill drops it
+				// by more than one. Top up rather than add, in case this kill's Slayer
+				// XP already registered a signal on this tick.
+				int killed = previousSlayerCount - remaining;
+				recordOnTaskSignals(tick, killed - countSignalsAt(tick));
+				lastSlayerCountDropTick = tick;
 			}
 			previousSlayerCount = remaining;
 			return;
@@ -665,9 +698,77 @@ public class NPCKillModule extends AbstractTaskModule
 		}
 		if (xp > previousSlayerXp)
 		{
-			lastSlayerXpGainTick = client.getTickCount();
+			int tick = client.getTickCount();
+			// Only if the counter hasn't already recorded this kill on this tick —
+			// they arrive together and describe ONE kill.
+			if (countSignalsAt(tick) == 0)
+			{
+				recordOnTaskSignals(tick, 1);
+			}
+			lastSlayerXpGainTick = tick;
 		}
 		previousSlayerXp = xp;
+	}
+
+	private void recordOnTaskSignals(int tick, int count)
+	{
+		for (int i = 0; i < count; i++)
+		{
+			onTaskSignalTicks.add(tick);
+		}
+	}
+
+	private int countSignalsAt(int tick)
+	{
+		int n = 0;
+		for (Integer t : onTaskSignalTicks)
+		{
+			if (t == tick)
+			{
+				n++;
+			}
+		}
+		return n;
+	}
+
+	/** True if unclaimed evidence has landed at or after this death — ends its hold. */
+	private boolean hasSignalAtOrAfter(int deathTick)
+	{
+		for (Integer t : onTaskSignalTicks)
+		{
+			if (t >= deathTick)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Claim the on-task evidence belonging to a death at {@code deathTick}, nearest
+	 * first, and CONSUME it so no other kill can be credited by the same signal.
+	 *
+	 * @return true if this kill was on task
+	 */
+	private boolean claimOnTaskSignal(int deathTick)
+	{
+		int bestIdx = -1;
+		int bestDistance = Integer.MAX_VALUE;
+		for (int i = 0; i < onTaskSignalTicks.size(); i++)
+		{
+			int distance = Math.abs(onTaskSignalTicks.get(i) - deathTick);
+			if (distance <= SLAYER_XP_WINDOW_TICKS && distance < bestDistance)
+			{
+				bestDistance = distance;
+				bestIdx = i;
+			}
+		}
+		if (bestIdx < 0)
+		{
+			return false;
+		}
+		onTaskSignalTicks.remove(bestIdx);
+		return true;
 	}
 
 	// NOTE: there is deliberately no onInteractingChanged handler any more. Tracking
@@ -782,6 +883,8 @@ public class NPCKillModule extends AbstractTaskModule
 					// lower value than last session would otherwise read as a kill.
 					previousSlayerCount = -1;
 					lastSlayerCountDropTick = -1;
+					// heldDeaths was just cleared, so nothing can claim these.
+					onTaskSignalTicks.clear();
 				}
 				break;
 			default:
@@ -1177,6 +1280,11 @@ public class NPCKillModule extends AbstractTaskModule
 			return;
 		}
 
+		// Resolve the on-task verdict ONCE for this death, lazily. The evidence is
+		// consumed when claimed, so asking per-task would make a kill that matches
+		// two gated tasks eat two kills' worth of evidence and refuse the second.
+		Boolean onTaskVerdict = null;
+
 		// Update progress for all matching tasks
 		for (NuzlockeTask task : matchingTasks)
 		{
@@ -1187,14 +1295,18 @@ public class NPCKillModule extends AbstractTaskModule
 			// credited the right monster even while assigned to a different one.)
 			if (requiresOnTaskGate(task))
 			{
-				boolean onTask = wasOnTaskKill(death.deathTick);
-				// Diagnostic for the next "I killed N but only got M" report: this is
-				// the only place a genuine on-task kill can be silently thrown away,
-				// and the two signal ticks are what decide it. Without them a refusal
-				// is indistinguishable from the player being genuinely off-task.
-				log.info("[NPCKILL-DEBUG] on-task gate: task='{}' onTask={} deathTick={} slayerXpTick={} slayerCountTick={}",
-					task.getTaskId(), onTask, death.deathTick, lastSlayerXpGainTick, lastSlayerCountDropTick);
-				if (!onTask)
+				if (onTaskVerdict == null)
+				{
+					onTaskVerdict = wasOnTaskKill(death.deathTick);
+					// Diagnostic for the next "I killed N but only got M" report: this
+					// is the only place a genuine on-task kill can be silently thrown
+					// away, and the signal ticks are what decide it. Without them a
+					// refusal is indistinguishable from being genuinely off-task.
+					log.info("[NPCKILL-DEBUG] on-task gate: task='{}' onTask={} deathTick={} slayerXpTick={} slayerCountTick={} unclaimedSignals={}",
+						task.getTaskId(), onTaskVerdict, death.deathTick,
+						lastSlayerXpGainTick, lastSlayerCountDropTick, onTaskSignalTicks);
+				}
+				if (!onTaskVerdict)
 				{
 					sendTaskFailure(task, "Not on a slayer task for this monster");
 					continue; // Skip this task, don't credit the kill
@@ -1599,26 +1711,18 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	/**
-	 * True if the kill that happened on deathTick was an on-task slayer kill — i.e. a
-	 * Slayer XP gain landed within SLAYER_XP_WINDOW_TICKS of the DEATH, in either
-	 * direction. Off-task kills award no Slayer XP, so this distinguishes "killed my
-	 * assigned monster" from "killed a monster that merely matches the task while
-	 * assigned to something else". SLAYER_COUNT (varp 394) is intentionally not used —
-	 * it only told us the player had *an* assignment, not *which* one.
+	 * True if the kill that happened on deathTick was an on-task slayer kill: it must
+	 * CLAIM a piece of on-task evidence recorded within SLAYER_XP_WINDOW_TICKS of the
+	 * DEATH, in either direction. Off-task kills produce no Slayer XP and no
+	 * SLAYER_COUNT movement, so this distinguishes "killed my assigned monster" from
+	 * "killed a monster that merely matches the task while assigned to something else".
 	 *
 	 * Compares against deathTick, NOT the current tick: gated deaths are held until
-	 * the XP arrives, so "now" drifts away from the kill while we wait.
+	 * the evidence arrives, so "now" drifts away from the kill while we wait.
 	 */
 	private boolean wasOnTaskKill(int deathTick)
 	{
-		return onTaskSignalNear(lastSlayerXpGainTick, deathTick)
-			|| onTaskSignalNear(lastSlayerCountDropTick, deathTick);
-	}
-
-	/** True if an on-task signal recorded at {@code signalTick} belongs to this death. */
-	private static boolean onTaskSignalNear(int signalTick, int deathTick)
-	{
-		return signalTick > 0 && Math.abs(signalTick - deathTick) <= SLAYER_XP_WINDOW_TICKS;
+		return claimOnTaskSignal(deathTick);
 	}
 
 	/**
