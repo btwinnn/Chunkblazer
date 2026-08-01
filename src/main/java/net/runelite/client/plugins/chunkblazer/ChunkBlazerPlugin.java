@@ -152,7 +152,16 @@ public class ChunkBlazerPlugin extends Plugin
 	private KeyManager keyManager;
 
 	@Inject
+	private net.runelite.client.input.MouseManager mouseManager;
+
+	@Inject
 	private ChunkBlazerInput inputListener;
+
+	@Inject
+	private TaskCardOverlay taskCardOverlay;
+
+	@Inject
+	private TaskCardInput taskCardInput;
 
 	// True while the configured world-map unlock key is held. Set by
 	// ChunkBlazerInput (KeyListener); read in onMenuOptionClicked so a click on
@@ -407,6 +416,12 @@ public class ChunkBlazerPlugin extends Plugin
 		// Register animated task completion overlay
 		overlayManager.add(taskCompletionAnimationOverlay);
 
+		// Task reveal cards. The mouse listener has to be registered alongside the
+		// overlay: it is what turns a click on a card into a flip (and swallows that
+		// click so it doesn't also walk the player into the middle of the screen).
+		overlayManager.add(taskCardOverlay);
+		mouseManager.registerMouseListener(taskCardInput);
+
 		// Player recognition surfaces: overhead tag + model outline (scene) and
 		// minimap dots. Each render path is individually config-gated.
 		overlayManager.add(playerOverlay);
@@ -473,6 +488,11 @@ public class ChunkBlazerPlugin extends Plugin
 		overlayManager.remove(orbOverlay);
 		overlayManager.remove(bossTokenOverlay);
 		overlayManager.remove(taskCompletionAnimationOverlay);
+		overlayManager.remove(taskCardOverlay);
+		mouseManager.unregisterMouseListener(taskCardInput);
+		// Drop cards WITHOUT revealing: the pending set is durable, so they are still
+		// waiting on the next startup. Revealing here would flip them for free.
+		taskCardOverlay.clear();
 		taskModuleManager.shutDown();
 		varPlayerService.shutDown();
 		if (soundManager != null)
@@ -3608,6 +3628,11 @@ public class ChunkBlazerPlugin extends Plugin
 		Set<String> completedTaskIds = getCompletedTaskIds();
 		Set<String> addedTaskIds = new HashSet<>(); // Track added tasks to prevent duplicates
 
+		// Tasks still behind a face-down card are NOT active and must not be registered
+		// with any module — that is the whole point of the reveal gate. They stay in
+		// regionRolledTasks (the roll is committed) and rejoin here once flipped.
+		Set<String> unrevealed = new HashSet<>(getUnrevealedTaskIds());
+
 		Set<String> unlockedRegions = getUnlockedRegionIds();
 
 		for (String regionIdStr : unlockedRegions)
@@ -3617,7 +3642,11 @@ public class ChunkBlazerPlugin extends Plugin
 				int regionId = Integer.parseInt(regionIdStr);
 				Set<String> rolledTaskIds = getRolledTasksForRegion(regionId);
 
-				if (rolledTaskIds.isEmpty())
+				// Free-list chunks have no tasks BY DESIGN, so they never have a roll to
+				// find and would be re-attempted on every loadActiveTasks — which runs
+				// constantly. Skipping them keeps the "No chunk found for region N"
+				// warning meaning what it says: a chunk that should exist and doesn't.
+				if (rolledTaskIds.isEmpty() && !isFreeUnlockableRegion(regionId))
 				{
 					rolledTaskIds = rollTasksForRegion(regionId);
 				}
@@ -3630,6 +3659,7 @@ public class ChunkBlazerPlugin extends Plugin
 						String taskId = task.getTaskId();
 						if (rolledTaskIds.contains(taskId) &&
 							!completedTaskIds.contains(taskId) &&
+							!unrevealed.contains(taskId) && // still face-down
 							!addedTaskIds.contains(taskId) && // Prevent duplicates
 							!task.isLocked())
 						{
@@ -3997,8 +4027,13 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 
-		// Save to config
+		// Save to config. The roll is committed here and never revisited — see
+		// markTasksUnrevealed for why that has to happen BEFORE the reveal gate.
 		saveRolledTasksForRegion(regionId, rolledIds);
+
+		// Park them behind cards. loadActiveTasks skips anything still pending, so
+		// these do not become active until the player flips them.
+		markTasksUnrevealed(rolledIds);
 
 		return rolledIds;
 	}
@@ -4052,6 +4087,92 @@ public class ChunkBlazerPlugin extends Plugin
 	/**
 	 * Get the rolled task IDs for a region from config.
 	 */
+	// --- Task reveal cards -------------------------------------------------------
+	//
+	// A rolled task waits behind a face-down card until the player flips it (see
+	// TaskCardOverlay). Until then its id sits in `unrevealedTasks` and loadActiveTasks
+	// skips it, so it is not in the active list and no module is tracking it.
+	//
+	// The ROLL is still committed the moment it happens (regionRolledTasks, written by
+	// rollTasksForRegion). Only the reveal is deferred. That ordering is deliberate:
+	// if the pending set decided the task instead of merely hiding it, a player could
+	// leave bad cards unflipped and reroll them by relogging.
+
+	/** Task ids rolled but not yet flipped, in a stable order for a stable card layout. */
+	public List<String> getUnrevealedTaskIds()
+	{
+		String data = config.unrevealedTasks();
+		if (data == null || data.isEmpty())
+		{
+			return new ArrayList<>();
+		}
+		List<String> ids = new ArrayList<>();
+		for (String id : data.split(","))
+		{
+			String trimmed = id.trim();
+			if (!trimmed.isEmpty() && !ids.contains(trimmed))
+			{
+				ids.add(trimmed);
+			}
+		}
+		return ids;
+	}
+
+	/**
+	 * Park freshly rolled tasks behind cards. No-op when the feature is off, which is
+	 * what keeps the old "straight into the list" behaviour available.
+	 */
+	private void markTasksUnrevealed(Set<String> taskIds)
+	{
+		if (!config.showTaskCards() || taskIds == null || taskIds.isEmpty())
+		{
+			return;
+		}
+		List<String> pending = getUnrevealedTaskIds();
+		boolean changed = false;
+		for (String taskId : taskIds)
+		{
+			// Never re-hide something already completed — that would resurrect a done
+			// task as a card and, on flip, put it back in the active list.
+			if (!pending.contains(taskId) && !getCompletedTaskIds().contains(taskId))
+			{
+				pending.add(taskId);
+				changed = true;
+			}
+		}
+		if (changed)
+		{
+			setAccountState("unrevealedTasks", String.join(",", pending));
+		}
+	}
+
+	/**
+	 * Flip a card: the task stops being pending and enters the active list on the spot.
+	 * Idempotent, because the overlay and a config change can both reach it.
+	 */
+	public void revealTaskCard(String taskId)
+	{
+		List<String> pending = getUnrevealedTaskIds();
+		if (!pending.remove(taskId))
+		{
+			return;
+		}
+		setAccountState("unrevealedTasks", String.join(",", pending));
+
+		// Now it counts: pick it up as an active task and repaint.
+		loadActiveTasks();
+		if (panel != null)
+		{
+			panel.updatePanel();
+		}
+	}
+
+	/** Exposed for the card overlay, which only has ids to work with. */
+	public NuzlockeTask getTaskById(String taskId)
+	{
+		return findTaskById(taskId);
+	}
+
 	public Set<String> getRolledTasksForRegion(int regionId)
 	{
 		String data = config.regionRolledTasks();

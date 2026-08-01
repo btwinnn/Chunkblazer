@@ -125,6 +125,19 @@ public interface ChunkBlazerConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "unrevealedTasks",
+		name = "Unrevealed Tasks",
+		description = "Rolled tasks still waiting behind a face-down card (comma-separated task IDs). "
+			+ "These are NOT active and are not tracked until the card is flipped.",
+		position = 6,
+		hidden = true
+	)
+	default String unrevealedTasks()
+	{
+		return "";
+	}
+
+	@ConfigItem(
 		keyName = "currentTaskId",
 		name = "Current Task ID",
 		description = "The currently active task ID",
@@ -252,11 +265,25 @@ public interface ChunkBlazerConfig extends Config
 	String displaySection = "display";
 
 	@ConfigItem(
+		keyName = "showTaskCards",
+		name = "Task Reveal Cards",
+		description = "Newly rolled tasks arrive as face-down cards you click to flip. "
+			+ "A task is not added to your list or tracked until its card is turned over. "
+			+ "Turn this off to have rolled tasks go straight into your list as before.",
+		section = displaySection,
+		position = 0
+	)
+	default boolean showTaskCards()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "showOverlay",
 		name = "Show Task Overlay",
 		description = "Show the current task overlay on screen",
 		section = displaySection,
-		position = 0
+		position = 1
 	)
 	default boolean showOverlay()
 	{
