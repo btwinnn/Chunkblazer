@@ -53,19 +53,45 @@ public class TaskCardOverlay extends Overlay
 	/** Fade-out once the player dismisses a face-up card. */
 	private static final long EXIT_DURATION = 320;
 
-	/** Card footprint when art is present; art is scaled to fit this width. */
-	private static final int CARD_WIDTH = 172;
+	/**
+	 * Preferred card width. The art is 356x200, so this draws it at ~67% — small enough
+	 * that five fit across a normal resizable viewport, large enough that the task name
+	 * in the body panel stays readable.
+	 */
+	private static final int CARD_WIDTH = 240;
 	private static final int CARD_GAP = 14;
+
+	/**
+	 * Below this width the body panel can no longer hold a legible task name, so the row
+	 * wraps instead of shrinking further. Five cards in one row needs ~1250px of
+	 * viewport; a fixed-mode client has 512. Without wrapping those five would be
+	 * squeezed to ~80px each — technically visible, actually useless.
+	 */
+	private static final int MIN_LEGIBLE_WIDTH = 150;
+	private static final int ROW_GAP = 12;
+
+	/**
+	 * Never more than three across, even when the viewport could fit five.
+	 *
+	 * <p>A roll is 4-5 tasks, and five 240px cards in a line want ~1250px — so on any
+	 * ordinary window one long row means shrinking every card to keep it on screen. Two
+	 * balanced rows (3+2, or 2+2 for a four-task roll) keep the cards at full size and
+	 * stay centred, which is what makes this degrade gracefully as the client window
+	 * scales down instead of falling off a cliff at some width.
+	 */
+	private static final int MAX_PER_ROW = 3;
 	/** Used only when art is missing — the drawn fallback needs some shape. */
 	private static final double FALLBACK_ASPECT = 202.0 / 344.0;
 
-	/**
-	 * Vertical centre of the body panel on the real card art, as a fraction of card
-	 * height. The art is a title plate on top with the panel beneath it, so the panel's
-	 * centre sits below the card's. Nudge this if the task name doesn't land squarely in
-	 * the panel once the PNGs are in.
-	 */
-	private static final double BODY_CENTRE_FRACTION = 0.63;
+	// Body-panel geometry, MEASURED off the shipped art rather than guessed: the panel
+	// is the largest contiguous flat-grey run in front_<tier>.png, which sits at
+	// y 90..180 and x 44..312 of 356x200 — identical across all five tiers. The panel is
+	// below the title plate, so its centre is NOT the card's centre.
+	// If the art is ever redrawn, re-measure rather than nudging these by eye.
+	private static final double BODY_CENTRE_FRACTION = 0.675;  // (90+180)/2 / 200
+	private static final double BODY_HEIGHT_FRACTION = 0.450;  // (180-90)  / 200
+	/** 0.753 measured, trimmed slightly so text never touches the panel bevel. */
+	private static final double BODY_WIDTH_FRACTION = 0.720;
 
 	private static final Color TEXT = new Color(255, 255, 255);
 	private static final Color TEXT_SHADOW = new Color(0, 0, 0, 190);
@@ -437,28 +463,82 @@ public class TaskCardOverlay extends Overlay
 		return new Rectangle(client.getViewportXOffset(), client.getViewportYOffset(), w, h);
 	}
 
-	/** Centre the row, shrinking the cards if the viewport is too narrow to hold them. */
+	/**
+	 * How many cards go on a row, given how many there are and how much width there is.
+	 *
+	 * <p>Two rules, in order. Never more than {@link #MAX_PER_ROW} across — five cards in
+	 * a line only fits a very wide client, and forcing it shrinks every card. Then
+	 * BALANCE: having settled on a row count, spread the cards evenly across it, so five
+	 * reads 3+2 and four reads 2+2 rather than 3+1.
+	 *
+	 * <p>Package-private and static purely so this is testable without a Graphics2D.
+	 */
+	static int[] rowSizes(int count, int availableWidth)
+	{
+		if (count <= 0)
+		{
+			return new int[]{0};
+		}
+		int cap = Math.min(MAX_PER_ROW, count);
+		// If even that many can't hold the legibility floor, narrow further.
+		int fits = Math.max(1, (availableWidth + CARD_GAP) / (MIN_LEGIBLE_WIDTH + CARD_GAP));
+		cap = Math.min(cap, fits);
+
+		int rows = (count + cap - 1) / cap;
+		// Spread the remainder across the LEADING rows rather than letting it pile onto
+		// the last one. A single perRow figure can't express this: seven cards at three
+		// across is 3+2+2, not 3+3+1, and the stranded single is what looks broken.
+		int base = count / rows;
+		int extra = count % rows;
+
+		int[] sizes = new int[rows];
+		for (int i = 0; i < rows; i++)
+		{
+			sizes[i] = base + (i < extra ? 1 : 0);
+		}
+		return sizes;
+	}
+
+	/**
+	 * Lay the cards out centred, shrinking to fit the viewport and wrapping onto extra
+	 * rows once shrinking alone would make them illegible.
+	 */
 	private void layout(Rectangle viewport)
 	{
 		int count = cards.size();
-		int cardWidth = CARD_WIDTH;
-		int totalWidth = count * cardWidth + (count - 1) * CARD_GAP;
-		int maxWidth = viewport.width - 40;
-
-		if (totalWidth > maxWidth && count > 0)
+		if (count == 0)
 		{
-			cardWidth = Math.max(64, (maxWidth - (count - 1) * CARD_GAP) / count);
-			totalWidth = count * cardWidth + (count - 1) * CARD_GAP;
+			return;
 		}
 
-		int cardHeight = (int) Math.round(cardWidth * aspectRatio());
-		int x = viewport.x + (viewport.width - totalWidth) / 2;
-		int y = viewport.y + (viewport.height - cardHeight) / 2;
+		int maxWidth = viewport.width - 40;
+		int[] sizes = rowSizes(count, maxWidth);
 
-		for (Card card : cards)
+		int widest = 1;
+		for (int size : sizes)
 		{
-			card.bounds = new Rectangle(x, y, cardWidth, cardHeight);
-			x += cardWidth + CARD_GAP;
+			widest = Math.max(widest, size);
+		}
+
+		int cardWidth = Math.min(CARD_WIDTH, (maxWidth - (widest - 1) * CARD_GAP) / widest);
+		cardWidth = Math.max(48, cardWidth); // a truly tiny viewport still gets something
+		int cardHeight = (int) Math.round(cardWidth * aspectRatio());
+
+		int blockHeight = sizes.length * cardHeight + (sizes.length - 1) * ROW_GAP;
+		int y = viewport.y + (viewport.height - blockHeight) / 2;
+
+		int index = 0;
+		for (int size : sizes)
+		{
+			int rowWidth = size * cardWidth + (size - 1) * CARD_GAP;
+			int x = viewport.x + (viewport.width - rowWidth) / 2;
+
+			for (int i = 0; i < size && index < count; i++, index++)
+			{
+				cards.get(index).bounds = new Rectangle(x, y, cardWidth, cardHeight);
+				x += cardWidth + CARD_GAP;
+			}
+			y += cardHeight + ROW_GAP;
 		}
 	}
 
@@ -582,19 +662,45 @@ public class TaskCardOverlay extends Overlay
 		graphics.setFont(FontManager.getRunescapeSmallFont());
 		FontMetrics fm = graphics.getFontMetrics();
 
-		List<String> lines = wrap(card.taskName, fm, b.width - (hasArt ? 28 : 20));
+		int textWidth = hasArt
+			? (int) Math.round(b.width * BODY_WIDTH_FRACTION)
+			: b.width - 20;
+
+		List<String> lines = wrap(card.taskName, fm, textWidth);
 		int lineHeight = fm.getHeight();
-		int blockHeight = lines.size() * lineHeight;
+
+		// Clamp to what the panel can actually hold. Task names run from "Defeat a Rat"
+		// to "Defeat a Level 63 Ogre on Task", and an overlong one would otherwise spill
+		// out of the panel and across the frame.
+		int panelHeight = (int) Math.round(b.height * (hasArt ? BODY_HEIGHT_FRACTION : 0.8));
+		int maxLines = Math.max(1, panelHeight / lineHeight);
+		if (lines.size() > maxLines)
+		{
+			lines = new ArrayList<>(lines.subList(0, maxLines));
+			int last = maxLines - 1;
+			lines.set(last, ellipsise(lines.get(last), fm, textWidth));
+		}
 
 		double centreFraction = hasArt ? BODY_CENTRE_FRACTION : 0.5;
 		int bodyCentreY = b.y + (int) Math.round(b.height * centreFraction);
-		int y = bodyCentreY - blockHeight / 2 + fm.getAscent();
+		int y = bodyCentreY - (lines.size() * lineHeight) / 2 + fm.getAscent();
 
 		for (String line : lines)
 		{
 			drawCentered(graphics, line, b.x + b.width / 2, y, TEXT);
 			y += lineHeight;
 		}
+	}
+
+	/** Trim a line until it plus an ellipsis fits the panel. */
+	private static String ellipsise(String line, FontMetrics fm, int maxWidth)
+	{
+		String text = line;
+		while (text.length() > 1 && fm.stringWidth(text + "...") > maxWidth)
+		{
+			text = text.substring(0, text.length() - 1);
+		}
+		return text.trim() + "...";
 	}
 
 	private void drawPrompt(Graphics2D graphics, Rectangle viewport)
