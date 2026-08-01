@@ -3170,6 +3170,11 @@ public class ChunkBlazerPlugin extends Plugin
 					config.pointsSpent(), pdata.getPointsSpent());
 				setAccountState("pointsSpent", pdata.getPointsSpent());
 			}
+			// AFTER the monotonic merge, deliberately. The corrupt figure this
+			// repairs is already stored server-side, so running it any earlier
+			// would just see the server's copy restored over the top of it. The
+			// corrected value then syncs upward and settles the server too.
+			migrateRepairImpossiblePointsSpent();
 			recomputePointsBalance();
 
 			// Rebuild the in-memory active-task list from the just-hydrated config
@@ -5220,6 +5225,18 @@ public class ChunkBlazerPlugin extends Plugin
 		int spent = config.pointsSpent();
 		int balance = Math.max(0, earned - spent);
 
+		// max(0, ...) silently absorbs a state that play cannot produce, and that
+		// silence is why the derivation bug ran for weeks looking like "unlocking
+		// a chunk spends all my points": the balance was pinned at zero and every
+		// recompute just re-confirmed it without complaint. Say so instead.
+		if (spent > earned)
+		{
+			log.warn("[CHUNKBLAZER] spend counter exceeds lifetime earnings: spent {} > earned {}. "
+					+ "The balance is pinned at 0 and every point earned will vanish on the next "
+					+ "recompute. Expect migrateRepairImpossiblePointsSpent() to correct this on login.",
+				spent, earned);
+		}
+
 		if (balance != config.totalPoints())
 		{
 			log.info("[CHUNKBLAZER] points balance recomputed: earned {} - spent {} = {} (was {})",
@@ -5256,6 +5273,31 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return;
 		}
+
+		// The whole derivation rests on the local balance being a REAL record of
+		// past spending. When the key is absent that reading is not merely
+		// unreliable, it is inverted: config.totalPoints() answers 0 from its
+		// default, and "balance 0" is then taken to mean SPENT EVERYTHING when it
+		// actually means NOTHING IS KNOWN.
+		//
+		// clearAccountState() unsets totalPoints and pointsSpent together, so
+		// every account switch landed in exactly that state and charged the
+		// incoming account its entire lifetime earnings. Cruk, 2026-08-01
+		// 17:23:19 — cleared, then "earned 414 - balance 0 = 414" one line later.
+		// The value is monotonic and syncs upward, so each switch ratcheted it
+		// permanently higher and pinned the balance at zero. A fresh install
+		// hydrating from the server hits the same state for the same reason.
+		//
+		// A legacy account — the only case this was written for — has a genuine
+		// persisted balance, so it still derives correctly.
+		if (!isPointsBalancePersisted())
+		{
+			log.info("[CHUNKBLAZER] skipping spend derivation — no balance stored locally "
+				+ "(fresh profile or account switch), so a zero balance means UNKNOWN, "
+				+ "not SPENT EVERYTHING. The server's spend figure stands.");
+			return;
+		}
+
 		int earned = computeEarnedPoints();
 		int balance = config.totalPoints();
 		if (earned <= 0 || balance >= earned)
@@ -5267,6 +5309,81 @@ public class ChunkBlazerPlugin extends Plugin
 		setAccountState("pointsSpent", spent);
 		log.info("[CHUNKBLAZER] derived points spent for this account: earned {} - balance {} = {}",
 			earned, balance, spent);
+	}
+
+	/**
+	 * Whether the spendable balance actually EXISTS in stored config, rather than
+	 * being {@link ChunkBlazerConfig#totalPoints()}'s default of 0.
+	 *
+	 * <p>Same shape as {@link #isUnlockedChunksPersisted()}: a config default makes
+	 * "absent" and "genuinely zero" indistinguishable through the typed accessor,
+	 * and every caller that treats those two as the same thing is wrong. Here it
+	 * decides whether a zero balance is evidence of spending or evidence of
+	 * nothing at all.
+	 */
+	private boolean isPointsBalancePersisted()
+	{
+		String raw = getAccountState("totalPoints");
+		return raw != null && !raw.trim().isEmpty();
+	}
+
+	/**
+	 * Undo an impossible spend counter left behind by the derivation bug above.
+	 *
+	 * <p>{@code spent > earned} cannot happen in play — points must be earned
+	 * before they can be spent — so it is a reliable signature of the corruption
+	 * rather than a state any legitimate session can reach. Both of Cruk's
+	 * accounts were sitting in it on 2026-08-01: ChunkBlazer at earned 117 /
+	 * spent 121, Cruk at earned 414 / spent 453. Fixing the derivation stops new
+	 * damage but cannot clear this, because the counter only ever moves upward
+	 * and the inflated figure is already on the server.
+	 *
+	 * <p>The chunks a player owns ARE the spend ledger: every paid chunk cost
+	 * exactly its unlock cost, and free/charter chunks cost zero. Re-summing them
+	 * recovers the true figure. The starting chunk is subtracted because
+	 * {@link #ensureStartingChunkUnlocked()} grants it rather than selling it.
+	 *
+	 * <p>Deliberately one-directional — it only ever LOWERS the counter, and only
+	 * to a total derived from chunks actually owned. Other free grants (casual
+	 * mode's one-time standing-chunk pick) make the recomputed figure slightly
+	 * high, which errs toward the player keeping fewer points than they are owed.
+	 * Balance stays {@code earned - spent} and so can never exceed earned, which
+	 * is what the server's Tier-0 check compares against.
+	 */
+	private void migrateRepairImpossiblePointsSpent()
+	{
+		int earned = computeEarnedPoints();
+		int spent = config.pointsSpent();
+		if (earned <= 0 || spent <= earned)
+		{
+			return;
+		}
+
+		int ledger = 0;
+		for (String id : getUnlockedRegionIds())
+		{
+			try
+			{
+				ledger += getRegionUnlockCost(Integer.parseInt(id.trim()));
+			}
+			catch (NumberFormatException ignored)
+			{
+				// a malformed region id contributes nothing
+			}
+		}
+		ledger = Math.max(0, ledger - getRegionUnlockCost(DEFAULT_START_REGION));
+
+		if (ledger >= spent)
+		{
+			return;
+		}
+
+		log.warn("[CHUNKBLAZER] impossible spend counter repaired: spent {} exceeded earned {}, "
+				+ "which play cannot produce. Rebuilt from the {} chunk(s) actually owned: spent = {}. "
+				+ "Balance goes {} -> {}.",
+			spent, earned, getUnlockedRegionIds().size(), ledger,
+			Math.max(0, earned - spent), Math.max(0, earned - ledger));
+		setAccountState("pointsSpent", ledger);
 	}
 
 	// --- Boss Tokens (secondary currency) ---

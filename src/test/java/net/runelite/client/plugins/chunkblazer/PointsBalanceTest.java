@@ -206,6 +206,10 @@ class PointsBalanceTest
 	 * An account from before the counter existed already has a balance that
 	 * reflects everything it ever spent, so the spend recovers exactly — no
 	 * guessing which chunks were granted free.
+	 *
+	 * <p>The stored balance is stubbed explicitly: the derivation now requires a
+	 * PERSISTED balance, because a merely-defaulted 0 means "unknown" rather than
+	 * "spent everything". A legacy account always has one.
 	 */
 	@Test
 	void spendIsDerivedFromAnExistingBalance() throws Exception
@@ -213,6 +217,7 @@ class PointsBalanceTest
 		seedEarned(CRUK_EARNED);
 		when(config.pointsSpent()).thenReturn(0);
 		when(config.totalPoints()).thenReturn(CRUK_BALANCE);
+		balanceStoredAs(String.valueOf(CRUK_BALANCE));
 
 		invoke("deriveInitialPointsSpent", new Class<?>[]{});
 
@@ -242,6 +247,9 @@ class PointsBalanceTest
 		seedEarned(CRUK_EARNED);
 		when(config.pointsSpent()).thenReturn(0);
 		when(config.totalPoints()).thenReturn(CRUK_EARNED);
+		// Stored, so the run gets past the persistence gate and reaches the
+		// balance >= earned check this test is actually about.
+		balanceStoredAs(String.valueOf(CRUK_EARNED));
 
 		invoke("deriveInitialPointsSpent", new Class<?>[]{});
 
@@ -278,5 +286,168 @@ class PointsBalanceTest
 		invoke("recomputePointsBalance", new Class<?>[]{});
 
 		assertEquals(2, capturedInt("totalPoints"), "only the two known tasks count");
+	}
+
+	// ---- Account switching must not charge the incoming account -----------
+	//
+	// Second live incident, 2026-08-01, same player. clearAccountState() unsets
+	// totalPoints and pointsSpent together; deriveInitialPointsSpent() then read
+	// the config DEFAULT of 0 as a real balance and concluded the account had
+	// spent everything it ever earned. Numbers below are from his session logs.
+
+	private static final int SWITCH_EARNED = 414;   // Cruk, after the server merge
+	private static final int SWITCH_SERVER_SPENT = 453;
+
+	private void balanceStoredAs(String raw)
+	{
+		lenient().when(configManager.getConfiguration(eq("chunkblazer"), eq("totalPoints")))
+			.thenReturn(raw);
+	}
+
+	private void ownsChunks(int count)
+	{
+		StringBuilder ids = new StringBuilder();
+		for (int i = 0; i < count; i++)
+		{
+			if (ids.length() > 0)
+			{
+				ids.append(',');
+			}
+			ids.append(12800 + i);
+		}
+		lenient().when(config.unlockedChunks()).thenReturn(ids.toString());
+	}
+
+	/**
+	 * any(Object.class), not a bare any(): per-account writes go through
+	 * setAccountState(String, Object), which binds ConfigManager's generic
+	 * setConfiguration(String, String, T). An untyped any() can resolve to the
+	 * all-String overload instead and then verifies a method nothing ever calls,
+	 * which passes no matter what the code does.
+	 */
+	private void assertNoWriteTo(String key)
+	{
+		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq(key), any(Object.class));
+	}
+
+	/**
+	 * THE regression. Post-clear, the balance key is ABSENT — the accessor's 0 is
+	 * a default, not a record of spending. Deriving from it charged Cruk all 414
+	 * points he had ever earned.
+	 */
+	@Test
+	void accountSwitchDoesNotChargeLifetimeEarnings() throws Exception
+	{
+		seedEarned(SWITCH_EARNED);
+		when(config.pointsSpent()).thenReturn(0);
+		balanceStoredAs(null);          // clearAccountState() unset it
+
+		invoke("deriveInitialPointsSpent", new Class<?>[]{});
+
+		assertNoWriteTo("pointsSpent");
+	}
+
+	/** A blank stored value is as absent as a missing one. */
+	@Test
+	void blankStoredBalanceAlsoSkipsDerivation() throws Exception
+	{
+		seedEarned(SWITCH_EARNED);
+		when(config.pointsSpent()).thenReturn(0);
+		balanceStoredAs("   ");
+
+		invoke("deriveInitialPointsSpent", new Class<?>[]{});
+
+		assertNoWriteTo("pointsSpent");
+	}
+
+	/**
+	 * The case the derivation was actually written for must still work: a legacy
+	 * account with a REAL persisted balance and no spend counter yet.
+	 */
+	@Test
+	void legacyAccountWithARealBalanceStillDerives() throws Exception
+	{
+		seedEarned(SWITCH_EARNED);
+		when(config.pointsSpent()).thenReturn(0);
+		when(config.totalPoints()).thenReturn(100);
+		balanceStoredAs("100");         // genuinely stored, not a default
+
+		invoke("deriveInitialPointsSpent", new Class<?>[]{});
+
+		assertEquals(314, capturedInt("pointsSpent"), "earned 414 - balance 100");
+	}
+
+	/**
+	 * Repairing the damage already done. Cruk arrived at earned 414 / spent 453 —
+	 * a state play cannot produce. The chunks he owns are the real ledger.
+	 */
+	@Test
+	void impossibleSpendIsRebuiltFromChunksOwned() throws Exception
+	{
+		seedEarned(SWITCH_EARNED);
+		when(config.pointsSpent()).thenReturn(SWITCH_SERVER_SPENT);
+		ownsChunks(40);                 // 40 owned, minus the granted start chunk
+
+		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
+
+		assertEquals(39, capturedInt("pointsSpent"),
+			"spend must come from chunks actually owned, not the corrupt counter");
+	}
+
+	/** A healthy account is never touched. */
+	@Test
+	void repairLeavesAHealthyAccountAlone() throws Exception
+	{
+		seedEarned(SWITCH_EARNED);
+		when(config.pointsSpent()).thenReturn(40);   // well under earned
+
+		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
+
+		assertNoWriteTo("pointsSpent");
+	}
+
+	/**
+	 * One-directional: the repair may only ever LOWER the counter. If the chunk
+	 * ledger came out higher it would be handing out points, so it must decline.
+	 */
+	@Test
+	void repairNeverRaisesTheSpendCounter() throws Exception
+	{
+		seedEarned(10);
+		when(config.pointsSpent()).thenReturn(12);   // impossible, but...
+		ownsChunks(80);                              // ...ledger is far higher
+
+		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
+
+		assertNoWriteTo("pointsSpent");
+	}
+
+	/**
+	 * End to end, in the order the login merge runs them: a switched-in account
+	 * with a wiped balance and the server's inflated counter still lands on a
+	 * spendable balance instead of zero.
+	 */
+	@Test
+	void switchedAccountEndsWithASpendableBalance() throws Exception
+	{
+		seedEarned(SWITCH_EARNED);
+		balanceStoredAs(null);
+		ownsChunks(40);
+
+		// Post-clear the counter is absent; the server then supplies its inflated
+		// figure through the monotonic merge, exactly as PlayerLoginResponse does.
+		when(config.pointsSpent())
+			.thenReturn(0)                   // deriveInitialPointsSpent()
+			.thenReturn(SWITCH_SERVER_SPENT) // migrateRepair...() sees the merged value
+			.thenReturn(39);                 // recomputePointsBalance() sees the repair
+
+		invoke("deriveInitialPointsSpent", new Class<?>[]{});
+		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
+		invoke("recomputePointsBalance", new Class<?>[]{});
+
+		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
+		verify(configManager).setConfiguration(eq("chunkblazer"), eq("totalPoints"), written.capture());
+		assertEquals(375, ((Number) written.getValue()).intValue(),
+			"earned 414 - repaired spend 39; the old code pinned this at 0");
 	}
 }
