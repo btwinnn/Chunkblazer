@@ -510,6 +510,45 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	}
 
 	/**
+	 * Cruk's black bear (session_2026-07-31 19:38:27). An NPC handle is only valid
+	 * while the actor is in the scene: once it despawns at the end of its death
+	 * animation the client clears it and getId() starts returning -1. A gated death is
+	 * decided several ticks later, by which point the handle can be a husk — it then
+	 * matches NO task, and the kill vanishes with no credit and no message. The log is
+	 * unambiguous: ChunkBlazer wrote {@code confirmed kill: id=-1 name='null'
+	 * damage=25} in the same second RuneLite's loot tracker recorded {@code npc=2839}.
+	 * The fix is to decide from the identity snapshotted at drain time.
+	 */
+	@Test
+	void testHeldDeath_creditsEvenAfterTheNpcDespawns() throws Exception
+	{
+		NuzlockeTask onTask = createTaskWithNpc("Defeat a Black Bear on Task", "defeat_black_bear_on_task", "SLAYER", 1, Arrays.asList(2839));
+		NuzlockeTask fast = createTaskWithNpc("Defeat a Black Bear Fast", "defeat_black_bear_fast", "NPC_KILL", 1, Arrays.asList(2839));
+		npcKillModule.addActiveTask(onTask);
+		npcKillModule.addActiveTask(fast);
+
+		NPC bear = mockNpc(2839, 1, "Black bear");
+		fireMyHitsplat(bear, 25);
+		killAndDrain(bear); // held — "Black Bear on Task" is gated
+
+		// The bear despawns while the death is held: the handle goes to id=-1/null,
+		// exactly as the client leaves it. lenient() because a correct implementation
+		// never reads it again — Mockito reporting these as UnnecessaryStubbing is the
+		// strictest available proof that the decision no longer touches the husk.
+		lenient().when(bear.getId()).thenReturn(-1);
+		lenient().when(bear.getName()).thenReturn(null);
+
+		setTick(now + 1);
+		grantSlayerXp();
+		npcKillModule.onGameTick(new GameTick());
+
+		assertEquals(1, onTask.getCurrentProgress(),
+			"a held kill must still be matched by the id captured when it died, not by a despawned husk");
+		assertEquals(1, fast.getCurrentProgress(),
+			"the despawn takes down every task the kill matched, gated or not");
+	}
+
+	/**
 	 * Rats and cows die fast, and a six-tick window is wide enough to cover several
 	 * of them. Each kill brings its OWN evidence, so a rapid on-task streak must
 	 * credit every kill — this is the case the widened window has to not break.

@@ -319,18 +319,38 @@ public class NPCKillModule extends AbstractTaskModule
 	 * happened on. Carrying deathTick matters for held deaths: elapsed fight time must
 	 * be measured to the DEATH, not to whenever we get around to deciding, or the wait
 	 * for Slayer XP would inflate every speed kill by the length of the wait.
+	 *
+	 * <p>The NPC's IDENTITY is snapshotted here too, and every downstream consumer must
+	 * read it from this record rather than from {@link #npc}. An {@code NPC} handle is
+	 * only valid while the actor is in the scene: once it despawns at the end of its
+	 * death animation the client clears it, and {@code getId()} starts returning -1
+	 * with {@code getName()} null. A decision deferred past that point matches no task
+	 * at all and the kill vanishes silently — Cruk's black bear, session_2026-07-31
+	 * 19:38:27, logged as {@code confirmed kill: id=-1 name='null' damage=25} in the
+	 * same second RuneLite's own loot tracker recorded {@code npc=2839}. The window
+	 * between death and despawn is only a handful of ticks, so ANY hold can straddle
+	 * it; snapshotting is what makes the hold length a free parameter.
 	 */
 	private static class DeathRecord
 	{
 		final NPC npc;
 		final FightRecord fight;
 		final int deathTick;
+		// Captured while the NPC is still in the scene — see the class comment.
+		final int npcId;
+		final String npcName;
+		final int npcCombatLevel;
+		final WorldPoint deathLocation;
 
 		DeathRecord(NPC npc, FightRecord fight, int deathTick)
 		{
 			this.npc = npc;
 			this.fight = fight;
 			this.deathTick = deathTick;
+			this.npcId = npc.getId();
+			this.npcName = npc.getName();
+			this.npcCombatLevel = npc.getCombatLevel();
+			this.deathLocation = npc.getWorldLocation();
 		}
 	}
 
@@ -340,22 +360,19 @@ public class NPCKillModule extends AbstractTaskModule
 	private static class PendingDropKill
 	{
 		final NuzlockeTask task;
-		final NPC killedNpc;
-		final FightRecord fight;
-		final WorldPoint deathLocation;
-		final int deathTick;
+		// The whole death, snapshotted. This waits up to PENDING_DROP_TIMEOUT_TICKS
+		// (~12s) for the drop, by which point the NPC has certainly despawned — so it
+		// must never have held a live NPC handle in the first place.
+		final DeathRecord death;
 		final List<Integer> requiredItemIds;
 		final int requiredQuantity;
 		int collectedQuantity = 0;
 
-		PendingDropKill(NuzlockeTask task, NPC npc, FightRecord fight, WorldPoint location, int tick,
+		PendingDropKill(NuzlockeTask task, DeathRecord death,
 						List<Integer> requiredItemIds, int requiredQuantity)
 		{
 			this.task = task;
-			this.killedNpc = npc;
-			this.fight = fight;
-			this.deathLocation = location;
-			this.deathTick = tick;
+			this.death = death;
 			this.requiredItemIds = requiredItemIds;
 			this.requiredQuantity = requiredQuantity;
 		}
@@ -561,7 +578,7 @@ public class NPCKillModule extends AbstractTaskModule
 				DeathRecord death = new DeathRecord(deadNpc, fight, currentTick);
 
 				// The on-task gate needs Slayer XP that has not arrived yet — park it.
-				if (needsOnTaskWait(deadNpc))
+				if (needsOnTaskWait(death))
 				{
 					heldDeaths.add(death);
 				}
@@ -606,7 +623,7 @@ public class NPCKillModule extends AbstractTaskModule
 			{
 				Map.Entry<String, PendingDropKill> entry = it.next();
 				PendingDropKill pending = entry.getValue();
-				int elapsed = currentTick - pending.deathTick;
+				int elapsed = currentTick - pending.death.deathTick;
 
 				if (elapsed > PENDING_DROP_TIMEOUT_TICKS)
 				{
@@ -1008,7 +1025,7 @@ public class NPCKillModule extends AbstractTaskModule
 			// TIMING CHECK: drops can lag the death event by the full death
 			// animation + server loot delay. Goblins observed at ~7 ticks;
 			// larger NPCs are higher. Use the constant rather than a literal.
-			int ticksSinceDeath = currentTick - pending.deathTick;
+			int ticksSinceDeath = currentTick - pending.death.deathTick;
 			if (ticksSinceDeath > DROP_SPAWN_FRESHNESS_TICKS)
 			{
 				continue;
@@ -1016,7 +1033,7 @@ public class NPCKillModule extends AbstractTaskModule
 
 			// LOCATION CHECK: Item must spawn at or very near the death location (within 1 tile)
 			// NPC drops spawn at the NPC's location, so this should be exact or 1 tile away
-			int distance = itemLocation.distanceTo(pending.deathLocation);
+			int distance = itemLocation.distanceTo(pending.death.deathLocation);
 			if (distance > 1)
 			{
 				continue;
@@ -1038,11 +1055,11 @@ public class NPCKillModule extends AbstractTaskModule
 
 				// Send progress to chatbox
 				String details = String.format("Killed %s and received %s drop",
-					pending.killedNpc.getName(), dropName);
+					pending.death.npcName, dropName);
 				sendTaskProgress(pending.task, details);
 
 				// Credit the kill
-				sendKillReport(pending.killedNpc, pending.task, pending.fight);
+				sendKillReport(pending.death, pending.task);
 				incrementTaskProgress(pending.task, 1);
 
 				it.remove();
@@ -1240,12 +1257,13 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	/**
-	 * Does any task this NPC could credit need the on-task slayer gate? Such deaths
-	 * wait for their Slayer XP rather than being decided immediately.
+	 * Does any task this death could credit need the on-task slayer gate? Such deaths
+	 * wait for their Slayer evidence rather than being decided immediately. Reads the
+	 * snapshot, so the answer can't change just because the NPC has despawned.
 	 */
-	private boolean needsOnTaskWait(NPC npc)
+	private boolean needsOnTaskWait(DeathRecord death)
 	{
-		for (NuzlockeTask task : findMatchingTasks(npc))
+		for (NuzlockeTask task : findMatchingTasks(death.npcId))
 		{
 			if (requiresOnTaskGate(task))
 			{
@@ -1262,18 +1280,18 @@ public class NPCKillModule extends AbstractTaskModule
 			return;
 		}
 
-		NPC npc = death.npc;
 		FightRecord fight = death.fight;
 
 		// Diagnostic for collecting real runtime NPC ids in-game: the wiki id often
 		// differs from / is incomplete vs what the client reports (level/spawn/hue
 		// variants). If a kill doesn't credit a task you expected, grep this line
-		// for the actual id and add it to the task's npc_ids.
+		// for the actual id and add it to the task's npc_ids. Reads the SNAPSHOT: a
+		// held death's NPC handle may already be a despawned husk reporting id=-1.
 		log.info("[NPCKILL-DEBUG] confirmed kill: id={} name='{}' damage={} fresh={} contested={}",
-			npc.getId(), npc.getName(), fight.damage, fight.startedFresh, fight.contested);
+			death.npcId, death.npcName, fight.damage, fight.startedFresh, fight.contested);
 
 		// Check all active tasks for a match
-		List<NuzlockeTask> matchingTasks = mostSpecificMatches(findMatchingTasks(npc));
+		List<NuzlockeTask> matchingTasks = mostSpecificMatches(findMatchingTasks(death.npcId));
 
 		if (matchingTasks.isEmpty())
 		{
@@ -1430,7 +1448,7 @@ public class NPCKillModule extends AbstractTaskModule
 			// If task has a dropped item constraint, check for the drop
 			if (hasDropConstraint)
 			{
-				WorldPoint deathLocation = npc.getWorldLocation();
+				WorldPoint deathLocation = death.deathLocation;
 				List<Integer> requiredItemIds = constraints.getDroppedItemIds();
 				int requiredQuantity = constraints.getDroppedItemQuantity();
 				String dropName = constraints.getDroppedItem();
@@ -1442,20 +1460,19 @@ public class NPCKillModule extends AbstractTaskModule
 				if (foundQuantity >= requiredQuantity)
 				{
 					// Send progress to chatbox
-					String details = String.format("Killed %s and received %s drop", npc.getName(), dropName)
+					String details = String.format("Killed %s and received %s drop", death.npcName, dropName)
 						+ killTimeSuffix(fight, death.deathTick);
 					sendTaskProgress(task, details);
 
 					// Credit the kill immediately
-					sendKillReport(npc, task, fight);
+					sendKillReport(death, task);
 					incrementTaskProgress(task, 1);
 					continue;
 				}
 
 				// Item not found yet - add to pending and wait for ItemSpawned event
 				PendingDropKill pending = new PendingDropKill(
-					task, npc, fight, deathLocation, death.deathTick,
-					requiredItemIds, requiredQuantity);
+					task, death, requiredItemIds, requiredQuantity);
 				pending.collectedQuantity = foundQuantity; // Track what we already found
 				pendingDropKills.put(task.getTaskId(), pending);
 
@@ -1465,11 +1482,11 @@ public class NPCKillModule extends AbstractTaskModule
 
 			// No drop constraint - credit the kill immediately
 			// Send progress to chatbox
-			String details = String.format("Killed %s", npc.getName()) + killTimeSuffix(fight, death.deathTick);
+			String details = String.format("Killed %s", death.npcName) + killTimeSuffix(fight, death.deathTick);
 			sendTaskProgress(task, details);
 
 			// Send kill report to server
-			sendKillReport(npc, task, fight);
+			sendKillReport(death, task);
 
 			// Increment progress on the task
 			incrementTaskProgress(task, 1);
@@ -1480,16 +1497,20 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	/**
-	 * Find all active tasks that match this NPC.
+	 * Find all active tasks that match this NPC id.
+	 *
+	 * <p>Takes the id rather than the NPC deliberately: a despawned handle reports -1,
+	 * which matches nothing and makes the kill disappear without a word. Callers
+	 * deciding a death must pass {@link DeathRecord#npcId}, never {@code npc.getId()}.
 	 */
-	private List<NuzlockeTask> findMatchingTasks(NPC npc)
+	private List<NuzlockeTask> findMatchingTasks(int npcId)
 	{
 		List<NuzlockeTask> matches = new ArrayList<>();
 
 		for (NuzlockeTask task : activeTasks)
 		{
 			TargetNpc targetNpc = task.getTargetNpc();
-			if (targetNpc != null && targetNpc.matchesNpcId(npc.getId()))
+			if (targetNpc != null && targetNpc.matchesNpcId(npcId))
 			{
 				matches.add(task);
 			}
@@ -1578,7 +1599,7 @@ public class NPCKillModule extends AbstractTaskModule
 	/**
 	 * Send a kill report to the server for verification.
 	 */
-	private void sendKillReport(NPC npc, NuzlockeTask task, FightRecord fight)
+	private void sendKillReport(DeathRecord death, NuzlockeTask task)
 	{
 		Player player = client.getLocalPlayer();
 		if (player == null || task == null)
@@ -1586,15 +1607,18 @@ public class NPCKillModule extends AbstractTaskModule
 			return;
 		}
 
+		FightRecord fight = death.fight;
+		WorldPoint location = death.deathLocation;
+
 		NpcKillReport.NpcKillReportBuilder builder = NpcKillReport.builder()
 			.playerHash(getPlayerHash())
 			.taskId(task.getTaskId())
-			.npcId(npc.getId())
-			.npcName(npc.getName())
-			.npcCombatLevel(npc.getCombatLevel())
-			.worldX(npc.getWorldLocation().getX())
-			.worldY(npc.getWorldLocation().getY())
-			.plane(npc.getWorldLocation().getPlane())
+			.npcId(death.npcId)
+			.npcName(death.npcName)
+			.npcCombatLevel(death.npcCombatLevel)
+			.worldX(location == null ? 0 : location.getX())
+			.worldY(location == null ? 0 : location.getY())
+			.plane(location == null ? 0 : location.getPlane())
 			.regionId(getCurrentRegionId())
 			.gameTick(getGameTick())
 			.timestamp(System.currentTimeMillis())
