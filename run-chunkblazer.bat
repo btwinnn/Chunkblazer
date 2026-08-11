@@ -42,13 +42,34 @@ if not exist "%RUNELITE_DIR%\gradlew.bat" (
     exit /b 1
 )
 
-:: Pull latest RuneLite updates (prevents j5connect and other version mismatches)
-call :log "[1/5] Pulling latest RuneLite updates..."
+:: Sync RuneLite from UPSTREAM (official runelite/runelite), not the fork.
+:: The `origin` remote is a personal fork that drifts behind and causes stale
+:: game revisions -> error_game_js5connect_outofdate. Tracking upstream makes the
+:: dev client self-heal against Jagex game updates. A local edit to
+:: runelite.properties is stashed across the fast-forward so it survives.
+call :log "[1/5] Syncing RuneLite from upstream (official)..."
 cd /d "%RUNELITE_DIR%"
-git pull origin master >> "%LOG_FILE%" 2>&1
-if %ERRORLEVEL% NEQ 0 (
-    call :log "WARNING: RuneLite git pull failed - continuing with local version"
+git remote get-url upstream >nul 2>&1
+if errorlevel 1 git remote add upstream https://github.com/runelite/runelite.git
+git fetch upstream master >> "%LOG_FILE%" 2>&1
+if errorlevel 1 (
+    call :log "WARNING: upstream fetch failed - continuing with local version"
+    goto :after_rl_sync
 )
+:: Preserve any local runelite.properties edit across the fast-forward.
+:: git diff --quiet exits 1 when the file has local changes.
+git diff --quiet -- runelite-client/src/main/resources/net/runelite/client/runelite.properties
+if errorlevel 1 (
+    call :log "  Stashing local runelite.properties change..."
+    git stash push -q -m "chunkblazer-local" -- runelite-client/src/main/resources/net/runelite/client/runelite.properties >> "%LOG_FILE%" 2>&1
+    git merge --ff-only upstream/master >> "%LOG_FILE%" 2>&1
+    if errorlevel 1 call :log "WARNING: fast-forward to upstream/master failed - continuing with local version"
+    git stash pop >> "%LOG_FILE%" 2>&1
+) else (
+    git merge --ff-only upstream/master >> "%LOG_FILE%" 2>&1
+    if errorlevel 1 call :log "WARNING: fast-forward to upstream/master failed - continuing with local version"
+)
+:after_rl_sync
 call :log ""
 
 :: Pull latest ChunkBlazer updates
@@ -91,6 +112,27 @@ if exist "%PLUGIN_RESOURCES%" (
     call :log "  No resources folder found (skipping)."
 )
 call :log "Plugin files synced."
+
+:: Generate the dev launcher. ChunkBlazer lives under com.chunkblazer (Hub rule),
+:: but RuneLite core discovery only scans net.runelite.client.plugins, so it can't
+:: see it. This launcher registers it via ExternalPluginManager.loadBuiltin - the
+:: same package-agnostic path the Hub uses - so dev matches production. Regenerated
+:: here every run because the copy step above wipes %JAVA_DEST% first. Not shipped.
+call :log "  Writing dev launcher (com.chunkblazer.DevLauncher)..."
+set "LAUNCHER=%JAVA_DEST%\DevLauncher.java"
+> "%LAUNCHER%" echo package com.chunkblazer;
+>> "%LAUNCHER%" echo.
+>> "%LAUNCHER%" echo import net.runelite.client.RuneLite;
+>> "%LAUNCHER%" echo import net.runelite.client.externalplugins.ExternalPluginManager;
+>> "%LAUNCHER%" echo.
+>> "%LAUNCHER%" echo public class DevLauncher
+>> "%LAUNCHER%" echo {
+>> "%LAUNCHER%" echo     public static void main(String[] args) throws Exception
+>> "%LAUNCHER%" echo     {
+>> "%LAUNCHER%" echo         ExternalPluginManager.loadBuiltin(ChunkBlazerPlugin.class);
+>> "%LAUNCHER%" echo         RuneLite.main(args);
+>> "%LAUNCHER%" echo     }
+>> "%LAUNCHER%" echo }
 call :log ""
 
 :: Build RuneLite with ChunkBlazer
@@ -160,9 +202,13 @@ echo.
 :: Tee stdout+stderr to the session log via PowerShell so the terminal still shows live output.
 :: --debug flips the root logger to DEBUG so chunkblazer module log.debug() calls actually appear.
 :: Paths are passed via env vars to avoid cmd/PowerShell quoting issues with spaces.
+:: Launch via -cp + com.chunkblazer.DevLauncher (NOT -jar): the jar's manifest main
+:: is net.runelite.client.RuneLite, which only core-loads net.runelite.client.plugins.
+:: DevLauncher registers ChunkBlazer through ExternalPluginManager first, then hands
+:: off to RuneLite.main - the shaded jar carries the full classpath, so -cp works.
 set "JAR=%CLIENT_JAR%"
 set "OUT=%SESSION_LOG%"
-powershell -NoProfile -Command "& { java -ea -jar $env:JAR --developer-mode --debug --insecure-write-credentials 2>&1 | Tee-Object -FilePath $env:OUT }"
+powershell -NoProfile -Command "& { java -ea -cp $env:JAR com.chunkblazer.DevLauncher --developer-mode --debug --insecure-write-credentials 2>&1 | Tee-Object -FilePath $env:OUT }"
 
 echo.
 echo Session log saved to: %SESSION_LOG%
