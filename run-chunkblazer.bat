@@ -25,6 +25,11 @@ set "CHUNKBLAZER_DIR=%SCRIPT_DIR%"
 set "RUNELITE_DIR=C:\runelite"
 set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\com\chunkblazer"
 set "PLUGIN_RESOURCES=%CHUNKBLAZER_DIR%\src\main\resources\com\chunkblazer"
+:: ChunkBlazer GPU is a separate repo (com.chunkblazer.gpu). Copied in as a
+:: subpackage so the one dev client runs both plugins.
+set "GPU_DIR=%CHUNKBLAZER_DIR%\..\Chunkblazer-GPU"
+set "PLUGIN_GPU_JAVA_SRC=%GPU_DIR%\src\main\java\com\chunkblazer\gpu"
+set "PLUGIN_GPU_RESOURCES=%GPU_DIR%\src\main\resources\com\chunkblazer\gpu"
 
 call :log "Configuration:"
 call :log "  CHUNKBLAZER_DIR: %CHUNKBLAZER_DIR%"
@@ -113,6 +118,20 @@ if exist "%PLUGIN_RESOURCES%" (
 )
 call :log "Plugin files synced."
 
+:: Copy ChunkBlazer GPU (separate repo, com.chunkblazer.gpu) in as a subpackage so
+:: the one dev client runs both plugins. Also purge any legacy net.* GPU copy left
+:: by the old pre-rename workflow.
+rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazergpu" 2>nul
+rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazergpu" 2>nul
+if exist "%PLUGIN_GPU_JAVA_SRC%" (
+    call :log "  Copying ChunkBlazer GPU sources..."
+    xcopy "%PLUGIN_GPU_JAVA_SRC%" "%JAVA_DEST%\gpu" /E /I /H /Y >> "%LOG_FILE%" 2>&1
+    if exist "%PLUGIN_GPU_RESOURCES%" xcopy "%PLUGIN_GPU_RESOURCES%" "%RES_DEST%\gpu" /E /I /H /Y >> "%LOG_FILE%" 2>&1
+    call :log "  ChunkBlazer GPU synced."
+) else (
+    call :log "  WARNING: ChunkBlazer GPU not found at %GPU_DIR% - GPU plugin will not load."
+)
+
 :: Generate the dev launcher. ChunkBlazer lives under com.chunkblazer (Hub rule),
 :: but RuneLite core discovery only scans net.runelite.client.plugins, so it can't
 :: see it. This launcher registers it via ExternalPluginManager.loadBuiltin - the
@@ -122,6 +141,7 @@ call :log "  Writing dev launcher (com.chunkblazer.DevLauncher)..."
 set "LAUNCHER=%JAVA_DEST%\DevLauncher.java"
 > "%LAUNCHER%" echo package com.chunkblazer;
 >> "%LAUNCHER%" echo.
+>> "%LAUNCHER%" echo import com.chunkblazer.gpu.ChunkBlazerGpuPlugin;
 >> "%LAUNCHER%" echo import net.runelite.client.RuneLite;
 >> "%LAUNCHER%" echo import net.runelite.client.externalplugins.ExternalPluginManager;
 >> "%LAUNCHER%" echo.
@@ -129,7 +149,7 @@ set "LAUNCHER=%JAVA_DEST%\DevLauncher.java"
 >> "%LAUNCHER%" echo {
 >> "%LAUNCHER%" echo     public static void main(String[] args) throws Exception
 >> "%LAUNCHER%" echo     {
->> "%LAUNCHER%" echo         ExternalPluginManager.loadBuiltin(ChunkBlazerPlugin.class);
+>> "%LAUNCHER%" echo         ExternalPluginManager.loadBuiltin(ChunkBlazerPlugin.class, ChunkBlazerGpuPlugin.class);
 >> "%LAUNCHER%" echo         RuneLite.main(args);
 >> "%LAUNCHER%" echo     }
 >> "%LAUNCHER%" echo }
