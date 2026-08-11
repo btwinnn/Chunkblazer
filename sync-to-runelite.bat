@@ -143,6 +143,10 @@ echo.
 echo [2/3] Mirroring Java sources...
 echo   From: %PLUGIN_JAVA_SRC%
 echo   To:   %JAVA_DEST%
+:: Purge legacy net.* copies from before the com.chunkblazer rename, or the old
+:: copy is core-discovered as a duplicate "ChunkBlazer" in the plugin list.
+rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer" 2>nul
+rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer" 2>nul
 if exist "%JAVA_DEST%" rd /s /q "%JAVA_DEST%"
 xcopy "%PLUGIN_JAVA_SRC%" "%JAVA_DEST%" /E /I /H /Y >nul
 if %ERRORLEVEL% NEQ 0 (

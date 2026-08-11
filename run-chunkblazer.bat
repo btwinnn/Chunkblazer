@@ -121,12 +121,20 @@ call :log "Plugin files synced."
 :: Copy ChunkBlazer GPU (separate repo, com.chunkblazer.gpu) in as a subpackage so
 :: the one dev client runs both plugins. Also purge any legacy net.* GPU copy left
 :: by the old pre-rename workflow.
+:: Purge any legacy net.* copies the pre-rename workflow left in the RuneLite
+:: tree. Without this, the old net.runelite.client.plugins.chunkblazer copy is
+:: still core-discovered and shows up as a SECOND "ChunkBlazer" in the plugin
+:: list next to the new com.chunkblazer one. Same for the old GPU copy. (The
+:: current com.chunkblazer copy lives elsewhere, so this only removes stale dirs.)
+rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer" 2>nul
+rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer" 2>nul
+rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazergpu" 2>nul
+rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazergpu" 2>nul
+
 :: GPU is OPTIONAL. If the sibling Chunkblazer-GPU repo isn't cloned, build
 :: ChunkBlazer alone - the launcher below drops the GPU references to match, so
 :: the build never fails just because a dev doesn't have the GPU repo.
 set "GPU_PRESENT="
-rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazergpu" 2>nul
-rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazergpu" 2>nul
 if exist "%PLUGIN_GPU_JAVA_SRC%" (
     call :log "  Copying ChunkBlazer GPU sources..."
     xcopy "%PLUGIN_GPU_JAVA_SRC%" "%JAVA_DEST%\gpu" /E /I /H /Y >> "%LOG_FILE%" 2>&1
