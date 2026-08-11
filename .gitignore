@@ -21,6 +21,7 @@ release.properties
 Thumbs.db
 
 # Build
+build/
 *.class
 *.jar
 *.log

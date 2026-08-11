@@ -23,8 +23,8 @@ call :log ""
 :: Set paths
 set "CHUNKBLAZER_DIR=%SCRIPT_DIR%"
 set "RUNELITE_DIR=C:\runelite"
-set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\net\runelite\client\plugins\chunkblazer"
-set "PLUGIN_RESOURCES=%CHUNKBLAZER_DIR%\src\main\resources\net\runelite\client\plugins\chunkblazer"
+set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\com\chunkblazer"
+set "PLUGIN_RESOURCES=%CHUNKBLAZER_DIR%\src\main\resources\com\chunkblazer"
 
 call :log "Configuration:"
 call :log "  CHUNKBLAZER_DIR: %CHUNKBLAZER_DIR%"
@@ -62,8 +62,8 @@ call :log ""
 
 :: Copy latest plugin files into RuneLite
 call :log "[3/5] Syncing ChunkBlazer plugin files..."
-set "JAVA_DEST=%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer"
-set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer"
+set "JAVA_DEST=%RUNELITE_DIR%\runelite-client\src\main\java\com\chunkblazer"
+set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\com\chunkblazer"
 
 call :log "  Copying Java sources..."
 call :log "    From: %PLUGIN_JAVA_SRC%"

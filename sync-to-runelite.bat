@@ -40,11 +40,11 @@ set "CHUNKBLAZER_DIR=%SCRIPT_DIR%"
 set "RUNELITE_DIR=C:\runelite"
 
 set "TASKS_JSON_SRC=%CHUNKBLAZER_DIR%\Tasks_JSON"
-set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\net\runelite\client\plugins\chunkblazer"
-set "PLUGIN_RES_SRC=%CHUNKBLAZER_DIR%\src\main\resources\net\runelite\client\plugins\chunkblazer"
+set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\com\chunkblazer"
+set "PLUGIN_RES_SRC=%CHUNKBLAZER_DIR%\src\main\resources\com\chunkblazer"
 
-set "JAVA_DEST=%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer"
-set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer"
+set "JAVA_DEST=%RUNELITE_DIR%\runelite-client\src\main\java\com\chunkblazer"
+set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\com\chunkblazer"
 
 :: Files the plugin actually loads at runtime (must match
 :: ChunkBlazerPlugin.TASK_JSON_FILES). If you add a new task

@@ -6,14 +6,16 @@
 // only ever reads this build.gradle. See SUBMISSION.md for the remaining steps.
 //
 // TODO before submitting (see SUBMISSION.md):
-//   1. Rename the Java package  net.runelite.client.plugins.chunkblazer -> com.chunkblazer
-//      (the net.runelite.* namespace is reserved for first-party/core code, and
-//      it split-packages against the client jar).
-//   2. Point `plugins=` in runelite-plugin.properties at the new FQN.
-//   3. Run `gradle wrapper` once so gradlew + gradle-wrapper.jar are committed.
+//   1. [DONE 2026-08-10] Package renamed net.runelite.client.plugins.chunkblazer
+//      -> com.chunkblazer (sources, resources, tests, descriptor, dev bats).
+//   2. [DONE 2026-08-10] `plugins=` in runelite-plugin.properties points at the
+//      new FQN com.chunkblazer.ChunkBlazerPlugin.
+//   3. Run `gradle wrapper` once so gradlew + gradle-wrapper.jar are committed
+//      (needs a local Gradle install; not doable in the review sandbox).
 
 plugins {
 	id 'java'
+	id 'checkstyle'
 }
 
 repositories {
@@ -56,4 +58,29 @@ tasks.withType(JavaCompile).configureEach {
 
 test {
 	useJUnitPlatform()
+}
+
+// Vendored copy of RuneLite's own ruleset (config/checkstyle/, pulled from
+// runelite/runelite @ master). The Plugin Hub CI holds submissions to these
+// rules, so run them locally FIRST:  ./gradlew checkstyleMain
+// config_loc resolves to configDirectory (config/checkstyle) so the
+// ${config_loc}/suppressions.xml reference in checkstyle.xml is satisfied.
+checkstyle {
+	toolVersion = '10.12.7'
+	configFile = file('config/checkstyle/checkstyle.xml')
+	configDirectory = file('config/checkstyle')
+	// Surface every violation rather than stopping at the first handful.
+	maxErrors = 0
+	maxWarnings = 0
+}
+
+// The dev workflow deliberately skips linting for fast iteration; this build's
+// checkstyle is the pre-submission gate, so let it report the full list instead
+// of failing the run on the first file. Flip to false once the list is clean.
+tasks.withType(Checkstyle).configureEach {
+	ignoreFailures = true
+	reports {
+		xml.required = true
+		html.required = true
+	}
 }
