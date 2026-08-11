@@ -1156,7 +1156,7 @@ public class ChunkBlazerPlugin extends Plugin
 				// caller and vice versa. We try both cases at both relative and absolute
 				// classpath paths so the loader survives any case mismatch in the bundle.
 				String altCase = flipJsonExtensionCase(jsonFile);
-				String absPrefix = "/net/runelite/client/plugins/chunkblazer/";
+				String absPrefix = "/com/chunkblazer/";
 				String[] candidates = { jsonFile, absPrefix + jsonFile, altCase, absPrefix + altCase };
 
 				InputStream is = null;
@@ -1377,7 +1377,7 @@ public class ChunkBlazerPlugin extends Plugin
 	private void loadGlobalTaskFile(String file)
 	{
 		String alt = flipJsonExtensionCase(file);
-		String abs = "/net/runelite/client/plugins/chunkblazer/";
+		String abs = "/com/chunkblazer/";
 		String[] candidates = { file, abs + file, alt, abs + alt };
 
 		InputStream is = null;
@@ -2100,7 +2100,7 @@ public class ChunkBlazerPlugin extends Plugin
 	private void loadFreeChunks()
 	{
 		String alt = flipJsonExtensionCase("Free_Chunks.json");
-		String abs = "/net/runelite/client/plugins/chunkblazer/";
+		String abs = "/com/chunkblazer/";
 		String[] candidates = { "Free_Chunks.json", abs + "Free_Chunks.json", alt, abs + alt };
 		InputStream is = null;
 		for (String path : candidates)

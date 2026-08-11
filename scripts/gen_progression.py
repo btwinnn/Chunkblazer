@@ -66,7 +66,7 @@ doc = {
 }
 
 OUT = [
-    r"C:\Chunkblazer\src\main\resources\net\runelite\client\plugins\chunkblazer\Progression_Tasks.json",
+    r"C:\Chunkblazer\src\main\resources\com\chunkblazer\Progression_Tasks.json",
     r"C:\ChunkBlazer-Server\internal\tasks\data\Progression_Tasks.json",
     r"C:\Chunkblazer\Tasks_JSON\All_Areas_Task_Folder\Progression_Tasks.json",
 ]

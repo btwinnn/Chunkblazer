@@ -22,7 +22,7 @@ $root      = Split-Path -Parent $MyInvocation.MyCommand.Path          # ...\Task
 $srcFolder = Join-Path $root 'Charter_Tasks_Folder'
 $outName   = 'Charter_Tasks.json'
 
-$pluginDest = 'C:\Chunkblazer\src\main\resources\net\runelite\client\plugins\chunkblazer\' + $outName
+$pluginDest = 'C:\Chunkblazer\src\main\resources\com\chunkblazer\' + $outName
 
 $chunks = @()
 foreach ($f in Get-ChildItem $srcFolder -Filter *.json | Sort-Object Name) {

@@ -15,11 +15,11 @@ $ErrorActionPreference = 'Stop'
 
 $pairs = @(
     @{ Name = 'Java (src\main\java -- tests excluded)';
-       Src  = 'C:\Chunkblazer\src\main\java\net\runelite\client\plugins\chunkblazer';
-       Dest = 'C:\runelite\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazer' },
+       Src  = 'C:\Chunkblazer\src\main\java\com\chunkblazer';
+       Dest = 'C:\runelite\runelite-client\src\main\java\com\chunkblazer' },
     @{ Name = 'Resources (incl. gpu\runelite\*.glsl shaders)';
-       Src  = 'C:\Chunkblazer\src\main\resources\net\runelite\client\plugins\chunkblazer';
-       Dest = 'C:\runelite\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazer' }
+       Src  = 'C:\Chunkblazer\src\main\resources\com\chunkblazer';
+       Dest = 'C:\runelite\runelite-client\src\main\resources\com\chunkblazer' }
 )
 
 function Get-Manifest($root) {

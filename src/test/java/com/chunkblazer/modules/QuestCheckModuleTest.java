@@ -42,7 +42,7 @@ import static org.mockito.Mockito.*;
 class QuestCheckModuleTest extends AbstractTaskModuleTest
 {
 	private static final String QUEST_TASKS_RESOURCE =
-		"/net/runelite/client/plugins/chunkblazer/Quest_Tasks.json";
+		"/com/chunkblazer/Quest_Tasks.json";
 
 	// QUEST_STATUS_GET result codes, as mapped by Quest.getState().
 	private static final int[] STACK_FINISHED = { 2 };

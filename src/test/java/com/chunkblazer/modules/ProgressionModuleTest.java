@@ -44,7 +44,7 @@ import static org.mockito.Mockito.*;
 class ProgressionModuleTest extends AbstractTaskModuleTest
 {
 	private static final String PROGRESSION_RESOURCE =
-		"/net/runelite/client/plugins/chunkblazer/Progression_Tasks.json";
+		"/com/chunkblazer/Progression_Tasks.json";
 
 	/** The designed ladder: threshold -> base_points. */
 	private static final Map<Integer, Integer> LADDER = new HashMap<>();
