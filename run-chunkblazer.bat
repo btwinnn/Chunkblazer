@@ -121,6 +121,10 @@ call :log "Plugin files synced."
 :: Copy ChunkBlazer GPU (separate repo, com.chunkblazer.gpu) in as a subpackage so
 :: the one dev client runs both plugins. Also purge any legacy net.* GPU copy left
 :: by the old pre-rename workflow.
+:: GPU is OPTIONAL. If the sibling Chunkblazer-GPU repo isn't cloned, build
+:: ChunkBlazer alone - the launcher below drops the GPU references to match, so
+:: the build never fails just because a dev doesn't have the GPU repo.
+set "GPU_PRESENT="
 rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins\chunkblazergpu" 2>nul
 rd /s /q "%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins\chunkblazergpu" 2>nul
 if exist "%PLUGIN_GPU_JAVA_SRC%" (
@@ -128,8 +132,9 @@ if exist "%PLUGIN_GPU_JAVA_SRC%" (
     xcopy "%PLUGIN_GPU_JAVA_SRC%" "%JAVA_DEST%\gpu" /E /I /H /Y >> "%LOG_FILE%" 2>&1
     if exist "%PLUGIN_GPU_RESOURCES%" xcopy "%PLUGIN_GPU_RESOURCES%" "%RES_DEST%\gpu" /E /I /H /Y >> "%LOG_FILE%" 2>&1
     call :log "  ChunkBlazer GPU synced."
+    set "GPU_PRESENT=1"
 ) else (
-    call :log "  WARNING: ChunkBlazer GPU not found at %GPU_DIR% - GPU plugin will not load."
+    call :log "  ChunkBlazer GPU repo not found at %GPU_DIR% - building ChunkBlazer only (this is fine)."
 )
 
 :: Generate the dev launcher. ChunkBlazer lives under com.chunkblazer (Hub rule),
@@ -141,7 +146,7 @@ call :log "  Writing dev launcher (com.chunkblazer.DevLauncher)..."
 set "LAUNCHER=%JAVA_DEST%\DevLauncher.java"
 > "%LAUNCHER%" echo package com.chunkblazer;
 >> "%LAUNCHER%" echo.
->> "%LAUNCHER%" echo import com.chunkblazer.gpu.ChunkBlazerGpuPlugin;
+if defined GPU_PRESENT echo import com.chunkblazer.gpu.ChunkBlazerGpuPlugin;>> "%LAUNCHER%"
 >> "%LAUNCHER%" echo import net.runelite.client.RuneLite;
 >> "%LAUNCHER%" echo import net.runelite.client.externalplugins.ExternalPluginManager;
 >> "%LAUNCHER%" echo.
@@ -149,7 +154,8 @@ set "LAUNCHER=%JAVA_DEST%\DevLauncher.java"
 >> "%LAUNCHER%" echo {
 >> "%LAUNCHER%" echo     public static void main(String[] args) throws Exception
 >> "%LAUNCHER%" echo     {
->> "%LAUNCHER%" echo         ExternalPluginManager.loadBuiltin(ChunkBlazerPlugin.class, ChunkBlazerGpuPlugin.class);
+if defined GPU_PRESENT echo         ExternalPluginManager.loadBuiltin(ChunkBlazerPlugin.class, ChunkBlazerGpuPlugin.class);>> "%LAUNCHER%"
+if not defined GPU_PRESENT echo         ExternalPluginManager.loadBuiltin(ChunkBlazerPlugin.class);>> "%LAUNCHER%"
 >> "%LAUNCHER%" echo         RuneLite.main(args);
 >> "%LAUNCHER%" echo     }
 >> "%LAUNCHER%" echo }
