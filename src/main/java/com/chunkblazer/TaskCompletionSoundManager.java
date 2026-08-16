@@ -1,6 +1,10 @@
 package com.chunkblazer;
 
+import com.chunkblazer.api.AssetStore;
+import com.chunkblazer.api.AudioAsset;
 import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,13 +62,15 @@ public class TaskCompletionSoundManager
 	private final Map<String, List<String>> areaSoundFiles = new HashMap<>();
 	private final Random random = new Random();
 	private final ChunkBlazerConfig config;
+	private final AssetStore assetStore;
 
 	private Clip currentClip;
 
 	@Inject
-	public TaskCompletionSoundManager(ChunkBlazerConfig config)
+	public TaskCompletionSoundManager(ChunkBlazerConfig config, AssetStore assetStore)
 	{
 		this.config = config;
+		this.assetStore = assetStore;
 		initializeSoundFiles();
 	}
 
@@ -224,6 +230,34 @@ public class TaskCompletionSoundManager
 			}
 		}
 
+		// Prefer the server-delivered asset for this area, if the manifest knows
+		// it. The play path stays render-safe: getIfPresent() is a pure disk
+		// lookup and never blocks on the network.
+		List<AudioAsset> remote = assetStore != null
+			? assetStore.audioForArea(folder)
+			: java.util.Collections.emptyList();
+		if (!remote.isEmpty())
+		{
+			AudioAsset pick = remote.get(random.nextInt(remote.size()));
+			File cached = assetStore.getIfPresent(pick);
+			if (cached != null)
+			{
+				playFile(cached);
+			}
+			else
+			{
+				// Not cached yet: play the bundled seed this time (if it still
+				// ships) and fetch the server copy for next time. Once the
+				// bundled WAVs are removed, the first play of a fresh area is
+				// silent and every subsequent one is the cached server asset.
+				playSound(SOUNDS_BASE_PATH + folder + "/" + pick.getName());
+				assetStore.warm(pick);
+			}
+			return;
+		}
+
+		// Manifest unavailable (offline, or before the first fetch completes):
+		// fall back to the bundled list exactly as before.
 		List<String> sounds = areaSoundFiles.get(folder);
 		if (sounds == null || sounds.isEmpty())
 		{
@@ -278,15 +312,11 @@ public class TaskCompletionSoundManager
 	}
 
 	/**
-	 * Play a sound file from resources.
+	 * Play a sound file bundled in plugin resources.
 	 * @param resourcePath Path to the sound file relative to the plugin package
 	 */
 	private void playSound(String resourcePath)
 	{
-		// Stop any currently playing sound
-		stopCurrentSound();
-
-
 		try
 		{
 			InputStream is = getClass().getResourceAsStream(resourcePath);
@@ -295,29 +325,10 @@ public class TaskCompletionSoundManager
 				log.error("Sound file not found at path: {}", resourcePath);
 				return;
 			}
-
-
-			BufferedInputStream bis = new BufferedInputStream(is);
-			AudioInputStream ais = AudioSystem.getAudioInputStream(bis);
-
-
-			currentClip = AudioSystem.getClip();
-			currentClip.open(ais);
-
-			// Set volume if available
-			if (currentClip.isControlSupported(FloatControl.Type.MASTER_GAIN))
+			try (AudioInputStream ais = AudioSystem.getAudioInputStream(new BufferedInputStream(is)))
 			{
-				FloatControl volume = (FloatControl) currentClip.getControl(FloatControl.Type.MASTER_GAIN);
-				// Convert percentage to decibels (-80 to 6 dB range typically).
-				// 0.03f (3%) was hardcoded here, which works out to -30dB — the
-				// clip really did play, it was just inaudible. Now player-tunable.
-				int configured = config != null ? config.taskCompletionSoundVolume() : 25;
-				float volumePercent = Math.max(0.001f, Math.min(1.0f, configured / 100.0f));
-				float dB = (float) (Math.log(volumePercent) / Math.log(10.0) * 20.0);
-				volume.setValue(Math.max(volume.getMinimum(), Math.min(volume.getMaximum(), dB)));
+				startClip(ais);
 			}
-
-			currentClip.start();
 		}
 		catch (javax.sound.sampled.UnsupportedAudioFileException e)
 		{
@@ -327,6 +338,58 @@ public class TaskCompletionSoundManager
 		{
 			log.error("Failed to play sound: {} - {}", resourcePath, e.getMessage(), e);
 		}
+	}
+
+	/**
+	 * Play a sound from a cached asset file on disk (the server-delivered copy).
+	 * Streamed straight off disk — nothing is held decoded in memory between
+	 * plays. µ-law WAVs are decoded natively by javax.sound.sampled.
+	 * @param file The cached .wav file
+	 */
+	private void playFile(File file)
+	{
+		try (FileInputStream fis = new FileInputStream(file);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(new BufferedInputStream(fis)))
+		{
+			startClip(ais);
+		}
+		catch (javax.sound.sampled.UnsupportedAudioFileException e)
+		{
+			log.error("Unsupported audio format for cached asset: {}", file, e);
+		}
+		catch (Exception e)
+		{
+			log.error("Failed to play cached asset {}: {}", file, e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Open and start a clip from an already-opened audio stream, applying the
+	 * configured volume. Stops any currently-playing clip first. Shared by the
+	 * bundled-resource and cached-file play paths.
+	 */
+	private void startClip(AudioInputStream ais) throws Exception
+	{
+		// Stop any currently playing sound
+		stopCurrentSound();
+
+		currentClip = AudioSystem.getClip();
+		currentClip.open(ais);
+
+		// Set volume if available
+		if (currentClip.isControlSupported(FloatControl.Type.MASTER_GAIN))
+		{
+			FloatControl volume = (FloatControl) currentClip.getControl(FloatControl.Type.MASTER_GAIN);
+			// Convert percentage to decibels (-80 to 6 dB range typically).
+			// 0.03f (3%) was hardcoded here, which works out to -30dB — the
+			// clip really did play, it was just inaudible. Now player-tunable.
+			int configured = config != null ? config.taskCompletionSoundVolume() : 25;
+			float volumePercent = Math.max(0.001f, Math.min(1.0f, configured / 100.0f));
+			float dB = (float) (Math.log(volumePercent) / Math.log(10.0) * 20.0);
+			volume.setValue(Math.max(volume.getMinimum(), Math.min(volume.getMaximum(), dB)));
+		}
+
+		currentClip.start();
 	}
 
 	/**

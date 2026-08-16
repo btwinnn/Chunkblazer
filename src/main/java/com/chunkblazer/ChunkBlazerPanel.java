@@ -36,9 +36,11 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import lombok.extern.slf4j.Slf4j;
 import com.chunkblazer.ui.WrappingTextLabel;
+import net.runelite.client.RuneLite;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.PluginPanel;
+import net.runelite.client.util.LinkBrowser;
 
 @Slf4j
 public class ChunkBlazerPanel extends PluginPanel
@@ -562,18 +564,10 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private void openLink(String url)
 	{
-		try
-		{
-			java.awt.Desktop.getDesktop().browse(new java.net.URI(url));
-		}
-		catch (Exception e)
-		{
-			log.error("Failed to open link: {}", url, e);
-			JOptionPane.showMessageDialog(this,
-				"Failed to open link:\n" + url + "\n\n" + e.getMessage(),
-				"Error",
-				JOptionPane.ERROR_MESSAGE);
-		}
+		// RuneLite's LinkBrowser is the Hub-blessed way to open a url — it handles
+		// the platform differences and avoids java.awt.Desktop (which the Plugin
+		// Hub reviewer flags).
+		LinkBrowser.browse(url);
 	}
 
 	/**
@@ -3016,38 +3010,6 @@ public class ChunkBlazerPanel extends PluginPanel
 		devControlsContentPanel.add(debugPanel);
 		devControlsContentPanel.add(Box.createVerticalStrut(4));
 
-		// Varbit/VarPlayer dump buttons — each appends a labelled snapshot to
-		// C:\Chunkblazer\VarBit_VarPlayer.txt with a timestamped header. Used
-		// to reverse-engineer which varbit/varplayer holds a given prayer/spell
-		// state when authoring new VARBIT_CHECK tasks. Two buttons share a row.
-		JPanel varDumpPanel = new JPanel(new GridLayout(1, 2, 4, 0));
-		varDumpPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-		varDumpPanel.setAlignmentX(LEFT_ALIGNMENT);
-		varDumpPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
-		varDumpPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
-
-		JButton prayerDumpButton = new JButton("Prayer Vars");
-		prayerDumpButton.setFont(FontManager.getRunescapeSmallFont());
-		prayerDumpButton.setForeground(new Color(100, 220, 200));
-		prayerDumpButton.setToolTipText("Append current PRAYER-related VarBit/VarPlayer values to C:\\Chunkblazer\\VarBit_VarPlayer.txt");
-		prayerDumpButton.addActionListener(e ->
-		{
-			plugin.dumpPrayerVars();
-		});
-		varDumpPanel.add(prayerDumpButton);
-
-		JButton magicDumpButton = new JButton("Magic Vars");
-		magicDumpButton.setFont(FontManager.getRunescapeSmallFont());
-		magicDumpButton.setForeground(new Color(180, 140, 240));
-		magicDumpButton.setToolTipText("Append current SPELL/MAGIC/AUTOCAST/SPELLBOOK VarBit/VarPlayer values to C:\\Chunkblazer\\VarBit_VarPlayer.txt (excludes PRAYER_*)");
-		magicDumpButton.addActionListener(e ->
-		{
-			plugin.dumpMagicVars();
-		});
-		varDumpPanel.add(magicDumpButton);
-
-		devControlsContentPanel.add(varDumpPanel);
-
 		controlsPanel.add(devControlsContentPanel);
 
 		return controlsPanel;
@@ -3343,47 +3305,19 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private void openLogFile()
 	{
-		try
+		// Resolve under RuneLite's own dir (never a hardcoded user.home path) and
+		// hand off to LinkBrowser.open — the Hub-compliant file opener. Avoids
+		// both Runtime.exec (external process, banned) and java.awt.Desktop.
+		java.io.File logFile = new java.io.File(RuneLite.RUNELITE_DIR, "logs/client.log");
+		if (!logFile.exists())
 		{
-			java.io.File logFile = new java.io.File(System.getProperty("user.home") + "/.runelite/logs/client.log");
-			if (!logFile.exists())
-			{
-				JOptionPane.showMessageDialog(this,
-					"Log file not found at:\n" + logFile.getAbsolutePath(),
-					"Log File Not Found",
-					JOptionPane.WARNING_MESSAGE);
-				return;
-			}
-
-			// Try Notepad++ first (common install locations)
-			String[] notepadPlusPlusPaths = {
-				"C:\\Program Files\\Notepad++\\notepad++.exe",
-				"C:\\Program Files (x86)\\Notepad++\\notepad++.exe"
-			};
-
-			for (String path : notepadPlusPlusPaths)
-			{
-				java.io.File npp = new java.io.File(path);
-				if (npp.exists())
-				{
-					// Open with Notepad++ and jump to end of file
-					Runtime.getRuntime().exec(new String[]{path, "-n999999", logFile.getAbsolutePath()});
-					return;
-				}
-			}
-
-			// Fallback to default application
-			java.awt.Desktop.getDesktop().open(logFile);
-		}
-		catch (Exception e)
-		{
-			log.error("Failed to open log file", e);
 			JOptionPane.showMessageDialog(this,
-				"Failed to open log file:\n" + e.getMessage() + "\n\n" +
-				"Log file location:\n" + System.getProperty("user.home") + "/.runelite/logs/client.log",
-				"Error",
-				JOptionPane.ERROR_MESSAGE);
+				"Log file not found at:\n" + logFile.getAbsolutePath(),
+				"Log File Not Found",
+				JOptionPane.WARNING_MESSAGE);
+			return;
 		}
+		LinkBrowser.open(logFile.getAbsolutePath());
 	}
 
 	private void onShowDebugInfo()

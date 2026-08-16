@@ -43,11 +43,15 @@ public class ChunkBlazerApiClient
 	private String playerApiKey;
 
 	@Inject
-	public ChunkBlazerApiClient(ChunkBlazerConfig config, Gson gson)
+	public ChunkBlazerApiClient(ChunkBlazerConfig config, Gson gson, OkHttpClient okHttpClient)
 	{
 		this.config = config;
 		this.gson = gson;
-		this.httpClient = new OkHttpClient.Builder()
+		// Derive from RuneLite's injected client (shared connection pool +
+		// dispatcher) rather than constructing a fresh OkHttpClient — the Plugin
+		// Hub reviewer requires reusing the injected instance. We only override
+		// the timeouts for our own endpoints.
+		this.httpClient = okHttpClient.newBuilder()
 			.connectTimeout(10, TimeUnit.SECONDS)
 			.readTimeout(30, TimeUnit.SECONDS)
 			.writeTimeout(30, TimeUnit.SECONDS)

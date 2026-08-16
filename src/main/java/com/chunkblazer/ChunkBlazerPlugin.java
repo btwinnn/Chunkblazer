@@ -144,6 +144,9 @@ public class ChunkBlazerPlugin extends Plugin
 	private ChunkBlazerApiClient apiClient;
 
 	@Inject
+	private com.chunkblazer.api.AssetStore assetStore;
+
+	@Inject
 	private ScheduledExecutorService executorService;
 
 	@Inject
@@ -284,6 +287,14 @@ public class ChunkBlazerPlugin extends Plugin
 
 		// Start verification service (registers for VarPlayer events)
 		varPlayerService.startUp();
+
+		// Load the media asset manifest: cached copy loads instantly, then an
+		// async server check upgrades it. Never blocks startup; degrades to the
+		// bundled seed audio when offline. See AssetStore.
+		if (assetStore != null)
+		{
+			assetStore.init();
+		}
 
 		// Load task data from JSON
 		loadChunkData();
@@ -496,6 +507,10 @@ public class ChunkBlazerPlugin extends Plugin
 		if (soundManager != null)
 		{
 			soundManager.shutdown();
+		}
+		if (assetStore != null)
+		{
+			assetStore.shutdown();
 		}
 		activeTask = null;
 	}
@@ -5749,152 +5764,6 @@ public class ChunkBlazerPlugin extends Plugin
 		if (chatboxPanelManager != null)
 		{
 			chatboxPanelManager.close();
-		}
-	}
-
-	/**
-	 * Dev dump: append every prayer-related VarPlayer + Varbit (current value)
-	 * to C:\Chunkblazer\VarBit_VarPlayer.txt with a timestamp header. Used to
-	 * reverse-engineer which var holds which prayer state when adding new
-	 * VARBIT_CHECK tasks for prayers.
-	 *
-	 * <p>Reflection (not hardcoded IDs) so RuneLite API renames don't silently
-	 * stop the dump — we just discover whatever PRAYER-tagged fields exist on
-	 * {@code net.runelite.api.Varbits} / {@code VarPlayer} at runtime.
-	 */
-	public void dumpPrayerVars()
-	{
-		dumpVarSnapshot("Prayer",
-			new String[]{"PRAYER", "QUICK_PRAYER"},
-			null);
-	}
-
-	/**
-	 * Dev dump for magic/spell vars (spellbook, autocast, spell unlock varbits, etc.).
-	 * Appends to the same file as {@link #dumpPrayerVars()} with its own header so
-	 * snapshots from both buttons coexist in one chronological log.
-	 *
-	 * <p>Excludes anything starting with {@code PRAYER_} so the "Protect from Magic"
-	 * prayer doesn't bleed into the magic section.
-	 */
-	public void dumpMagicVars()
-	{
-		dumpVarSnapshot("Magic",
-			new String[]{"SPELL", "MAGIC", "AUTOCAST", "SPELLBOOK"},
-			new String[]{"PRAYER_"});
-	}
-
-	/**
-	 * Append a snapshot of VarPlayers + Varbits whose names contain any of
-	 * {@code includeKeywords} (and none of {@code excludePrefixes}) to the
-	 * shared dump file.
-	 */
-	private void dumpVarSnapshot(String label, String[] includeKeywords, String[] excludePrefixes)
-	{
-		java.nio.file.Path outPath = java.nio.file.Paths.get("C:\\Chunkblazer\\VarBit_VarPlayer.txt");
-		StringBuilder sb = new StringBuilder();
-		sb.append("\n========================================================\n");
-		sb.append(label).append(" var snapshot @ ").append(java.time.LocalDateTime.now()).append('\n');
-		sb.append("========================================================\n");
-
-		sb.append("\n--- VarPlayers (").append(label).append("-related) ---\n");
-		collectVarPlayers(sb, includeKeywords, excludePrefixes);
-
-		sb.append("\n--- Varbits (").append(label).append("-related) ---\n");
-		collectVarbits(sb, includeKeywords, excludePrefixes);
-
-		try
-		{
-			java.nio.file.Files.createDirectories(outPath.getParent());
-			java.nio.file.Files.write(
-				outPath,
-				sb.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8),
-				java.nio.file.StandardOpenOption.CREATE,
-				java.nio.file.StandardOpenOption.APPEND);
-		}
-		catch (Exception e)
-		{
-			log.error("Dev: failed to write {} var dump to {}", label, outPath, e);
-		}
-	}
-
-	private boolean matchesKeyword(String name, String[] includeKeywords, String[] excludePrefixes)
-	{
-		if (excludePrefixes != null)
-		{
-			for (String p : excludePrefixes)
-			{
-				if (name.startsWith(p)) return false;
-			}
-		}
-		for (String k : includeKeywords)
-		{
-			if (name.contains(k)) return true;
-		}
-		return false;
-	}
-
-	private void collectVarPlayers(StringBuilder sb, String[] includeKeywords, String[] excludePrefixes)
-	{
-		// VarPlayer is an enum in current RuneLite API (older versions had a
-		// class with static int fields). Handle both by checking isEnum().
-		try
-		{
-			Class<?> cls = Class.forName("net.runelite.api.VarPlayer");
-			if (cls.isEnum())
-			{
-				java.lang.reflect.Method getId = cls.getMethod("getId");
-				for (Object constant : cls.getEnumConstants())
-				{
-					String name = ((Enum<?>) constant).name();
-					if (!matchesKeyword(name, includeKeywords, excludePrefixes)) continue;
-					int id = (int) getId.invoke(constant);
-					int value = client.getVarpValue(id);
-					sb.append(String.format("  %-40s id=%-6d value=%d%n", name, id, value));
-				}
-			}
-			else
-			{
-				for (java.lang.reflect.Field f : cls.getDeclaredFields())
-				{
-					if (!java.lang.reflect.Modifier.isStatic(f.getModifiers())) continue;
-					if (f.getType() != int.class) continue;
-					if (!matchesKeyword(f.getName(), includeKeywords, excludePrefixes)) continue;
-					int id = f.getInt(null);
-					int value = client.getVarpValue(id);
-					sb.append(String.format("  %-40s id=%-6d value=%d%n", f.getName(), id, value));
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			sb.append("  (could not enumerate VarPlayer: ").append(e.getClass().getSimpleName())
-				.append(": ").append(e.getMessage()).append(")\n");
-		}
-	}
-
-	private void collectVarbits(StringBuilder sb, String[] includeKeywords, String[] excludePrefixes)
-	{
-		try
-		{
-			Class<?> cls = Class.forName("net.runelite.api.Varbits");
-			for (java.lang.reflect.Field f : cls.getDeclaredFields())
-			{
-				if (!java.lang.reflect.Modifier.isStatic(f.getModifiers())) continue;
-				if (f.getType() != int.class) continue;
-				String name = f.getName();
-				// QUICK_PRAYER lacks "PRAYER_" prefix but is prayer-related;
-				// include if any keyword matches (covers both cases).
-				if (!matchesKeyword(name, includeKeywords, excludePrefixes)) continue;
-				int id = f.getInt(null);
-				int value = client.getVarbitValue(id);
-				sb.append(String.format("  %-40s id=%-6d value=%d%n", name, id, value));
-			}
-		}
-		catch (Exception e)
-		{
-			sb.append("  (could not enumerate Varbits: ").append(e.getClass().getSimpleName())
-				.append(": ").append(e.getMessage()).append(")\n");
 		}
 	}
 }
