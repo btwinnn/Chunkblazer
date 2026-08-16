@@ -145,6 +145,15 @@ public class AssetStore
 
 		// -> network (async; never blocks startup)
 		warmExecutor.execute(this::refreshManifest);
+
+		// Pre-warm everything we already know about so completions play the real
+		// regional jingle, not the seed fallback. Idempotent (skips cached), and
+		// if we're offline this still warms from the cached manifest. A fresh
+		// network manifest triggers its own warmAll() in refreshManifest().
+		if (this.manifest != null)
+		{
+			warmExecutor.execute(this::warmAll);
+		}
 	}
 
 	/** True once a non-empty manifest has been loaded from cache or network. */
@@ -238,6 +247,29 @@ public class AssetStore
 		}
 	}
 
+	/**
+	 * Warm the entire manifest in the background so completions play real
+	 * regional jingles instead of the seed fallback. Idempotent — {@link #warm}
+	 * skips anything already cached or in flight, so calling this every login is
+	 * a near-zero-cost re-check once the ~9.4 MB corpus is on disk. The whole set
+	 * is one-time and edge-cached, so origin cost is negligible.
+	 */
+	public void warmAll()
+	{
+		AssetManifest m = this.manifest;
+		if (m == null || m.getAudio() == null)
+		{
+			return;
+		}
+		for (List<AudioAsset> list : m.getAudio().values())
+		{
+			for (AudioAsset a : list)
+			{
+				warm(a);
+			}
+		}
+	}
+
 	public void shutdown()
 	{
 		warmExecutor.shutdownNow();
@@ -264,8 +296,10 @@ public class AssetStore
 		{
 			if (resp.code() == 304)
 			{
-				// Unchanged — keep the cached copy, no body, no re-parse.
+				// Unchanged — keep the cached copy, no body, no re-parse. Still
+				// warm, in case the cache was cleared while the manifest wasn't.
 				log.debug("Asset manifest unchanged (304)");
+				warmAll();
 				return;
 			}
 			if (!resp.isSuccessful())
@@ -299,6 +333,7 @@ public class AssetStore
 			this.manifest = fresh;
 			this.loaded = true;
 			log.debug("Refreshed asset manifest ({} areas)", fresh.getAudio().size());
+			warmAll();
 		}
 		catch (IOException e)
 		{

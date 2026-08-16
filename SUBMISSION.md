@@ -22,12 +22,13 @@ from `runelite-client`). When committing: `git add config/`.
   down on `shutDown()`, fetches data not code, behind `apiEnabled`.
 
 ## Blockers (must fix before submit)
-1. **Shrink resources.** Was ~64 MB (~60 MB of it 83 WAVs). The media pipeline
-   (see `Chunkblazer-Server/docs/MEDIA-PIPELINE-PLAN.md`) converts them to ~9.4 MB
-   of server-served, content-addressed µ-law and the plugin fetches them at
-   runtime via `AssetStore`. **Final step still pending:** delete the bundled
-   `*.wav` from resources (leaving one small fallback jingle) once the runtime
-   fetch is verified in-game — that's what takes the jar under 1 MB.
+1. **Shrink resources.** ✅ Largely done (2026-08-16). Was ~64 MB (~60 MB of it 83
+   WAVs). Runtime fetch verified in-game, then the bundled `*.wav` were deleted
+   down to a single seed jingle (`Misthalin_Sounds/Quest_Complete_1.wav`); all
+   other jingles are fetched from the server as content-addressed µ-law via
+   `AssetStore` (see `Chunkblazer-Server/docs/MEDIA-PIPELINE-PLAN.md`). **Plugin
+   resources 64 MB → 4.4 MB.** The remaining 4.4 MB is the seed + PNGs (0.6 MB) +
+   task JSON (3.1 MB); the task JSON is removed by blocker #2 below.
 2. **Under the reviewer token limit.** Task JSON alone exceeds the ~200k-token
    cap. Fix = move `*_Tasks.json` to the server (see
    `Chunkblazer-Server/docs/TASK-CATALOG-MIGRATION-PLAN.md`).

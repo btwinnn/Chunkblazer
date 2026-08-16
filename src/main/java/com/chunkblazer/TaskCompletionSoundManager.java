@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -58,8 +59,12 @@ public class TaskCompletionSoundManager
 		AREA_TO_FOLDER.put("Varlamore", "Varlamore_Sounds");
 	}
 
-	// Cache of loaded sound files per area
-	private final Map<String, List<String>> areaSoundFiles = new HashMap<>();
+	// The one jingle still bundled in the jar. Every other completion sound is
+	// fetched from the server at runtime (see AssetStore). This seed is the
+	// fallback whenever the server copy isn't cached yet, or the manifest hasn't
+	// loaded (offline / first run) — so a completion is never totally silent.
+	private static final String SEED_SOUND = SOUNDS_BASE_PATH + DEFAULT_SOUND_FOLDER + "/Quest_Complete_1.wav";
+
 	private final Random random = new Random();
 	private final ChunkBlazerConfig config;
 	private final AssetStore assetStore;
@@ -71,131 +76,6 @@ public class TaskCompletionSoundManager
 	{
 		this.config = config;
 		this.assetStore = assetStore;
-		initializeSoundFiles();
-	}
-
-	/**
-	 * Initialize the list of available sound files for each area.
-	 */
-	private void initializeSoundFiles()
-	{
-		// Pre-define known sound files for each region
-		areaSoundFiles.put("Misthalin_Sounds", List.of(
-			"Correct!_(Recipe_for_Disaster_-_Lumbridge_Guide).wav",
-			"Fancy_Stone_Entrance_(POH).wav",
-			"Logic_(Recruitment_Drive).wav",
-			"Quest_Complete_1.wav",
-			"Quest_Complete_3.wav",
-			"Rift_Closed_(Guardians_of_the_Rift).wav",
-			"Task_Mastered_(Leagues).wav",
-			"The_Watchtower_Shield.wav",
-			"Tinsay_Satisfied_(Tai_Bwo_Wannai_Trio).wav"
-		));
-
-		areaSoundFiles.put("Asgarnia_Sounds", List.of(
-			"Draw_(Burthorpe_Games_Room).wav",
-			"Maze_Centre.wav",
-			"Memory_(Recruitment_Drive).wav",
-			"Pest_Controlled_(Pest_Control).wav",
-			"Safe_Cracked_(Rouges__Den).wav",
-			"Treasure!_(Treasure_Trails).wav",
-			"Victory!_(Burthorpe_Games_Room).wav",
-			"You_Are_Victorious!_(Emir_s_Arena).wav"
-		));
-
-		areaSoundFiles.put("Kandarin_Sounds", List.of(
-			"A_Forgettable_Puzzle..._(Forgettable_Tale...).wav",
-			"Box_of_Health_(Stronghold_of_Security).wav",
-			"Case_Closed_(King_s_Ransom).wav",
-			"Draw._(Castle_Wars).wav",
-			"Gnomeball_GOAL!.wav",
-			"King_has_Come_(King_s_Ransom).wav",
-			"Victory!_(Castle_Wars).wav"
-		));
-
-		areaSoundFiles.put("Karamja_Sounds", List.of(
-			"All_Easy_Tasks_(Karamja_Diary).wav",
-			"Easy_Task_(Karamja_Diary).wav",
-			"Hard_Task_(Karamja_Diary).wav",
-			"Last_Man_Standing!_(Fight_Pits).wav",
-			"Meanwhile._(Monkey_Madness).wav",
-			"Medium_Task_(Karamja_Diary).wav",
-			"Tagged_a_Ticket!_(Brimhaven_Agility_Arena).wav",
-			"The_Fight_Continues_(Fight_Cave).wav"
-		));
-
-		areaSoundFiles.put("Morytania_Sounds", List.of(
-			"Air_Guitar.wav",
-			"Canifis_Entrance_(POH).wav",
-			"Danger_Evaded_(Temple_Trekking).wav",
-			"Dangers_of_Morytania_(Temple_Trekking).wav",
-			"Deathly_Mansion_Entrance_(POH).wav",
-			"Petrification_of_the_Basilisk_(The_Fremennik_Exiles).wav",
-			"Rat_Beats_Cat_(Rat_Pits).wav",
-			"Trek_Continues_(Temple_Trekking).wav",
-			"Trek_Destination_(Temple_Trekking).wav"
-		));
-
-		areaSoundFiles.put("Fremmy_Sounds", List.of(
-			"Ballad_Refrain_(Fremennik_Trials).wav",
-			"Border_Broken_(Leagues).wav",
-			"Fremennik-Style_Wood_Entrance_(POH).wav",
-			"Making_Sense_of_Dwarven_Schematics_(Between_a_Rock).wav",
-			"Perfectly_Tuned_(Fremennik_Trials).wav",
-			"The_Royal_Decree_(The_Fremennik_Isles).wav",
-			"Tiadeche_Thankful_(Tai_Bwo_Wannai_Trio).wav"
-		));
-
-		areaSoundFiles.put("Tirannwn_Sounds", List.of(
-			"Audience_of_Nature.wav",
-			"Clearing_the_Gauntlet.wav",
-			"Fairy_Queen_Awakens!_(A_Fairy_Tale_Part_II).wav",
-			"Flamtaer_Restored.wav",
-			"Quest_Complete_2.wav",
-			"Star_of_Your_Own_(Shooting_Stars).wav",
-			"Stealing_from_the_Godfather_(A_Fairy_Tale_Part_II).wav",
-			"The_Chest_of_Light_(Mourning_s_End_Part_II).wav"
-		));
-
-		areaSoundFiles.put("Wilderness_Sounds", List.of(
-			"An_Ogre_Sail.wav",
-			"Defeated!_(Soul_Wars).wav",
-			"Honourable_Victory!_(Barbarian_Assault).wav",
-			"Oh_Dear!.wav",
-			"Sudden_Cry_(The_Eyes_of_Glouphrie).wav",
-			"Sword_Good._Hand_Over._(Giants__Foundry).wav",
-			"Victorious!_(Soul_Wars).wav",
-			"Void_Knight_Defeated..._(Pest_Control).wav"
-		));
-
-		areaSoundFiles.put("Zeah_Sounds", List.of(
-			"Commence_The_Fight!_(Duel_Arena).wav",
-			"Hosidius_Entrance_(POH).wav",
-			"Lucky_Win_(Death_Plateau).wav",
-			"Observation_(Recruitment_Drive).wav",
-			"Order_(Recruitment_Drive).wav",
-			"Relic_of_Power_(Leagues).wav",
-			"Tamayu_Slays_the_Shaikahan_(Tai_Bwo_Wannai_Trio).wav"
-		));
-
-		areaSoundFiles.put("Desert_Sounds", List.of(
-			"Icthlarin_s_Little_Puzzle.wav",
-			"Rune_Casket_Open!_(Rouge_Trader).wav",
-			"Snake_Charming_(Pyramid_Plunder).wav",
-			"Snake_Charming_(The_Feud).wav",
-			"Top_of_the_Pyramid!.wav",
-			"Whitewashed_Stone_Entrance_(POH).wav"
-		));
-
-		areaSoundFiles.put("Varlamore_Sounds", List.of(
-			"A_New_Champion!_(Champion_s_Challenge).wav",
-			"Civitas_Entrance_(POH).wav",
-			"First_Sunshine_(Death_to_the_Dorgeshuun).wav",
-			"Scape_Jingle.wav",
-			"Star_of_Your_Own_(Shooting_Stars).wav",
-			"Tinsay_Satisfied_(Tai_Bwo_Wannai_Trio).wav"
-		));
-
 	}
 
 	/**
@@ -230,85 +110,53 @@ public class TaskCompletionSoundManager
 			}
 		}
 
-		// Prefer the server-delivered asset for this area, if the manifest knows
-		// it. The play path stays render-safe: getIfPresent() is a pure disk
-		// lookup and never blocks on the network.
+		// Play a random server-delivered jingle for this area. This runs only on
+		// task completion (not per-frame), so the small per-asset disk checks
+		// below are fine.
 		List<AudioAsset> remote = assetStore != null
 			? assetStore.audioForArea(folder)
 			: java.util.Collections.emptyList();
 		if (!remote.isEmpty())
 		{
-			AudioAsset pick = remote.get(random.nextInt(remote.size()));
-			File cached = assetStore.getIfPresent(pick);
-			if (cached != null)
+			// Prefer a jingle from THIS region that's already cached, for regional
+			// variety. getIfPresent() is a pure disk lookup — no network.
+			List<AudioAsset> cached = new ArrayList<>();
+			for (AudioAsset a : remote)
 			{
-				playFile(cached);
+				if (assetStore.getIfPresent(a) != null)
+				{
+					cached.add(a);
+				}
+			}
+			if (!cached.isEmpty())
+			{
+				AudioAsset pick = cached.get(random.nextInt(cached.size()));
+				playFile(assetStore.getIfPresent(pick));
 			}
 			else
 			{
-				// Not cached yet: play the bundled seed this time (if it still
-				// ships) and fetch the server copy for next time. Once the
-				// bundled WAVs are removed, the first play of a fresh area is
-				// silent and every subsequent one is the cached server asset.
-				playSound(SOUNDS_BASE_PATH + folder + "/" + pick.getName());
-				assetStore.warm(pick);
+				// Nothing from this area cached yet (cold start): seed this once.
+				playSeed();
 			}
+			// Ensure the whole area is (being) cached so subsequent completions
+			// here play the real regional jingles, not the seed.
+			assetStore.warmArea(folder);
 			return;
 		}
 
-		// Manifest unavailable (offline, or before the first fetch completes):
-		// fall back to the bundled list exactly as before.
-		List<String> sounds = areaSoundFiles.get(folder);
-		if (sounds == null || sounds.isEmpty())
-		{
-			// Try to load sounds dynamically
-			sounds = discoverSoundsInFolder(folder);
-			if (sounds.isEmpty())
-			{
-				return;
-			}
-			areaSoundFiles.put(folder, sounds);
-		}
-
-		// Pick a random sound
-		String soundFile = sounds.get(random.nextInt(sounds.size()));
-		String fullPath = SOUNDS_BASE_PATH + folder + "/" + soundFile;
-
-		playSound(fullPath);
+		// Manifest not loaded yet (offline, or before the first fetch completes):
+		// the seed jingle is the only audio bundled in the jar.
+		playSeed();
 	}
 
 	/**
-	 * Discover sound files in a folder by trying common names.
+	 * Play the single bundled fallback jingle. Used when the server copy for an
+	 * area isn't cached yet, or the asset manifest hasn't loaded (offline / first
+	 * run) — so a task completion is never totally silent.
 	 */
-	private List<String> discoverSoundsInFolder(String folder)
+	private void playSeed()
 	{
-		List<String> discovered = new ArrayList<>();
-
-		// Try to load the folder's sounds by checking if resources exist
-		String[] commonSounds = {
-			"Quest_Complete_1.wav",
-			"Quest_Complete_2.wav",
-			"Quest_Complete_3.wav",
-			"Task_Mastered_(Leagues).wav"
-		};
-
-		for (String sound : commonSounds)
-		{
-			String path = SOUNDS_BASE_PATH + folder + "/" + sound;
-			try (InputStream is = getClass().getResourceAsStream(path))
-			{
-				if (is != null)
-				{
-					discovered.add(sound);
-				}
-			}
-			catch (Exception e)
-			{
-				// Ignore - file doesn't exist
-			}
-		}
-
-		return discovered;
+		playSound(SEED_SOUND);
 	}
 
 	/**
@@ -372,6 +220,25 @@ public class TaskCompletionSoundManager
 	{
 		// Stop any currently playing sound
 		stopCurrentSound();
+
+		// A Clip output line can't open compressed encodings (µ-law/A-law) directly
+		// on most mixers — javax.sound can READ them but not play them raw. Decode
+		// to 16-bit signed PCM first (still no external dependency; Java Sound does
+		// the conversion in-memory). Bundled PCM WAVs pass through unchanged.
+		AudioFormat src = ais.getFormat();
+		if (src.getEncoding() != AudioFormat.Encoding.PCM_SIGNED
+			&& src.getEncoding() != AudioFormat.Encoding.PCM_UNSIGNED)
+		{
+			AudioFormat pcm = new AudioFormat(
+				AudioFormat.Encoding.PCM_SIGNED,
+				src.getSampleRate(),
+				16,
+				src.getChannels(),
+				src.getChannels() * 2,
+				src.getSampleRate(),
+				false);
+			ais = AudioSystem.getAudioInputStream(pcm, ais);
+		}
 
 		currentClip = AudioSystem.getClip();
 		currentClip.open(ais);

@@ -24,6 +24,6 @@ public class AssetManifest
 	private int schema;
 	private String profile;
 
-	/** area folder name (e.g. {@code Misthalin_Sounds}) -> its available jingles. */
+	/** Area folder name (e.g. {@code Misthalin_Sounds}) mapped to its available jingles. */
 	private Map<String, List<AudioAsset>> audio;
 }
