@@ -238,7 +238,7 @@ public class ConstructionModule extends AbstractTaskModule
 					// produces a real delta instead of a baseline sighting.
 					previousConstructionXp = client.getSkillExperience(Skill.CONSTRUCTION);
 				}
-				log.info("[CONSTRUCTION-DEBUG] tracking '{}' ({}) objects={} xpBaseline={}",
+				log.debug("[CONSTRUCTION-DEBUG] tracking '{}' ({}) objects={} xpBaseline={}",
 					task.getName(), task.getTaskId(), requiredObjectIds, previousConstructionXp);
 			});
 		}
@@ -346,7 +346,7 @@ public class ConstructionModule extends AbstractTaskModule
 		// click while a construction task is active — varbit multilocs (STASH
 		// units) often have wiki ids that don't line up with what the client
 		// reports, and the click id is the ground truth to author against.
-		log.info("[CONSTRUCTION-DEBUG] tick={} Build clicked: id={} target='{}' (watched={})",
+		log.debug("[CONSTRUCTION-DEBUG] tick={} Build clicked: id={} target='{}' (watched={})",
 			getGameTick(), objectId, event.getMenuTarget(), watchedObjectIds.contains(objectId));
 
 		if (!watchedObjectIds.contains(objectId))
@@ -383,13 +383,13 @@ public class ConstructionModule extends AbstractTaskModule
 		// furniture that already exists — those are not builds.
 		if (lastSceneLoadTick >= 0 && tick - lastSceneLoadTick <= SCENE_LOAD_SUPPRESS_TICKS)
 		{
-			log.info("[CONSTRUCTION-DEBUG] tick={} ignoring scene-replay spawn of watched object {} (load tick={})",
+			log.debug("[CONSTRUCTION-DEBUG] tick={} ignoring scene-replay spawn of watched object {} (load tick={})",
 				tick, obj.getId(), lastSceneLoadTick);
 			return;
 		}
 
 		recentWatchedSpawns.put(obj.getId(), tick);
-		log.info("[CONSTRUCTION-DEBUG] tick={} watched object {} spawned (lastXpTick={})",
+		log.debug("[CONSTRUCTION-DEBUG] tick={} watched object {} spawned (lastXpTick={})",
 			tick, obj.getId(), lastXpGainTick);
 
 		// XP-before-spawn order: the Construction XP for this build may have
@@ -426,7 +426,7 @@ public class ConstructionModule extends AbstractTaskModule
 			return;
 		}
 
-		log.info("[CONSTRUCTION-DEBUG] construction xp +{} ({} -> { }) tick={}",
+		log.debug("[CONSTRUCTION-DEBUG] construction xp +{} ({} -> { }) tick={}",
 			newXp - prevXp, prevXp, newXp, lastXpGainTick);
 
 		boolean credited = creditMatchingTasks();
@@ -450,7 +450,7 @@ public class ConstructionModule extends AbstractTaskModule
 					}
 				}
 			}
-			log.info("[CONSTRUCTION-DEBUG] tick={} construction xp with NO watched spawn/Build-click in window; recent spawns: [{}]",
+			log.debug("[CONSTRUCTION-DEBUG] tick={} construction xp with NO watched spawn/Build-click in window; recent spawns: [{}]",
 				lastXpGainTick, recent);
 		}
 	}
@@ -513,7 +513,7 @@ public class ConstructionModule extends AbstractTaskModule
 				recentBuildClicks.remove(clickMatch);
 			}
 			int matchedObjectId = spawnMatch != null ? spawnMatch : clickMatch;
-			log.info("[CONSTRUCTION-DEBUG] tick={} crediting '{}': object {} built (via {})",
+			log.debug("[CONSTRUCTION-DEBUG] tick={} crediting '{}': object {} built (via {})",
 				tick, task.getTaskId(), matchedObjectId, spawnMatch != null ? "spawn" : "Build click");
 			applyCredit(task, "Built: " + task.getName());
 			credited = true;
@@ -557,7 +557,7 @@ public class ConstructionModule extends AbstractTaskModule
 		int playerRegionId = getCurrentRegionId();
 		if (taskRegionId > 0 && playerRegionId > 0 && taskRegionId != playerRegionId)
 		{
-			log.info("[CONSTRUCTION-DEBUG] region gate blocked '{}': task region {} vs player region {}",
+			log.debug("[CONSTRUCTION-DEBUG] region gate blocked '{}': task region {} vs player region {}",
 				task.getTaskId(), taskRegionId, playerRegionId);
 			return false;
 		}

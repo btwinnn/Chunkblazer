@@ -206,7 +206,7 @@ public class EquipModule extends AbstractTaskModule
 		}
 		else
 		{
-			log.warn("EquipModule: equipment container is NULL during initialization");
+			log.debug("EquipModule: equipment container is NULL during initialization");
 		}
 	}
 
