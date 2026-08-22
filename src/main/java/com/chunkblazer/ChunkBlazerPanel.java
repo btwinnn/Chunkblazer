@@ -111,6 +111,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JPanel completedTasksPanel;
 	private JPanel completedTasksContentPanel; // Inner panel for completed tasks
 	private JScrollPane completedTasksScrollPane;
+	private JPanel devControlsPanel;
 	private JPanel taskListPanel;
 	private JPanel taskListContentPanel; // Inner panel for region tasks
 	private JScrollPane taskListScrollPane;
@@ -147,6 +148,10 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JPanel activeTasksFilterPanel;
 	private JLabel activeTasksCollapsedLabel;
 
+	// Dev Controls Collapse
+	private JToggleButton devControlsToggle;
+	private boolean devControlsExpanded = false;
+	private JPanel devControlsContentPanel;
 	private JTextField completedTasksSearchField;
 	private JComboBox<String> categoryFilterCombo;
 	private JComboBox<String> regionFilterCombo;
@@ -338,6 +343,16 @@ public class ChunkBlazerPanel extends PluginPanel
 		setupSectionPanel(unlockedListPanel);
 		mainPanel.add(unlockedListPanel);
 		mainPanel.add(Box.createVerticalStrut(8));
+
+		// Dev/Test Controls Section (at the bottom, collapsible). Built for every
+		// client but hidden until the server says this account is a dev — the panel
+		// is constructed before login, so it starts hidden and updatePanel() reveals
+		// it once the login response lands. The plugin-side devToolsDenied() guard
+		// is what actually enforces this; hiding is just the UI half.
+		devControlsPanel = createDevControlsSection();
+		setupSectionPanel(devControlsPanel);
+		devControlsPanel.setVisible(false);
+		mainPanel.add(devControlsPanel);
 
 		// Add vertical glue at the bottom to push content up and prevent shrinking
 		mainPanel.add(Box.createVerticalGlue());
@@ -2634,6 +2649,300 @@ public class ChunkBlazerPanel extends PluginPanel
 		selectedTaskPanel.repaint();
 	}
 
+	private JPanel createDevControlsSection()
+	{
+		JPanel controlsPanel = new JPanel();
+		controlsPanel.setLayout(new BoxLayout(controlsPanel, BoxLayout.Y_AXIS));
+		controlsPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		controlsPanel.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(new Color(100, 100, 150)),
+			new EmptyBorder(6, 6, 6, 6)
+		));
+
+		// Header row with toggle button
+		JPanel headerRow = new JPanel(new BorderLayout(5, 0));
+		headerRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		headerRow.setAlignmentX(LEFT_ALIGNMENT);
+		headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
+		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
+
+		JLabel sectionTitle = new JLabel("Dev Controls");
+		sectionTitle.setFont(FontManager.getRunescapeBoldFont());
+		sectionTitle.setForeground(new Color(150, 150, 255));
+		headerRow.add(sectionTitle, BorderLayout.WEST);
+
+		devControlsToggle = new JToggleButton();
+		setToggleArrow(devControlsToggle, devControlsExpanded);
+		devControlsToggle.setFont(new Font("Arial", Font.PLAIN, 10));
+		devControlsToggle.setPreferredSize(new Dimension(30, 20));
+		devControlsToggle.setMaximumSize(new Dimension(30, 20));
+		devControlsToggle.setToolTipText("Expand/collapse dev controls");
+		devControlsToggle.addActionListener(e ->
+		{
+			devControlsExpanded = devControlsToggle.isSelected();
+			setToggleArrow(devControlsToggle, devControlsExpanded);
+			updateDevControlsVisibility();
+		});
+		headerRow.add(devControlsToggle, BorderLayout.EAST);
+
+		controlsPanel.add(headerRow);
+		controlsPanel.add(Box.createVerticalStrut(5));
+
+		// Collapsible content panel
+		devControlsContentPanel = new JPanel();
+		devControlsContentPanel.setLayout(new BoxLayout(devControlsContentPanel, BoxLayout.Y_AXIS));
+		devControlsContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		devControlsContentPanel.setAlignmentX(LEFT_ALIGNMENT);
+		devControlsContentPanel.setVisible(false); // Hidden by default
+
+		// Task buttons row
+		JPanel taskButtonsPanel = new JPanel(new GridLayout(1, 2, 4, 0));
+		taskButtonsPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		taskButtonsPanel.setAlignmentX(LEFT_ALIGNMENT);
+		taskButtonsPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+		taskButtonsPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
+
+		JButton completeButton = new JButton("Complete");
+		completeButton.setFont(FontManager.getRunescapeSmallFont());
+		completeButton.setToolTipText("Complete current task");
+		completeButton.addActionListener(e -> onCompleteTask());
+		taskButtonsPanel.add(completeButton);
+
+		JButton rerollButton = new JButton("Reroll");
+		rerollButton.setFont(FontManager.getRunescapeSmallFont());
+		rerollButton.setToolTipText("Reroll current task");
+		rerollButton.addActionListener(e -> onRerollTask());
+		taskButtonsPanel.add(rerollButton);
+
+		devControlsContentPanel.add(taskButtonsPanel);
+		devControlsContentPanel.add(Box.createVerticalStrut(4));
+
+		// Points button row
+		JPanel pointsPanel = new JPanel(new GridLayout(1, 2, 4, 0));
+		pointsPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		pointsPanel.setAlignmentX(LEFT_ALIGNMENT);
+		pointsPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+		pointsPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
+
+		JButton add10PointsButton = new JButton("+10 pts");
+		add10PointsButton.setFont(FontManager.getRunescapeSmallFont());
+		add10PointsButton.setToolTipText("Add 10 points");
+		add10PointsButton.addActionListener(e ->
+		{
+			plugin.devAddPoints(10);
+			updateStats();
+		});
+		pointsPanel.add(add10PointsButton);
+
+		JButton add100PointsButton = new JButton("+100 pts");
+		add100PointsButton.setFont(FontManager.getRunescapeSmallFont());
+		add100PointsButton.setToolTipText("Add 100 points");
+		add100PointsButton.addActionListener(e ->
+		{
+			plugin.devAddPoints(100);
+			updateStats();
+		});
+		pointsPanel.add(add100PointsButton);
+
+		devControlsContentPanel.add(pointsPanel);
+		devControlsContentPanel.add(Box.createVerticalStrut(4));
+
+		// Reset buttons row
+		JPanel resetPanel = new JPanel(new GridLayout(1, 2, 4, 0));
+		resetPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		resetPanel.setAlignmentX(LEFT_ALIGNMENT);
+		resetPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+		resetPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
+
+		JButton resetTasksButton = new JButton("Rst Tasks");
+		resetTasksButton.setFont(FontManager.getRunescapeSmallFont());
+		resetTasksButton.setForeground(new Color(255, 100, 100));
+		resetTasksButton.setToolTipText("Reset task progress");
+		resetTasksButton.addActionListener(e -> onResetTasks());
+		resetPanel.add(resetTasksButton);
+
+		JButton resetAllButton = new JButton("Rst All");
+		resetAllButton.setFont(FontManager.getRunescapeSmallFont());
+		resetAllButton.setForeground(new Color(255, 50, 50));
+		resetAllButton.setToolTipText("Reset everything");
+		resetAllButton.addActionListener(e -> onResetAll());
+		resetPanel.add(resetAllButton);
+
+		devControlsContentPanel.add(resetPanel);
+		devControlsContentPanel.add(Box.createVerticalStrut(4));
+
+		// Chunk button row — force-unlock the current region with no adjacency check
+		// or point cost. unlockRegionFree() also rolls tasks for the region so the dev
+		// can immediately test task assignment on the newly-unlocked chunk.
+		JPanel chunkPanel = new JPanel(new GridLayout(1, 1, 4, 0));
+		chunkPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		chunkPanel.setAlignmentX(LEFT_ALIGNMENT);
+		chunkPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+		chunkPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
+
+		JButton forceUnlockButton = new JButton("Force Unlock Chunk");
+		forceUnlockButton.setFont(FontManager.getRunescapeSmallFont());
+		forceUnlockButton.setForeground(new Color(255, 200, 100));
+		forceUnlockButton.setToolTipText("Unlock the chunk you're standing on with no adjacency check or point cost. Rolls tasks for the region.");
+		forceUnlockButton.addActionListener(e ->
+		{
+			int regionId = plugin.getCurrentRegionId();
+			if (regionId <= 0)
+			{
+				return;
+			}
+			plugin.unlockRegionFree(regionId);
+			updateStats();
+			updateRegionDisplay();
+		});
+		chunkPanel.add(forceUnlockButton);
+
+		devControlsContentPanel.add(chunkPanel);
+		devControlsContentPanel.add(Box.createVerticalStrut(4));
+
+		// Dev unlock-by-ID — replaces the old editable "Unlocked Regions" config
+		// field. Type one or more region IDs (comma-separated) and click Unlock to
+		// force-unlock them (no cost / no adjacency) for testing.
+		JPanel unlockByIdPanel = new JPanel(new BorderLayout(4, 0));
+		unlockByIdPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		unlockByIdPanel.setAlignmentX(LEFT_ALIGNMENT);
+		unlockByIdPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+		unlockByIdPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
+
+		JTextField unlockIdField = new JTextField();
+		unlockIdField.setFont(FontManager.getRunescapeSmallFont());
+		unlockIdField.setToolTipText("Region ID(s), comma-separated, e.g. 12594,12595");
+		unlockByIdPanel.add(unlockIdField, BorderLayout.CENTER);
+
+		JButton unlockIdButton = new JButton("Unlock");
+		unlockIdButton.setFont(FontManager.getRunescapeSmallFont());
+		unlockIdButton.setForeground(new Color(255, 200, 100));
+		unlockIdButton.setToolTipText("Force-unlock the entered region ID(s)");
+		unlockIdButton.addActionListener(e ->
+		{
+			plugin.devUnlockRegions(unlockIdField.getText());
+			unlockIdField.setText("");
+			updateStats();
+			updateRegionDisplay();
+		});
+		unlockByIdPanel.add(unlockIdButton, BorderLayout.EAST);
+
+		devControlsContentPanel.add(unlockByIdPanel);
+		devControlsContentPanel.add(Box.createVerticalStrut(4));
+
+		// Debug button row
+		JPanel debugPanel = new JPanel(new GridLayout(1, 2, 4, 0));
+		debugPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		debugPanel.setAlignmentX(LEFT_ALIGNMENT);
+		debugPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 26));
+		debugPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 26));
+
+		JButton debugButton = new JButton("Debug");
+		debugButton.setFont(FontManager.getRunescapeSmallFont());
+		debugButton.setForeground(new Color(100, 150, 255));
+		debugButton.setToolTipText("Show debug info");
+		debugButton.addActionListener(e -> onShowDebugInfo());
+		debugPanel.add(debugButton);
+
+		JButton logButton = new JButton("Logs");
+		logButton.setFont(FontManager.getRunescapeSmallFont());
+		logButton.setForeground(new Color(100, 150, 255));
+		logButton.setToolTipText("Open log file");
+		logButton.addActionListener(e -> openLogFile());
+		debugPanel.add(logButton);
+
+		devControlsContentPanel.add(debugPanel);
+		devControlsContentPanel.add(Box.createVerticalStrut(4));
+
+		controlsPanel.add(devControlsContentPanel);
+
+		return controlsPanel;
+	}
+
+	private void updateDevControlsVisibility()
+	{
+		devControlsContentPanel.setVisible(devControlsExpanded);
+
+		// Revalidate the panel hierarchy
+		devControlsPanel.revalidate();
+		devControlsPanel.repaint();
+
+		if (devControlsPanel.getParent() != null)
+		{
+			devControlsPanel.getParent().revalidate();
+			devControlsPanel.getParent().repaint();
+		}
+	}
+
+	private void onResetTasks()
+	{
+		int confirm = JOptionPane.showConfirmDialog(
+			this,
+			"Reset all task progress?\n\n" +
+			"This will:\n" +
+			"- Clear all rolled tasks (re-roll on next assign)\n" +
+			"- Clear assigned task history\n" +
+			"- Clear current active task\n" +
+			"- Clear completed tasks list\n\n" +
+			"Points and unlocked chunks will be kept.",
+			"Reset Task Progress",
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.WARNING_MESSAGE
+		);
+
+		if (confirm == JOptionPane.YES_OPTION)
+		{
+			try
+			{
+				plugin.devResetTasks();
+
+				// Clear selected task
+				selectedTask = null;
+				updateSelectedTaskDisplay();
+
+				// Force refresh all sections
+				updatePanel();
+
+				// Explicitly clear and refresh completed tasks content
+				completedTasksContentPanel.removeAll();
+				updateCompletedTasksContent();
+				completedTasksContentPanel.revalidate();
+				completedTasksContentPanel.repaint();
+
+				JOptionPane.showMessageDialog(this, "Task progress reset!", "Reset Complete", JOptionPane.INFORMATION_MESSAGE);
+			}
+			catch (Exception e)
+			{
+				log.error(">>> Dev: Reset Tasks FAILED with exception: ", e);
+				JOptionPane.showMessageDialog(this, "Reset failed! Check logs.", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
+	private void onResetAll()
+	{
+		int confirm = JOptionPane.showConfirmDialog(
+			this,
+			"RESET EVERYTHING?\n\n" +
+			"This will:\n" +
+			"- Reset all task progress\n" +
+			"- Reset points to 0\n" +
+			"- Reset unlocked chunks to starting area\n" +
+			"- Unlock game mode selection\n\n" +
+			"This cannot be undone!",
+			"Full Reset",
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.WARNING_MESSAGE
+		);
+
+		if (confirm == JOptionPane.YES_OPTION)
+		{
+			plugin.devResetAll();
+			updatePanel();
+			JOptionPane.showMessageDialog(this, "Full reset complete!", "Reset Complete", JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+
 	private JPanel createTaskListSection()
 	{
 		JPanel listPanel = new JPanel();
@@ -2800,6 +3109,22 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 	}
 
+	private void onCompleteTask()
+	{
+		if (selectedTask != null)
+		{
+			plugin.devCompleteSpecificTask(selectedTask);
+			// Clear selection after completing
+			selectedTask = null;
+			updateSelectedTaskDisplay();
+		}
+		else
+		{
+			plugin.devCompleteActiveTask();
+		}
+		updateTaskDisplay();
+	}
+
 	private void onRerollTask()
 	{
 		try
@@ -2936,6 +3261,10 @@ public class ChunkBlazerPanel extends PluginPanel
 			completedTasksPanel.setVisible(loggedIn);
 			globalTasksPanel.setVisible(loggedIn);
 			taskListPanel.setVisible(loggedIn);
+
+			// Dev Controls need BOTH a login and the server's is_dev verdict. Set
+			// before the !loggedIn early-return below so logging out hides it too.
+			devControlsPanel.setVisible(loggedIn && plugin.isDevAuthorized());
 
 			if (!loggedIn)
 			{
