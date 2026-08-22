@@ -22,8 +22,10 @@ Thumbs.db
 
 # Build
 build/
+.gradle/
 *.class
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.log
 
 # Local tools (Maven, etc.)
