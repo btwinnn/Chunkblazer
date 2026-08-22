@@ -3494,6 +3494,13 @@ public class ChunkBlazerPlugin extends Plugin
 				{
 					labels.add(chunk.getName() + " (" + chunk.getRegionIds().get(0) + ")");
 				}
+				else if (freeUnlockableNames.get(id) != null)
+				{
+					// Free chunks live only in freeUnlockableNames, not chunksByRegionId,
+					// so surface their Friendly_Name here too (matches getRegionName)
+					// instead of a bare "Region <id>".
+					labels.add(freeUnlockableNames.get(id) + " (" + id + ")");
+				}
 				else
 				{
 					labels.add("Region " + id);
