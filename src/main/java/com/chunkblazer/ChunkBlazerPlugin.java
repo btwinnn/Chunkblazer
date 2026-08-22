@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Provides;
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -1148,59 +1147,14 @@ public class ChunkBlazerPlugin extends Plugin
 
 
 	/**
-	 * Returns the filename with .json/.JSON extension flipped to the opposite case,
-	 * or unchanged if it doesn't end in either. Used to defensively try both case
-	 * variants when reading bundled task JSON resources.
-	 */
-	private static String flipJsonExtensionCase(String filename)
-	{
-		if (filename.endsWith(".json"))
-		{
-			return filename.substring(0, filename.length() - 5) + ".JSON";
-		}
-		if (filename.endsWith(".JSON"))
-		{
-			return filename.substring(0, filename.length() - 5) + ".json";
-		}
-		return filename;
-	}
-
-	/**
-	 * Read a task JSON file's content by name. Prefers the catalog store
-	 * (server-fetched → disk cache → bundled gzipped seed); falls back to the
-	 * bundled raw resource during the migration transition. Step 3 of the catalog
-	 * migration deletes the bundled raw JSON and this fallback, leaving the seed
-	 * as the only bundled copy.
+	 * Read a task JSON file's content by name from the catalog store
+	 * (server-fetched → disk cache → bundled gzipped seed). Returns null if the
+	 * store has no such file; callers log and skip. Post-migration there is no
+	 * bundled raw JSON — the gzipped seed is the offline floor (see CatalogStore).
 	 */
 	private String readTaskFileContent(String filename)
 	{
-		if (catalogStore != null)
-		{
-			String c = catalogStore.getFileContent(filename);
-			if (c != null && !c.isEmpty())
-			{
-				return c;
-			}
-		}
-		// Fallback: bundled resource, case-tolerant at relative + absolute paths.
-		String altCase = flipJsonExtensionCase(filename);
-		String absPrefix = "/com/chunkblazer/";
-		String[] candidates = { filename, absPrefix + filename, altCase, absPrefix + altCase };
-		for (String path : candidates)
-		{
-			try (InputStream is = getClass().getResourceAsStream(path))
-			{
-				if (is != null)
-				{
-					return new String(is.readAllBytes(), StandardCharsets.UTF_8);
-				}
-			}
-			catch (Exception e)
-			{
-				// try next candidate
-			}
-		}
-		return null;
+		return catalogStore != null ? catalogStore.getFileContent(filename) : null;
 	}
 
 	private void loadChunkData()
