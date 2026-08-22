@@ -174,6 +174,15 @@ public class ChunkBlazerPlugin extends Plugin
 
 	// --- Plugin State ---
 
+	// Server verdict on whether this account may use the Dev Controls panel,
+	// from the is_dev flag in the login response. Deliberately a transient field
+	// and NOT a config entry: config is user-editable from the RuneLite profile
+	// file, so persisting it there would recreate the very self-grant this
+	// closes. Defaults false and resets on logout, so an unreachable server or
+	// an old build denies the tools rather than opening them.
+	@Getter
+	private volatile boolean devAuthorized;
+
 	@Getter
 	private NuzlockeTask activeTask; // Legacy single task for backward compatibility
 
@@ -588,6 +597,10 @@ public class ChunkBlazerPlugin extends Plugin
 			activeTask = null;
 			lastRegionId = -1;
 			pendingServerLogin = false;
+			// Drop dev authorization with the session. Without this it would carry
+			// over to whichever account logs in next on this client, handing a
+			// normal account the dev tools until its own login response arrived.
+			devAuthorized = false;
 			// Same reasoning for the cached Progression baseline: it is parsed
 			// for one account, and the next one to log in must re-read (and, if
 			// the stored baseline isn't theirs, capture their own).
@@ -3048,6 +3061,11 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		PlayerLoginResponse.PlayerData pdata = response.getPlayer();
 
+		// Dev-tool authorization, straight off the login response. Set outside the
+		// clientThread hop so the panel's next repaint sees it, and always assigned
+		// (not just when true) so a demoted account loses the tools on next login.
+		devAuthorized = pdata != null && pdata.isDev();
+
 		clientThread.invokeLater(() ->
 		{
 			String rsn = getPlayerName();
@@ -3462,6 +3480,37 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 		return new ArrayList<>(labels);
+	}
+
+	/**
+	 * Dev-only: unlock one or more regions by ID (comma-separated), bypassing the
+	 * point cost and adjacency gate. Replaces the old hand-editable "Unlocked
+	 * Regions" config field as the testing shortcut.
+	 */
+	public void devUnlockRegions(String csv)
+	{
+		if (devToolsDenied("unlockRegions") || csv == null)
+		{
+			return;
+		}
+		for (String part : csv.split(","))
+		{
+			String t = part.trim();
+			if (t.isEmpty())
+			{
+				continue;
+			}
+			try
+			{
+				unlockRegionFree(Integer.parseInt(t));
+			}
+			catch (NumberFormatException e)
+			{
+				log.warn("devUnlockRegions: ignoring bad region id '{}'", t);
+			}
+		}
+		loadActiveTasks();
+		panel.updatePanel();
 	}
 
 	// --- Task Methods ---
@@ -4256,6 +4305,111 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
+	 * Guard for every dev tool that mutates progress. Hiding the panel is the
+	 * primary gate; this is the backstop, because the panel is only UI and these
+	 * methods are public. A dev-granted task is indistinguishable from an earned
+	 * one at sync time — it's a real catalog task, so the server's points
+	 * recompute matches the client and Tier-0 anti-cheat stays silent — so an
+	 * ungated call here is an invisible self-grant.
+	 */
+	private boolean devToolsDenied(String action)
+	{
+		if (devAuthorized)
+		{
+			return false;
+		}
+		log.warn("[CHUNKBLAZER] refused dev action '{}': account not authorized by server", action);
+		return true;
+	}
+
+	public void devCompleteActiveTask()
+	{
+		if (devToolsDenied("completeActiveTask") || activeTask == null)
+		{
+			return;
+		}
+
+		completeTask(activeTask);
+	}
+
+	/**
+	 * Complete a specific task (used by dev tools when a task is selected)
+	 */
+	public void devCompleteSpecificTask(NuzlockeTask task)
+	{
+		if (devToolsDenied("completeSpecificTask") || task == null)
+		{
+			return;
+		}
+
+		// Check if this task is in our active tasks list
+		if (!activeTasks.contains(task))
+		{
+			return;
+		}
+
+		completeTask(task);
+	}
+
+	public void devAddPoints(int points)
+	{
+		if (devToolsDenied("addPoints"))
+		{
+			return;
+		}
+
+		int current = config.totalPoints();
+		setAccountState("totalPoints", current + points);
+	}
+
+	public void devResetTasks()
+	{
+		if (devToolsDenied("resetTasks"))
+		{
+			return;
+		}
+
+		// Dev accounts are already exempt from the server's drop guard, but say it
+		// anyway: the exemption is a property of the account, this is a property of
+		// the operation, and only the second one stays true if the account is ever
+		// demoted.
+		declareIntentionalReset("devResetTasks");
+
+		// Clear rolled tasks for current region only
+		int currentRegion = getCurrentRegionId();
+		if (currentRegion > 0)
+		{
+			clearRolledTasksForRegion(currentRegion);
+		}
+
+		// Log current state before clearing
+
+		// Clear completed tasks
+		setAccountState("completedTasks", "");
+		// Clear task progress data
+		setAccountState("taskProgressData", "");
+		// Clear assigned tasks
+		setAccountState("assignedTasks", "");
+		// Also clear rolled tasks for ALL regions to fully reset
+		setAccountState("regionRolledTasks", "");
+
+		// Verify the clear worked
+
+		// Clear module state
+		taskModuleManager.clearTask();
+
+		// Clear active tasks
+		activeTasks.clear();
+		activeTask = null;
+		completedTaskCache.clear();
+
+
+		// Re-roll and load tasks
+		loadActiveTasks();
+		panel.updatePanel();
+	}
+
+	/**
 	 * Clear the rolled tasks for a specific region so they can be re-rolled.
 	 */
 	private void clearRolledTasksForRegion(int regionId)
@@ -4291,6 +4445,45 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 		setAccountState("regionRolledTasks", newData.toString());
+	}
+
+	public void devResetAll()
+	{
+		if (devToolsDenied("resetAll"))
+		{
+			return;
+		}
+
+		// The most destructive operation the plugin has — it drops every task AND
+		// every chunk but the starting one. Exactly the shape the server's drop
+		// guard refuses, so it has to declare itself.
+		declareIntentionalReset("devResetAll");
+
+		// Reset tasks
+		setAccountState("regionRolledTasks", "");
+		setAccountState("assignedTasks", "");
+		setAccountState("completedTasks", "");
+		setAccountState("taskProgressData", "");
+		taskModuleManager.clearTask();
+		activeTask = null;
+		activeTasks.clear();
+		completedTaskCache.clear();
+		saveCurrentTask();
+
+		// Reset points
+		setAccountState("totalPoints", 0);
+
+		// Reset unlocked chunks to the free starting chunk only. Every other
+		// chunk must be unlocked with points after reset.
+		setAccountState("unlockedChunks", String.valueOf(DEFAULT_START_REGION));
+
+		// Reset game mode lock
+		setAccountState("accountModeHash", "");
+		setAccountState("gameMode", GameMode.CASUAL);
+
+
+		// Re-roll and load tasks for the now-only starting chunk so the panel populates.
+		loadActiveTasks();
 	}
 
 	private void completeTask(NuzlockeTask task)
