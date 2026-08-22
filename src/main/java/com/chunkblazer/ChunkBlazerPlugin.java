@@ -147,6 +147,9 @@ public class ChunkBlazerPlugin extends Plugin
 	private com.chunkblazer.api.AssetStore assetStore;
 
 	@Inject
+	private com.chunkblazer.api.CatalogStore catalogStore;
+
+	@Inject
 	private ScheduledExecutorService executorService;
 
 	@Inject
@@ -296,7 +299,16 @@ public class ChunkBlazerPlugin extends Plugin
 			assetStore.init();
 		}
 
-		// Load task data from JSON
+		// Task catalog: load synchronously (disk cache → bundled gzipped seed)
+		// BEFORE the loaders below read it, then refresh from the server async for
+		// next launch. Falls back to bundled raw JSON if the store has nothing.
+		if (catalogStore != null)
+		{
+			catalogStore.init();
+		}
+
+		// Load task data — sourced from the catalog store (server/cache/seed),
+		// with a bundled-resource fallback during the migration transition.
 		loadChunkData();
 
 		// The starting-chunk bootstrap deliberately does NOT run here.
@@ -511,6 +523,10 @@ public class ChunkBlazerPlugin extends Plugin
 		if (assetStore != null)
 		{
 			assetStore.shutdown();
+		}
+		if (catalogStore != null)
+		{
+			catalogStore.shutdown();
 		}
 		activeTask = null;
 	}
@@ -1149,6 +1165,44 @@ public class ChunkBlazerPlugin extends Plugin
 		return filename;
 	}
 
+	/**
+	 * Read a task JSON file's content by name. Prefers the catalog store
+	 * (server-fetched → disk cache → bundled gzipped seed); falls back to the
+	 * bundled raw resource during the migration transition. Step 3 of the catalog
+	 * migration deletes the bundled raw JSON and this fallback, leaving the seed
+	 * as the only bundled copy.
+	 */
+	private String readTaskFileContent(String filename)
+	{
+		if (catalogStore != null)
+		{
+			String c = catalogStore.getFileContent(filename);
+			if (c != null && !c.isEmpty())
+			{
+				return c;
+			}
+		}
+		// Fallback: bundled resource, case-tolerant at relative + absolute paths.
+		String altCase = flipJsonExtensionCase(filename);
+		String absPrefix = "/com/chunkblazer/";
+		String[] candidates = { filename, absPrefix + filename, altCase, absPrefix + altCase };
+		for (String path : candidates)
+		{
+			try (InputStream is = getClass().getResourceAsStream(path))
+			{
+				if (is != null)
+				{
+					return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+				}
+			}
+			catch (Exception e)
+			{
+				// try next candidate
+			}
+		}
+		return null;
+	}
+
 	private void loadChunkData()
 	{
 		allChunks.clear();
@@ -1166,34 +1220,14 @@ public class ChunkBlazerPlugin extends Plugin
 			try
 			{
 
-				// Resource lookups inside a JAR are case-sensitive (unlike Windows fs),
-				// so a file shipped as Foo.JSON breaks a getResourceAsStream("Foo.json")
-				// caller and vice versa. We try both cases at both relative and absolute
-				// classpath paths so the loader survives any case mismatch in the bundle.
-				String altCase = flipJsonExtensionCase(jsonFile);
-				String absPrefix = "/com/chunkblazer/";
-				String[] candidates = { jsonFile, absPrefix + jsonFile, altCase, absPrefix + altCase };
-
-				InputStream is = null;
-				String foundVia = null;
-				for (String path : candidates)
+				// Sourced from the catalog store (server → cache → bundled seed),
+				// with a bundled raw-resource fallback during the migration.
+				String jsonContent = readTaskFileContent(jsonFile);
+				if (jsonContent == null)
 				{
-					InputStream s = getClass().getResourceAsStream(path);
-					if (s != null)
-					{
-						is = s;
-						foundVia = path;
-						break;
-					}
-				}
-				if (is == null)
-				{
-					log.error("FAILED to find task file: {} (tried {})",
-						jsonFile, java.util.Arrays.toString(candidates));
+					log.error("FAILED to find task file: {}", jsonFile);
 					continue;
 				}
-
-				String jsonContent = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 
 				Map<String, List<NuzlockeChunk>> data = null;
 				try
@@ -1253,8 +1287,6 @@ public class ChunkBlazerPlugin extends Plugin
 				{
 					log.warn("Failed to parse {} - data is null or empty", jsonFile);
 				}
-
-				is.close();
 			}
 			catch (Exception e)
 			{
@@ -1391,29 +1423,15 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private void loadGlobalTaskFile(String file)
 	{
-		String alt = flipJsonExtensionCase(file);
-		String abs = "/com/chunkblazer/";
-		String[] candidates = { file, abs + file, alt, abs + alt };
-
-		InputStream is = null;
-		for (String path : candidates)
+		String json = readTaskFileContent(file);
+		if (json == null)
 		{
-			is = getClass().getResourceAsStream(path);
-			if (is != null)
-			{
-				break;
-			}
-		}
-		if (is == null)
-		{
-			log.error("FAILED to find Global Tasks file: {} (tried {})",
-				file, java.util.Arrays.toString(candidates));
+			log.error("FAILED to find Global Tasks file: {}", file);
 			return;
 		}
 
 		try
 		{
-			String json = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 			Type mapType = new TypeToken<Map<String, List<NuzlockeChunk>>>()
 			{
 			}.getType();
@@ -1446,16 +1464,6 @@ public class ChunkBlazerPlugin extends Plugin
 		catch (Exception e)
 		{
 			log.error("Failed to load Global Tasks from {}: {}", file, e.getMessage(), e);
-		}
-		finally
-		{
-			try
-			{
-				is.close();
-			}
-			catch (Exception ignored)
-			{
-			}
 		}
 	}
 
@@ -2114,25 +2122,13 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void loadFreeChunks()
 	{
-		String alt = flipJsonExtensionCase("Free_Chunks.json");
-		String abs = "/com/chunkblazer/";
-		String[] candidates = { "Free_Chunks.json", abs + "Free_Chunks.json", alt, abs + alt };
-		InputStream is = null;
-		for (String path : candidates)
-		{
-			is = getClass().getResourceAsStream(path);
-			if (is != null)
-			{
-				break;
-			}
-		}
-		if (is == null)
+		String json = readTaskFileContent("Free_Chunks.json");
+		if (json == null)
 		{
 			return;
 		}
 		try
 		{
-			String json = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 			com.google.gson.JsonObject obj = gson.fromJson(json, com.google.gson.JsonObject.class);
 			freeUnlockableRegionIds.clear();
 			freeUnlockableNames.clear();
