@@ -263,7 +263,6 @@ public class EquipModule extends AbstractTaskModule
 		int foundItemId = -1;
 		int foundSlot = -1;
 
-		StringBuilder itemDetails = new StringBuilder();
 		for (Map.Entry<Integer, Boolean> target : targetItems.entrySet())
 		{
 			int itemId = target.getKey();
@@ -279,12 +278,6 @@ public class EquipModule extends AbstractTaskModule
 					foundSlot = findSlotForItem(itemId);
 				}
 			}
-
-			if (itemDetails.length() > 0)
-			{
-				itemDetails.append(", ");
-			}
-			itemDetails.append(getItemName(itemId)).append(": ").append(isEquipped ? "EQUIPPED" : "not equipped");
 		}
 
 		int previousProgress = task.getCurrentProgress();
@@ -323,8 +316,11 @@ public class EquipModule extends AbstractTaskModule
 				sendItemEquippedReport(foundItemId, foundSlot, -1, false);
 			}
 
-			// Send success chat message
-			String successDetails = "Equipped: " + itemDetails.toString();
+			// Send success chat message. Show only the item actually equipped, not
+			// every accepted variant id — a multi-variant item (e.g. Crystal legs
+			// has active/inactive + charge tiers) otherwise spammed a long
+			// "X: not equipped, Y: not equipped, ..." line.
+			String successDetails = foundItemId > 0 ? "Equipped: " + getItemName(foundItemId) : null;
 			sendTaskSuccess(task, successDetails);
 
 			if (completionCallback != null)
@@ -339,8 +335,10 @@ public class EquipModule extends AbstractTaskModule
 		}
 		else if (totalEquipped > previousProgress && totalEquipped > 0)
 		{
-			// Progress was made but task not complete (multi-item equip task)
-			sendTaskProgress(task, itemDetails.toString(), totalEquipped, totalRequired);
+			// Progress was made but task not complete (multi-item equip task). The
+			// "(current/total)" in the message already conveys it; no per-variant
+			// detail line (that was the source of the "X: not equipped, ..." spam).
+			sendTaskProgress(task, null, totalEquipped, totalRequired);
 
 			if (completionCallback != null)
 			{
