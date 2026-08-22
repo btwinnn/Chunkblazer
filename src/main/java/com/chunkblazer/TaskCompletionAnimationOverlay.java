@@ -135,11 +135,6 @@ public class TaskCompletionAnimationOverlay extends Overlay
 		startTime = -1;
 	}
 
-	public boolean isShowing()
-	{
-		return startTime != -1 && System.currentTimeMillis() - startTime < TOTAL_DURATION;
-	}
-
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{

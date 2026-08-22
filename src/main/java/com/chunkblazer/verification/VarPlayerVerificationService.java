@@ -192,14 +192,6 @@ public class VarPlayerVerificationService
 		return client.getVarpValue(VarPlayerID.SLAYER_COUNT);
 	}
 
-	/**
-	 * Check if player is on a slayer task.
-	 */
-	public boolean isOnSlayerTask()
-	{
-		return getSlayerTaskCount() > 0;
-	}
-
 	private Integer getVarpIdForBoss(String bossName)
 	{
 		if (bossName == null)

@@ -149,15 +149,6 @@ public class NuzlockeTask
 		return name;
 	}
 
-	public String getProgressText()
-	{
-		if (targetQuantity > 1)
-		{
-			return currentProgress + "/" + targetQuantity;
-		}
-		return completed ? "Complete" : "In Progress";
-	}
-
 	/**
 	 * Custom deserializer that handles flexible JSON formats for NuzlockeTask.
 	 * Specifically handles required_items being an object instead of array.

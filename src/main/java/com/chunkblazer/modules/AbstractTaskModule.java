@@ -4,7 +4,6 @@ import com.google.common.hash.Hashing;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Predicate;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -84,21 +83,6 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 		}
 	}
 
-	/**
-	 * Find an active task matching the given criteria.
-	 */
-	protected NuzlockeTask findMatchingTask(Predicate<NuzlockeTask> matcher)
-	{
-		for (NuzlockeTask task : activeTasks)
-		{
-			if (matcher.test(task))
-			{
-				return task;
-			}
-		}
-		return null;
-	}
-
 	@Override
 	public void onTaskCleared()
 	{
@@ -111,26 +95,6 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 	public boolean canHandle(NuzlockeTask task)
 	{
 		return getCompletionType().equalsIgnoreCase(task.getCompletionType());
-	}
-
-	/**
-	 * Increment progress and check for completion.
-	 */
-	protected void incrementProgress(int amount)
-	{
-		if (activeTask == null)
-		{
-			return;
-		}
-
-		currentProgress += amount;
-		activeTask.setCurrentProgress(currentProgress);
-
-
-		if (currentProgress >= activeTask.getTargetQuantity())
-		{
-			onTaskCompleted();
-		}
 	}
 
 	/**

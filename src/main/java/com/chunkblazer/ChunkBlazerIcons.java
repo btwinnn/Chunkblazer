@@ -286,38 +286,4 @@ public class ChunkBlazerIcons
 		return path;
 	}
 
-	/**
-	 * Create a "CB" text icon as fallback.
-	 */
-	public static BufferedImage createTextIcon(int size)
-	{
-		BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = image.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
-		// Background circle
-		GradientPaint gradient = new GradientPaint(
-			0, 0, FIRE_ORANGE,
-			size, size, FIRE_RED
-		);
-		g2d.setPaint(gradient);
-		g2d.fillOval(1, 1, size - 2, size - 2);
-
-		// Text "CB"
-		g2d.setColor(Color.WHITE);
-		g2d.setFont(g2d.getFont().deriveFont((float) (size * 0.45)));
-
-		String text = "CB";
-		int textWidth = g2d.getFontMetrics().stringWidth(text);
-		int textHeight = g2d.getFontMetrics().getAscent();
-
-		g2d.drawString(text,
-			(size - textWidth) / 2,
-			(size + textHeight) / 2 - 1
-		);
-
-		g2d.dispose();
-		return image;
-	}
 }

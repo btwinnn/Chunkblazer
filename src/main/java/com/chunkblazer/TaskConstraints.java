@@ -149,16 +149,6 @@ public class TaskConstraints
 		return timeInTicks != null && timeInTicks > 0;
 	}
 
-	public double getTimeInSeconds()
-	{
-		if (timeInTicks == null)
-		{
-			return 0;
-		}
-		// 1 game tick = 0.6 seconds
-		return timeInTicks * 0.6;
-	}
-
 	public int getRequiredLevel()
 	{
 		return requiredLevel != null ? requiredLevel : 1;

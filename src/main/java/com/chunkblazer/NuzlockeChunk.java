@@ -71,11 +71,6 @@ public class NuzlockeChunk
 		return "Unknown Region";
 	}
 
-	public boolean containsRegion(int regionId)
-	{
-		return regionIds != null && regionIds.contains(regionId);
-	}
-
 	public int getUnlockCostValue()
 	{
 		return unlockCost != null ? unlockCost : 1;

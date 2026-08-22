@@ -41,14 +41,6 @@ public class PlayerLoginResponse
 	private String apiKey;
 
 	/**
-	 * Check if this response indicates a new player was created.
-	 */
-	public boolean isNewPlayer()
-	{
-		return "created".equals(status);
-	}
-
-	/**
 	 * Check if the login was successful.
 	 */
 	public boolean isSuccess()

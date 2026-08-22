@@ -72,14 +72,6 @@ public class TargetNpc
 	}
 
 	/**
-	 * Get the first NPC ID (for display purposes).
-	 */
-	public int getFirstNpcId()
-	{
-		return npcIds != null && !npcIds.isEmpty() ? npcIds.get(0) : -1;
-	}
-
-	/**
 	 * Custom deserializer that handles flexible JSON formats:
 	 * - "name" can be a string or single-element array
 	 * - "quantity" can be int, single-element array, or range array

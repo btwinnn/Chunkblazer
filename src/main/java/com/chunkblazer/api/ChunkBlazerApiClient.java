@@ -727,68 +727,6 @@ public class ChunkBlazerApiClient
 	// ==================== Task/Event Reporting Endpoints ====================
 
 	/**
-	 * Verify a task completion with the server.
-	 *
-	 * @param request The verification request containing task and evidence data
-	 * @return CompletableFuture with the server response
-	 */
-	public CompletableFuture<TaskVerificationResponse> verifyTaskCompletion(TaskVerificationRequest request)
-	{
-		if (!config.apiEnabled())
-		{
-			// API disabled - return offline success for testing
-			return CompletableFuture.completedFuture(
-				TaskVerificationResponse.offlineSuccess(request.getTaskId())
-			);
-		}
-
-		CompletableFuture<TaskVerificationResponse> future = new CompletableFuture<>();
-
-		String url = config.apiBaseUrl() + "/api/v1/tasks/verify";
-		String json = gson.toJson(request);
-
-		Request httpRequest = new Request.Builder()
-			.url(url)
-			.addHeader("X-API-Key", playerApiKey != null ? playerApiKey : config.apiKey())
-			.addHeader("Content-Type", "application/json")
-			.addHeader("X-Client-Version", CLIENT_VERSION)
-			.post(RequestBody.create(JSON, json))
-			.build();
-
-		httpClient.newCall(httpRequest).enqueue(new Callback()
-		{
-			@Override
-			public void onFailure(Call call, IOException e)
-			{
-				log.error("API request failed: {}", e.getMessage());
-				future.complete(TaskVerificationResponse.error("Network error: " + e.getMessage()));
-			}
-
-			@Override
-			public void onResponse(Call call, Response response) throws IOException
-			{
-				try (response)
-				{
-					String body = response.body() != null ? response.body().string() : "";
-
-					if (response.isSuccessful())
-					{
-						TaskVerificationResponse verifyResponse = gson.fromJson(body, TaskVerificationResponse.class);
-						future.complete(verifyResponse);
-					}
-					else
-					{
-						log.warn("API returned error {}: {}", response.code(), body);
-						future.complete(TaskVerificationResponse.error("Server error: " + response.code()));
-					}
-				}
-			}
-		});
-
-		return future;
-	}
-
-	/**
 	 * Report an NPC kill to the server for verification.
 	 */
 	public CompletableFuture<TaskVerificationResponse> reportNpcKill(NpcKillReport report)

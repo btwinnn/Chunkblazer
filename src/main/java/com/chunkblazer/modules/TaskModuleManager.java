@@ -250,21 +250,6 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	}
 
 	/**
-	 * Get a task by ID from active tasks.
-	 */
-	public NuzlockeTask getActiveTaskById(String taskId)
-	{
-		for (NuzlockeTask task : activeTasks)
-		{
-			if (task.getTaskId().equals(taskId))
-			{
-				return task;
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Find the module that can handle the given task.
 	 */
 	private AbstractTaskModule findModuleForTask(NuzlockeTask task)

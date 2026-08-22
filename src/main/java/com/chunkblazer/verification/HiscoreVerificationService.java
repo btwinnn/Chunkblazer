@@ -183,46 +183,6 @@ public class HiscoreVerificationService
 	}
 
 	/**
-	 * Verify a boss kill count increased (for boss NPC kills).
-	 * Call this BEFORE the kill to get baseline KC, then after to verify increment.
-	 *
-	 * @param bossName The boss name (must match HiscoreSkill enum name)
-	 * @param expectedMinKc The minimum KC expected after the kill
-	 * @return Verification result with actual KC
-	 */
-	public CompletableFuture<BossVerificationResult> verifyBossKillCount(String bossName, int expectedMinKc)
-	{
-		return fetchHiscores().thenApply(result ->
-		{
-			if (result == null)
-			{
-				return new BossVerificationResult(false, -1, "Could not fetch hiscores", false);
-			}
-
-			HiscoreSkill bossSkill = mapBossNameToHiscoreSkill(bossName);
-			if (bossSkill == null)
-			{
-				// Not a tracked boss - can't verify via hiscores
-				return new BossVerificationResult(false, -1, "Boss not tracked in hiscores", false);
-			}
-
-			net.runelite.client.hiscore.Skill bossData = result.getSkill(bossSkill);
-			if (bossData == null || bossData.getLevel() < 0)
-			{
-				// Player hasn't killed this boss enough to be on hiscores
-				return new BossVerificationResult(false, 0, "No KC on hiscores yet", true);
-			}
-
-			int actualKc = bossData.getLevel(); // For bosses, "level" is the KC
-			boolean verified = actualKc >= expectedMinKc;
-
-
-			return new BossVerificationResult(verified, actualKc,
-				verified ? "Verified via Jagex Hiscores" : "KC not yet updated", true);
-		});
-	}
-
-	/**
 	 * Get the current boss KC from hiscores (for baseline before a kill).
 	 */
 	public CompletableFuture<Integer> getBossKillCount(String bossName)
@@ -248,14 +208,6 @@ public class HiscoreVerificationService
 
 			return bossData.getLevel();
 		});
-	}
-
-	/**
-	 * Check if a boss is trackable via hiscores.
-	 */
-	public boolean isBossTrackable(String bossName)
-	{
-		return mapBossNameToHiscoreSkill(bossName) != null;
 	}
 
 	/**
@@ -384,15 +336,6 @@ public class HiscoreVerificationService
 			default:
 				return null;
 		}
-	}
-
-	/**
-	 * Clear the cache (call when player logs out or changes).
-	 */
-	public void clearCache()
-	{
-		cachedResult = null;
-		cacheTimestamp = 0;
 	}
 
 	/**

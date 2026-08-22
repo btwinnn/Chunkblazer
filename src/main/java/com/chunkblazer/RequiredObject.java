@@ -59,16 +59,6 @@ public class RequiredObject
 		this.rolledQuantity = null;
 	}
 
-	public boolean matchesObjectId(int objectId)
-	{
-		return objectIds != null && objectIds.contains(objectId);
-	}
-
-	public int getFirstObjectId()
-	{
-		return objectIds != null && !objectIds.isEmpty() ? objectIds.get(0) : -1;
-	}
-
 	public List<Integer> getObjectIds()
 	{
 		return objectIds;
