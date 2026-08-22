@@ -250,7 +250,7 @@ public class TaskCompletionSoundManager
 			// Convert percentage to decibels (-80 to 6 dB range typically).
 			// 0.03f (3%) was hardcoded here, which works out to -30dB — the
 			// clip really did play, it was just inaudible. Now player-tunable.
-			int configured = config != null ? config.taskCompletionSoundVolume() : 25;
+			int configured = config != null ? config.taskCompletionSoundVolume() : 3;
 			float volumePercent = Math.max(0.001f, Math.min(1.0f, configured / 100.0f));
 			float dB = (float) (Math.log(volumePercent) / Math.log(10.0) * 20.0);
 			volume.setValue(Math.max(volume.getMinimum(), Math.min(volume.getMaximum(), dB)));

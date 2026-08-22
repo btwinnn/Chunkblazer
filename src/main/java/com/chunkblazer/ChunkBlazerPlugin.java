@@ -542,6 +542,19 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private volatile boolean serverLoginDone = false;
 
+	// Last RS profile key onProfileChanged acted on. A world hop (and some no-op
+	// ProfilePanel actions) re-activate the config profile without changing the
+	// account, re-firing ProfileChanged; acting again revokes sync and reseeds off
+	// config that reads null mid-switch. Dedupe on the account key so only a real
+	// switch does the work.
+	private volatile String lastProfileSwitchKey;
+
+	// Last confirmed mode-lock verdict for the current account. getLocalPlayer() is
+	// briefly null right after a hop's LOGGED_IN, so isModeLocked() can't read the
+	// RSN and would report "unlocked" — flashing the mode picker every hop. During
+	// that window we trust this cached verdict instead. Reset on real logout.
+	private volatile boolean modeLockConfirmed;
+
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged event)
 	{
@@ -606,6 +619,9 @@ public class ChunkBlazerPlugin extends Plugin
 			// Real logout — reset the dedupe flag so the NEXT LOGGED_IN
 			// (which is a fresh game session) re-runs loginToServer.
 			serverLoginDone = false;
+			// Re-determine mode-lock from scratch next login: the cached verdict is
+			// per-account, and a different account may log in next.
+			modeLockConfirmed = false;
 			// And clear any pending verification — the nonce is tied to the
 			// pre-logout session. Also drop any in-flight Nuzlocke lock.
 			pendingVerificationNonce = null;
@@ -638,6 +654,19 @@ public class ChunkBlazerPlugin extends Plugin
 	@Subscribe
 	public void onProfileChanged(ProfileChanged event)
 	{
+		// A world hop (and some no-op ProfilePanel actions) re-activate the config
+		// profile without changing the account, re-firing this event. Reacting
+		// again revokes sync authority and reloads/reseeds off config that reads
+		// null mid-switch — which re-seeded the start chunk for hopping players.
+		// Only do the work on a real account change; skip a null key
+		// (mid-transition / logout, handled by the LOGIN_SCREEN path).
+		String key = configManager != null ? configManager.getRSProfileKey() : null;
+		if (key == null || key.equals(lastProfileSwitchKey))
+		{
+			return;
+		}
+		lastProfileSwitchKey = key;
+
 		revokeSyncAuthorityForProfileSwitch();
 
 		loadActiveTasks();
@@ -2167,11 +2196,19 @@ public class ChunkBlazerPlugin extends Plugin
 		String currentRsn = getPlayerName();
 		if (currentRsn == null)
 		{
-			return false;
+			// Player not loaded yet (the brief window right after a world hop's
+			// LOGGED_IN, noted in onGameStateChanged). We can't verify the account
+			// this instant, but reporting "unlocked" here is what flashed the mode
+			// picker on every hop. Trust the last verdict confirmed for this
+			// session; it is reset on real logout, so a genuine account change
+			// re-determines it once its player loads.
+			return modeLockConfirmed;
 		}
 
 		String expectedPrefix = hashRsn(currentRsn);
-		return hash.startsWith(expectedPrefix);
+		boolean locked = hash.startsWith(expectedPrefix);
+		modeLockConfirmed = locked;
+		return locked;
 	}
 
 	/**

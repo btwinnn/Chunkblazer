@@ -348,9 +348,11 @@ public interface ChunkBlazerConfig extends Config
 	@Range(min = 0, max = 100)
 	default int taskCompletionSoundVolume()
 	{
-		// Was hardcoded at 3%, which is effectively inaudible over game audio —
-		// the sounds played fine, nobody could hear them.
-		return 25;
+		// 3% baseline (~-30dB): a deliberately quiet default so the jingle sits
+		// under game audio. Note it can be hard to hear over loud game sound (an
+		// earlier 25% default was chosen for that reason); raise it (0-100) if you
+		// want the jingle louder.
+		return 3;
 	}
 
 	@ConfigItem(
