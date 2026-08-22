@@ -131,21 +131,13 @@ if not exist "%RUNELITE_DIR%\gradlew.bat" (
 
 :: Copy ChunkBlazer plugin into RuneLite (instead of symlinks)
 call :log "[4/5] Copying ChunkBlazer plugin into RuneLite..."
-set "JAVA_PLUGINS_DIR=%RUNELITE_DIR%\runelite-client\src\main\java\net\runelite\client\plugins"
-set "RES_PLUGINS_DIR=%RUNELITE_DIR%\runelite-client\src\main\resources\net\runelite\client\plugins"
-
-:: Create plugin directories if they don't exist
-if not exist "%JAVA_PLUGINS_DIR%" (
-    call :log "  Creating: %JAVA_PLUGINS_DIR%"
-    md "%JAVA_PLUGINS_DIR%" 2>nul
-)
-if not exist "%RES_PLUGINS_DIR%" (
-    call :log "  Creating: %RES_PLUGINS_DIR%"
-    md "%RES_PLUGINS_DIR%" 2>nul
-)
-
-set "JAVA_DEST=%JAVA_PLUGINS_DIR%\chunkblazer"
-set "RES_DEST=%RES_PLUGINS_DIR%\chunkblazer"
+:: Plugin lives under its REAL package com.chunkblazer (post Aug-2026 rename), NOT
+:: net.runelite.client.plugins. RuneLite core only auto-discovers the latter, so
+:: run-chunkblazer.bat generates a DevLauncher that registers ChunkBlazer via
+:: ExternalPluginManager (the same path the Hub uses). Keep these two dests in sync
+:: with run-chunkblazer.bat; xcopy /I creates them.
+set "JAVA_DEST=%RUNELITE_DIR%\runelite-client\src\main\java\com\chunkblazer"
+set "RES_DEST=%RUNELITE_DIR%\runelite-client\src\main\resources\com\chunkblazer"
 
 call :log "  Copying Java sources..."
 call :log "    From: %PLUGIN_JAVA_SRC%"
