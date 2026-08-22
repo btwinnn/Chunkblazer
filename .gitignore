@@ -31,11 +31,6 @@ build/
 # Local tools (Maven, etc.)
 tools/
 
-# Unit tests — kept LOCAL only, out of the plugin repo to stay under the
-# Plugin Hub reviewer's ~200k-token limit. The files remain on the dev machine
-# (and in git history prior to this commit) but are no longer tracked. Re-home
-# them into a tracked location before relying on them long-term.
-
 # Logs (per-tester local output — never commit)
 run-log.txt
 update-runelite-log.txt

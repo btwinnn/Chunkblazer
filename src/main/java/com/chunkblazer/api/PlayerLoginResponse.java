@@ -132,13 +132,11 @@ public class PlayerLoginResponse
 		private String verifiedAt;
 
 		/**
-		 * Whether the server authorizes this account to use the Dev Controls
-		 * panel. Server-issued on purpose: those tools write directly to local
-		 * task state, and a dev-granted task is a real catalog task, so the
-		 * server's Tier-0 points recompute agrees with the client and never
-		 * flags it. Gating this client-side would leave every player an
-		 * unobservable self-grant. Defaults false, so an old or malformed
-		 * response denies the tools.
+		 * Whether the server marks this account as a ChunkBlazer dev/tester.
+		 * Drives the {@code [Dev]} badge in the roster and player overlay.
+		 * Server-issued on purpose so it can't be self-granted from local
+		 * config; defaults false, so an old or malformed response leaves the
+		 * account unmarked.
 		 */
 		@SerializedName("is_dev")
 		private boolean isDev;

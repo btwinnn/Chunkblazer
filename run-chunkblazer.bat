@@ -35,6 +35,16 @@ call :log "Configuration:"
 call :log "  CHUNKBLAZER_DIR: %CHUNKBLAZER_DIR%"
 call :log "  RUNELITE_DIR: %RUNELITE_DIR%"
 call :log "  LOG_FILE: %LOG_FILE%"
+
+:: Which ChunkBlazer branch are we about to test? Dev tools (Dev Controls panel +
+:: dev* actions) live ONLY on 'dev'; 'main' is the clean public/submission branch.
+:: This mirror-copies whatever is checked out, so surface the branch to avoid
+:: testing 'main' and wondering where the dev tools went.
+for /f "delims=" %%b in ('git -C "%CHUNKBLAZER_DIR%" rev-parse --abbrev-ref HEAD 2^>nul') do set "CB_BRANCH=%%b"
+if defined CB_BRANCH (
+    call :log "  ChunkBlazer branch: %CB_BRANCH%"
+    if /I "%CB_BRANCH%"=="main" call :log "  NOTE: on 'main' - dev tools are NOT present. Checkout 'dev' to test them."
+)
 call :log ""
 
 :: Check RuneLite exists

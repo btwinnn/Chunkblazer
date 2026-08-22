@@ -53,6 +53,22 @@ or anything unrelated to the challenge.
 
 ---
 
+## What the plugin downloads
+
+Two things are too large to ship inside the plugin, so they're fetched from the
+server (read-only) and cached on your machine:
+
+- **Task definitions** — `GET /api/tasks` (~3 MB of JSON). Fetched once, cached
+  under `RUNELITE_DIR`, and revalidated with an ETag/`304 Not Modified`, so it's
+  re-downloaded only when the catalog actually changes.
+- **Completion jingles** — content-addressed audio (~60 MB total). Fetched on
+  demand and disk-cached the same way; only the sounds you encounter are pulled.
+
+These are one-way downloads of game content — no personal data is sent to
+retrieve them.
+
+---
+
 ## Your control
 
 - **Play offline:** turn off **"Enable Server Verification"** in the plugin

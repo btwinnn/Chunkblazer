@@ -2870,6 +2870,14 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void setAccountState(String key, Object value)
 	{
+		// Skip no-op writes: a single completion can re-run the same save path
+		// several times per tick with identical data. Rewriting the stored value
+		// fires a redundant ConfigChanged and disk write for nothing.
+		String newVal = value == null ? null : String.valueOf(value);
+		if (newVal != null && newVal.equals(configManager.getConfiguration(CONFIG_GROUP, key)))
+		{
+			return;
+		}
 		if (!isAccountStateAvailable())
 		{
 			log.warn("[CHUNKBLAZER] per-account write '{}' issued with no RS profile available — "
