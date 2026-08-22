@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -223,6 +224,11 @@ public class ChunkBlazerPlugin extends Plugin
 	// always-accessible dungeon regions are handled separately by the coordinate
 	// rule in isFreeRegion, NOT by this list.
 	private final Set<Integer> freeUnlockableRegionIds = new HashSet<>();
+	// Regions we've already warned have no owning chunk (e.g. manually-unlocked
+	// underground/instanced spots). rollTasksForRegion runs on several threads and
+	// fires repeatedly, so we log each missing region once per client run instead
+	// of every attempt. Thread-safe because the roll can come from Client + EDT.
+	private final Set<Integer> warnedMissingChunkRegions = ConcurrentHashMap.newKeySet();
 	// Region id -> Friendly_Name for free chunks, used in the unlock message.
 	private final Map<Integer, String> freeUnlockableNames = new HashMap<>();
 	// Region id -> neighbor_ids for free chunks. Free chunks live only in
@@ -3899,8 +3905,12 @@ public class ChunkBlazerPlugin extends Plugin
 		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
 		if (chunk == null)
 		{
-			log.warn("rollTasksForRegion: No chunk found for region {}. Total chunks in map: {}",
-				regionId, chunksByRegionId.size());
+			// Log each missing region once per client run — see warnedMissingChunkRegions.
+			if (warnedMissingChunkRegions.add(regionId))
+			{
+				log.warn("rollTasksForRegion: No chunk found for region {}. Total chunks in map: {}",
+					regionId, chunksByRegionId.size());
+			}
 			return new HashSet<>();
 		}
 		if (chunk.getTasks() == null || chunk.getTasks().isEmpty())

@@ -1,4 +1,4 @@
-# ChunkBlazer — Data & Privacy
+# ChunkBlazer Data & Privacy
 
 ChunkBlazer is a **server-backed game mode**, similar to
 [Wise Old Man](https://wiseoldman.net) and [TempleOSRS](https://templeosrs.com).
@@ -16,8 +16,8 @@ track your account progress any time at **https://chunkblazer.com**.
 
 ChunkBlazer is a chunk-unlock challenge: you unlock map regions ("chunks") and
 complete randomly-assigned tasks for points. So that your save state, points,
-unlocked chunks and leaderboard rank persist across logins and devices — and so
-completions can be verified fairly — the plugin syncs that progress to the
+unlocked chunks and leaderboard rank persist across logins and devices (and so
+completions can be verified fairly), the plugin syncs that progress to the
 ChunkBlazer server while you play. If you turn syncing off, the plugin still
 works locally, but your progress is **not** saved to the server, and
 leaderboards / player discovery are unavailable.
@@ -58,13 +58,13 @@ or anything unrelated to the challenge.
 Two things are too large to ship inside the plugin, so they're fetched from the
 server (read-only) and cached on your machine:
 
-- **Task definitions** — `GET /api/tasks` (~3 MB of JSON). Fetched once, cached
+- **Task definitions:** `GET /api/tasks` (~3 MB of JSON). Fetched once, cached
   under `RUNELITE_DIR`, and revalidated with an ETag/`304 Not Modified`, so it's
   re-downloaded only when the catalog actually changes.
-- **Completion jingles** — content-addressed audio (~60 MB total). Fetched on
+- **Completion jingles:** content-addressed audio (~60 MB total). Fetched on
   demand and disk-cached the same way; only the sounds you encounter are pulled.
 
-These are one-way downloads of game content — no personal data is sent to
+These are one-way downloads of game content; no personal data is sent to
 retrieve them.
 
 ---
@@ -72,7 +72,7 @@ retrieve them.
 ## Your control
 
 - **Play offline:** turn off **"Enable Server Verification"** in the plugin
-  settings. With it off, nothing leaves your client — but server saves,
+  settings. With it off, nothing leaves your client, but server saves,
   leaderboards, and seeing other players are disabled.
 - **Stay hidden:** turn off **"Visible to Others"** to keep your name off the
   "players online" list while still saving your progress.
