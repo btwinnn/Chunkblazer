@@ -343,7 +343,7 @@ public class FiremakingModule extends AbstractTaskModule
 		if (consumedAny && lastFiremakingXpTick >= 0
 			&& tick - lastFiremakingXpTick <= MATCH_WINDOW_TICKS)
 		{
-			creditPendingBurns("consumption after XP");
+			creditPendingBurns();
 		}
 	}
 
@@ -407,7 +407,7 @@ public class FiremakingModule extends AbstractTaskModule
 
 		if (lastFiremakingXpTick >= 0 && tick - lastFiremakingXpTick <= MATCH_WINDOW_TICKS)
 		{
-			creditPendingBurns("ground light after XP");
+			creditPendingBurns();
 		}
 	}
 
@@ -444,7 +444,7 @@ public class FiremakingModule extends AbstractTaskModule
 		// CONSUMPTION-FIRST ordering: the traditional tinderbox path, where the
 		// log leaves the inventory before the XP lands. A bonfire batch that
 		// drained ahead of its XP drops also credits here.
-		creditPendingBurns("XP after consumption");
+		creditPendingBurns();
 	}
 
 	/**
@@ -454,7 +454,7 @@ public class FiremakingModule extends AbstractTaskModule
 	 * completes the burn. Safe to call speculatively: it no-ops when there is
 	 * nothing pending.
 	 */
-	private void creditPendingBurns(String trigger)
+	private void creditPendingBurns()
 	{
 		expirePendingBurns();
 
@@ -477,9 +477,6 @@ public class FiremakingModule extends AbstractTaskModule
 		// a light — and it would double-count outright now that the ground
 		// despawn credits the same log again when the fire finally catches.
 		lastFiremakingXpTick = -1;
-
-		log.info("[FIREMAKING-DEBUG] burn credited ({}): {} at tick {}",
-			trigger, burned, getGameTick());
 
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
@@ -569,22 +566,6 @@ public class FiremakingModule extends AbstractTaskModule
 		for (Map<Integer, Integer> items : taskTargetItems.values())
 		{
 			watchedItemIds.addAll(items.keySet());
-		}
-	}
-
-	private String getItemName(int itemId)
-	{
-		try
-		{
-			if (client.isClientThread())
-			{
-				return itemManager.getItemComposition(itemId).getName();
-			}
-			return "Item#" + itemId;
-		}
-		catch (Exception e)
-		{
-			return "Item#" + itemId;
 		}
 	}
 

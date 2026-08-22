@@ -223,9 +223,8 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 		AbstractTaskModule module = findModuleForTask(task);
 		if (module == null)
 		{
-			log.warn(">>> NO MODULE found for task: {} (type: {}, category: {})",
-				task.getName(), completionType, category);
-			log.warn("    Available modules by type: {}", modulesByType.keySet());
+			log.debug("No module found for task: {} (type: {}, category: {}); available: {}",
+				task.getName(), completionType, category, modulesByType.keySet());
 			return;
 		}
 

@@ -25,7 +25,6 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.RequiredItem;
-import com.chunkblazer.api.ItemObtainedReport;
 
 /**
  * Module for handling OBTAIN completion type tasks.
@@ -189,9 +188,6 @@ public class ObtainModule extends AbstractTaskModule
 						Set<Integer> variantIds = new HashSet<>(itemIds);
 						slots.add(new Slot(variantIds, requiredQty));
 						watchedItemIds.addAll(variantIds);
-						for (Integer itemId : variantIds)
-						{
-						}
 					}
 					else
 					{
@@ -776,65 +772,6 @@ public class ObtainModule extends AbstractTaskModule
 		{
 			return "Item#" + itemId;
 		}
-	}
-
-	/**
-	 * Send item obtained report to API (for server verification).
-	 */
-	private void sendItemObtainedReport(int itemId, int quantity)
-	{
-		// Find which task this item belongs to (for the report). With the
-		// slot-aware structure: walk every slot of every active task and
-		// see if the itemId appears in any slot's variant set.
-		String taskId = "";
-		outer:
-		for (NuzlockeTask task : activeTasks)
-		{
-			List<Slot> slots = taskSlots.get(task.getTaskId());
-			if (slots == null)
-			{
-				continue;
-			}
-			for (Slot slot : slots)
-			{
-				if (slot.variantIds.contains(itemId))
-				{
-					taskId = task.getTaskId();
-					break outer;
-				}
-			}
-		}
-
-		ItemObtainedReport report = ItemObtainedReport.builder()
-			.playerHash(getPlayerHash())
-			.taskId(taskId)
-			.itemId(itemId)
-			.itemName(getItemName(itemId))
-			.quantity(quantity)
-			.source("UNKNOWN")
-			.sourceId(-1)
-			.regionId(getCurrentRegionId())
-			.worldX(client.getLocalPlayer() != null ? client.getLocalPlayer().getWorldLocation().getX() : 0)
-			.worldY(client.getLocalPlayer() != null ? client.getLocalPlayer().getWorldLocation().getY() : 0)
-			.plane(client.getLocalPlayer() != null ? client.getLocalPlayer().getWorldLocation().getPlane() : 0)
-			.gameTick(getGameTick())
-			.timestamp(System.currentTimeMillis())
-			.geValue(itemManager.getItemPrice(itemId))
-			.destination("INVENTORY")
-			.build();
-
-		apiClient.reportItemObtained(report)
-			.thenAccept(response ->
-			{
-				if (response != null && !response.isSuccess())
-				{
-					log.warn("ObtainModule: Server rejected item report: {}", response.getErrorMessage());
-				}
-			})
-			.exceptionally(ex ->
-			{
-				return null;
-			});
 	}
 
 	// ==================== CHAT MESSAGE METHODS ====================

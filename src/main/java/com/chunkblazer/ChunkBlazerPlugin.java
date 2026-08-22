@@ -277,10 +277,6 @@ public class ChunkBlazerPlugin extends Plugin
 	// (with this snapshot) the moment verification succeeds". Cleared on logout.
 	private volatile EligibilitySnapshot pendingNuzlockeSnapshot;
 
-	// --- Constants ---
-	private static final String DEV_MENU_OPTION = "DEBUG: Complete Task";
-	private static final String DEV_MENU_TARGET = "ChunkBlazer";
-
 	// --- Plugin Lifecycle ---
 
 	@Override

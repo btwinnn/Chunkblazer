@@ -33,7 +33,6 @@ public class VarbitCheckModule extends AbstractTaskModule
 	// Chat colors for ChunkBlazer messages
 	private static final String COLOR_BLUE = "3366ff";
 	private static final String COLOR_DARK_BLUE = "1a5276";
-	private static final String COLOR_DARK_GREEN = "228b22";
 	private static final String COLOR_BLACK = "000000";
 
 	@Inject

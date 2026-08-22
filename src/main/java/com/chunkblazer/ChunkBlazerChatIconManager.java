@@ -22,7 +22,6 @@ import net.runelite.client.util.ImageUtil;
 public class ChunkBlazerChatIconManager
 {
 	private static final int ICON_WIDTH = 11;
-	private static final int ICON_HEIGHT = 11;
 
 	private final Client client;
 	private final ClientThread clientThread;

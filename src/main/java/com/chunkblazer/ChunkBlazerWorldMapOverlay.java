@@ -12,17 +12,14 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.api.Client;
-import net.runelite.api.MenuAction;
 import net.runelite.api.Point;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.worldmap.WorldMap;
 import net.runelite.client.ui.FontManager;
-import net.runelite.client.ui.JagexColors;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.util.ColorUtil;
 
 @Slf4j
 class ChunkBlazerWorldMapOverlay extends Overlay
@@ -389,67 +386,5 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 		graphics.drawString(line3, textX, textY);
 	}
 
-	private void addUnlockMenuEntry(int regionId)
-	{
-		Widget bottomBar = client.getWidget(InterfaceID.Worldmap.BOTTOM_GRAPHIC0);
-		if (bottomBar == null || client.isMenuOpen())
-		{
-			return;
-		}
 
-		String regionName = plugin.getRegionName(regionId);
-		int unlockCost = plugin.getRegionUnlockCost(regionId);
-		int playerPoints = plugin.getTotalPoints();
-
-		client.createMenuEntry(-1)
-			.setTarget(ColorUtil.wrapWithColorTag(regionName + " (" + regionId + ")", JagexColors.MENU_TARGET))
-			.setOption("Unlock chunk")
-			.setType(MenuAction.RUNELITE)
-			.onClick(m -> showUnlockConfirmation(regionId, regionName, unlockCost, playerPoints));
-
-		// Show cost info
-		String costText = "Cost: " + unlockCost + " pts";
-		if (playerPoints < unlockCost)
-		{
-			costText += " (Need " + (unlockCost - playerPoints) + " more)";
-		}
-		client.createMenuEntry(-2)
-			.setTarget(ColorUtil.wrapWithColorTag(costText, playerPoints >= unlockCost ? new Color(255, 215, 0) : Color.RED))
-			.setOption("")
-			.setType(MenuAction.RUNELITE);
-	}
-
-
-	private void showUnlockConfirmation(int regionId, String regionName, int unlockCost, int playerPoints)
-	{
-		clientThread.invokeLater(() ->
-		{
-			if (playerPoints < unlockCost)
-			{
-				// Show "not enough points" message with OK button
-				chatboxPanelManager.openTextMenuInput(
-						"Cannot unlock " + regionName + "! " +
-						"Need " + (unlockCost - playerPoints) + " more points. " +
-						"(Cost: " + unlockCost + ", You have: " + playerPoints + ")")
-					.option("OK", () ->
-					{
-					})
-					.build();
-				return;
-			}
-
-			// Show unlock confirmation with Confirm/Cancel options
-			chatboxPanelManager.openTextMenuInput(
-					"Confirm: it costs " + unlockCost + " points to unlock " + regionName + ". " +
-					"(Remaining after unlock: " + (playerPoints - unlockCost) + " points)")
-				.option("Confirm", () ->
-				{
-					plugin.unlockRegion(regionId);
-				})
-				.option("Cancel", () ->
-				{
-				})
-				.build();
-		});
-	}
 }

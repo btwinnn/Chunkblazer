@@ -97,7 +97,6 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JPanel regionUnlockPanel;
 	private JPanel unlockedListPanel;
 	private boolean unlockedListExpanded = false; // Unlocked Chunks list collapsed by default
-	private JPanel unlockableChunksPanel; // unused — list UI removed; dead code, delete in cleanup pass
 	// Pins the top-right region-unlock prompt to a chunk clicked on the world map
 	// (hold U + click), overriding the walk-into-chunk current-region behaviour
 	// until the player confirms or cancels.
@@ -1718,161 +1717,6 @@ public class ChunkBlazerPanel extends PluginPanel
 			unlockedListPanel.getParent().revalidate();
 			unlockedListPanel.getParent().repaint();
 		}
-	}
-
-	/**
-	 * Empty container for the "Unlockable Chunks" list; populated and shown/hidden
-	 * by {@link #updateUnlockableChunksSection()}.
-	 */
-	private JPanel createUnlockableChunksSection()
-	{
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-		panel.setBorder(BorderFactory.createCompoundBorder(
-			BorderFactory.createLineBorder(FLAME),
-			new EmptyBorder(6, 6, 6, 6)
-		));
-		panel.setVisible(false);
-		return panel;
-	}
-
-	/**
-	 * Lists every neighbouring chunk the player can unlock right now, each with an
-	 * inline Unlock button. Mirrors the world-map / minimap unlock but in the side
-	 * panel, so it's reachable without the map. Safe from any thread.
-	 */
-	public void updateUnlockableChunksSection()
-	{
-		if (!SwingUtilities.isEventDispatchThread())
-		{
-			SwingUtilities.invokeLater(this::updateUnlockableChunksSection);
-			return;
-		}
-		if (unlockableChunksPanel == null)
-		{
-			return;
-		}
-
-		java.util.List<Integer> neighbors = new java.util.ArrayList<>(plugin.getNeighborRegionIds());
-		neighbors.removeIf(r -> plugin.isRegionUnlocked(r));
-		java.util.Collections.sort(neighbors);
-
-		unlockableChunksPanel.removeAll();
-
-		if (!plugin.isLoggedIn() || neighbors.isEmpty())
-		{
-			unlockableChunksPanel.setVisible(false);
-			if (unlockableChunksPanel.getParent() != null)
-			{
-				unlockableChunksPanel.getParent().revalidate();
-				unlockableChunksPanel.getParent().repaint();
-			}
-			return;
-		}
-
-		int points = plugin.getTotalPoints();
-
-		JLabel title = new JLabel("Unlockable Chunks");
-		title.setFont(FontManager.getRunescapeBoldFont());
-		title.setForeground(FLAME);
-		title.setAlignmentX(LEFT_ALIGNMENT);
-		unlockableChunksPanel.add(title);
-		unlockableChunksPanel.add(Box.createVerticalStrut(4));
-
-		for (int regionId : neighbors)
-		{
-			String name = plugin.getRegionName(regionId);
-			int cost = plugin.getRegionUnlockCost(regionId);
-			boolean canAfford = points >= cost;
-
-			JPanel row = new JPanel(new BorderLayout(4, 0));
-			row.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-			row.setAlignmentX(LEFT_ALIGNMENT);
-			row.setMaximumSize(new Dimension(CONTENT_WIDTH, 24));
-
-			JLabel nameLabel = new JLabel(name);
-			nameLabel.setFont(FontManager.getRunescapeSmallFont());
-			nameLabel.setForeground(Color.WHITE);
-			nameLabel.setToolTipText(name + " (" + regionId + ")");
-			row.add(nameLabel, BorderLayout.CENTER);
-
-			final int finalRegion = regionId;
-			final String finalName = name;
-			final int finalCost = cost;
-			JButton btn = new JButton(cost + " pts");
-			btn.setFont(FontManager.getRunescapeSmallFont());
-			btn.setFocusPainted(false);
-			btn.setMargin(new Insets(0, 4, 0, 4));
-			if (canAfford)
-			{
-				btn.setBackground(new Color(50, 110, 60));
-				btn.setForeground(Color.WHITE);
-				btn.addActionListener(e -> showListUnlockConfirm(row, finalRegion, finalName, finalCost));
-			}
-			else
-			{
-				btn.setEnabled(false);
-				btn.setToolTipText("Need " + (cost - points) + " more pts");
-			}
-			row.add(btn, BorderLayout.EAST);
-
-			unlockableChunksPanel.add(row);
-			unlockableChunksPanel.add(Box.createVerticalStrut(3));
-		}
-
-		unlockableChunksPanel.setVisible(true);
-		unlockableChunksPanel.revalidate();
-		unlockableChunksPanel.repaint();
-		if (unlockableChunksPanel.getParent() != null)
-		{
-			unlockableChunksPanel.getParent().revalidate();
-			unlockableChunksPanel.getParent().repaint();
-		}
-	}
-
-	/**
-	 * Inline "Spend N? Yes / No" confirm for an Unlockable Chunks row.
-	 */
-	private void showListUnlockConfirm(JPanel row, int regionId, String regionName, int cost)
-	{
-		row.removeAll();
-
-		JLabel prompt = new JLabel("Spend " + cost + "?");
-		prompt.setFont(FontManager.getRunescapeSmallFont());
-		prompt.setForeground(Color.WHITE);
-		row.add(prompt, BorderLayout.WEST);
-
-		JPanel choices = new JPanel(new GridLayout(1, 2, 4, 0));
-		choices.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-
-		JButton yes = new JButton("Yes");
-		yes.setFont(FontManager.getRunescapeSmallFont());
-		yes.setBackground(new Color(50, 110, 60));
-		yes.setForeground(Color.WHITE);
-		yes.setFocusPainted(false);
-		yes.addActionListener(e ->
-		{
-			plugin.closeChatboxPrompt();
-			plugin.unlockRegion(regionId);
-			updateUnlockableChunksSection();
-			updateStats();
-			updateRegionUnlockSection();
-		});
-
-		JButton no = new JButton("No");
-		no.setFont(FontManager.getRunescapeSmallFont());
-		no.setBackground(new Color(110, 50, 50));
-		no.setForeground(Color.WHITE);
-		no.setFocusPainted(false);
-		no.addActionListener(e -> updateUnlockableChunksSection());
-
-		choices.add(yes);
-		choices.add(no);
-		row.add(choices, BorderLayout.EAST);
-
-		row.revalidate();
-		row.repaint();
 	}
 
 	/**
@@ -3565,17 +3409,6 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		List<NuzlockeTask> allTasks = plugin.getActiveTasks();
 
-		// Debug: check for duplicates
-		java.util.Set<String> taskIds = new java.util.HashSet<>();
-		for (NuzlockeTask t : allTasks)
-		{
-			if (taskIds.contains(t.getTaskId()))
-			{
-				log.warn(">>> DUPLICATE TASK DETECTED: {} ({})", t.getName(), t.getTaskId());
-			}
-			taskIds.add(t.getTaskId());
-		}
-
 		// Cache filter values
 		final String filterText = activeTasksSearchText != null ? activeTasksSearchText : "";
 		final String filterCategory = activeTasksSelectedCategory != null ? activeTasksSelectedCategory : "All";
@@ -3894,33 +3727,6 @@ public class ChunkBlazerPanel extends PluginPanel
 		card.add(infoLabel);
 
 		return card;
-	}
-
-	private JLabel makeChunkChip(String fullText)
-	{
-		String label = fullText.replaceAll("\\s*\\([^)]*\\)\\s*$", "");
-		JLabel chip = new JLabel(label)
-		{
-			@Override
-			protected void paintComponent(Graphics g)
-			{
-				java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
-				g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
-					java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-				g2.setColor(new Color(40, 52, 76));
-				g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
-				g2.setColor(new Color(64, 80, 108));
-				g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
-				g2.dispose();
-				super.paintComponent(g);
-			}
-		};
-		chip.setOpaque(false);
-		chip.setForeground(new Color(210, 220, 235));
-		chip.setFont(FontManager.getRunescapeSmallFont());
-		chip.setBorder(new EmptyBorder(2, 7, 2, 7));
-		chip.setToolTipText(fullText);
-		return chip;
 	}
 
 	/**

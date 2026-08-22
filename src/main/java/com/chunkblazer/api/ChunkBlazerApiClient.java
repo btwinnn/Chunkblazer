@@ -901,62 +901,6 @@ public class ChunkBlazerApiClient
 	}
 
 	/**
-	 * Report item obtained for verification.
-	 */
-	public CompletableFuture<TaskVerificationResponse> reportItemObtained(ItemObtainedReport report)
-	{
-		if (!config.apiEnabled())
-		{
-			return CompletableFuture.completedFuture(
-				TaskVerificationResponse.offlineSuccess(report.getTaskId())
-			);
-		}
-
-		CompletableFuture<TaskVerificationResponse> future = new CompletableFuture<>();
-
-		String url = config.apiBaseUrl() + "/api/v1/events/item-obtained";
-		String json = gson.toJson(report);
-
-		Request httpRequest = new Request.Builder()
-			.url(url)
-			.addHeader("X-API-Key", playerApiKey != null ? playerApiKey : config.apiKey())
-			.addHeader("Content-Type", "application/json")
-			.post(RequestBody.create(JSON, json))
-			.build();
-
-		httpClient.newCall(httpRequest).enqueue(new Callback()
-		{
-			@Override
-			public void onFailure(Call call, IOException e)
-			{
-				log.error("Item obtained report failed: {}", e.getMessage());
-				future.complete(TaskVerificationResponse.error("Network error"));
-			}
-
-			@Override
-			public void onResponse(Call call, Response response) throws IOException
-			{
-				try (response)
-				{
-					String body = response.body() != null ? response.body().string() : "";
-
-					if (response.isSuccessful())
-					{
-						TaskVerificationResponse verifyResponse = gson.fromJson(body, TaskVerificationResponse.class);
-						future.complete(verifyResponse);
-					}
-					else
-					{
-						future.complete(TaskVerificationResponse.error("Server error: " + response.code()));
-					}
-				}
-			}
-		});
-
-		return future;
-	}
-
-	/**
 	 * Report item equipped for verification.
 	 * This endpoint allows the server to verify that:
 	 * - The item was legitimately equipped (was in inventory)

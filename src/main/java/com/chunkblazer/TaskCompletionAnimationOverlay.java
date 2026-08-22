@@ -92,11 +92,6 @@ public class TaskCompletionAnimationOverlay extends Overlay
 		}
 	}
 
-	private String dims(BufferedImage img)
-	{
-		return img != null ? img.getWidth() + "x" + img.getHeight() : "null";
-	}
-
 	private BufferedImage loadImage(String path)
 	{
 		try (InputStream is = getClass().getResourceAsStream(path))

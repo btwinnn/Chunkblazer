@@ -533,32 +533,6 @@ public class EquipModule extends AbstractTaskModule
 	}
 
 	/**
-	 * Get the item ID at a specific equipment slot.
-	 */
-	private int getItemAtSlot(int slotIndex)
-	{
-		ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
-		if (equipment == null)
-		{
-			return -1;
-		}
-
-		Item[] items = equipment.getItems();
-		if (slotIndex < 0 || slotIndex >= items.length)
-		{
-			return -1;
-		}
-
-		Item item = items[slotIndex];
-		if (item == null || item.getId() <= 0)
-		{
-			return -1;
-		}
-
-		return item.getId();
-	}
-
-	/**
 	 * Get a human-readable name for an equipment slot index.
 	 */
 	private String getSlotName(int slotIndex)
