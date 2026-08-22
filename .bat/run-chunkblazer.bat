@@ -21,7 +21,8 @@ call :log "========================================"
 call :log ""
 
 :: Set paths
-set "CHUNKBLAZER_DIR=%SCRIPT_DIR%"
+:: This script lives in <repo>\.bat, so the repo root is one level up.
+for %%I in ("%SCRIPT_DIR%\..") do set "CHUNKBLAZER_DIR=%%~fI"
 set "RUNELITE_DIR=C:\runelite"
 set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\com\chunkblazer"
 set "PLUGIN_RESOURCES=%CHUNKBLAZER_DIR%\src\main\resources\com\chunkblazer"
