@@ -146,13 +146,33 @@ public class CombatAchievementModule extends AbstractTaskModule
 		{
 			return;
 		}
-		// VarbitChanged fires for VarPlayer changes too. We don't rely on which
-		// varp changed (API-version portable) — just re-scan the few active CA
-		// tasks; each is a handful of cheap varp reads.
+		// Only re-scan when a CA-completion varp actually changed. VarbitChanged
+		// fires for every varp/varbit, and a fresh login replays THOUSANDS in one
+		// burst on the client thread — re-scanning every active CA task on each of
+		// those was needless work stacked on the heaviest moment of the session
+		// (a maxed account with many active tasks). CA completion lives only in the
+		// packed varps below, and those change rarely, so filter to them. We still
+		// force a full re-scan on login via onGameStateChanged.
+		if (!isCaVarp(event.getVarpId()))
+		{
+			return;
+		}
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			checkTaskCompletion(task);
 		}
+	}
+
+	private static boolean isCaVarp(int varpId)
+	{
+		for (int v : CA_TASK_COMPLETED_VARPS)
+		{
+			if (v == varpId)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void checkTaskCompletion(NuzlockeTask task)
