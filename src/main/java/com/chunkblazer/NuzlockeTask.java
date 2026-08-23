@@ -26,6 +26,28 @@ public class NuzlockeTask
 	 */
 	private String description;
 
+	/**
+	 * The category as it should read in the plugin UI (filters, dropdowns, card
+	 * labels). The catalog tags some item-set pools with a "_Set" suffix
+	 * ("Herblore_Set", "Obtain_Set") to group authoring, but players just think
+	 * of those as the base skill — so we fold "_Set" back onto its parent
+	 * ("Herblore", "Obtain") for display and filtering. This is presentation only;
+	 * the raw {@link #category} (and all task routing, which keys off
+	 * completion_type) is untouched.
+	 */
+	public static String displayCategory(String raw)
+	{
+		if (raw == null || raw.isEmpty())
+		{
+			return raw;
+		}
+		if (raw.length() > 4 && raw.regionMatches(true, raw.length() - 4, "_Set", 0, 4))
+		{
+			return raw.substring(0, raw.length() - 4);
+		}
+		return raw;
+	}
+
 	@SerializedName("completion_type")
 	private String completionType;
 

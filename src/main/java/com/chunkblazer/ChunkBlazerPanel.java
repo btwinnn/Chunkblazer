@@ -1378,7 +1378,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		card.add(nameLabel);
 
 		// Info line mirrors the completed cards: "Quest  +2 pts".
-		String category = task.getCategory() != null ? task.getCategory() : "Global";
+		String category = task.getCategory() != null ? NuzlockeTask.displayCategory(task.getCategory()) : "Global";
 		JLabel infoLabel = new JLabel(category + "  +" + task.getBasePoints() + " pts");
 		infoLabel.setFont(FontManager.getRunescapeSmallFont());
 		infoLabel.setForeground(done ? new Color(170, 130, 60) : Color.ORANGE);
@@ -1883,6 +1883,15 @@ public class ChunkBlazerPanel extends PluginPanel
 		grantLine.setForeground(Color.LIGHT_GRAY);
 		grantLine.setAlignmentX(LEFT_ALIGNMENT);
 		regionUnlockPanel.add(grantLine);
+		regionUnlockPanel.add(Box.createVerticalStrut(4));
+
+		WrappingTextLabel tokenNote = new WrappingTextLabel(
+			"This will cost 1 boss token. You will need to defeat this boss to gain another.",
+			FontManager.getRunescapeSmallFont(),
+			new Color(230, 200, 120),
+			TASK_TEXT_WRAP_WIDTH);
+		tokenNote.setAlignmentX(LEFT_ALIGNMENT);
+		regionUnlockPanel.add(tokenNote);
 		regionUnlockPanel.add(Box.createVerticalStrut(6));
 
 		final int finalRegionId = regionId;
@@ -2489,10 +2498,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		isRefreshingActiveFilters = true;
 		try
 		{
-			// Populate categories from all active tasks
+			// Populate categories from all active tasks. Fold "_Set" pools
+			// (Herblore_Set, Obtain_Set) onto the base skill so they list once.
 			Set<String> categories = plugin.getActiveTasks().stream()
 				.map(NuzlockeTask::getCategory)
 				.filter(c -> c != null && !c.isEmpty())
+				.map(NuzlockeTask::displayCategory)
 				.collect(Collectors.toCollection(java.util.TreeSet::new));
 
 			String currentCategory = activeTasksSelectedCategory;
@@ -2694,7 +2705,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 
 		// Category and points
-		String info = selectedTask.getCategory() + " | " + selectedTask.getBasePoints() + " pts";
+		String info = NuzlockeTask.displayCategory(selectedTask.getCategory()) + " | " + selectedTask.getBasePoints() + " pts";
 		if (selectedTask.getLevelRequirement() > 1)
 		{
 			info += " | L" + selectedTask.getLevelRequirement();
@@ -3231,7 +3242,7 @@ public class ChunkBlazerPanel extends PluginPanel
 				// Category filter
 				if (!"All".equals(filterCategory))
 				{
-					String taskCategory = task.getCategory() != null ? task.getCategory() : "";
+					String taskCategory = NuzlockeTask.displayCategory(task.getCategory() != null ? task.getCategory() : "");
 					if (!filterCategory.equals(taskCategory))
 					{
 						return false;
@@ -3737,7 +3748,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Info line: Category | Points | Level (compact single line)
 		StringBuilder infoText = new StringBuilder();
-		infoText.append(task.getCategory());
+		infoText.append(NuzlockeTask.displayCategory(task.getCategory()));
 		infoText.append("  ").append(task.getBasePoints()).append("pt");
 		if (task.getLevelRequirement() > 1)
 		{
@@ -3959,7 +3970,7 @@ public class ChunkBlazerPanel extends PluginPanel
 				}
 				if (!"All".equals(filterCategory))
 				{
-					String cat = info.getCategory() != null ? info.getCategory() : "";
+					String cat = NuzlockeTask.displayCategory(info.getCategory() != null ? info.getCategory() : "");
 					if (!filterCategory.equals(cat))
 					{
 						return false;
@@ -4080,7 +4091,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 
 		// Info line: Category | Points
-		String infoText = info.getCategory() + "  +" + info.getPoints() + " pts";
+		String infoText = NuzlockeTask.displayCategory(info.getCategory()) + "  +" + info.getPoints() + " pts";
 		JLabel infoLabel = new JLabel(infoText);
 		infoLabel.setFont(FontManager.getRunescapeSmallFont());
 		infoLabel.setForeground(Color.ORANGE);

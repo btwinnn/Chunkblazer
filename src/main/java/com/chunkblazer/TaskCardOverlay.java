@@ -75,6 +75,8 @@ public class TaskCardOverlay extends Overlay
 	private static final double BODY_WIDTH_FRACTION = 0.720;
 
 	private static final Color TEXT = new Color(255, 255, 255);
+	/** The "how to complete" blurb under the task name — a touch dimmer than the title. */
+	private static final Color DESC_TEXT = new Color(205, 205, 205);
 	private static final Color TEXT_SHADOW = new Color(0, 0, 0, 190);
 	private static final Color PROMPT = new Color(235, 235, 235, 225);
 	private static final Color CARD_SHADOW = new Color(0, 0, 0, 110);
@@ -108,6 +110,7 @@ public class TaskCardOverlay extends Overlay
 	{
 		final String taskId;
 		final String taskName;
+		final String description;
 		final TaskCardTier tier;
 		Rectangle bounds = new Rectangle();
 		/** Wall-clock ms the turn began, or -1 while still face down. */
@@ -117,10 +120,11 @@ public class TaskCardOverlay extends Overlay
 		/** Set once the task has been handed to the plugin, so it happens exactly once. */
 		boolean activated;
 
-		Card(String taskId, String taskName, TaskCardTier tier)
+		Card(String taskId, String taskName, String description, TaskCardTier tier)
 		{
 			this.taskId = taskId;
 			this.taskName = taskName;
+			this.description = description;
 			this.tier = tier;
 		}
 
@@ -376,7 +380,7 @@ public class TaskCardOverlay extends Overlay
 				plugin.revealTaskCard(taskId);
 				continue;
 			}
-			cards.add(new Card(taskId, task.getName(), TaskCardTier.fromTask(task)));
+			cards.add(new Card(taskId, task.getName(), task.getDescription(), TaskCardTier.fromTask(task)));
 		}
 	}
 
@@ -606,33 +610,65 @@ public class TaskCardOverlay extends Overlay
 
 		graphics.setFont(FontManager.getRunescapeSmallFont());
 		FontMetrics fm = graphics.getFontMetrics();
+		int lineHeight = fm.getHeight();
 
 		int textWidth = hasArt
 			? (int) Math.round(b.width * BODY_WIDTH_FRACTION)
 			: b.width - 20;
 
-		List<String> lines = wrap(card.taskName, fm, textWidth);
-		int lineHeight = fm.getHeight();
+		// Body block: the task NAME (title), then its DESCRIPTION ("how to complete
+		// this") beneath it when authored. Both wrapped; name has priority for the
+		// limited panel height, the description fills whatever is left (ellipsised if
+		// it can't all fit). Most non-raid tasks have no description, so this collapses
+		// back to just the name.
+		List<String> nameLines = wrap(card.taskName, fm, textWidth);
+		List<String> descLines = (card.description != null && !card.description.trim().isEmpty())
+			? wrap(card.description.trim(), fm, textWidth)
+			: new ArrayList<>();
 
-		// Clamp to what the panel can actually hold. Task names run from "Defeat a Rat"
-		// to "Defeat a Level 63 Ogre on Task", and an overlong one would otherwise spill
-		// out of the panel and across the frame.
 		int panelHeight = (int) Math.round(b.height * (hasArt ? BODY_HEIGHT_FRACTION : 0.8));
 		int maxLines = Math.max(1, panelHeight / lineHeight);
-		if (lines.size() > maxLines)
+
+		// Name: keep it all when there's no description; otherwise leave room for a
+		// gap + at least one description line.
+		int nameCap = descLines.isEmpty() ? maxLines : Math.max(1, maxLines - 2);
+		if (nameLines.size() > nameCap)
 		{
-			lines = new ArrayList<>(lines.subList(0, maxLines));
-			int last = maxLines - 1;
-			lines.set(last, ellipsise(lines.get(last), fm, textWidth));
+			nameLines = new ArrayList<>(nameLines.subList(0, nameCap));
+			nameLines.set(nameCap - 1, ellipsise(nameLines.get(nameCap - 1), fm, textWidth));
 		}
 
+		int gap = descLines.isEmpty() ? 0 : 1; // one blank line between title and blurb
+		int descCap = Math.max(0, maxLines - nameLines.size() - gap);
+		if (!descLines.isEmpty())
+		{
+			if (descCap == 0)
+			{
+				descLines = new ArrayList<>();
+				gap = 0;
+			}
+			else if (descLines.size() > descCap)
+			{
+				descLines = new ArrayList<>(descLines.subList(0, descCap));
+				descLines.set(descCap - 1, ellipsise(descLines.get(descCap - 1), fm, textWidth));
+			}
+		}
+
+		int totalLines = nameLines.size() + gap + descLines.size();
 		double centreFraction = hasArt ? BODY_CENTRE_FRACTION : 0.5;
 		int bodyCentreY = b.y + (int) Math.round(b.height * centreFraction);
-		int y = bodyCentreY - (lines.size() * lineHeight) / 2 + fm.getAscent();
+		int cx = b.x + b.width / 2;
+		int y = bodyCentreY - (totalLines * lineHeight) / 2 + fm.getAscent();
 
-		for (String line : lines)
+		for (String line : nameLines)
 		{
-			drawCentered(graphics, line, b.x + b.width / 2, y, TEXT);
+			drawCentered(graphics, line, cx, y, TEXT);
+			y += lineHeight;
+		}
+		y += gap * lineHeight;
+		for (String line : descLines)
+		{
+			drawCentered(graphics, line, cx, y, DESC_TEXT);
 			y += lineHeight;
 		}
 	}

@@ -73,9 +73,11 @@ public class RaidChallengeModule extends AbstractTaskModule
 	private static final int DEFAULT_RUN_VARP = 173;
 	private static final int[] DEFAULT_PARTY_VARBITS = {14346, 14347, 14348, 14349, 14350, 14351, 14352, 14353};
 
-	private static final String COLOR_BLUE = "3366ff";
-	private static final String COLOR_DARK_BLUE = "1a5276";
-	private static final String COLOR_BLACK = "000000";
+	private static final String COLOR_BLUE = "3366ff";        // [ChunkBlazer] branding
+	private static final String COLOR_DARK_BLUE = "1a5276";   // Challenge Complete
+	private static final String COLOR_DARK_GREEN = "228b22";  // Challenge Progress
+	private static final String COLOR_RED = "ff3333";         // Challenge Failed
+	private static final String COLOR_BLACK = "000000";       // task name text
 
 	@Inject
 	private ItemManager itemManager;
@@ -94,6 +96,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		int surviveTicks;       // in-window ticks with the phase active
 		int progress;           // qualifying completions so far
 		int target = 1;         // completions required (rolled from quantity range)
+		boolean satisfyFailTold; // satisfy-triggered gate failure already announced this attempt
 	}
 
 	private final Map<String, State> states = new ConcurrentHashMap<>();
@@ -318,6 +321,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 			if (!gates || s.violated || !pit)
 			{
 				log.debug("[RAIDCHALLENGE-DEBUG] {} did NOT qualify this run — resetting attempt", task.getTaskId());
+				// If a rule was broken mid-fight we already told the player why; only
+				// announce the point-in-time / gate reason when nothing was flagged yet.
+				if (!s.violated)
+				{
+					sendFailure(task, gateFailReason(ch, pit));
+				}
 				resetAttempt(s); // this run didn't qualify; try again next time
 				continue;
 			}
@@ -332,6 +341,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				log.debug("[RAIDCHALLENGE-DEBUG] {} progressed to {}/{}", task.getTaskId(), s.progress, s.target);
 				completionCallback.onProgressUpdated(task, s.progress);
+				sendProgress(task, s.progress, s.target);
 			}
 			resetAttempt(s);
 		}
@@ -367,10 +377,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 		{
 			RaidChallenge ch = task.getChallenge();
 			State s = states.get(task.getTaskId());
-			if (ch != null && s != null && s.windowOpen
+			if (ch != null && s != null && s.windowOpen && !s.violated
 				&& ch.getNoNpcDeathIds() != null && ch.getNoNpcDeathIds().contains(id))
 			{
 				s.violated = true; // a protected NPC died (e.g. an energy siphon)
+				log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: protected NPC {} died", task.getTaskId(), id);
+				sendFailure(task, "A protected NPC was killed — this run no longer counts.");
 			}
 		}
 	}
@@ -386,7 +398,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		{
 			RaidChallenge ch = task.getChallenge();
 			State s = states.get(task.getTaskId());
-			if (ch == null || s == null || !s.windowOpen || ch.getForbiddenItemIds() == null)
+			if (ch == null || s == null || !s.windowOpen || s.violated || ch.getForbiddenItemIds() == null)
 			{
 				continue;
 			}
@@ -395,6 +407,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 				if (it != null && ch.getForbiddenItemIds().contains(it.getId()))
 				{
 					s.violated = true; // took a raid-supplied item
+					log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: forbidden item {} in inventory", task.getTaskId(), it.getId());
+					sendFailure(task, "You picked up an item that isn't allowed for this challenge.");
 					break;
 				}
 			}
@@ -500,14 +514,19 @@ public class RaidChallengeModule extends AbstractTaskModule
 		{
 			return;
 		}
+		// `why` is the debug detail (ids/varps for the log); `reason` is the plain-
+		// English line the player sees so they know what broke the run.
 		String why = null;
+		String reason = null;
 		if (Boolean.TRUE.equals(ch.getNoRun()) && client.getVarpValue(runVarp(ch)) != 0)
 		{
 			why = "run enabled (varp " + runVarp(ch) + ")";
+			reason = "Run was on — this challenge must be done with run disabled.";
 		}
 		else if (ch.getWeaponIds() != null && !ch.getWeaponIds().contains(equippedId(3)))
 		{
 			why = "weapon " + equippedId(3) + " not one of " + ch.getWeaponIds();
+			reason = "You weren't using a required weapon for this challenge.";
 		}
 		else if (ch.getEmptySlots() != null)
 		{
@@ -516,6 +535,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 				if (equippedId(slot) != -1)
 				{
 					why = "slot " + slot + " occupied (item " + equippedId(slot) + ")";
+					reason = "An equipment slot that must stay empty is filled.";
 					break;
 				}
 			}
@@ -525,15 +545,18 @@ public class RaidChallengeModule extends AbstractTaskModule
 		{
 			why = "attack style varp=" + client.getVarpValue(ch.getAttackStyleVarp())
 				+ " not one of " + ch.getAttackStyleValues();
+			reason = "Wrong attack style for this challenge.";
 		}
 		if (why == null && hasArenaBox(ch) && outsideArenaBox(ch))
 		{
 			why = "outside arena box";
+			reason = "You left the area this challenge must be done in.";
 		}
 		if (why != null)
 		{
 			s.violated = true;
 			log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: {}", task.getTaskId(), why);
+			sendFailure(task, reason);
 		}
 	}
 
@@ -570,8 +593,16 @@ public class RaidChallengeModule extends AbstractTaskModule
 	{
 		if (s.violated || !gatesPass(ch) || !pointInTimeOk(ch))
 		{
+			boolean pit = pointInTimeOk(ch);
 			log.debug("[RAIDCHALLENGE-DEBUG] {} reached its target but did NOT qualify (violated={} gates={} pointInTime={})",
-				task.getTaskId(), s.violated, gatesPass(ch), pointInTimeOk(ch));
+				task.getTaskId(), s.violated, gatesPass(ch), pit);
+			// This runs every tick while the accumulator is maxed but the gates fail;
+			// announce the reason once so it doesn't spam the chatbox each tick.
+			if (!s.violated && !s.satisfyFailTold)
+			{
+				s.satisfyFailTold = true;
+				sendFailure(task, gateFailReason(ch, pit));
+			}
 			return;
 		}
 		s.progress = s.target;
@@ -606,6 +637,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		s.violated = false;
 		s.damageFreeTicks = 0;
 		s.surviveTicks = 0;
+		s.satisfyFailTold = false;
 	}
 
 	// ── Raw reads ────────────────────────────────────────────────────────────
@@ -797,5 +829,86 @@ public class RaidChallengeModule extends AbstractTaskModule
 			.type(ChatMessageType.GAMEMESSAGE)
 			.value(message)
 			.build());
+	}
+
+	/**
+	 * Progress toward a multi-count challenge (e.g. "beat this room 3 times").
+	 * Mirrors the regular task modules' "Task Progress (n/N)" line.
+	 */
+	private void sendProgress(NuzlockeTask task, int progress, int target)
+	{
+		if (!config.showChatProgress())
+		{
+			return;
+		}
+		String message = "<col=" + COLOR_BLUE + ">[ChunkBlazer]</col> "
+			+ "<col=" + COLOR_DARK_GREEN + ">Challenge Progress:</col> "
+			+ "<col=" + COLOR_BLACK + ">" + task.getName() + "</col> "
+			+ "(" + progress + "/" + target + ")";
+		chatMessageManager.queue(QueuedMessage.builder()
+			.type(ChatMessageType.GAMEMESSAGE)
+			.value(message)
+			.build());
+	}
+
+	/**
+	 * Tell the player their attempt did not count, and why — the raid-challenge
+	 * equivalent of the regular modules' "Task Failed: ... - Reason:" feedback.
+	 * Gated on the same showChatFailed toggle players already use.
+	 */
+	private void sendFailure(NuzlockeTask task, String reason)
+	{
+		if (!config.showChatFailed())
+		{
+			return;
+		}
+		String message = "<col=" + COLOR_BLUE + ">[ChunkBlazer]</col> "
+			+ "<col=" + COLOR_RED + ">Challenge Failed:</col> "
+			+ "<col=" + COLOR_BLACK + ">" + task.getName() + "</col>";
+		chatMessageManager.queue(QueuedMessage.builder()
+			.type(ChatMessageType.GAMEMESSAGE)
+			.value(message)
+			.build());
+		if (reason != null && !reason.isEmpty())
+		{
+			chatMessageManager.queue(QueuedMessage.builder()
+				.type(ChatMessageType.GAMEMESSAGE)
+				.value("  - Reason: " + reason)
+				.build());
+		}
+	}
+
+	/**
+	 * Plain-English reason a run failed its gates / point-in-time reads (raid level,
+	 * solo, weight, gear value). Used when no sustained rule was broken mid-fight.
+	 */
+	private String gateFailReason(RaidChallenge ch, boolean pointInTimeOk)
+	{
+		if (ch.getMinRaidLevel() != null && raidLevel(ch) < ch.getMinRaidLevel())
+		{
+			return "Raid level was too low — need " + ch.getMinRaidLevel()
+				+ "+ (was " + raidLevel(ch) + ").";
+		}
+		if (Boolean.TRUE.equals(ch.getSolo()) && teamSize(ch) != 1)
+		{
+			return "This challenge must be done solo (team size was " + teamSize(ch) + ").";
+		}
+		if (!pointInTimeOk)
+		{
+			int weight = client.getWeight();
+			if (ch.getMinWeightKg() != null && weight < ch.getMinWeightKg())
+			{
+				return "Your weight was too low — need at least " + ch.getMinWeightKg() + "kg.";
+			}
+			if (ch.getMaxWeightKg() != null && weight > ch.getMaxWeightKg())
+			{
+				return "Your weight was too high — must be at most " + ch.getMaxWeightKg() + "kg.";
+			}
+			if (ch.getMaxGearValue() != null && equippedGearValue() >= ch.getMaxGearValue())
+			{
+				return "Your equipped gear was worth too much for this challenge.";
+			}
+		}
+		return "The run didn't meet this challenge's requirements.";
 	}
 }

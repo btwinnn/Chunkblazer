@@ -945,7 +945,8 @@ public class ChunkBlazerPlugin extends Plugin
 				else
 				{
 					chatboxPanelManager.openTextMenuInput(
-							"Unlock boss chunk " + bossName + " for 1 Boss Token? (You have " + tokens + ")")
+							"Unlock boss chunk " + bossName + "? This will cost 1 boss token."
+								+ " You will need to defeat this boss to gain another. (You have " + tokens + ")")
 						.option("Yes, unlock!", () ->
 						{
 							unlockBossRegion(regionId);
@@ -4865,7 +4866,9 @@ public class ChunkBlazerPlugin extends Plugin
 				{
 					if (task.getCategory() != null && !task.getCategory().isEmpty())
 					{
-						categories.add(task.getCategory());
+						// Fold "_Set" pools (Herblore_Set, Obtain_Set) onto the base
+						// skill so the filter lists one "Herblore", not two entries.
+						categories.add(NuzlockeTask.displayCategory(task.getCategory()));
 					}
 				}
 			}
@@ -4878,7 +4881,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			if (task.getCategory() != null && !task.getCategory().isEmpty())
 			{
-				categories.add(task.getCategory());
+				categories.add(NuzlockeTask.displayCategory(task.getCategory()));
 			}
 		}
 
