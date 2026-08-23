@@ -762,7 +762,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 	private boolean hasArenaBox(RaidChallenge ch)
 	{
 		return ch.getArenaMinX() != null || ch.getArenaMaxX() != null
-			|| ch.getArenaMinY() != null || ch.getArenaMaxY() != null;
+			|| ch.getArenaMinY() != null || ch.getArenaMaxY() != null
+			|| (ch.getArenaBoxes() != null && !ch.getArenaBoxes().isEmpty());
 	}
 
 	/**
@@ -784,19 +785,58 @@ public class RaidChallengeModule extends AbstractTaskModule
 		}
 		int x = wp.getX() & 63;
 		int y = wp.getY() & 63;
-		if (ch.getArenaMinX() != null && x < ch.getArenaMinX())
+
+		// The valid area is the UNION of the legacy single box and every arena_boxes
+		// entry. Inside ANY box → OK; outside ALL of them → violated. This lets an
+		// L-shaped / split legal area (e.g. Ba-Ba's floor plus the platform you stand
+		// on) be described as a couple of rectangles instead of one that wrongly
+		// clips out the platform.
+		boolean anyBox = false;
+		if (ch.getArenaMinX() != null || ch.getArenaMaxX() != null
+			|| ch.getArenaMinY() != null || ch.getArenaMaxY() != null)
 		{
-			return true;
+			anyBox = true;
+			if (inBox(x, y, ch.getArenaMinX(), ch.getArenaMaxX(), ch.getArenaMinY(), ch.getArenaMaxY()))
+			{
+				return false;
+			}
 		}
-		if (ch.getArenaMaxX() != null && x > ch.getArenaMaxX())
+		if (ch.getArenaBoxes() != null)
 		{
-			return true;
+			for (RaidChallenge.ArenaBox b : ch.getArenaBoxes())
+			{
+				if (b == null)
+				{
+					continue;
+				}
+				anyBox = true;
+				if (inBox(x, y, b.getMinX(), b.getMaxX(), b.getMinY(), b.getMaxY()))
+				{
+					return false;
+				}
+			}
 		}
-		if (ch.getArenaMinY() != null && y < ch.getArenaMinY())
+		// Boxes defined but the player is in none → outside. No boxes at all → nothing
+		// to enforce, so never "outside".
+		return anyBox;
+	}
+
+	/** True if (x,y) is within a box's bounds; an absent bound is unbounded on that side. */
+	private static boolean inBox(int x, int y, Integer minX, Integer maxX, Integer minY, Integer maxY)
+	{
+		if (minX != null && x < minX)
 		{
-			return true;
+			return false;
 		}
-		return ch.getArenaMaxY() != null && y > ch.getArenaMaxY();
+		if (maxX != null && x > maxX)
+		{
+			return false;
+		}
+		if (minY != null && y < minY)
+		{
+			return false;
+		}
+		return maxY == null || y <= maxY;
 	}
 
 	private int rollQuantity(RaidChallenge ch)
