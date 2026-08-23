@@ -95,6 +95,29 @@ git pull >> "%LOG_FILE%" 2>&1
 if %ERRORLEVEL% NEQ 0 (
     call :log "WARNING: ChunkBlazer git pull failed - continuing with local version"
 )
+
+:: Staleness guard: warn if the checked-out branch is BEHIND main. This build uses
+:: WHATEVER branch is checked out (see the copy step below), and 'dev' silently fell
+:: 11 commits behind main once -- testers rebuilt stale code missing every fix for a
+:: whole evening. main IS the baseline, so only check the OTHER branches: dev is meant
+:: to be "main plus dev tools", so it should never be behind main. (Messages avoid
+:: literal parens / '!' so cmd's block + delayed-expansion parsing doesn't mangle them.)
+if /I NOT "%CB_BRANCH%"=="main" (
+    git fetch origin main >> "%LOG_FILE%" 2>&1
+    set "CB_BEHIND=0"
+    for /f %%c in ('git rev-list --count HEAD..origin/main 2^>nul') do set "CB_BEHIND=%%c"
+    if not "!CB_BEHIND!"=="0" (
+        call :log ""
+        call :log "  ***************************************************************"
+        call :log "  *  WARNING: branch '%CB_BRANCH%' is BEHIND main by !CB_BEHIND! commits."
+        call :log "  *  You are about to build STALE code missing recent main fixes."
+        call :log "  *  Fix: merge main into %CB_BRANCH% and push, or switch to main."
+        call :log "  ***************************************************************"
+        call :log ""
+        :: Give the tester a beat to notice before the build log scrolls it away.
+        timeout /t 6 >nul 2>&1
+    )
+)
 call :log ""
 
 :: Copy latest plugin files into RuneLite
