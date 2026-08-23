@@ -351,8 +351,7 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				// Server verified completion
 				// Points already awarded in completeTask, but this confirms server agreement
-				panel.updateStats();
-				panel.updateTaskDisplay();
+				scheduleTaskDisplayRefresh();
 			}
 
 			@Override
@@ -366,11 +365,13 @@ public class ChunkBlazerPlugin extends Plugin
 				// saved rolled value.
 				saveTaskProgress(task.getTaskId(), newProgress, task.getTargetQuantity());
 
-				// Progress updated - refresh UI on Swing thread
-				javax.swing.SwingUtilities.invokeLater(() ->
-				{
-					panel.updateTaskDisplay();
-				});
+				// Coalesced UI refresh (see scheduleTaskDisplayRefresh). NEVER a raw
+				// invokeLater per call: progress updates arrive in bursts (module init,
+				// the login varbit storm), each rebuild does Container.removeAll whose
+				// removeSourceEvents scans the WHOLE EDT queue, and a queue full of
+				// these rebuild events makes that quadratic — it froze a maxed tester's
+				// client on the login screen for ~30s (thread dump 2026-08-22).
+				scheduleTaskDisplayRefresh();
 			}
 		});
 		taskModuleManager.startUp();
@@ -4730,6 +4731,43 @@ public class ChunkBlazerPlugin extends Plugin
 
 		// The expensive part, ONCE regardless of batch size.
 		completeTasks(batch);
+	}
+
+	/**
+	 * Guards {@link #scheduleTaskDisplayRefresh()} so a burst of refresh requests
+	 * collapses to a single queued panel rebuild.
+	 */
+	private final java.util.concurrent.atomic.AtomicBoolean taskDisplayRefreshPending =
+		new java.util.concurrent.atomic.AtomicBoolean(false);
+
+	/**
+	 * Queue AT MOST ONE task-panel rebuild at a time. onProgressUpdated /
+	 * onServerVerified fire in bursts (module init, the login varbit storm), and each
+	 * rebuild is a Container.removeAll whose removeSourceEvents scans the entire EDT
+	 * event queue — so N queued rebuilds cost O(N^2) and spun the EDT for ~30s,
+	 * freezing the client on the login screen (Taylor's thread dump, 2026-08-22).
+	 * Collapsing a burst to one rebuild keeps the queue tiny and the UI responsive.
+	 * The flag is cleared BEFORE the rebuild so a late update still schedules a
+	 * trailing refresh.
+	 */
+	private void scheduleTaskDisplayRefresh()
+	{
+		if (panel == null)
+		{
+			return;
+		}
+		if (taskDisplayRefreshPending.compareAndSet(false, true))
+		{
+			javax.swing.SwingUtilities.invokeLater(() ->
+			{
+				taskDisplayRefreshPending.set(false);
+				if (panel != null)
+				{
+					panel.updateStats();
+					panel.updateTaskDisplay();
+				}
+			});
+		}
 	}
 
 	private void completeTask(NuzlockeTask task)
