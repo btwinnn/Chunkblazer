@@ -320,35 +320,21 @@ public class ChunkBlazerPlugin extends Plugin
 			@Override
 			public void onTaskCompleted(NuzlockeTask task, int progress)
 			{
-				// Task completed locally - request server verification
-
-				// Show animated task completion popup
-				if (taskCompletionAnimationOverlay != null && task != null)
+				// Coalesce: enqueue and let flushPendingCompletions() (onGameTick) do
+				// the expensive settle-up ONCE for the whole batch. Completing tasks
+				// one-by-one here — two config writes + a disk flush + five panel
+				// rebuilds EACH (see completeTasks()) — froze the client when a
+				// boss-chunk grant settled a maxed account's whole stack of
+				// already-satisfied tasks at login (Mike, 2026-08-22). Animation and
+				// sound move into the flush too, capped, so a storm doesn't queue
+				// dozens of popups/clips.
+				if (task != null)
 				{
-					String regionName = getTaskCompletionLabel(task);
-					taskCompletionAnimationOverlay.showTaskCompletion(task, task.getBasePoints(), regionName);
-
-					// Play region-specific completion sound
-					if (config.playTaskCompletionSound())
+					synchronized (pendingCompletions)
 					{
-						// Pass the area through even when null: Global Tasks belong
-						// to no chunk, so getTaskArea() is always null for them and
-						// this guard silently muted every quest completion. The
-						// sound manager falls back to a default folder instead.
-						String area = getTaskArea(task);
-						if (soundManager != null)
-						{
-							soundManager.playRandomSoundForArea(area);
-						}
+						pendingCompletions.add(task);
 					}
 				}
-				else
-				{
-					log.error(">>>   CANNOT show animated popup - overlay or task is null!");
-				}
-
-
-				completeTask(task);
 			}
 
 			@Override
@@ -745,6 +731,12 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return;
 		}
+
+		// Settle any completions detected since the last tick in ONE batch. A
+		// boss-chunk grant can complete a whole stack of already-satisfied tasks at
+		// once, and the per-task settle-up path freezes the client at that volume
+		// (see completeTasks()). Coalescing keeps it to a single settle-up per tick.
+		flushPendingCompletions();
 
 		if (pendingServerLogin && player.getName() != null)
 		{
@@ -4081,8 +4073,12 @@ public class ChunkBlazerPlugin extends Plugin
 				rolledIds.add(t.getTaskId());
 			}
 			saveRolledTasksForRegion(regionId, rolledIds);
-			// Deliberately NOT parked behind reveal cards: boss tasks go active
-			// immediately so the player sees the whole list.
+			// Boss chunks present their whole stack as a card "pack" the player opens
+			// one at a time (see TaskCardOverlay). This also spreads completions out
+			// (each card activates its task only when flipped) instead of settling a
+			// maxed account's entire satisfied stack at once. markTasksUnrevealed
+			// no-ops when the player has cards disabled — then they go straight active.
+			markTasksUnrevealed(rolledIds);
 			return rolledIds;
 		}
 
@@ -4444,6 +4440,57 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 		setAccountState("regionRolledTasks", newData.toString());
+	}
+
+	/** Cap on completion popups shown per batch, so a login storm doesn't queue dozens. */
+	private static final int COMPLETION_ANIM_CAP = 5;
+
+	/**
+	 * Tasks whose completion was detected since the last tick, awaiting a single
+	 * batched settle-up in {@link #flushPendingCompletions()}. Modules fire
+	 * onTaskCompleted one at a time; a boss-chunk grant can settle a maxed
+	 * account's whole stack at once, and the per-task settle-up path freezes the
+	 * client at that volume (see {@link #completeTasks}).
+	 */
+	private final java.util.LinkedHashSet<NuzlockeTask> pendingCompletions = new java.util.LinkedHashSet<>();
+
+	/**
+	 * Settle every completion queued since the last tick in ONE batch: cap the
+	 * animation popups, play a single sound, and do the expensive config/panel
+	 * settle-up exactly once. Called from onGameTick.
+	 */
+	private void flushPendingCompletions()
+	{
+		List<NuzlockeTask> batch;
+		synchronized (pendingCompletions)
+		{
+			if (pendingCompletions.isEmpty())
+			{
+				return;
+			}
+			batch = new ArrayList<>(pendingCompletions);
+			pendingCompletions.clear();
+		}
+
+		int shown = 0;
+		for (NuzlockeTask task : batch)
+		{
+			if (taskCompletionAnimationOverlay != null && shown < COMPLETION_ANIM_CAP)
+			{
+				taskCompletionAnimationOverlay.showTaskCompletion(
+					task, task.getBasePoints(), getTaskCompletionLabel(task));
+				shown++;
+			}
+		}
+		// One sound for the whole batch — N clips at once on a login storm is both a
+		// cacophony and needless load.
+		if (config.playTaskCompletionSound() && soundManager != null)
+		{
+			soundManager.playRandomSoundForArea(getTaskArea(batch.get(0)));
+		}
+
+		// The expensive part, ONCE regardless of batch size.
+		completeTasks(batch);
 	}
 
 	private void completeTask(NuzlockeTask task)
@@ -5552,10 +5599,12 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void ensureBossChunkTasksGranted()
 	{
+		Set<String> completed = getCompletedTaskIds();
+
 		for (NuzlockeChunk chunk : new HashSet<>(chunksByRegionId.values()))
 		{
 			if (chunk == null || !chunk.isBoss() || chunk.getRegionIds() == null
-				|| chunk.getRegionIds().isEmpty())
+				|| chunk.getRegionIds().isEmpty() || chunk.getTasks() == null)
 			{
 				continue;
 			}
@@ -5572,11 +5621,30 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				continue;
 			}
+
 			int primary = chunk.getRegionIds().get(0);
-			if (getRolledTasksForRegion(primary).isEmpty())
+			// A boss chunk grants EVERY task. Find any catalog task not yet rolled
+			// (and not already completed) and grant it — repairs players who unlocked
+			// ToA before Boss_Tasks.json loaded (0 rolled) or got only a partial 4-5
+			// subset. Newly granted tasks are added as a card "pack" (markTasksUnrevealed)
+			// so they reveal one at a time rather than dumping ~30 completions at once.
+			Set<String> rolled = new HashSet<>(getRolledTasksForRegion(primary));
+			Set<String> missing = new HashSet<>();
+			for (NuzlockeTask t : chunk.getTasks())
 			{
-				log.info("[CHUNKBLAZER] boss chunk {} is unlocked but has no tasks — granting all now", primary);
-				rollTasksForRegion(primary, true);
+				String id = t.getTaskId();
+				if (id != null && !t.isLocked() && !completed.contains(id) && !rolled.contains(id))
+				{
+					missing.add(id);
+				}
+			}
+			if (!missing.isEmpty())
+			{
+				log.info("[CHUNKBLAZER] boss chunk {}: granting {} task(s) as a card pack", primary, missing.size());
+				Set<String> full = new HashSet<>(rolled);
+				full.addAll(missing);
+				saveRolledTasksForRegion(primary, full);
+				markTasksUnrevealed(missing);
 			}
 		}
 	}
