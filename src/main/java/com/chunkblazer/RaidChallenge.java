@@ -105,6 +105,14 @@ public class RaidChallenge
 	 */
 	@SerializedName("survive_ticks")
 	private Integer surviveTicks;
+	/**
+	 * Named phase gate for {@code survive_ticks} (interpreted by RaidChallengeModule),
+	 * e.g. "toa_wardens_enrage" for the Wardens' final lightning phase. Preferred over
+	 * {@code phase_varbit} for phases that have no varbit (the Wardens enrage is one —
+	 * it's an NPC/HP state, not a varbit). An unknown key is treated as never-active.
+	 */
+	@SerializedName("phase")
+	private String phase;
 	@SerializedName("phase_varbit")
 	private Integer phaseVarbit;
 	@SerializedName("phase_value")
