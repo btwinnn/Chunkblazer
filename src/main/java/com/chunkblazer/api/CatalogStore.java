@@ -81,6 +81,9 @@ public class CatalogStore
 	// game thread by the loaders — volatile publish of an immutable snapshot.
 	private volatile Map<String, String> files = Collections.emptyMap();
 	private volatile boolean loaded;
+	// Lazily-loaded bundled seed, used by getFileContent as a per-file floor for
+	// anything the active catalog (stale cache / not-yet-redeployed server) lacks.
+	private volatile Map<String, String> seedFiles;
 
 	@Inject
 	public CatalogStore(OkHttpClient sharedClient, ChunkBlazerConfig config, Gson gson)
@@ -144,7 +147,23 @@ public class CatalogStore
 	/** The JSON content for a catalog file (e.g. {@code "Misthalin_Tasks.json"}), or null. */
 	public String getFileContent(String filename)
 	{
-		return files.get(filename);
+		String v = files.get(filename);
+		if (v != null)
+		{
+			return v;
+		}
+		// Per-file fallback to the bundled seed. The active catalog can be a stale
+		// on-disk cache (or a server not yet redeployed) that predates a newly added
+		// file — e.g. Boss_Tasks.json. Without this, that file is silently missing
+		// until the server serves it, and its chunks never load (a boss chunk then
+		// looks like an ordinary region and can be unlocked with points). The seed
+		// ships every file, so it is the correct floor for anything the cache lacks.
+		if (seedFiles == null)
+		{
+			Map<String, String> s = loadFromSeed();
+			seedFiles = s != null ? s : java.util.Collections.emptyMap();
+		}
+		return seedFiles.get(filename);
 	}
 
 	/** The set of catalog filenames currently loaded. */

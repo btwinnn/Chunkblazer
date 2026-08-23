@@ -21,7 +21,8 @@ call :log "========================================"
 call :log ""
 
 :: Set paths
-set "CHUNKBLAZER_DIR=%SCRIPT_DIR%"
+:: This script lives in <repo>\.bat, so the repo root is one level up.
+for %%I in ("%SCRIPT_DIR%\..") do set "CHUNKBLAZER_DIR=%%~fI"
 set "RUNELITE_DIR=C:\runelite"
 set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\com\chunkblazer"
 set "PLUGIN_RESOURCES=%CHUNKBLAZER_DIR%\src\main\resources\com\chunkblazer"
@@ -230,9 +231,14 @@ call :log "Finished: %DATE% %TIME%"
 set "SESSION_LOG_DIR=%CHUNKBLAZER_DIR%\session_logs"
 if not exist "%SESSION_LOG_DIR%" mkdir "%SESSION_LOG_DIR%"
 
-:: Sortable timestamp for filename (locale-independent via wmic)
-for /f "tokens=2 delims==" %%a in ('wmic os get localdatetime /value 2^>nul ^| find "="') do set "DT=%%a"
-set "TS=%DT:~0,4%-%DT:~4,2%-%DT:~6,2%_%DT:~8,2%-%DT:~10,2%-%DT:~12,2%"
+:: Sortable, locale-independent timestamp via PowerShell. (Was wmic, which is
+:: deprecated and ABSENT on newer Windows 11 — with no output the %DT:~..%
+:: substrings collapsed into a name full of illegal ':' chars and Tee-Object
+:: below failed with "path's format is not supported". PowerShell is already
+:: required for the tee, so it is always available here.)
+set "TS="
+for /f "usebackq delims=" %%t in (`powershell -NoProfile -Command "Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'"`) do set "TS=%%t"
+if not defined TS set "TS=session"
 set "SESSION_LOG=%SESSION_LOG_DIR%\session_%TS%.txt"
 
 :: Prune: keep newest 5 session logs, delete the rest

@@ -346,16 +346,9 @@ public class ObtainModule extends AbstractTaskModule
 		for (Slot slot : slots)
 		{
 			int slotHeld = 0;
-			StringBuilder variantBreakdown = new StringBuilder();
 			for (Integer variantId : slot.variantIds)
 			{
-				int held = getItemCount(variantId);
-				slotHeld += held;
-				if (variantBreakdown.length() > 0)
-				{
-					variantBreakdown.append("/");
-				}
-				variantBreakdown.append(getItemName(variantId)).append(":").append(held);
+				slotHeld += getItemCount(variantId);
 			}
 			int countForSlot = Math.min(slotHeld, slot.requiredQuantity);
 			totalRequired += slot.requiredQuantity;
@@ -365,9 +358,12 @@ public class ObtainModule extends AbstractTaskModule
 			{
 				itemDetails.append(", ");
 			}
-			itemDetails.append("[").append(variantBreakdown).append("]")
-				.append(" ").append(slotHeld).append("/").append(slot.requiredQuantity);
-
+			// One representative name per slot rather than every variant id, so a
+			// recoloured set (e.g. Graceful) doesn't spam a long variant breakdown.
+			String slotName = slot.variantIds.isEmpty() ? "item"
+				: getItemName(slot.variantIds.iterator().next());
+			itemDetails.append(slotName).append(" ")
+				.append(countForSlot).append("/").append(slot.requiredQuantity);
 		}
 
 		// Floor progress at the previously-saved value so we never regress across sessions
@@ -394,9 +390,10 @@ public class ObtainModule extends AbstractTaskModule
 		{
 			task.setCompleted(true);
 
-			// Send success chat message
-			String successDetails = "All items obtained: " + itemDetails.toString();
-			sendTaskSuccess(task, successDetails);
+			// Send success chat message. The task name already states what was
+			// obtained; the per-slot detail line would just repeat it (and for a
+			// recoloured set it used to spam every variant), so omit it.
+			sendTaskSuccess(task, null);
 
 			if (completionCallback != null)
 			{

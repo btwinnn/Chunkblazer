@@ -58,6 +58,23 @@ public class NuzlockeTask
 	@SerializedName("is_unlocked")
 	private Boolean isUnlocked;
 
+	/**
+	 * For COMBAT_ACHIEVEMENT tasks: the Combat Achievement task ids that must ALL
+	 * read complete for this task to finish. These are the sparse in-game CA ids
+	 * (see CA_Struct_IDs.json), read from the packed CA-completion VarPlayers by
+	 * {@code CombatAchievementModule}.
+	 */
+	@SerializedName("ca_ids")
+	private List<Integer> caIds;
+
+	/**
+	 * For RAID_CHALLENGE tasks: the data-driven condition set (no-run, gear cap,
+	 * weapon used, arena half, …) evaluated by RaidChallengeModule. Authored in the
+	 * server catalog so new raid challenges are JSON-only. See {@link RaidChallenge}.
+	 */
+	@SerializedName("challenge")
+	private RaidChallenge challenge;
+
 	@SerializedName("required_items")
 	private List<RequiredItem> requiredItems;
 
@@ -177,6 +194,26 @@ public class NuzlockeTask
 			// Boolean field (with null check)
 			task.setIsUnlocked(getBooleanOrNull(obj, "is_unlocked"));
 			task.setGroupContent(getBooleanOrNull(obj, "group_content"));
+
+			// Combat Achievement ids (COMBAT_ACHIEVEMENT tasks): array of ints.
+			if (obj.has("ca_ids") && obj.get("ca_ids").isJsonArray())
+			{
+				List<Integer> caIds = new ArrayList<>();
+				for (JsonElement el : obj.getAsJsonArray("ca_ids"))
+				{
+					if (el != null && !el.isJsonNull() && el.isJsonPrimitive())
+					{
+						caIds.add(el.getAsInt());
+					}
+				}
+				task.setCaIds(caIds);
+			}
+
+			// Raid challenge condition set (reflective deserialize of the block).
+			if (obj.has("challenge") && obj.get("challenge").isJsonObject())
+			{
+				task.setChallenge(context.deserialize(obj.get("challenge"), RaidChallenge.class));
+			}
 
 			// Handle required_items - can be array or single object
 			if (obj.has("required_items"))

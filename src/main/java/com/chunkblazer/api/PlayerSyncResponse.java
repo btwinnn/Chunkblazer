@@ -28,6 +28,12 @@ public class PlayerSyncResponse
 	/** Server-authoritative completed tasks */
 	private List<String> serverCompletedTasks;
 
+	/**
+	 * Server-authoritative spendable Boss Token balance = max(0, earned - spent).
+	 * The client adopts this on sync so it survives reinstall / profile switch.
+	 */
+	private Integer serverBossTokens;
+
 	/** Current active task from server */
 	private ServerTask activeTask;
 

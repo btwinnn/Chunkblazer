@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -232,6 +233,11 @@ public class ChunkBlazerPlugin extends Plugin
 	// always-accessible dungeon regions are handled separately by the coordinate
 	// rule in isFreeRegion, NOT by this list.
 	private final Set<Integer> freeUnlockableRegionIds = new HashSet<>();
+	// Regions we've already warned have no owning chunk (e.g. manually-unlocked
+	// underground/instanced spots). rollTasksForRegion runs on several threads and
+	// fires repeatedly, so we log each missing region once per client run instead
+	// of every attempt. Thread-safe because the roll can come from Client + EDT.
+	private final Set<Integer> warnedMissingChunkRegions = ConcurrentHashMap.newKeySet();
 	// Region id -> Friendly_Name for free chunks, used in the unlock message.
 	private final Map<Integer, String> freeUnlockableNames = new HashMap<>();
 	// Region id -> neighbor_ids for free chunks. Free chunks live only in
@@ -323,35 +329,21 @@ public class ChunkBlazerPlugin extends Plugin
 			@Override
 			public void onTaskCompleted(NuzlockeTask task, int progress)
 			{
-				// Task completed locally - request server verification
-
-				// Show animated task completion popup
-				if (taskCompletionAnimationOverlay != null && task != null)
+				// Coalesce: enqueue and let flushPendingCompletions() (onGameTick) do
+				// the expensive settle-up ONCE for the whole batch. Completing tasks
+				// one-by-one here — two config writes + a disk flush + five panel
+				// rebuilds EACH (see completeTasks()) — froze the client when a
+				// boss-chunk grant settled a maxed account's whole stack of
+				// already-satisfied tasks at login (Mike, 2026-08-22). Animation and
+				// sound move into the flush too, capped, so a storm doesn't queue
+				// dozens of popups/clips.
+				if (task != null)
 				{
-					String regionName = getTaskCompletionLabel(task);
-					taskCompletionAnimationOverlay.showTaskCompletion(task, task.getBasePoints(), regionName);
-
-					// Play region-specific completion sound
-					if (config.playTaskCompletionSound())
+					synchronized (pendingCompletions)
 					{
-						// Pass the area through even when null: Global Tasks belong
-						// to no chunk, so getTaskArea() is always null for them and
-						// this guard silently muted every quest completion. The
-						// sound manager falls back to a default folder instead.
-						String area = getTaskArea(task);
-						if (soundManager != null)
-						{
-							soundManager.playRandomSoundForArea(area);
-						}
+						pendingCompletions.add(task);
 					}
 				}
-				else
-				{
-					log.error(">>>   CANNOT show animated popup - overlay or task is null!");
-				}
-
-
-				completeTask(task);
 			}
 
 			@Override
@@ -545,6 +537,19 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private volatile boolean serverLoginDone = false;
 
+	// Last RS profile key onProfileChanged acted on. A world hop (and some no-op
+	// ProfilePanel actions) re-activate the config profile without changing the
+	// account, re-firing ProfileChanged; acting again revokes sync and reseeds off
+	// config that reads null mid-switch. Dedupe on the account key so only a real
+	// switch does the work.
+	private volatile String lastProfileSwitchKey;
+
+	// Last confirmed mode-lock verdict for the current account. getLocalPlayer() is
+	// briefly null right after a hop's LOGGED_IN, so isModeLocked() can't read the
+	// RSN and would report "unlocked" — flashing the mode picker every hop. During
+	// that window we trust this cached verdict instead. Reset on real logout.
+	private volatile boolean modeLockConfirmed;
+
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged event)
 	{
@@ -613,6 +618,9 @@ public class ChunkBlazerPlugin extends Plugin
 			// Real logout — reset the dedupe flag so the NEXT LOGGED_IN
 			// (which is a fresh game session) re-runs loginToServer.
 			serverLoginDone = false;
+			// Re-determine mode-lock from scratch next login: the cached verdict is
+			// per-account, and a different account may log in next.
+			modeLockConfirmed = false;
 			// And clear any pending verification — the nonce is tied to the
 			// pre-logout session. Also drop any in-flight Nuzlocke lock.
 			pendingVerificationNonce = null;
@@ -645,6 +653,19 @@ public class ChunkBlazerPlugin extends Plugin
 	@Subscribe
 	public void onProfileChanged(ProfileChanged event)
 	{
+		// A world hop (and some no-op ProfilePanel actions) re-activate the config
+		// profile without changing the account, re-firing this event. Reacting
+		// again revokes sync authority and reloads/reseeds off config that reads
+		// null mid-switch — which re-seeded the start chunk for hopping players.
+		// Only do the work on a real account change; skip a null key
+		// (mid-transition / logout, handled by the LOGIN_SCREEN path).
+		String key = configManager != null ? configManager.getRSProfileKey() : null;
+		if (key == null || key.equals(lastProfileSwitchKey))
+		{
+			return;
+		}
+		lastProfileSwitchKey = key;
+
 		revokeSyncAuthorityForProfileSwitch();
 
 		loadActiveTasks();
@@ -724,6 +745,12 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
+		// Settle any completions detected since the last tick in ONE batch. A
+		// boss-chunk grant can complete a whole stack of already-satisfied tasks at
+		// once, and the per-task settle-up path freezes the client at that volume
+		// (see completeTasks()). Coalescing keeps it to a single settle-up per tick.
+		flushPendingCompletions();
+
 		if (pendingServerLogin && player.getName() != null)
 		{
 			pendingServerLogin = false;
@@ -750,11 +777,8 @@ public class ChunkBlazerPlugin extends Plugin
 				loadActiveTasks();
 				panel.updatePanel();
 			}
-			// Auto-unlock region if enabled and player has enough points
-			else if (config.autoUnlockRegions())
-			{
-				tryAutoUnlockCurrentRegion(currentRegionId);
-			}
+			// Deliberate-unlock only: entering an unlockable neighbour offers a
+			// prompt; nothing auto-unlocks (the old free-exploration mode is gone).
 			else if (config.showUnlockPopup())
 			{
 				// Show unlock popup if entering an unlockable neighbor region
@@ -889,55 +913,6 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Attempt to auto-unlock the current region.
-	 * If autoUnlockFree is enabled, unlocks ANY region the player walks into.
-	 * Otherwise, only unlocks neighbor regions if player has enough points.
-	 */
-	private void tryAutoUnlockCurrentRegion(int regionId)
-	{
-		// Skip if already unlocked
-		if (isRegionUnlocked(regionId))
-		{
-			return;
-		}
-
-		// Check if this region is a defined chunk (has tasks)
-		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
-
-		// Check if free unlock mode is enabled - unlocks ANY region
-		if (config.autoUnlockFree())
-		{
-			// Free unlock - don't spend points, unlock ANY region
-			String chunkName = chunk != null ? chunk.getName() : "Unknown";
-			unlockRegionFree(regionId);
-
-			// Roll tasks for this region if it has tasks defined
-			if (chunk != null && chunk.getTasks() != null && !chunk.getTasks().isEmpty())
-			{
-				Set<String> existingRolled = getRolledTasksForRegion(regionId);
-				if (existingRolled.isEmpty())
-				{
-					rollTasksForRegion(regionId);
-				}
-			}
-
-			// Reload tasks for the newly unlocked region
-			loadActiveTasks();
-			panel.updatePanel();
-		}
-		// Non-free mode: do NOT auto-spend points when the player walks into a
-		// new region. Walking + points + autoUnlockRegions used to silently
-		// drain the wallet — confusing especially for the dev "+10 / +100"
-		// buttons, where freshly-granted points evaporated as soon as the
-		// player took a step. Spending points to unlock now requires explicit
-		// intent through the panel's "Unlock" button, the minimap right-click
-		// menu, or the world-map click. The side-panel section visible while
-		// standing in a locked region surfaces this prompt automatically.
-		// The autoUnlockFree branch above still grants free exploration unlocks
-		// for users who want that mode.
-	}
-
-	/**
 	 * Show an in-game popup to unlock a region if the player enters an unlockable neighbor.
 	 */
 	private void showUnlockPopupIfNeeded(int regionId)
@@ -960,6 +935,40 @@ public class ChunkBlazerPlugin extends Plugin
 		if (!neighbors.contains(regionId))
 		{
 			return; // Not a neighbor
+		}
+
+		// Boss chunks cost a Boss Token, not points — show a token prompt and route
+		// to the token unlock path instead of the points one below.
+		if (chunk.isBoss())
+		{
+			final int tokens = getBossTokens();
+			final String bossName = chunk.getName();
+			clientThread.invokeLater(() ->
+			{
+				if (tokens <= 0)
+				{
+					chatboxPanelManager.openTextMenuInput(
+							"Boss chunk: " + bossName + "! You need a Boss Token to unlock it.")
+						.option("OK", () ->
+						{
+						})
+						.build();
+				}
+				else
+				{
+					chatboxPanelManager.openTextMenuInput(
+							"Unlock boss chunk " + bossName + " for 1 Boss Token? (You have " + tokens + ")")
+						.option("Yes, unlock!", () ->
+						{
+							unlockBossRegion(regionId);
+						})
+						.option("No, not yet", () ->
+						{
+						})
+						.build();
+				}
+			});
+			return;
 		}
 
 		// Show the unlock popup
@@ -1134,7 +1143,12 @@ public class ChunkBlazerPlugin extends Plugin
 		// Charter ports. Authored per-port in Tasks_JSON/Charter_Tasks_Folder and
 		// aggregated into this one file by build-charter-tasks.ps1. They're free +
 		// auto-unlocked via Free_Chunks.json (also generated by that script).
-		"Charter_Tasks.json"
+		"Charter_Tasks.json",
+		// Boss chunks (raids / bosses). Authored per-boss in
+		// task-authoring/Boss_Task_Folder and aggregated into this file by
+		// build-task-catalog.ps1. Unlocked with Boss Tokens (not points); unlocking
+		// grants EVERY task at once. See docs/BOSS-CHUNKS.md.
+		"Boss_Tasks.json"
 	};
 
 	// The single free chunk every new game starts with (Lumbridge). Auto-unlocked
@@ -2174,11 +2188,19 @@ public class ChunkBlazerPlugin extends Plugin
 		String currentRsn = getPlayerName();
 		if (currentRsn == null)
 		{
-			return false;
+			// Player not loaded yet (the brief window right after a world hop's
+			// LOGGED_IN, noted in onGameStateChanged). We can't verify the account
+			// this instant, but reporting "unlocked" here is what flashed the mode
+			// picker on every hop. Trust the last verdict confirmed for this
+			// session; it is reset on real logout, so a genuine account change
+			// re-determines it once its player loads.
+			return modeLockConfirmed;
 		}
 
 		String expectedPrefix = hashRsn(currentRsn);
-		return hash.startsWith(expectedPrefix);
+		boolean locked = hash.startsWith(expectedPrefix);
+		modeLockConfirmed = locked;
+		return locked;
 	}
 
 	/**
@@ -2353,13 +2375,20 @@ public class ChunkBlazerPlugin extends Plugin
 		String rsnHash = hashRsn(rsn);
 		String modeKey = rsnHash + ":" + mode.name();
 
-		setAccountState("accountModeHash", modeKey);
-		setAccountState("gameMode", mode);
+		// CASUAL can be persisted immediately — the server never refuses it.
+		// NUZLOCKE (Competitive) must be confirmed by the server FIRST: it
+		// re-validates fresh-L3 eligibility, and writing the local lock before
+		// that confirmation let a main the server rejects get stuck showing
+		// Competitive while every lock/sync was refused (Madame Lulu, 2026-08-22).
+		// So for NUZLOCKE we only persist inside the success branch below.
+		if (mode != GameMode.NUZLOCKE)
+		{
+			setAccountState("accountModeHash", modeKey);
+			setAccountState("gameMode", mode);
+		}
 
-
-		// Mirror the lock to the server. Local config is the immediate source of
-		// truth; the server call backs it up so the choice survives across
-		// installs / machines (and, for Nuzlocke, re-validates eligibility).
+		// Mirror the lock to the server. For Casual this just backs up the choice;
+		// for Nuzlocke the server re-validates eligibility and is authoritative.
 		if (config.apiEnabled() && apiClient != null)
 		{
 			apiClient.lockGameMode(mode, eligibility)
@@ -2367,12 +2396,19 @@ public class ChunkBlazerPlugin extends Plugin
 				{
 					if (response == null)
 					{
+						if (mode == GameMode.NUZLOCKE)
+						{
+							addPluginChatMessage("Couldn't reach the server to confirm Competitive — staying on Casual. Try again later.");
+						}
 						return;
 					}
 					if (response.isSuccess())
 					{
 						if (mode == GameMode.NUZLOCKE)
 						{
+							// Server confirmed eligibility — now it is safe to persist.
+							setAccountState("accountModeHash", modeKey);
+							setAccountState("gameMode", mode);
 							addPluginChatMessage("Competitive locked in. Good luck — there's no going back!");
 						}
 					}
@@ -2382,10 +2418,22 @@ public class ChunkBlazerPlugin extends Plugin
 					}
 					else
 					{
+						// Rejected (e.g. eligibility_required for a non-fresh account).
+						// Never leave a local Competitive lock the server won't honor.
+						if (mode == GameMode.NUZLOCKE)
+						{
+							addPluginChatMessage("Competitive was declined by the server — your account isn't eligible, so you're staying on Casual.");
+						}
 						log.warn("Server lock-mode response: status={} message={}",
 							response.getStatus(), response.getMessage());
 					}
 				});
+		}
+		else if (mode == GameMode.NUZLOCKE)
+		{
+			// No server to confirm eligibility — cannot safely lock Competitive.
+			addPluginChatMessage("Competitive needs the ChunkBlazer server to confirm your account. Try again when online.");
+			return;
 		}
 
 		// For Casual mode, unlock the current chunk the player is standing in
@@ -2574,6 +2622,40 @@ public class ChunkBlazerPlugin extends Plugin
 		// outstanding).
 		maybeAddChatIcon(event);
 		handleVerificationChat(event);
+		handleBossCompletionChat(event);
+	}
+
+	/**
+	 * Watch for a boss/raid completion message and award the once-per-boss Boss
+	 * Token via {@link #recordBossCompletion} (which no-ops unless that boss chunk
+	 * is unlocked and not already recorded).
+	 *
+	 * <p>ToA bosses despawn rather than dying, so ActorDeath is unreliable — the
+	 * game's completion-count GAMEMESSAGE is the signal both RuneLite and the
+	 * official ToA plugin key off. The Normal / Entry Mode / Expert Mode variants
+	 * all contain "Tombs of Amascut" and "count is", so a substring match covers
+	 * every difficulty. See docs/BOSS-CHUNKS.md for the researched signals; the
+	 * per-raid-level "Defeat ToA (150+/300+)" TASKS (varbit 14380) are a separate,
+	 * still-to-be-verified module.
+	 */
+	private void handleBossCompletionChat(ChatMessage event)
+	{
+		ChatMessageType type = event.getType();
+		if (type != ChatMessageType.GAMEMESSAGE && type != ChatMessageType.SPAM)
+		{
+			return;
+		}
+		String msg = event.getMessage();
+		if (msg == null)
+		{
+			return;
+		}
+		String plain = msg.toLowerCase();
+		// Tombs of Amascut completion (Normal / Entry Mode / Expert Mode all match).
+		if (plain.contains("tombs of amascut") && plain.contains("count is"))
+		{
+			recordBossCompletion("toa");
+		}
 	}
 
 	/**
@@ -2798,7 +2880,7 @@ public class ChunkBlazerPlugin extends Plugin
 		"unlockedChunks", "completedTasks", "assignedTasks", "regionRolledTasks",
 		"currentTaskId", "currentTaskQuantity", "currentTaskProgress",
 		"totalPoints", "pointsSpent", "bossTokens", "taskProgressData",
-		"progressionBaseline",
+		"progressionBaseline", "bossCompletions",
 	};
 
 	// --- Per-account state accessors ---------------------------------------
@@ -3092,15 +3174,30 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 			else if (isModeLocked() && !response.isModeLocked())
 			{
-				// We're locked locally but the server isn't — the original lock-mode
-				// mirror call was dropped or sent to a different server (e.g. before the
-				// API URL was corrected). Re-push so the server catches up; otherwise the
-				// account stays permanently unranked. Fire-and-forget: if it fails, the
-				// next login retries (local stays locked, server still unlocked).
+				// Locked locally but the server isn't. Re-push so a genuine lock
+				// whose mirror was dropped can catch up. But Competitive (NUZLOCKE)
+				// is only ever real once the server confirms eligibility: if the
+				// re-push returns "eligibility_required", this local lock was never
+				// valid (an old build persisted it before the server accepted — e.g.
+				// a main that fails the fresh-L3 check), so clear it and fall back to
+				// Casual instead of 400-looping every login. Only the server's
+				// explicit ineligible verdict clears it, so a truly locked account
+				// (server returns ok / already_locked) is never demoted. Self-heals
+				// accounts stuck showing Competitive (Madame Lulu, 2026-08-22).
 				GameMode localMode = getGameMode(); // authoritative locked mode, not the raw dropdown
 				if (localMode != null && config.apiEnabled() && apiClient != null)
 				{
-					apiClient.lockGameMode(localMode);
+					apiClient.lockGameMode(localMode)
+						.thenAccept(resp ->
+						{
+							if (resp != null && "eligibility_required".equals(resp.getError()))
+							{
+								setAccountState("accountModeHash", "");
+								setAccountState("gameMode", GameMode.CASUAL);
+								modeLockConfirmed = false;
+								addPluginChatMessage("Your account isn't eligible for Competitive, so ChunkBlazer set it back to Casual.");
+							}
+						});
 				}
 			}
 
@@ -3303,6 +3400,16 @@ public class ChunkBlazerPlugin extends Plugin
 						pendingIntentionalReset = false;
 						log.info("[CHUNKBLAZER] intentional reset accepted by the server");
 					}
+					// Adopt the server's authoritative Boss Token balance. The client
+					// mutates a local copy for immediate UX (spend on unlock, +1 on
+					// first clear); the server recomputes the truth from the monotonic
+					// completion + boss-unlock records, so adopting here recovers the
+					// balance after a reinstall / profile switch and self-heals any
+					// transient client/server divergence. Config write is thread-safe.
+					if (resp != null && resp.isSuccess() && resp.getServerBossTokens() != null)
+					{
+						setAccountState("bossTokens", resp.getServerBossTokens());
+					}
 				});
 		});
 	}
@@ -3380,6 +3487,7 @@ public class ChunkBlazerPlugin extends Plugin
 			.clientPoints(config.totalPoints())
 			.pointsSpent(config.pointsSpent())
 			.completedTasks(completed)
+			.bossCompletions(new ArrayList<>(getCompletedBossKeys()))
 			.intentionalReset(pendingIntentionalReset)
 			.timestamp(System.currentTimeMillis())
 			.clientVersion("1.0.0")
@@ -3468,6 +3576,13 @@ public class ChunkBlazerPlugin extends Plugin
 				if (chunk != null && chunk.getRegionIds() != null && !chunk.getRegionIds().isEmpty())
 				{
 					labels.add(chunk.getName() + " (" + chunk.getRegionIds().get(0) + ")");
+				}
+				else if (freeUnlockableNames.get(id) != null)
+				{
+					// Free chunks live only in freeUnlockableNames, not chunksByRegionId,
+					// so surface their Friendly_Name here too (matches getRegionName)
+					// instead of a bare "Region <id>".
+					labels.add(freeUnlockableNames.get(id) + " (" + id + ")");
 				}
 				else
 				{
@@ -3601,6 +3716,7 @@ public class ChunkBlazerPlugin extends Plugin
 		ensureStartingChunkUnlocked();
 		migrateStripSeededCharterChunks();
 		migrateRepairBogusProgressionBaseline();
+		ensureBossChunkTasksGranted();
 
 		activeTasks.clear();
 		taskModuleManager.clearTask(); // Clear module state to prevent duplicates
@@ -3945,11 +4061,26 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private Set<String> rollTasksForRegion(int regionId)
 	{
+		return rollTasksForRegion(regionId, false);
+	}
+
+	/**
+	 * Roll tasks for a region. When {@code rollAll} is true (boss chunks), EVERY
+	 * eligible task is granted — no weighted 4-5 subset — and the tasks are made
+	 * active immediately instead of being parked behind reveal cards, so a boss
+	 * chunk hands the player its whole task list at once.
+	 */
+	private Set<String> rollTasksForRegion(int regionId, boolean rollAll)
+	{
 		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
 		if (chunk == null)
 		{
-			log.warn("rollTasksForRegion: No chunk found for region {}. Total chunks in map: {}",
-				regionId, chunksByRegionId.size());
+			// Log each missing region once per client run — see warnedMissingChunkRegions.
+			if (warnedMissingChunkRegions.add(regionId))
+			{
+				log.warn("rollTasksForRegion: No chunk found for region {}. Total chunks in map: {}",
+					regionId, chunksByRegionId.size());
+			}
 			return new HashSet<>();
 		}
 		if (chunk.getTasks() == null || chunk.getTasks().isEmpty())
@@ -3981,12 +4112,30 @@ public class ChunkBlazerPlugin extends Plugin
 			return new HashSet<>();
 		}
 
+		Set<String> rolledIds = new HashSet<>();
+
+		// Boss chunks grant EVERY eligible task at once — no weighted subset.
+		if (rollAll)
+		{
+			for (NuzlockeTask t : availableTasks)
+			{
+				rolledIds.add(t.getTaskId());
+			}
+			saveRolledTasksForRegion(regionId, rolledIds);
+			// Boss chunks present their whole stack as a card "pack" the player opens
+			// one at a time (see TaskCardOverlay). This also spreads completions out
+			// (each card activates its task only when flipped) instead of settling a
+			// maxed account's entire satisfied stack at once. markTasksUnrevealed
+			// no-ops when the player has cards disabled — then they go straight active.
+			markTasksUnrevealed(rolledIds);
+			return rolledIds;
+		}
+
 		// Determine how many tasks to roll (4-5, or all if fewer available)
 		int numToRoll = MIN_TASKS_PER_REGION + random.nextInt(MAX_TASKS_PER_REGION - MIN_TASKS_PER_REGION + 1);
 		numToRoll = Math.min(numToRoll, availableTasks.size());
 
 		// Use weighted random selection based on assignment_weight
-		Set<String> rolledIds = new HashSet<>();
 		List<NuzlockeTask> remainingTasks = new ArrayList<>(availableTasks);
 
 		for (int i = 0; i < numToRoll && !remainingTasks.isEmpty(); i++)
@@ -4139,12 +4288,58 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		setAccountState("unrevealedTasks", String.join(",", pending));
 
-		// Now it counts: pick it up as an active task and repaint.
-		loadActiveTasks();
+		// Incremental activation via the O(1) index. A card flip must NOT re-run a
+		// full loadActiveTasks: that clears and re-registers EVERY active task with
+		// its module and (through saveActiveTasks) rewrites the whole progress blob
+		// once per active task — a 30-card boss pack would do all that 30 times.
+		// Instead bring in just this one task exactly the way loadActiveTasks would:
+		// look it up in the index, initialize it, then either settle an already-
+		// satisfied one through the batched path or add it active and register it
+		// (registerActiveTask runs the module's retroactive check). Same indexing and
+		// retroactive behaviour as a normal roll, at O(1) per flip.
+		NuzlockeTask task = findTaskById(taskId);
+		if (task != null && !task.isLocked()
+			&& !getCompletedTaskIds().contains(taskId) && !isTaskActive(taskId))
+		{
+			initializeTask(task);
+			if (task.getCurrentProgress() >= task.getTargetQuantity())
+			{
+				// Already satisfied when granted — settle through the batched flush
+				// like every other completion (never the per-task freeze path).
+				synchronized (pendingCompletions)
+				{
+					pendingCompletions.add(task);
+				}
+			}
+			else
+			{
+				activeTasks.add(task);
+				if (activeTask == null)
+				{
+					activeTask = task;
+				}
+				taskModuleManager.registerActiveTask(task);
+				saveTaskProgress(taskId, task.getCurrentProgress(), task.getTargetQuantity());
+			}
+		}
+
 		if (panel != null)
 		{
 			panel.updatePanel();
 		}
+	}
+
+	/** True if a task with this id is already in the active list. */
+	private boolean isTaskActive(String taskId)
+	{
+		for (NuzlockeTask t : activeTasks)
+		{
+			if (taskId.equals(t.getTaskId()))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** Exposed for the card overlay, which only has ids to work with. */
@@ -4484,6 +4679,57 @@ public class ChunkBlazerPlugin extends Plugin
 
 		// Re-roll and load tasks for the now-only starting chunk so the panel populates.
 		loadActiveTasks();
+	}
+
+	/** Cap on completion popups shown per batch, so a login storm doesn't queue dozens. */
+	private static final int COMPLETION_ANIM_CAP = 5;
+
+	/**
+	 * Tasks whose completion was detected since the last tick, awaiting a single
+	 * batched settle-up in {@link #flushPendingCompletions()}. Modules fire
+	 * onTaskCompleted one at a time; a boss-chunk grant can settle a maxed
+	 * account's whole stack at once, and the per-task settle-up path freezes the
+	 * client at that volume (see {@link #completeTasks}).
+	 */
+	private final java.util.LinkedHashSet<NuzlockeTask> pendingCompletions = new java.util.LinkedHashSet<>();
+
+	/**
+	 * Settle every completion queued since the last tick in ONE batch: cap the
+	 * animation popups, play a single sound, and do the expensive config/panel
+	 * settle-up exactly once. Called from onGameTick.
+	 */
+	private void flushPendingCompletions()
+	{
+		List<NuzlockeTask> batch;
+		synchronized (pendingCompletions)
+		{
+			if (pendingCompletions.isEmpty())
+			{
+				return;
+			}
+			batch = new ArrayList<>(pendingCompletions);
+			pendingCompletions.clear();
+		}
+
+		int shown = 0;
+		for (NuzlockeTask task : batch)
+		{
+			if (taskCompletionAnimationOverlay != null && shown < COMPLETION_ANIM_CAP)
+			{
+				taskCompletionAnimationOverlay.showTaskCompletion(
+					task, task.getBasePoints(), getTaskCompletionLabel(task));
+				shown++;
+			}
+		}
+		// One sound for the whole batch — N clips at once on a login storm is both a
+		// cacophony and needless load.
+		if (config.playTaskCompletionSound() && soundManager != null)
+		{
+			soundManager.playRandomSoundForArea(getTaskArea(batch.get(0)));
+		}
+
+		// The expensive part, ONCE regardless of batch size.
+		completeTasks(batch);
 	}
 
 	private void completeTask(NuzlockeTask task)
@@ -4956,6 +5202,35 @@ public class ChunkBlazerPlugin extends Plugin
 		return null;
 	}
 
+	/**
+	 * @return true if this region is (part of) a boss chunk. Used by the side panel
+	 * to render the Boss-Token unlock UI instead of the points one.
+	 */
+	public boolean isBossRegion(int regionId)
+	{
+		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+		return chunk != null && chunk.isBoss();
+	}
+
+	/**
+	 * @return true if this task belongs to a boss chunk (chunk_type BOSS). Used by
+	 * the side panel's "Boss chunks only" task filter.
+	 */
+	public boolean isBossTask(NuzlockeTask task)
+	{
+		if (task == null || task.getTaskId() == null)
+		{
+			return false;
+		}
+		int regionId = findRegionForTask(task.getTaskId());
+		if (regionId > 0)
+		{
+			NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+			return chunk != null && chunk.isBoss();
+		}
+		return false;
+	}
+
 	// --- Task Progress Persistence ---
 
 	/**
@@ -5405,6 +5680,214 @@ public class ChunkBlazerPlugin extends Plugin
 		return true;
 	}
 
+	/**
+	 * Unlock a boss chunk: spend one Boss Token (not points), keep the adjacency
+	 * gate, and grant EVERY task on the chunk at once. Permanent unlock. No-op with
+	 * a chat notice if the player has no token or the chunk isn't adjacent. Routed
+	 * to from {@link #unlockRegion} once a chunk is identified as a boss chunk.
+	 */
+	public void unlockBossRegion(int regionId)
+	{
+		if (isRegionUnlocked(regionId))
+		{
+			return;
+		}
+		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+		if (chunk == null || !chunk.isBoss())
+		{
+			log.warn("unlockBossRegion({}) called for a non-boss chunk", regionId);
+			return;
+		}
+
+		// Adjacency gate — same as points unlocks. The boss bridge in
+		// getNeighborRegionIds() is what makes a boss chunk eligible in the first
+		// place (its surrounding chunks don't list it, so it bridges in reverse).
+		Set<Integer> neighbors = getNeighborRegionIds();
+		if (!neighbors.contains(regionId))
+		{
+			log.warn("unlockBossRegion({}) refused — not adjacent to any unlocked chunk", regionId);
+			addPluginChatMessage("That boss chunk isn't adjacent to your unlocked area yet.");
+			return;
+		}
+
+		// Spend the token BEFORE granting anything, so a failure never hands out the
+		// chunk for free. spendBossToken() is a no-op returning false when empty.
+		if (!spendBossToken())
+		{
+			addPluginChatMessage("You need a Boss Token to unlock " + getRegionName(regionId) + ".");
+			return;
+		}
+
+		// Unlock every region of the chunk (surface + any sub-regions).
+		List<Integer> toUnlock = (chunk.getRegionIds() != null && !chunk.getRegionIds().isEmpty())
+			? chunk.getRegionIds()
+			: java.util.Collections.singletonList(regionId);
+		java.util.LinkedHashSet<String> unlockedSet = new java.util.LinkedHashSet<>(getUnlockedRegionIds());
+		for (Integer r : toUnlock)
+		{
+			unlockedSet.add(String.valueOf(r));
+		}
+		setAccountState("unlockedChunks", String.join(",", unlockedSet));
+		persistUnlockNow();
+
+		// Grant ALL tasks — active immediately, not parked behind reveal cards.
+		rollTasksForRegion(regionId, true);
+		loadActiveTasks();
+		if (panel != null)
+		{
+			panel.updatePanel();
+		}
+
+		addPluginChatMessage("Unlocked boss chunk " + getRegionName(regionId)
+			+ " for 1 Boss Token. " + getBossTokens() + " remaining.");
+		playRegionUnlockJingle(regionId);
+	}
+
+	/**
+	 * The boss/raid keys the player has completed at least once after unlocking
+	 * that boss chunk (comma-separated in account state). Drives the once-per-boss
+	 * token grant and the sync's bossCompletions list.
+	 */
+	public Set<String> getCompletedBossKeys()
+	{
+		Set<String> keys = new java.util.LinkedHashSet<>();
+		String raw = getAccountState("bossCompletions");
+		if (raw != null && !raw.isEmpty())
+		{
+			for (String k : raw.split(","))
+			{
+				String t = k.trim();
+				if (!t.isEmpty())
+				{
+					keys.add(t);
+				}
+			}
+		}
+		return keys;
+	}
+
+	/**
+	 * @return true if the player has unlocked the boss chunk carrying this boss_key
+	 * (any of its regions is unlocked).
+	 */
+	private boolean isBossChunkUnlocked(String bossKey)
+	{
+		if (bossKey == null || bossKey.isEmpty())
+		{
+			return false;
+		}
+		for (NuzlockeChunk chunk : new HashSet<>(chunksByRegionId.values()))
+		{
+			if (chunk == null || !chunk.isBoss() || !bossKey.equalsIgnoreCase(chunk.getBossKey())
+				|| chunk.getRegionIds() == null)
+			{
+				continue;
+			}
+			for (Integer r : chunk.getRegionIds())
+			{
+				if (isRegionUnlocked(r))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Record the first-ever completion of a boss/raid (by boss_key) AFTER its chunk
+	 * was unlocked, and grant +1 Boss Token. Non-retroactive and once-per-boss: a
+	 * completion for a boss whose chunk isn't unlocked, or one already recorded, is
+	 * ignored. The completion set is synced to the server, which recomputes the
+	 * authoritative token balance. Safe to call on every observed boss completion.
+	 */
+	public void recordBossCompletion(String bossKey)
+	{
+		if (bossKey == null || bossKey.isEmpty())
+		{
+			return;
+		}
+		// Only earns a token if the player actually unlocked this boss chunk —
+		// the token gates the unlock, so an un-unlocked boss can't mint one.
+		if (!isBossChunkUnlocked(bossKey))
+		{
+			return;
+		}
+		Set<String> done = getCompletedBossKeys();
+		if (done.contains(bossKey))
+		{
+			return; // once per boss, non-retroactive
+		}
+		done.add(bossKey);
+		setAccountState("bossCompletions", String.join(",", done));
+		addBossTokens(1);
+		persistUnlockNow();
+		addPluginChatMessage("First clear recorded — +1 Boss Token earned!");
+	}
+
+	/**
+	 * Self-heal for boss chunks that are unlocked but have no tasks rolled. This
+	 * covers a chunk unlocked while {@code Boss_Tasks.json} hadn't loaded yet — when
+	 * the region was momentarily treated as an ordinary chunk and bought with points
+	 * instead of a Boss Token, and no tasks were granted. Once the boss catalog is
+	 * present, grant every task (rollAll). Idempotent: {@link #rollTasksForRegion}
+	 * filters out already-rolled/completed tasks, so this no-ops once tasks exist.
+	 * (The Boss Token accounting reconciles itself server-side: spent tokens are
+	 * derived from unlocked boss regions, so an already-unlocked boss chunk counts
+	 * as a spend on the next sync regardless of how it was originally unlocked.)
+	 */
+	private void ensureBossChunkTasksGranted()
+	{
+		Set<String> completed = getCompletedTaskIds();
+
+		for (NuzlockeChunk chunk : new HashSet<>(chunksByRegionId.values()))
+		{
+			if (chunk == null || !chunk.isBoss() || chunk.getRegionIds() == null
+				|| chunk.getRegionIds().isEmpty() || chunk.getTasks() == null)
+			{
+				continue;
+			}
+			boolean anyUnlocked = false;
+			for (Integer r : chunk.getRegionIds())
+			{
+				if (isRegionUnlocked(r))
+				{
+					anyUnlocked = true;
+					break;
+				}
+			}
+			if (!anyUnlocked)
+			{
+				continue;
+			}
+
+			int primary = chunk.getRegionIds().get(0);
+			// A boss chunk grants EVERY task. Find any catalog task not yet rolled
+			// (and not already completed) and grant it — repairs players who unlocked
+			// ToA before Boss_Tasks.json loaded (0 rolled) or got only a partial 4-5
+			// subset. Newly granted tasks are added as a card "pack" (markTasksUnrevealed)
+			// so they reveal one at a time rather than dumping ~30 completions at once.
+			Set<String> rolled = new HashSet<>(getRolledTasksForRegion(primary));
+			Set<String> missing = new HashSet<>();
+			for (NuzlockeTask t : chunk.getTasks())
+			{
+				String id = t.getTaskId();
+				if (id != null && !t.isLocked() && !completed.contains(id) && !rolled.contains(id))
+				{
+					missing.add(id);
+				}
+			}
+			if (!missing.isEmpty())
+			{
+				log.info("[CHUNKBLAZER] boss chunk {}: granting {} task(s) as a card pack", primary, missing.size());
+				Set<String> full = new HashSet<>(rolled);
+				full.addAll(missing);
+				saveRolledTasksForRegion(primary, full);
+				markTasksUnrevealed(missing);
+			}
+		}
+	}
+
 	// --- Helper Methods ---
 
 	private String getPlayerName()
@@ -5486,6 +5969,41 @@ public class ChunkBlazerPlugin extends Plugin
 					}
 				}
 				break;
+			}
+		}
+
+		// Boss-chunk bridge: a boss chunk (chunk_type BOSS) is unlocked with a Boss
+		// Token and sits off the normal task-area grid, so the ordinary chunks
+		// around it don't list it in their neighbor_ids. Expose it here once ANY of
+		// its OWN neighbor_ids is unlocked — the same reverse-adjacency trick as the
+		// Prifddinas bridge, but self-contained so no existing chunk data needs
+		// editing. The Boss-Token spend still gates the actual unlock (unlockRegion).
+		for (NuzlockeChunk chunk : new HashSet<>(chunksByRegionId.values()))
+		{
+			if (chunk == null || !chunk.isBoss()
+				|| chunk.getNeighborIds() == null || chunk.getRegionIds() == null)
+			{
+				continue;
+			}
+			boolean bordersUnlocked = false;
+			for (Integer n : chunk.getNeighborIds())
+			{
+				if (unlocked.contains(String.valueOf(n)))
+				{
+					bordersUnlocked = true;
+					break;
+				}
+			}
+			if (!bordersUnlocked)
+			{
+				continue;
+			}
+			for (Integer r : chunk.getRegionIds())
+			{
+				if (!unlocked.contains(String.valueOf(r)))
+				{
+					neighbors.add(r);
+				}
 			}
 		}
 
@@ -5595,6 +6113,16 @@ public class ChunkBlazerPlugin extends Plugin
 			unlockRegionFree(regionId);
 			loadActiveTasks();
 			panel.updatePanel();
+			return;
+		}
+
+		// Boss chunks (raids / bosses): unlocked with a Boss Token instead of
+		// points, still adjacency-gated, and granting EVERY task at once. Routed
+		// here (before the points path) so every unlock entry point handles them.
+		NuzlockeChunk bossChunk = chunksByRegionId.get(regionId);
+		if (bossChunk != null && bossChunk.isBoss())
+		{
+			unlockBossRegion(regionId);
 			return;
 		}
 

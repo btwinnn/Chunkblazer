@@ -348,9 +348,11 @@ public interface ChunkBlazerConfig extends Config
 	@Range(min = 0, max = 100)
 	default int taskCompletionSoundVolume()
 	{
-		// Was hardcoded at 3%, which is effectively inaudible over game audio —
-		// the sounds played fine, nobody could hear them.
-		return 25;
+		// 3% baseline (~-30dB): a deliberately quiet default so the jingle sits
+		// under game audio. Note it can be hard to hear over loud game sound (an
+		// earlier 25% default was chosen for that reason); raise it (0-100) if you
+		// want the jingle louder.
+		return 3;
 	}
 
 	@ConfigItem(
@@ -431,30 +433,6 @@ public interface ChunkBlazerConfig extends Config
 		position = 4
 	)
 	String regionSection = "region";
-
-	@ConfigItem(
-		keyName = "autoUnlockRegions",
-		name = "Auto-Unlock Regions",
-		description = "Master switch for walk-in unlocks. Combine with 'Free Auto-Unlock' for free exploration mode. Walking never spends points — point-cost unlocks always require an explicit click in the side panel, minimap, or world map.",
-		section = regionSection,
-		position = 0
-	)
-	default boolean autoUnlockRegions()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "autoUnlockFree",
-		name = "Free Auto-Unlock",
-		description = "Unlock ANY region you walk into without spending points (exploration mode). Enable this to freely explore the map.",
-		section = regionSection,
-		position = 1
-	)
-	default boolean autoUnlockFree()
-	{
-		return false;
-	}
 
 	@ConfigItem(
 		keyName = "showUnlockPopup",

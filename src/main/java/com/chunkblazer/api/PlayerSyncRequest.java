@@ -64,6 +64,13 @@ public class PlayerSyncRequest
 	private List<String> completedTasks;
 
 	/**
+	 * Boss/raid keys the player has completed at least once (e.g. "toa"). Additive
+	 * on the server (never a wholesale replace); it recomputes earned Boss Tokens
+	 * from the union. See docs/BOSS-CHUNKS.md.
+	 */
+	private List<String> bossCompletions;
+
+	/**
 	 * Declares that this sync is MEANT to destroy progress.
 	 *
 	 * <p>The server refuses a sync that drops a large share of a player's chunks

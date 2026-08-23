@@ -192,6 +192,10 @@ public class ChunkBlazerPanel extends PluginPanel
 	// Tier (points) filters. 0 = All; otherwise the base_points value to match.
 	private JComboBox<String> activeTasksTierCombo;
 	private int activeTasksSelectedTier = 0;
+	// Boss-chunk task filter: when checked, show only tasks belonging to boss
+	// chunks (raids / bosses unlocked with Boss Tokens).
+	private JCheckBox activeTasksBossOnlyCheck;
+	private boolean activeTasksBossOnly = false;
 	private JComboBox<String> completedTasksTierCombo;
 	private int completedTasksSelectedTier = 0;
 
@@ -1777,6 +1781,15 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 
 		String regionName = plugin.getRegionName(regionId);
+
+		// Boss chunks are unlocked with a Boss Token, not points — render that UI
+		// instead of the points cost/button below.
+		if (plugin.isBossRegion(regionId))
+		{
+			renderBossUnlockSection(regionId, regionName);
+			return;
+		}
+
 		int cost = plugin.getRegionUnlockCost(regionId);
 		int points = plugin.getTotalPoints();
 		boolean canAfford = points >= cost;
@@ -1833,6 +1846,89 @@ public class ChunkBlazerPanel extends PluginPanel
 			unlockBtn.setForeground(Color.WHITE);
 			unlockBtn.setFocusPainted(false);
 			unlockBtn.addActionListener(e -> showUnlockConfirm(buttonRow, finalRegionId, finalRegionName, finalCost));
+			buttonRow.add(unlockBtn, BorderLayout.CENTER);
+		}
+		regionUnlockPanel.add(buttonRow);
+
+		regionUnlockPanel.setVisible(true);
+		regionUnlockPanel.revalidate();
+		regionUnlockPanel.repaint();
+		regionUnlockPanel.getParent().revalidate();
+		regionUnlockPanel.getParent().repaint();
+	}
+
+	/**
+	 * Render the locked-region prompt for a BOSS chunk: costs one Boss Token (not
+	 * points) and grants every task on unlock. Mirrors the points layout but reads
+	 * the token balance and routes to {@code unlockBossRegion}.
+	 */
+	private void renderBossUnlockSection(int regionId, String regionName)
+	{
+		int tokens = plugin.getBossTokens();
+		boolean canAfford = tokens > 0;
+
+		regionUnlockPanel.removeAll();
+
+		JLabel title = new JLabel("🔒 Boss Chunk");
+		title.setFont(FontManager.getRunescapeBoldFont());
+		title.setForeground(Color.WHITE);
+		title.setAlignmentX(LEFT_ALIGNMENT);
+		regionUnlockPanel.add(title);
+		regionUnlockPanel.add(Box.createVerticalStrut(3));
+		regionUnlockPanel.add(sectionDivider());
+		regionUnlockPanel.add(Box.createVerticalStrut(5));
+
+		WrappingTextLabel nameLabel = new WrappingTextLabel(
+			regionName + " (" + regionId + ")",
+			FontManager.getRunescapeSmallFont().deriveFont(Font.BOLD),
+			Color.WHITE,
+			TASK_TEXT_WRAP_WIDTH);
+		regionUnlockPanel.add(nameLabel);
+		regionUnlockPanel.add(Box.createVerticalStrut(4));
+
+		JLabel costLine = new JLabel("Cost: 1 Boss Token | You have: " + tokens);
+		costLine.setFont(FontManager.getRunescapeSmallFont());
+		costLine.setForeground(canAfford ? new Color(150, 255, 150) : new Color(255, 130, 130));
+		costLine.setAlignmentX(LEFT_ALIGNMENT);
+		regionUnlockPanel.add(costLine);
+		regionUnlockPanel.add(Box.createVerticalStrut(4));
+
+		JLabel grantLine = new JLabel("Unlocking grants every task on this chunk.");
+		grantLine.setFont(FontManager.getRunescapeSmallFont());
+		grantLine.setForeground(Color.LIGHT_GRAY);
+		grantLine.setAlignmentX(LEFT_ALIGNMENT);
+		regionUnlockPanel.add(grantLine);
+		regionUnlockPanel.add(Box.createVerticalStrut(6));
+
+		final int finalRegionId = regionId;
+		JPanel buttonRow = new JPanel(new BorderLayout(4, 0));
+		buttonRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		buttonRow.setAlignmentX(LEFT_ALIGNMENT);
+		buttonRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 28));
+
+		if (!canAfford)
+		{
+			JButton disabled = new JButton("Need a Boss Token");
+			disabled.setEnabled(false);
+			disabled.setFont(FontManager.getRunescapeSmallFont());
+			disabled.setFocusPainted(false);
+			buttonRow.add(disabled, BorderLayout.CENTER);
+		}
+		else
+		{
+			JButton unlockBtn = new JButton("Unlock for 1 Boss Token");
+			unlockBtn.setFont(FontManager.getRunescapeBoldFont());
+			unlockBtn.setBackground(new Color(50, 110, 60));
+			unlockBtn.setForeground(Color.WHITE);
+			unlockBtn.setFocusPainted(false);
+			unlockBtn.addActionListener(e ->
+			{
+				plugin.closeChatboxPrompt();
+				plugin.unlockBossRegion(finalRegionId);
+				mapUnlockRegionId = -1;
+				updateRegionUnlockSection();
+				updateStats();
+			});
 			buttonRow.add(unlockBtn, BorderLayout.CENTER);
 		}
 		regionUnlockPanel.add(buttonRow);
@@ -2298,6 +2394,24 @@ public class ChunkBlazerPanel extends PluginPanel
 		tierRow.add(activeTasksTierCombo, BorderLayout.CENTER);
 
 		activeTasksFilterPanel.add(tierRow);
+		activeTasksFilterPanel.add(Box.createVerticalStrut(4));
+
+		// Boss-chunk filter — show only tasks from boss chunks (raids / bosses).
+		activeTasksBossOnlyCheck = new JCheckBox("Boss chunk tasks only");
+		activeTasksBossOnlyCheck.setFont(FontManager.getRunescapeSmallFont());
+		activeTasksBossOnlyCheck.setForeground(Color.LIGHT_GRAY);
+		activeTasksBossOnlyCheck.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		activeTasksBossOnlyCheck.setToolTipText("Show only tasks from boss chunks (raids / bosses)");
+		activeTasksBossOnlyCheck.setAlignmentX(LEFT_ALIGNMENT);
+		activeTasksBossOnlyCheck.addActionListener(e ->
+		{
+			if (!isRefreshingFilters)
+			{
+				activeTasksBossOnly = activeTasksBossOnlyCheck.isSelected();
+				updateActiveTasksDisplay();
+			}
+		});
+		activeTasksFilterPanel.add(activeTasksBossOnlyCheck);
 		activeTasksFilterPanel.add(Box.createVerticalStrut(4));
 
 		taskPanel.add(activeTasksFilterPanel);
@@ -3459,6 +3573,11 @@ public class ChunkBlazerPanel extends PluginPanel
 				}
 				// Tier filter — 0 means All.
 				if (filterTier > 0 && task.getBasePoints() != filterTier)
+				{
+					return false;
+				}
+				// Boss-chunk-only filter.
+				if (activeTasksBossOnly && !plugin.isBossTask(task))
 				{
 					return false;
 				}

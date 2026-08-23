@@ -53,32 +53,14 @@ public class TaskCardOverlay extends Overlay
 	private static final long EXIT_DURATION = 320;
 
 	/**
-	 * Preferred card width. The art is 356x200, so this draws it at ~67% — small enough
-	 * that five fit across a normal resizable viewport, large enough that the task name
-	 * in the body panel stays readable.
+	 * Preferred width of the single centred card. One card at a time (pack-opening),
+	 * so it can be larger than the old grid allowed; clamped to the viewport below.
 	 */
-	private static final int CARD_WIDTH = 240;
-	private static final int CARD_GAP = 14;
-
-	/**
-	 * Below this width the body panel can no longer hold a legible task name, so the row
-	 * wraps instead of shrinking further. Five cards in one row needs ~1250px of
-	 * viewport; a fixed-mode client has 512. Without wrapping those five would be
-	 * squeezed to ~80px each — technically visible, actually useless.
-	 */
-	private static final int MIN_LEGIBLE_WIDTH = 150;
-	private static final int ROW_GAP = 12;
-
-	/**
-	 * Never more than three across, even when the viewport could fit five.
-	 *
-	 * <p>A roll is 4-5 tasks, and five 240px cards in a line want ~1250px — so on any
-	 * ordinary window one long row means shrinking every card to keep it on screen. Two
-	 * balanced rows (3+2, or 2+2 for a four-task roll) keep the cards at full size and
-	 * stay centred, which is what makes this degrade gracefully as the client window
-	 * scales down instead of falling off a cliff at some width.
-	 */
-	private static final int MAX_PER_ROW = 3;
+	private static final int CARD_WIDTH = 260;
+	/** How far each stacked "deck" card behind the current one is offset, px. */
+	private static final int DECK_OFFSET = 7;
+	/** How many face-down cards to draw in the pile behind the current card. */
+	private static final int DECK_MAX_VISIBLE = 5;
 	/** Used only when art is missing — the drawn fallback needs some shape. */
 	private static final double FALLBACK_ASPECT = 202.0 / 344.0;
 
@@ -280,30 +262,26 @@ public class TaskCardOverlay extends Overlay
 		{
 			return false;
 		}
-		// Front-most first: cards are drawn left to right and don't overlap, but a
-		// reverse scan is still the correct hit-test order if that ever changes.
-		for (int i = cards.size() - 1; i >= 0; i--)
+		// Pack-opening: only the front card (index 0) is interactive. Click it to
+		// flip; click the face-up card to dismiss it and advance to the next.
+		Card current = cards.get(0);
+		if (!current.bounds.contains(x, y))
 		{
-			Card card = cards.get(i);
-			if (!card.bounds.contains(x, y))
-			{
-				continue;
-			}
-			if (card.isFaceDown())
-			{
-				card.flipStart = System.currentTimeMillis();
-				return true;
-			}
-			if (card.isFaceUp())
-			{
-				card.dismissStart = System.currentTimeMillis();
-				return true;
-			}
-			// Mid-turn or already leaving: swallow the click so an impatient
-			// double-click doesn't fall through to the game world underneath.
+			return false;
+		}
+		if (current.isFaceDown())
+		{
+			current.flipStart = System.currentTimeMillis();
 			return true;
 		}
-		return false;
+		if (current.isFaceUp())
+		{
+			current.dismissStart = System.currentTimeMillis();
+			return true;
+		}
+		// Mid-turn or already leaving: swallow the click so an impatient
+		// double-click doesn't fall through to the game world underneath.
+		return true;
 	}
 
 	/** True while there is anything to draw or click. */
@@ -341,14 +319,14 @@ public class TaskCardOverlay extends Overlay
 		graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
 			RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-		layout(viewport);
+		Card current = cards.get(0);
+		layoutCurrent(current, viewport);
 
-		for (Card card : cards)
-		{
-			drawCard(graphics, card);
-		}
-
-		drawPrompt(graphics, viewport);
+		// Deck of the remaining cards stacked behind the current one, so a 30-card
+		// boss-chunk grant reads as a pack to open, not a wall to scroll.
+		drawDeck(graphics, current, cards.size() - 1);
+		drawCard(graphics, current);
+		drawPrompt(graphics, viewport, current);
 		return null;
 	}
 
@@ -462,82 +440,50 @@ public class TaskCardOverlay extends Overlay
 		return new Rectangle(client.getViewportXOffset(), client.getViewportYOffset(), w, h);
 	}
 
-	/**
-	 * How many cards go on a row, given how many there are and how much width there is.
-	 *
-	 * <p>Two rules, in order. Never more than {@link #MAX_PER_ROW} across — five cards in
-	 * a line only fits a very wide client, and forcing it shrinks every card. Then
-	 * BALANCE: having settled on a row count, spread the cards evenly across it, so five
-	 * reads 3+2 and four reads 2+2 rather than 3+1.
-	 *
-	 * <p>Package-private and static purely so this is testable without a Graphics2D.
-	 */
-	static int[] rowSizes(int count, int availableWidth)
+	/** Centre the current card in the viewport, clamped to fit. */
+	private void layoutCurrent(Card current, Rectangle viewport)
 	{
-		if (count <= 0)
-		{
-			return new int[]{0};
-		}
-		int cap = Math.min(MAX_PER_ROW, count);
-		// If even that many can't hold the legibility floor, narrow further.
-		int fits = Math.max(1, (availableWidth + CARD_GAP) / (MIN_LEGIBLE_WIDTH + CARD_GAP));
-		cap = Math.min(cap, fits);
-
-		int rows = (count + cap - 1) / cap;
-		// Spread the remainder across the LEADING rows rather than letting it pile onto
-		// the last one. A single perRow figure can't express this: seven cards at three
-		// across is 3+2+2, not 3+3+1, and the stranded single is what looks broken.
-		int base = count / rows;
-		int extra = count % rows;
-
-		int[] sizes = new int[rows];
-		for (int i = 0; i < rows; i++)
-		{
-			sizes[i] = base + (i < extra ? 1 : 0);
-		}
-		return sizes;
+		int cardWidth = Math.min(CARD_WIDTH, viewport.width - 80);
+		cardWidth = Math.max(48, cardWidth); // a truly tiny viewport still gets something
+		int cardHeight = (int) Math.round(cardWidth * aspectRatio());
+		int x = viewport.x + (viewport.width - cardWidth) / 2;
+		int y = viewport.y + (viewport.height - cardHeight) / 2;
+		current.bounds = new Rectangle(x, y, cardWidth, cardHeight);
 	}
 
 	/**
-	 * Lay the cards out centred, shrinking to fit the viewport and wrapping onto extra
-	 * rows once shrinking alone would make them illegible.
+	 * Draw the remaining cards as a face-down pile behind the current one, so the
+	 * player can see there is more to open. Purely decorative — only the current
+	 * card is interactive.
 	 */
-	private void layout(Rectangle viewport)
+	private void drawDeck(Graphics2D graphics, Card current, int remaining)
 	{
-		int count = cards.size();
-		if (count == 0)
+		if (remaining <= 0)
 		{
 			return;
 		}
-
-		int maxWidth = viewport.width - 40;
-		int[] sizes = rowSizes(count, maxWidth);
-
-		int widest = 1;
-		for (int size : sizes)
+		int visible = Math.min(remaining, DECK_MAX_VISIBLE);
+		Rectangle b = current.bounds;
+		TaskCardTier tier = cards.size() > 1 ? cards.get(1).tier : current.tier;
+		BufferedImage back = backs.get(tier);
+		// Farthest card first so nearer ones overlap it.
+		for (int i = visible; i >= 1; i--)
 		{
-			widest = Math.max(widest, size);
-		}
-
-		int cardWidth = Math.min(CARD_WIDTH, (maxWidth - (widest - 1) * CARD_GAP) / widest);
-		cardWidth = Math.max(48, cardWidth); // a truly tiny viewport still gets something
-		int cardHeight = (int) Math.round(cardWidth * aspectRatio());
-
-		int blockHeight = sizes.length * cardHeight + (sizes.length - 1) * ROW_GAP;
-		int y = viewport.y + (viewport.height - blockHeight) / 2;
-
-		int index = 0;
-		for (int size : sizes)
-		{
-			int rowWidth = size * cardWidth + (size - 1) * CARD_GAP;
-			int x = viewport.x + (viewport.width - rowWidth) / 2;
-
-			for (int i = 0; i < size && index < count; i++, index++)
+			int ox = b.x - i * DECK_OFFSET;
+			int oy = b.y - i * DECK_OFFSET;
+			graphics.setColor(CARD_SHADOW);
+			graphics.fillRect(ox + 3, oy + 4, b.width, b.height);
+			if (back != null)
 			{
-				cards.get(index).bounds = new Rectangle(x, y, cardWidth, cardHeight);
-				x += cardWidth + CARD_GAP;
+				graphics.drawImage(back, ox, oy, b.width, b.height, null);
 			}
-			y += cardHeight + ROW_GAP;
+			else
+			{
+				graphics.setColor(tier.getAccent().darker().darker());
+				graphics.fillRect(ox, oy, b.width, b.height);
+				graphics.setColor(tier.getAccent());
+				graphics.drawRect(ox, oy, b.width - 1, b.height - 1);
+			}
 		}
 	}
 
@@ -702,36 +648,24 @@ public class TaskCardOverlay extends Overlay
 		return text.trim() + "...";
 	}
 
-	private void drawPrompt(Graphics2D graphics, Rectangle viewport)
+	private void drawPrompt(Graphics2D graphics, Rectangle viewport, Card current)
 	{
-		int faceDown = 0;
-		int faceUp = 0;
-		for (Card card : cards)
-		{
-			if (card.isFaceDown())
-			{
-				faceDown++;
-			}
-			else if (card.isFaceUp())
-			{
-				faceUp++;
-			}
-		}
-
+		int total = cards.size();
 		String text;
-		if (faceDown > 0)
+		if (current.isFaceDown())
 		{
-			text = faceDown == 1
-				? "Click the card to reveal your task"
-				: "Click a card to reveal your task (" + faceDown + " left)";
+			text = total > 1
+				? "Click to reveal — " + total + " cards to open"
+				: "Click the card to reveal your task";
 		}
-		else if (faceUp > 0)
+		else if (current.isFaceUp())
 		{
-			// Nothing is waiting on this — the tasks are already yours. Say so, so the
+			// Nothing is waiting on this — the task is already yours. Say so, so the
 			// card doesn't read as something still to be completed.
-			text = faceUp == 1
-				? "Task added. Click the card to dismiss it."
-				: "Tasks added. Click a card to dismiss it.";
+			int left = total - 1;
+			text = left > 0
+				? "Task added — click for the next card (" + left + " left)"
+				: "Task added — click to close";
 		}
 		else
 		{
@@ -739,8 +673,7 @@ public class TaskCardOverlay extends Overlay
 		}
 
 		graphics.setFont(FontManager.getRunescapeBoldFont());
-		Rectangle first = cards.get(0).bounds;
-		drawCentered(graphics, text, viewport.x + viewport.width / 2, first.y - 12, PROMPT);
+		drawCentered(graphics, text, viewport.x + viewport.width / 2, current.bounds.y - 14, PROMPT);
 	}
 
 	private void drawCentered(Graphics2D graphics, String text, int centreX, int y, Color colour)

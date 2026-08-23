@@ -33,7 +33,8 @@ color 0A
 set "SCRIPT_DIR=%~dp0"
 if "%SCRIPT_DIR:~-1%"=="\" set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
 
-set "CHUNKBLAZER_DIR=%SCRIPT_DIR%"
+:: This script lives in <repo>\.bat, so the repo root is one level up.
+for %%I in ("%SCRIPT_DIR%\..") do set "CHUNKBLAZER_DIR=%%~fI"
 set "RUNELITE_DIR=C:\runelite"
 
 set "PLUGIN_JAVA_SRC=%CHUNKBLAZER_DIR%\src\main\java\com\chunkblazer"
