@@ -4239,12 +4239,58 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		setAccountState("unrevealedTasks", String.join(",", pending));
 
-		// Now it counts: pick it up as an active task and repaint.
-		loadActiveTasks();
+		// Incremental activation via the O(1) index. A card flip must NOT re-run a
+		// full loadActiveTasks: that clears and re-registers EVERY active task with
+		// its module and (through saveActiveTasks) rewrites the whole progress blob
+		// once per active task — a 30-card boss pack would do all that 30 times.
+		// Instead bring in just this one task exactly the way loadActiveTasks would:
+		// look it up in the index, initialize it, then either settle an already-
+		// satisfied one through the batched path or add it active and register it
+		// (registerActiveTask runs the module's retroactive check). Same indexing and
+		// retroactive behaviour as a normal roll, at O(1) per flip.
+		NuzlockeTask task = findTaskById(taskId);
+		if (task != null && !task.isLocked()
+			&& !getCompletedTaskIds().contains(taskId) && !isTaskActive(taskId))
+		{
+			initializeTask(task);
+			if (task.getCurrentProgress() >= task.getTargetQuantity())
+			{
+				// Already satisfied when granted — settle through the batched flush
+				// like every other completion (never the per-task freeze path).
+				synchronized (pendingCompletions)
+				{
+					pendingCompletions.add(task);
+				}
+			}
+			else
+			{
+				activeTasks.add(task);
+				if (activeTask == null)
+				{
+					activeTask = task;
+				}
+				taskModuleManager.registerActiveTask(task);
+				saveTaskProgress(taskId, task.getCurrentProgress(), task.getTargetQuantity());
+			}
+		}
+
 		if (panel != null)
 		{
 			panel.updatePanel();
 		}
+	}
+
+	/** True if a task with this id is already in the active list. */
+	private boolean isTaskActive(String taskId)
+	{
+		for (NuzlockeTask t : activeTasks)
+		{
+			if (taskId.equals(t.getTaskId()))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** Exposed for the card overlay, which only has ids to work with. */
