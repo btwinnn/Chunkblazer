@@ -772,11 +772,8 @@ public class ChunkBlazerPlugin extends Plugin
 				loadActiveTasks();
 				panel.updatePanel();
 			}
-			// Auto-unlock region if enabled and player has enough points
-			else if (config.autoUnlockRegions())
-			{
-				tryAutoUnlockCurrentRegion(currentRegionId);
-			}
+			// Deliberate-unlock only: entering an unlockable neighbour offers a
+			// prompt; nothing auto-unlocks (the old free-exploration mode is gone).
 			else if (config.showUnlockPopup())
 			{
 				// Show unlock popup if entering an unlockable neighbor region
@@ -911,55 +908,6 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Attempt to auto-unlock the current region.
-	 * If autoUnlockFree is enabled, unlocks ANY region the player walks into.
-	 * Otherwise, only unlocks neighbor regions if player has enough points.
-	 */
-	private void tryAutoUnlockCurrentRegion(int regionId)
-	{
-		// Skip if already unlocked
-		if (isRegionUnlocked(regionId))
-		{
-			return;
-		}
-
-		// Check if this region is a defined chunk (has tasks)
-		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
-
-		// Check if free unlock mode is enabled - unlocks ANY region
-		if (config.autoUnlockFree())
-		{
-			// Free unlock - don't spend points, unlock ANY region
-			String chunkName = chunk != null ? chunk.getName() : "Unknown";
-			unlockRegionFree(regionId);
-
-			// Roll tasks for this region if it has tasks defined
-			if (chunk != null && chunk.getTasks() != null && !chunk.getTasks().isEmpty())
-			{
-				Set<String> existingRolled = getRolledTasksForRegion(regionId);
-				if (existingRolled.isEmpty())
-				{
-					rollTasksForRegion(regionId);
-				}
-			}
-
-			// Reload tasks for the newly unlocked region
-			loadActiveTasks();
-			panel.updatePanel();
-		}
-		// Non-free mode: do NOT auto-spend points when the player walks into a
-		// new region. Walking + points + autoUnlockRegions used to silently
-		// drain the wallet — confusing especially for the dev "+10 / +100"
-		// buttons, where freshly-granted points evaporated as soon as the
-		// player took a step. Spending points to unlock now requires explicit
-		// intent through the panel's "Unlock" button, the minimap right-click
-		// menu, or the world-map click. The side-panel section visible while
-		// standing in a locked region surfaces this prompt automatically.
-		// The autoUnlockFree branch above still grants free exploration unlocks
-		// for users who want that mode.
-	}
-
-	/**
 	 * Show an in-game popup to unlock a region if the player enters an unlockable neighbor.
 	 */
 	private void showUnlockPopupIfNeeded(int regionId)
@@ -982,6 +930,40 @@ public class ChunkBlazerPlugin extends Plugin
 		if (!neighbors.contains(regionId))
 		{
 			return; // Not a neighbor
+		}
+
+		// Boss chunks cost a Boss Token, not points — show a token prompt and route
+		// to the token unlock path instead of the points one below.
+		if (chunk.isBoss())
+		{
+			final int tokens = getBossTokens();
+			final String bossName = chunk.getName();
+			clientThread.invokeLater(() ->
+			{
+				if (tokens <= 0)
+				{
+					chatboxPanelManager.openTextMenuInput(
+							"Boss chunk: " + bossName + "! You need a Boss Token to unlock it.")
+						.option("OK", () ->
+						{
+						})
+						.build();
+				}
+				else
+				{
+					chatboxPanelManager.openTextMenuInput(
+							"Unlock boss chunk " + bossName + " for 1 Boss Token? (You have " + tokens + ")")
+						.option("Yes, unlock!", () ->
+						{
+							unlockBossRegion(regionId);
+						})
+						.option("No, not yet", () ->
+						{
+						})
+						.build();
+				}
+			});
+			return;
 		}
 
 		// Show the unlock popup
@@ -3693,6 +3675,7 @@ public class ChunkBlazerPlugin extends Plugin
 		ensureStartingChunkUnlocked();
 		migrateStripSeededCharterChunks();
 		migrateRepairBogusProgressionBaseline();
+		ensureBossChunkTasksGranted();
 
 		activeTasks.clear();
 		taskModuleManager.clearTask(); // Clear module state to prevent duplicates
@@ -4934,6 +4917,16 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
+	 * @return true if this region is (part of) a boss chunk. Used by the side panel
+	 * to render the Boss-Token unlock UI instead of the points one.
+	 */
+	public boolean isBossRegion(int regionId)
+	{
+		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+		return chunk != null && chunk.isBoss();
+	}
+
+	/**
 	 * @return true if this task belongs to a boss chunk (chunk_type BOSS). Used by
 	 * the side panel's "Boss chunks only" task filter.
 	 */
@@ -5544,6 +5537,48 @@ public class ChunkBlazerPlugin extends Plugin
 		addBossTokens(1);
 		persistUnlockNow();
 		addPluginChatMessage("First clear recorded — +1 Boss Token earned!");
+	}
+
+	/**
+	 * Self-heal for boss chunks that are unlocked but have no tasks rolled. This
+	 * covers a chunk unlocked while {@code Boss_Tasks.json} hadn't loaded yet — when
+	 * the region was momentarily treated as an ordinary chunk and bought with points
+	 * instead of a Boss Token, and no tasks were granted. Once the boss catalog is
+	 * present, grant every task (rollAll). Idempotent: {@link #rollTasksForRegion}
+	 * filters out already-rolled/completed tasks, so this no-ops once tasks exist.
+	 * (The Boss Token accounting reconciles itself server-side: spent tokens are
+	 * derived from unlocked boss regions, so an already-unlocked boss chunk counts
+	 * as a spend on the next sync regardless of how it was originally unlocked.)
+	 */
+	private void ensureBossChunkTasksGranted()
+	{
+		for (NuzlockeChunk chunk : new HashSet<>(chunksByRegionId.values()))
+		{
+			if (chunk == null || !chunk.isBoss() || chunk.getRegionIds() == null
+				|| chunk.getRegionIds().isEmpty())
+			{
+				continue;
+			}
+			boolean anyUnlocked = false;
+			for (Integer r : chunk.getRegionIds())
+			{
+				if (isRegionUnlocked(r))
+				{
+					anyUnlocked = true;
+					break;
+				}
+			}
+			if (!anyUnlocked)
+			{
+				continue;
+			}
+			int primary = chunk.getRegionIds().get(0);
+			if (getRolledTasksForRegion(primary).isEmpty())
+			{
+				log.info("[CHUNKBLAZER] boss chunk {} is unlocked but has no tasks — granting all now", primary);
+				rollTasksForRegion(primary, true);
+			}
+		}
 	}
 
 	// --- Helper Methods ---

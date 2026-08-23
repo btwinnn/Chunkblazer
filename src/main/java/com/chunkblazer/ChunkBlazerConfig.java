@@ -435,30 +435,6 @@ public interface ChunkBlazerConfig extends Config
 	String regionSection = "region";
 
 	@ConfigItem(
-		keyName = "autoUnlockRegions",
-		name = "Auto-Unlock Regions",
-		description = "Master switch for walk-in unlocks. Combine with 'Free Auto-Unlock' for free exploration mode. Walking never spends points — point-cost unlocks always require an explicit click in the side panel, minimap, or world map.",
-		section = regionSection,
-		position = 0
-	)
-	default boolean autoUnlockRegions()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "autoUnlockFree",
-		name = "Free Auto-Unlock",
-		description = "Unlock ANY region you walk into without spending points (exploration mode). Enable this to freely explore the map.",
-		section = regionSection,
-		position = 1
-	)
-	default boolean autoUnlockFree()
-	{
-		return false;
-	}
-
-	@ConfigItem(
 		keyName = "showUnlockPopup",
 		name = "Show Unlock Popup",
 		description = "Show an in-game popup to unlock regions when you walk into them (when Auto-Unlock is disabled).",
