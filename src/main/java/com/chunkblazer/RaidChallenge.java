@@ -1,0 +1,153 @@
+package com.chunkblazer;
+
+import com.google.gson.annotations.SerializedName;
+import java.util.List;
+import lombok.Data;
+
+/**
+ * Data-driven definition of a raid/boss "challenge" — a completion conditioned on
+ * how the fight was done (no running, gear cap, weapon used, arena half, …).
+ *
+ * <p>Every field here is authored in the SERVER task catalog (which does not count
+ * against the plugin's reviewer token budget) and interpreted generically by
+ * {@link com.chunkblazer.modules.RaidChallengeModule}. Adding a new boss/raid
+ * challenge is therefore JSON-only — no new plugin code — which is what keeps the
+ * plugin small as more boss chunks and raids are added.
+ *
+ * <p>All fields are optional; a challenge enforces only the ones present. Absent =
+ * not checked. Two evaluation phases:
+ * <ul>
+ *   <li><b>Sustained</b> (tracked every tick / on events while the player is inside
+ *       {@link #roomRegions}): {@code noRun}, {@code arenaAxis}, {@code noNpcDeathIds},
+ *       {@code forbiddenItemIds}, {@code emptySlots}, {@code weaponIds},
+ *       {@code noDamageTicks}, {@code surviveTicks}, {@code attackStyleVarp},
+ *       {@code defenceReduceNpcIds}. A single violation fails the attempt for that run.</li>
+ *   <li><b>At completion</b> (when {@link #completeMessage} appears): the gates
+ *       ({@code minRaidLevel}, {@code solo}) and point-in-time reads
+ *       ({@code minWeightKg}, {@code maxWeightKg}, {@code maxGearValue}), plus a final
+ *       re-check of the sustained flags.</li>
+ * </ul>
+ */
+@Data
+public class RaidChallenge
+{
+	/**
+	 * Substring of the GAMEMESSAGE that signals the relevant completion. Per-room
+	 * challenges use the room banner (e.g. "Challenge complete: Kephri"); whole-raid
+	 * challenges use the KC line (e.g. "count is"). Case-insensitive match.
+	 */
+	@SerializedName("complete_message")
+	private String completeMessage;
+
+	/**
+	 * Instanced region IDs that define the fight "window" for sustained conditions.
+	 * The window opens when the player enters any of these and closes at
+	 * {@link #completeMessage}. Absent → whole-raid scope (window opens on the first
+	 * raid region seen; use for raid-wide challenges like "no supplies").
+	 */
+	@SerializedName("room_regions")
+	private List<Integer> roomRegions;
+
+	// ── Gates (checked once, at completion) ──────────────────────────────────
+	/** Minimum ToA raid/invocation level (varbit {@link #raidLevelVarbit}). */
+	@SerializedName("min_raid_level")
+	private Integer minRaidLevel;
+
+	/** Require the raid be solo (team size == 1). */
+	@SerializedName("solo")
+	private Boolean solo;
+
+	// ── Sustained conditions (any violation fails the run) ───────────────────
+	/** Player must never have run enabled (varp {@link #runVarp}) during the window. */
+	@SerializedName("no_run")
+	private Boolean noRun;
+
+	/** Weapon (equipment slot 3) must always be one of these while attacking. */
+	@SerializedName("weapon_ids")
+	private List<Integer> weaponIds;
+
+	/** These equipment slot indices must stay empty for the whole window. */
+	@SerializedName("empty_slots")
+	private List<Integer> emptySlots;
+
+	/** None of these NPCs may die during the window (e.g. Wardens' energy siphons). */
+	@SerializedName("no_npc_death_ids")
+	private List<Integer> noNpcDeathIds;
+
+	/** None of these item IDs may ever enter the inventory (e.g. raid-supplied items). */
+	@SerializedName("forbidden_item_ids")
+	private List<Integer> forbiddenItemIds;
+
+	/**
+	 * Arena bounding box in REGION-LOCAL tile coords (0–63) of {@link #roomRegions}
+	 * — the same regionX/regionY a RuneLite ground marker records. The player must
+	 * stay within [min,max] on both axes for the whole window; a step outside fails
+	 * the attempt. Only the bounds that are present are enforced.
+	 */
+	@SerializedName("arena_min_x")
+	private Integer arenaMinX;
+	@SerializedName("arena_max_x")
+	private Integer arenaMaxX;
+	@SerializedName("arena_min_y")
+	private Integer arenaMinY;
+	@SerializedName("arena_max_y")
+	private Integer arenaMaxY;
+
+	/** Reach this many CONSECUTIVE damage-free ticks in the window (Butterfly: 50 = 30s). */
+	@SerializedName("no_damage_ticks")
+	private Integer noDamageTicks;
+
+	/**
+	 * Survive this many ticks while a phase is active, to complete (enrage timers).
+	 * The phase is "active" when varbit {@code phaseVarbit} == {@code phaseValue}
+	 * (both authored + verified in-game); if no phase varbit is given, counts from
+	 * window open. 100 ticks = 60s.
+	 */
+	@SerializedName("survive_ticks")
+	private Integer surviveTicks;
+	@SerializedName("phase_varbit")
+	private Integer phaseVarbit;
+	@SerializedName("phase_value")
+	private Integer phaseValue;
+
+	/**
+	 * Attack-style purity: the combat-style varp ({@code attackStyleVarp}, default 43)
+	 * must be one of {@code attackStyleValues} whenever the player attacks. The
+	 * varp→style mapping is weapon-dependent, so the allowed value(s) are authored +
+	 * verified in-game (e.g. stab for a given weapon). Best-effort.
+	 */
+	@SerializedName("attack_style_varp")
+	private Integer attackStyleVarp;
+	@SerializedName("attack_style_values")
+	private List<Integer> attackStyleValues;
+
+	// ── Point-in-time reads (checked at completion) ──────────────────────────
+	/** Equipped + carried weight (kg) must be at least this. */
+	@SerializedName("min_weight_kg")
+	private Integer minWeightKg;
+	/** Equipped + carried weight (kg) must be at most this. */
+	@SerializedName("max_weight_kg")
+	private Integer maxWeightKg;
+	/** Total GE value of equipped gear must be below this. */
+	@SerializedName("max_gear_value")
+	private Long maxGearValue;
+
+	// ── Per-raid source overrides (default to ToA) ───────────────────────────
+	/** Varbit holding the raid/invocation level. Default 14380 (TOA_CLIENT_RAID_LEVEL). */
+	@SerializedName("raid_level_varbit")
+	private Integer raidLevelVarbit;
+	/** Party-slot varbits summed (min(v,1)) for team size. Default = ToA P0..P7. */
+	@SerializedName("party_size_varbits")
+	private List<Integer> partySizeVarbits;
+	/** Varp read for the run toggle. Default 173. */
+	@SerializedName("run_varp")
+	private Integer runVarp;
+
+	// ── Quantity (repeatable completions, e.g. "Defeat ToA (150+) 1-5 times") ──
+	/** Minimum qualifying completions required; rolled with {@link #maxQuantity}. */
+	@SerializedName("min_quantity")
+	private Integer minQuantity;
+	/** Maximum qualifying completions; the target is rolled in [min,max]. Default 1. */
+	@SerializedName("max_quantity")
+	private Integer maxQuantity;
+}

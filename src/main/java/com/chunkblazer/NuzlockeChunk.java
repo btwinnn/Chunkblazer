@@ -39,6 +39,14 @@ public class NuzlockeChunk
 	private String chunkType;
 
 	/**
+	 * For boss chunks (chunk_type "BOSS"): the stable key identifying the boss/raid
+	 * (e.g. "toa"). Used to attribute the once-per-boss completion that earns a
+	 * Boss Token, and reported to the server in the sync's bossCompletions list.
+	 */
+	@SerializedName("boss_key")
+	private String bossKey;
+
+	/**
 	 * Outbound charter/sail routes from this chunk (port-to-port). Currently
 	 * informational — parsed and held for a future travel feature; nothing reads
 	 * it yet, but keeping it modeled means the data isn't silently dropped.
@@ -92,6 +100,24 @@ public class NuzlockeChunk
 	public boolean isCharter()
 	{
 		return "CHARTER".equalsIgnoreCase(chunkType);
+	}
+
+	/**
+	 * @return true if this chunk is a boss chunk — unlocked with a Boss Token
+	 * (not points), granting every task on the chunk at once. See docs/BOSS-CHUNKS.
+	 */
+	public boolean isBoss()
+	{
+		return "BOSS".equalsIgnoreCase(chunkType);
+	}
+
+	/**
+	 * @return the boss/raid key for a boss chunk (e.g. "toa"), or null if this is
+	 * not a boss chunk / none was authored.
+	 */
+	public String getBossKey()
+	{
+		return bossKey;
 	}
 
 	@Data

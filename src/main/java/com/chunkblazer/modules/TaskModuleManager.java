@@ -67,6 +67,12 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 	private ProgressionModule progressionModule;
 
 	@Inject
+	private CombatAchievementModule combatAchievementModule;
+
+	@Inject
+	private RaidChallengeModule raidChallengeModule;
+
+	@Inject
 	public TaskModuleManager()
 	{
 	}
@@ -93,6 +99,8 @@ public class TaskModuleManager implements AbstractTaskModule.TaskCompletionCallb
 		registerModule(npcDialogueModule);
 		registerModule(questCheckModule);
 		registerModule(progressionModule);
+		registerModule(combatAchievementModule);
+		registerModule(raidChallengeModule);
 
 		// Register ObtainModule for all production-based skilling types
 		// These all work the same way - tracking items appearing in inventory

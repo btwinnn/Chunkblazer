@@ -187,6 +187,10 @@ public class ChunkBlazerPanel extends PluginPanel
 	// Tier (points) filters. 0 = All; otherwise the base_points value to match.
 	private JComboBox<String> activeTasksTierCombo;
 	private int activeTasksSelectedTier = 0;
+	// Boss-chunk task filter: when checked, show only tasks belonging to boss
+	// chunks (raids / bosses unlocked with Boss Tokens).
+	private JCheckBox activeTasksBossOnlyCheck;
+	private boolean activeTasksBossOnly = false;
 	private JComboBox<String> completedTasksTierCombo;
 	private int completedTasksSelectedTier = 0;
 
@@ -2285,6 +2289,24 @@ public class ChunkBlazerPanel extends PluginPanel
 		activeTasksFilterPanel.add(tierRow);
 		activeTasksFilterPanel.add(Box.createVerticalStrut(4));
 
+		// Boss-chunk filter — show only tasks from boss chunks (raids / bosses).
+		activeTasksBossOnlyCheck = new JCheckBox("Boss chunk tasks only");
+		activeTasksBossOnlyCheck.setFont(FontManager.getRunescapeSmallFont());
+		activeTasksBossOnlyCheck.setForeground(Color.LIGHT_GRAY);
+		activeTasksBossOnlyCheck.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		activeTasksBossOnlyCheck.setToolTipText("Show only tasks from boss chunks (raids / bosses)");
+		activeTasksBossOnlyCheck.setAlignmentX(LEFT_ALIGNMENT);
+		activeTasksBossOnlyCheck.addActionListener(e ->
+		{
+			if (!isRefreshingFilters)
+			{
+				activeTasksBossOnly = activeTasksBossOnlyCheck.isSelected();
+				updateActiveTasksDisplay();
+			}
+		});
+		activeTasksFilterPanel.add(activeTasksBossOnlyCheck);
+		activeTasksFilterPanel.add(Box.createVerticalStrut(4));
+
 		taskPanel.add(activeTasksFilterPanel);
 
 		// === SCROLLABLE TASK LIST ===
@@ -3130,6 +3152,11 @@ public class ChunkBlazerPanel extends PluginPanel
 				}
 				// Tier filter — 0 means All.
 				if (filterTier > 0 && task.getBasePoints() != filterTier)
+				{
+					return false;
+				}
+				// Boss-chunk-only filter.
+				if (activeTasksBossOnly && !plugin.isBossTask(task))
 				{
 					return false;
 				}
