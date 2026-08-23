@@ -18,11 +18,16 @@ import net.runelite.api.Player;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ActorDeath;
+import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.events.GraphicsObjectCreated;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.NpcChanged;
+import net.runelite.api.events.NpcDespawned;
+import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
@@ -93,6 +98,28 @@ public class RaidChallengeModule extends AbstractTaskModule
 
 	private final Map<String, State> states = new ConcurrentHashMap<>();
 
+	// ── ToA Wardens enrage detection ─────────────────────────────────────────
+	// There is NO varbit for the Wardens enrage/"final lightning" phase (confirmed
+	// against RuneLite + the official ToA plugin). The final Warden is NPC id
+	// 11761/11762 (Damaged==Enraged) or 11763/11764 (brief Invulnerable) — the id
+	// does NOT change when enrage begins, so we detect enrage separately:
+	//   1. the lightning GraphicsObject (enrage-only, most precise) — id unknown
+	//      until captured in-game, see WARDEN_LIGHTNING_GFX_ID + the capture logs;
+	//   2. the HP heal-spike at enrage start (near-death -> heals ~20%) — works now.
+	// The phase key "toa_wardens_enrage" on a survive_ticks task gates on this.
+	private static final String PHASE_TOA_WARDENS_ENRAGE = "toa_wardens_enrage";
+	/** Fill in once captured via the [WARDEN-GFX] logs; -1 disables the gfx trigger. */
+	private static final int WARDEN_LIGHTNING_GFX_ID = -1;
+
+	private NPC finalWarden;         // the P3+ Warden NPC while present
+	private boolean wardenEnraged;   // true once the enrage/lightning phase has begun
+	private int wardenLowestRatio = Integer.MAX_VALUE;
+
+	private static boolean isFinalWarden(int npcId)
+	{
+		return npcId >= 11761 && npcId <= 11764; // contiguous: both wardens, Damaged/Enraged/Invuln
+	}
+
 	@Inject
 	public RaidChallengeModule()
 	{
@@ -134,10 +161,23 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return;
 		}
 		State s = new State();
-		s.target = Math.max(1, rollQuantity(task.getChallenge()));
+		// Roll the quantity target ONCE, then keep it stable. This module's state is
+		// cleared and re-created on every loadActiveTasks (which runs several times a
+		// session), so re-rolling here each time made the target wander — and a re-roll
+		// landing on 1 completed a "do it N times" task after a single clear (Taylor's
+		// "assigned 2, finished after 1"). A persisted multi-count target arrives via
+		// task.getTargetQuantity() (initializeTask loads it from saved progress); reuse
+		// it instead of re-rolling. Only roll when it hasn't been rolled yet (<= 1).
+		int persistedTarget = task.getTargetQuantity();
+		s.target = persistedTarget > 1 ? persistedTarget : Math.max(1, rollQuantity(task.getChallenge()));
 		s.progress = Math.max(0, task.getCurrentProgress());
 		states.put(task.getTaskId(), s);
 		task.setTargetQuantity(s.target);
+
+		RaidChallenge ch = task.getChallenge();
+		log.debug("[RAIDCHALLENGE-DEBUG] tracking {} (msg='{}', rooms={}, minRaid={}, solo={}, target={}, satisfyTriggered={})",
+			task.getTaskId(), ch.getCompleteMessage(), ch.getRoomRegions(), ch.getMinRaidLevel(),
+			ch.getSolo(), s.target, isSatisfyTriggered(ch));
 	}
 
 	@Override
@@ -174,6 +214,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		{
 			return;
 		}
+		updateWardenEnrage(); // refresh the Wardens enrage flag before phase checks
 		int region = currentInstancedRegion();
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
@@ -189,6 +230,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				s.windowOpen = true;
 				resetAttempt(s); // fresh attempt each time the window (re)opens
+				log.debug("[RAIDCHALLENGE-DEBUG] {} window OPEN (region={}, rooms={}, raidLevel={}, team={})",
+					task.getTaskId(), region, ch.getRoomRegions(), raidLevel(ch), teamSize(ch));
 			}
 			else if (!inWin && s.windowOpen)
 			{
@@ -197,13 +240,15 @@ public class RaidChallengeModule extends AbstractTaskModule
 				// attempt's violated/accumulator flags must survive until either the
 				// message is evaluated or a new attempt opens the window again.
 				s.windowOpen = false;
+				log.debug("[RAIDCHALLENGE-DEBUG] {} window CLOSED (region={}, violated={})",
+					task.getTaskId(), region, s.violated);
 			}
 			if (!inWin)
 			{
 				continue;
 			}
 
-			sampleSustained(ch, s);
+			sampleSustained(task, ch, s);
 
 			// Satisfy-triggered accumulators.
 			if (ch.getNoDamageTicks() != null)
@@ -217,6 +262,11 @@ public class RaidChallengeModule extends AbstractTaskModule
 			if (ch.getSurviveTicks() != null && phaseActive(ch))
 			{
 				s.surviveTicks++;
+				if (s.surviveTicks % 25 == 0 || s.surviveTicks >= ch.getSurviveTicks())
+				{
+					log.debug("[RAIDCHALLENGE-DEBUG] {} survive {}/{} ticks (phase active)",
+						task.getTaskId(), s.surviveTicks, ch.getSurviveTicks());
+				}
 				if (s.surviveTicks >= ch.getSurviveTicks())
 				{
 					trySatisfy(task, ch, s);
@@ -260,8 +310,14 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				continue;
 			}
-			if (!gatesPass(ch) || s.violated || !pointInTimeOk(ch))
+			boolean gates = gatesPass(ch);
+			boolean pit = pointInTimeOk(ch);
+			log.debug("[RAIDCHALLENGE-DEBUG] {} complete-msg matched; gatesPass={} (raidLevel={} min={} team={} solo={}) violated={} pointInTime={} progress={}/{}",
+				task.getTaskId(), gates, raidLevel(ch), ch.getMinRaidLevel(), teamSize(ch), ch.getSolo(),
+				s.violated, pit, s.progress, s.target);
+			if (!gates || s.violated || !pit)
 			{
+				log.debug("[RAIDCHALLENGE-DEBUG] {} did NOT qualify this run — resetting attempt", task.getTaskId());
 				resetAttempt(s); // this run didn't qualify; try again next time
 				continue;
 			}
@@ -269,10 +325,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 			task.setCurrentProgress(s.progress);
 			if (s.progress >= s.target)
 			{
+				log.debug("[RAIDCHALLENGE-DEBUG] {} COMPLETE ({}/{})", task.getTaskId(), s.progress, s.target);
 				complete(task, s);
 			}
 			else if (completionCallback != null)
 			{
+				log.debug("[RAIDCHALLENGE-DEBUG] {} progressed to {}/{}", task.getTaskId(), s.progress, s.target);
 				completionCallback.onProgressUpdated(task, s.progress);
 			}
 			resetAttempt(s);
@@ -343,45 +401,139 @@ public class RaidChallengeModule extends AbstractTaskModule
 		}
 	}
 
+	// ── ToA Wardens enrage tracking (for phase "toa_wardens_enrage") ──────────
+
+	@Subscribe
+	public void onNpcSpawned(NpcSpawned e)
+	{
+		if (isFinalWarden(e.getNpc().getId()))
+		{
+			finalWarden = e.getNpc();
+			wardenEnraged = false;
+			wardenLowestRatio = Integer.MAX_VALUE;
+			log.debug("[WARDEN] final Warden spawned id={}", e.getNpc().getId());
+		}
+	}
+
+	@Subscribe
+	public void onNpcChanged(NpcChanged e)
+	{
+		if (isFinalWarden(e.getNpc().getId()))
+		{
+			finalWarden = e.getNpc();
+			log.debug("[WARDEN] final Warden changed id={}", e.getNpc().getId());
+		}
+	}
+
+	@Subscribe
+	public void onNpcDespawned(NpcDespawned e)
+	{
+		if (finalWarden != null && e.getNpc() == finalWarden)
+		{
+			log.debug("[WARDEN] final Warden despawned id={} (enrage window ends)", e.getNpc().getId());
+			finalWarden = null;
+			wardenEnraged = false;
+			wardenLowestRatio = Integer.MAX_VALUE;
+		}
+	}
+
+	@Subscribe
+	public void onGraphicsObjectCreated(GraphicsObjectCreated e)
+	{
+		if (finalWarden == null)
+		{
+			return;
+		}
+		int id = e.getGraphicsObject().getId();
+		// Capture aid: with the final Warden present, log gfx ids so we can identify
+		// the enrage lightning object, then set WARDEN_LIGHTNING_GFX_ID to it.
+		log.debug("[WARDEN-GFX] graphicsObjectId={}", id);
+		if (WARDEN_LIGHTNING_GFX_ID != -1 && id == WARDEN_LIGHTNING_GFX_ID)
+		{
+			wardenEnraged = true;
+		}
+	}
+
+	@Subscribe
+	public void onAnimationChanged(AnimationChanged e)
+	{
+		if (finalWarden != null && e.getActor() == finalWarden)
+		{
+			log.debug("[WARDEN-ANIM] npcId={} anim={}", finalWarden.getId(), finalWarden.getAnimation());
+		}
+	}
+
+	/**
+	 * Detect enrage from the final Warden's HP heal-spike (near-death then heals
+	 * ~20%). Works today; the gfx-object trigger above is more precise once its id
+	 * is captured. Called each tick from onGameTick.
+	 */
+	private void updateWardenEnrage()
+	{
+		if (finalWarden == null)
+		{
+			return;
+		}
+		int ratio = finalWarden.getHealthRatio();
+		int scale = finalWarden.getHealthScale();
+		if (ratio < 0 || scale <= 0)
+		{
+			return;
+		}
+		wardenLowestRatio = Math.min(wardenLowestRatio, ratio);
+		double pct = (double) ratio / scale;
+		double lowPct = (double) wardenLowestRatio / scale;
+		if (!wardenEnraged && lowPct <= 0.06 && (pct - lowPct) >= 0.10)
+		{
+			wardenEnraged = true;
+			log.debug("[WARDEN-HP] enrage detected (heal-spike): low={}% now={}%",
+				Math.round(lowPct * 100), Math.round(pct * 100));
+		}
+	}
+
 	// ── Evaluation helpers ───────────────────────────────────────────────────
 
 	/** Per-tick sustained-condition sampling; a single failure taints the attempt. */
-	private void sampleSustained(RaidChallenge ch, State s)
+	private void sampleSustained(NuzlockeTask task, RaidChallenge ch, State s)
 	{
 		if (s.violated)
 		{
 			return;
 		}
+		String why = null;
 		if (Boolean.TRUE.equals(ch.getNoRun()) && client.getVarpValue(runVarp(ch)) != 0)
 		{
-			s.violated = true;
-			return;
+			why = "run enabled (varp " + runVarp(ch) + ")";
 		}
-		if (ch.getWeaponIds() != null && !ch.getWeaponIds().contains(equippedId(3)))
+		else if (ch.getWeaponIds() != null && !ch.getWeaponIds().contains(equippedId(3)))
 		{
-			s.violated = true;
-			return;
+			why = "weapon " + equippedId(3) + " not one of " + ch.getWeaponIds();
 		}
-		if (ch.getEmptySlots() != null)
+		else if (ch.getEmptySlots() != null)
 		{
 			for (int slot : ch.getEmptySlots())
 			{
 				if (equippedId(slot) != -1)
 				{
-					s.violated = true;
-					return;
+					why = "slot " + slot + " occupied (item " + equippedId(slot) + ")";
+					break;
 				}
 			}
 		}
-		if (ch.getAttackStyleVarp() != null && ch.getAttackStyleValues() != null
+		if (why == null && ch.getAttackStyleVarp() != null && ch.getAttackStyleValues() != null
 			&& !ch.getAttackStyleValues().contains(client.getVarpValue(ch.getAttackStyleVarp())))
 		{
-			s.violated = true;
-			return;
+			why = "attack style varp=" + client.getVarpValue(ch.getAttackStyleVarp())
+				+ " not one of " + ch.getAttackStyleValues();
 		}
-		if (hasArenaBox(ch) && outsideArenaBox(ch))
+		if (why == null && hasArenaBox(ch) && outsideArenaBox(ch))
+		{
+			why = "outside arena box";
+		}
+		if (why != null)
 		{
 			s.violated = true;
+			log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: {}", task.getTaskId(), why);
 		}
 	}
 
@@ -418,10 +570,13 @@ public class RaidChallengeModule extends AbstractTaskModule
 	{
 		if (s.violated || !gatesPass(ch) || !pointInTimeOk(ch))
 		{
+			log.debug("[RAIDCHALLENGE-DEBUG] {} reached its target but did NOT qualify (violated={} gates={} pointInTime={})",
+				task.getTaskId(), s.violated, gatesPass(ch), pointInTimeOk(ch));
 			return;
 		}
 		s.progress = s.target;
 		task.setCurrentProgress(s.target);
+		log.debug("[RAIDCHALLENGE-DEBUG] {} SATISFIED -> complete", task.getTaskId());
 		complete(task, s);
 	}
 
@@ -477,12 +632,32 @@ public class RaidChallengeModule extends AbstractTaskModule
 
 	private boolean phaseActive(RaidChallenge ch)
 	{
-		if (ch.getPhaseVarbit() == null)
+		// Named phase gates first (for phases with no varbit, like the Wardens enrage).
+		String phase = ch.getPhase();
+		if (phase != null && !phase.isEmpty())
+		{
+			if (PHASE_TOA_WARDENS_ENRAGE.equalsIgnoreCase(phase))
+			{
+				return finalWarden != null && wardenEnraged;
+			}
+			return false; // unknown phase key — never active (safe)
+		}
+		Integer pv = ch.getPhaseVarbit();
+		if (pv == null)
 		{
 			return true; // no phase gate — count from window open
 		}
+		if (pv <= 0)
+		{
+			// UNVERIFIED sentinel: the real phase varbit hasn't been captured yet.
+			// Treat the phase as never active so a survive-timer can't false-complete
+			// on general room time (Mike's 150 solo completed "Stay Angry" while just
+			// in the Wardens room, because varbit 0 read nonzero). The enrage/"final
+			// lightning" phase varbit must be captured in-game and authored here.
+			return false;
+		}
 		int want = ch.getPhaseValue() != null ? ch.getPhaseValue() : 1;
-		return client.getVarbitValue(ch.getPhaseVarbit()) == want;
+		return client.getVarbitValue(pv) == want;
 	}
 
 	private int teamSize(RaidChallenge ch)
