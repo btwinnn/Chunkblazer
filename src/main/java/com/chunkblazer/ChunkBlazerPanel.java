@@ -2680,6 +2680,19 @@ public class ChunkBlazerPanel extends PluginPanel
 			TASK_TEXT_WRAP_WIDTH);
 		selectedTaskPanel.add(nameLabel);
 
+		// Description ("how to complete this"), wrapped, right under the title.
+		String selDesc = selectedTask.getDescription();
+		if (selDesc != null && !selDesc.trim().isEmpty())
+		{
+			WrappingTextLabel selDescLabel = new WrappingTextLabel(
+				selDesc.trim(),
+				FontManager.getRunescapeSmallFont(),
+				new Color(200, 200, 200),
+				TASK_TEXT_WRAP_WIDTH);
+			selDescLabel.setAlignmentX(LEFT_ALIGNMENT);
+			selectedTaskPanel.add(selDescLabel);
+		}
+
 		// Category and points
 		String info = selectedTask.getCategory() + " | " + selectedTask.getBasePoints() + " pts";
 		if (selectedTask.getLevelRequirement() > 1)
@@ -3749,6 +3762,22 @@ public class ChunkBlazerPanel extends PluginPanel
 		activeRegionLabel.setAlignmentX(LEFT_ALIGNMENT);
 		itemPanel.add(activeRegionLabel);
 
+		// Optional "how to complete this" description, wrapped. Especially useful for
+		// raid/boss tasks whose name alone doesn't spell out the requirement
+		// (e.g. "Strapped Sands" -> "less than 10m in equipped gear").
+		String activeDesc = task.getDescription();
+		if (activeDesc != null && !activeDesc.trim().isEmpty())
+		{
+			WrappingTextLabel descLabel = new WrappingTextLabel(
+				activeDesc.trim(),
+				FontManager.getRunescapeSmallFont(),
+				new Color(185, 185, 185),
+				TASK_TEXT_WRAP_WIDTH);
+			descLabel.setAlignmentX(LEFT_ALIGNMENT);
+			itemPanel.add(Box.createVerticalStrut(2));
+			itemPanel.add(descLabel);
+		}
+
 		// Progress bar row
 		int progress = task.getCurrentProgress();
 		int target = task.getTargetQuantity();
@@ -4033,6 +4062,22 @@ public class ChunkBlazerPanel extends PluginPanel
 			new Color(100, 200, 100),
 			TASK_TEXT_WRAP_WIDTH);
 		itemPanel.add(nameLabel);
+
+		// Description ("what this task was"), looked up from the catalog by id since
+		// the completed-task record itself doesn't carry it. Skipped for tasks the
+		// catalog no longer knows (getTaskById == null).
+		NuzlockeTask completedDef = info.getTaskId() != null ? plugin.getTaskById(info.getTaskId()) : null;
+		String completedDesc = completedDef != null ? completedDef.getDescription() : null;
+		if (completedDesc != null && !completedDesc.trim().isEmpty())
+		{
+			WrappingTextLabel completedDescLabel = new WrappingTextLabel(
+				completedDesc.trim(),
+				FontManager.getRunescapeSmallFont(),
+				new Color(170, 170, 170),
+				TASK_TEXT_WRAP_WIDTH);
+			completedDescLabel.setAlignmentX(LEFT_ALIGNMENT);
+			itemPanel.add(completedDescLabel);
+		}
 
 		// Info line: Category | Points
 		String infoText = info.getCategory() + "  +" + info.getPoints() + " pts";
