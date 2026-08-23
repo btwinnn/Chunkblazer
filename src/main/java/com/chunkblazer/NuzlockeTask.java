@@ -19,6 +19,13 @@ public class NuzlockeTask
 
 	private String category;
 
+	/**
+	 * Optional human-readable "how to complete this" blurb shown on the task card.
+	 * Authored in the catalog; especially useful for raid/boss tasks whose name
+	 * alone doesn't spell out the requirement (e.g. "Strapped Sands").
+	 */
+	private String description;
+
 	@SerializedName("completion_type")
 	private String completionType;
 
@@ -184,6 +191,7 @@ public class NuzlockeTask
 			task.setName(getStringOrNull(obj, "name"));
 			task.setTaskId(getStringOrNull(obj, "taskID"));
 			task.setCategory(getStringOrNull(obj, "category"));
+			task.setDescription(getStringOrNull(obj, "description"));
 			task.setCompletionType(getStringOrNull(obj, "completion_type"));
 
 			// Integer fields (with null checks)

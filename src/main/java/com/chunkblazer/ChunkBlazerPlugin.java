@@ -1224,7 +1224,14 @@ public class ChunkBlazerPlugin extends Plugin
 						// Add chunks and build mappings
 						for (NuzlockeChunk chunk : chunks)
 						{
-							chunk.setArea(areaName);
+							// Area is normally derived from the filename, but a chunk may
+							// declare its own "area" in JSON to file it under a real region
+							// instead of its source file — e.g. the ToA boss chunk lives in
+							// Boss_Tasks.json but belongs to the Desert for the area filter.
+							if (chunk.getArea() == null || chunk.getArea().isEmpty())
+							{
+								chunk.setArea(areaName);
+							}
 							allChunks.add(chunk);
 							if (chunk.getRegionIds() != null)
 							{
