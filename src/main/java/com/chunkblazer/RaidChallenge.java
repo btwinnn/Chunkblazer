@@ -154,14 +154,27 @@ public class RaidChallenge
 	private List<Integer> attackStyleValues;
 
 	/**
-	 * "Kill this NPC with melee STAB only." Every hit the LOCAL player lands on any
-	 * NPC in this list must be a stab-melee attack, or the run fails. Unlike the
-	 * continuous {@code attackStyleVarp} check, this is evaluated ONLY when a hitsplat
-	 * from the player lands on one of these NPCs — so switching to a ranged weapon to
-	 * hit a different target (e.g. shooting the jug at Zebak) never trips it. The stab
-	 * determination reads the equipped-weapon-type varbit + attack-style varp; the
-	 * module logs the raw values ([ZEBAK-STAB-DEBUG]) so the mapping can be verified.
+	 * NPCs whose hits from the LOCAL player are gated on {@link #requiredAttackStyle}.
+	 * Every hit you land on one of these NPCs must use that damage style, or the run
+	 * fails. Evaluated ONLY on hitsplats to these NPCs — so switching weapons for a
+	 * side target (e.g. shooting a Zebak jug with a ranged weapon) never trips it.
+	 * The active style is derived from the equipped-weapon-type varbit + attack-style
+	 * varp; the module logs the resolved style ([STYLE-DEBUG]) so the weapon table
+	 * can be verified/extended.
 	 */
+	@SerializedName("style_target_ids")
+	private List<Integer> styleTargetIds;
+
+	/**
+	 * Damage style every hit on {@link #styleTargetIds} must use: {@code STAB},
+	 * {@code SLASH}, {@code CRUSH}, {@code RANGED}, or {@code MAGIC}. Defaults to
+	 * {@code STAB} when a target list is present but this is unset.
+	 */
+	@SerializedName("required_attack_style")
+	private String requiredAttackStyle;
+
+	/** @deprecated legacy name for {@link #styleTargetIds}; still parsed so old catalogs load. */
+	@Deprecated
 	@SerializedName("stab_target_ids")
 	private List<Integer> stabTargetIds;
 
