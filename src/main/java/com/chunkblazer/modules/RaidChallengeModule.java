@@ -98,6 +98,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		int progress;           // qualifying completions so far
 		int target = 1;         // completions required (rolled from quantity range)
 		boolean satisfyFailTold; // satisfy-triggered gate failure already announced this attempt
+		final Set<Integer> obtainedIds = new HashSet<>(); // obtain_all: required items seen this window
 	}
 
 	private final Map<String, State> states = new ConcurrentHashMap<>();
@@ -190,6 +191,14 @@ public class RaidChallengeModule extends AbstractTaskModule
 		int persistedTarget = task.getTargetQuantity();
 		s.target = persistedTarget > 1 ? persistedTarget : Math.max(1, rollQuantity(task.getChallenge()));
 		s.progress = Math.max(0, task.getCurrentProgress());
+		// obtain_all: the target is simply "how many distinct items to collect", and
+		// progress lives only within a single raid window (supplies vanish on exit),
+		// so it never carries a persisted count.
+		if (task.getChallenge().getObtainAllItemIds() != null && !task.getChallenge().getObtainAllItemIds().isEmpty())
+		{
+			s.target = task.getChallenge().getObtainAllItemIds().size();
+			s.progress = 0;
+		}
 		states.put(task.getTaskId(), s);
 		task.setTargetQuantity(s.target);
 
@@ -569,22 +578,58 @@ public class RaidChallengeModule extends AbstractTaskModule
 		{
 			return;
 		}
-		for (NuzlockeTask task : activeTasks)
+		Item[] items = e.getItemContainer().getItems();
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			RaidChallenge ch = task.getChallenge();
 			State s = states.get(task.getTaskId());
-			if (ch == null || s == null || !s.windowOpen || s.violated || ch.getForbiddenItemIds() == null)
+			if (ch == null || s == null || !s.windowOpen || s.violated)
 			{
 				continue;
 			}
-			for (Item it : e.getItemContainer().getItems())
+
+			// Forbidden items -> the run no longer counts.
+			if (ch.getForbiddenItemIds() != null)
 			{
-				if (it != null && ch.getForbiddenItemIds().contains(it.getId()))
+				for (Item it : items)
 				{
-					s.violated = true; // took a raid-supplied item
-					log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: forbidden item {} in inventory", task.getTaskId(), it.getId());
-					announceFailure(task, "You picked up an item that isn't allowed for this challenge.");
-					break;
+					if (it != null && ch.getForbiddenItemIds().contains(it.getId()))
+					{
+						s.violated = true; // took a raid-supplied item
+						log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: forbidden item {} in inventory", task.getTaskId(), it.getId());
+						announceFailure(task, "You picked up an item that isn't allowed for this challenge.");
+						break;
+					}
+				}
+			}
+
+			// obtain_all: mark each required item seen this window; complete when the
+			// full set has been collected within the one raid.
+			if (!s.violated && ch.getObtainAllItemIds() != null && !ch.getObtainAllItemIds().isEmpty())
+			{
+				boolean changed = false;
+				for (Item it : items)
+				{
+					if (it != null && ch.getObtainAllItemIds().contains(it.getId()) && s.obtainedIds.add(it.getId()))
+					{
+						changed = true;
+					}
+				}
+				if (changed)
+				{
+					s.progress = s.obtainedIds.size();
+					task.setCurrentProgress(s.progress);
+					log.debug("[RAIDCHALLENGE-DEBUG] {} obtain-all {}/{} (have {})",
+						task.getTaskId(), s.obtainedIds.size(), ch.getObtainAllItemIds().size(), s.obtainedIds);
+					if (s.obtainedIds.size() >= ch.getObtainAllItemIds().size())
+					{
+						trySatisfy(task, ch, s);
+					}
+					else if (completionCallback != null)
+					{
+						completionCallback.onProgressUpdated(task, s.progress);
+						sendProgress(task, s.progress, s.target);
+					}
 				}
 			}
 		}
@@ -798,7 +843,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 
 	private boolean isSatisfyTriggered(RaidChallenge ch)
 	{
-		return ch.getNoDamageTicks() != null || ch.getSurviveTicks() != null;
+		return ch.getNoDamageTicks() != null || ch.getSurviveTicks() != null
+			|| (ch.getObtainAllItemIds() != null && !ch.getObtainAllItemIds().isEmpty());
 	}
 
 	private void complete(NuzlockeTask task, State s)
@@ -823,6 +869,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		s.damageFreeTicks = 0;
 		s.surviveTicks = 0;
 		s.satisfyFailTold = false;
+		s.obtainedIds.clear();
 	}
 
 	// ── Raw reads ────────────────────────────────────────────────────────────

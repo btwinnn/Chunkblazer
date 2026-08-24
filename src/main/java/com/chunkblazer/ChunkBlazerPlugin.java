@@ -2695,6 +2695,15 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("toa");
 		}
+		// Chambers of Xeric completion. The KC line ("Your completed Chambers of Xeric
+		// count is: N") and the raid-complete banner ("Congratulations - your raid is
+		// complete!") both fire on a finished CoX; either grants the token. NOTE: verify
+		// the exact wording in-game — see docs/BOSS-CHUNKS.md capture note.
+		else if ((plain.contains("chambers of xeric") && plain.contains("count is"))
+			|| plain.contains("your raid is complete"))
+		{
+			recordBossCompletion("cox");
+		}
 	}
 
 	/**

@@ -178,6 +178,17 @@ public class RaidChallenge
 	@SerializedName("stab_target_ids")
 	private List<Integer> stabTargetIds;
 
+	/**
+	 * "Obtain ALL of these item ids within a single raid." Satisfy-triggered: the
+	 * task completes the moment every listed item has been seen in the inventory
+	 * during one fight window, and progress resets when a new raid begins. Use for
+	 * in-raid crafting goals whose supplies are destroyed on exit — e.g. CoX's
+	 * "mix these four (+) potions in the same raid" — where the same-raid constraint
+	 * can't be met by a plain OBTAIN set (which counts across raids).
+	 */
+	@SerializedName("obtain_all_item_ids")
+	private List<Integer> obtainAllItemIds;
+
 	// ── Point-in-time reads (checked at completion) ──────────────────────────
 	/** Equipped + carried weight (kg) must be at least this. */
 	@SerializedName("min_weight_kg")
