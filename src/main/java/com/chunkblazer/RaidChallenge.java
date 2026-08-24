@@ -93,6 +93,30 @@ public class RaidChallenge
 	@SerializedName("arena_max_y")
 	private Integer arenaMaxY;
 
+	/**
+	 * Additional valid arena rectangles (region-local tile coords, 0–63), for when the
+	 * legal fight area isn't one clean rectangle — e.g. Ba-Ba's floor PLUS the raised
+	 * platform you stand on. The valid area is the UNION of the single box above and
+	 * every box here: the player is only "outside the arena" when they're outside ALL
+	 * of them. Each box is just four bounds (min/max x/y) — no per-tile lists — and
+	 * enforces only the bounds it sets (absent bound = unbounded on that side).
+	 */
+	@SerializedName("arena_boxes")
+	private List<ArenaBox> arenaBoxes;
+
+	@lombok.Data
+	public static class ArenaBox
+	{
+		@SerializedName("min_x")
+		private Integer minX;
+		@SerializedName("max_x")
+		private Integer maxX;
+		@SerializedName("min_y")
+		private Integer minY;
+		@SerializedName("max_y")
+		private Integer maxY;
+	}
+
 	/** Reach this many CONSECUTIVE damage-free ticks in the window (Butterfly: 50 = 30s). */
 	@SerializedName("no_damage_ticks")
 	private Integer noDamageTicks;
@@ -128,6 +152,18 @@ public class RaidChallenge
 	private Integer attackStyleVarp;
 	@SerializedName("attack_style_values")
 	private List<Integer> attackStyleValues;
+
+	/**
+	 * "Kill this NPC with melee STAB only." Every hit the LOCAL player lands on any
+	 * NPC in this list must be a stab-melee attack, or the run fails. Unlike the
+	 * continuous {@code attackStyleVarp} check, this is evaluated ONLY when a hitsplat
+	 * from the player lands on one of these NPCs — so switching to a ranged weapon to
+	 * hit a different target (e.g. shooting the jug at Zebak) never trips it. The stab
+	 * determination reads the equipped-weapon-type varbit + attack-style varp; the
+	 * module logs the raw values ([ZEBAK-STAB-DEBUG]) so the mapping can be verified.
+	 */
+	@SerializedName("stab_target_ids")
+	private List<Integer> stabTargetIds;
 
 	// ── Point-in-time reads (checked at completion) ──────────────────────────
 	/** Equipped + carried weight (kg) must be at least this. */
