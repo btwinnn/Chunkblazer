@@ -122,6 +122,16 @@ public class RaidChallengeModule extends AbstractTaskModule
 	private boolean wardenEnraged;   // true once the enrage/lightning phase has begun
 	private int wardenLowestRatio = Integer.MAX_VALUE;
 
+	// Chat-spam guard: a task's failure line is announced AT MOST ONCE per raid.
+	// Without this, re-entering a room (per-room challenges reset their attempt each
+	// time the window reopens) or the every-tick re-check would re-print the same
+	// "Challenge Failed" line over and over within a single raid. The set of already-
+	// announced taskIds is cleared only when a NEW raid begins — detected as the
+	// raid-level going from "no raid" to "in a raid" — so it survives room changes
+	// and task-state rebuilds mid-raid but resets cleanly for the next attempt.
+	private final Set<String> failureAnnouncedThisRaid = new HashSet<>();
+	private boolean wasInRaid;
+
 	private static boolean isFinalWarden(int npcId)
 	{
 		return npcId >= 11761 && npcId <= 11764; // contiguous: both wardens, Damaged/Enraged/Invuln
@@ -149,6 +159,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 	{
 		eventBus.unregister(this);
 		states.clear();
+		failureAnnouncedThisRaid.clear();
+		wasInRaid = false;
 	}
 
 	@Override
@@ -192,6 +204,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 	{
 		super.onTaskCleared();
 		states.clear();
+		failureAnnouncedThisRaid.clear();
+		wasInRaid = false;
 	}
 
 	@Override
@@ -222,6 +236,17 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return;
 		}
 		updateWardenEnrage(); // refresh the Wardens enrage flag before phase checks
+
+		// New-raid edge: when the player goes from not-in-a-raid to in-a-raid, forget
+		// which failures were announced so the next raid can report fresh (see
+		// failureAnnouncedThisRaid). Stays set for the whole raid across room changes.
+		boolean inRaid = anyActiveTaskInRaid();
+		if (inRaid && !wasInRaid)
+		{
+			failureAnnouncedThisRaid.clear();
+		}
+		wasInRaid = inRaid;
+
 		int region = currentInstancedRegion();
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
@@ -329,7 +354,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 				// announce the point-in-time / gate reason when nothing was flagged yet.
 				if (!s.violated)
 				{
-					sendFailure(task, gateFailReason(ch, pit));
+					announceFailure(task, gateFailReason(ch, pit));
 				}
 				resetAttempt(s); // this run didn't qualify; try again next time
 				continue;
@@ -404,7 +429,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 				s.violated = true;
 				log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: hit NPC {} with {} (needs {})",
 					task.getTaskId(), npcId, current, required);
-				sendFailure(task, "You hit this boss with a " + current.label()
+				announceFailure(task, "You hit this boss with a " + current.label()
 					+ " attack — " + required.label() + " only.");
 			}
 		}
@@ -532,7 +557,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				s.violated = true; // a protected NPC died (e.g. an energy siphon)
 				log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: protected NPC {} died", task.getTaskId(), id);
-				sendFailure(task, "A protected NPC was killed — this run no longer counts.");
+				announceFailure(task, "A protected NPC was killed — this run no longer counts.");
 			}
 		}
 	}
@@ -558,7 +583,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 				{
 					s.violated = true; // took a raid-supplied item
 					log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: forbidden item {} in inventory", task.getTaskId(), it.getId());
-					sendFailure(task, "You picked up an item that isn't allowed for this challenge.");
+					announceFailure(task, "You picked up an item that isn't allowed for this challenge.");
 					break;
 				}
 			}
@@ -716,7 +741,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		{
 			s.violated = true;
 			log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: {}", task.getTaskId(), why);
-			sendFailure(task, reason);
+			announceFailure(task, reason);
 		}
 	}
 
@@ -761,7 +786,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			if (!s.violated && !s.satisfyFailTold)
 			{
 				s.satisfyFailTold = true;
-				sendFailure(task, gateFailReason(ch, pit));
+				announceFailure(task, gateFailReason(ch, pit));
 			}
 			return;
 		}
@@ -1067,6 +1092,32 @@ public class RaidChallengeModule extends AbstractTaskModule
 			.type(ChatMessageType.GAMEMESSAGE)
 			.value(message)
 			.build());
+	}
+
+	/** True if the player is currently inside a raid for any active challenge. */
+	private boolean anyActiveTaskInRaid()
+	{
+		for (NuzlockeTask task : activeTasks)
+		{
+			if (task.getChallenge() != null && raidLevel(task.getChallenge()) > 0)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Announce a task's failure, but only ONCE per raid — repeat violations of the
+	 * same task in the same raid (room re-entries, per-tick re-checks) stay silent so
+	 * the chatbox isn't spammed. The set is cleared when a fresh raid starts.
+	 */
+	private void announceFailure(NuzlockeTask task, String reason)
+	{
+		if (failureAnnouncedThisRaid.add(task.getTaskId()))
+		{
+			sendFailure(task, reason);
+		}
 	}
 
 	/**
