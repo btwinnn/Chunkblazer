@@ -230,14 +230,13 @@ public interface ChunkBlazerConfig extends Config
 		return "https://api.chunkblazer.com";
 	}
 
-	@ConfigItem(
-		keyName = "apiEnabled",
-		name = "Enable Server Verification",
-		description = "We send your character's API data to the server to track and save your progress. "
-			+ "Turn this off to play fully offline (leaderboards and player discovery will be unavailable).",
-		section = apiSection,
-		position = 1
-	)
+	/**
+	 * Server verification is ALWAYS ON — the toggle was removed from the config so it
+	 * can't be switched off. Left as a plain (non-@ConfigItem) constant so the many
+	 * {@code config.apiEnabled()} call sites keep compiling and always read true. With
+	 * no @ConfigItem there is no stored key, so any stale "apiEnabled=false" from an
+	 * older build is ignored and the account still syncs.
+	 */
 	default boolean apiEnabled()
 	{
 		return true;
@@ -467,8 +466,9 @@ public interface ChunkBlazerConfig extends Config
 
 	@ConfigItem(
 		keyName = "showOtherPlayers",
-		name = "Show Other Players",
-		description = "Display an icon and info above other ChunkBlazer players in-game",
+		name = "Show General Info",
+		description = "Show an icon and general info (e.g. account type and mode, like \"Main Casual\") "
+			+ "above other ChunkBlazer players in-game.",
 		section = playerDiscoverySection,
 		position = 0
 	)
