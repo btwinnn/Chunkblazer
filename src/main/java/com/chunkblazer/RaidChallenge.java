@@ -153,6 +153,18 @@ public class RaidChallenge
 	@SerializedName("attack_style_values")
 	private List<Integer> attackStyleValues;
 
+	/**
+	 * "Kill this NPC with melee STAB only." Every hit the LOCAL player lands on any
+	 * NPC in this list must be a stab-melee attack, or the run fails. Unlike the
+	 * continuous {@code attackStyleVarp} check, this is evaluated ONLY when a hitsplat
+	 * from the player lands on one of these NPCs — so switching to a ranged weapon to
+	 * hit a different target (e.g. shooting the jug at Zebak) never trips it. The stab
+	 * determination reads the equipped-weapon-type varbit + attack-style varp; the
+	 * module logs the raw values ([ZEBAK-STAB-DEBUG]) so the mapping can be verified.
+	 */
+	@SerializedName("stab_target_ids")
+	private List<Integer> stabTargetIds;
+
 	// ── Point-in-time reads (checked at completion) ──────────────────────────
 	/** Equipped + carried weight (kg) must be at least this. */
 	@SerializedName("min_weight_kg")

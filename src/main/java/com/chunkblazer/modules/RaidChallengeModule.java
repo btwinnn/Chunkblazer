@@ -350,18 +350,90 @@ public class RaidChallengeModule extends AbstractTaskModule
 	@Subscribe
 	public void onHitsplatApplied(HitsplatApplied e)
 	{
-		if (activeTasks.isEmpty() || e.getActor() != client.getLocalPlayer())
+		if (activeTasks.isEmpty())
 		{
 			return;
 		}
-		// Any damage on the local player breaks a "no damage for N ticks" streak.
-		for (NuzlockeTask task : activeTasks)
+
+		// (a) Damage on the LOCAL PLAYER breaks a "no damage for N ticks" streak.
+		if (e.getActor() == client.getLocalPlayer())
 		{
-			State s = states.get(task.getTaskId());
-			if (s != null && s.windowOpen)
+			for (NuzlockeTask task : activeTasks)
 			{
-				s.damageFreeTicks = 0;
+				State s = states.get(task.getTaskId());
+				if (s != null && s.windowOpen)
+				{
+					s.damageFreeTicks = 0;
+				}
 			}
+			return;
+		}
+
+		// (b) Damage the LOCAL PLAYER deals to a watched NPC (stab-only challenges).
+		// A stab_target NPC must only ever be hit by us with a stab-melee attack.
+		if (!(e.getActor() instanceof NPC) || e.getHitsplat() == null || e.getHitsplat().isOthers())
+		{
+			return; // not our splat (someone else's / non-player source)
+		}
+		int npcId = ((NPC) e.getActor()).getId();
+		boolean stab = isStabMeleeAttack();
+		boolean anyStabTaskWatchesThis = false;
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
+		{
+			RaidChallenge ch = task.getChallenge();
+			State s = states.get(task.getTaskId());
+			if (ch == null || s == null || !s.windowOpen || s.violated
+				|| ch.getStabTargetIds() == null || !ch.getStabTargetIds().contains(npcId))
+			{
+				continue;
+			}
+			anyStabTaskWatchesThis = true;
+			if (!stab)
+			{
+				s.violated = true;
+				log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: non-stab hit on NPC {}", task.getTaskId(), npcId);
+				sendFailure(task, "You hit this boss with a non-stab attack — melee stab only.");
+			}
+		}
+		if (anyStabTaskWatchesThis)
+		{
+			// Capture aid: confirm/expand the stab mapping against real weapons.
+			log.debug("[ZEBAK-STAB-DEBUG] hit npc={} weaponType={} attackStyleVarp={} -> stab={}",
+				npcId, client.getVarbitValue(EQUIPPED_WEAPON_TYPE_VARBIT),
+				client.getVarpValue(ATTACK_STYLE_VARP), stab);
+		}
+	}
+
+	// EQUIPPED_WEAPON_TYPE varbit (357) + ATTACK_STYLE varp (43) together fix the
+	// current combat style; neither alone is enough (the varp is just a 0–3 index
+	// whose meaning depends on the weapon type).
+	private static final int EQUIPPED_WEAPON_TYPE_VARBIT = 357;
+	private static final int ATTACK_STYLE_VARP = 43;
+
+	/**
+	 * True if the player's CURRENTLY selected attack is a melee STAB. Resolves the
+	 * equipped-weapon-type varbit + attack-style index against the weapon types whose
+	 * selected option is stab. Best-effort and verified via [ZEBAK-STAB-DEBUG] logs;
+	 * non-melee weapon types (bows, crossbows, staves, etc.) are never stab.
+	 */
+	private boolean isStabMeleeAttack()
+	{
+		int weaponType = client.getVarbitValue(EQUIPPED_WEAPON_TYPE_VARBIT);
+		int style = client.getVarpValue(ATTACK_STYLE_VARP); // 0..3, weapon-dependent
+		switch (weaponType)
+		{
+			// Stab-primary melee: dagger / stab-sword (Fang, rapier), spear, hasta,
+			// pickaxe — their "Accurate/Lunge" first option is Stab.
+			case 1:  // POINTED (dagger / stab sword: Stab, Slash, ...)
+			case 12: // SPEAR (Lunge=Stab, Swipe, Pound, Block=Stab)
+			case 13: // PICKAXE (Spike=Stab, Impale=Stab, Smash, Block)
+				return style == 0 || (weaponType != 1 && style == 3);
+			// Slash-primary swords/claws/scythes: their STAB option is index 2 (Lunge).
+			case 9:  // SLASH_SWORD (Chop, Slash, Lunge=Stab, Block)
+			case 4:  // CLAWS (Chop, Slash, Lunge=Stab, Block)
+				return style == 2;
+			default:
+				return false; // 2h swords/blunt/axe/whip = no stab; ranged/magic = not melee
 		}
 	}
 
