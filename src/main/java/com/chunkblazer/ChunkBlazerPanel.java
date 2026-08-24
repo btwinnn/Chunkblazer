@@ -253,9 +253,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private JPanel createMainPanel()
 	{
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.setBackground(ColorScheme.DARK_GRAY_COLOR);
+		JPanel mainPanel = boxPanel(ColorScheme.DARK_GRAY_COLOR);
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		// Header Section (fixed size - don't use setupSectionPanel)
@@ -377,6 +375,71 @@ public class ChunkBlazerPanel extends PluginPanel
 		return d;
 	}
 
+	// --- Swing factory helpers -----------------------------------------------
+	// Small builders that collapse the repeated "new component, set font, set
+	// colour, add" boilerplate. Pure convenience — they set exactly the same
+	// properties the inline code used to, in the same order.
+
+	/**
+	 * Create a JLabel with the given font and colour. Does NOT set alignment or
+	 * add it anywhere — for labels added with a layout constraint, stored in a
+	 * field, or needing extra config before they go into their parent.
+	 */
+	private JLabel styledLabel(String text, Font font, Color fg)
+	{
+		JLabel label = new JLabel(text);
+		label.setFont(font);
+		label.setForeground(fg);
+		return label;
+	}
+
+	/**
+	 * Create a left-aligned JLabel (font + colour + LEFT_ALIGNMENT), add it to
+	 * {@code parent}, and return it — the common BoxLayout section-label pattern.
+	 */
+	private JLabel addLabel(JPanel parent, String text, Font font, Color fg)
+	{
+		JLabel label = styledLabel(text, font, fg);
+		label.setAlignmentX(LEFT_ALIGNMENT);
+		parent.add(label);
+		return label;
+	}
+
+	/**
+	 * Create a JPanel with the given layout manager and background colour.
+	 */
+	private JPanel styledPanel(java.awt.LayoutManager layout, Color bg)
+	{
+		JPanel panel = new JPanel(layout);
+		panel.setBackground(bg);
+		return panel;
+	}
+
+	/**
+	 * Create a vertical (Y_AXIS BoxLayout) JPanel with the given background.
+	 */
+	private JPanel boxPanel(Color bg)
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBackground(bg);
+		return panel;
+	}
+
+	/**
+	 * Create a standard action button: bold RuneScape font, white text on the
+	 * given background, no focus ring. Caller wires the listener and adds it.
+	 */
+	private JButton actionButton(String text, Color bg)
+	{
+		JButton button = new JButton(text);
+		button.setFont(FontManager.getRunescapeBoldFont());
+		button.setBackground(bg);
+		button.setForeground(Color.WHITE);
+		button.setFocusPainted(false);
+		return button;
+	}
+
 	/**
 	 * Small triangle icon for collapse toggles — drawn rather than using a unicode
 	 * arrow glyph (which renders as a tofu box / "X" in the button font). Points
@@ -482,19 +545,13 @@ public class ChunkBlazerPanel extends PluginPanel
 	 */
 	private JPanel createVerificationSection()
 	{
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBackground(new Color(60, 45, 18)); // dark amber
+		JPanel panel = boxPanel(new Color(60, 45, 18)); // dark amber
 		panel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(new Color(230, 170, 50), 2),
 			new EmptyBorder(8, 8, 8, 8)
 		));
 
-		JLabel title = new JLabel("Verify Your Account");
-		title.setFont(FontManager.getRunescapeBoldFont());
-		title.setForeground(new Color(255, 190, 60));
-		title.setAlignmentX(LEFT_ALIGNMENT);
-		panel.add(title);
+		addLabel(panel, "Verify Your Account", FontManager.getRunescapeBoldFont(), new Color(255, 190, 60));
 		panel.add(Box.createVerticalStrut(5));
 
 		WrappingTextLabel body = new WrappingTextLabel(
@@ -505,11 +562,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(body);
 		panel.add(Box.createVerticalStrut(6));
 
-		verificationCodeLabel = new JLabel(" ");
-		verificationCodeLabel.setFont(FontManager.getRunescapeBoldFont().deriveFont(24f));
-		verificationCodeLabel.setForeground(new Color(120, 230, 120));
-		verificationCodeLabel.setAlignmentX(LEFT_ALIGNMENT);
-		panel.add(verificationCodeLabel);
+		verificationCodeLabel = addLabel(panel, " ",
+			FontManager.getRunescapeBoldFont().deriveFont(24f), new Color(120, 230, 120));
 
 		return panel;
 	}
@@ -571,14 +625,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		row.setAlignmentX(LEFT_ALIGNMENT);
 		row.setMaximumSize(new Dimension(PANEL_WIDTH, 16));
 
-		JLabel note = new JLabel("Progress synced to");
-		note.setFont(FontManager.getRunescapeSmallFont());
-		note.setForeground(ColorScheme.LIGHT_GRAY_COLOR);
-		row.add(note);
+		row.add(styledLabel("Progress synced to", FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR));
 
-		JLabel site = new JLabel("chunkblazer.com");
-		site.setFont(FontManager.getRunescapeSmallFont());
-		site.setForeground(new Color(255, 152, 0));
+		JLabel site = styledLabel("chunkblazer.com", FontManager.getRunescapeSmallFont(), new Color(255, 152, 0));
 		site.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
 		site.setToolTipText("Track your account progress at chunkblazer.com");
 		site.addMouseListener(new java.awt.event.MouseAdapter()
@@ -591,9 +640,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		});
 		row.add(site);
 
-		JLabel info = new JLabel("(?)"); // ASCII — Runescape font lacks a circled-i glyph
-		info.setFont(FontManager.getRunescapeSmallFont());
-		info.setForeground(ColorScheme.LIGHT_GRAY_COLOR);
+		// ASCII "(?)" — Runescape font lacks a circled-i glyph
+		JLabel info = styledLabel("(?)", FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR);
 		info.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
 		info.setToolTipText("How your data is used");
 		info.addMouseListener(new java.awt.event.MouseAdapter()
@@ -654,9 +702,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private JPanel createCompletedTasksSection()
 	{
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel panel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		panel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(new Color(100, 100, 180)),
 			new EmptyBorder(6, 6, 6, 6)
@@ -664,16 +710,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.setAlignmentX(LEFT_ALIGNMENT);
 
 		// Header row with toggle button
-		JPanel headerRow = new JPanel(new BorderLayout(5, 0));
-		headerRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel headerRow = styledPanel(new BorderLayout(5, 0), ColorScheme.DARKER_GRAY_COLOR);
 		headerRow.setAlignmentX(LEFT_ALIGNMENT);
 		headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
 		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
 
-		JLabel sectionTitle = new JLabel("Completed Tasks");
-		sectionTitle.setFont(FontManager.getRunescapeBoldFont());
-		sectionTitle.setForeground(new Color(100, 255, 100));
-		headerRow.add(sectionTitle, BorderLayout.WEST);
+		headerRow.add(styledLabel("Completed Tasks", FontManager.getRunescapeBoldFont(), new Color(100, 255, 100)), BorderLayout.WEST);
 
 		completedTasksToggle = new JToggleButton();
 		setToggleArrow(completedTasksToggle, completedTasksExpanded);
@@ -694,25 +736,19 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(Box.createVerticalStrut(5));
 
 		// Filter panel (visible when expanded)
-		completedTasksFilterPanel = new JPanel();
-		completedTasksFilterPanel.setLayout(new BoxLayout(completedTasksFilterPanel, BoxLayout.Y_AXIS));
-		completedTasksFilterPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		completedTasksFilterPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		completedTasksFilterPanel.setAlignmentX(LEFT_ALIGNMENT);
 		completedTasksFilterPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 185));
 		completedTasksFilterPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 185));
 		completedTasksFilterPanel.setVisible(false);
 
 		// Search text field
-		JPanel searchRow = new JPanel(new BorderLayout(5, 0));
-		searchRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel searchRow = styledPanel(new BorderLayout(5, 0), ColorScheme.DARKER_GRAY_COLOR);
 		searchRow.setAlignmentX(LEFT_ALIGNMENT);
 		searchRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
 		searchRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
 
-		JLabel searchLabel = new JLabel("Search:");
-		searchLabel.setFont(FontManager.getRunescapeSmallFont());
-		searchLabel.setForeground(Color.LIGHT_GRAY);
-		searchRow.add(searchLabel, BorderLayout.WEST);
+		searchRow.add(styledLabel("Search:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.WEST);
 
 		completedTasksSearchField = new JTextField();
 		completedTasksSearchField.setToolTipText("Search tasks by name");
@@ -740,16 +776,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		completedTasksFilterPanel.add(Box.createVerticalStrut(5));
 
 		// Area filter — broadest cut (Misthalin / Asgarnia / Zeah / ...).
-		JPanel areaRow = new JPanel(new BorderLayout(2, 0));
-		areaRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel areaRow = styledPanel(new BorderLayout(2, 0), ColorScheme.DARKER_GRAY_COLOR);
 		areaRow.setAlignmentX(LEFT_ALIGNMENT);
 		areaRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 45));
 		areaRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 45));
 
-		JLabel areaLabel = new JLabel("Area:");
-		areaLabel.setFont(FontManager.getRunescapeSmallFont());
-		areaLabel.setForeground(Color.LIGHT_GRAY);
-		areaRow.add(areaLabel, BorderLayout.NORTH);
+		areaRow.add(styledLabel("Area:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.NORTH);
 
 		areaFilterCombo = new JComboBox<>(new String[]{"All"});
 		areaFilterCombo.setFont(FontManager.getRunescapeSmallFont());
@@ -768,20 +800,15 @@ public class ChunkBlazerPanel extends PluginPanel
 		completedTasksFilterPanel.add(Box.createVerticalStrut(5));
 
 		// Category and Region filter row
-		JPanel filterRow = new JPanel(new GridLayout(1, 2, 5, 0));
-		filterRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel filterRow = styledPanel(new GridLayout(1, 2, 5, 0), ColorScheme.DARKER_GRAY_COLOR);
 		filterRow.setAlignmentX(LEFT_ALIGNMENT);
 		filterRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 50));
 		filterRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 50));
 
 		// Category filter
-		JPanel categoryPanel = new JPanel(new BorderLayout(2, 0));
-		categoryPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel categoryPanel = styledPanel(new BorderLayout(2, 0), ColorScheme.DARKER_GRAY_COLOR);
 
-		JLabel catLabel = new JLabel("Category:");
-		catLabel.setFont(FontManager.getRunescapeSmallFont());
-		catLabel.setForeground(Color.LIGHT_GRAY);
-		categoryPanel.add(catLabel, BorderLayout.NORTH);
+		categoryPanel.add(styledLabel("Category:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.NORTH);
 
 		categoryFilterCombo = new JComboBox<>(new String[]{"All"});
 		categoryFilterCombo.setFont(FontManager.getRunescapeSmallFont());
@@ -799,13 +826,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		filterRow.add(categoryPanel);
 
 		// Region filter
-		JPanel regionPanel = new JPanel(new BorderLayout(2, 0));
-		regionPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel regionPanel = styledPanel(new BorderLayout(2, 0), ColorScheme.DARKER_GRAY_COLOR);
 
-		JLabel regLabel = new JLabel("Chunk:");
-		regLabel.setFont(FontManager.getRunescapeSmallFont());
-		regLabel.setForeground(Color.LIGHT_GRAY);
-		regionPanel.add(regLabel, BorderLayout.NORTH);
+		regionPanel.add(styledLabel("Chunk:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.NORTH);
 
 		regionFilterCombo = new JComboBox<>(new String[]{"All"});
 		regionFilterCombo.setFont(FontManager.getRunescapeSmallFont());
@@ -826,16 +849,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		completedTasksFilterPanel.add(Box.createVerticalStrut(5));
 
 		// Tier (points) filter — mirrors the card colours.
-		JPanel cTierRow = new JPanel(new BorderLayout(2, 0));
-		cTierRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel cTierRow = styledPanel(new BorderLayout(2, 0), ColorScheme.DARKER_GRAY_COLOR);
 		cTierRow.setAlignmentX(LEFT_ALIGNMENT);
 		cTierRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 45));
 		cTierRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 45));
 
-		JLabel cTierLabel = new JLabel("Tier:");
-		cTierLabel.setFont(FontManager.getRunescapeSmallFont());
-		cTierLabel.setForeground(Color.LIGHT_GRAY);
-		cTierRow.add(cTierLabel, BorderLayout.NORTH);
+		cTierRow.add(styledLabel("Tier:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.NORTH);
 
 		completedTasksTierCombo = new JComboBox<>(TIER_NAMES);
 		completedTasksTierCombo.setFont(FontManager.getRunescapeSmallFont());
@@ -856,9 +875,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(completedTasksFilterPanel);
 
 		// Scrollable content panel
-		completedTasksContentPanel = new JPanel();
-		completedTasksContentPanel.setLayout(new BoxLayout(completedTasksContentPanel, BoxLayout.Y_AXIS));
-		completedTasksContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		completedTasksContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		completedTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		completedTasksScrollPane = new JScrollPane(completedTasksContentPanel);
@@ -874,11 +891,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(completedTasksScrollPane);
 
 		// Collapsed summary label
-		completedCollapsedLabel = new JLabel("Click to view completed tasks");
-		completedCollapsedLabel.setFont(FontManager.getRunescapeSmallFont());
-		completedCollapsedLabel.setForeground(Color.GRAY);
-		completedCollapsedLabel.setAlignmentX(LEFT_ALIGNMENT);
-		panel.add(completedCollapsedLabel);
+		completedCollapsedLabel = addLabel(panel, "Click to view completed tasks", FontManager.getRunescapeSmallFont(), Color.GRAY);
 
 		return panel;
 	}
@@ -934,17 +947,14 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private JPanel createGlobalTasksSection()
 	{
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel panel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		panel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(new Color(190, 150, 60)),
 			new EmptyBorder(6, 6, 6, 6)
 		));
 		panel.setAlignmentX(LEFT_ALIGNMENT);
 
-		JPanel headerRow = new JPanel(new BorderLayout(5, 0));
-		headerRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel headerRow = styledPanel(new BorderLayout(5, 0), ColorScheme.DARKER_GRAY_COLOR);
 		headerRow.setAlignmentX(LEFT_ALIGNMENT);
 		headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
 		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
@@ -952,9 +962,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Held as a field rather than found by walking the header's children —
 		// the index-hunting pattern used elsewhere breaks the moment the header
 		// layout changes.
-		globalTasksSectionTitle = new JLabel("Global Tasks");
-		globalTasksSectionTitle.setFont(FontManager.getRunescapeBoldFont());
-		globalTasksSectionTitle.setForeground(new Color(255, 200, 80));
+		globalTasksSectionTitle = styledLabel("Global Tasks", FontManager.getRunescapeBoldFont(), new Color(255, 200, 80));
 		headerRow.add(globalTasksSectionTitle, BorderLayout.WEST);
 
 		globalTasksToggle = new JToggleButton();
@@ -975,24 +983,18 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(sectionDivider());
 		panel.add(Box.createVerticalStrut(5));
 
-		globalTasksFilterPanel = new JPanel();
-		globalTasksFilterPanel.setLayout(new BoxLayout(globalTasksFilterPanel, BoxLayout.Y_AXIS));
-		globalTasksFilterPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		globalTasksFilterPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		globalTasksFilterPanel.setAlignmentX(LEFT_ALIGNMENT);
 		globalTasksFilterPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 105));
 		globalTasksFilterPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 105));
 		globalTasksFilterPanel.setVisible(false);
 
-		JPanel searchRow = new JPanel(new BorderLayout(5, 0));
-		searchRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel searchRow = styledPanel(new BorderLayout(5, 0), ColorScheme.DARKER_GRAY_COLOR);
 		searchRow.setAlignmentX(LEFT_ALIGNMENT);
 		searchRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
 		searchRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
 
-		JLabel searchLabel = new JLabel("Search:");
-		searchLabel.setFont(FontManager.getRunescapeSmallFont());
-		searchLabel.setForeground(Color.LIGHT_GRAY);
-		searchRow.add(searchLabel, BorderLayout.WEST);
+		searchRow.add(styledLabel("Search:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.WEST);
 
 		globalTasksSearchField = new JTextField();
 		globalTasksSearchField.setToolTipText("Search global tasks by name");
@@ -1021,16 +1023,12 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Type filter — Quests today; Progression and Mystery later. Populated
 		// from the categories present in the pool, so new types need no code.
-		JPanel typeRow = new JPanel(new BorderLayout(2, 0));
-		typeRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel typeRow = styledPanel(new BorderLayout(2, 0), ColorScheme.DARKER_GRAY_COLOR);
 		typeRow.setAlignmentX(LEFT_ALIGNMENT);
 		typeRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 45));
 		typeRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 45));
 
-		JLabel typeLabel = new JLabel("Type:");
-		typeLabel.setFont(FontManager.getRunescapeSmallFont());
-		typeLabel.setForeground(Color.LIGHT_GRAY);
-		typeRow.add(typeLabel, BorderLayout.NORTH);
+		typeRow.add(styledLabel("Type:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.NORTH);
 
 		globalTasksTypeCombo = new JComboBox<>(new String[]{"All"});
 		globalTasksTypeCombo.setFont(FontManager.getRunescapeSmallFont());
@@ -1059,9 +1057,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		panel.add(globalTasksFilterPanel);
 
-		globalTasksContentPanel = new JPanel();
-		globalTasksContentPanel.setLayout(new BoxLayout(globalTasksContentPanel, BoxLayout.Y_AXIS));
-		globalTasksContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		globalTasksContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		globalTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		globalTasksScrollPane = new JScrollPane(globalTasksContentPanel);
@@ -1077,11 +1073,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		panel.add(globalTasksScrollPane);
 
-		globalTasksCollapsedLabel = new JLabel("Click to view global tasks");
-		globalTasksCollapsedLabel.setFont(FontManager.getRunescapeSmallFont());
-		globalTasksCollapsedLabel.setForeground(Color.GRAY);
-		globalTasksCollapsedLabel.setAlignmentX(LEFT_ALIGNMENT);
-		panel.add(globalTasksCollapsedLabel);
+		globalTasksCollapsedLabel = addLabel(panel, "Click to view global tasks", FontManager.getRunescapeSmallFont(), Color.GRAY);
 
 		return panel;
 	}
@@ -1308,11 +1300,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		{
 			// Mirrors the Completed Tasks summary line, and makes it obvious the
 			// list is filtered rather than empty/broken.
-			JLabel summary = new JLabel("Showing " + shown + " tasks (" + matchingPoints + " pts)");
-			summary.setFont(FontManager.getRunescapeSmallFont());
-			summary.setForeground(FLAME);
-			summary.setAlignmentX(LEFT_ALIGNMENT);
-			globalTasksContentPanel.add(summary);
+			addLabel(globalTasksContentPanel, "Showing " + shown + " tasks (" + matchingPoints + " pts)",
+				FontManager.getRunescapeSmallFont(), FLAME);
 			globalTasksContentPanel.add(Box.createVerticalStrut(5));
 		}
 
@@ -1325,13 +1314,9 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		if (shown == 0)
 		{
-			JLabel empty = new JLabel(plugin.getVisibleGlobalTasks().isEmpty()
-				? "No global tasks loaded"
-				: "No tasks match the filter");
-			empty.setFont(FontManager.getRunescapeSmallFont());
-			empty.setForeground(Color.GRAY);
-			empty.setAlignmentX(LEFT_ALIGNMENT);
-			globalTasksContentPanel.add(empty);
+			addLabel(globalTasksContentPanel,
+				plugin.getVisibleGlobalTasks().isEmpty() ? "No global tasks loaded" : "No tasks match the filter",
+				FontManager.getRunescapeSmallFont(), Color.GRAY);
 		}
 
 		globalTasksContentPanel.revalidate();
@@ -1379,11 +1364,8 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Info line mirrors the completed cards: "Quest  +2 pts".
 		String category = task.getCategory() != null ? NuzlockeTask.displayCategory(task.getCategory()) : "Global";
-		JLabel infoLabel = new JLabel(category + "  +" + task.getBasePoints() + " pts");
-		infoLabel.setFont(FontManager.getRunescapeSmallFont());
-		infoLabel.setForeground(done ? new Color(170, 130, 60) : Color.ORANGE);
-		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
-		card.add(infoLabel);
+		addLabel(card, category + "  +" + task.getBasePoints() + " pts",
+			FontManager.getRunescapeSmallFont(), done ? new Color(170, 130, 60) : Color.ORANGE);
 
 		return card;
 	}
@@ -1458,9 +1440,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private JPanel createHeaderSection()
 	{
-		JPanel headerPanel = new JPanel();
-		headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
-		headerPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel headerPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		headerPanel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(ColorScheme.MEDIUM_GRAY_COLOR),
 			new EmptyBorder(3, 6, 3, 6)
@@ -1471,15 +1451,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		headerPanel.setMaximumSize(new Dimension(PANEL_WIDTH - 10, HEADER_HEIGHT));
 
 		// Title row with Discord button
-		JPanel titleRow = new JPanel(new BorderLayout(3, 0));
-		titleRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel titleRow = styledPanel(new BorderLayout(3, 0), ColorScheme.DARKER_GRAY_COLOR);
 		titleRow.setAlignmentX(CENTER_ALIGNMENT);
 		titleRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 20));
 
-		JLabel titleLabel = new JLabel("ChunkBlazer");
-		titleLabel.setFont(FontManager.getRunescapeBoldFont());
-		titleLabel.setForeground(new Color(255, 152, 0)); // Orange color
-		titleRow.add(titleLabel, BorderLayout.WEST);
+		// Orange title
+		titleRow.add(styledLabel("ChunkBlazer", FontManager.getRunescapeBoldFont(), new Color(255, 152, 0)), BorderLayout.WEST);
 
 		// Discord button with icon character
 		JButton discordButton = new JButton("\uD83D\uDCAC Discord"); // Speech bubble icon
@@ -1494,17 +1471,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		headerPanel.add(titleRow);
 
 		// Region and mode on same line
-		JPanel infoRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		infoRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel infoRow = styledPanel(new FlowLayout(FlowLayout.LEFT, 0, 0), ColorScheme.DARKER_GRAY_COLOR);
 		infoRow.setAlignmentX(CENTER_ALIGNMENT);
 
-		regionLabel = new JLabel("Unknown (0)");
-		regionLabel.setFont(FontManager.getRunescapeSmallFont());
-		regionLabel.setForeground(Color.WHITE);
+		regionLabel = styledLabel("Unknown (0)", FontManager.getRunescapeSmallFont(), Color.WHITE);
 
-		modeLabel = new JLabel(" | Mode: --");
-		modeLabel.setFont(FontManager.getRunescapeSmallFont());
-		modeLabel.setForeground(new Color(0, 200, 200));
+		modeLabel = styledLabel(" | Mode: --", FontManager.getRunescapeSmallFont(), new Color(0, 200, 200));
 
 		infoRow.add(regionLabel);
 		infoRow.add(modeLabel);
@@ -1515,9 +1487,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private JPanel createStatsSection()
 	{
-		JPanel statsPanel = new JPanel();
-		statsPanel.setLayout(new GridLayout(1, 4, 2, 0));
-		statsPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel statsPanel = styledPanel(new GridLayout(1, 4, 2, 0), ColorScheme.DARKER_GRAY_COLOR);
 		statsPanel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(FLAME), // Gold border
 			new EmptyBorder(2, 3, 2, 3)
@@ -1556,9 +1526,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	 */
 	private JPanel createRegionUnlockSection()
 	{
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel panel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		panel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(FLAME), // gold — matches stats border
 			new EmptyBorder(6, 6, 6, 6)
@@ -1573,9 +1541,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	 */
 	private JPanel createUnlockedListSection()
 	{
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel panel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		panel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(ColorScheme.MEDIUM_GRAY_COLOR),
 			new EmptyBorder(6, 6, 6, 6)
@@ -1617,15 +1583,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Collapsible header: title + count on the left, a toggle on the right.
 		// Collapsed by default so a long unlock list doesn't dominate the panel —
 		// the rows only render when expanded.
-		JPanel headerRow = new JPanel(new BorderLayout(4, 0));
-		headerRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel headerRow = styledPanel(new BorderLayout(4, 0), ColorScheme.DARKER_GRAY_COLOR);
 		headerRow.setAlignmentX(LEFT_ALIGNMENT);
 		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 20));
 
-		JLabel title = new JLabel("Unlocked Chunks (" + names.size() + ")");
-		title.setFont(FontManager.getRunescapeBoldFont());
-		title.setForeground(Color.WHITE);
-		headerRow.add(title, BorderLayout.WEST);
+		headerRow.add(styledLabel("Unlocked Chunks (" + names.size() + ")",
+			FontManager.getRunescapeBoldFont(), Color.WHITE), BorderLayout.WEST);
 
 		JToggleButton toggle = new JToggleButton();
 		setToggleArrow(toggle, unlockedListExpanded);
@@ -1649,19 +1612,14 @@ public class ChunkBlazerPanel extends PluginPanel
 			unlockedListPanel.add(Box.createVerticalStrut(5));
 			if (names.isEmpty())
 			{
-				JLabel empty = new JLabel("No chunks unlocked yet.");
-				empty.setFont(FontManager.getRunescapeSmallFont());
-				empty.setForeground(ColorScheme.LIGHT_GRAY_COLOR);
-				empty.setAlignmentX(LEFT_ALIGNMENT);
-				unlockedListPanel.add(empty);
+				addLabel(unlockedListPanel, "No chunks unlocked yet.",
+					FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR);
 			}
 			else
 			{
 				// One card per chunk, same shape as the Global Tasks / Completed
 				// Tasks cards so the whole panel reads as one system.
-				JPanel chunkList = new JPanel();
-				chunkList.setLayout(new BoxLayout(chunkList, BoxLayout.Y_AXIS));
-				chunkList.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+				JPanel chunkList = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 				chunkList.setAlignmentX(LEFT_ALIGNMENT);
 				for (String n : names)
 				{
@@ -1691,11 +1649,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		else if (!names.isEmpty())
 		{
 			// Collapsed hint, matching the other collapsible sections.
-			JLabel collapsed = new JLabel("Click to view " + names.size() + " unlocked chunks");
-			collapsed.setFont(FontManager.getRunescapeSmallFont());
-			collapsed.setForeground(Color.GRAY);
-			collapsed.setAlignmentX(LEFT_ALIGNMENT);
-			unlockedListPanel.add(collapsed);
+			addLabel(unlockedListPanel, "Click to view " + names.size() + " unlocked chunks",
+				FontManager.getRunescapeSmallFont(), Color.GRAY);
 		}
 
 		unlockedListPanel.setVisible(true);
@@ -1781,11 +1736,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		regionUnlockPanel.removeAll();
 
-		JLabel title = new JLabel("🔒 Locked Region");
-		title.setFont(FontManager.getRunescapeBoldFont());
-		title.setForeground(Color.WHITE);
-		title.setAlignmentX(LEFT_ALIGNMENT);
-		regionUnlockPanel.add(title);
+		addLabel(regionUnlockPanel, "🔒 Locked Region", FontManager.getRunescapeBoldFont(), Color.WHITE);
 		regionUnlockPanel.add(Box.createVerticalStrut(3));
 		regionUnlockPanel.add(sectionDivider());
 		regionUnlockPanel.add(Box.createVerticalStrut(5));
@@ -1798,11 +1749,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		regionUnlockPanel.add(nameLabel);
 		regionUnlockPanel.add(Box.createVerticalStrut(4));
 
-		JLabel costLine = new JLabel("Cost: " + cost + " pts | You have: " + points);
-		costLine.setFont(FontManager.getRunescapeSmallFont());
-		costLine.setForeground(canAfford ? new Color(150, 255, 150) : new Color(255, 130, 130));
-		costLine.setAlignmentX(LEFT_ALIGNMENT);
-		regionUnlockPanel.add(costLine);
+		addLabel(regionUnlockPanel, "Cost: " + cost + " pts | You have: " + points,
+			FontManager.getRunescapeSmallFont(), canAfford ? new Color(150, 255, 150) : new Color(255, 130, 130));
 		regionUnlockPanel.add(Box.createVerticalStrut(6));
 
 		// Two-state button: shows the cost, then on click swaps to "Confirm? Yes/No".
@@ -1810,8 +1758,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		final int finalRegionId = regionId;
 		final String finalRegionName = regionName;
 		final int finalCost = cost;
-		JPanel buttonRow = new JPanel(new BorderLayout(4, 0));
-		buttonRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel buttonRow = styledPanel(new BorderLayout(4, 0), ColorScheme.DARKER_GRAY_COLOR);
 		buttonRow.setAlignmentX(LEFT_ALIGNMENT);
 		buttonRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 28));
 
@@ -1825,11 +1772,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 		else
 		{
-			JButton unlockBtn = new JButton("Unlock for " + cost + " pts");
-			unlockBtn.setFont(FontManager.getRunescapeBoldFont());
-			unlockBtn.setBackground(new Color(50, 110, 60));
-			unlockBtn.setForeground(Color.WHITE);
-			unlockBtn.setFocusPainted(false);
+			JButton unlockBtn = actionButton("Unlock for " + cost + " pts", new Color(50, 110, 60));
 			unlockBtn.addActionListener(e -> showUnlockConfirm(buttonRow, finalRegionId, finalRegionName, finalCost));
 			buttonRow.add(unlockBtn, BorderLayout.CENTER);
 		}
@@ -1854,11 +1797,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		regionUnlockPanel.removeAll();
 
-		JLabel title = new JLabel("🔒 Boss Chunk");
-		title.setFont(FontManager.getRunescapeBoldFont());
-		title.setForeground(Color.WHITE);
-		title.setAlignmentX(LEFT_ALIGNMENT);
-		regionUnlockPanel.add(title);
+		addLabel(regionUnlockPanel, "🔒 Boss Chunk", FontManager.getRunescapeBoldFont(), Color.WHITE);
 		regionUnlockPanel.add(Box.createVerticalStrut(3));
 		regionUnlockPanel.add(sectionDivider());
 		regionUnlockPanel.add(Box.createVerticalStrut(5));
@@ -1871,18 +1810,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		regionUnlockPanel.add(nameLabel);
 		regionUnlockPanel.add(Box.createVerticalStrut(4));
 
-		JLabel costLine = new JLabel("Cost: 1 Boss Token | You have: " + tokens);
-		costLine.setFont(FontManager.getRunescapeSmallFont());
-		costLine.setForeground(canAfford ? new Color(150, 255, 150) : new Color(255, 130, 130));
-		costLine.setAlignmentX(LEFT_ALIGNMENT);
-		regionUnlockPanel.add(costLine);
+		addLabel(regionUnlockPanel, "Cost: 1 Boss Token | You have: " + tokens,
+			FontManager.getRunescapeSmallFont(), canAfford ? new Color(150, 255, 150) : new Color(255, 130, 130));
 		regionUnlockPanel.add(Box.createVerticalStrut(4));
 
-		JLabel grantLine = new JLabel("Unlocking grants every task on this chunk.");
-		grantLine.setFont(FontManager.getRunescapeSmallFont());
-		grantLine.setForeground(Color.LIGHT_GRAY);
-		grantLine.setAlignmentX(LEFT_ALIGNMENT);
-		regionUnlockPanel.add(grantLine);
+		addLabel(regionUnlockPanel, "Unlocking grants every task on this chunk.",
+			FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
 		regionUnlockPanel.add(Box.createVerticalStrut(4));
 
 		WrappingTextLabel tokenNote = new WrappingTextLabel(
@@ -1895,8 +1828,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		regionUnlockPanel.add(Box.createVerticalStrut(6));
 
 		final int finalRegionId = regionId;
-		JPanel buttonRow = new JPanel(new BorderLayout(4, 0));
-		buttonRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel buttonRow = styledPanel(new BorderLayout(4, 0), ColorScheme.DARKER_GRAY_COLOR);
 		buttonRow.setAlignmentX(LEFT_ALIGNMENT);
 		buttonRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 28));
 
@@ -1910,11 +1842,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 		else
 		{
-			JButton unlockBtn = new JButton("Unlock for 1 Boss Token");
-			unlockBtn.setFont(FontManager.getRunescapeBoldFont());
-			unlockBtn.setBackground(new Color(50, 110, 60));
-			unlockBtn.setForeground(Color.WHITE);
-			unlockBtn.setFocusPainted(false);
+			JButton unlockBtn = actionButton("Unlock for 1 Boss Token", new Color(50, 110, 60));
 			unlockBtn.addActionListener(e ->
 			{
 				plugin.closeChatboxPrompt();
@@ -1942,19 +1870,11 @@ public class ChunkBlazerPanel extends PluginPanel
 	{
 		buttonRow.removeAll();
 
-		JLabel prompt = new JLabel("Spend " + cost + "?");
-		prompt.setFont(FontManager.getRunescapeSmallFont());
-		prompt.setForeground(Color.WHITE);
-		buttonRow.add(prompt, BorderLayout.WEST);
+		buttonRow.add(styledLabel("Spend " + cost + "?", FontManager.getRunescapeSmallFont(), Color.WHITE), BorderLayout.WEST);
 
-		JPanel choices = new JPanel(new GridLayout(1, 2, 4, 0));
-		choices.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel choices = styledPanel(new GridLayout(1, 2, 4, 0), ColorScheme.DARKER_GRAY_COLOR);
 
-		JButton yes = new JButton("Yes");
-		yes.setFont(FontManager.getRunescapeBoldFont());
-		yes.setBackground(new Color(50, 110, 60));
-		yes.setForeground(Color.WHITE);
-		yes.setFocusPainted(false);
+		JButton yes = actionButton("Yes", new Color(50, 110, 60));
 		yes.addActionListener(e ->
 		{
 			// Close any open chatbox unlock-prompt for this region first. If we
@@ -1971,11 +1891,7 @@ public class ChunkBlazerPanel extends PluginPanel
 			updateStats();
 		});
 
-		JButton no = new JButton("No");
-		no.setFont(FontManager.getRunescapeBoldFont());
-		no.setBackground(new Color(110, 50, 50));
-		no.setForeground(Color.WHITE);
-		no.setFocusPainted(false);
+		JButton no = actionButton("No", new Color(110, 50, 50));
 		no.addActionListener(e ->
 		{
 			// Cancel drops the world-map click pin too.
@@ -1993,22 +1909,16 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private JPanel createStatBox(String label, String value)
 	{
-		JPanel box = new JPanel();
-		box.setLayout(new BorderLayout());
-		box.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel box = styledPanel(new BorderLayout(), ColorScheme.DARKER_GRAY_COLOR);
 
-		JPanel innerPanel = new JPanel();
-		innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
-		innerPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel innerPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 
-		JLabel labelText = new JLabel(label.toUpperCase());
-		labelText.setFont(new Font("Arial", Font.PLAIN, 9));
-		labelText.setForeground(new Color(150, 150, 150)); // muted grey
+		// muted grey
+		JLabel labelText = styledLabel(label.toUpperCase(), new Font("Arial", Font.PLAIN, 9), new Color(150, 150, 150));
 		labelText.setAlignmentX(CENTER_ALIGNMENT);
 
-		JLabel valueText = new JLabel(value);
-		valueText.setFont(FontManager.getRunescapeBoldFont().deriveFont(15f));
-		valueText.setForeground(FLAME); // gold
+		// gold
+		JLabel valueText = styledLabel(value, FontManager.getRunescapeBoldFont().deriveFont(15f), FLAME);
 		valueText.setAlignmentX(CENTER_ALIGNMENT);
 
 		innerPanel.add(labelText);
@@ -2020,30 +1930,21 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private JPanel createModeSelectionSection()
 	{
-		JPanel modePanel = new JPanel();
-		modePanel.setLayout(new BoxLayout(modePanel, BoxLayout.Y_AXIS));
-		modePanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel modePanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		modePanel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(ColorScheme.MEDIUM_GRAY_COLOR),
 			new EmptyBorder(10, 10, 10, 10)
 		));
 
 		// Section title
-		JLabel sectionTitle = new JLabel("Select Game Mode");
-		sectionTitle.setFont(FontManager.getRunescapeBoldFont());
-		sectionTitle.setForeground(Color.WHITE);
-		sectionTitle.setAlignmentX(LEFT_ALIGNMENT);
-		modePanel.add(sectionTitle);
+		addLabel(modePanel, "Select Game Mode", FontManager.getRunescapeBoldFont(), Color.WHITE);
 		modePanel.add(Box.createVerticalStrut(3));
 		modePanel.add(sectionDivider());
 		modePanel.add(Box.createVerticalStrut(5));
 
 		// Warning text
-		JLabel warningLabel = new JLabel("<html><i>This choice is permanent for this account!</i></html>");
-		warningLabel.setFont(FontManager.getRunescapeSmallFont());
-		warningLabel.setForeground(Color.YELLOW);
-		warningLabel.setAlignmentX(LEFT_ALIGNMENT);
-		modePanel.add(warningLabel);
+		addLabel(modePanel, "<html><i>This choice is permanent for this account!</i></html>",
+			FontManager.getRunescapeSmallFont(), Color.YELLOW);
 		modePanel.add(Box.createVerticalStrut(10));
 
 		// Radio buttons
@@ -2060,13 +1961,9 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Fixed-width table keeps the blurb inside CONTENT_WIDTH; Swing's CSS
 		// subset ignores width on div/body/p, so a table is the reliable wrap.
-		JLabel casualDesc = new JLabel("<html><table width='190' cellpadding='0' cellspacing='0'><tr><td>"
+		addLabel(modePanel, "<html><table width='190' cellpadding='0' cellspacing='0'><tr><td>"
 			+ "Start anywhere. Play on any account. Featured on the casual leaderboard."
-			+ "</td></tr></table></html>");
-		casualDesc.setFont(FontManager.getRunescapeSmallFont());
-		casualDesc.setForeground(Color.LIGHT_GRAY);
-		casualDesc.setAlignmentX(LEFT_ALIGNMENT);
-		modePanel.add(casualDesc);
+			+ "</td></tr></table></html>", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
 		modePanel.add(Box.createVerticalStrut(5));
 
 		nuzlockeRadio = new JRadioButton("Competitive");
@@ -2077,13 +1974,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		modeGroup.add(nuzlockeRadio);
 		modePanel.add(nuzlockeRadio);
 
-		JLabel nuzlockeDesc = new JLabel("<html><table width='190' cellpadding='0' cellspacing='0'><tr><td>"
+		addLabel(modePanel, "<html><table width='190' cellpadding='0' cellspacing='0'><tr><td>"
 			+ "Featured on the main page of the leaderboard and website. You must start on a fresh level 3 account."
-			+ "</td></tr></table></html>");
-		nuzlockeDesc.setFont(FontManager.getRunescapeSmallFont());
-		nuzlockeDesc.setForeground(Color.LIGHT_GRAY);
-		nuzlockeDesc.setAlignmentX(LEFT_ALIGNMENT);
-		modePanel.add(nuzlockeDesc);
+			+ "</td></tr></table></html>", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
 		modePanel.add(Box.createVerticalStrut(10));
 
 		// Confirm button
@@ -2101,32 +1994,18 @@ public class ChunkBlazerPanel extends PluginPanel
 	 */
 	private JPanel createLockedModeSection()
 	{
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel panel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		panel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(ColorScheme.MEDIUM_GRAY_COLOR),
 			new EmptyBorder(10, 10, 10, 10)
 		));
 
-		JLabel title = new JLabel("Game Mode");
-		title.setFont(FontManager.getRunescapeBoldFont());
-		title.setForeground(Color.WHITE);
-		title.setAlignmentX(LEFT_ALIGNMENT);
-		panel.add(title);
+		addLabel(panel, "Game Mode", FontManager.getRunescapeBoldFont(), Color.WHITE);
 		panel.add(Box.createVerticalStrut(5));
 
-		lockedModeValueLabel = new JLabel("Casual");
-		lockedModeValueLabel.setFont(FontManager.getRunescapeBoldFont());
-		lockedModeValueLabel.setForeground(new Color(100, 200, 100));
-		lockedModeValueLabel.setAlignmentX(LEFT_ALIGNMENT);
-		panel.add(lockedModeValueLabel);
+		lockedModeValueLabel = addLabel(panel, "Casual", FontManager.getRunescapeBoldFont(), new Color(100, 200, 100));
 
-		JLabel lockedNote = new JLabel("Locked for this account");
-		lockedNote.setFont(FontManager.getRunescapeSmallFont());
-		lockedNote.setForeground(Color.LIGHT_GRAY);
-		lockedNote.setAlignmentX(LEFT_ALIGNMENT);
-		panel.add(lockedNote);
+		addLabel(panel, "Locked for this account", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
 
 		return panel;
 	}
@@ -2137,35 +2016,24 @@ public class ChunkBlazerPanel extends PluginPanel
 	 */
 	private JPanel createLoggedOutSection()
 	{
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel panel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		panel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(ColorScheme.MEDIUM_GRAY_COLOR),
 			new EmptyBorder(15, 10, 15, 10)
 		));
 
-		JLabel title = new JLabel("Not logged in");
-		title.setFont(FontManager.getRunescapeBoldFont());
-		title.setForeground(Color.WHITE);
-		title.setAlignmentX(LEFT_ALIGNMENT);
-		panel.add(title);
+		addLabel(panel, "Not logged in", FontManager.getRunescapeBoldFont(), Color.WHITE);
 		panel.add(Box.createVerticalStrut(5));
 
-		JLabel msg = new JLabel("<html>Log into Old School RuneScape to start playing ChunkBlazer.</html>");
-		msg.setFont(FontManager.getRunescapeSmallFont());
-		msg.setForeground(Color.LIGHT_GRAY);
-		msg.setAlignmentX(LEFT_ALIGNMENT);
-		panel.add(msg);
+		addLabel(panel, "<html>Log into Old School RuneScape to start playing ChunkBlazer.</html>",
+			FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
 
 		return panel;
 	}
 
 	private JPanel createCurrentTaskSection()
 	{
-		JPanel taskPanel = new JPanel();
-		taskPanel.setLayout(new BoxLayout(taskPanel, BoxLayout.Y_AXIS));
-		taskPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel taskPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		taskPanel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(new Color(100, 180, 100)),
 			new EmptyBorder(6, 6, 6, 6)
@@ -2173,9 +2041,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		taskPanel.setAlignmentX(LEFT_ALIGNMENT);
 
 		// === SELECTED TASK HIGHLIGHT BOX ===
-		selectedTaskPanel = new JPanel();
-		selectedTaskPanel.setLayout(new BoxLayout(selectedTaskPanel, BoxLayout.Y_AXIS));
-		selectedTaskPanel.setBackground(new Color(60, 80, 60));
+		selectedTaskPanel = boxPanel(new Color(60, 80, 60));
 		selectedTaskPanel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(FLAME, 2), // Gold border
 			new EmptyBorder(6, 6, 6, 6)
@@ -2184,15 +2050,10 @@ public class ChunkBlazerPanel extends PluginPanel
 		selectedTaskPanel.setPreferredSize(new Dimension(CONTENT_WIDTH, 135));
 		selectedTaskPanel.setMaximumSize(new Dimension(CONTENT_WIDTH, 135));
 
-		JLabel selectedTitle = new JLabel("\u2605 SELECTED TASK \u2605"); // Star symbols
-		selectedTitle.setFont(FontManager.getRunescapeBoldFont());
-		selectedTitle.setForeground(FLAME); // Gold color
-		selectedTitle.setAlignmentX(LEFT_ALIGNMENT);
-		selectedTaskPanel.add(selectedTitle);
+		// Star symbols; gold
+		addLabel(selectedTaskPanel, "\u2605 SELECTED TASK \u2605", FontManager.getRunescapeBoldFont(), FLAME);
 
-		JLabel selectedTaskName = new JLabel("Click a task below to select");
-		selectedTaskName.setFont(FontManager.getRunescapeSmallFont());
-		selectedTaskName.setForeground(Color.LIGHT_GRAY);
+		JLabel selectedTaskName = styledLabel("Click a task below to select", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
 		selectedTaskName.setAlignmentX(LEFT_ALIGNMENT);
 		selectedTaskName.setName("selectedTaskName");
 		selectedTaskPanel.add(selectedTaskName);
@@ -2202,8 +2063,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		taskPanel.add(Box.createVerticalStrut(4));
 
 		// === HEADER ROW WITH TOGGLE ===
-		JPanel headerRow = new JPanel(new BorderLayout(5, 0));
-		headerRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel headerRow = styledPanel(new BorderLayout(5, 0), ColorScheme.DARKER_GRAY_COLOR);
 		headerRow.setAlignmentX(LEFT_ALIGNMENT);
 		headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 22));
 		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 22));
@@ -2239,16 +2099,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		activeTasksFilterPanel.setAlignmentX(LEFT_ALIGNMENT);
 
 		// Search field
-		JPanel searchRow = new JPanel(new BorderLayout(5, 0));
-		searchRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel searchRow = styledPanel(new BorderLayout(5, 0), ColorScheme.DARKER_GRAY_COLOR);
 		searchRow.setAlignmentX(LEFT_ALIGNMENT);
 		searchRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 22));
 		searchRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 22));
 
-		JLabel searchLabel = new JLabel("Search:");
-		searchLabel.setFont(FontManager.getRunescapeSmallFont());
-		searchLabel.setForeground(Color.LIGHT_GRAY);
-		searchRow.add(searchLabel, BorderLayout.WEST);
+		searchRow.add(styledLabel("Search:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.WEST);
 
 		activeTasksSearchField = new JTextField();
 		activeTasksSearchField.setToolTipText("Search tasks by name");
@@ -2277,16 +2133,12 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Area filter (broadest cut — Misthalin / Asgarnia / Zeah / ...).
 		// On its own row above Category+Region so the dropdown has room for full area names.
-		JPanel areaRow = new JPanel(new BorderLayout(2, 0));
-		areaRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel areaRow = styledPanel(new BorderLayout(2, 0), ColorScheme.DARKER_GRAY_COLOR);
 		areaRow.setAlignmentX(LEFT_ALIGNMENT);
 		areaRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 40));
 		areaRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 40));
 
-		JLabel areaLabel = new JLabel("Area:");
-		areaLabel.setFont(FontManager.getRunescapeSmallFont());
-		areaLabel.setForeground(Color.LIGHT_GRAY);
-		areaRow.add(areaLabel, BorderLayout.NORTH);
+		areaRow.add(styledLabel("Area:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.NORTH);
 
 		activeTasksAreaCombo = new JComboBox<>(new String[]{"All"});
 		activeTasksAreaCombo.setFont(FontManager.getRunescapeSmallFont());
@@ -2312,13 +2164,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		filterRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 40));
 
 		// Category filter
-		JPanel categoryPanel = new JPanel(new BorderLayout(2, 0));
-		categoryPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel categoryPanel = styledPanel(new BorderLayout(2, 0), ColorScheme.DARKER_GRAY_COLOR);
 
-		JLabel catLabel = new JLabel("Category:");
-		catLabel.setFont(FontManager.getRunescapeSmallFont());
-		catLabel.setForeground(Color.LIGHT_GRAY);
-		categoryPanel.add(catLabel, BorderLayout.NORTH);
+		categoryPanel.add(styledLabel("Category:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.NORTH);
 
 		activeTasksCategoryCombo = new JComboBox<>(new String[]{"All"});
 		activeTasksCategoryCombo.setFont(FontManager.getRunescapeSmallFont());
@@ -2336,13 +2184,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		filterRow.add(categoryPanel);
 
 		// Region filter
-		JPanel regionPanel = new JPanel(new BorderLayout(2, 0));
-		regionPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel regionPanel = styledPanel(new BorderLayout(2, 0), ColorScheme.DARKER_GRAY_COLOR);
 
-		JLabel regLabel = new JLabel("Chunk:");
-		regLabel.setFont(FontManager.getRunescapeSmallFont());
-		regLabel.setForeground(Color.LIGHT_GRAY);
-		regionPanel.add(regLabel, BorderLayout.NORTH);
+		regionPanel.add(styledLabel("Chunk:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.NORTH);
 
 		activeTasksRegionCombo = new JComboBox<>(new String[]{"All"});
 		activeTasksRegionCombo.setFont(FontManager.getRunescapeSmallFont());
@@ -2784,8 +2628,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		listPanel.setAlignmentX(LEFT_ALIGNMENT);
 
 		// Header row with toggle button
-		JPanel headerRow = new JPanel(new BorderLayout(5, 0));
-		headerRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel headerRow = styledPanel(new BorderLayout(5, 0), ColorScheme.DARKER_GRAY_COLOR);
 		headerRow.setAlignmentX(LEFT_ALIGNMENT);
 		headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
 		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
