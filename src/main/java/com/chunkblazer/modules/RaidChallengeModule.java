@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -106,13 +107,16 @@ public class RaidChallengeModule extends AbstractTaskModule
 	// against RuneLite + the official ToA plugin). The final Warden is NPC id
 	// 11761/11762 (Damaged==Enraged) or 11763/11764 (brief Invulnerable) — the id
 	// does NOT change when enrage begins, so we detect enrage separately:
-	//   1. the lightning GraphicsObject (enrage-only, most precise) — id unknown
-	//      until captured in-game, see WARDEN_LIGHTNING_GFX_ID + the capture logs;
-	//   2. the HP heal-spike at enrage start (near-death -> heals ~20%) — works now.
+	//   1. the lightning GraphicsObject (enrage-only, most precise) — CAPTURED below;
+	//   2. the HP heal-spike at enrage start (near-death -> heals ~20%) — fallback.
 	// The phase key "toa_wardens_enrage" on a survive_ticks task gates on this.
 	private static final String PHASE_TOA_WARDENS_ENRAGE = "toa_wardens_enrage";
-	/** Fill in once captured via the [WARDEN-GFX] logs; -1 disables the gfx trigger. */
-	private static final int WARDEN_LIGHTNING_GFX_ID = -1;
+	// Enrage lightning GraphicsObject ids, captured live from the [WARDEN-GFX] logs
+	// (session 2026-08-23): the general P3 lightning (2220-2223) stops the instant
+	// the warden enrages and these take over for the rest of the fight, so their
+	// appearance — while the final Warden is present — marks enrage start precisely.
+	private static final Set<Integer> WARDEN_LIGHTNING_GFX_IDS =
+		new HashSet<>(java.util.Arrays.asList(2197, 1446));
 
 	private NPC finalWarden;         // the P3+ Warden NPC while present
 	private boolean wardenEnraged;   // true once the enrage/lightning phase has begun
@@ -369,71 +373,145 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return;
 		}
 
-		// (b) Damage the LOCAL PLAYER deals to a watched NPC (stab-only challenges).
-		// A stab_target NPC must only ever be hit by us with a stab-melee attack.
+		// (b) Damage the LOCAL PLAYER deals to a style-gated NPC. Every hit on such
+		// an NPC must use the task's required attack style (STAB/SLASH/CRUSH/…) or the
+		// run fails. Scoped to the listed NPCs only, so swapping weapons for a side
+		// target (e.g. shooting a Zebak jug) is fine — that hit is on a different NPC.
 		if (!(e.getActor() instanceof NPC) || e.getHitsplat() == null || e.getHitsplat().isOthers())
 		{
 			return; // not our splat (someone else's / non-player source)
 		}
 		int npcId = ((NPC) e.getActor()).getId();
-		boolean stab = isStabMeleeAttack();
-		boolean anyStabTaskWatchesThis = false;
+		CombatStyle current = currentCombatStyle();
+		boolean anyTaskWatchesThis = false;
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			RaidChallenge ch = task.getChallenge();
 			State s = states.get(task.getTaskId());
+			List<Integer> targets = styleTargetIds(ch);
 			if (ch == null || s == null || !s.windowOpen || s.violated
-				|| ch.getStabTargetIds() == null || !ch.getStabTargetIds().contains(npcId))
+				|| targets == null || !targets.contains(npcId))
 			{
 				continue;
 			}
-			anyStabTaskWatchesThis = true;
-			if (!stab)
+			anyTaskWatchesThis = true;
+			CombatStyle required = requiredCombatStyle(ch);
+			// Lenient on UNKNOWN: an unmapped weapon type is given the benefit of the
+			// doubt (pass) rather than failing a possibly-valid attack. The [STYLE-DEBUG]
+			// line below records the weaponType so it can be added to WEAPON_STYLES.
+			if (current != CombatStyle.UNKNOWN && current != required)
 			{
 				s.violated = true;
-				log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: non-stab hit on NPC {}", task.getTaskId(), npcId);
-				sendFailure(task, "You hit this boss with a non-stab attack — melee stab only.");
+				log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: hit NPC {} with {} (needs {})",
+					task.getTaskId(), npcId, current, required);
+				sendFailure(task, "You hit this boss with a " + current.label()
+					+ " attack — " + required.label() + " only.");
 			}
 		}
-		if (anyStabTaskWatchesThis)
+		if (anyTaskWatchesThis)
 		{
-			// Capture aid: confirm/expand the stab mapping against real weapons.
-			log.debug("[ZEBAK-STAB-DEBUG] hit npc={} weaponType={} attackStyleVarp={} -> stab={}",
+			// Capture aid: confirm/extend the weapon-type table against real weapons.
+			// An UNKNOWN here is an unmapped weapon type to add to WEAPON_STYLES.
+			log.debug("[STYLE-DEBUG] hit npc={} weaponType={} attackStyleVarp={} -> {}",
 				npcId, client.getVarbitValue(EQUIPPED_WEAPON_TYPE_VARBIT),
-				client.getVarpValue(ATTACK_STYLE_VARP), stab);
+				client.getVarpValue(ATTACK_STYLE_VARP), current);
 		}
 	}
 
-	// EQUIPPED_WEAPON_TYPE varbit (357) + ATTACK_STYLE varp (43) together fix the
-	// current combat style; neither alone is enough (the varp is just a 0–3 index
-	// whose meaning depends on the weapon type).
+	// ── Combat-style resolution ──────────────────────────────────────────────
+	// The active damage style is derived from EQUIPPED_WEAPON_TYPE varbit (357) +
+	// ATTACK_STYLE varp (43): neither alone is enough — the varp is only a 0–3 index
+	// whose meaning depends on the weapon type. This is the general version of the
+	// old stab-only check, so tasks can now gate on any style via JSON
+	// (required_attack_style). New weapon families are added to WEAPON_STYLES, and
+	// [STYLE-DEBUG] logs an UNKNOWN for anything not yet mapped so gaps self-surface.
 	private static final int EQUIPPED_WEAPON_TYPE_VARBIT = 357;
 	private static final int ATTACK_STYLE_VARP = 43;
 
-	/**
-	 * True if the player's CURRENTLY selected attack is a melee STAB. Resolves the
-	 * equipped-weapon-type varbit + attack-style index against the weapon types whose
-	 * selected option is stab. Best-effort and verified via [ZEBAK-STAB-DEBUG] logs;
-	 * non-melee weapon types (bows, crossbows, staves, etc.) are never stab.
-	 */
-	private boolean isStabMeleeAttack()
+	enum CombatStyle
+	{
+		STAB, SLASH, CRUSH, RANGED, MAGIC, UNKNOWN;
+
+		String label()
+		{
+			return this == UNKNOWN ? "different" : name().toLowerCase();
+		}
+	}
+
+	// weaponType (EQUIPPED_WEAPON_TYPE ordinal) -> the damage style of each of its
+	// attack-style options, indexed by the ATTACK_STYLE varp (0..3). Verified live
+	// where noted; the rest are the standard OSRS combat options. Anything absent
+	// resolves to UNKNOWN (logged), never a wrong guess.
+	private static final Map<Integer, CombatStyle[]> WEAPON_STYLES = buildWeaponStyles();
+
+	private static Map<Integer, CombatStyle[]> buildWeaponStyles()
+	{
+		CombatStyle STAB = CombatStyle.STAB, SLASH = CombatStyle.SLASH,
+			CRUSH = CombatStyle.CRUSH, RANGED = CombatStyle.RANGED, MAGIC = CombatStyle.MAGIC;
+		Map<Integer, CombatStyle[]> m = new java.util.HashMap<>();
+		m.put(0,  new CombatStyle[]{CRUSH, CRUSH, CRUSH});                 // UNARMED
+		m.put(1,  new CombatStyle[]{SLASH, SLASH, CRUSH, SLASH});          // AXE
+		m.put(2,  new CombatStyle[]{CRUSH, CRUSH, CRUSH});                 // BLUNT (mace/warhammer)
+		m.put(3,  new CombatStyle[]{RANGED, RANGED, RANGED});             // BOW
+		m.put(4,  new CombatStyle[]{SLASH, SLASH, STAB, SLASH});           // CLAW
+		m.put(5,  new CombatStyle[]{RANGED, RANGED, RANGED});             // CROSSBOW
+		m.put(7,  new CombatStyle[]{RANGED, RANGED, RANGED});             // CHINCHOMPA
+		m.put(9,  new CombatStyle[]{SLASH, SLASH, STAB, SLASH});           // SLASH_SWORD (scimitar/longsword)
+		m.put(10, new CombatStyle[]{SLASH, SLASH, CRUSH, SLASH});          // TWO_HANDED_SWORD
+		m.put(11, new CombatStyle[]{STAB, STAB, CRUSH, STAB});            // PICKAXE
+		m.put(12, new CombatStyle[]{STAB, SLASH, STAB});                  // POLEARM (halberd: Jab/Swipe/Fend)
+		m.put(13, new CombatStyle[]{CRUSH, CRUSH, CRUSH});               // POLESTAFF
+		m.put(14, new CombatStyle[]{SLASH, SLASH, CRUSH, SLASH});          // SCYTHE
+		m.put(15, new CombatStyle[]{STAB, SLASH, CRUSH, STAB});           // SPEAR / hasta
+		m.put(16, new CombatStyle[]{CRUSH, CRUSH, STAB, CRUSH});          // SPIKED (e.g. some maces)
+		m.put(17, new CombatStyle[]{STAB, STAB, SLASH, STAB});            // STAB_SWORD (dagger/rapier/Fang) — style 1 verified live
+		m.put(19, new CombatStyle[]{SLASH, SLASH, SLASH});               // WHIP
+		m.put(22, new CombatStyle[]{CRUSH, CRUSH, CRUSH});               // BLUDGEON
+		return m;
+	}
+
+	/** The player's current damage style, or UNKNOWN for an unmapped weapon type. */
+	private CombatStyle currentCombatStyle()
 	{
 		int weaponType = client.getVarbitValue(EQUIPPED_WEAPON_TYPE_VARBIT);
-		int style = client.getVarpValue(ATTACK_STYLE_VARP); // 0..3, weapon-dependent
-		switch (weaponType)
+		int style = client.getVarpValue(ATTACK_STYLE_VARP);
+		CombatStyle[] styles = WEAPON_STYLES.get(weaponType);
+		if (styles == null || style < 0 || style >= styles.length)
 		{
-			// Stab-primary melee: dagger / stab-sword (Fang, rapier), spear, hasta,
-			// pickaxe — their "Accurate/Lunge" first option is Stab.
-			case 1:  // POINTED (dagger / stab sword: Stab, Slash, ...)
-			case 12: // SPEAR (Lunge=Stab, Swipe, Pound, Block=Stab)
-			case 13: // PICKAXE (Spike=Stab, Impale=Stab, Smash, Block)
-				return style == 0 || (weaponType != 1 && style == 3);
-			// Slash-primary swords/claws/scythes: their STAB option is index 2 (Lunge).
-			case 9:  // SLASH_SWORD (Chop, Slash, Lunge=Stab, Block)
-			case 4:  // CLAWS (Chop, Slash, Lunge=Stab, Block)
-				return style == 2;
-			default:
-				return false; // 2h swords/blunt/axe/whip = no stab; ranged/magic = not melee
+			return CombatStyle.UNKNOWN;
+		}
+		return styles[style];
+	}
+
+	/** NPCs whose hits are style-gated ({@code style_target_ids}, legacy {@code stab_target_ids}). */
+	private static List<Integer> styleTargetIds(RaidChallenge ch)
+	{
+		if (ch == null)
+		{
+			return null;
+		}
+		if (ch.getStyleTargetIds() != null && !ch.getStyleTargetIds().isEmpty())
+		{
+			return ch.getStyleTargetIds();
+		}
+		return ch.getStabTargetIds(); // legacy alias
+	}
+
+	/** Required style for a style-gated task; defaults to STAB when unset. */
+	private static CombatStyle requiredCombatStyle(RaidChallenge ch)
+	{
+		String s = ch == null ? null : ch.getRequiredAttackStyle();
+		if (s == null || s.trim().isEmpty())
+		{
+			return CombatStyle.STAB; // back-compat: stab_target_ids without a style = STAB
+		}
+		try
+		{
+			return CombatStyle.valueOf(s.trim().toUpperCase());
+		}
+		catch (IllegalArgumentException e)
+		{
+			return CombatStyle.STAB;
 		}
 	}
 
@@ -531,12 +609,13 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return;
 		}
 		int id = e.getGraphicsObject().getId();
-		// Capture aid: with the final Warden present, log gfx ids so we can identify
-		// the enrage lightning object, then set WARDEN_LIGHTNING_GFX_ID to it.
+		// Capture aid: with the final Warden present, log gfx ids (kept on so the
+		// enrage-id mapping can be re-verified / extended if a future update shifts it).
 		log.debug("[WARDEN-GFX] graphicsObjectId={}", id);
-		if (WARDEN_LIGHTNING_GFX_ID != -1 && id == WARDEN_LIGHTNING_GFX_ID)
+		if (!wardenEnraged && WARDEN_LIGHTNING_GFX_IDS.contains(id))
 		{
 			wardenEnraged = true;
+			log.debug("[WARDEN] enrage detected via lightning gfx {}", id);
 		}
 	}
 

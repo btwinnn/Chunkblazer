@@ -931,7 +931,6 @@ public class NPCKillModule extends AbstractTaskModule
 			if (fight != null && !fight.contested)
 			{
 				fight.contested = true;
-				log.info("[NPCKILL-DEBUG] fight contested by another player's damage (index={})", index);
 			}
 			return;
 		}
@@ -955,11 +954,6 @@ public class NPCKillModule extends AbstractTaskModule
 			fight.combatStartTick = tick;
 			fights.put(index, fight);
 
-			if (!fight.startedFresh)
-			{
-				log.info("[NPCKILL-DEBUG] fight started on an already-damaged NPC (index={} name='{}')",
-					index, npc.getName());
-			}
 		}
 
 		fight.damage += hitsplat.getAmount();
@@ -978,8 +972,6 @@ public class NPCKillModule extends AbstractTaskModule
 				if (violation != null)
 				{
 					fight.equipViolatedTaskIds.add(task.getTaskId());
-					log.info("[NPCKILL-DEBUG] equipment violated mid-fight for '{}': {}",
-						task.getTaskId(), violation);
 				}
 			}
 		}
@@ -1286,8 +1278,6 @@ public class NPCKillModule extends AbstractTaskModule
 		// variants). If a kill doesn't credit a task you expected, grep this line
 		// for the actual id and add it to the task's npc_ids. Reads the SNAPSHOT: a
 		// held death's NPC handle may already be a despawned husk reporting id=-1.
-		log.info("[NPCKILL-DEBUG] confirmed kill: id={} name='{}' damage={} fresh={} contested={}",
-			death.npcId, death.npcName, fight.damage, fight.startedFresh, fight.contested);
 
 		// Check all active tasks for a match
 		List<NuzlockeTask> matchingTasks = mostSpecificMatches(findMatchingTasks(death.npcId));
@@ -1319,9 +1309,6 @@ public class NPCKillModule extends AbstractTaskModule
 					// is the only place a genuine on-task kill can be silently thrown
 					// away, and the signal ticks are what decide it. Without them a
 					// refusal is indistinguishable from being genuinely off-task.
-					log.info("[NPCKILL-DEBUG] on-task gate: task='{}' onTask={} deathTick={} slayerXpTick={} slayerCountTick={} unclaimedSignals={}",
-						task.getTaskId(), onTaskVerdict, death.deathTick,
-						lastSlayerXpGainTick, lastSlayerCountDropTick, onTaskSignalTicks);
 				}
 				if (!onTaskVerdict)
 				{

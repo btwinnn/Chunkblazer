@@ -237,8 +237,6 @@ public class FarmingModule extends AbstractTaskModule
 				{
 					previousFarmingXp = client.getSkillExperience(Skill.FARMING);
 				}
-				log.debug("[FARMING-DEBUG] tracking '{}' ({}) watched={} snapshot={} target={} xpBaseline={}",
-					task.getName(), task.getTaskId(), watched, seeded, task.getTargetQuantity(), previousFarmingXp);
 			});
 		}
 		catch (Exception e)
@@ -292,7 +290,6 @@ public class FarmingModule extends AbstractTaskModule
 		}
 
 		farmingActionThisTick = true;
-		log.debug("[FARMING-DEBUG] farming xp +{} ({} -> { }) tick={}", newXp - prevXp, prevXp, newXp, getGameTick());
 
 		// XP is a SAME-TICK marker only (raking). It must not claim pending
 		// changes from earlier ticks — that would credit "bank the seeds,
@@ -323,8 +320,6 @@ public class FarmingModule extends AbstractTaskModule
 		}
 
 		farmingActionThisTick = true;
-		log.debug("[FARMING-DEBUG] plant message tick={} type={} msg='{}'",
-			getGameTick(), event.getType(), Text.removeTags(event.getMessage()));
 		// The plant message arrives at the END of the planting animation; the
 		// seed left the inventory at its START, ticks earlier. Allow claiming
 		// a pending DECREASE from the window.
@@ -359,8 +354,6 @@ public class FarmingModule extends AbstractTaskModule
 				{
 					pendingChanges.put(task.getTaskId(),
 						new PendingChange(getGameTick(), delta.decrease, delta.details));
-					log.debug("[FARMING-DEBUG] tick={} pending change recorded for '{}': {} (awaiting marker)",
-						getGameTick(), task.getTaskId(), delta.details);
 				}
 			}
 			return;
@@ -392,11 +385,6 @@ public class FarmingModule extends AbstractTaskModule
 				// Watched changes are normally consumed into pendingChanges by
 				// onItemContainerChanged before this slide runs; a change dying
 				// here means a container event was missed entirely.
-				if (old != null && !old.equals(next))
-				{
-					log.debug("[FARMING-DEBUG] tick={} slide consumed uncredited change for '{}': {} -> { } (markerThisTick={})",
-						getGameTick(), task.getTaskId(), old, next, farmingActionThisTick);
-				}
 			}
 		}
 
@@ -405,11 +393,6 @@ public class FarmingModule extends AbstractTaskModule
 		pendingChanges.entrySet().removeIf(e ->
 		{
 			boolean expired = getGameTick() - e.getValue().tick > PENDING_WINDOW_TICKS;
-			if (expired)
-			{
-				log.debug("[FARMING-DEBUG] tick={} pending change for '{}' expired unclaimed: {}",
-					getGameTick(), e.getKey(), e.getValue().details);
-			}
 			return expired;
 		});
 
@@ -434,8 +417,6 @@ public class FarmingModule extends AbstractTaskModule
 		{
 			// A live delta supersedes any stale pending for this task.
 			pendingChanges.remove(task.getTaskId());
-			log.debug("[FARMING-DEBUG] tick={} crediting '{}' from live delta: {}",
-				getGameTick(), task.getTaskId(), delta.details);
 			applyCredit(task, delta.details);
 			return;
 		}
@@ -453,16 +434,11 @@ public class FarmingModule extends AbstractTaskModule
 			if (sameTick || (allowPending && inWindow && pending.decrease))
 			{
 				pendingChanges.remove(task.getTaskId());
-				log.debug("[FARMING-DEBUG] tick={} crediting '{}' from pending change (tick={}): {}",
-					getGameTick(), task.getTaskId(), pending.tick, pending.details);
 				applyCredit(task, pending.details);
 				return;
 			}
 		}
 
-		log.debug("[FARMING-DEBUG] tick={} marker fired but nothing to credit for '{}' (allowPending={}, pending={})",
-			getGameTick(), task.getTaskId(), allowPending,
-			pendingChanges.containsKey(task.getTaskId()));
 	}
 
 	/**

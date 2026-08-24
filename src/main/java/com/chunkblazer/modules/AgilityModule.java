@@ -261,11 +261,6 @@ public class AgilityModule extends AbstractTaskModule
 		// shortcuts have no watched ids at all). Do the shortcut in-game and read
 		// the id here, then put it in the task's required_object. This is how to
 		// reconcile the "wiki id doesn't line up with what the client reports" gap.
-		if (option != null && isAgilityVerb(option))
-		{
-			log.info("[AGILITY-DEBUG] obstacle/shortcut clicked: id={} option='{}' target='{}' (watched={})",
-				objectId, option, event.getMenuTarget(), watchedObjectIds.contains(objectId));
-		}
 
 		if (watchedObjectIds.isEmpty() || !watchedObjectIds.contains(objectId))
 		{

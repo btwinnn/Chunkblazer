@@ -2530,6 +2530,36 @@ public class ChunkBlazerPlugin extends Plugin
 		configManager.setConfiguration("chunkblazer", CHARTER_SEED_STRIPPED_KEY, "true");
 	}
 
+	private static final String SOUND_VOLUME_MIGRATED_KEY = "soundVolumeReset3Pct";
+	private static final int OLD_DEFAULT_SOUND_VOLUME = 25;
+
+	/**
+	 * One-time migration. The task-completion sound volume default was {@value
+	 * #OLD_DEFAULT_SOUND_VOLUME}% in early builds and is now a deliberately quiet
+	 * 3%. Accounts created under the old default carry a STORED 25 that overrides
+	 * the new 3% code default — and RuneLite config sync can resurrect it across a
+	 * player's installs. Clear a stored 25 exactly once so it falls back to 3%.
+	 * Guarded by a hidden flag so a value the player deliberately sets AFTER the
+	 * migration (even 25) is never touched. Idempotent + cheap once the flag is set.
+	 */
+	public void migrateResetStaleSoundVolume()
+	{
+		if ("true".equals(configManager.getConfiguration(CONFIG_GROUP, SOUND_VOLUME_MIGRATED_KEY)))
+		{
+			return;
+		}
+		Integer stored = configManager.getConfiguration(CONFIG_GROUP, "taskCompletionSoundVolume", Integer.class);
+		if (stored != null && stored == OLD_DEFAULT_SOUND_VOLUME)
+		{
+			// Unset (not set-to-3): let it resolve to the code default so future
+			// default changes carry through, and so this reads as "never chosen".
+			configManager.unsetConfiguration(CONFIG_GROUP, "taskCompletionSoundVolume");
+			log.info("[CHUNKBLAZER] cleared stale {}% task-sound volume; now uses the 3% default",
+				OLD_DEFAULT_SOUND_VOLUME);
+		}
+		configManager.setConfiguration(CONFIG_GROUP, SOUND_VOLUME_MIGRATED_KEY, "true");
+	}
+
 	/** True if the region belongs to a charter-port chunk ({@code chunk_type:CHARTER}). */
 	public boolean isCharterRegion(int regionId)
 	{
@@ -3725,6 +3755,7 @@ public class ChunkBlazerPlugin extends Plugin
 		ensureStartingChunkUnlocked();
 		migrateStripSeededCharterChunks();
 		migrateRepairBogusProgressionBaseline();
+		migrateResetStaleSoundVolume();
 		ensureBossChunkTasksGranted();
 
 		activeTasks.clear();
