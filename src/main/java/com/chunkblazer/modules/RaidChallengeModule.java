@@ -624,6 +624,15 @@ public class RaidChallengeModule extends AbstractTaskModule
 			why = "outside arena box";
 			reason = "You left the area this challenge must be done in.";
 		}
+		// Gear-value budget: fail the instant the window opens if you walk in over
+		// budget, instead of staying silent until the completion message. Checked
+		// every tick so re-equipping something pricey mid-fight also trips it.
+		if (why == null && ch.getMaxGearValue() != null && equippedGearValue() >= ch.getMaxGearValue())
+		{
+			why = "gear value " + equippedGearValue() + " >= max " + ch.getMaxGearValue();
+			reason = "Your equipped gear is worth too much — must be under "
+				+ formatGp(ch.getMaxGearValue()) + " (you have " + formatGp(equippedGearValue()) + ").";
+		}
 		if (why != null)
 		{
 			s.violated = true;
@@ -829,6 +838,24 @@ public class RaidChallengeModule extends AbstractTaskModule
 			}
 		}
 		return total;
+	}
+
+	/** Compact gp for chat feedback: 12345678 → "12m". */
+	private static String formatGp(long gp)
+	{
+		if (gp >= 1_000_000_000L)
+		{
+			return (gp / 1_000_000_000L) + "b";
+		}
+		if (gp >= 1_000_000L)
+		{
+			return (gp / 1_000_000L) + "m";
+		}
+		if (gp >= 1_000L)
+		{
+			return (gp / 1_000L) + "k";
+		}
+		return String.valueOf(gp);
 	}
 
 	private boolean hasArenaBox(RaidChallenge ch)
