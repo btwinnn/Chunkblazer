@@ -126,9 +126,6 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JLabel chunksUnlockedLabel;
 	private JLabel tasksCompletedLabel;
 	private JLabel taskNameLabel;
-	private JLabel taskCategoryLabel;
-	private JLabel taskPointsLabel;
-	private JLabel taskProgressLabel;
 	private JRadioButton casualRadio;
 	private JRadioButton nuzlockeRadio;
 
@@ -620,8 +617,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	 */
 	private JPanel createDataNoticeRow()
 	{
-		JPanel row = new JPanel(new FlowLayout(FlowLayout.CENTER, 3, 0));
-		row.setBackground(ColorScheme.DARK_GRAY_COLOR);
+		JPanel row = styledPanel(new FlowLayout(FlowLayout.CENTER, 3, 0), ColorScheme.DARK_GRAY_COLOR);
 		row.setAlignmentX(LEFT_ALIGNMENT);
 		row.setMaximumSize(new Dimension(PANEL_WIDTH, 16));
 
@@ -2068,9 +2064,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 22));
 		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 22));
 
-		activeTasksSectionTitle = new JLabel("Active Tasks");
-		activeTasksSectionTitle.setFont(FontManager.getRunescapeBoldFont());
-		activeTasksSectionTitle.setForeground(new Color(100, 255, 100));
+		activeTasksSectionTitle = styledLabel("Active Tasks", FontManager.getRunescapeBoldFont(), new Color(100, 255, 100));
 		headerRow.add(activeTasksSectionTitle, BorderLayout.WEST);
 
 		activeTasksToggle = new JToggleButton();
@@ -2093,9 +2087,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		taskPanel.add(Box.createVerticalStrut(4));
 
 		// === FILTER PANEL (collapsible) ===
-		activeTasksFilterPanel = new JPanel();
-		activeTasksFilterPanel.setLayout(new BoxLayout(activeTasksFilterPanel, BoxLayout.Y_AXIS));
-		activeTasksFilterPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		activeTasksFilterPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		activeTasksFilterPanel.setAlignmentX(LEFT_ALIGNMENT);
 
 		// Search field
@@ -2157,8 +2149,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		activeTasksFilterPanel.add(Box.createVerticalStrut(4));
 
 		// Category and Region filters
-		JPanel filterRow = new JPanel(new GridLayout(1, 2, 4, 0));
-		filterRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel filterRow = styledPanel(new GridLayout(1, 2, 4, 0), ColorScheme.DARKER_GRAY_COLOR);
 		filterRow.setAlignmentX(LEFT_ALIGNMENT);
 		filterRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 40));
 		filterRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 40));
@@ -2207,16 +2198,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		activeTasksFilterPanel.add(Box.createVerticalStrut(4));
 
 		// Tier (points) filter — mirrors the card colours.
-		JPanel tierRow = new JPanel(new BorderLayout(2, 0));
-		tierRow.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel tierRow = styledPanel(new BorderLayout(2, 0), ColorScheme.DARKER_GRAY_COLOR);
 		tierRow.setAlignmentX(LEFT_ALIGNMENT);
 		tierRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 40));
 		tierRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 40));
 
-		JLabel tierLabel = new JLabel("Tier:");
-		tierLabel.setFont(FontManager.getRunescapeSmallFont());
-		tierLabel.setForeground(Color.LIGHT_GRAY);
-		tierRow.add(tierLabel, BorderLayout.NORTH);
+		tierRow.add(styledLabel("Tier:", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY), BorderLayout.NORTH);
 
 		activeTasksTierCombo = new JComboBox<>(TIER_NAMES);
 		activeTasksTierCombo.setFont(FontManager.getRunescapeSmallFont());
@@ -2255,9 +2242,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		taskPanel.add(activeTasksFilterPanel);
 
 		// === SCROLLABLE TASK LIST ===
-		activeTasksContentPanel = new JPanel();
-		activeTasksContentPanel.setLayout(new BoxLayout(activeTasksContentPanel, BoxLayout.Y_AXIS));
-		activeTasksContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		activeTasksContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 
 		activeTasksScrollPane = new JScrollPane(activeTasksContentPanel);
 		activeTasksScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -2268,26 +2253,15 @@ public class ChunkBlazerPanel extends PluginPanel
 		activeTasksScrollPane.setAlignmentX(LEFT_ALIGNMENT);
 
 		// Placeholder
-		taskNameLabel = new JLabel("Loading tasks...");
-		taskNameLabel.setFont(FontManager.getRunescapeSmallFont());
-		taskNameLabel.setForeground(Color.LIGHT_GRAY);
-		taskNameLabel.setAlignmentX(LEFT_ALIGNMENT);
-		activeTasksContentPanel.add(taskNameLabel);
+		taskNameLabel = addLabel(activeTasksContentPanel, "Loading tasks...", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
 
 		taskPanel.add(activeTasksScrollPane);
 
 		// === COLLAPSED LABEL ===
-		activeTasksCollapsedLabel = new JLabel("Click to view tasks");
-		activeTasksCollapsedLabel.setFont(FontManager.getRunescapeSmallFont());
-		activeTasksCollapsedLabel.setForeground(Color.GRAY);
+		activeTasksCollapsedLabel = styledLabel("Click to view tasks", FontManager.getRunescapeSmallFont(), Color.GRAY);
 		activeTasksCollapsedLabel.setAlignmentX(LEFT_ALIGNMENT);
 		activeTasksCollapsedLabel.setVisible(false); // Hidden when expanded
 		taskPanel.add(activeTasksCollapsedLabel);
-
-		// Hidden labels for backward compatibility
-		taskCategoryLabel = new JLabel("");
-		taskPointsLabel = new JLabel("");
-		taskProgressLabel = new JLabel("");
 
 		return taskPanel;
 	}
@@ -2480,15 +2454,11 @@ public class ChunkBlazerPanel extends PluginPanel
 		selectedTaskPanel.removeAll();
 
 		// Header row: title on the left, \u00d7 dismiss on the right.
-		JPanel headerRow = new JPanel(new BorderLayout(5, 0));
-		headerRow.setBackground(selectedTaskPanel.getBackground());
+		JPanel headerRow = styledPanel(new BorderLayout(5, 0), selectedTaskPanel.getBackground());
 		headerRow.setAlignmentX(LEFT_ALIGNMENT);
 		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 22));
 
-		JLabel selectedTitle = new JLabel("\u2605 SELECTED TASK \u2605");
-		selectedTitle.setFont(FontManager.getRunescapeBoldFont());
-		selectedTitle.setForeground(FLAME);
-		headerRow.add(selectedTitle, BorderLayout.WEST);
+		headerRow.add(styledLabel("\u2605 SELECTED TASK \u2605", FontManager.getRunescapeBoldFont(), FLAME), BorderLayout.WEST);
 
 		// Beveled close button (painted xIcon); the X brightens to red on hover.
 		final Color dismissIdleColor = new Color(180, 180, 180);
@@ -2554,11 +2524,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		{
 			info += " | L" + selectedTask.getLevelRequirement();
 		}
-		JLabel infoLabel = new JLabel(info);
-		infoLabel.setFont(FontManager.getRunescapeSmallFont());
-		infoLabel.setForeground(new Color(255, 200, 100));
-		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
-		selectedTaskPanel.add(infoLabel);
+		addLabel(selectedTaskPanel, info, FontManager.getRunescapeSmallFont(), new Color(255, 200, 100));
 
 		// Region + Area rows — gives the player full context for the highlighted task.
 		// getTaskRegionName already includes the numeric ID in "ChunkName (id)" form.
@@ -2566,20 +2532,12 @@ public class ChunkBlazerPanel extends PluginPanel
 		String regionRow = (selRegionName != null && !selRegionName.isEmpty())
 			? "Chunk: " + selRegionName
 			: "Chunk: unknown";
-		JLabel selRegionLabel = new JLabel(regionRow);
-		selRegionLabel.setFont(FontManager.getRunescapeSmallFont());
-		selRegionLabel.setForeground(new Color(140, 200, 230));
-		selRegionLabel.setAlignmentX(LEFT_ALIGNMENT);
-		selectedTaskPanel.add(selRegionLabel);
+		addLabel(selectedTaskPanel, regionRow, FontManager.getRunescapeSmallFont(), new Color(140, 200, 230));
 
 		String selArea = plugin.getTaskArea(selectedTask);
 		if (selArea != null && !selArea.isEmpty())
 		{
-			JLabel selAreaLabel = new JLabel("Area: " + selArea);
-			selAreaLabel.setFont(FontManager.getRunescapeSmallFont());
-			selAreaLabel.setForeground(new Color(180, 180, 220));
-			selAreaLabel.setAlignmentX(LEFT_ALIGNMENT);
-			selectedTaskPanel.add(selAreaLabel);
+			addLabel(selectedTaskPanel, "Area: " + selArea, FontManager.getRunescapeSmallFont(), new Color(180, 180, 220));
 		}
 
 		// Progress
@@ -2588,8 +2546,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		float pct = target > 0 ? (float) progress / target : 0;
 		pct = Math.min(pct, 1.0f);
 
-		JPanel progressRow = new JPanel(new BorderLayout(4, 0));
-		progressRow.setBackground(new Color(60, 80, 60));
+		JPanel progressRow = styledPanel(new BorderLayout(4, 0), new Color(60, 80, 60));
 		progressRow.setAlignmentX(LEFT_ALIGNMENT);
 		progressRow.setPreferredSize(new Dimension(CONTENT_WIDTH - 30, 14));
 		progressRow.setMaximumSize(new Dimension(CONTENT_WIDTH - 30, 14));
@@ -2604,10 +2561,7 @@ public class ChunkBlazerPanel extends PluginPanel
 			12);
 		progressRow.add(progressBar, BorderLayout.CENTER);
 
-		JLabel progressText = new JLabel(progress + "/" + target);
-		progressText.setFont(FontManager.getRunescapeSmallFont());
-		progressText.setForeground(Color.WHITE);
-		progressRow.add(progressText, BorderLayout.EAST);
+		progressRow.add(styledLabel(progress + "/" + target, FontManager.getRunescapeSmallFont(), Color.WHITE), BorderLayout.EAST);
 
 		selectedTaskPanel.add(Box.createVerticalStrut(4));
 		selectedTaskPanel.add(progressRow);
@@ -2618,9 +2572,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 	private JPanel createTaskListSection()
 	{
-		JPanel listPanel = new JPanel();
-		listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-		listPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		JPanel listPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		listPanel.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(ColorScheme.MEDIUM_GRAY_COLOR),
 			new EmptyBorder(6, 6, 6, 6)
@@ -2633,10 +2585,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		headerRow.setPreferredSize(new Dimension(CONTENT_WIDTH, 25));
 		headerRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 25));
 
-		JLabel sectionTitle = new JLabel("Chunk Tasks");
-		sectionTitle.setFont(FontManager.getRunescapeBoldFont());
-		sectionTitle.setForeground(Color.WHITE);
-		headerRow.add(sectionTitle, BorderLayout.WEST);
+		headerRow.add(styledLabel("Chunk Tasks", FontManager.getRunescapeBoldFont(), Color.WHITE), BorderLayout.WEST);
 
 		taskListToggle = new JToggleButton();
 		setToggleArrow(taskListToggle, taskListExpanded);
@@ -2685,9 +2634,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		listPanel.add(Box.createVerticalStrut(3));
 
 		// Scrollable task list content
-		taskListContentPanel = new JPanel();
-		taskListContentPanel.setLayout(new BoxLayout(taskListContentPanel, BoxLayout.Y_AXIS));
-		taskListContentPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		taskListContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		taskListContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		taskListScrollPane = new JScrollPane(taskListContentPanel);
@@ -2703,11 +2650,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		listPanel.add(taskListScrollPane);
 
 		// Collapsed summary (visible when collapsed)
-		JLabel collapsedLabel = new JLabel("Click to view tasks");
-		collapsedLabel.setFont(FontManager.getRunescapeSmallFont());
-		collapsedLabel.setForeground(Color.GRAY);
-		collapsedLabel.setAlignmentX(LEFT_ALIGNMENT);
-		listPanel.add(collapsedLabel);
+		addLabel(listPanel, "Click to view tasks", FontManager.getRunescapeSmallFont(), Color.GRAY);
 
 		return listPanel;
 	}
@@ -3126,11 +3069,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		if (filteredTasks.isEmpty())
 		{
 			String message = allTasks.isEmpty() ? "No active tasks" : "No tasks match filter";
-			JLabel noTaskLabel = new JLabel(message);
-			noTaskLabel.setFont(FontManager.getRunescapeSmallFont());
-			noTaskLabel.setForeground(Color.GRAY);
-			noTaskLabel.setAlignmentX(LEFT_ALIGNMENT);
-			activeTasksContentPanel.add(noTaskLabel);
+			addLabel(activeTasksContentPanel, message, FontManager.getRunescapeSmallFont(), Color.GRAY);
 		}
 		else
 		{
@@ -3138,12 +3077,9 @@ public class ChunkBlazerPanel extends PluginPanel
 			// are what's STILL ON OFFER (base_points of tasks not yet done), not
 			// points banked — these tasks are by definition incomplete.
 			int availablePoints = filteredTasks.stream().mapToInt(NuzlockeTask::getBasePoints).sum();
-			JLabel summaryLabel = new JLabel(
-				"Showing " + filteredTasks.size() + " tasks (" + availablePoints + " pts available)");
-			summaryLabel.setFont(FontManager.getRunescapeSmallFont());
-			summaryLabel.setForeground(FLAME);
-			summaryLabel.setAlignmentX(LEFT_ALIGNMENT);
-			activeTasksContentPanel.add(summaryLabel);
+			addLabel(activeTasksContentPanel,
+				"Showing " + filteredTasks.size() + " tasks (" + availablePoints + " pts available)",
+				FontManager.getRunescapeSmallFont(), FLAME);
 			activeTasksContentPanel.add(Box.createVerticalStrut(5));
 
 			int taskNumber = 1;
@@ -3377,11 +3313,8 @@ public class ChunkBlazerPanel extends PluginPanel
 			TASK_TEXT_WRAP_WIDTH);
 		card.add(nameLabel);
 
-		JLabel infoLabel = new JLabel(region != null ? "Chunk " + region : "Unlocked");
-		infoLabel.setFont(FontManager.getRunescapeSmallFont());
-		infoLabel.setForeground(new Color(150, 190, 150));
-		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
-		card.add(infoLabel);
+		addLabel(card, region != null ? "Chunk " + region : "Unlocked",
+			FontManager.getRunescapeSmallFont(), new Color(150, 190, 150));
 
 		return card;
 	}
@@ -3597,11 +3530,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		{
 			infoText.append("  L").append(task.getLevelRequirement());
 		}
-		JLabel infoLabel = new JLabel(infoText.toString());
-		infoLabel.setFont(FontManager.getRunescapeSmallFont());
-		infoLabel.setForeground(isSelected ? new Color(255, 200, 100) : Color.ORANGE);
-		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
-		itemPanel.add(infoLabel);
+		addLabel(itemPanel, infoText.toString(),
+			FontManager.getRunescapeSmallFont(), isSelected ? new Color(255, 200, 100) : Color.ORANGE);
 
 		// Region subtitle: friendly name + numeric region ID, so a glance tells the
 		// player which chunk rolled the task. getTaskRegionName already returns the
@@ -3610,11 +3540,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		String regionText = (activeRegionName != null && !activeRegionName.isEmpty())
 			? "Chunk: " + activeRegionName
 			: "Chunk: unknown";
-		JLabel activeRegionLabel = new JLabel(regionText);
-		activeRegionLabel.setFont(FontManager.getRunescapeSmallFont());
-		activeRegionLabel.setForeground(new Color(140, 200, 230));
-		activeRegionLabel.setAlignmentX(LEFT_ALIGNMENT);
-		itemPanel.add(activeRegionLabel);
+		addLabel(itemPanel, regionText, FontManager.getRunescapeSmallFont(), new Color(140, 200, 230));
 
 		// Optional "how to complete this" description, wrapped. Especially useful for
 		// raid/boss tasks whose name alone doesn't spell out the requirement
@@ -3654,10 +3580,7 @@ public class ChunkBlazerPanel extends PluginPanel
 			10);
 		progressRow.add(progressBar, BorderLayout.CENTER);
 
-		JLabel progressText = new JLabel(progress + "/" + target);
-		progressText.setFont(FontManager.getRunescapeSmallFont());
-		progressText.setForeground(Color.WHITE);
-		progressRow.add(progressText, BorderLayout.EAST);
+		progressRow.add(styledLabel(progress + "/" + target, FontManager.getRunescapeSmallFont(), Color.WHITE), BorderLayout.EAST);
 
 		itemPanel.add(Box.createVerticalStrut(2));
 		itemPanel.add(progressRow);
@@ -3849,20 +3772,13 @@ public class ChunkBlazerPanel extends PluginPanel
 		if (filteredTasks.isEmpty())
 		{
 			String message = allTasks.isEmpty() ? "No tasks completed yet" : "No tasks match filters";
-			JLabel placeholder = new JLabel(message);
-			placeholder.setFont(FontManager.getRunescapeSmallFont());
-			placeholder.setForeground(Color.GRAY);
-			placeholder.setAlignmentX(LEFT_ALIGNMENT);
-			completedTasksContentPanel.add(placeholder);
+			addLabel(completedTasksContentPanel, message, FontManager.getRunescapeSmallFont(), Color.GRAY);
 		}
 		else
 		{
 			int totalPoints = filteredTasks.stream().mapToInt(CompletedTaskInfo::getPoints).sum();
-			JLabel summaryLabel = new JLabel("Showing " + filteredTasks.size() + " tasks (" + totalPoints + " pts)");
-			summaryLabel.setFont(FontManager.getRunescapeSmallFont());
-			summaryLabel.setForeground(FLAME);
-			summaryLabel.setAlignmentX(LEFT_ALIGNMENT);
-			completedTasksContentPanel.add(summaryLabel);
+			addLabel(completedTasksContentPanel, "Showing " + filteredTasks.size() + " tasks (" + totalPoints + " pts)",
+				FontManager.getRunescapeSmallFont(), FLAME);
 			completedTasksContentPanel.add(Box.createVerticalStrut(5));
 
 			for (CompletedTaskInfo info : filteredTasks)
@@ -3935,11 +3851,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Info line: Category | Points
 		String infoText = NuzlockeTask.displayCategory(info.getCategory()) + "  +" + info.getPoints() + " pts";
-		JLabel infoLabel = new JLabel(infoText);
-		infoLabel.setFont(FontManager.getRunescapeSmallFont());
-		infoLabel.setForeground(Color.ORANGE);
-		infoLabel.setAlignmentX(LEFT_ALIGNMENT);
-		itemPanel.add(infoLabel);
+		addLabel(itemPanel, infoText, FontManager.getRunescapeSmallFont(), Color.ORANGE);
 
 		// Region line. info.getRegionName() is already the composed
 		// "ChunkName (regionId)" string from getRegionName(int) — display as-is.
@@ -4039,11 +3951,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		if (tasks == null || tasks.isEmpty())
 		{
-			JLabel noTasksLabel = new JLabel("No tasks rolled for this region");
-			noTasksLabel.setFont(FontManager.getRunescapeSmallFont());
-			noTasksLabel.setForeground(Color.GRAY);
-			noTasksLabel.setAlignmentX(LEFT_ALIGNMENT);
-			taskListContentPanel.add(noTasksLabel);
+			addLabel(taskListContentPanel, "No tasks rolled for this region", FontManager.getRunescapeSmallFont(), Color.GRAY);
 		}
 		else
 		{
@@ -4068,11 +3976,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 			if (shown == 0 && !taskFilterText.isEmpty())
 			{
-				JLabel noMatchLabel = new JLabel("No tasks match filter");
-				noMatchLabel.setFont(FontManager.getRunescapeSmallFont());
-				noMatchLabel.setForeground(Color.GRAY);
-				noMatchLabel.setAlignmentX(LEFT_ALIGNMENT);
-				taskListContentPanel.add(noMatchLabel);
+				addLabel(taskListContentPanel, "No tasks match filter", FontManager.getRunescapeSmallFont(), Color.GRAY);
 			}
 		}
 
@@ -4168,31 +4072,20 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Status indicator
 		if (isActive)
 		{
-			JLabel statusLabel = new JLabel("ACTIVE");
-			statusLabel.setFont(FontManager.getRunescapeSmallFont());
-			statusLabel.setForeground(new Color(100, 255, 100));
-			infoPanel.add(statusLabel);
+			infoPanel.add(styledLabel("ACTIVE", FontManager.getRunescapeSmallFont(), new Color(100, 255, 100)));
 		}
 		else if (isAssigned)
 		{
-			JLabel statusLabel = new JLabel("DONE");
-			statusLabel.setFont(FontManager.getRunescapeSmallFont());
-			statusLabel.setForeground(Color.GRAY);
-			infoPanel.add(statusLabel);
+			infoPanel.add(styledLabel("DONE", FontManager.getRunescapeSmallFont(), Color.GRAY));
 		}
 
 		if (task.getLevelRequirement() > 1)
 		{
-			JLabel levelLabel = new JLabel("Lv" + task.getLevelRequirement());
-			levelLabel.setFont(FontManager.getRunescapeSmallFont());
-			levelLabel.setForeground(Color.ORANGE);
-			infoPanel.add(levelLabel);
+			infoPanel.add(styledLabel("Lv" + task.getLevelRequirement(), FontManager.getRunescapeSmallFont(), Color.ORANGE));
 		}
 
-		JLabel pointsLabel = new JLabel(task.getBasePoints() + "pt");
-		pointsLabel.setFont(FontManager.getRunescapeSmallFont());
-		pointsLabel.setForeground(isAssigned ? Color.GRAY : new Color(100, 200, 100));
-		infoPanel.add(pointsLabel);
+		infoPanel.add(styledLabel(task.getBasePoints() + "pt",
+			FontManager.getRunescapeSmallFont(), isAssigned ? Color.GRAY : new Color(100, 200, 100)));
 
 		itemPanel.add(infoPanel);
 
