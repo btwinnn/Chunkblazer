@@ -195,6 +195,10 @@ class ChunkBlazerPluginTest
 		// Guards the bundled Free_Chunks.json against syntax/schema breakage: inject a
 		// real Gson, run the loader, and confirm it populated the free set + names.
 		setField(plugin, "gson", new com.google.gson.Gson());
+		// Free_Chunks.json now ships inside the bundled seed and is read through
+		// CatalogStore; give the plugin a seed-backed store (getFileContent falls back
+		// to the bundled seed with no init()/network needed).
+		setField(plugin, "catalogStore", seedBackedCatalogStore());
 		java.lang.reflect.Method load = plugin.getClass().getDeclaredMethod("loadFreeChunks");
 		load.setAccessible(true);
 		load.invoke(plugin);
@@ -213,6 +217,10 @@ class ChunkBlazerPluginTest
 		// made e.g. the Rellekka islands unreachable. Their neighbor_ids come
 		// from Free_Chunks.json and must feed the unlockable set.
 		setField(plugin, "gson", new com.google.gson.Gson());
+		// Free_Chunks.json now ships inside the bundled seed and is read through
+		// CatalogStore; give the plugin a seed-backed store (getFileContent falls back
+		// to the bundled seed with no init()/network needed).
+		setField(plugin, "catalogStore", seedBackedCatalogStore());
 		java.lang.reflect.Method load = plugin.getClass().getDeclaredMethod("loadFreeChunks");
 		load.setAccessible(true);
 		load.invoke(plugin);
@@ -371,6 +379,19 @@ class ChunkBlazerPluginTest
 		Field f = findField(target.getClass(), name);
 		f.setAccessible(true);
 		f.set(target, value);
+	}
+
+	/**
+	 * A CatalogStore that serves files from the bundled seed. getFileContent() falls
+	 * back to the gzipped seed per-file, so no init()/network is needed here — the http
+	 * client is never touched on that path.
+	 */
+	private com.chunkblazer.api.CatalogStore seedBackedCatalogStore()
+	{
+		// A real (unused) client — the constructor calls newBuilder() on it, and the
+		// seed path never makes a request. Cheap to build; opens no connections.
+		return new com.chunkblazer.api.CatalogStore(
+			new okhttp3.OkHttpClient(), config, new com.google.gson.Gson());
 	}
 
 	private static Field findField(Class<?> type, String name) throws NoSuchFieldException

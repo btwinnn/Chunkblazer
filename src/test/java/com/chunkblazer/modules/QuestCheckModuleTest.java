@@ -17,6 +17,7 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.chat.ChatMessageManager;
 import com.chunkblazer.NuzlockeChunk;
+import com.chunkblazer.ShippedSeed;
 import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.TaskConstraints;
 import org.junit.jupiter.api.BeforeEach;
@@ -134,27 +135,26 @@ class QuestCheckModuleTest extends AbstractTaskModuleTest
 
 	private List<NuzlockeTask> loadShippedQuestTasks() throws Exception
 	{
-		try (InputStream is = getClass().getResourceAsStream(QUEST_TASKS_RESOURCE))
+		// Quest_Tasks.json rides inside the bundled gzipped seed since the JSON→server
+		// migration; pull it out the same way CatalogStore does, then parse as before.
+		String json = ShippedSeed.fileContent("Quest_Tasks.json");
+		assertNotNull(json, "Quest_Tasks.json is missing from the bundled seed");
+
+		Type mapType = new TypeToken<Map<String, List<NuzlockeChunk>>>()
 		{
-			assertNotNull(is, "Quest_Tasks.json is not on the classpath at " + QUEST_TASKS_RESOURCE);
+		}.getType();
+		Map<String, List<NuzlockeChunk>> data = new Gson().fromJson(json, mapType);
 
-			Type mapType = new TypeToken<Map<String, List<NuzlockeChunk>>>()
-			{
-			}.getType();
-			Map<String, List<NuzlockeChunk>> data =
-				new Gson().fromJson(new InputStreamReader(is, StandardCharsets.UTF_8), mapType);
+		assertNotNull(data);
+		assertTrue(data.containsKey("Quest_Tasks"), "root key should be Quest_Tasks, got " + data.keySet());
 
-			assertNotNull(data);
-			assertTrue(data.containsKey("Quest_Tasks"), "root key should be Quest_Tasks, got " + data.keySet());
+		List<NuzlockeChunk> groups = data.get("Quest_Tasks");
+		assertNotNull(groups);
+		assertEquals(1, groups.size(), "expected exactly one region group");
 
-			List<NuzlockeChunk> groups = data.get("Quest_Tasks");
-			assertNotNull(groups);
-			assertEquals(1, groups.size(), "expected exactly one region group");
-
-			List<NuzlockeTask> tasks = groups.get(0).getTasks();
-			assertNotNull(tasks, "region group has no tasks array");
-			return tasks;
-		}
+		List<NuzlockeTask> tasks = groups.get(0).getTasks();
+		assertNotNull(tasks, "region group has no tasks array");
+		return tasks;
 	}
 
 	@Test
