@@ -254,6 +254,26 @@ public class RaidChallenge
 	@SerializedName("no_prayer_restore")
 	private Boolean noPrayerRestore;
 
+	/** These item ids must ALL stay in the INVENTORY for the whole fight (e.g. Bag of Salt). */
+	@SerializedName("required_inventory_ids")
+	private List<Integer> requiredInventoryIds;
+
+	/**
+	 * Bit positions in the ACTIVE_PRAYERS varbit (4101) that must stay OFF for the whole
+	 * fight — set any and the run fails. E.g. overheads are bits 12 (magic), 13 (missiles),
+	 * 14 (melee): "defeat X without overhead prayers".
+	 */
+	@SerializedName("forbidden_prayer_bits")
+	private List<Integer> forbiddenPrayerBits;
+
+	/**
+	 * One item from EACH group must be equipped for the whole fight — for sets whose slots
+	 * have interchangeable variants (e.g. full Prospector: helm/jacket/legs/boots, each with
+	 * several item-id variants). Every group must be satisfied, or the run fails.
+	 */
+	@SerializedName("required_equipped_groups")
+	private List<List<Integer>> requiredEquippedGroups;
+
 	// ── Per-raid source overrides (default to ToA) ───────────────────────────
 	/** Varbit holding the raid/invocation level. Default 14380 (TOA_CLIENT_RAID_LEVEL). */
 	@SerializedName("raid_level_varbit")

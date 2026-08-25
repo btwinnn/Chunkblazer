@@ -528,6 +528,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 	// unmapped type resolves to UNKNOWN and is treated leniently (passes).
 	private static final int EQUIPPED_WEAPON_TYPE_VARBIT = 357;
 	private static final int ATTACK_STYLE_VARP = 43;
+	/** Bitmap varbit: 1 bit per active prayer (overheads at 12=magic/13=missiles/14=melee). */
+	private static final int ACTIVE_PRAYERS_VARBIT = 4101;
 
 	enum CombatStyle
 	{
@@ -836,6 +838,53 @@ public class RaidChallengeModule extends AbstractTaskModule
 		{
 			why = "prayer points restored";
 			reason = "You restored prayer during the fight — restore BEFORE the room, not in it.";
+		}
+		if (why == null && ch.getRequiredInventoryIds() != null)
+		{
+			Map<Integer, Integer> counts = inventoryCounts();
+			for (int reqId : ch.getRequiredInventoryIds())
+			{
+				if (counts.getOrDefault(reqId, 0) <= 0)
+				{
+					why = "required inventory item " + reqId + " missing";
+					reason = "You must keep the required item in your inventory for this challenge.";
+					break;
+				}
+			}
+		}
+		if (why == null && ch.getRequiredEquippedGroups() != null)
+		{
+			for (List<Integer> group : ch.getRequiredEquippedGroups())
+			{
+				boolean worn = false;
+				for (int id : group)
+				{
+					if (isEquipped(id))
+					{
+						worn = true;
+						break;
+					}
+				}
+				if (!worn)
+				{
+					why = "required equipped group " + group + " not satisfied";
+					reason = "You must be wearing the full required set for this challenge.";
+					break;
+				}
+			}
+		}
+		if (why == null && ch.getForbiddenPrayerBits() != null)
+		{
+			int prayers = client.getVarbitValue(ACTIVE_PRAYERS_VARBIT);
+			for (int bit : ch.getForbiddenPrayerBits())
+			{
+				if ((prayers & (1 << bit)) != 0)
+				{
+					why = "forbidden prayer bit " + bit + " active";
+					reason = "You used a prayer that isn't allowed for this challenge.";
+					break;
+				}
+			}
 		}
 		if (why == null && ch.getRequiredEquippedIds() != null)
 		{
