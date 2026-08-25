@@ -231,12 +231,21 @@ public interface ChunkBlazerConfig extends Config
 	}
 
 	/**
-	 * Server verification is ALWAYS ON — the toggle was removed from the config so it
-	 * can't be switched off. Left as a plain (non-@ConfigItem) constant so the many
-	 * {@code config.apiEnabled()} call sites keep compiling and always read true. With
-	 * no @ConfigItem there is no stored key, so any stale "apiEnabled=false" from an
-	 * older build is ignored and the account still syncs.
+	 * Server verification is ALWAYS ON. The toggle is {@code hidden} so it never shows
+	 * in the config UI, and a FRESH keyName ("serverVerificationOn") means no player
+	 * has a stored value for it — so it always resolves to the {@code true} default,
+	 * ignoring any stale "apiEnabled=false" from an older build. It MUST keep a valid
+	 * {@code @ConfigItem}: RuneLite's config proxy throws for an un-annotated method,
+	 * which previously killed the catalog refresh (and account sync) at startup.
 	 */
+	@ConfigItem(
+		keyName = "serverVerificationOn",
+		name = "Enable Server Verification",
+		description = "Server verification is always on.",
+		section = apiSection,
+		position = 1,
+		hidden = true
+	)
 	default boolean apiEnabled()
 	{
 		return true;
