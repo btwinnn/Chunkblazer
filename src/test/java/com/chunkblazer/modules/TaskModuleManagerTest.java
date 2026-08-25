@@ -59,6 +59,12 @@ class TaskModuleManagerTest
 	@Mock
 	private ProgressionModule progressionModule;
 
+	@Mock
+	private CombatAchievementModule combatAchievementModule;
+
+	@Mock
+	private RaidChallengeModule raidChallengeModule;
+
 	@InjectMocks
 	private TaskModuleManager taskModuleManager;
 
@@ -79,6 +85,8 @@ class TaskModuleManagerTest
 		injectField(taskModuleManager, "npcDialogueModule", npcDialogueModule);
 		injectField(taskModuleManager, "questCheckModule", questCheckModule);
 		injectField(taskModuleManager, "progressionModule", progressionModule);
+		injectField(taskModuleManager, "combatAchievementModule", combatAchievementModule);
+		injectField(taskModuleManager, "raidChallengeModule", raidChallengeModule);
 
 		// Setup module completion types
 		when(npcKillModule.getCompletionType()).thenReturn("NPC_KILL");
@@ -94,6 +102,8 @@ class TaskModuleManagerTest
 		when(npcDialogueModule.getCompletionType()).thenReturn("NPC_DIALOGUE");
 		when(questCheckModule.getCompletionType()).thenReturn("QUEST_CHECK");
 		when(progressionModule.getCompletionType()).thenReturn("SKILL_THRESHOLD");
+		when(combatAchievementModule.getCompletionType()).thenReturn("COMBAT_ACHIEVEMENT");
+		when(raidChallengeModule.getCompletionType()).thenReturn("RAID_CHALLENGE");
 
 		// Initialize the manager
 		taskModuleManager.initialize();
@@ -363,7 +373,7 @@ class TaskModuleManagerTest
 		NuzlockeTask task = createTask("Kill Goblin", "kill_goblin", "NPC_KILL");
 		taskModuleManager.registerActiveTask(task);
 
-		NuzlockeTask found = taskModuleManager.getActiveTaskById("kill_goblin");
+		NuzlockeTask found = findActiveTask("kill_goblin");
 
 		assertNotNull(found);
 		assertEquals("Kill Goblin", found.getName());
@@ -375,9 +385,18 @@ class TaskModuleManagerTest
 		NuzlockeTask task = createTask("Kill Goblin", "kill_goblin", "NPC_KILL");
 		taskModuleManager.registerActiveTask(task);
 
-		NuzlockeTask found = taskModuleManager.getActiveTaskById("non_existent");
+		NuzlockeTask found = findActiveTask("non_existent");
 
 		assertNull(found);
+	}
+
+	/** Look a task up by id among the active tasks (the by-id getter was removed). */
+	private NuzlockeTask findActiveTask(String taskId)
+	{
+		return taskModuleManager.getActiveTasks().stream()
+			.filter(t -> taskId.equals(t.getTaskId()))
+			.findFirst()
+			.orElse(null);
 	}
 
 	@Test
