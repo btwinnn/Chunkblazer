@@ -209,19 +209,15 @@ public interface ChunkBlazerConfig extends Config
 		return "";
 	}
 
-	@ConfigSection(
-		name = "Server Sync",
-		description = "Saves your progress to the ChunkBlazer server. (See the side-panel \"(?)\" notice for "
-			+ "the full list of what's sent.)",
-		position = 10
-	)
-	String apiSection = "api";
+	// The old "Server Sync" @ConfigSection was removed: its three items are all hidden
+	// and server verification is always on, but an all-hidden section still renders an
+	// empty header in the config panel. The items now declare no section, so nothing
+	// shows. Their keyNames are unchanged, so stored values still resolve.
 
 	@ConfigItem(
 		keyName = "apiBaseUrl",
 		name = "API Base URL",
 		description = "Base URL for the ChunkBlazer verification server",
-		section = apiSection,
 		position = 0,
 		hidden = true
 	)
@@ -242,7 +238,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "serverVerificationOn",
 		name = "Enable Server Verification",
 		description = "Server verification is always on.",
-		section = apiSection,
 		position = 1,
 		hidden = true
 	)
@@ -255,7 +250,6 @@ public interface ChunkBlazerConfig extends Config
 		keyName = "apiKey",
 		name = "API Key",
 		description = "Your ChunkBlazer API key for server verification",
-		section = apiSection,
 		position = 2,
 		secret = true,
 		hidden = true
