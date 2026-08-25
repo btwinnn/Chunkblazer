@@ -216,8 +216,11 @@ public class RaidChallengeModule extends AbstractTaskModule
 	{
 		super.onTaskCleared();
 		states.clear();
-		failureAnnouncedThisRaid.clear();
-		wasInRaid = false;
+		// Deliberately do NOT touch failureAnnouncedThisRaid / wasInRaid here.
+		// onTaskCleared fires on every loadActiveTasks (varbit storms, region changes,
+		// syncs — many times per raid), and clearing the once-per-raid guard here made
+		// the same "Challenge Failed" line re-announce after each reload. The guard is
+		// reset only on a genuine new-raid transition (see onGameTick) and on shutDown.
 	}
 
 	@Override
