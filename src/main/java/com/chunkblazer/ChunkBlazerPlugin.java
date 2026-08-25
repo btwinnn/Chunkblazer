@@ -748,8 +748,13 @@ public class ChunkBlazerPlugin extends Plugin
 		WorldPoint wp = player.getWorldLocation();
 		int currentRegionId = wp.getRegionID();
 
-		// Update panel if region changed
-		if (currentRegionId != lastRegionId)
+		// Inside an instanced area (raid interiors like ToA/CoX) getWorldLocation()
+		// returns an instance TEMPLATE region that isn't a chunk — it would flip the
+		// panel to "Unknown (13454)" and could misfire the walk-into-a-neighbour unlock
+		// prompts (and spam "No chunk found for region N"). Freeze on the last overworld
+		// region so the panel keeps showing the chunk you ENTERED the instance from; the
+		// change is picked up again the moment you step back out.
+		if (!client.isInInstancedRegion() && currentRegionId != lastRegionId)
 		{
 			lastRegionId = currentRegionId;
 
