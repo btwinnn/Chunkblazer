@@ -19,7 +19,6 @@ import net.runelite.api.Player;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ActorDeath;
-import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
@@ -203,9 +202,13 @@ public class RaidChallengeModule extends AbstractTaskModule
 		task.setTargetQuantity(s.target);
 
 		RaidChallenge ch = task.getChallenge();
-		log.debug("[RAIDCHALLENGE-DEBUG] tracking {} (msg='{}', rooms={}, minRaid={}, solo={}, target={}, satisfyTriggered={})",
-			task.getTaskId(), ch.getCompleteMessage(), ch.getRoomRegions(), ch.getMinRaidLevel(),
-			ch.getSolo(), s.target, isSatisfyTriggered(ch));
+		log.debug("[RAIDCHALLENGE-DEBUG] tracking {} (msg='{}', rooms={}, raidVarbit={}={}, minRaid={}, solo={}, forbidden={}, obtainAll={}, target={}, satisfyTriggered={})",
+			task.getTaskId(), ch.getCompleteMessage(), ch.getRoomRegions(),
+			(ch.getRaidLevelVarbit() != null ? ch.getRaidLevelVarbit() : DEFAULT_RAID_LEVEL_VARBIT), raidLevel(ch),
+			ch.getMinRaidLevel(), ch.getSolo(),
+			ch.getForbiddenItemIds() == null ? 0 : ch.getForbiddenItemIds().size(),
+			ch.getObtainAllItemIds() == null ? 0 : ch.getObtainAllItemIds().size(),
+			s.target, isSatisfyTriggered(ch));
 	}
 
 	@Override
@@ -417,7 +420,6 @@ public class RaidChallengeModule extends AbstractTaskModule
 		}
 		int npcId = ((NPC) e.getActor()).getId();
 		CombatStyle current = currentCombatStyle();
-		boolean anyTaskWatchesThis = false;
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			RaidChallenge ch = task.getChallenge();
@@ -428,11 +430,9 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				continue;
 			}
-			anyTaskWatchesThis = true;
 			CombatStyle required = requiredCombatStyle(ch);
 			// Lenient on UNKNOWN: an unmapped weapon type is given the benefit of the
-			// doubt (pass) rather than failing a possibly-valid attack. The [STYLE-DEBUG]
-			// line below records the weaponType so it can be added to WEAPON_STYLES.
+			// doubt (pass) rather than failing a possibly-valid attack.
 			if (current != CombatStyle.UNKNOWN && current != required)
 			{
 				s.violated = true;
@@ -442,14 +442,6 @@ public class RaidChallengeModule extends AbstractTaskModule
 					+ " attack — " + required.label() + " only.");
 			}
 		}
-		if (anyTaskWatchesThis)
-		{
-			// Capture aid: confirm/extend the weapon-type table against real weapons.
-			// An UNKNOWN here is an unmapped weapon type to add to WEAPON_STYLES.
-			log.debug("[STYLE-DEBUG] hit npc={} weaponType={} attackStyleVarp={} -> {}",
-				npcId, client.getVarbitValue(EQUIPPED_WEAPON_TYPE_VARBIT),
-				client.getVarpValue(ATTACK_STYLE_VARP), current);
-		}
 	}
 
 	// ── Combat-style resolution ──────────────────────────────────────────────
@@ -457,8 +449,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 	// ATTACK_STYLE varp (43): neither alone is enough — the varp is only a 0–3 index
 	// whose meaning depends on the weapon type. This is the general version of the
 	// old stab-only check, so tasks can now gate on any style via JSON
-	// (required_attack_style). New weapon families are added to WEAPON_STYLES, and
-	// [STYLE-DEBUG] logs an UNKNOWN for anything not yet mapped so gaps self-surface.
+	// (required_attack_style). New weapon families are added to WEAPON_STYLES; an
+	// unmapped type resolves to UNKNOWN and is treated leniently (passes).
 	private static final int EQUIPPED_WEAPON_TYPE_VARBIT = 357;
 	private static final int ATTACK_STYLE_VARP = 43;
 
@@ -645,7 +637,6 @@ public class RaidChallengeModule extends AbstractTaskModule
 			finalWarden = e.getNpc();
 			wardenEnraged = false;
 			wardenLowestRatio = Integer.MAX_VALUE;
-			log.debug("[WARDEN] final Warden spawned id={}", e.getNpc().getId());
 		}
 	}
 
@@ -655,7 +646,6 @@ public class RaidChallengeModule extends AbstractTaskModule
 		if (isFinalWarden(e.getNpc().getId()))
 		{
 			finalWarden = e.getNpc();
-			log.debug("[WARDEN] final Warden changed id={}", e.getNpc().getId());
 		}
 	}
 
@@ -664,7 +654,6 @@ public class RaidChallengeModule extends AbstractTaskModule
 	{
 		if (finalWarden != null && e.getNpc() == finalWarden)
 		{
-			log.debug("[WARDEN] final Warden despawned id={} (enrage window ends)", e.getNpc().getId());
 			finalWarden = null;
 			wardenEnraged = false;
 			wardenLowestRatio = Integer.MAX_VALUE;
@@ -679,22 +668,9 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return;
 		}
 		int id = e.getGraphicsObject().getId();
-		// Capture aid: with the final Warden present, log gfx ids (kept on so the
-		// enrage-id mapping can be re-verified / extended if a future update shifts it).
-		log.debug("[WARDEN-GFX] graphicsObjectId={}", id);
 		if (!wardenEnraged && WARDEN_LIGHTNING_GFX_IDS.contains(id))
 		{
 			wardenEnraged = true;
-			log.debug("[WARDEN] enrage detected via lightning gfx {}", id);
-		}
-	}
-
-	@Subscribe
-	public void onAnimationChanged(AnimationChanged e)
-	{
-		if (finalWarden != null && e.getActor() == finalWarden)
-		{
-			log.debug("[WARDEN-ANIM] npcId={} anim={}", finalWarden.getId(), finalWarden.getAnimation());
 		}
 	}
 
@@ -721,8 +697,6 @@ public class RaidChallengeModule extends AbstractTaskModule
 		if (!wardenEnraged && lowPct <= 0.06 && (pct - lowPct) >= 0.10)
 		{
 			wardenEnraged = true;
-			log.debug("[WARDEN-HP] enrage detected (heal-spike): low={}% now={}%",
-				Math.round(lowPct * 100), Math.round(pct * 100));
 		}
 	}
 
