@@ -189,6 +189,24 @@ public class RaidChallenge
 	@SerializedName("obtain_all_item_ids")
 	private List<Integer> obtainAllItemIds;
 
+	/**
+	 * Like {@link #obtainAllItemIds} but grouped: complete when you've obtained one
+	 * item from EVERY group within a single raid. Each group is a set of interchangeable
+	 * variants (e.g. all four doses of one potion), so any dose satisfies that group.
+	 * Preferred over the flat id list when items come in doses/variants.
+	 */
+	@SerializedName("obtain_all_item_groups")
+	private List<List<Integer>> obtainAllItemGroups;
+
+	/**
+	 * When set (a {@link net.runelite.api.Skill} name, e.g. {@code "HERBLORE"}), an
+	 * obtain_all item only counts if you MADE it — its inventory count rose on the same
+	 * tick you gained XP in that skill. This turns "have the item" into "skill it up in
+	 * the raid" (CoX Homebrew must MIX the potions, not just pick one up).
+	 */
+	@SerializedName("obtain_all_require_skill")
+	private String obtainAllRequireSkill;
+
 	// ── Point-in-time reads (checked at completion) ──────────────────────────
 	/** Equipped + carried weight (kg) must be at least this. */
 	@SerializedName("min_weight_kg")
@@ -199,6 +217,42 @@ public class RaidChallenge
 	/** Total GE value of equipped gear must be below this. */
 	@SerializedName("max_gear_value")
 	private Long maxGearValue;
+
+	/** Total GE value of equipped gear must be AT LEAST this (high-gear challenges). */
+	@SerializedName("min_gear_value")
+	private Long minGearValue;
+
+	/**
+	 * "Defeat this NPC." Completes when one of these NPCs dies while you were engaged.
+	 * For raids with no per-room completion chat (Chambers of Xeric), the boss's death
+	 * is the completion signal. The fight window for sustained conditions ({@code noRun},
+	 * {@code weaponIds}, …) is the ENCOUNTER — from your first hit on the target until it
+	 * dies — so "defeat X without running / with weapon Y" is scoped to that fight, not
+	 * the whole raid.
+	 */
+	@SerializedName("defeat_npc_ids")
+	private List<Integer> defeatNpcIds;
+
+	/**
+	 * With {@link #defeatNpcIds}: require this many of the target NPCs to die within a
+	 * short window of each other ("kill two at the same time"). The window defaults to
+	 * {@code defeat_within_ticks} = 2 game ticks. Absent → a single kill completes.
+	 */
+	@SerializedName("defeat_simultaneous")
+	private Integer defeatSimultaneous;
+	@SerializedName("defeat_within_ticks")
+	private Integer defeatWithinTicks;
+
+	/** These item ids must ALL be equipped for the whole fight (e.g. Priest gown set). */
+	@SerializedName("required_equipped_ids")
+	private List<Integer> requiredEquippedIds;
+
+	/**
+	 * Prayer points must NEVER go UP during the fight — restoring prayer (potion, altar,
+	 * etc.) fails the run. Restore BEFORE engaging. Used for the CoX Vanguards.
+	 */
+	@SerializedName("no_prayer_restore")
+	private Boolean noPrayerRestore;
 
 	// ── Per-raid source overrides (default to ToA) ───────────────────────────
 	/** Varbit holding the raid/invocation level. Default 14380 (TOA_CLIENT_RAID_LEVEL). */
