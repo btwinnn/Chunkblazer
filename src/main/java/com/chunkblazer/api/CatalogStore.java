@@ -81,6 +81,9 @@ public class CatalogStore
 	// game thread by the loaders — volatile publish of an immutable snapshot.
 	private volatile Map<String, String> files = Collections.emptyMap();
 	private volatile boolean loaded;
+	// Monotonic build version of the currently-loaded catalog (from _meta.json), 0 if
+	// unversioned. Drives the seed-vs-cache choice and is logged so drift is visible.
+	private volatile long loadedVersion;
 	// Lazily-loaded bundled seed, used by getFileContent as a per-file floor for
 	// anything the active catalog (stale cache / not-yet-redeployed server) lacks.
 	private volatile Map<String, String> seedFiles;
@@ -112,18 +115,42 @@ public class CatalogStore
 		//noinspection ResultOfMethodCallIgnored
 		cacheDir.mkdirs();
 
-		Map<String, String> loadedFiles = loadFromDiskCache();
-		String source = "cache";
-		if (loadedFiles == null || loadedFiles.isEmpty())
+		Map<String, String> cache = loadFromDiskCache();
+		Map<String, String> seed = loadFromSeed();
+		this.seedFiles = seed != null ? seed : Collections.emptyMap(); // reuse for getFileContent
+		long cacheV = versionOf(cache);
+		long seedV = versionOf(seed);
+
+		Map<String, String> loadedFiles;
+		String source;
+		if (cache == null || cache.isEmpty())
 		{
-			loadedFiles = loadFromSeed();
+			loadedFiles = seed;
 			source = "seed";
 		}
+		else if (seed != null && !seed.isEmpty() && seedV > cacheV)
+		{
+			// The bundled seed is NEWER than the disk cache — a freshly-built/updated
+			// plugin whose cache hasn't caught up (e.g. a RuneLite Hub update, or a
+			// local rebuild before the server redeploy). Prefer the seed and drop the
+			// stale cache so it can't keep winning; the async refresh re-populates it.
+			// This kills the "rebuilt the plugin but it still shows old content" trap.
+			loadedFiles = seed;
+			source = "seed (v" + seedV + " newer than stale cache v" + cacheV + ")";
+			deleteStaleCache();
+		}
+		else
+		{
+			loadedFiles = cache;
+			source = "cache";
+		}
+
 		if (loadedFiles != null && !loadedFiles.isEmpty())
 		{
 			this.files = loadedFiles;
 			this.loaded = true;
-			log.debug("Task catalog loaded from {} ({} files)", source, loadedFiles.size());
+			this.loadedVersion = versionOf(loadedFiles);
+			log.info("Task catalog loaded from {} ({} files, v{})", source, loadedFiles.size(), loadedVersion);
 		}
 		else
 		{
@@ -136,6 +163,52 @@ public class CatalogStore
 		// Async refresh for NEXT launch. Never blocks startup; never re-parses the
 		// running task set.
 		refreshExecutor.execute(this::refreshCatalog);
+	}
+
+	/** Build version of the currently-loaded catalog (from _meta.json), 0 if unversioned. */
+	public long getCatalogVersion()
+	{
+		return loadedVersion;
+	}
+
+	/**
+	 * Parse the monotonic build version out of a catalog's {@code _meta.json}
+	 * ({@code {"catalog_version":"yyyyMMddHHmmss"}}). Returns 0 when absent or bad —
+	 * so any versioned catalog always beats an old unversioned one.
+	 */
+	private long versionOf(Map<String, String> catalog)
+	{
+		if (catalog == null)
+		{
+			return 0L;
+		}
+		String meta = catalog.get("_meta.json");
+		if (meta == null || meta.isEmpty())
+		{
+			return 0L;
+		}
+		try
+		{
+			com.google.gson.JsonObject o = gson.fromJson(meta, com.google.gson.JsonObject.class);
+			if (o != null && o.has("catalog_version"))
+			{
+				return Long.parseLong(o.get("catalog_version").getAsString().trim());
+			}
+		}
+		catch (RuntimeException e)
+		{
+			log.debug("Catalog _meta.json unreadable: {}", e.getMessage());
+		}
+		return 0L;
+	}
+
+	/** Best-effort removal of a stale disk cache so a newer seed can't lose to it again. */
+	private void deleteStaleCache()
+	{
+		//noinspection ResultOfMethodCallIgnored
+		catalogFile.delete();
+		//noinspection ResultOfMethodCallIgnored
+		etagFile.delete();
 	}
 
 	/** True once a non-empty catalog has been loaded from cache, seed, or network. */
@@ -241,7 +314,7 @@ public class CatalogStore
 			}
 			if (!resp.isSuccessful())
 			{
-				log.debug("Task catalog fetch returned {}", resp.code());
+				log.warn("Task catalog fetch returned HTTP {} — keeping last-good; server sync may be stale", resp.code());
 				return; // keep last-good
 			}
 
@@ -269,11 +342,20 @@ public class CatalogStore
 			}
 			this.files = fresh;
 			this.loaded = true;
-			log.debug("Task catalog refreshed from server ({} files)", fresh.size());
+			log.info("Task catalog refreshed from server ({} files, v{}) — applies next launch",
+				fresh.size(), versionOf(fresh));
 		}
 		catch (IOException e)
 		{
+			// Genuinely offline / network hiccup — benign and common, keep it quiet.
 			log.debug("Task catalog fetch failed (offline?): {}", e.getMessage());
+		}
+		catch (RuntimeException e)
+		{
+			// A code/config bug in the refresh path (e.g. the apiEnabled proxy throw)
+			// would otherwise surface only as a generic RuneLite "uncaught exception".
+			// Attribute it clearly so a dead sync layer never hides again.
+			log.warn("Task catalog refresh crashed — server sync is down this session", e);
 		}
 	}
 
