@@ -1,5 +1,10 @@
 package com.chunkblazer.modules;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +21,7 @@ import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.NPC;
 import net.runelite.api.Player;
+import net.runelite.api.Skill;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ActorDeath;
@@ -97,7 +103,9 @@ public class RaidChallengeModule extends AbstractTaskModule
 		int progress;           // qualifying completions so far
 		int target = 1;         // completions required (rolled from quantity range)
 		boolean satisfyFailTold; // satisfy-triggered gate failure already announced this attempt
-		final Set<Integer> obtainedIds = new HashSet<>(); // obtain_all: required items seen this window
+		final Set<Integer> obtainedGroups = new HashSet<>();       // obtain_all: group indices completed this window
+		final Map<Integer, Integer> obtainSnapshot = new HashMap<>(); // item id -> last-seen inventory count
+		boolean encounterActive;  // defeat_npc: true from first hit on the target until it dies
 	}
 
 	private final Map<String, State> states = new ConcurrentHashMap<>();
@@ -131,6 +139,20 @@ public class RaidChallengeModule extends AbstractTaskModule
 	// and task-state rebuilds mid-raid but resets cleanly for the next attempt.
 	private final Set<String> failureAnnouncedThisRaid = new HashSet<>();
 	private boolean wasInRaid;
+
+	// obtain_all "made it" gating: which skills gained XP THIS tick (recomputed at the
+	// top of onGameTick, which fires AFTER the tick's Stat/Item events — so the deltas
+	// are exact and immune to Stat-vs-Item event order). lastSkillXp holds the prior xp.
+	private final Map<Skill, Integer> lastSkillXp = new EnumMap<>(Skill.class);
+	private final Set<Skill> gainedSkillsThisTick = EnumSet.noneOf(Skill.class);
+
+	// defeat_simultaneous: recent target-NPC death ticks per task, to detect "kill N
+	// within a few ticks of each other" (e.g. two Skeletal Mystics at once).
+	private final Map<String, List<Integer>> simDeathTicks = new HashMap<>();
+
+	// no_prayer_restore: prayer points last tick, and whether they rose this tick.
+	private int lastPrayerPoints = -1;
+	private boolean prayerRestoredThisTick;
 
 	private static boolean isFinalWarden(int npcId)
 	{
@@ -190,12 +212,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 		int persistedTarget = task.getTargetQuantity();
 		s.target = persistedTarget > 1 ? persistedTarget : Math.max(1, rollQuantity(task.getChallenge()));
 		s.progress = Math.max(0, task.getCurrentProgress());
-		// obtain_all: the target is simply "how many distinct items to collect", and
-		// progress lives only within a single raid window (supplies vanish on exit),
-		// so it never carries a persisted count.
-		if (task.getChallenge().getObtainAllItemIds() != null && !task.getChallenge().getObtainAllItemIds().isEmpty())
+		// obtain_all: target = number of groups to complete; progress lives only within
+		// a single raid window (supplies vanish on exit), so it never persists.
+		List<List<Integer>> groups = obtainGroups(task.getChallenge());
+		if (groups != null)
 		{
-			s.target = task.getChallenge().getObtainAllItemIds().size();
+			s.target = groups.size();
 			s.progress = 0;
 		}
 		states.put(task.getTaskId(), s);
@@ -207,7 +229,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			(ch.getRaidLevelVarbit() != null ? ch.getRaidLevelVarbit() : DEFAULT_RAID_LEVEL_VARBIT), raidLevel(ch),
 			ch.getMinRaidLevel(), ch.getSolo(),
 			ch.getForbiddenItemIds() == null ? 0 : ch.getForbiddenItemIds().size(),
-			ch.getObtainAllItemIds() == null ? 0 : ch.getObtainAllItemIds().size(),
+			obtainGroups(ch) == null ? 0 : obtainGroups(ch).size(),
 			s.target, isSatisfyTriggered(ch));
 	}
 
@@ -262,6 +284,9 @@ public class RaidChallengeModule extends AbstractTaskModule
 		}
 		wasInRaid = inRaid;
 
+		recomputeSkillGains(); // which required skills gained XP this tick (obtain_all)
+		recomputePrayerRestore(); // did prayer points go UP this tick (no_prayer_restore)
+
 		int region = currentInstancedRegion();
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
@@ -272,11 +297,24 @@ public class RaidChallengeModule extends AbstractTaskModule
 				continue;
 			}
 
+			// defeat_npc tasks have no region window — their "window" is the encounter
+			// (first hit on the target -> its death, driven by onHitsplat/onActorDeath).
+			// Sample sustained conditions (no-run, weapon) only while that fight is live.
+			if (ch.getDefeatNpcIds() != null && !ch.getDefeatNpcIds().isEmpty())
+			{
+				if (s.encounterActive)
+				{
+					sampleSustained(task, ch, s);
+				}
+				continue;
+			}
+
 			boolean inWin = isInWindow(ch, region);
 			if (inWin && !s.windowOpen)
 			{
 				s.windowOpen = true;
 				resetAttempt(s); // fresh attempt each time the window (re)opens
+				seedObtainSnapshot(ch, s); // baseline counts so items held at entry don't count
 				log.debug("[RAIDCHALLENGE-DEBUG] {} window OPEN (region={}, rooms={}, raidLevel={}, team={})",
 					task.getTaskId(), region, ch.getRoomRegions(), raidLevel(ch), teamSize(ch));
 			}
@@ -296,6 +334,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 			}
 
 			sampleSustained(task, ch, s);
+
+			// obtain_all: credit each potion GROUP made (count up + required-skill XP) this tick.
+			if (obtainGroups(ch) != null)
+			{
+				creditObtainAll(task, ch, s);
+			}
 
 			// Satisfy-triggered accumulators.
 			if (ch.getNoDamageTicks() != null)
@@ -357,6 +401,16 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				continue;
 			}
+			// Every raid prints "... count is: N" on completion (ToA AND CoX both do),
+			// so a CoX kill-count line would otherwise match a ToA task's "count is"
+			// trigger and fail it. Only honor a completion message when THIS task's raid
+			// is actually active — its raid-level varbit reads > 0. Finishing one raid can
+			// no longer fail another raid's challenges. (Off-thread raidLevel() returns 0,
+			// but onChatMessage runs on the client thread, so the read is live here.)
+			if (raidLevel(ch) <= 0)
+			{
+				continue;
+			}
 			boolean gates = gatesPass(ch);
 			boolean pit = pointInTimeOk(ch);
 			log.debug("[RAIDCHALLENGE-DEBUG] {} complete-msg matched; gatesPass={} (raidLevel={} min={} team={} solo={}) violated={} pointInTime={} progress={}/{}",
@@ -413,22 +467,40 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return;
 		}
 
-		// (b) Damage the LOCAL PLAYER deals to a style-gated NPC. Every hit on such
-		// an NPC must use the task's required attack style (STAB/SLASH/CRUSH/…) or the
-		// run fails. Scoped to the listed NPCs only, so swapping weapons for a side
-		// target (e.g. shooting a Zebak jug) is fine — that hit is on a different NPC.
 		if (!(e.getActor() instanceof NPC) || e.getHitsplat() == null || e.getHitsplat().isOthers())
 		{
 			return; // not our splat (someone else's / non-player source)
 		}
 		int npcId = ((NPC) e.getActor()).getId();
+
+		// (b) First hit on a defeat_npc target opens its encounter BEFORE the style check
+		// below, so the opening hit is already subject to the weapon/style/no-run rules
+		// (HM06's "Tekton, crush only" must judge the very first hit).
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
+		{
+			RaidChallenge ch = task.getChallenge();
+			State s = states.get(task.getTaskId());
+			if (ch == null || s == null || s.encounterActive
+				|| ch.getDefeatNpcIds() == null || !ch.getDefeatNpcIds().contains(npcId))
+			{
+				continue;
+			}
+			resetAttempt(s);          // fresh fight — clear any stale violation/flags
+			s.encounterActive = true;
+			log.debug("[RAIDCHALLENGE-DEBUG] {} encounter START (npc={})", task.getTaskId(), npcId);
+		}
+
+		// (c) Damage the LOCAL PLAYER deals to a style-gated NPC. Every hit on such an
+		// NPC must use the task's required attack style (STAB/SLASH/CRUSH/…) or the run
+		// fails. Active in a region window OR a defeat_npc encounter. Scoped to the listed
+		// NPCs, so swapping weapons for a side target (a Zebak jug) is fine.
 		CombatStyle current = currentCombatStyle();
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			RaidChallenge ch = task.getChallenge();
 			State s = states.get(task.getTaskId());
 			List<Integer> targets = styleTargetIds(ch);
-			if (ch == null || s == null || !s.windowOpen || s.violated
+			if (ch == null || s == null || !(s.windowOpen || s.encounterActive) || s.violated
 				|| targets == null || !targets.contains(npcId))
 			{
 				continue;
@@ -552,16 +624,66 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return;
 		}
 		int id = ((NPC) e.getActor()).getId();
-		for (NuzlockeTask task : activeTasks)
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			RaidChallenge ch = task.getChallenge();
 			State s = states.get(task.getTaskId());
-			if (ch != null && s != null && s.windowOpen && !s.violated
+			if (ch == null || s == null)
+			{
+				continue;
+			}
+			if (s.windowOpen && !s.violated
 				&& ch.getNoNpcDeathIds() != null && ch.getNoNpcDeathIds().contains(id))
 			{
 				s.violated = true; // a protected NPC died (e.g. an energy siphon)
 				log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: protected NPC {} died", task.getTaskId(), id);
 				announceFailure(task, "A protected NPC was killed — this run no longer counts.");
+			}
+			if (ch.getDefeatNpcIds() != null && ch.getDefeatNpcIds().contains(id))
+			{
+				if (ch.getDefeatSimultaneous() != null)
+				{
+					// "Kill N together": count target deaths within a tick window. The
+					// encounter (opened on first hit) carries any sustained conditions —
+					// e.g. the Vanguards' no-prayer-restore — so a violation blocks it.
+					int tick = client.getTickCount();
+					int window = ch.getDefeatWithinTicks() != null ? ch.getDefeatWithinTicks() : 2;
+					List<Integer> ticks = simDeathTicks.computeIfAbsent(task.getTaskId(), k -> new ArrayList<>());
+					ticks.add(tick);
+					final int cut = tick - window;
+					ticks.removeIf(t -> t < cut);
+					log.debug("[RAIDCHALLENGE-DEBUG] {} simultaneous kill: {} death(s) within {} ticks (violated={})",
+						task.getTaskId(), ticks.size(), window, s.violated);
+					if (ticks.size() >= ch.getDefeatSimultaneous() && s.encounterActive
+						&& !s.violated && gatesPass(ch) && pointInTimeOk(ch))
+					{
+						ticks.clear();
+						s.encounterActive = false;
+						complete(task, s);
+					}
+				}
+				// defeat_npc: the target dying is the completion signal. Qualifies if the
+				// encounter had no sustained violation and the gates/point-in-time hold.
+				else if (s.encounterActive)
+				{
+					boolean gates = gatesPass(ch);
+					boolean pit = pointInTimeOk(ch);
+					log.debug("[RAIDCHALLENGE-DEBUG] {} defeat_npc {} died; violated={} gates={} pointInTime={}",
+						task.getTaskId(), id, s.violated, gates, pit);
+					s.encounterActive = false;
+					if (!s.violated && gates && pit)
+					{
+						complete(task, s);
+					}
+					else
+					{
+						if (!s.violated)
+						{
+							announceFailure(task, gateFailReason(ch, pit));
+						}
+						resetAttempt(s);
+					}
+				}
 			}
 		}
 	}
@@ -597,36 +719,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 					}
 				}
 			}
-
-			// obtain_all: mark each required item seen this window; complete when the
-			// full set has been collected within the one raid.
-			if (!s.violated && ch.getObtainAllItemIds() != null && !ch.getObtainAllItemIds().isEmpty())
-			{
-				boolean changed = false;
-				for (Item it : items)
-				{
-					if (it != null && ch.getObtainAllItemIds().contains(it.getId()) && s.obtainedIds.add(it.getId()))
-					{
-						changed = true;
-					}
-				}
-				if (changed)
-				{
-					s.progress = s.obtainedIds.size();
-					task.setCurrentProgress(s.progress);
-					log.debug("[RAIDCHALLENGE-DEBUG] {} obtain-all {}/{} (have {})",
-						task.getTaskId(), s.obtainedIds.size(), ch.getObtainAllItemIds().size(), s.obtainedIds);
-					if (s.obtainedIds.size() >= ch.getObtainAllItemIds().size())
-					{
-						trySatisfy(task, ch, s);
-					}
-					else if (completionCallback != null)
-					{
-						completionCallback.onProgressUpdated(task, s.progress);
-						sendProgress(task, s.progress, s.target);
-					}
-				}
-			}
+			// obtain_all is handled per-tick in onGameTick (creditObtainAll) so it can
+			// pair item-count deltas with same-tick skill XP regardless of event order.
 		}
 	}
 
@@ -738,6 +832,23 @@ public class RaidChallengeModule extends AbstractTaskModule
 				}
 			}
 		}
+		if (why == null && Boolean.TRUE.equals(ch.getNoPrayerRestore()) && prayerRestoredThisTick)
+		{
+			why = "prayer points restored";
+			reason = "You restored prayer during the fight — restore BEFORE the room, not in it.";
+		}
+		if (why == null && ch.getRequiredEquippedIds() != null)
+		{
+			for (int reqId : ch.getRequiredEquippedIds())
+			{
+				if (!isEquipped(reqId))
+				{
+					why = "required equipped item " + reqId + " not worn";
+					reason = "You must be wearing the required gear for this challenge.";
+					break;
+				}
+			}
+		}
 		if (why == null && ch.getAttackStyleVarp() != null && ch.getAttackStyleValues() != null
 			&& !ch.getAttackStyleValues().contains(client.getVarpValue(ch.getAttackStyleVarp())))
 		{
@@ -758,6 +869,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 			why = "gear value " + equippedGearValue() + " >= max " + ch.getMaxGearValue();
 			reason = "Your equipped gear is worth too much — must be under "
 				+ formatGp(ch.getMaxGearValue()) + " (you have " + formatGp(equippedGearValue()) + ").";
+		}
+		if (why == null && ch.getMinGearValue() != null && equippedGearValue() < ch.getMinGearValue())
+		{
+			why = "gear value " + equippedGearValue() + " < min " + ch.getMinGearValue();
+			reason = "Your equipped gear isn't worth enough — need at least "
+				+ formatGp(ch.getMinGearValue()) + " (you have " + formatGp(equippedGearValue()) + ").";
 		}
 		if (why != null)
 		{
@@ -780,6 +897,10 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return false;
 		}
 		if (ch.getMaxGearValue() != null && equippedGearValue() >= ch.getMaxGearValue())
+		{
+			return false;
+		}
+		if (ch.getMinGearValue() != null && equippedGearValue() < ch.getMinGearValue())
 		{
 			return false;
 		}
@@ -821,7 +942,185 @@ public class RaidChallengeModule extends AbstractTaskModule
 	private boolean isSatisfyTriggered(RaidChallenge ch)
 	{
 		return ch.getNoDamageTicks() != null || ch.getSurviveTicks() != null
-			|| (ch.getObtainAllItemIds() != null && !ch.getObtainAllItemIds().isEmpty());
+			|| obtainGroups(ch) != null;
+	}
+
+	// ── obtain_all helpers ───────────────────────────────────────────────────
+
+	/**
+	 * Item groups for an obtain_all task: {@code obtain_all_item_groups} if set, else
+	 * each id in the legacy flat {@code obtain_all_item_ids} as its own group. null when
+	 * the task isn't an obtain_all. Any one item from a group satisfies that group.
+	 */
+	private static List<List<Integer>> obtainGroups(RaidChallenge ch)
+	{
+		if (ch.getObtainAllItemGroups() != null && !ch.getObtainAllItemGroups().isEmpty())
+		{
+			return ch.getObtainAllItemGroups();
+		}
+		if (ch.getObtainAllItemIds() != null && !ch.getObtainAllItemIds().isEmpty())
+		{
+			List<List<Integer>> g = new ArrayList<>();
+			for (Integer id : ch.getObtainAllItemIds())
+			{
+				g.add(Collections.singletonList(id));
+			}
+			return g;
+		}
+		return null;
+	}
+
+	/** Skill an obtain_all item must be MADE with ({@code obtain_all_require_skill}), or null. */
+	private static Skill requiredObtainSkill(RaidChallenge ch)
+	{
+		String s = ch.getObtainAllRequireSkill();
+		if (s == null || s.trim().isEmpty())
+		{
+			return null;
+		}
+		try
+		{
+			return Skill.valueOf(s.trim().toUpperCase());
+		}
+		catch (IllegalArgumentException e)
+		{
+			return null;
+		}
+	}
+
+	/** Recompute which required obtain-skills gained XP this tick (client thread only). */
+	private void recomputeSkillGains()
+	{
+		gainedSkillsThisTick.clear();
+		Set<Skill> required = EnumSet.noneOf(Skill.class);
+		for (NuzlockeTask task : activeTasks)
+		{
+			RaidChallenge ch = task.getChallenge();
+			Skill sk = ch == null ? null : requiredObtainSkill(ch);
+			if (sk != null)
+			{
+				required.add(sk);
+			}
+		}
+		for (Skill sk : required)
+		{
+			int xp = client.getSkillExperience(sk);
+			Integer prev = lastSkillXp.put(sk, xp);
+			if (prev != null && xp > prev)
+			{
+				gainedSkillsThisTick.add(sk);
+			}
+		}
+	}
+
+	/**
+	 * Detect a prayer-point restore this tick (client thread only). Prayer points only
+	 * ever go UP from restoring (potion/altar/etc.) — normal play drains them — so a
+	 * rise is a restore. A drop-to-restore across one tick is still a net rise, caught here.
+	 */
+	private void recomputePrayerRestore()
+	{
+		prayerRestoredThisTick = false;
+		int pp = client.getBoostedSkillLevel(Skill.PRAYER);
+		if (lastPrayerPoints >= 0 && pp > lastPrayerPoints)
+		{
+			prayerRestoredThisTick = true;
+		}
+		lastPrayerPoints = pp;
+	}
+
+	/** Baseline the obtain_all item counts at window open so items held at entry don't count. */
+	private void seedObtainSnapshot(RaidChallenge ch, State s)
+	{
+		List<List<Integer>> groups = obtainGroups(ch);
+		if (groups == null)
+		{
+			return;
+		}
+		Map<Integer, Integer> counts = inventoryCounts();
+		for (List<Integer> group : groups)
+		{
+			for (int id : group)
+			{
+				s.obtainSnapshot.put(id, counts.getOrDefault(id, 0));
+			}
+		}
+	}
+
+	/**
+	 * Credit each obtain_all GROUP the player MADE this tick: an item in the group whose
+	 * inventory count rose since last tick, paired with a required-skill XP gain this
+	 * tick — so MIXING counts, picking one up does not. Completes when every group is made.
+	 */
+	private void creditObtainAll(NuzlockeTask task, RaidChallenge ch, State s)
+	{
+		if (s.violated)
+		{
+			return;
+		}
+		List<List<Integer>> groups = obtainGroups(ch);
+		if (groups == null)
+		{
+			return;
+		}
+		Skill req = requiredObtainSkill(ch);
+		boolean madeThisTick = req == null || gainedSkillsThisTick.contains(req);
+		Map<Integer, Integer> counts = inventoryCounts();
+
+		boolean changed = false;
+		for (int g = 0; g < groups.size(); g++)
+		{
+			boolean groupMade = false;
+			for (int id : groups.get(g))
+			{
+				int now = counts.getOrDefault(id, 0);
+				Integer prev = s.obtainSnapshot.get(id);
+				int before = prev == null ? 0 : prev;
+				if (now > before && madeThisTick)
+				{
+					groupMade = true;
+				}
+				s.obtainSnapshot.put(id, now); // slide regardless — a pickup just moves the baseline
+			}
+			if (groupMade && s.obtainedGroups.add(g))
+			{
+				changed = true;
+			}
+		}
+		if (!changed)
+		{
+			return;
+		}
+		s.progress = s.obtainedGroups.size();
+		task.setCurrentProgress(s.progress);
+		log.debug("[RAIDCHALLENGE-DEBUG] {} obtain-all(made) {}/{}", task.getTaskId(), s.progress, groups.size());
+		if (s.obtainedGroups.size() >= groups.size())
+		{
+			trySatisfy(task, ch, s);
+		}
+		else if (completionCallback != null)
+		{
+			completionCallback.onProgressUpdated(task, s.progress);
+			sendProgress(task, s.progress, s.target);
+		}
+	}
+
+	/** Inventory item id -> total quantity. */
+	private Map<Integer, Integer> inventoryCounts()
+	{
+		Map<Integer, Integer> counts = new HashMap<>();
+		ItemContainer inv = client.getItemContainer(InventoryID.INVENTORY);
+		if (inv != null)
+		{
+			for (Item it : inv.getItems())
+			{
+				if (it != null && it.getId() > 0)
+				{
+					counts.merge(it.getId(), Math.max(1, it.getQuantity()), Integer::sum);
+				}
+			}
+		}
+		return counts;
 	}
 
 	private void complete(NuzlockeTask task, State s)
@@ -846,7 +1145,9 @@ public class RaidChallengeModule extends AbstractTaskModule
 		s.damageFreeTicks = 0;
 		s.surviveTicks = 0;
 		s.satisfyFailTold = false;
-		s.obtainedIds.clear();
+		s.obtainedGroups.clear();
+		s.obtainSnapshot.clear();
+		s.encounterActive = false;
 	}
 
 	// ── Raw reads ────────────────────────────────────────────────────────────
@@ -862,6 +1163,17 @@ public class RaidChallengeModule extends AbstractTaskModule
 
 	private int raidLevel(RaidChallenge ch)
 	{
+		// getVarbitValue asserts the CLIENT thread. addActiveTask() can run OFF it —
+		// unlockRegion() -> loadActiveTasks() fires from a minimap-unlock popup callback
+		// on the EDT — and reading the varbit there threw AssertionError, which aborted
+		// loadActiveTasks mid-registration and left an unlock half-applied until relog
+		// (Travis: "unlocked underground, then couldn't unlock upstairs"). Off the client
+		// thread there is no live raid anyway, so 0 is the correct, safe answer. The real
+		// window/gate checks all run in onGameTick/onChatMessage on the client thread.
+		if (!client.isClientThread())
+		{
+			return 0;
+		}
 		int v = ch.getRaidLevelVarbit() != null ? ch.getRaidLevelVarbit() : DEFAULT_RAID_LEVEL_VARBIT;
 		return client.getVarbitValue(v);
 	}
@@ -948,6 +1260,24 @@ public class RaidChallengeModule extends AbstractTaskModule
 		}
 		Item it = eq.getItem(slot);
 		return it == null ? -1 : it.getId();
+	}
+
+	/** True if the given item id is currently worn in any equipment slot. */
+	private boolean isEquipped(int itemId)
+	{
+		ItemContainer eq = client.getItemContainer(InventoryID.EQUIPMENT);
+		if (eq == null)
+		{
+			return false;
+		}
+		for (Item it : eq.getItems())
+		{
+			if (it != null && it.getId() == itemId)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private long equippedGearValue()
