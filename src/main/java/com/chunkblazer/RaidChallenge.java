@@ -248,11 +248,12 @@ public class RaidChallenge
 	private List<Integer> requiredEquippedIds;
 
 	/**
-	 * Prayer points must NEVER go UP during the fight — restoring prayer (potion, altar,
-	 * etc.) fails the run. Restore BEFORE engaging. Used for the CoX Vanguards.
+	 * With {@link #defeatNpcIds}: the KILLING blow must be a Vengeance rebound — i.e. the
+	 * target died on the tick your active Vengeance reflected damage back to it (the
+	 * VENGEANCE_REBOUND varbit 2450 flips 1→0). "Finish it off with Vengeance."
 	 */
-	@SerializedName("no_prayer_restore")
-	private Boolean noPrayerRestore;
+	@SerializedName("final_blow_vengeance")
+	private Boolean finalBlowVengeance;
 
 	/** These item ids must ALL stay in the INVENTORY for the whole fight (e.g. Bag of Salt). */
 	@SerializedName("required_inventory_ids")
