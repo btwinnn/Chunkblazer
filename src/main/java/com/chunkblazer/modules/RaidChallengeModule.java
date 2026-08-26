@@ -150,9 +150,13 @@ public class RaidChallengeModule extends AbstractTaskModule
 	// within a few ticks of each other" (e.g. two Skeletal Mystics at once).
 	private final Map<String, List<Integer>> simDeathTicks = new HashMap<>();
 
-	// no_prayer_restore: prayer points last tick, and whether they rose this tick.
-	private int lastPrayerPoints = -1;
-	private boolean prayerRestoredThisTick;
+	// final_blow_vengeance: the target died and passed every other check — its
+	// completion is HELD until end-of-tick (onGameTick), when both this death and the
+	// Vengeance-rebound varbit change have been processed, so their order can't race.
+	private int vengeancePrev;               // VENGEANCE_REBOUND at end of last tick
+	private NuzlockeTask pendingVengeanceKill;
+	private int pendingVengeanceKillTick = Integer.MIN_VALUE;
+
 
 	private static boolean isFinalWarden(int npcId)
 	{
@@ -183,6 +187,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		states.clear();
 		failureAnnouncedThisRaid.clear();
 		wasInRaid = false;
+		pendingVengeanceKill = null;
 	}
 
 	@Override
@@ -285,7 +290,15 @@ public class RaidChallengeModule extends AbstractTaskModule
 		wasInRaid = inRaid;
 
 		recomputeSkillGains(); // which required skills gained XP this tick (obtain_all)
-		recomputePrayerRestore(); // did prayer points go UP this tick (no_prayer_restore)
+
+		// Vengeance rebound detection: the armed varbit going 1→0 this tick means you
+		// took a hit and it reflected. Compared against last tick's value; onGameTick
+		// runs at END of tick, so both the death (onActorDeath) and this varbit change
+		// are already in when we resolve a held final_blow_vengeance kill below.
+		int veng = client.isClientThread() ? client.getVarbitValue(VENGEANCE_REBOUND_VARBIT) : 0;
+		boolean vengeanceReboundedThisTick = vengeancePrev == 1 && veng == 0;
+		vengeancePrev = veng;
+		resolvePendingVengeanceKill(vengeanceReboundedThisTick);
 
 		int region = currentInstancedRegion();
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
@@ -530,6 +543,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 	private static final int ATTACK_STYLE_VARP = 43;
 	/** Bitmap varbit: 1 bit per active prayer (overheads at 12=magic/13=missiles/14=melee). */
 	private static final int ACTIVE_PRAYERS_VARBIT = 4101;
+	/** 1 while Vengeance is armed; flips to 0 the tick it rebounds (you took a hit). */
+	private static final int VENGEANCE_REBOUND_VARBIT = 2450;
 
 	enum CombatStyle
 	{
@@ -643,7 +658,31 @@ public class RaidChallengeModule extends AbstractTaskModule
 			}
 			if (ch.getDefeatNpcIds() != null && ch.getDefeatNpcIds().contains(id))
 			{
-				if (ch.getDefeatSimultaneous() != null)
+				if (Boolean.TRUE.equals(ch.getFinalBlowVengeance()))
+				{
+					// The kill must be a Vengeance rebound. Everything but "how it died"
+					// is checked here; the vengeance-timing decision is HELD to end-of-tick
+					// (resolvePendingVengeanceKill) so death-vs-varbit order can't race.
+					boolean gates = gatesPass(ch);
+					boolean pit = pointInTimeOk(ch);
+					log.debug("[RAIDCHALLENGE-DEBUG] {} defeat_npc {} died (venge finish pending); violated={} gates={} pit={}",
+						task.getTaskId(), id, s.violated, gates, pit);
+					s.encounterActive = false;
+					if (!s.violated && gates && pit)
+					{
+						pendingVengeanceKill = task;
+						pendingVengeanceKillTick = client.getTickCount();
+					}
+					else
+					{
+						if (!s.violated)
+						{
+							announceFailure(task, gateFailReason(ch, pit));
+						}
+						resetAttempt(s);
+					}
+				}
+				else if (ch.getDefeatSimultaneous() != null)
 				{
 					// "Kill N together": count target deaths within a tick window. The
 					// encounter (opened on first hit) carries any sustained conditions —
@@ -833,11 +872,6 @@ public class RaidChallengeModule extends AbstractTaskModule
 					break;
 				}
 			}
-		}
-		if (why == null && Boolean.TRUE.equals(ch.getNoPrayerRestore()) && prayerRestoredThisTick)
-		{
-			why = "prayer points restored";
-			reason = "You restored prayer during the fight — restore BEFORE the room, not in it.";
 		}
 		if (why == null && ch.getRequiredInventoryIds() != null)
 		{
@@ -1062,22 +1096,6 @@ public class RaidChallengeModule extends AbstractTaskModule
 		}
 	}
 
-	/**
-	 * Detect a prayer-point restore this tick (client thread only). Prayer points only
-	 * ever go UP from restoring (potion/altar/etc.) — normal play drains them — so a
-	 * rise is a restore. A drop-to-restore across one tick is still a net rise, caught here.
-	 */
-	private void recomputePrayerRestore()
-	{
-		prayerRestoredThisTick = false;
-		int pp = client.getBoostedSkillLevel(Skill.PRAYER);
-		if (lastPrayerPoints >= 0 && pp > lastPrayerPoints)
-		{
-			prayerRestoredThisTick = true;
-		}
-		lastPrayerPoints = pp;
-	}
-
 	/** Baseline the obtain_all item counts at window open so items held at entry don't count. */
 	private void seedObtainSnapshot(RaidChallenge ch, State s)
 	{
@@ -1197,6 +1215,38 @@ public class RaidChallengeModule extends AbstractTaskModule
 		s.obtainedGroups.clear();
 		s.obtainSnapshot.clear();
 		s.encounterActive = false;
+	}
+
+	/**
+	 * Finish a held final_blow_vengeance kill at end-of-tick: complete it only if the
+	 * target died THIS tick AND Vengeance rebounded this tick (the death coincided with
+	 * the reflected hit). Any other end — a normal killing blow, or the tick advancing
+	 * without a rebound — means the finish wasn't Vengeance, so the attempt is failed.
+	 */
+	private void resolvePendingVengeanceKill(boolean vengeanceReboundedThisTick)
+	{
+		if (pendingVengeanceKill == null)
+		{
+			return;
+		}
+		NuzlockeTask task = pendingVengeanceKill;
+		pendingVengeanceKill = null;
+		State s = states.get(task.getTaskId());
+		if (s == null)
+		{
+			return;
+		}
+		if (pendingVengeanceKillTick == client.getTickCount() && vengeanceReboundedThisTick)
+		{
+			log.debug("[RAIDCHALLENGE-DEBUG] {} vengeance finish CONFIRMED", task.getTaskId());
+			complete(task, s);
+		}
+		else
+		{
+			log.debug("[RAIDCHALLENGE-DEBUG] {} died without a vengeance rebound this tick", task.getTaskId());
+			announceFailure(task, "The finishing blow wasn't a Vengeance rebound — Vengeance must land the kill.");
+			resetAttempt(s);
+		}
 	}
 
 	// ── Raw reads ────────────────────────────────────────────────────────────

@@ -8,7 +8,6 @@ import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.NPC;
-import net.runelite.api.Skill;
 import net.runelite.api.events.ActorDeath;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
@@ -308,39 +307,6 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertFalse(t.isCompleted(), "a forbidden overhead prayer being active fails the run");
 	}
 
-	// ── no_prayer_restore (Don't Sip Don't Trip) ─────────────────────────────
-
-	@Test
-	void noPrayerRestore_steadyPrayerCompletes()
-	{
-		NuzlockeTask t = addTask("cox_no_sip", c -> {
-			c.setDefeatNpcIds(Arrays.asList(VASA));
-			c.setNoPrayerRestore(true);
-		});
-		when(client.getBoostedSkillLevel(Skill.PRAYER)).thenReturn(60); // never rises
-		fireHit(VASA);
-		fireTick();
-		fireTick();
-		fireDeath(VASA);
-		assertTrue(t.isCompleted(), "prayer that never goes up completes a no_prayer_restore task");
-	}
-
-	@Test
-	void noPrayerRestore_restoringFails()
-	{
-		NuzlockeTask t = addTask("cox_no_sip", c -> {
-			c.setDefeatNpcIds(Arrays.asList(VASA));
-			c.setNoPrayerRestore(true);
-		});
-		fireHit(VASA);
-		when(client.getBoostedSkillLevel(Skill.PRAYER)).thenReturn(40);
-		fireTick(); // baseline 40
-		when(client.getBoostedSkillLevel(Skill.PRAYER)).thenReturn(70);
-		fireTick(); // prayer JUMPED — a restore
-		fireDeath(VASA);
-		assertFalse(t.isCompleted(), "prayer points rising mid-fight (a restore) fails the run");
-	}
-
 	// ── defeat_simultaneous (Joint Execution: 2 mystics within 2 ticks) ──────
 
 	@Test
@@ -373,6 +339,46 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		when(client.getTickCount()).thenReturn(105); // 5 ticks later — outside the window
 		fireDeath(MYSTIC_B);
 		assertFalse(t.isCompleted(), "two kills spread beyond the window must not complete");
+	}
+
+	// ── final_blow_vengeance (Bite Back: finish the Muttadile with Vengeance) ─
+
+	private static final int MUTTADILE = 7563;
+	private static final int VENGEANCE_REBOUND = 2450;
+
+	@Test
+	void finalBlowVengeance_vengeanceKillCompletes()
+	{
+		NuzlockeTask t = addTask("cox_bite_back", c -> {
+			c.setDefeatNpcIds(Arrays.asList(MUTTADILE));
+			c.setFinalBlowVengeance(true);
+		});
+		// Tick 100: Vengeance armed. The tick baselines the varbit at 1.
+		lenient().when(client.getVarbitValue(VENGEANCE_REBOUND)).thenReturn(1);
+		fireHit(MUTTADILE);
+		fireTick();
+		// Tick 101: a hit rebounds Vengeance (2450 → 0) and the Muttadile dies the same tick.
+		when(client.getTickCount()).thenReturn(101);
+		lenient().when(client.getVarbitValue(VENGEANCE_REBOUND)).thenReturn(0);
+		fireDeath(MUTTADILE);   // death held, pending the end-of-tick venge check
+		fireTick();             // end of tick 101: rebound detected → completes
+		assertTrue(t.isCompleted(), "a Muttadile finished by a Vengeance rebound completes Bite Back");
+	}
+
+	@Test
+	void finalBlowVengeance_normalKillDoesNotComplete()
+	{
+		NuzlockeTask t = addTask("cox_bite_back", c -> {
+			c.setDefeatNpcIds(Arrays.asList(MUTTADILE));
+			c.setFinalBlowVengeance(true);
+		});
+		lenient().when(client.getVarbitValue(VENGEANCE_REBOUND)).thenReturn(0); // no vengeance
+		fireHit(MUTTADILE);
+		fireTick();
+		when(client.getTickCount()).thenReturn(101);
+		fireDeath(MUTTADILE);   // a normal killing blow
+		fireTick();             // no rebound this tick → the finish fails
+		assertFalse(t.isCompleted(), "a normal killing blow must not complete a vengeance-finish task");
 	}
 
 	// ── style_target + required_attack_style (HM06: Tekton, Crush only) ──────
