@@ -2700,6 +2700,18 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("toa");
 		}
+		// Scurrius + Bryophyta share ONE boss chunk (region 12854, boss_keys), each
+		// earning its own token on first KC. Their kill-count GAMEMESSAGE fires the
+		// same in public and private, so no instance handling is needed here. Wording
+		// confirmed in-game: "Your Scurrius kill count is: N".
+		else if (plain.contains("scurrius") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("scurrius");
+		}
+		else if (plain.contains("bryophyta") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("bryophyta");
+		}
 		// Chambers of Xeric completion. The KC line ("Your completed Chambers of Xeric
 		// count is: N") and the raid-complete banner ("Congratulations - your raid is
 		// complete!") both fire on a finished CoX; either grants the token. NOTE: verify
@@ -5871,8 +5883,8 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		for (NuzlockeChunk chunk : new HashSet<>(chunksByRegionId.values()))
 		{
-			if (chunk == null || !chunk.isBoss() || !bossKey.equalsIgnoreCase(chunk.getBossKey())
-				|| chunk.getRegionIds() == null)
+			if (chunk == null || !chunk.isBoss() || chunk.getRegionIds() == null
+				|| !containsIgnoreCase(chunk.getBossKeys(), bossKey))
 			{
 				continue;
 			}
@@ -5882,6 +5894,23 @@ public class ChunkBlazerPlugin extends Plugin
 				{
 					return true;
 				}
+			}
+		}
+		return false;
+	}
+
+	/** Case-insensitive membership test — a chunk may carry one boss key or several. */
+	private static boolean containsIgnoreCase(java.util.List<String> keys, String key)
+	{
+		if (keys == null)
+		{
+			return false;
+		}
+		for (String k : keys)
+		{
+			if (key.equalsIgnoreCase(k))
+			{
+				return true;
 			}
 		}
 		return false;
