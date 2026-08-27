@@ -223,6 +223,68 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertFalse(t.isCompleted(), "missing the required inventory item fails the run");
 	}
 
+	// ── empty_inventory (Scurrius "Forgot Lunch") ────────────────────────────
+
+	@Test
+	void emptyInventory_emptyCompletes()
+	{
+		NuzlockeTask t = addTask("scurrius_forgot_lunch", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setEmptyInventory(true);
+		});
+		setInventory(); // nothing carried
+		encounterKill(ICE_DEMON);
+		assertTrue(t.isCompleted(), "an empty inventory completes a Forgot-Lunch task");
+	}
+
+	@Test
+	void emptyInventory_carryingSomethingFails()
+	{
+		NuzlockeTask t = addTask("scurrius_forgot_lunch", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setEmptyInventory(true);
+		});
+		setInventory(995); // a single coin ruins it
+		encounterKill(ICE_DEMON);
+		assertFalse(t.isCompleted(), "any item in the inventory fails an empty-inventory task");
+	}
+
+	// ── min_hitsplat (Scurrius "Ratsplosion": 20+) ───────────────────────────
+
+	@Test
+	void minHitsplat_bigHitCompletes()
+	{
+		NuzlockeTask t = addTask("scurrius_ratsplosion", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setMinHitsplat(20);
+		});
+		fireHit(ICE_DEMON, 25); // a 25 landed on the target
+		assertTrue(t.isCompleted(), "a hit at/over the threshold completes a min_hitsplat task");
+	}
+
+	@Test
+	void minHitsplat_smallHitDoesNotComplete()
+	{
+		NuzlockeTask t = addTask("scurrius_ratsplosion", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setMinHitsplat(20);
+		});
+		fireHit(ICE_DEMON, 12); // under the threshold
+		assertFalse(t.isCompleted(), "a hit below the threshold must not complete it");
+	}
+
+	@Test
+	void minHitsplat_plainKillDoesNotComplete()
+	{
+		NuzlockeTask t = addTask("scurrius_ratsplosion", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setMinHitsplat(20);
+		});
+		fireHit(ICE_DEMON, 5); // small hits only
+		fireDeath(ICE_DEMON);   // then it dies — but that's not the trigger
+		assertFalse(t.isCompleted(), "a min_hitsplat task completes on the big hit, not on the kill");
+	}
+
 	// ── required_equipped_ids (Friendly Fire: Priest gown top + bottom) ──────
 
 	@Test
@@ -545,12 +607,18 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 
 	private void fireHit(int npcId)
 	{
+		fireHit(npcId, 1);
+	}
+
+	private void fireHit(int npcId, int amount)
+	{
 		NPC target = npc(npcId); // build BEFORE the stubbing chain (nested when() is illegal)
 		HitsplatApplied e = mock(HitsplatApplied.class);
 		Hitsplat h = mock(Hitsplat.class);
 		lenient().when(e.getActor()).thenReturn(target);
 		lenient().when(e.getHitsplat()).thenReturn(h);
 		lenient().when(h.isOthers()).thenReturn(false);
+		lenient().when(h.getAmount()).thenReturn(amount);
 		module.onHitsplatApplied(e);
 	}
 
