@@ -5887,6 +5887,9 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		for (NuzlockeChunk chunk : new HashSet<>(chunksByRegionId.values()))
 		{
+			// A boss chunk may carry one boss key (ToA/CoX) or several on one region
+			// (Scurrius + Bryophyta) — match against the whole set so each boss's first
+			// clear can mint its own token.
 			if (chunk == null || !chunk.isBoss() || chunk.getRegionIds() == null
 				|| !containsIgnoreCase(chunk.getBossKeys(), bossKey))
 			{
