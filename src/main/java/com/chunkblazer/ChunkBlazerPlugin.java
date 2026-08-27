@@ -2712,6 +2712,10 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("bryophyta");
 		}
+		else if (plain.contains("brutus") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("brutus");
+		}
 		// Chambers of Xeric completion. The KC line ("Your completed Chambers of Xeric
 		// count is: N") and the raid-complete banner ("Congratulations - your raid is
 		// complete!") both fire on a finished CoX; either grants the token. NOTE: verify
