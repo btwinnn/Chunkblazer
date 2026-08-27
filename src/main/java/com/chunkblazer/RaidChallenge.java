@@ -259,6 +259,17 @@ public class RaidChallenge
 	@SerializedName("required_inventory_ids")
 	private List<Integer> requiredInventoryIds;
 
+	/** The whole inventory must stay EMPTY for the fight ("Forgot Lunch"). */
+	@SerializedName("empty_inventory")
+	private Boolean emptyInventory;
+
+	/**
+	 * Satisfy-triggered: completes the instant you land a hitsplat of AT LEAST this on a
+	 * {@link #defeatNpcIds} target ("Ratsplosion: hit Scurrius for 20+"). No kill needed.
+	 */
+	@SerializedName("min_hitsplat")
+	private Integer minHitsplat;
+
 	/**
 	 * Bit positions in the ACTIVE_PRAYERS varbit (4101) that must stay OFF for the whole
 	 * fight — set any and the run fails. E.g. overheads are bits 12 (magic), 13 (missiles),

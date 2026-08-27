@@ -530,6 +530,27 @@ public class RaidChallengeModule extends AbstractTaskModule
 					+ " attack — " + required.label() + " only.");
 			}
 		}
+
+		// (d) min_hitsplat: a single big enough hit on a target NPC completes the task —
+		// satisfy-triggered, no kill needed ("Ratsplosion: hit Scurrius for 20+"). Only
+		// OUR damage reaches here (others' splats were filtered at the top).
+		int amount = e.getHitsplat().getAmount();
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
+		{
+			RaidChallenge ch = task.getChallenge();
+			State s = states.get(task.getTaskId());
+			if (ch == null || s == null || ch.getMinHitsplat() == null
+				|| ch.getDefeatNpcIds() == null || !ch.getDefeatNpcIds().contains(npcId))
+			{
+				continue;
+			}
+			if (amount >= ch.getMinHitsplat())
+			{
+				log.debug("[RAIDCHALLENGE-DEBUG] {} min_hitsplat {} met (hit {})",
+					task.getTaskId(), ch.getMinHitsplat(), amount);
+				complete(task, s);
+			}
+		}
 	}
 
 	// ── Combat-style resolution ──────────────────────────────────────────────
@@ -658,7 +679,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 			}
 			if (ch.getDefeatNpcIds() != null && ch.getDefeatNpcIds().contains(id))
 			{
-				if (Boolean.TRUE.equals(ch.getFinalBlowVengeance()))
+				if (ch.getMinHitsplat() != null)
+				{
+					// Satisfy-triggered on the hitsplat (onHitsplatApplied), not the kill
+					// — a normal death must NOT complete a min_hitsplat task.
+				}
+				else if (Boolean.TRUE.equals(ch.getFinalBlowVengeance()))
 				{
 					// The kill must be a Vengeance rebound. Everything but "how it died"
 					// is checked here; the vengeance-timing decision is HELD to end-of-tick
@@ -886,6 +912,11 @@ public class RaidChallengeModule extends AbstractTaskModule
 				}
 			}
 		}
+		if (why == null && Boolean.TRUE.equals(ch.getEmptyInventory()) && !inventoryCounts().isEmpty())
+		{
+			why = "inventory not empty";
+			reason = "Your inventory must be completely empty for this challenge.";
+		}
 		if (why == null && ch.getRequiredEquippedGroups() != null)
 		{
 			for (List<Integer> group : ch.getRequiredEquippedGroups())
@@ -1025,7 +1056,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 	private boolean isSatisfyTriggered(RaidChallenge ch)
 	{
 		return ch.getNoDamageTicks() != null || ch.getSurviveTicks() != null
-			|| obtainGroups(ch) != null;
+			|| obtainGroups(ch) != null || ch.getMinHitsplat() != null;
 	}
 
 	// ── obtain_all helpers ───────────────────────────────────────────────────
