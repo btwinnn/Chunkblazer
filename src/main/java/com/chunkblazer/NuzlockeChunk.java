@@ -47,6 +47,15 @@ public class NuzlockeChunk
 	private String bossKey;
 
 	/**
+	 * For boss chunks hosting MORE THAN ONE token-boss on a single region (e.g. the
+	 * Varrock chunk that carries both Scurrius and Bryophyta): the list of boss keys,
+	 * each earning its own once-per-boss token. When present it supersedes
+	 * {@link #bossKey}; {@link #getBossKeys()} returns the effective set of either.
+	 */
+	@SerializedName("boss_keys")
+	private java.util.List<String> bossKeys;
+
+	/**
 	 * Outbound charter/sail routes from this chunk (port-to-port). Currently
 	 * informational — parsed and held for a future travel feature; nothing reads
 	 * it yet, but keeping it modeled means the data isn't silently dropped.
@@ -118,6 +127,24 @@ public class NuzlockeChunk
 	public String getBossKey()
 	{
 		return bossKey;
+	}
+
+	/**
+	 * @return every boss key this chunk hosts — the {@code boss_keys} list if authored,
+	 * else the single {@code boss_key} (as a one-element list), else empty. This is the
+	 * accessor the token logic should use so one chunk can carry multiple token-bosses.
+	 */
+	public java.util.List<String> getBossKeys()
+	{
+		if (bossKeys != null && !bossKeys.isEmpty())
+		{
+			return bossKeys;
+		}
+		if (bossKey != null && !bossKey.isEmpty())
+		{
+			return java.util.Collections.singletonList(bossKey);
+		}
+		return java.util.Collections.emptyList();
 	}
 
 	@Data
