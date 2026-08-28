@@ -33,7 +33,10 @@ import net.runelite.api.MenuAction;
 import net.runelite.api.MessageNode;
 import net.runelite.api.Player;
 import net.runelite.api.Skill;
+import net.runelite.api.NPC;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.events.ActorDeath;
+import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
@@ -1291,6 +1294,10 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			log.error("NO REGIONS LOADED! chunksByRegionId is empty!");
 		}
+
+		// Data-driven boss NPC-death detection: refresh the npc-id -> boss-key map from
+		// the boss chunks' authored boss_npc_ids now that chunksByRegionId is populated.
+		rebuildBossNpcKeys();
 
 		// Free (0-cost) chunk registry — dungeons etc. that unlock for free.
 		loadFreeChunks();
@@ -2667,6 +2674,80 @@ public class ChunkBlazerPlugin extends Plugin
 		maybeAddChatIcon(event);
 		handleVerificationChat(event);
 		handleBossCompletionChat(event);
+	}
+
+	/**
+	 * Boss NPC id -> boss key, for bosses whose completion is detected by the NPC's
+	 * DEATH rather than a kill-count chat line. Some (Bryophyta) print no kill-count
+	 * message at all, so the chat path never fires; the NPC always dies. Idempotent with
+	 * the chat path — recordBossCompletion is once-per-boss — so a boss with both signals
+	 * is never double-granted. Raids (ToA/CoX) stay chat-only (their bosses despawn).
+	 *
+	 * <p>Built from each boss chunk's authored {@code boss_npc_ids} (see
+	 * {@link #rebuildBossNpcKeys()}), so adding a new world boss is pure catalog data — no
+	 * plugin change.
+	 */
+	private volatile Map<Integer, String> bossNpcKeys = java.util.Collections.emptyMap();
+
+	// Boss keys the LOCAL player has dealt damage to — so an NPC-death token grant is
+	// "your kill", matching the chat path's safety (a teammate's kill can't mint yours).
+	private final Set<String> engagedBossKeys = ConcurrentHashMap.newKeySet();
+
+	/** Rebuild the npc-id -> boss-key lookup from the loaded chunks' boss_npc_ids. */
+	private void rebuildBossNpcKeys()
+	{
+		Map<Integer, String> m = new HashMap<>();
+		for (NuzlockeChunk chunk : new HashSet<>(chunksByRegionId.values()))
+		{
+			if (chunk == null || chunk.getBossNpcIds() == null)
+			{
+				continue;
+			}
+			for (Map.Entry<String, List<Integer>> e : chunk.getBossNpcIds().entrySet())
+			{
+				if (e.getValue() == null)
+				{
+					continue;
+				}
+				for (Integer id : e.getValue())
+				{
+					if (id != null)
+					{
+						m.put(id, e.getKey());
+					}
+				}
+			}
+		}
+		bossNpcKeys = m;
+	}
+
+	@Subscribe
+	public void onHitsplatApplied(HitsplatApplied event)
+	{
+		if (!(event.getActor() instanceof NPC) || event.getHitsplat() == null
+			|| event.getHitsplat().isOthers())
+		{
+			return; // someone else's / non-player splat
+		}
+		String key = bossNpcKeys.get(((NPC) event.getActor()).getId());
+		if (key != null)
+		{
+			engagedBossKeys.add(key);
+		}
+	}
+
+	@Subscribe
+	public void onActorDeath(ActorDeath event)
+	{
+		if (!(event.getActor() instanceof NPC))
+		{
+			return;
+		}
+		String key = bossNpcKeys.get(((NPC) event.getActor()).getId());
+		if (key != null && engagedBossKeys.contains(key))
+		{
+			recordBossCompletion(key);
+		}
 	}
 
 	/**
