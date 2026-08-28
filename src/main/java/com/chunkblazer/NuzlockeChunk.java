@@ -56,6 +56,16 @@ public class NuzlockeChunk
 	private java.util.List<String> bossKeys;
 
 	/**
+	 * Boss key -> the NPC ids whose DEATH signals that boss's completion (for the
+	 * once-per-boss token). Authored per boss chunk so detection is data-driven — a new
+	 * world boss needs no plugin change, just its ids here. E.g. the Scurrius+Bryophyta
+	 * chunk: {"scurrius":[7221,7222],"bryophyta":[8195]}. Raids (ToA/CoX) leave this null
+	 * and use the completion chat message instead (their bosses despawn / are multi-phase).
+	 */
+	@SerializedName("boss_npc_ids")
+	private java.util.Map<String, java.util.List<Integer>> bossNpcIds;
+
+	/**
 	 * Outbound charter/sail routes from this chunk (port-to-port). Currently
 	 * informational — parsed and held for a future travel feature; nothing reads
 	 * it yet, but keeping it modeled means the data isn't silently dropped.
@@ -145,6 +155,12 @@ public class NuzlockeChunk
 			return java.util.Collections.singletonList(bossKey);
 		}
 		return java.util.Collections.emptyList();
+	}
+
+	/** @return boss key -> NPC ids whose death completes that boss, or null if none authored. */
+	public java.util.Map<String, java.util.List<Integer>> getBossNpcIds()
+	{
+		return bossNpcIds;
 	}
 
 	@Data

@@ -50,4 +50,23 @@ class NuzlockeChunkBossKeysTest
 		NuzlockeChunk c = parse("{\"region_id\":[12345],\"chunk_type\":\"Standard\"}");
 		assertTrue(c.getBossKeys().isEmpty(), "a non-boss chunk has no boss keys");
 	}
+
+	@Test
+	void bossNpcIds_parsePerBossKey()
+	{
+		// The data-driven NPC-death detection: each boss key maps to the npc ids whose
+		// death completes it. Drives the plugin's id -> key lookup (no hardcoded map).
+		NuzlockeChunk c = parse("{\"chunk_type\":\"BOSS\",\"boss_keys\":[\"scurrius\",\"bryophyta\"],"
+			+ "\"boss_npc_ids\":{\"scurrius\":[7221,7222],\"bryophyta\":[8195]}}");
+		assertNotNull(c.getBossNpcIds());
+		assertEquals(java.util.Arrays.asList(7221, 7222), c.getBossNpcIds().get("scurrius"));
+		assertEquals(java.util.Arrays.asList(8195), c.getBossNpcIds().get("bryophyta"));
+	}
+
+	@Test
+	void bossNpcIds_absentIsNull()
+	{
+		NuzlockeChunk c = parse("{\"chunk_type\":\"BOSS\",\"boss_key\":\"toa\"}");
+		assertNull(c.getBossNpcIds(), "raids leave boss_npc_ids unset (chat-detected)");
+	}
 }
