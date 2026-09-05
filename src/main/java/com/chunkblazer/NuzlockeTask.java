@@ -84,6 +84,15 @@ public class NuzlockeTask
 	@SerializedName("group_content")
 	private Boolean groupContent;
 
+	/**
+	 * When true, this task cannot complete while the player is in a Theatre of Blood Entry
+	 * Mode raid. The mode is latched from the "You enter the Theatre of Blood (X Mode)" chat
+	 * banner (see {@link com.chunkblazer.modules.TobModeTracker}); Entry is the learner tier,
+	 * so flagged tasks are Normal/Hard only. Null-safe: absent means no gate.
+	 */
+	@SerializedName("forbid_entry_mode")
+	private Boolean forbidEntryMode;
+
 	@SerializedName("is_unlocked")
 	private Boolean isUnlocked;
 
@@ -152,6 +161,12 @@ public class NuzlockeTask
 	public boolean isGroupContent()
 	{
 		return groupContent != null && groupContent;
+	}
+
+	/** True when this task must not complete in a ToB Entry Mode raid. Null-safe (absent = allowed). */
+	public boolean isForbidEntryMode()
+	{
+		return forbidEntryMode != null && forbidEntryMode;
 	}
 
 	/**

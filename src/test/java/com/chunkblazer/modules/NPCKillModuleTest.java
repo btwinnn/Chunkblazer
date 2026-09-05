@@ -51,6 +51,8 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	@InjectMocks
 	private NPCKillModule npcKillModule;
 
+	private TobModeTracker tobMode;
+
 	@Mock
 	private NPC targetNpc;
 
@@ -67,6 +69,8 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 		injectField(npcKillModule, "clientThread", clientThread);
 		injectField(npcKillModule, "eventBus", eventBus);
 		injectField(npcKillModule, "config", config);
+		tobMode = new TobModeTracker();
+		injectField(npcKillModule, "tobMode", tobMode);
 
 		npcKillModule.setCompletionCallback(completionCallback);
 
@@ -127,6 +131,34 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	{
 		NuzlockeTask task = createTestTask("Kill Goblin", "kill_goblin", "NPC_KILL", 5);
 		assertTrue(npcKillModule.canHandle(task));
+	}
+
+	// ── forbid_entry_mode: ToB add-counters must not credit in an Entry raid ──
+
+	@Test
+	void forbidEntryMode_blocksCreditInEntryRaid() throws Exception
+	{
+		tobMode.observeChat("You enter the Theatre of Blood (Entry Mode)");
+		NuzlockeTask t = createTaskWithNpc("Bloody Brilliant", "tob_bloody_brilliant", "NPC_KILL", 5, Arrays.asList(8367));
+		t.setForbidEntryMode(true);
+		npcKillModule.addActiveTask(t);
+
+		simulateKill(mockNpc(8367, 1, "Blood spawn"));
+
+		assertEquals(0, t.getCurrentProgress(), "a blood-spawn kill in an Entry raid must not credit");
+	}
+
+	@Test
+	void forbidEntryMode_creditsInNormalRaid() throws Exception
+	{
+		tobMode.observeChat("You enter the Theatre of Blood (Normal Mode)");
+		NuzlockeTask t = createTaskWithNpc("Bloody Brilliant", "tob_bloody_brilliant", "NPC_KILL", 5, Arrays.asList(8367));
+		t.setForbidEntryMode(true);
+		npcKillModule.addActiveTask(t);
+
+		simulateKill(mockNpc(8367, 1, "Blood spawn"));
+
+		assertEquals(1, t.getCurrentProgress(), "a blood-spawn kill in a Normal raid credits normally");
 	}
 
 	@Test
