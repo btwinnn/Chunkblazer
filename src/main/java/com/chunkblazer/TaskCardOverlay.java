@@ -95,6 +95,22 @@ public class TaskCardOverlay extends Overlay
 	private String lastPendingRaw = null;
 
 	/**
+	 * Bounds of the "Reveal 5" / "Reveal all" batch buttons drawn this frame, or null
+	 * when they aren't shown. Set in render (client thread), read in onClick (mouse
+	 * thread) — a benign race, same as the card bounds.
+	 */
+	private Rectangle revealFiveBounds;
+	private Rectangle revealAllBounds;
+
+	/**
+	 * A batch-reveal asked for by a button click. 0 = none, -1 = reveal all, N =
+	 * reveal N. Written on the mouse thread by onClick, consumed on the client thread
+	 * in render() so the actual reveal (config writes, task activation) stays on the
+	 * same thread the single-card flip already uses.
+	 */
+	private volatile int batchRevealRequest = 0;
+
+	/**
 	 * One card and where it is in its life.
 	 *
 	 * <p>FACE_DOWN → (click) → turning → FACE_UP → (click) → leaving → gone. A card sits
@@ -266,6 +282,18 @@ public class TaskCardOverlay extends Overlay
 		{
 			return false;
 		}
+		// Batch controls first — the escape hatch from clicking through a big pack
+		// (e.g. a boss chunk's ~30 cards). Handled on the client thread in render().
+		if (revealAllBounds != null && revealAllBounds.contains(x, y))
+		{
+			batchRevealRequest = -1;
+			return true;
+		}
+		if (revealFiveBounds != null && revealFiveBounds.contains(x, y))
+		{
+			batchRevealRequest = 5;
+			return true;
+		}
 		// Pack-opening: only the front card (index 0) is interactive. Click it to
 		// flip; click the face-up card to dismiss it and advance to the next.
 		Card current = cards.get(0);
@@ -305,6 +333,12 @@ public class TaskCardOverlay extends Overlay
 			return null;
 		}
 
+		// Button bounds are recomputed every frame by drawPrompt; clear them first so
+		// a stale rectangle can't take a click once the buttons stop being drawn.
+		revealFiveBounds = null;
+		revealAllBounds = null;
+
+		processBatchReveal();
 		syncCards();
 		retireFinishedCards();
 
@@ -419,6 +453,36 @@ public class TaskCardOverlay extends Overlay
 				it.remove();
 			}
 		}
+	}
+
+	/**
+	 * Honour a batch-reveal button click: flip N cards (or all) at once, instantly,
+	 * without the per-card turn animation — the whole point is to not click through
+	 * them. Runs on the client thread (called from render) so plugin.revealTaskCard,
+	 * which activates the task and writes config, stays on the same thread as the
+	 * single-card flip path in retireFinishedCards.
+	 */
+	private void processBatchReveal()
+	{
+		int req = batchRevealRequest;
+		if (req == 0)
+		{
+			return;
+		}
+		batchRevealRequest = 0;
+
+		List<String> pending = plugin.getUnrevealedTaskIds();
+		int n = req < 0 ? pending.size() : Math.min(req, pending.size());
+		for (int i = 0; i < n; i++)
+		{
+			plugin.revealTaskCard(pending.get(i));
+		}
+
+		// Rebuild from the now-smaller pending set on the next syncCards(). Clearing
+		// is fine — every revealed task has already been activated, and any remaining
+		// cards are re-created face-down.
+		cards.clear();
+		lastPendingRaw = null;
 	}
 
 	private void revealAllPending()
@@ -710,6 +774,49 @@ public class TaskCardOverlay extends Overlay
 
 		graphics.setFont(FontManager.getRunescapeBoldFont());
 		drawCentered(graphics, text, viewport.x + viewport.width / 2, current.bounds.y - 14, PROMPT);
+
+		// Batch controls: only meaningful with a pile to work through, and only while
+		// the front card is still face down (mid-flip/face-up the click means "next").
+		if (current.isFaceDown() && total > 1)
+		{
+			int cx = viewport.x + viewport.width / 2;
+			int by = current.bounds.y + current.bounds.height + 10;
+			if (total > 5)
+			{
+				revealFiveBounds = drawButton(graphics, "Reveal 5", cx - 58, by);
+				revealAllBounds = drawButton(graphics, "Reveal all (" + total + ")", cx + 58, by);
+			}
+			else
+			{
+				revealAllBounds = drawButton(graphics, "Reveal all (" + total + ")", cx, by);
+			}
+		}
+	}
+
+	/** A small centred pill button. Returns its bounds for hit-testing in onClick. */
+	private Rectangle drawButton(Graphics2D graphics, String text, int centreX, int top)
+	{
+		graphics.setFont(FontManager.getRunescapeSmallFont());
+		FontMetrics fm = graphics.getFontMetrics();
+		int padX = 10;
+		int padY = 4;
+		int w = fm.stringWidth(text) + padX * 2;
+		int h = fm.getHeight() + padY * 2;
+		int x = centreX - w / 2;
+		Rectangle bounds = new Rectangle(x, top, w, h);
+
+		graphics.setColor(new Color(0, 0, 0, 160));
+		graphics.fillRect(x, top, w, h);
+		graphics.setColor(PROMPT);
+		graphics.drawRect(x, top, w - 1, h - 1);
+
+		int tx = centreX - fm.stringWidth(text) / 2;
+		int ty = top + padY + fm.getAscent();
+		graphics.setColor(TEXT_SHADOW);
+		graphics.drawString(text, tx + 1, ty + 1);
+		graphics.setColor(PROMPT);
+		graphics.drawString(text, tx, ty);
+		return bounds;
 	}
 
 	private void drawCentered(Graphics2D graphics, String text, int centreX, int y, Color colour)
@@ -757,5 +864,10 @@ public class TaskCardOverlay extends Overlay
 		cards.clear();
 		// Force the next sync to rebuild rather than trust the cached text.
 		lastPendingRaw = null;
+		// Drop any pending batch request and stale button bounds so they can't fire
+		// into the next session.
+		batchRevealRequest = 0;
+		revealFiveBounds = null;
+		revealAllBounds = null;
 	}
 }
