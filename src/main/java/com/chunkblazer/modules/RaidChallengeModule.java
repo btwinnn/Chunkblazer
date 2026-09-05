@@ -106,6 +106,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 		final Set<Integer> obtainedGroups = new HashSet<>();       // obtain_all: group indices completed this window
 		final Map<Integer, Integer> obtainSnapshot = new HashMap<>(); // item id -> last-seen inventory count
 		boolean encounterActive;  // defeat_npc: true from first hit on the target until it dies
+		boolean arenaHpGateLatched; // arena_hp_gate: the watched NPC has hit the HP threshold this attempt
+		int defeatCount;          // defeat_count: counted kills so far this fight window
 	}
 
 	private final Map<String, State> states = new ConcurrentHashMap<>();
@@ -273,6 +275,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 	@Subscribe
 	public void onGameTick(GameTick e)
 	{
+		logTobVarbitCapture(); // TEMP [TOB-DEBUG] — runs with no active task; delete after capture
 		if (activeTasks.isEmpty())
 		{
 			return;
@@ -677,6 +680,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 				log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: protected NPC {} died", task.getTaskId(), id);
 				announceFailure(task, "A protected NPC was killed — this run no longer counts.");
 			}
+			// defeat_count: tally a counted add's death within the fight window.
+			if (ch.getDefeatCount() != null && ch.getDefeatCountNpcIds() != null
+				&& ch.getDefeatCountNpcIds().contains(id))
+			{
+				tallyDefeatCount(task, ch, s);
+			}
 			if (ch.getDefeatNpcIds() != null && ch.getDefeatNpcIds().contains(id))
 			{
 				if (ch.getMinHitsplat() != null)
@@ -838,6 +847,96 @@ public class RaidChallengeModule extends AbstractTaskModule
 		}
 	}
 
+	// ── TEMPORARY [TOB-DEBUG] varbit + HP capture ────────────────────────────
+	// Purpose: capture the ToB room-state varbit (6447), the boss-HP varbit (6448),
+	// and whatever encodes the raid MODE (Entry/Normal/Hard) — believed to live in the
+	// same band. Logs ONLY deltas in [6440,6460] so it never spams; a line appears only
+	// when one of these varbits changes. On any change it also dumps the ToB bosses in
+	// scene with their health-bar ratio, so 6448 can be decoded (absolute vs scaled, and
+	// which boss it follows). Do a Normal run and an Entry run so the mode varbit shows
+	// as a value that differs between them. DELETE this whole block after capture.
+	private static final int TOB_DBG_LO = 6440, TOB_DBG_HI = 6460;
+	private static final Set<Integer> TOB_DBG_BOSS_IDS = new HashSet<>(java.util.Arrays.asList(
+		8360, 8361, 8362, 8363, 10822,                 // Maiden (normal phases + hard)
+		8359, 10813,                                    // Bloat
+		8387, 8388, 10867, 10868,                       // Sotetseg
+		8340, 10772,                                    // Xarpus
+		8369, 8370, 8371, 8372, 8373, 8374, 8375,       // Verzik (normal P1/P2/P3)
+		10847, 10848, 10849, 10850, 10851, 10852, 10853 // Verzik (hard P1/P2/P3)
+	));
+	private final Map<Integer, Integer> tobDbgLast = new HashMap<>();
+
+	private void logTobVarbitCapture()
+	{
+		if (!client.isClientThread())
+		{
+			return;
+		}
+		StringBuilder changed = null;
+		for (int id = TOB_DBG_LO; id <= TOB_DBG_HI; id++)
+		{
+			int v = client.getVarbitValue(id);
+			Integer prev = tobDbgLast.put(id, v);
+			int p = prev == null ? 0 : prev;
+			if (p != v)
+			{
+				if (changed == null)
+				{
+					changed = new StringBuilder();
+				}
+				changed.append(' ').append(id).append(':').append(p).append("->").append(v);
+			}
+		}
+		if (changed == null)
+		{
+			return;
+		}
+		log.info("[TOB-DEBUG] tick={} region={} varbits{}", client.getTickCount(), currentInstancedRegion(), changed);
+		StringBuilder bosses = null;
+		for (NPC n : client.getNpcs())
+		{
+			if (n != null && TOB_DBG_BOSS_IDS.contains(n.getId()))
+			{
+				if (bosses == null)
+				{
+					bosses = new StringBuilder();
+				}
+				bosses.append(" npc=").append(n.getId())
+					.append(" hp=").append(n.getHealthRatio()).append('/').append(n.getHealthScale());
+			}
+		}
+		if (bosses != null)
+		{
+			log.info("[TOB-DEBUG]   bosses{}", bosses);
+		}
+	}
+
+	/**
+	 * Tally one counted kill toward a defeat_count task, completing once the target N is
+	 * reached in a single fight window. Only counts while the window is open and the
+	 * attempt is clean; the tally resets when the window reopens (see resetAttempt), which
+	 * is what makes it "in one fight". Counts every matching death in the room, not strictly
+	 * the local player's — attribution per add is impractical in group content.
+	 */
+	private void tallyDefeatCount(NuzlockeTask task, RaidChallenge ch, State s)
+	{
+		if (!s.windowOpen || s.violated || ch.getDefeatCount() == null)
+		{
+			return;
+		}
+		s.defeatCount++;
+		log.debug("[RAIDCHALLENGE-DEBUG] {} defeat_count {}/{}", task.getTaskId(), s.defeatCount, ch.getDefeatCount());
+		if (s.defeatCount >= ch.getDefeatCount())
+		{
+			trySatisfy(task, ch, s);
+		}
+		else if (completionCallback != null)
+		{
+			completionCallback.onProgressUpdated(task, s.defeatCount);
+			sendProgress(task, s.defeatCount, ch.getDefeatCount());
+		}
+	}
+
 	/**
 	 * Detect enrage from the final Warden's HP heal-spike (near-death then heals
 	 * ~20%). Works today; the gfx-object trigger above is more precise once its id
@@ -970,10 +1069,16 @@ public class RaidChallengeModule extends AbstractTaskModule
 				+ " not one of " + ch.getAttackStyleValues();
 			reason = "Wrong attack style for this challenge.";
 		}
-		if (why == null && hasArenaBox(ch) && outsideArenaBox(ch))
+		if (why == null && hasArenaBox(ch))
 		{
-			why = "outside arena box";
-			reason = "You left the area this challenge must be done in.";
+			// An HP-gated arena (e.g. Maiden's Red Carpet from 50% down) is only enforced
+			// once the watched boss reaches the threshold; latch it, then check position.
+			updateArenaHpLatch(ch, s);
+			if (arenaGateOpen(ch, s) && outsideArenaBox(ch))
+			{
+				why = "outside arena box";
+				reason = "You left the area this challenge must be done in.";
+			}
 		}
 		// Gear-value budget: fail the instant the window opens if you walk in over
 		// budget, instead of staying silent until the completion message. Checked
@@ -1056,7 +1161,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 	private boolean isSatisfyTriggered(RaidChallenge ch)
 	{
 		return ch.getNoDamageTicks() != null || ch.getSurviveTicks() != null
-			|| obtainGroups(ch) != null || ch.getMinHitsplat() != null;
+			|| obtainGroups(ch) != null || ch.getMinHitsplat() != null
+			|| ch.getDefeatCount() != null;
 	}
 
 	// ── obtain_all helpers ───────────────────────────────────────────────────
@@ -1246,6 +1352,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 		s.obtainedGroups.clear();
 		s.obtainSnapshot.clear();
 		s.encounterActive = false;
+		s.arenaHpGateLatched = false;
+		s.defeatCount = 0;
 	}
 
 	/**
@@ -1524,6 +1632,66 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return false;
 		}
 		return maxY == null || y <= maxY;
+	}
+
+	/**
+	 * Latch the arena's HP gate ON the first time a watched NPC is at or below the
+	 * configured health percent. Once latched it stays on for the rest of the attempt
+	 * (reset in resetAttempt), so a boss that heals back up — Maiden feeding on blood
+	 * spawns — does not reopen free movement. No-op when no HP gate is configured.
+	 */
+	private void updateArenaHpLatch(RaidChallenge ch, State s)
+	{
+		if (s.arenaHpGateLatched)
+		{
+			return;
+		}
+		List<Integer> ids = ch.getArenaHpGateNpcIds();
+		Integer pct = ch.getArenaHpGateBelowPercent();
+		if (ids == null || ids.isEmpty() || pct == null)
+		{
+			return;
+		}
+		List<NPC> npcs = client.getNpcs();
+		if (npcs == null)
+		{
+			return;
+		}
+		for (NPC npc : npcs)
+		{
+			if (npc == null || !ids.contains(npc.getId()))
+			{
+				continue;
+			}
+			int ratio = npc.getHealthRatio();
+			int scale = npc.getHealthScale();
+			if (ratio < 0 || scale <= 0)
+			{
+				continue; // no health bar shown yet — can't judge, wait for the next tick
+			}
+			double healthPct = (double) ratio / scale * 100.0;
+			if (healthPct <= pct)
+			{
+				s.arenaHpGateLatched = true;
+				log.debug("[RAIDCHALLENGE-DEBUG] arena HP gate OPEN (npc {} at {}% <= {}%)",
+					npc.getId(), Math.round(healthPct), pct);
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Whether the arena is currently being enforced: always, unless an HP gate is
+	 * configured, in which case only after it has latched (see updateArenaHpLatch).
+	 */
+	private boolean arenaGateOpen(RaidChallenge ch, State s)
+	{
+		if (ch.getArenaHpGateNpcIds() == null || ch.getArenaHpGateNpcIds().isEmpty()
+			|| ch.getArenaHpGateBelowPercent() == null)
+		{
+			return true; // no HP gate — arena enforced for the whole window
+		}
+		return s.arenaHpGateLatched;
 	}
 
 	private int rollQuantity(RaidChallenge ch)

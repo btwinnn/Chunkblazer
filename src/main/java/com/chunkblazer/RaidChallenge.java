@@ -117,6 +117,24 @@ public class RaidChallenge
 		private Integer maxY;
 	}
 
+	/**
+	 * NPC ids whose current health gates the arena ({@link #arenaBoxes} / the single box):
+	 * the arena is enforced only once one of these NPCs has dropped to
+	 * {@link #arenaHpGateBelowPercent} percent health or below. Used for "from 50 percent
+	 * down, stay on these tiles" mechanics like Maiden's Red Carpet. Absent means the arena
+	 * is enforced for the whole window. The gate LATCHES on the first time the threshold is
+	 * reached this attempt, so a boss healing back up does not reopen free movement.
+	 */
+	@SerializedName("arena_hp_gate_npc_ids")
+	private List<Integer> arenaHpGateNpcIds;
+
+	/**
+	 * Health percent (0 to 100) at or below which the arena gate opens. Read together with
+	 * {@link #arenaHpGateNpcIds}; ignored unless that is set. E.g. 50 for Maiden's Red Carpet.
+	 */
+	@SerializedName("arena_hp_gate_below_percent")
+	private Integer arenaHpGateBelowPercent;
+
 	/** Reach this many CONSECUTIVE damage-free ticks in the window (Butterfly: 50 = 30s). */
 	@SerializedName("no_damage_ticks")
 	private Integer noDamageTicks;
@@ -242,6 +260,21 @@ public class RaidChallenge
 	private Integer defeatSimultaneous;
 	@SerializedName("defeat_within_ticks")
 	private Integer defeatWithinTicks;
+
+	/**
+	 * Satisfy-triggered COUNTER: complete once this many counted kills happen in a single
+	 * fight window (e.g. "defeat 20 small Nylocas in one Nylocas fight", "5 Blood Spawns in
+	 * one Maiden fight"). The window is {@link #roomRegions} — so it is required, and the
+	 * tally resets each time you re-enter the room, giving the "in one fight" scoping. The
+	 * things to count come from {@link #defeatCountNpcIds} (their death). Independent of
+	 * {@link #defeatNpcIds}, which is a single-kill completion.
+	 */
+	@SerializedName("defeat_count")
+	private Integer defeatCount;
+
+	/** NPC ids counted for {@link #defeatCount}, tallied on their death within the window. */
+	@SerializedName("defeat_count_npc_ids")
+	private List<Integer> defeatCountNpcIds;
 
 	/** These item ids must ALL be equipped for the whole fight (e.g. Priest gown set). */
 	@SerializedName("required_equipped_ids")
