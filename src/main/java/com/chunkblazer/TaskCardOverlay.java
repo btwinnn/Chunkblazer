@@ -779,16 +779,20 @@ public class TaskCardOverlay extends Overlay
 		// the front card is still face down (mid-flip/face-up the click means "next").
 		if (current.isFaceDown() && total > 1)
 		{
+			// These send tasks straight to the list without the flip animation, so the
+			// labels say exactly that. Stacked (not side by side) because the labels are
+			// long enough that two columns would overlap on a narrow viewport.
 			int cx = viewport.x + viewport.width / 2;
 			int by = current.bounds.y + current.bounds.height + 10;
 			if (total > 5)
 			{
-				revealFiveBounds = drawButton(graphics, "Reveal 5", cx - 58, by);
-				revealAllBounds = drawButton(graphics, "Reveal all (" + total + ")", cx + 58, by);
+				revealFiveBounds = drawButton(graphics, "Send 5 To Task List", cx, by);
+				revealAllBounds = drawButton(graphics, "Send All To Task List (" + total + ")",
+					cx, by + revealFiveBounds.height + 6);
 			}
 			else
 			{
-				revealAllBounds = drawButton(graphics, "Reveal all (" + total + ")", cx, by);
+				revealAllBounds = drawButton(graphics, "Send All To Task List (" + total + ")", cx, by);
 			}
 		}
 	}
