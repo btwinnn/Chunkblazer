@@ -152,6 +152,9 @@ public class NPCKillModule extends AbstractTaskModule
 	@Inject
 	private ChunkBlazerConfig config;
 
+	@Inject
+	private TobModeTracker tobMode;
+
 	// ── Fights we have a stake in, keyed by NPC index ────────────────────
 	// One record per NPC we have personally damaged. This REPLACED a single
 	// currentTarget/damageDealtToTarget/combatStartTick triple that was only ever
@@ -1295,6 +1298,12 @@ public class NPCKillModule extends AbstractTaskModule
 		// Update progress for all matching tasks
 		for (NuzlockeTask task : matchingTasks)
 		{
+			// ToB Entry-mode gate: a task flagged forbid_entry_mode does not credit while the
+			// player is in a KNOWN Entry raid. Fail-open on UNKNOWN (e.g. a mid-raid relog).
+			if (task.isForbidEntryMode() && tobMode.isEntry())
+			{
+				continue;
+			}
 			// SLAYER task check — must be killing the ASSIGNED monster, not just
 			// holding any slayer assignment. On-task kills award Slayer XP; off-task
 			// kills don't, so a Slayer XP gain in this kill's tick window proves the

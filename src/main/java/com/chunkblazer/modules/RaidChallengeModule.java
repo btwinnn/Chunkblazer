@@ -91,6 +91,9 @@ public class RaidChallengeModule extends AbstractTaskModule
 	@Inject
 	private ChatMessageManager chatMessageManager;
 
+	@Inject
+	private TobModeTracker tobMode;
+
 	private final Random random = new Random();
 
 	/** Per-attempt runtime state for one active challenge task. */
@@ -269,13 +272,15 @@ public class RaidChallengeModule extends AbstractTaskModule
 				resetAttempt(s);
 				s.windowOpen = false;
 			}
+			// The ToB entry banner won't replay on the next login, so forget the mode
+			// (callers fail-open on UNKNOWN rather than punish a relog).
+			tobMode.clear();
 		}
 	}
 
 	@Subscribe
 	public void onGameTick(GameTick e)
 	{
-		logTobVarbitCapture(); // TEMP [TOB-DEBUG] — runs with no active task; delete after capture
 		if (activeTasks.isEmpty())
 		{
 			return;
@@ -385,6 +390,11 @@ public class RaidChallengeModule extends AbstractTaskModule
 	@Subscribe
 	public void onChatMessage(ChatMessage e)
 	{
+		// Latch the ToB raid mode from the "You enter the Theatre of Blood (X Mode)" banner.
+		// Runs BEFORE the active-task early-return so it works even when only NPC_KILL ToB
+		// tasks are assigned (those are gated in NPCKillModule off this same shared tracker).
+		tobMode.observeChat(e.getMessage());
+
 		if (activeTasks.isEmpty())
 		{
 			return;
@@ -847,70 +857,6 @@ public class RaidChallengeModule extends AbstractTaskModule
 		}
 	}
 
-	// ── TEMPORARY [TOB-DEBUG] varbit + HP capture ────────────────────────────
-	// Purpose: capture the ToB room-state varbit (6447), the boss-HP varbit (6448),
-	// and whatever encodes the raid MODE (Entry/Normal/Hard) — believed to live in the
-	// same band. Logs ONLY deltas in [6440,6460] so it never spams; a line appears only
-	// when one of these varbits changes. On any change it also dumps the ToB bosses in
-	// scene with their health-bar ratio, so 6448 can be decoded (absolute vs scaled, and
-	// which boss it follows). Do a Normal run and an Entry run so the mode varbit shows
-	// as a value that differs between them. DELETE this whole block after capture.
-	private static final int TOB_DBG_LO = 6440, TOB_DBG_HI = 6460;
-	private static final Set<Integer> TOB_DBG_BOSS_IDS = new HashSet<>(java.util.Arrays.asList(
-		8360, 8361, 8362, 8363, 10822,                 // Maiden (normal phases + hard)
-		8359, 10813,                                    // Bloat
-		8387, 8388, 10867, 10868,                       // Sotetseg
-		8340, 10772,                                    // Xarpus
-		8369, 8370, 8371, 8372, 8373, 8374, 8375,       // Verzik (normal P1/P2/P3)
-		10847, 10848, 10849, 10850, 10851, 10852, 10853 // Verzik (hard P1/P2/P3)
-	));
-	private final Map<Integer, Integer> tobDbgLast = new HashMap<>();
-
-	private void logTobVarbitCapture()
-	{
-		if (!client.isClientThread())
-		{
-			return;
-		}
-		StringBuilder changed = null;
-		for (int id = TOB_DBG_LO; id <= TOB_DBG_HI; id++)
-		{
-			int v = client.getVarbitValue(id);
-			Integer prev = tobDbgLast.put(id, v);
-			int p = prev == null ? 0 : prev;
-			if (p != v)
-			{
-				if (changed == null)
-				{
-					changed = new StringBuilder();
-				}
-				changed.append(' ').append(id).append(':').append(p).append("->").append(v);
-			}
-		}
-		if (changed == null)
-		{
-			return;
-		}
-		log.info("[TOB-DEBUG] tick={} region={} varbits{}", client.getTickCount(), currentInstancedRegion(), changed);
-		StringBuilder bosses = null;
-		for (NPC n : client.getNpcs())
-		{
-			if (n != null && TOB_DBG_BOSS_IDS.contains(n.getId()))
-			{
-				if (bosses == null)
-				{
-					bosses = new StringBuilder();
-				}
-				bosses.append(" npc=").append(n.getId())
-					.append(" hp=").append(n.getHealthRatio()).append('/').append(n.getHealthScale());
-			}
-		}
-		if (bosses != null)
-		{
-			log.info("[TOB-DEBUG]   bosses{}", bosses);
-		}
-	}
-
 	/**
 	 * Tally one counted kill toward a defeat_count task, completing once the target N is
 	 * reached in a single fight window. Only counts while the window is open and the
@@ -1331,6 +1277,14 @@ public class RaidChallengeModule extends AbstractTaskModule
 	{
 		if (task.isCompleted())
 		{
+			return;
+		}
+		// ToB Entry-mode gate: the single funnel every completion path passes through, so
+		// one check covers defeat_npc, satisfy-triggered and defeat_count alike. Fail-open on
+		// UNKNOWN mode (a relog): only a KNOWN Entry raid blocks a forbid_entry_mode task.
+		if (task.isForbidEntryMode() && tobMode.isEntry())
+		{
+			log.debug("[RAIDCHALLENGE-DEBUG] {} blocked — Theatre of Blood Entry mode does not count", task.getTaskId());
 			return;
 		}
 		task.setCompleted(true);

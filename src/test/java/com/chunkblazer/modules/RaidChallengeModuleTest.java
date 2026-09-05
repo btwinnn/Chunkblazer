@@ -82,6 +82,8 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	@InjectMocks
 	private RaidChallengeModule module;
 
+	private TobModeTracker tobMode;
+
 	private final Map<Integer, NPC> npcs = new HashMap<>();
 
 	@BeforeEach
@@ -94,6 +96,8 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		injectField(module, "config", config);
 		injectField(module, "itemManager", itemManager);
 		injectField(module, "chatMessageManager", chatMessageManager);
+		tobMode = new TobModeTracker();
+		injectField(module, "tobMode", tobMode);
 		module.setCompletionCallback(completionCallback);
 
 		// raidLevel()/gatesPass() only read varbits on the client thread.
@@ -573,6 +577,51 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	{
 		NuzlockeTask t = addTask("cox_ice_carving", c -> c.setDefeatNpcIds(Arrays.asList(ICE_DEMON)));
 		assertTrue(module.getActiveTasks().contains(t));
+	}
+
+	// ── forbid_entry_mode: ToB Entry-mode tasks must not complete (mode from chat) ──
+
+	@Test
+	void forbidEntryMode_blocksCompletionInEntryRaid()
+	{
+		tobMode.observeChat("You enter the Theatre of Blood (Entry Mode)");
+		NuzlockeTask t = addTask("tob_two_fatasses", c -> c.setDefeatNpcIds(Arrays.asList(SHAMAN)));
+		t.setForbidEntryMode(true);
+		encounterKill(SHAMAN);
+		assertFalse(t.isCompleted(), "a forbid_entry_mode task must not complete in a ToB Entry raid");
+	}
+
+	@Test
+	void forbidEntryMode_allowsCompletionInNormalRaid()
+	{
+		tobMode.observeChat("You enter the Theatre of Blood (Normal Mode)");
+		NuzlockeTask t = addTask("tob_two_fatasses", c -> c.setDefeatNpcIds(Arrays.asList(SHAMAN)));
+		t.setForbidEntryMode(true);
+		encounterKill(SHAMAN);
+		assertTrue(t.isCompleted(), "a forbid_entry_mode task completes normally in Normal mode");
+	}
+
+	@Test
+	void forbidEntryMode_modeLatchedViaChatHandler()
+	{
+		// The entry banner arriving through onChatMessage (before the active-task return)
+		// is what latches the mode — this exercises that wiring end to end.
+		fireChat("You enter the Theatre of Blood (Entry Mode)");
+		NuzlockeTask t = addTask("tob_two_fatasses", c -> c.setDefeatNpcIds(Arrays.asList(SHAMAN)));
+		t.setForbidEntryMode(true);
+		encounterKill(SHAMAN);
+		assertFalse(t.isCompleted(), "mode latched via the chat handler blocks Entry completion");
+	}
+
+	@Test
+	void forbidEntryMode_unknownModeFailsOpen()
+	{
+		// No entry banner seen (e.g. a mid-raid relog) -> UNKNOWN -> allow, so a legit
+		// relogger is never punished.
+		NuzlockeTask t = addTask("tob_two_fatasses", c -> c.setDefeatNpcIds(Arrays.asList(SHAMAN)));
+		t.setForbidEntryMode(true);
+		encounterKill(SHAMAN);
+		assertTrue(t.isCompleted(), "unknown mode fails open (completes)");
 	}
 
 	// ── arena_hp_gate: Maiden's "Red Carpet" (arena only enforced from 50% HP) ──
