@@ -64,6 +64,18 @@ public class PlayerSyncRequest
 	private List<String> completedTasks;
 
 	/**
+	 * The per-region task roll, sent verbatim as the plugin's config string
+	 * ("regionId:task1,task2|regionId2:task3"). The server stores it as an opaque
+	 * blob (it grants nothing — points and completions are verified separately) so
+	 * the roll and the face-down card state survive a profile switch / reinstall,
+	 * instead of being regenerated en masse on the next login.
+	 */
+	private String regionRolledTasks;
+
+	/** Still-face-down reveal cards, sent verbatim ("task1,task2"). Round-tripped with {@link #regionRolledTasks}. */
+	private String unrevealedTasks;
+
+	/**
 	 * Boss/raid keys the player has completed at least once (e.g. "toa"). Additive
 	 * on the server (never a wholesale replace); it recomputes earned Boss Tokens
 	 * from the union. See docs/BOSS-CHUNKS.md.

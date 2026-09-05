@@ -3272,6 +3272,52 @@ public class ChunkBlazerPlugin extends Plugin
 			merged.size() - before, before, merged.size());
 	}
 
+	/**
+	 * Restore the per-region task roll (and the face-down card state) from the
+	 * server, but ONLY when this profile has no roll of its own.
+	 *
+	 * <p>The roll is client-authoritative: a profile that has been playing this
+	 * account has the real, current roll in local config, and the server copy is
+	 * just the last thing it synced up — so we never overwrite a non-empty local
+	 * roll. An EMPTY local roll is the tell that this is a fresh load of the
+	 * account on this profile (account switch, reinstall, new machine), which is
+	 * exactly when {@link #loadActiveTasks} would otherwise regenerate a roll for
+	 * every unlocked region at once — the 572-card dump. Restoring the stored roll
+	 * first means loadActiveTasks finds it already present and leaves it alone, so
+	 * the account looks the same as it did on its home profile, down to which
+	 * cards are still face-down.
+	 *
+	 * <p>Accounts that have never synced a roll (everyone, on the first login after
+	 * this ships) get an empty string here and fall through to loadActiveTasks'
+	 * graceful bulk backfill, which settles finished tasks and cards only the rest.
+	 */
+	private void restoreRollStateFromServer(PlayerLoginResponse.PlayerData pdata)
+	{
+		if (pdata == null)
+		{
+			return;
+		}
+		String localRoll = config.regionRolledTasks();
+		if (localRoll != null && !localRoll.isEmpty())
+		{
+			return; // local roll is authoritative — never clobber it
+		}
+		String serverRoll = pdata.getRegionRolledTasks();
+		if (serverRoll == null || serverRoll.isEmpty())
+		{
+			return; // server has no roll to restore — bulk backfill will handle it
+		}
+
+		setAccountState("regionRolledTasks", serverRoll);
+		String serverUnrevealed = pdata.getUnrevealedTasks();
+		setAccountState("unrevealedTasks", serverUnrevealed == null ? "" : serverUnrevealed);
+
+		int regionEntries = serverRoll.split("\\|").length;
+		log.info("[CHUNKBLAZER] restored task roll from the server ({} region entr{}) — "
+			+ "skipping the wholesale re-roll",
+			regionEntries, regionEntries == 1 ? "y" : "ies");
+	}
+
 	private void hydrateFromLoginResponse(PlayerLoginResponse response)
 	{
 		if (response == null || !response.isSuccess())
@@ -3353,6 +3399,7 @@ public class ChunkBlazerPlugin extends Plugin
 			// just as server-side progress survives a reinstall.
 			mergeUnlockedRegionsFromServer(pdata);
 			mergeCompletedTasksFromServer(pdata);
+			restoreRollStateFromServer(pdata);
 
 			// 4. Points.
 			//
@@ -3620,6 +3667,10 @@ public class ChunkBlazerPlugin extends Plugin
 			.pointsSpent(config.pointsSpent())
 			.completedTasks(completed)
 			.bossCompletions(new ArrayList<>(getCompletedBossKeys()))
+			// The roll + reveal state, verbatim, so it survives a profile switch or
+			// reinstall instead of being regenerated wholesale on the next login.
+			.regionRolledTasks(config.regionRolledTasks())
+			.unrevealedTasks(config.unrevealedTasks())
 			.intentionalReset(pendingIntentionalReset)
 			.timestamp(System.currentTimeMillis())
 			.clientVersion("1.0.0")
@@ -3833,6 +3884,27 @@ public class ChunkBlazerPlugin extends Plugin
 
 		Set<String> unlockedRegions = getUnlockedRegionIds();
 
+		// Tasks the bulk backfill decides to hide behind fresh cards, carded once at
+		// the end so an account switch reveals gradually instead of dumping them all.
+		Set<String> bulkRolledToCard = new HashSet<>();
+
+		// Satisfied tasks the load settles, batched: writing completedTasks once at the
+		// end instead of once per task turns an O(n^2) pile of config rewrites (each
+		// markTaskCompleted rebuilds the whole CSV) into a single write. A bulk backfill
+		// on a maxed account can satisfy hundreds at once — that loop was the real load
+		// spike, not the overlay (which only ever draws one card plus a small deck).
+		Set<String> settledIds = new LinkedHashSet<>();
+		int settledPoints = 0;
+
+		// Safety + compute ceiling on the face-down pile. A bulk backfill (account
+		// switch / reinstall) must never turn an established account's whole unlocked
+		// map into a wall of cards to open — the "500 cards" hazard. One chunk yields
+		// at most ~80 tasks, so 80 is a generous single-load ceiling; the rest of the
+		// backlog surfaces on later loads as the pile drains. The count already in the
+		// pile (e.g. boss packs granted just above) is charged against the budget, so
+		// the TOTAL pile is what's bounded, not just this pass.
+		int cardBudget = Math.max(0, MAX_BACKFILL_CARDS - unrevealed.size());
+
 		for (String regionIdStr : unlockedRegions)
 		{
 			try
@@ -3844,9 +3916,28 @@ public class ChunkBlazerPlugin extends Plugin
 				// find and would be re-attempted on every loadActiveTasks — which runs
 				// constantly. Skipping them keeps the "No chunk found for region N"
 				// warning meaning what it says: a chunk that should exist and doesn't.
+				//
+				// A region with no roll here means BULK BACKFILL: this account's roll is
+				// local-only (never synced field until the server persists it) and this
+				// profile has none — an account switch, a fresh install, a new machine.
+				// Roll it WITHOUT blanket-carding (parkBehindCards=false); the loop below
+				// settles already-satisfied tasks silently and cards only what's left, so
+				// a maxed main doesn't get a face-down card for every task it already did
+				// (the "572 cards on account switch" report).
+				boolean freshlyRolled = false;
 				if (rolledTaskIds.isEmpty() && !isFreeUnlockableRegion(regionId))
 				{
-					rolledTaskIds = rollTasksForRegion(regionId);
+					// Stop rolling new regions once the card pile is full: leave them
+					// unrolled and let a later load pick them up as the player works
+					// through what's already there. With cards off there is no pile to
+					// protect, so backfill everything as before (satisfied tasks still
+					// settle below; only the unfinished remainder goes active).
+					if (config.showTaskCards() && cardBudget <= 0)
+					{
+						continue;
+					}
+					rolledTaskIds = rollTasksForRegion(regionId, false, false);
+					freshlyRolled = true;
 				}
 
 				NuzlockeChunk chunk = chunksByRegionId.get(regionId);
@@ -3864,13 +3955,26 @@ public class ChunkBlazerPlugin extends Plugin
 							// Initialize task
 							initializeTask(task);
 
-							// Self-heal stuck tasks where progress saved but completion never fired (e.g. throw in popup code between onProgressUpdated and onTaskCompleted).
+							// Self-heal stuck tasks where progress saved but completion never fired (e.g. throw in popup code between onProgressUpdated and onTaskCompleted). Batched — see settledIds.
 							if (task.getCurrentProgress() >= task.getTargetQuantity())
 							{
 								completedTaskCache.put(taskId, task);
-								addPoints(task.getBasePoints());
-								markTaskCompleted(taskId);
+								settledIds.add(taskId);
+								settledPoints += task.getBasePoints();
 								addedTaskIds.add(taskId);
+								continue;
+							}
+
+							// Bulk backfill of an unfinished task: park it behind a card
+							// (matching a normal roll's reveal drip) rather than dumping it
+							// straight into the active list. Only when cards are enabled and
+							// there's room in the pile — with cards off there is nothing to
+							// flip, so it goes active as it always did.
+							if (freshlyRolled && config.showTaskCards() && cardBudget > 0)
+							{
+								bulkRolledToCard.add(taskId);
+								addedTaskIds.add(taskId);
+								cardBudget--;
 								continue;
 							}
 
@@ -3884,6 +3988,42 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				log.warn("Invalid region ID: {}", regionIdStr);
 			}
+		}
+
+		// Commit every settled task in ONE completedTasks write + ONE points add,
+		// rather than rewriting the whole CSV per task inside the loop. Done before
+		// the carding below so the completed set is current when markTasksUnrevealed
+		// runs its own completed-check.
+		if (!settledIds.isEmpty())
+		{
+			LinkedHashSet<String> merged = new LinkedHashSet<>();
+			String existing = config.completedTasks();
+			if (existing != null && !existing.isEmpty())
+			{
+				for (String s : existing.split(","))
+				{
+					String t = s.trim();
+					if (!t.isEmpty())
+					{
+						merged.add(t);
+					}
+				}
+			}
+			merged.addAll(settledIds);
+			setAccountState("completedTasks", String.join(",", merged));
+			addPoints(settledPoints);
+			log.info("[CHUNKBLAZER] settled {} already-satisfied task(s) on load (+{} points, batched)",
+				settledIds.size(), settledPoints);
+		}
+
+		// Park the backfill's unfinished tasks behind cards in one pass. Satisfied
+		// tasks were already settled above and are excluded by markTasksUnrevealed's
+		// own completed-set check, so this only ever hides genuine to-dos.
+		if (!bulkRolledToCard.isEmpty())
+		{
+			markTasksUnrevealed(bulkRolledToCard);
+			log.info("[CHUNKBLAZER] bulk task backfill: {} unfinished task(s) parked as reveal cards",
+				bulkRolledToCard.size());
 		}
 
 		// Register all active tasks with modules for tracking
@@ -4158,12 +4298,27 @@ public class ChunkBlazerPlugin extends Plugin
 	private static final int MAX_TASKS_PER_REGION = 5;
 
 	/**
+	 * Hard ceiling on how many face-down reveal cards a single load may create when
+	 * bulk-backfilling an account whose roll is absent (account switch, reinstall,
+	 * new machine). It bounds both the "wall of cards to open" and the per-flip card
+	 * bookkeeping cost. Sized to roughly one chunk's worth of tasks so a normal
+	 * single-chunk grant is never clipped; a genuine backlog beyond this surfaces on
+	 * later loads as the pile drains, and is preserved server-side either way.
+	 */
+	private static final int MAX_BACKFILL_CARDS = 80;
+
+	/**
 	 * Roll 4-5 random tasks for a region using weighted selection.
 	 * Tasks are globally unique - once a task is assigned anywhere, it cannot be rolled again.
 	 */
 	private Set<String> rollTasksForRegion(int regionId)
 	{
-		return rollTasksForRegion(regionId, false);
+		return rollTasksForRegion(regionId, false, true);
+	}
+
+	private Set<String> rollTasksForRegion(int regionId, boolean rollAll)
+	{
+		return rollTasksForRegion(regionId, rollAll, true);
 	}
 
 	/**
@@ -4171,8 +4326,18 @@ public class ChunkBlazerPlugin extends Plugin
 	 * eligible task is granted — no weighted 4-5 subset — and the tasks are made
 	 * active immediately instead of being parked behind reveal cards, so a boss
 	 * chunk hands the player its whole task list at once.
+	 *
+	 * <p>{@code parkBehindCards} decides whether freshly rolled tasks are hidden
+	 * behind face-down reveal cards. It is true for every ordinary roll (a live
+	 * chunk unlock, the start/current region). It is set FALSE only by the bulk
+	 * backfill inside {@link #loadActiveTasks}, which rolls every unlocked region
+	 * of an account whose local roll is absent (account switch, fresh install, new
+	 * machine). That path decides card-vs-settle per task itself — settling ones
+	 * already satisfied, carding only what's left — so it must not have every task
+	 * blanket-carded here, which is what dumped ~572 face-down cards on an account
+	 * switch.
 	 */
-	private Set<String> rollTasksForRegion(int regionId, boolean rollAll)
+	private Set<String> rollTasksForRegion(int regionId, boolean rollAll, boolean parkBehindCards)
 	{
 		NuzlockeChunk chunk = chunksByRegionId.get(regionId);
 		if (chunk == null)
@@ -4229,7 +4394,10 @@ public class ChunkBlazerPlugin extends Plugin
 			// (each card activates its task only when flipped) instead of settling a
 			// maxed account's entire satisfied stack at once. markTasksUnrevealed
 			// no-ops when the player has cards disabled — then they go straight active.
-			markTasksUnrevealed(rolledIds);
+			if (parkBehindCards)
+			{
+				markTasksUnrevealed(rolledIds);
+			}
 			return rolledIds;
 		}
 
@@ -4263,8 +4431,12 @@ public class ChunkBlazerPlugin extends Plugin
 		saveRolledTasksForRegion(regionId, rolledIds);
 
 		// Park them behind cards. loadActiveTasks skips anything still pending, so
-		// these do not become active until the player flips them.
-		markTasksUnrevealed(rolledIds);
+		// these do not become active until the player flips them. Skipped for the
+		// bulk backfill, which cards per-task itself (see parkBehindCards).
+		if (parkBehindCards)
+		{
+			markTasksUnrevealed(rolledIds);
+		}
 
 		return rolledIds;
 	}

@@ -122,6 +122,25 @@ public class PlayerLoginResponse
 		private List<String> completedTasks = new ArrayList<>();
 
 		/**
+		 * The account's per-region task roll, stored verbatim as the plugin's own
+		 * config string ("regionId:task1,task2|regionId2:task3"). The server never
+		 * interprets it — it round-trips the blob so the roll (and, with it, which
+		 * cards are still face-down) survives an account switch, a reinstall, or a
+		 * new machine, instead of being regenerated wholesale (the 572-card dump).
+		 * Empty for accounts that have not synced a roll yet.
+		 */
+		@SerializedName("region_rolled_tasks")
+		private String regionRolledTasks = "";
+
+		/**
+		 * The account's still-face-down reveal cards, stored verbatim as the plugin's
+		 * config string ("task1,task2"). Restored alongside {@link #regionRolledTasks}
+		 * so flipped stays flipped across profiles/devices.
+		 */
+		@SerializedName("unrevealed_tasks")
+		private String unrevealedTasks = "";
+
+		/**
 		 * Whether this player has completed RSN ownership verification via the
 		 * in-game chat handshake. If false, the plugin should kick off the
 		 * verification flow on first login.
