@@ -575,7 +575,93 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertTrue(module.getActiveTasks().contains(t));
 	}
 
+	// ── arena_hp_gate: Maiden's "Red Carpet" (arena only enforced from 50% HP) ──
+
+	@Test
+	void arenaHpGate_completesOnKillWithoutSpuriousFailure()
+	{
+		// Red Carpet is a health-gated arena. With no player location mocked the arena
+		// position check is inert (fromLocalInstance needs a live scene), so this guards
+		// the new HP-gate wiring: it must not throw or falsely fail — the kill still credits.
+		NuzlockeTask t = addTask("tob_red_carpet", c -> {
+			c.setDefeatNpcIds(Arrays.asList(8360, 8362));
+			RaidChallenge.ArenaBox box = new RaidChallenge.ArenaBox();
+			box.setMinX(24);
+			box.setMaxX(51);
+			box.setMinY(28);
+			box.setMaxY(34);
+			c.setArenaBoxes(Arrays.asList(box));
+			c.setArenaHpGateNpcIds(Arrays.asList(8360, 8362));
+			c.setArenaHpGateBelowPercent(50);
+		});
+		encounterKill(8362);
+		assertTrue(t.isCompleted(), "an HP-gated arena task still completes on the kill");
+	}
+
+	// ── defeat_count: count N kills in one fight window (Stainless, Bug Basher/…) ──
+
+	@Test
+	void defeatCount_reachesTargetInWindowCompletes() throws Exception
+	{
+		NuzlockeTask t = addTask("tob_bug_basher", c -> {
+			c.setRoomRegions(Arrays.asList(13122));
+			c.setDefeatCount(3);
+			c.setDefeatCountNpcIds(Arrays.asList(8342, 8348));
+		});
+		forceWindowOpen(t); // stand in the Nylocas room (scene can't be mocked in a unit test)
+		fireDeath(8342);
+		fireDeath(8348);
+		assertFalse(t.isCompleted(), "two counted deaths is short of the target of three");
+		fireDeath(8342);
+		assertTrue(t.isCompleted(), "3 counted nylo deaths in one window completes Bug Basher");
+	}
+
+	@Test
+	void defeatCount_bloodSpawnNpcDeathsCompleteStainless() throws Exception
+	{
+		NuzlockeTask t = addTask("tob_stainless", c -> {
+			c.setRoomRegions(Arrays.asList(12613, 12869));
+			c.setDefeatCount(2);
+			c.setDefeatCountNpcIds(Arrays.asList(8367, 10821, 10829));
+		});
+		forceWindowOpen(t);
+		fireDeath(8367);
+		assertFalse(t.isCompleted(), "one blood spawn is short of the target of two");
+		fireDeath(10821);
+		assertTrue(t.isCompleted(), "2 blood-spawn deaths in one window completes Stainless");
+	}
+
+	@Test
+	void defeatCount_deathsOutsideWindowDoNotComplete()
+	{
+		// The tally is gated on the room window, so kills made outside the room can't
+		// bank progress toward "in one fight". No window is opened here.
+		NuzlockeTask t = addTask("tob_bug_basher", c -> {
+			c.setRoomRegions(Arrays.asList(13122));
+			c.setDefeatCount(3);
+			c.setDefeatCountNpcIds(Arrays.asList(8342, 8348));
+		});
+		for (int i = 0; i < 5; i++)
+		{
+			fireDeath(8342);
+		}
+		assertFalse(t.isCompleted(), "counted deaths outside the room window must not credit");
+	}
+
 	// ── helpers ──────────────────────────────────────────────────────────────
+
+	/** Force a task's fight window open — the room check needs a live scene we can't mock. */
+	private void forceWindowOpen(NuzlockeTask task) throws Exception
+	{
+		Field statesField = RaidChallengeModule.class.getDeclaredField("states");
+		statesField.setAccessible(true);
+		Map<?, ?> states = (Map<?, ?>) statesField.get(module);
+		Object state = states.get(task.getTaskId());
+		assertNotNull(state, "task should have registered a challenge state");
+		Field win = state.getClass().getDeclaredField("windowOpen");
+		win.setAccessible(true);
+		win.setBoolean(state, true);
+	}
 
 	/** Build a RAID_CHALLENGE task, configure its challenge block, and register it. */
 	private NuzlockeTask addTask(String id, java.util.function.Consumer<RaidChallenge> cfg)
