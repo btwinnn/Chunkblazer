@@ -257,6 +257,15 @@ public class RaidChallenge
 	private Integer minCrushDefence;
 
 	/**
+	 * Checked at completion: none of these NPC ids may be ALIVE in the scene when the task
+	 * would complete ("Defeat the Kalphite Queen without any other enemies alive"). A living
+	 * add blocks the completion (retry on the next kill). Point-in-time, not sustained — a
+	 * spawn you clear before the kill doesn't taint the run.
+	 */
+	@SerializedName("forbidden_alive_npc_ids")
+	private List<Integer> forbiddenAliveNpcIds;
+
+	/**
 	 * "Defeat this NPC." Completes when one of these NPCs dies while you were engaged.
 	 * For raids with no per-room completion chat (Chambers of Xeric), the boss's death
 	 * is the completion signal. The fight window for sustained conditions ({@code noRun},
@@ -327,6 +336,18 @@ public class RaidChallenge
 	 */
 	@SerializedName("hitsplat_values")
 	private List<Integer> hitsplatValues;
+
+	/**
+	 * Satisfy-triggered: completes when you land {@link #consecutiveHitsplatCount} hits of
+	 * EXACTLY this amount, back to back, on a {@link #defeatNpcIds} target ("Snake Eyes: two
+	 * 1s in a row on Zulrah"). Any hit of a different amount resets the streak. No kill needed.
+	 */
+	@SerializedName("consecutive_hitsplat_value")
+	private Integer consecutiveHitsplatValue;
+
+	/** How many back-to-back {@link #consecutiveHitsplatValue} hits are required. Default 2. */
+	@SerializedName("consecutive_hitsplat_count")
+	private Integer consecutiveHitsplatCount;
 
 	/**
 	 * Bit positions in the ACTIVE_PRAYERS varbit (4101) that must stay OFF for the whole

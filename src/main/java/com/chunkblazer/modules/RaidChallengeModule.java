@@ -112,6 +112,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		boolean encounterActive;  // defeat_npc: true from first hit on the target until it dies
 		boolean arenaHpGateLatched; // arena_hp_gate: the watched NPC has hit the HP threshold this attempt
 		int defeatCount;          // defeat_count: counted kills so far this fight window
+		int hitStreak;            // consecutive_hitsplat_value: back-to-back matching hits so far
 	}
 
 	private final Map<String, State> states = new ConcurrentHashMap<>();
@@ -591,6 +592,35 @@ public class RaidChallengeModule extends AbstractTaskModule
 				complete(task, s);
 			}
 		}
+
+		// (f) consecutive_hitsplat_value: N back-to-back hits of an exact amount on a target
+		// NPC complete the task ("Snake Eyes: two 1s in a row on Zulrah"). Any other amount
+		// resets the streak. Only OUR damage reaches here.
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
+		{
+			RaidChallenge ch = task.getChallenge();
+			State s = states.get(task.getTaskId());
+			if (ch == null || s == null || ch.getConsecutiveHitsplatValue() == null
+				|| ch.getDefeatNpcIds() == null || !ch.getDefeatNpcIds().contains(npcId))
+			{
+				continue;
+			}
+			if (amount == ch.getConsecutiveHitsplatValue())
+			{
+				s.hitStreak++;
+				int need = ch.getConsecutiveHitsplatCount() == null ? 2 : ch.getConsecutiveHitsplatCount();
+				log.debug("[RAIDCHALLENGE-DEBUG] {} consecutive_hitsplat {}/{} (hit {})",
+					task.getTaskId(), s.hitStreak, need, amount);
+				if (s.hitStreak >= need)
+				{
+					complete(task, s);
+				}
+			}
+			else
+			{
+				s.hitStreak = 0; // a different amount breaks the run
+			}
+		}
 	}
 
 	// ── Combat-style resolution ──────────────────────────────────────────────
@@ -748,10 +778,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 			}
 			if (ch.getDefeatNpcIds() != null && ch.getDefeatNpcIds().contains(id))
 			{
-				if (ch.getMinHitsplat() != null || ch.getHitsplatValues() != null)
+				if (ch.getMinHitsplat() != null || ch.getHitsplatValues() != null
+					|| ch.getConsecutiveHitsplatValue() != null)
 				{
-					// Satisfy-triggered on the hitsplat (onHitsplatApplied), not the kill —
-					// a normal death must NOT complete a min_hitsplat / hitsplat_values task.
+					// Satisfy-triggered on the hitsplat (onHitsplatApplied), not the kill — a
+					// normal death must NOT complete a min_hitsplat / hitsplat_values /
+					// consecutive_hitsplat_value task.
 				}
 				else if (Boolean.TRUE.equals(ch.getFinalBlowVengeance()))
 				{
@@ -1131,7 +1163,24 @@ public class RaidChallengeModule extends AbstractTaskModule
 		{
 			return false;
 		}
+		if (ch.getForbiddenAliveNpcIds() != null && anyForbiddenNpcAlive(ch.getForbiddenAliveNpcIds()))
+		{
+			return false;
+		}
 		return true;
+	}
+
+	/** True if any NPC with a forbidden id is currently alive in the scene (see forbidden_alive_npc_ids). */
+	private boolean anyForbiddenNpcAlive(List<Integer> ids)
+	{
+		for (NPC npc : client.getNpcs())
+		{
+			if (npc != null && !npc.isDead() && ids.contains(npc.getId()))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -1182,6 +1231,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		return ch.getNoDamageTicks() != null || ch.getSurviveTicks() != null
 			|| obtainGroups(ch) != null || ch.getMinHitsplat() != null
 			|| ch.getHitsplatValues() != null
+			|| ch.getConsecutiveHitsplatValue() != null
 			|| ch.getDefeatCount() != null;
 	}
 
@@ -1382,6 +1432,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		s.encounterActive = false;
 		s.arenaHpGateLatched = false;
 		s.defeatCount = 0;
+		s.hitStreak = 0;
 	}
 
 	/**

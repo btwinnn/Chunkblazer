@@ -2821,6 +2821,21 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("cox");
 		}
+		// Zulrah rotates through phases and DIVES between them (a form change, not a death),
+		// so ActorDeath on a form is ambiguous. Gate the token on the KC line — "Your Zulrah
+		// kill count is: N" — which fires only on a real kill. No boss_npc_ids for Zulrah.
+		else if (plain.contains("zulrah") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("zulrah");
+		}
+		// Perilous Moons (Cam Torum): a run ends by LOOTING THE LUNAR CHEST after all three
+		// moons fall — there is no single boss NPC. Gate the token on that KC line — "Your
+		// Lunar Chest count is: N" — like Barrows' chest. First clear after unlock mints one
+		// token; recordBossCompletion is idempotent so later chests never grant more.
+		else if (plain.contains("lunar chest count is"))
+		{
+			recordBossCompletion("moons_of_peril");
+		}
 	}
 
 	/**
