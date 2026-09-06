@@ -170,6 +170,21 @@ public class NuzlockeTask
 	}
 
 	/**
+	 * EQUIP tasks only: require ALL of the required_items groups to be worn at once (a full
+	 * set) rather than the default "any one item completes it". Each required_items entry is
+	 * one group (a piece plus its accepted variants); the task completes when one item from
+	 * EVERY group is equipped. Null-safe: absent means the default any-one behaviour.
+	 */
+	@SerializedName("require_all_equipped")
+	private Boolean requireAllEquipped;
+
+	/** True when an EQUIP task requires the FULL set (one from every group). Null-safe. */
+	public boolean isRequireAllEquipped()
+	{
+		return requireAllEquipped != null && requireAllEquipped;
+	}
+
+	/**
 	 * Validates the group_content flag against the rest of the task, and returns
 	 * a human-readable problem or null when the task is consistent.
 	 *

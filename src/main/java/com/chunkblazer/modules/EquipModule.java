@@ -256,39 +256,57 @@ public class EquipModule extends AbstractTaskModule
 			return;
 		}
 
-		// Check if any of the required items are currently equipped
 		List<Integer> equippedIds = getEquippedItemIds();
-		int totalRequired = targetItems.size();
+		int totalRequired;
 		int totalEquipped = 0;
 		int foundItemId = -1;
 		int foundSlot = -1;
+		boolean complete;
 
-		for (Map.Entry<Integer, Boolean> target : targetItems.entrySet())
+		if (task.isRequireAllEquipped() && task.getRequiredItems() != null && !task.getRequiredItems().isEmpty())
 		{
-			int itemId = target.getKey();
-			boolean isEquipped = equippedIds.contains(itemId);
-
-			if (isEquipped)
+			// Full-set mode: ONE item from EACH required_items group must be worn (a group is
+			// one piece plus its accepted variants). Completes only when every group is satisfied.
+			List<RequiredItem> groups = task.getRequiredItems();
+			totalRequired = groups.size();
+			for (RequiredItem g : groups)
 			{
-				totalEquipped++;
-				// Track the first equipped item for server report
-				if (foundItemId == -1)
+				int worn = firstEquippedId(g.getItemIds(), equippedIds);
+				if (worn != -1)
 				{
-					foundItemId = itemId;
-					foundSlot = findSlotForItem(itemId);
+					totalEquipped++;
+					if (foundItemId == -1)
+					{
+						foundItemId = worn;
+						foundSlot = findSlotForItem(worn);
+					}
 				}
 			}
+			complete = totalRequired > 0 && totalEquipped == totalRequired;
+		}
+		else
+		{
+			// Default: any ONE of the accepted item ids completes the task.
+			totalRequired = targetItems.size();
+			for (int itemId : targetItems.keySet())
+			{
+				if (equippedIds.contains(itemId))
+				{
+					totalEquipped++;
+					if (foundItemId == -1)
+					{
+						foundItemId = itemId;
+						foundSlot = findSlotForItem(itemId);
+					}
+				}
+			}
+			complete = totalEquipped > 0;
 		}
 
 		int previousProgress = task.getCurrentProgress();
-
-		// For equip tasks, progress is binary per item (0 or 1)
-		// The task is complete when any required item is equipped
-		// (tasks typically only have one required item for equip)
 		task.setCurrentProgress(totalEquipped);
 
-		// Check for completion (at least one required item equipped)
-		if (totalEquipped > 0 && !task.isCompleted())
+		if (complete && !task.isCompleted())
 		{
 			// Validate level requirements before marking complete
 			String levelViolation = validateLevelRequirements(task, equippedIds);
@@ -333,7 +351,7 @@ public class EquipModule extends AbstractTaskModule
 			activeTasks.remove(task);
 			rebuildWatchedItems();
 		}
-		else if (totalEquipped > previousProgress && totalEquipped > 0)
+		else if (!complete && totalEquipped > previousProgress && totalEquipped > 0)
 		{
 			// Progress was made but task not complete (multi-item equip task). The
 			// "(current/total)" in the message already conveys it; no per-variant
@@ -345,6 +363,23 @@ public class EquipModule extends AbstractTaskModule
 				completionCallback.onProgressUpdated(task, totalEquipped);
 			}
 		}
+	}
+
+	/** First id from the group that is currently equipped, or -1 if none of them is. */
+	private int firstEquippedId(List<Integer> groupIds, List<Integer> equippedIds)
+	{
+		if (groupIds == null)
+		{
+			return -1;
+		}
+		for (int id : groupIds)
+		{
+			if (equippedIds.contains(id))
+			{
+				return id;
+			}
+		}
+		return -1;
 	}
 
 	/**

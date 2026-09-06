@@ -249,6 +249,14 @@ public class RaidChallenge
 	private Integer minPrayerBonus;
 
 	/**
+	 * Summed CRUSH DEFENCE bonus of equipped gear must be AT LEAST this (e.g. Torag "244+ crush
+	 * defence"). Read from each equipped item's equipment stats and sampled through the fight
+	 * like the gear checks, so dropping below the threshold mid-fight taints the attempt.
+	 */
+	@SerializedName("min_crush_defence")
+	private Integer minCrushDefence;
+
+	/**
 	 * "Defeat this NPC." Completes when one of these NPCs dies while you were engaged.
 	 * For raids with no per-room completion chat (Chambers of Xeric), the boss's death
 	 * is the completion signal. The fight window for sustained conditions ({@code noRun},
