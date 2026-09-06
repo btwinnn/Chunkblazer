@@ -1053,6 +1053,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 			reason = "Your equipped Prayer bonus is too low — need at least +"
 				+ ch.getMinPrayerBonus() + " (you have +" + equippedPrayerBonus() + ").";
 		}
+		if (why == null && ch.getMinCrushDefence() != null && equippedCrushDefence() < ch.getMinCrushDefence())
+		{
+			why = "crush defence " + equippedCrushDefence() + " < min " + ch.getMinCrushDefence();
+			reason = "Your equipped Crush defence is too low — need at least "
+				+ ch.getMinCrushDefence() + " (you have " + equippedCrushDefence() + ").";
+		}
 		if (why != null)
 		{
 			s.violated = true;
@@ -1532,6 +1538,30 @@ public class RaidChallengeModule extends AbstractTaskModule
 			if (stats != null && stats.getEquipment() != null)
 			{
 				total += stats.getEquipment().getPrayer();
+			}
+		}
+		return total;
+	}
+
+	/** Summed Crush defence bonus of every equipped item (from its equipment stats). */
+	private int equippedCrushDefence()
+	{
+		ItemContainer eq = client.getItemContainer(InventoryID.EQUIPMENT);
+		if (eq == null)
+		{
+			return 0;
+		}
+		int total = 0;
+		for (Item it : eq.getItems())
+		{
+			if (it == null || it.getId() <= 0)
+			{
+				continue;
+			}
+			ItemStats stats = itemManager.getItemStats(it.getId(), false);
+			if (stats != null && stats.getEquipment() != null)
+			{
+				total += stats.getEquipment().getDcrush();
 			}
 		}
 		return total;

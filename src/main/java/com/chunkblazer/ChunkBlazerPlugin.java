@@ -2885,6 +2885,13 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("royal_titans");
 		}
+		// Barrows has no single boss NPC — a run ends by LOOTING THE CHEST. Gate the token
+		// on that KC line so it grants on a real completed run, not merely killing one
+		// brother. Wording confirmed in-game: "Your Barrows chest count is: N".
+		else if (plain.contains("barrows chest count is"))
+		{
+			recordBossCompletion("barrows");
+		}
 		// Chambers of Xeric completion. The KC line ("Your completed Chambers of Xeric
 		// count is: N") and the raid-complete banner ("Congratulations - your raid is
 		// complete!") both fire on a finished CoX; either grants the token. NOTE: verify

@@ -6,6 +6,7 @@ import net.runelite.api.ItemContainer;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.game.ItemManager;
 import com.chunkblazer.NuzlockeTask;
+import com.chunkblazer.RequiredItem;
 import com.chunkblazer.api.ChunkBlazerApiClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,6 +86,28 @@ class EquipModuleTest extends AbstractTaskModuleTest
 		return null;
 	}
 
+	private RequiredItem reqItem(int itemId)
+	{
+		RequiredItem r = new RequiredItem();
+		r.setItemIds(Arrays.asList(itemId));
+		r.setQuantity(1);
+		return r;
+	}
+
+	/** Mock the EQUIPMENT container holding exactly these item ids. */
+	private void setEquipment(int... ids)
+	{
+		Item[] arr = new Item[14];
+		for (int i = 0; i < ids.length; i++)
+		{
+			Item it = mock(Item.class);
+			lenient().when(it.getId()).thenReturn(ids[i]);
+			arr[i] = it;
+		}
+		lenient().when(equipmentContainer.getItems()).thenReturn(arr);
+		lenient().when(client.getItemContainer(InventoryID.EQUIPMENT)).thenReturn(equipmentContainer);
+	}
+
 	@Test
 	void testGetCompletionType()
 	{
@@ -130,6 +153,35 @@ class EquipModuleTest extends AbstractTaskModuleTest
 		equipModule.onTaskCleared();
 
 		assertTrue(equipModule.getActiveTasks().isEmpty());
+	}
+
+	// ── require_all_equipped: Barrows full sets vs "any piece" default ──
+
+	@Test
+	void requireAllEquipped_completesOnlyWithTheFullSet() throws Exception
+	{
+		NuzlockeTask t = createTestTask("Verac's set", "veracs_set", "EQUIP", 4);
+		t.setRequireAllEquipped(true);
+		t.setRequiredItems(Arrays.asList(reqItem(4753), reqItem(4757), reqItem(4759), reqItem(4755)));
+
+		setEquipment(4753, 4757); // 2 of the 4 pieces
+		equipModule.addActiveTask(t);
+		equipModule.checkProgress();
+		assertFalse(t.isCompleted(), "a partial set must not complete a require_all_equipped task");
+
+		setEquipment(4753, 4757, 4759, 4755); // full set
+		equipModule.checkProgress();
+		assertTrue(t.isCompleted(), "the full set completes it");
+	}
+
+	@Test
+	void defaultEquip_completesOnAnyOnePiece()
+	{
+		NuzlockeTask t = createTaskWithItems("Any Barrows piece", "any_piece", "EQUIP", 1, Arrays.asList(4753, 4757, 4759));
+		equipModule.addActiveTask(t); // no gear yet — initial check finds nothing
+		setEquipment(4757); // one accepted piece
+		equipModule.checkProgress();
+		assertTrue(t.isCompleted(), "default EQUIP completes on any one accepted item");
 	}
 
 	@Test

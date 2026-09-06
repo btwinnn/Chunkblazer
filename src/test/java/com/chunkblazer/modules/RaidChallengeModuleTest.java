@@ -609,6 +609,34 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertFalse(t.isCompleted(), "+5 prayer bonus is below the +20 requirement");
 	}
 
+	// ── min_crush_defence: Barrows "A Rock versus a Hard Place" (244+ crush defence) ──
+
+	@Test
+	void minCrushDefence_metCompletesTheKill()
+	{
+		setEquipment(slot(BODY, 4749));
+		setCrushDefence(4749, 250);
+		NuzlockeTask t = addTask("barrows_a_rock", c -> {
+			c.setDefeatNpcIds(Arrays.asList(1676));
+			c.setMinCrushDefence(244);
+		});
+		encounterKill(1676);
+		assertTrue(t.isCompleted(), "250 crush defence meets the 244 requirement");
+	}
+
+	@Test
+	void minCrushDefence_belowThresholdFailsTheRun()
+	{
+		setEquipment(slot(BODY, 4749));
+		setCrushDefence(4749, 100);
+		NuzlockeTask t = addTask("barrows_a_rock", c -> {
+			c.setDefeatNpcIds(Arrays.asList(1676));
+			c.setMinCrushDefence(244);
+		});
+		encounterKill(1676);
+		assertFalse(t.isCompleted(), "100 crush defence is below the 244 requirement");
+	}
+
 	// ── chat completion: specific-message boss (Royal Titans) vs raid-gated (ToA/CoX) ──
 
 	@Test
@@ -861,6 +889,16 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	{
 		ItemEquipmentStats eq = mock(ItemEquipmentStats.class);
 		lenient().when(eq.getPrayer()).thenReturn(prayer);
+		ItemStats stats = mock(ItemStats.class);
+		lenient().when(stats.getEquipment()).thenReturn(eq);
+		lenient().when(itemManager.getItemStats(itemId, false)).thenReturn(stats);
+	}
+
+	/** Stub an equipped item's Crush defence bonus for equippedCrushDefence(). */
+	private void setCrushDefence(int itemId, int dcrush)
+	{
+		ItemEquipmentStats eq = mock(ItemEquipmentStats.class);
+		lenient().when(eq.getDcrush()).thenReturn(dcrush);
 		ItemStats stats = mock(ItemStats.class);
 		lenient().when(stats.getEquipment()).thenReturn(eq);
 		lenient().when(itemManager.getItemStats(itemId, false)).thenReturn(stats);
