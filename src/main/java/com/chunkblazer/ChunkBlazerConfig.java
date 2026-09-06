@@ -306,14 +306,30 @@ public interface ChunkBlazerConfig extends Config
 
 	@ConfigItem(
 		keyName = "showSceneChunks",
-		name = "Show Chunk Borders",
-		description = "Draw chunk/region borders on the game scene and world map. Locked chunks get a translucent grey wash.",
+		name = "Show Chunk Borders (Scene)",
+		description = "Draw chunk/region borders on the 3D game scene. Locked chunks get a translucent grey wash. Turn this off to keep borders on the minimap/world map only.",
 		section = displaySection,
 		position = 3
 	)
 	default boolean showSceneChunks()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showWorldMapChunks",
+		name = "Show Chunk Borders (World Map)",
+		description = "Draw chunk/region borders on the world map. Independent of the scene and minimap toggles.",
+		section = displaySection,
+		position = 4
+	)
+	default boolean showWorldMapChunks()
+	{
+		// Default to the scene toggle's value so splitting this out doesn't change
+		// behaviour on upgrade: someone who had "Show Chunk Borders" off keeps the
+		// world map clear, and someone who had it on keeps it. Once they set this
+		// toggle explicitly, it takes its own stored value.
+		return showSceneChunks();
 	}
 
 	@ConfigItem(
