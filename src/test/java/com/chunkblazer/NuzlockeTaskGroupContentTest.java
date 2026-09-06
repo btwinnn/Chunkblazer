@@ -41,6 +41,43 @@ class NuzlockeTaskGroupContentTest
 		assertNull(task.getGroupContentSchemaError(), "an unconstrained group task is valid");
 	}
 
+	/**
+	 * Regression: the custom NuzlockeTaskDeserializer reads every field by hand, so a
+	 * NuzlockeTask-level boolean that isn't wired in silently stays null despite its
+	 * @SerializedName. require_all_equipped went unread — full-set EQUIP tasks (Barrows,
+	 * Moons) completed on a SINGLE piece in production because isRequireAllEquipped()
+	 * fell back to false. These parse tests guard the deserializer, unlike the module
+	 * tests that call the setter directly.
+	 */
+	@Test
+	void requireAllEquippedIsParsedFromJson()
+	{
+		NuzlockeTask task = gson.fromJson(
+			"{\"name\":\"Verac's set\",\"taskID\":\"barrows_equip_veracs_set\",\"require_all_equipped\":true}",
+			NuzlockeTask.class);
+
+		assertTrue(task.isRequireAllEquipped(), "require_all_equipped:true must deserialize");
+	}
+
+	@Test
+	void requireAllEquippedDefaultsFalseWhenAbsent()
+	{
+		NuzlockeTask task = gson.fromJson(
+			"{\"name\":\"Any piece\",\"taskID\":\"barrows_equip_any_piece\"}", NuzlockeTask.class);
+
+		assertFalse(task.isRequireAllEquipped(), "absent require_all_equipped must default to false (OR semantics)");
+	}
+
+	@Test
+	void forbidEntryModeIsParsedFromJson()
+	{
+		NuzlockeTask task = gson.fromJson(
+			"{\"name\":\"Stainless\",\"taskID\":\"tob_stainless\",\"forbid_entry_mode\":true}",
+			NuzlockeTask.class);
+
+		assertTrue(task.isForbidEntryMode(), "forbid_entry_mode:true must deserialize (ToB Entry-mode gate)");
+	}
+
 	@Test
 	void groupContentWithTimeLimitIsRejected()
 	{
