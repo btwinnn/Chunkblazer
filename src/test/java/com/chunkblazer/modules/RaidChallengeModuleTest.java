@@ -327,6 +327,86 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertFalse(t.isCompleted(), "hitsplat_values completes on a matching hit, not on the kill");
 	}
 
+	// ── consecutive_hitsplat_value (Zulrah "Snake Eyes": two 1s back to back) ─
+
+	@Test
+	void consecutiveHitsplat_backToBackCompletes()
+	{
+		NuzlockeTask t = addTask("zulrah_snake_eyes", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setConsecutiveHitsplatValue(1);
+			c.setConsecutiveHitsplatCount(2);
+		});
+		fireHit(ICE_DEMON, 1);
+		fireHit(ICE_DEMON, 1); // two 1s in a row
+		assertTrue(t.isCompleted(), "two back-to-back matching hits complete it");
+	}
+
+	@Test
+	void consecutiveHitsplat_brokenStreakDoesNotComplete()
+	{
+		NuzlockeTask t = addTask("zulrah_snake_eyes", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setConsecutiveHitsplatValue(1);
+			c.setConsecutiveHitsplatCount(2);
+		});
+		fireHit(ICE_DEMON, 1);
+		fireHit(ICE_DEMON, 5); // a different amount resets the streak
+		fireHit(ICE_DEMON, 1); // only one 1 since the reset
+		assertFalse(t.isCompleted(), "a non-matching hit between the two resets the streak");
+	}
+
+	@Test
+	void consecutiveHitsplat_plainKillDoesNotComplete()
+	{
+		NuzlockeTask t = addTask("zulrah_snake_eyes", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setConsecutiveHitsplatValue(1);
+			c.setConsecutiveHitsplatCount(2);
+		});
+		fireHit(ICE_DEMON, 1); // only a single matching hit
+		fireDeath(ICE_DEMON);   // the kill is not the trigger
+		assertFalse(t.isCompleted(), "the kill must not complete a consecutive_hitsplat task");
+	}
+
+	// ── forbidden_alive_npc_ids (KQ "Monarch Waltz": no adds alive at the kill) ─
+
+	@Test
+	void forbiddenAliveNpc_blocksWhenAnAddIsAlive()
+	{
+		NuzlockeTask t = addTask("kq_monarch_waltz", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setForbiddenAliveNpcIds(Arrays.asList(7777));
+		});
+		setNpcsAlive(7777); // a forbidden add is alive when the boss dies
+		encounterKill(ICE_DEMON);
+		assertFalse(t.isCompleted(), "a living forbidden NPC blocks the defeat");
+	}
+
+	@Test
+	void forbiddenAliveNpc_completesWhenNoneAlive()
+	{
+		NuzlockeTask t = addTask("kq_monarch_waltz", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setForbiddenAliveNpcIds(Arrays.asList(7777));
+		});
+		setNpcsAlive(); // no forbidden add present
+		encounterKill(ICE_DEMON);
+		assertTrue(t.isCompleted(), "with no forbidden NPC alive, the defeat completes");
+	}
+
+	@Test
+	void forbiddenAliveNpc_ignoresADeadAdd()
+	{
+		NuzlockeTask t = addTask("kq_monarch_waltz", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setForbiddenAliveNpcIds(Arrays.asList(7777));
+		});
+		setNpcsDead(7777); // the add is present but dying — doesn't count as alive
+		encounterKill(ICE_DEMON);
+		assertTrue(t.isCompleted(), "a dead/ dying forbidden NPC does not block the defeat");
+	}
+
 	// ── required_equipped_ids (Friendly Fire: Priest gown top + bottom) ──────
 
 	@Test
@@ -995,6 +1075,34 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		}
 		lenient().when(inv.getItems()).thenReturn(arr);
 		lenient().when(client.getItemContainer(InventoryID.INVENTORY)).thenReturn(inv);
+	}
+
+	/** Stub client.getNpcs() with the given ids, all alive (isDead=false). */
+	private void setNpcsAlive(int... npcIds)
+	{
+		java.util.List<NPC> list = new java.util.ArrayList<>();
+		for (int id : npcIds)
+		{
+			NPC n = mock(NPC.class);
+			lenient().when(n.getId()).thenReturn(id);
+			lenient().when(n.isDead()).thenReturn(false);
+			list.add(n);
+		}
+		lenient().when(client.getNpcs()).thenReturn(list);
+	}
+
+	/** Stub client.getNpcs() with the given ids, all dead/dying (isDead=true). */
+	private void setNpcsDead(int... npcIds)
+	{
+		java.util.List<NPC> list = new java.util.ArrayList<>();
+		for (int id : npcIds)
+		{
+			NPC n = mock(NPC.class);
+			lenient().when(n.getId()).thenReturn(id);
+			lenient().when(n.isDead()).thenReturn(true);
+			list.add(n);
+		}
+		lenient().when(client.getNpcs()).thenReturn(list);
 	}
 
 	/** Set the equipped-weapon-type varbit + attack-style varp used by style resolution. */
