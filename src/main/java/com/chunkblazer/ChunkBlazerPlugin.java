@@ -2559,99 +2559,6 @@ public class ChunkBlazerPlugin extends Plugin
 		configManager.setConfiguration(CONFIG_GROUP, SOUND_VOLUME_MIGRATED_KEY, "true");
 	}
 
-	/** Accounts to repair, and the regions whose junk roll to clear. See {@link #migrateResetJunkRollsForAffectedAccounts}. */
-	private static final String JUNK_ROLL_FIX_KEY = "junkRollFix_2026_09_lumbridge";
-	private static final int[] JUNK_ROLL_FIX_REGIONS = {12850, 12595}; // Lumbridge, Lumbridge Mill
-
-	/**
-	 * One-shot, single-account repair (2026-09-05, Bobby Blazer). A corrupted client
-	 * build re-rolled FRESH tasks onto Lumbridge (12850) and Lumbridge Mill (12595)
-	 * after his original rolls were already completed, leaving "active" tasks he never
-	 * took on. This resets each of those regions' roll to ONLY the tasks he has
-	 * actually completed there, so:
-	 *
-	 * <ul>
-	 *   <li>every rolled task is already done → the chunk shows 0 active
-	 *       (loadActiveTasks skips completed tasks), and</li>
-	 *   <li>the roll is non-empty → it never re-rolls (rollTasksForRegion runs only on
-	 *       an empty roll, and ensureStartingChunkUnlocked only rolls an empty start
-	 *       chunk), and</li>
-	 *   <li>nothing is granted — his completed set and points are untouched
-	 *       (important: he's a Competitive account).</li>
-	 * </ul>
-	 *
-	 * <p>Scoped to his account by display name (OSRS names are unique) and guarded by a
-	 * run-once flag, so no other player is affected. The flag is set only once the fix
-	 * has actually been applied against his hydrated completed set — so a pre-hydrate
-	 * pass (empty completions) is a no-op that leaves it armed to run again, rather than
-	 * burning the one shot on an empty roll that would just re-roll junk.
-	 */
-	private void migrateResetJunkRollsForAffectedAccounts()
-	{
-		if ("true".equals(configManager.getConfiguration(CONFIG_GROUP, JUNK_ROLL_FIX_KEY)))
-		{
-			return;
-		}
-		String rsn = getPlayerName();
-		if (!"Bobby Blazer".equals(rsn))
-		{
-			return; // not the affected account — leave armed (do NOT mark done)
-		}
-
-		Set<String> completed = getCompletedTaskIds();
-		boolean applied = false;
-
-		for (int regionId : JUNK_ROLL_FIX_REGIONS)
-		{
-			NuzlockeChunk chunk = chunksByRegionId.get(regionId);
-			if (chunk == null || chunk.getTasks() == null)
-			{
-				continue;
-			}
-
-			// The region's roll becomes exactly the tasks he has completed here. If he
-			// completed nothing here yet (e.g. a pre-hydrate pass with an empty set),
-			// skip it — writing an empty roll would just re-roll fresh junk.
-			Set<String> completedHere = new LinkedHashSet<>();
-			Set<String> regionTaskIds = new HashSet<>();
-			for (NuzlockeTask t : chunk.getTasks())
-			{
-				String id = t.getTaskId();
-				if (id == null)
-				{
-					continue;
-				}
-				regionTaskIds.add(id);
-				if (completed.contains(id))
-				{
-					completedHere.add(id);
-				}
-			}
-			if (completedHere.isEmpty())
-			{
-				continue;
-			}
-
-			saveRolledTasksForRegion(regionId, completedHere);
-
-			// Drop any leftover face-down cards for this region's tasks.
-			List<String> pending = getUnrevealedTaskIds();
-			if (pending.removeIf(regionTaskIds::contains))
-			{
-				setAccountState("unrevealedTasks", String.join(",", pending));
-			}
-
-			applied = true;
-			log.info("[CHUNKBLAZER] junk-roll fix: region {} roll reset to {} completed task(s); junk active tasks cleared",
-				regionId, completedHere.size());
-		}
-
-		if (applied)
-		{
-			configManager.setConfiguration(CONFIG_GROUP, JUNK_ROLL_FIX_KEY, "true");
-		}
-	}
-
 	/** True if the region belongs to a charter-port chunk ({@code chunk_type:CHARTER}). */
 	public boolean isCharterRegion(int regionId)
 	{
@@ -3977,7 +3884,6 @@ public class ChunkBlazerPlugin extends Plugin
 		migrateStripSeededCharterChunks();
 		migrateRepairBogusProgressionBaseline();
 		migrateResetStaleSoundVolume();
-		migrateResetJunkRollsForAffectedAccounts();
 		ensureBossChunkTasksGranted();
 
 		activeTasks.clear();
@@ -5198,6 +5104,14 @@ public class ChunkBlazerPlugin extends Plugin
 		// Fallback: locate the chunk that defines this task. Tasks completed outside
 		// the rolled-task flow (or after rolled data is cleared) still need a region
 		// so the popup shows the right name and the area-specific jingle plays.
+		//
+		// A taskId can be defined in several chunks (e.g. obtain_grimy_ranarr lives
+		// in 6 chunks, one of them the locked Chaos Druid Tower). Prefer a chunk the
+		// player has actually UNLOCKED so a shared task attributes to a region they
+		// own, instead of whichever chunk happens to appear first here. Fall back to
+		// the first defining chunk only when the player owns none of them, which
+		// preserves the previous first-wins behaviour for that case.
+		int firstDefiningRegion = -1;
 		for (NuzlockeChunk chunk : allChunks)
 		{
 			if (chunk.getTasks() == null || chunk.getRegionIds() == null || chunk.getRegionIds().isEmpty())
@@ -5208,12 +5122,21 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				if (taskId.equals(task.getTaskId()))
 				{
-					return chunk.getRegionIds().get(0);
+					int region = chunk.getRegionIds().get(0);
+					if (firstDefiningRegion == -1)
+					{
+						firstDefiningRegion = region;
+					}
+					if (isRegionUnlocked(region))
+					{
+						return region;
+					}
+					break; // this chunk defines the task; try the next chunk
 				}
 			}
 		}
 
-		return -1;
+		return firstDefiningRegion;
 	}
 
 	/**
