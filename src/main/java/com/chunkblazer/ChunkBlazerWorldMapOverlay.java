@@ -75,10 +75,11 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		// Single "Show Chunk Borders" toggle (showSceneChunks) now gates both the
-		// scene and world-map border overlays — the old showChunkBorders duplicate
-		// was removed.
-		if (!config.showSceneChunks())
+		// Chunk borders render on three independent surfaces: the minimap
+		// (showMinimapChunks), the 3D scene (showSceneChunks), and this world map
+		// (showWorldMapChunks). Splitting the scene/world-map toggles lets a player
+		// keep borders on the minimap/world map without the in-scene overlay.
+		if (!config.showWorldMapChunks())
 		{
 			return null;
 		}
