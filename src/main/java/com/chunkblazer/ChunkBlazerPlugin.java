@@ -2890,6 +2890,14 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("brutus");
 		}
+		// Royal Titans is a DUO (Branda + Eldric): a single titan's death is not a
+		// completion (the other revives), so the token is chat-gated on the KC line —
+		// "Your Royal Titans kill count is: N" — which fires only on a real clear, rather
+		// than the data-driven NPC-death path a solo world boss would use.
+		else if (plain.contains("royal titans") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("royal_titans");
+		}
 		// Chambers of Xeric completion. The KC line ("Your completed Chambers of Xeric
 		// count is: N") and the raid-complete banner ("Congratulations - your raid is
 		// complete!") both fire on a finished CoX; either grants the token. NOTE: verify

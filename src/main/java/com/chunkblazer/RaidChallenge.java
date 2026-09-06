@@ -241,6 +241,14 @@ public class RaidChallenge
 	private Long minGearValue;
 
 	/**
+	 * Summed Prayer bonus of equipped gear must be AT LEAST this (e.g. "+20 Prayer bonus").
+	 * Read from each equipped item's equipment stats; sampled through the fight like the gear
+	 * checks, so dropping below the threshold mid-fight taints the attempt.
+	 */
+	@SerializedName("min_prayer_bonus")
+	private Integer minPrayerBonus;
+
+	/**
 	 * "Defeat this NPC." Completes when one of these NPCs dies while you were engaged.
 	 * For raids with no per-room completion chat (Chambers of Xeric), the boss's death
 	 * is the completion signal. The fight window for sustained conditions ({@code noRun},

@@ -38,6 +38,7 @@ import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
+import net.runelite.http.api.item.ItemStats;
 import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.RaidChallenge;
 
@@ -433,7 +434,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 			// is actually active — its raid-level varbit reads > 0. Finishing one raid can
 			// no longer fail another raid's challenges. (Off-thread raidLevel() returns 0,
 			// but onChatMessage runs on the client thread, so the read is live here.)
-			if (raidLevel(ch) <= 0)
+			// This guard is ONLY for tasks that opt into raid-level gating (min_raid_level
+			// or an explicit raid_level_varbit); a boss with a SPECIFIC completion message
+			// and no raid-level gate — Royal Titans' "royal titans kill count is" — can't
+			// collide with another boss, so it is trusted directly rather than blocked by
+			// the default ToA varbit reading 0.
+			if (usesRaidLevelGate(ch) && raidLevel(ch) <= 0)
 			{
 				continue;
 			}
@@ -1041,6 +1047,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 			reason = "Your equipped gear isn't worth enough — need at least "
 				+ formatGp(ch.getMinGearValue()) + " (you have " + formatGp(equippedGearValue()) + ").";
 		}
+		if (why == null && ch.getMinPrayerBonus() != null && equippedPrayerBonus() < ch.getMinPrayerBonus())
+		{
+			why = "prayer bonus " + equippedPrayerBonus() + " < min " + ch.getMinPrayerBonus();
+			reason = "Your equipped Prayer bonus is too low — need at least +"
+				+ ch.getMinPrayerBonus() + " (you have +" + equippedPrayerBonus() + ").";
+		}
 		if (why != null)
 		{
 			s.violated = true;
@@ -1070,6 +1082,17 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * True if this challenge opts into raid-level gating — ToA's {@code min_raid_level} or an
+	 * explicit {@code raid_level_varbit} (CoX authors 5432). The cross-raid "count is" guard
+	 * applies only to these; a boss with a specific completion message and no raid-level gate
+	 * is trusted directly (its message can't collide with another raid's).
+	 */
+	private static boolean usesRaidLevelGate(RaidChallenge ch)
+	{
+		return ch.getMinRaidLevel() != null || ch.getRaidLevelVarbit() != null;
 	}
 
 	private boolean gatesPass(RaidChallenge ch)
@@ -1485,6 +1508,30 @@ public class RaidChallengeModule extends AbstractTaskModule
 			if (it != null && it.getId() > 0)
 			{
 				total += (long) itemManager.getItemPrice(it.getId()) * Math.max(1, it.getQuantity());
+			}
+		}
+		return total;
+	}
+
+	/** Summed Prayer bonus of every equipped item (from its equipment stats). */
+	private int equippedPrayerBonus()
+	{
+		ItemContainer eq = client.getItemContainer(InventoryID.EQUIPMENT);
+		if (eq == null)
+		{
+			return 0;
+		}
+		int total = 0;
+		for (Item it : eq.getItems())
+		{
+			if (it == null || it.getId() <= 0)
+			{
+				continue;
+			}
+			ItemStats stats = itemManager.getItemStats(it.getId(), false);
+			if (stats != null && stats.getEquipment() != null)
+			{
+				total += stats.getEquipment().getPrayer();
 			}
 		}
 		return total;
