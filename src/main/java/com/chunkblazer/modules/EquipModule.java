@@ -262,6 +262,9 @@ public class EquipModule extends AbstractTaskModule
 		int foundItemId = -1;
 		int foundSlot = -1;
 		boolean complete;
+		// For full-set tasks: every piece worn (one per group), so the success line can
+		// list the whole set instead of just the first piece found.
+		List<Integer> wornSetItems = new ArrayList<>();
 
 		if (task.isRequireAllEquipped() && task.getRequiredItems() != null && !task.getRequiredItems().isEmpty())
 		{
@@ -275,6 +278,7 @@ public class EquipModule extends AbstractTaskModule
 				if (worn != -1)
 				{
 					totalEquipped++;
+					wornSetItems.add(worn);
 					if (foundItemId == -1)
 					{
 						foundItemId = worn;
@@ -334,11 +338,30 @@ public class EquipModule extends AbstractTaskModule
 				sendItemEquippedReport(foundItemId, foundSlot, -1, false);
 			}
 
-			// Send success chat message. Show only the item actually equipped, not
-			// every accepted variant id — a multi-variant item (e.g. Crystal legs
-			// has active/inactive + charge tiers) otherwise spammed a long
-			// "X: not equipped, Y: not equipped, ..." line.
-			String successDetails = foundItemId > 0 ? "Equipped: " + getItemName(foundItemId) : null;
+			// Send success chat message. For a full-set task list every piece worn so the
+			// line reflects the whole set (e.g. "Verac's helm, brassard, plateskirt, flail"),
+			// not just the piece that happened to trigger the check — that lone-item line
+			// made a correct full-set completion look like it fired on one item. For a
+			// default (any-one) task, show only the item actually equipped, not every
+			// accepted variant id (a multi-variant item otherwise spammed a long line).
+			String successDetails;
+			if (task.isRequireAllEquipped() && !wornSetItems.isEmpty())
+			{
+				StringBuilder sb = new StringBuilder("Equipped: ");
+				for (int i = 0; i < wornSetItems.size(); i++)
+				{
+					if (i > 0)
+					{
+						sb.append(", ");
+					}
+					sb.append(getItemName(wornSetItems.get(i)));
+				}
+				successDetails = sb.toString();
+			}
+			else
+			{
+				successDetails = foundItemId > 0 ? "Equipped: " + getItemName(foundItemId) : null;
+			}
 			sendTaskSuccess(task, successDetails);
 
 			if (completionCallback != null)

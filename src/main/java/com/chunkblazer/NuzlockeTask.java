@@ -251,9 +251,16 @@ public class NuzlockeTask
 			task.setAssignmentWeight(getIntOrDefault(obj, "assignment_weight", 1));
 			task.setLevel(getIntOrNull(obj, "level"));
 
-			// Boolean field (with null check)
+			// Boolean fields (with null check). NOTE: this custom deserializer bypasses
+			// the @SerializedName annotations entirely — every field must be read here by
+			// hand. A NuzlockeTask-level boolean that isn't listed silently stays null,
+			// so require_all_equipped / forbid_entry_mode must be wired in explicitly
+			// (their absence let full-set EQUIP tasks complete on one piece and let ToB
+			// Entry-mode kills count).
 			task.setIsUnlocked(getBooleanOrNull(obj, "is_unlocked"));
 			task.setGroupContent(getBooleanOrNull(obj, "group_content"));
+			task.setRequireAllEquipped(getBooleanOrNull(obj, "require_all_equipped"));
+			task.setForbidEntryMode(getBooleanOrNull(obj, "forbid_entry_mode"));
 
 			// Combat Achievement ids (COMBAT_ACHIEVEMENT tasks): array of ints.
 			if (obj.has("ca_ids") && obj.get("ca_ids").isJsonArray())
