@@ -539,8 +539,9 @@ public class RaidChallengeModule extends AbstractTaskModule
 			}
 			CombatStyle required = requiredCombatStyle(ch);
 			// Lenient on UNKNOWN: an unmapped weapon type is given the benefit of the
-			// doubt (pass) rather than failing a possibly-valid attack.
-			if (current != CombatStyle.UNKNOWN && current != required)
+			// doubt (pass) rather than failing a possibly-valid attack. MELEE matches any
+			// of STAB/SLASH/CRUSH (see styleMatches).
+			if (!styleMatches(current, required))
 			{
 				s.violated = true;
 				log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: hit NPC {} with {} (needs {})",
@@ -570,6 +571,26 @@ public class RaidChallengeModule extends AbstractTaskModule
 				complete(task, s);
 			}
 		}
+
+		// (e) hitsplat_values: a single hit of an EXACT allowed amount on a target NPC
+		// completes the task — satisfy-triggered, no kill needed ("Prime Number: hit
+		// Dagannoth Prime for a prime damage value"). Only OUR damage reaches here.
+		for (NuzlockeTask task : new HashSet<>(activeTasks))
+		{
+			RaidChallenge ch = task.getChallenge();
+			State s = states.get(task.getTaskId());
+			if (ch == null || s == null || ch.getHitsplatValues() == null
+				|| ch.getDefeatNpcIds() == null || !ch.getDefeatNpcIds().contains(npcId))
+			{
+				continue;
+			}
+			if (ch.getHitsplatValues().contains(amount))
+			{
+				log.debug("[RAIDCHALLENGE-DEBUG] {} hitsplat_values matched (hit {})",
+					task.getTaskId(), amount);
+				complete(task, s);
+			}
+		}
 	}
 
 	// ── Combat-style resolution ──────────────────────────────────────────────
@@ -588,12 +609,35 @@ public class RaidChallengeModule extends AbstractTaskModule
 
 	enum CombatStyle
 	{
-		STAB, SLASH, CRUSH, RANGED, MAGIC, UNKNOWN;
+		STAB, SLASH, CRUSH, RANGED, MAGIC,
+		// MELEE is a REQUIRED-only meta-style: a weapon never resolves to it (they map to
+		// STAB/SLASH/CRUSH), but a task can require "any melee" and have all three match.
+		MELEE,
+		UNKNOWN;
 
 		String label()
 		{
 			return this == UNKNOWN ? "different" : name().toLowerCase();
 		}
+	}
+
+	/**
+	 * Does the player's current damage style satisfy the required one? UNKNOWN passes
+	 * (lenient, an unmapped weapon), and the MELEE meta-style matches any of STAB/SLASH/
+	 * CRUSH so a task can require "with melee" without naming a single sub-style.
+	 */
+	private static boolean styleMatches(CombatStyle current, CombatStyle required)
+	{
+		if (current == CombatStyle.UNKNOWN)
+		{
+			return true;
+		}
+		if (required == CombatStyle.MELEE)
+		{
+			return current == CombatStyle.STAB || current == CombatStyle.SLASH
+				|| current == CombatStyle.CRUSH;
+		}
+		return current == required;
 	}
 
 	// weaponType (EQUIPPED_WEAPON_TYPE ordinal) -> the damage style of each of its
@@ -704,10 +748,10 @@ public class RaidChallengeModule extends AbstractTaskModule
 			}
 			if (ch.getDefeatNpcIds() != null && ch.getDefeatNpcIds().contains(id))
 			{
-				if (ch.getMinHitsplat() != null)
+				if (ch.getMinHitsplat() != null || ch.getHitsplatValues() != null)
 				{
-					// Satisfy-triggered on the hitsplat (onHitsplatApplied), not the kill
-					// — a normal death must NOT complete a min_hitsplat task.
+					// Satisfy-triggered on the hitsplat (onHitsplatApplied), not the kill —
+					// a normal death must NOT complete a min_hitsplat / hitsplat_values task.
 				}
 				else if (Boolean.TRUE.equals(ch.getFinalBlowVengeance()))
 				{
@@ -1137,6 +1181,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 	{
 		return ch.getNoDamageTicks() != null || ch.getSurviveTicks() != null
 			|| obtainGroups(ch) != null || ch.getMinHitsplat() != null
+			|| ch.getHitsplatValues() != null
 			|| ch.getDefeatCount() != null;
 	}
 

@@ -291,6 +291,42 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertFalse(t.isCompleted(), "a min_hitsplat task completes on the big hit, not on the kill");
 	}
 
+	// ── hitsplat_values (Dagannoth Prime "Prime Number": exact prime damage) ──
+
+	@Test
+	void hitsplatValues_exactMatchCompletes()
+	{
+		NuzlockeTask t = addTask("dk_prime_number", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setHitsplatValues(Arrays.asList(2, 3, 5, 7, 11));
+		});
+		fireHit(ICE_DEMON, 7); // exactly a listed value
+		assertTrue(t.isCompleted(), "a hit whose amount is exactly a listed value completes it");
+	}
+
+	@Test
+	void hitsplatValues_nonMatchingHitDoesNotComplete()
+	{
+		NuzlockeTask t = addTask("dk_prime_number", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setHitsplatValues(Arrays.asList(2, 3, 5, 7, 11));
+		});
+		fireHit(ICE_DEMON, 4); // not a listed value (not prime)
+		assertFalse(t.isCompleted(), "a hit that is not one of the listed values must not complete it");
+	}
+
+	@Test
+	void hitsplatValues_plainKillDoesNotComplete()
+	{
+		NuzlockeTask t = addTask("dk_prime_number", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setHitsplatValues(Arrays.asList(2, 3, 5, 7, 11));
+		});
+		fireHit(ICE_DEMON, 4); // only non-matching hits
+		fireDeath(ICE_DEMON);   // the kill is not the trigger
+		assertFalse(t.isCompleted(), "hitsplat_values completes on a matching hit, not on the kill");
+	}
+
 	// ── required_equipped_ids (Friendly Fire: Priest gown top + bottom) ──────
 
 	@Test
@@ -476,6 +512,48 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		fireHit(TEKTON);       // the very first hit is the wrong style → violation
 		fireDeath(TEKTON);
 		assertFalse(t.isCompleted(), "a single wrong-style hit on the target fails the run");
+	}
+
+	// ── required_attack_style MELEE meta-style (DK "Choking the King") ────────
+
+	@Test
+	void meleeStyle_acceptsCrush()
+	{
+		NuzlockeTask t = addTask("dk_choking_the_king", c -> {
+			c.setDefeatNpcIds(Arrays.asList(TEKTON));
+			c.setStyleTargetIds(Arrays.asList(TEKTON));
+			c.setRequiredAttackStyle("MELEE");
+		});
+		setCombatStyle(2, 0); // weapon type 2 (blunt) → CRUSH, a melee sub-style
+		encounterKill(TEKTON);
+		assertTrue(t.isCompleted(), "MELEE accepts a CRUSH hit");
+	}
+
+	@Test
+	void meleeStyle_acceptsSlash()
+	{
+		NuzlockeTask t = addTask("dk_choking_the_king", c -> {
+			c.setDefeatNpcIds(Arrays.asList(TEKTON));
+			c.setStyleTargetIds(Arrays.asList(TEKTON));
+			c.setRequiredAttackStyle("MELEE");
+		});
+		setCombatStyle(1, 0); // weapon type 1 (axe), style 0 → SLASH, a melee sub-style
+		encounterKill(TEKTON);
+		assertTrue(t.isCompleted(), "MELEE accepts a SLASH hit");
+	}
+
+	@Test
+	void meleeStyle_rejectsRanged()
+	{
+		NuzlockeTask t = addTask("dk_choking_the_king", c -> {
+			c.setDefeatNpcIds(Arrays.asList(TEKTON));
+			c.setStyleTargetIds(Arrays.asList(TEKTON));
+			c.setRequiredAttackStyle("MELEE");
+		});
+		setCombatStyle(3, 0); // weapon type 3 (bow) → RANGED, not melee
+		fireHit(TEKTON);       // first hit is ranged → violation
+		fireDeath(TEKTON);
+		assertFalse(t.isCompleted(), "MELEE rejects a RANGED hit on the target");
 	}
 
 	// ── gear value (Please Carry Me / Pulling the Bootstraps) ────────────────

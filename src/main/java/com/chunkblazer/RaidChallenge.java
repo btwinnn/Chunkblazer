@@ -320,6 +320,15 @@ public class RaidChallenge
 	private Integer minHitsplat;
 
 	/**
+	 * Satisfy-triggered: completes the instant you land a hitsplat whose amount is EXACTLY
+	 * one of these values on a {@link #defeatNpcIds} target ("Prime Number: hit Dagannoth
+	 * Prime for a prime damage value"). No kill needed. Unlike {@link #minHitsplat} this is
+	 * an exact-match set, not a threshold.
+	 */
+	@SerializedName("hitsplat_values")
+	private List<Integer> hitsplatValues;
+
+	/**
 	 * Bit positions in the ACTIVE_PRAYERS varbit (4101) that must stay OFF for the whole
 	 * fight — set any and the run fails. E.g. overheads are bits 12 (magic), 13 (missiles),
 	 * 14 (melee): "defeat X without overhead prayers".
