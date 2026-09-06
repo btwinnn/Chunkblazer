@@ -14,6 +14,8 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.game.ItemManager;
+import net.runelite.http.api.item.ItemStats;
+import net.runelite.http.api.item.ItemEquipmentStats;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -579,6 +581,60 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertTrue(module.getActiveTasks().contains(t));
 	}
 
+	// ── min_prayer_bonus: Giant Mole "Holy Moley" (+20 Prayer bonus from gear) ──
+
+	@Test
+	void minPrayerBonus_metCompletesTheKill()
+	{
+		setEquipment(slot(HEAD, 12013));
+		setPrayerBonus(12013, 25);
+		NuzlockeTask t = addTask("giant_mole_holy_moley", c -> {
+			c.setDefeatNpcIds(Arrays.asList(5779));
+			c.setMinPrayerBonus(20);
+		});
+		encounterKill(5779);
+		assertTrue(t.isCompleted(), "+25 prayer bonus meets the +20 requirement");
+	}
+
+	@Test
+	void minPrayerBonus_belowThresholdFailsTheRun()
+	{
+		setEquipment(slot(HEAD, 12013));
+		setPrayerBonus(12013, 5);
+		NuzlockeTask t = addTask("giant_mole_holy_moley", c -> {
+			c.setDefeatNpcIds(Arrays.asList(5779));
+			c.setMinPrayerBonus(20);
+		});
+		encounterKill(5779);
+		assertFalse(t.isCompleted(), "+5 prayer bonus is below the +20 requirement");
+	}
+
+	// ── chat completion: specific-message boss (Royal Titans) vs raid-gated (ToA/CoX) ──
+
+	@Test
+	void chatCompletion_specificMessageWithoutRaidGateCompletes()
+	{
+		// Royal Titans has a specific KC message and NO raid-level gate; the cross-raid
+		// "count is" guard must not block it (that guard is only for raid-level-gated tasks).
+		NuzlockeTask t = addTask("royal_titans_defeat", c ->
+			c.setCompleteMessage("royal titans kill count is"));
+		fireChat("Your Royal Titans kill count is: 26");
+		assertTrue(t.isCompleted(), "a specific KC message with no raid-level gate completes");
+	}
+
+	@Test
+	void chatCompletion_raidGatedTaskStillBlockedWhenRaidInactive()
+	{
+		// The ToA/CoX cross-raid protection: a raid-level-gated task must stay blocked when
+		// its raid isn't active (raidLevel reads 0). Guards against the relaxation above.
+		NuzlockeTask t = addTask("toa_style", c -> {
+			c.setCompleteMessage("count is");
+			c.setMinRaidLevel(150);
+		});
+		fireChat("Your Tombs of Amascut count is: 5");
+		assertFalse(t.isCompleted(), "a raid-gated task stays blocked when its raid isn't active");
+	}
+
 	// ── forbid_entry_mode: ToB Entry-mode tasks must not complete (mode from chat) ──
 
 	@Test
@@ -798,6 +854,16 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		}
 		lenient().when(eq.getItems()).thenReturn(arr);
 		lenient().when(client.getItemContainer(InventoryID.EQUIPMENT)).thenReturn(eq);
+	}
+
+	/** Stub an equipped item's Prayer bonus (from its equipment stats) for equippedPrayerBonus(). */
+	private void setPrayerBonus(int itemId, int prayer)
+	{
+		ItemEquipmentStats eq = mock(ItemEquipmentStats.class);
+		lenient().when(eq.getPrayer()).thenReturn(prayer);
+		ItemStats stats = mock(ItemStats.class);
+		lenient().when(stats.getEquipment()).thenReturn(eq);
+		lenient().when(itemManager.getItemStats(itemId, false)).thenReturn(stats);
 	}
 
 	private void setInventory(int... itemIds)
