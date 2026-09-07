@@ -1162,13 +1162,21 @@ public class RaidChallengeModule extends AbstractTaskModule
 					+ " or below (you have " + hp + ").";
 			}
 		}
-		if (why == null && Boolean.TRUE.equals(ch.getNoPrayerLoss()))
+		if (why == null && (Boolean.TRUE.equals(ch.getNoPrayerLoss()) || Boolean.TRUE.equals(ch.getNoPrayerRestore())))
 		{
 			int prayer = client.getBoostedSkillLevel(Skill.PRAYER);
-			if (s.lastPrayerPoints >= 0 && prayer < s.lastPrayerPoints)
+			if (s.lastPrayerPoints >= 0)
 			{
-				why = "prayer dropped " + s.lastPrayerPoints + " -> " + prayer;
-				reason = "You lost a Prayer point — this challenge must be done without losing any.";
+				if (Boolean.TRUE.equals(ch.getNoPrayerLoss()) && prayer < s.lastPrayerPoints)
+				{
+					why = "prayer dropped " + s.lastPrayerPoints + " -> " + prayer;
+					reason = "You lost a Prayer point — this challenge must be done without losing any.";
+				}
+				else if (Boolean.TRUE.equals(ch.getNoPrayerRestore()) && prayer > s.lastPrayerPoints)
+				{
+					why = "prayer restored " + s.lastPrayerPoints + " -> " + prayer;
+					reason = "You restored Prayer points — this challenge must be done without restoring any.";
+				}
 			}
 			s.lastPrayerPoints = prayer;
 		}

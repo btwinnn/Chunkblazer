@@ -2851,6 +2851,20 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("hueycoatl");
 		}
+		// Doom of Mokhaiotl is a solo, multi-phase delve boss — a phase NPC's ActorDeath is an
+		// unreliable kill signal. Gate the token on the deep-delve completion line — "Deep delves
+		// completed: N" (delve 8+) — the same signal the Clear Deep Delves task tracks.
+		else if (plain.contains("deep delves completed"))
+		{
+			recordBossCompletion("doom_of_mokhaiotl");
+		}
+		// Phantom Muspah is a solo, multi-phase boss (melee/ranged/shielded/post-shield forms),
+		// so a form's ActorDeath is an unreliable kill signal. Gate the token on the KC line —
+		// "Your Phantom Muspah kill count is: N" — a real clear only.
+		else if (plain.contains("phantom muspah") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("phantom_muspah");
+		}
 	}
 
 	/**
