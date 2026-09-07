@@ -2844,6 +2844,13 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("nex");
 		}
+		// The Hueycoatl (Varlamore) is a massable, multi-part/phased boss whose segments
+		// break apart mid-fight, so a part's ActorDeath is an unreliable kill signal. Gate
+		// the token on the KC line — "Your Hueycoatl kill count is: N" — a real clear only.
+		else if (plain.contains("hueycoatl") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("hueycoatl");
+		}
 	}
 
 	/**
