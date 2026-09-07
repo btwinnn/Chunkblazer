@@ -113,6 +113,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		boolean arenaHpGateLatched; // arena_hp_gate: the watched NPC has hit the HP threshold this attempt
 		int defeatCount;          // defeat_count: counted kills so far this fight window
 		int hitStreak;            // consecutive_hitsplat_value: back-to-back matching hits so far
+		int lastPrayerPoints = -1; // no_prayer_loss: prayer points last tick (-1 = not yet sampled)
 	}
 
 	private final Map<String, State> states = new ConcurrentHashMap<>();
@@ -486,15 +487,25 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return;
 		}
 
-		// (a) Damage on the LOCAL PLAYER breaks a "no damage for N ticks" streak.
+		// (a) Damage on the LOCAL PLAYER breaks a "no damage for N ticks" streak, and fails
+		// a no_damage challenge outright. A 0 hitsplat (block/miss) isn't damage.
 		if (e.getActor() == client.getLocalPlayer())
 		{
+			int dmg = e.getHitsplat() != null ? e.getHitsplat().getAmount() : 0;
 			for (NuzlockeTask task : activeTasks)
 			{
 				State s = states.get(task.getTaskId());
-				if (s != null && s.windowOpen)
+				if (s == null || !(s.windowOpen || s.encounterActive))
 				{
-					s.damageFreeTicks = 0;
+					continue;
+				}
+				s.damageFreeTicks = 0;
+				RaidChallenge ch = task.getChallenge();
+				if (dmg > 0 && ch != null && Boolean.TRUE.equals(ch.getNoDamage()) && !s.violated)
+				{
+					s.violated = true;
+					log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: took {} damage", task.getTaskId(), dmg);
+					announceFailure(task, "You took damage — this challenge must be done without taking a hit.");
 				}
 			}
 			return;
@@ -1135,6 +1146,32 @@ public class RaidChallengeModule extends AbstractTaskModule
 			reason = "Your equipped Crush defence is too low — need at least "
 				+ ch.getMinCrushDefence() + " (you have " + equippedCrushDefence() + ").";
 		}
+		if (why == null && ch.getMinRangedDefence() != null && equippedRangedDefence() < ch.getMinRangedDefence())
+		{
+			why = "ranged defence " + equippedRangedDefence() + " < min " + ch.getMinRangedDefence();
+			reason = "Your equipped Ranged defence is too low — need at least "
+				+ ch.getMinRangedDefence() + " (you have " + equippedRangedDefence() + ").";
+		}
+		if (why == null && ch.getMaxPlayerHitpoints() != null)
+		{
+			int hp = client.getBoostedSkillLevel(Skill.HITPOINTS);
+			if (hp > ch.getMaxPlayerHitpoints())
+			{
+				why = "hitpoints " + hp + " > max " + ch.getMaxPlayerHitpoints();
+				reason = "Your Hitpoints are too high — stay at " + ch.getMaxPlayerHitpoints()
+					+ " or below (you have " + hp + ").";
+			}
+		}
+		if (why == null && Boolean.TRUE.equals(ch.getNoPrayerLoss()))
+		{
+			int prayer = client.getBoostedSkillLevel(Skill.PRAYER);
+			if (s.lastPrayerPoints >= 0 && prayer < s.lastPrayerPoints)
+			{
+				why = "prayer dropped " + s.lastPrayerPoints + " -> " + prayer;
+				reason = "You lost a Prayer point — this challenge must be done without losing any.";
+			}
+			s.lastPrayerPoints = prayer;
+		}
 		if (why != null)
 		{
 			s.violated = true;
@@ -1433,6 +1470,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		s.arenaHpGateLatched = false;
 		s.defeatCount = 0;
 		s.hitStreak = 0;
+		s.lastPrayerPoints = -1;
 	}
 
 	/**
@@ -1658,6 +1696,29 @@ public class RaidChallengeModule extends AbstractTaskModule
 			if (stats != null && stats.getEquipment() != null)
 			{
 				total += stats.getEquipment().getDcrush();
+			}
+		}
+		return total;
+	}
+
+	private int equippedRangedDefence()
+	{
+		ItemContainer eq = client.getItemContainer(InventoryID.EQUIPMENT);
+		if (eq == null)
+		{
+			return 0;
+		}
+		int total = 0;
+		for (Item it : eq.getItems())
+		{
+			if (it == null || it.getId() <= 0)
+			{
+				continue;
+			}
+			ItemStats stats = itemManager.getItemStats(it.getId(), false);
+			if (stats != null && stats.getEquipment() != null)
+			{
+				total += stats.getEquipment().getDrange();
 			}
 		}
 		return total;

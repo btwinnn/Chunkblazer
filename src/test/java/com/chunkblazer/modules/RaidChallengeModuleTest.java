@@ -4,6 +4,8 @@ import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.RaidChallenge;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Hitsplat;
+import net.runelite.api.Player;
+import net.runelite.api.Skill;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
@@ -795,6 +797,119 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertFalse(t.isCompleted(), "100 crush defence is below the 244 requirement");
 	}
 
+	// ── min_ranged_defence: Graardor "Impenetrable" (250+ ranged defence) ──
+
+	@Test
+	void minRangedDefence_metCompletesTheKill()
+	{
+		setEquipment(slot(BODY, 4749));
+		setRangedDefence(4749, 260);
+		NuzlockeTask t = addTask("gwd_graardor_impenetrable", c -> {
+			c.setDefeatNpcIds(Arrays.asList(2215));
+			c.setMinRangedDefence(250);
+		});
+		encounterKill(2215);
+		assertTrue(t.isCompleted(), "260 ranged defence meets the 250 requirement");
+	}
+
+	@Test
+	void minRangedDefence_belowThresholdFailsTheRun()
+	{
+		setEquipment(slot(BODY, 4749));
+		setRangedDefence(4749, 100);
+		NuzlockeTask t = addTask("gwd_graardor_impenetrable", c -> {
+			c.setDefeatNpcIds(Arrays.asList(2215));
+			c.setMinRangedDefence(250);
+		});
+		encounterKill(2215);
+		assertFalse(t.isCompleted(), "100 ranged defence is below the 250 requirement");
+	}
+
+	// ── no_damage: Graardor "Untouchable" (take no hit) ──
+
+	@Test
+	void noDamage_takingAHitFailsTheRun()
+	{
+		Player player = mock(Player.class);
+		lenient().when(client.getLocalPlayer()).thenReturn(player);
+		NuzlockeTask t = addTask("gwd_graardor_untouchable", c -> {
+			c.setDefeatNpcIds(Arrays.asList(2215));
+			c.setNoDamage(true);
+		});
+		fireHit(2215);           // engage the boss (opens the encounter)
+		firePlayerHit(player, 8); // then take a hit → run tainted
+		fireDeath(2215);
+		assertFalse(t.isCompleted(), "taking damage fails a no_damage kill");
+	}
+
+	@Test
+	void noDamage_untouchedKillCompletes()
+	{
+		Player player = mock(Player.class);
+		lenient().when(client.getLocalPlayer()).thenReturn(player);
+		NuzlockeTask t = addTask("gwd_graardor_untouchable", c -> {
+			c.setDefeatNpcIds(Arrays.asList(2215));
+			c.setNoDamage(true);
+		});
+		encounterKill(2215); // never took a hit
+		assertTrue(t.isCompleted(), "an untouched kill completes a no_damage task");
+	}
+
+	// ── max_player_hitpoints: K'ril "Glass Cannon" (stay at 50 HP or less) ──
+
+	@Test
+	void maxPlayerHitpoints_lowHpCompletes()
+	{
+		lenient().when(client.getBoostedSkillLevel(Skill.HITPOINTS)).thenReturn(40);
+		NuzlockeTask t = addTask("gwd_kril_glass_cannon", c -> {
+			c.setDefeatNpcIds(Arrays.asList(3129));
+			c.setMaxPlayerHitpoints(50);
+		});
+		encounterKill(3129);
+		assertTrue(t.isCompleted(), "40 HP is within the 50-or-less limit");
+	}
+
+	@Test
+	void maxPlayerHitpoints_highHpFailsTheRun()
+	{
+		lenient().when(client.getBoostedSkillLevel(Skill.HITPOINTS)).thenReturn(80);
+		NuzlockeTask t = addTask("gwd_kril_glass_cannon", c -> {
+			c.setDefeatNpcIds(Arrays.asList(3129));
+			c.setMaxPlayerHitpoints(50);
+		});
+		encounterKill(3129);
+		assertFalse(t.isCompleted(), "80 HP is over the 50-or-less limit");
+	}
+
+	// ── no_prayer_loss: Graardor "Livin' on a Prayer" (never lose a prayer point) ──
+
+	@Test
+	void noPrayerLoss_steadyPrayerCompletes()
+	{
+		lenient().when(client.getBoostedSkillLevel(Skill.PRAYER)).thenReturn(50);
+		NuzlockeTask t = addTask("gwd_graardor_livin", c -> {
+			c.setDefeatNpcIds(Arrays.asList(2215));
+			c.setNoPrayerLoss(true);
+		});
+		encounterKill(2215); // prayer constant at 50
+		assertTrue(t.isCompleted(), "prayer never dropping completes it");
+	}
+
+	@Test
+	void noPrayerLoss_prayerDropFailsTheRun()
+	{
+		lenient().when(client.getBoostedSkillLevel(Skill.PRAYER)).thenReturn(50, 45);
+		NuzlockeTask t = addTask("gwd_graardor_livin", c -> {
+			c.setDefeatNpcIds(Arrays.asList(2215));
+			c.setNoPrayerLoss(true);
+		});
+		fireHit(2215);   // engage
+		fireTick();      // sample prayer = 50 (baseline)
+		fireTick();      // sample prayer = 45 → lost a point → tainted
+		fireDeath(2215);
+		assertFalse(t.isCompleted(), "a prayer-point drop fails the run");
+	}
+
 	// ── chat completion: specific-message boss (Royal Titans) vs raid-gated (ToA/CoX) ──
 
 	@Test
@@ -1060,6 +1175,28 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		ItemStats stats = mock(ItemStats.class);
 		lenient().when(stats.getEquipment()).thenReturn(eq);
 		lenient().when(itemManager.getItemStats(itemId, false)).thenReturn(stats);
+	}
+
+	/** Stub an equipped item's Ranged defence bonus for equippedRangedDefence(). */
+	private void setRangedDefence(int itemId, int drange)
+	{
+		ItemEquipmentStats eq = mock(ItemEquipmentStats.class);
+		lenient().when(eq.getDrange()).thenReturn(drange);
+		ItemStats stats = mock(ItemStats.class);
+		lenient().when(stats.getEquipment()).thenReturn(eq);
+		lenient().when(itemManager.getItemStats(itemId, false)).thenReturn(stats);
+	}
+
+	/** Fire a hitsplat ON the local player (damage taken), for no_damage. */
+	private void firePlayerHit(Player player, int amount)
+	{
+		HitsplatApplied e = mock(HitsplatApplied.class);
+		Hitsplat h = mock(Hitsplat.class);
+		lenient().when(e.getActor()).thenReturn(player);
+		lenient().when(e.getHitsplat()).thenReturn(h);
+		lenient().when(h.isOthers()).thenReturn(false);
+		lenient().when(h.getAmount()).thenReturn(amount);
+		module.onHitsplatApplied(e);
 	}
 
 	private void setInventory(int... itemIds)
