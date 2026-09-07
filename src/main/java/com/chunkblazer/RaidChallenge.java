@@ -257,6 +257,38 @@ public class RaidChallenge
 	private Integer minCrushDefence;
 
 	/**
+	 * Summed RANGED DEFENCE bonus of equipped gear must be AT LEAST this (e.g. Graardor
+	 * "250+ ranged defence"). Read from each equipped item's equipment stats and sampled
+	 * through the fight, so dropping below the threshold mid-fight taints the attempt.
+	 */
+	@SerializedName("min_ranged_defence")
+	private Integer minRangedDefence;
+
+	/**
+	 * Sustained: the player must take NO damage for the whole fight ("defeat X without it
+	 * landing a hit"). Any hitsplat dealt TO the local player during the window/encounter
+	 * fails the attempt. A 0 hitsplat (block/miss) is ignored — only real damage counts.
+	 * Cannot single out one attacker, so a minion's hit also fails it.
+	 */
+	@SerializedName("no_damage")
+	private Boolean noDamage;
+
+	/**
+	 * Sustained: the player's current Hitpoints must stay AT OR BELOW this the whole fight
+	 * ("Glass Cannon: stay at 50 HP or less"). Sampled each tick; going above taints it.
+	 */
+	@SerializedName("max_player_hitpoints")
+	private Integer maxPlayerHitpoints;
+
+	/**
+	 * Sustained: the player's Prayer points must never DROP during the fight ("defeat X
+	 * without losing a Prayer point"). A tick-over-tick decrease fails the attempt;
+	 * restoring prayer (potion/altar) raising it is fine.
+	 */
+	@SerializedName("no_prayer_loss")
+	private Boolean noPrayerLoss;
+
+	/**
 	 * Checked at completion: none of these NPC ids may be ALIVE in the scene when the task
 	 * would complete ("Defeat the Kalphite Queen without any other enemies alive"). A living
 	 * add blocks the completion (retry on the next kill). Point-in-time, not sustained — a

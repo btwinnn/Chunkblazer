@@ -2823,6 +2823,14 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("moons_of_peril");
 		}
+		// Nex (God Wars) transitions through 5 phases via INVULNERABILITY, not death, so
+		// keying the token off a phase NPC's ActorDeath is ambiguous. Gate it on the KC line —
+		// "Your Nex kill count is: N" — which fires only on a real clear. The other four GWD
+		// bosses die cleanly and stay on the data-driven NPC-death path (boss_npc_ids).
+		else if (plain.contains("nex") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("nex");
+		}
 	}
 
 	/**
