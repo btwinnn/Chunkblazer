@@ -910,6 +910,38 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertFalse(t.isCompleted(), "a prayer-point drop fails the run");
 	}
 
+	// ── hitsplat_values + gear gate (Amoxliatl "Pendant of Eights": hit 8 w/ pendant) ──
+
+	@Test
+	void hitsplatValues_withGearGate_completesWhenGearWorn()
+	{
+		setEquipment(slot(2, 29893)); // pendant of ates equipped (amulet slot)
+		NuzlockeTask t = addTask("amoxliatl_pendant_of_eights", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setHitsplatValues(Arrays.asList(8));
+			c.setRequiredEquippedGroups(Arrays.asList(Arrays.asList(29893, 29892)));
+		});
+		fireHit(ICE_DEMON);   // open encounter
+		fireTick();           // sample sustained: pendant worn, not violated
+		fireHit(ICE_DEMON, 8); // the qualifying hit
+		assertTrue(t.isCompleted(), "an 8 with the pendant worn completes it");
+	}
+
+	@Test
+	void hitsplatValues_withGearGate_blockedWhenGearMissing()
+	{
+		setEquipment(slot(BODY, 4749)); // pendant NOT equipped
+		NuzlockeTask t = addTask("amoxliatl_pendant_of_eights", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setHitsplatValues(Arrays.asList(8));
+			c.setRequiredEquippedGroups(Arrays.asList(Arrays.asList(29893, 29892)));
+		});
+		fireHit(ICE_DEMON);   // open encounter
+		fireTick();           // sample sustained: pendant missing -> violated
+		fireHit(ICE_DEMON, 8); // an 8 lands, but the gear gate was broken
+		assertFalse(t.isCompleted(), "an 8 without the pendant must not complete it");
+	}
+
 	// ── chat completion: specific-message boss (Royal Titans) vs raid-gated (ToA/CoX) ──
 
 	@Test

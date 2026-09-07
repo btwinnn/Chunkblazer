@@ -576,7 +576,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				continue;
 			}
-			if (amount >= ch.getMinHitsplat())
+			if (amount >= ch.getMinHitsplat() && !s.violated)
 			{
 				log.debug("[RAIDCHALLENGE-DEBUG] {} min_hitsplat {} met (hit {})",
 					task.getTaskId(), ch.getMinHitsplat(), amount);
@@ -596,7 +596,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				continue;
 			}
-			if (ch.getHitsplatValues().contains(amount))
+			if (ch.getHitsplatValues().contains(amount) && !s.violated)
 			{
 				log.debug("[RAIDCHALLENGE-DEBUG] {} hitsplat_values matched (hit {})",
 					task.getTaskId(), amount);
@@ -622,7 +622,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 				int need = ch.getConsecutiveHitsplatCount() == null ? 2 : ch.getConsecutiveHitsplatCount();
 				log.debug("[RAIDCHALLENGE-DEBUG] {} consecutive_hitsplat {}/{} (hit {})",
 					task.getTaskId(), s.hitStreak, need, amount);
-				if (s.hitStreak >= need)
+				if (s.hitStreak >= need && !s.violated)
 				{
 					complete(task, s);
 				}
