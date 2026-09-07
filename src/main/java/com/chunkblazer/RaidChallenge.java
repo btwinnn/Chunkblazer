@@ -289,6 +289,14 @@ public class RaidChallenge
 	private Boolean noPrayerLoss;
 
 	/**
+	 * Sustained: the player's Prayer points must never RISE during the fight ("defeat X
+	 * without restoring your Prayer points"). A tick-over-tick increase (potion/altar) fails
+	 * the attempt. The inverse of {@link #noPrayerLoss}; a task uses one or the other.
+	 */
+	@SerializedName("no_prayer_restore")
+	private Boolean noPrayerRestore;
+
+	/**
 	 * Checked at completion: none of these NPC ids may be ALIVE in the scene when the task
 	 * would complete ("Defeat the Kalphite Queen without any other enemies alive"). A living
 	 * add blocks the completion (retry on the next kill). Point-in-time, not sustained — a

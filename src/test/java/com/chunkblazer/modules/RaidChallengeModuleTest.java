@@ -910,6 +910,35 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertFalse(t.isCompleted(), "a prayer-point drop fails the run");
 	}
 
+	// ── no_prayer_restore: Muspah "Sluggod" (never restore prayer) ──
+
+	@Test
+	void noPrayerRestore_steadyPrayerCompletes()
+	{
+		lenient().when(client.getBoostedSkillLevel(Skill.PRAYER)).thenReturn(30);
+		NuzlockeTask t = addTask("phantom_muspah_sluggod", c -> {
+			c.setDefeatNpcIds(Arrays.asList(12080));
+			c.setNoPrayerRestore(true);
+		});
+		encounterKill(12080); // prayer never rises
+		assertTrue(t.isCompleted(), "prayer never restored completes it");
+	}
+
+	@Test
+	void noPrayerRestore_prayerRiseFailsTheRun()
+	{
+		lenient().when(client.getBoostedSkillLevel(Skill.PRAYER)).thenReturn(30, 55);
+		NuzlockeTask t = addTask("phantom_muspah_sluggod", c -> {
+			c.setDefeatNpcIds(Arrays.asList(12080));
+			c.setNoPrayerRestore(true);
+		});
+		fireHit(12080);  // engage
+		fireTick();      // sample prayer = 30 (baseline)
+		fireTick();      // sample prayer = 55 → restored → tainted
+		fireDeath(12080);
+		assertFalse(t.isCompleted(), "a prayer restore fails the run");
+	}
+
 	// ── hitsplat_values + gear gate (Amoxliatl "Pendant of Eights": hit 8 w/ pendant) ──
 
 	@Test
