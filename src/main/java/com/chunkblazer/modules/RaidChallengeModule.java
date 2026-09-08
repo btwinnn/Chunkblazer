@@ -114,6 +114,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 		int defeatCount;          // defeat_count: counted kills so far this fight window
 		int hitStreak;            // consecutive_hitsplat_value: back-to-back matching hits so far
 		int lastPrayerPoints = -1; // no_prayer_loss: prayer points last tick (-1 = not yet sampled)
+		int consumedCount;         // max_consumed: cumulative drop in tracked item count this attempt
+		int consumedLastInv = -1;  // max_consumed: tracked item count last sampled (-1 = not yet seeded)
 	}
 
 	private final Map<String, State> states = new ConcurrentHashMap<>();
@@ -1025,6 +1027,11 @@ public class RaidChallengeModule extends AbstractTaskModule
 			why = "weapon " + equippedId(3) + " not one of " + ch.getWeaponIds();
 			reason = "You weren't using a required weapon for this challenge.";
 		}
+		else if (ch.getForbiddenWeaponIds() != null && ch.getForbiddenWeaponIds().contains(equippedId(3)))
+		{
+			why = "forbidden weapon " + equippedId(3) + " equipped";
+			reason = "You used a forbidden weapon for this challenge.";
+		}
 		else if (ch.getEmptySlots() != null)
 		{
 			for (int slot : ch.getEmptySlots())
@@ -1048,6 +1055,49 @@ public class RaidChallengeModule extends AbstractTaskModule
 					reason = "You must keep the required item in your inventory for this challenge.";
 					break;
 				}
+			}
+		}
+		if (why == null && ch.getRequiredInventoryGroups() != null)
+		{
+			Map<Integer, Integer> counts = inventoryCounts();
+			for (List<Integer> group : ch.getRequiredInventoryGroups())
+			{
+				boolean anyHeld = false;
+				for (int id : group)
+				{
+					if (counts.getOrDefault(id, 0) > 0)
+					{
+						anyHeld = true;
+						break;
+					}
+				}
+				if (!anyHeld)
+				{
+					why = "no item from required inventory group " + group;
+					reason = "You must keep a required item in your inventory for this challenge.";
+					break;
+				}
+			}
+		}
+		if (why == null && ch.getMaxConsumedItemIds() != null && ch.getMaxConsumed() != null)
+		{
+			Map<Integer, Integer> counts = inventoryCounts();
+			int cur = 0;
+			for (int id : ch.getMaxConsumedItemIds())
+			{
+				cur += counts.getOrDefault(id, 0);
+			}
+			// Only a DROP is consumption; making/looting more (a rise) just re-baselines.
+			if (s.consumedLastInv >= 0 && cur < s.consumedLastInv)
+			{
+				s.consumedCount += (s.consumedLastInv - cur);
+			}
+			s.consumedLastInv = cur;
+			if (s.consumedCount > ch.getMaxConsumed())
+			{
+				why = "consumed " + s.consumedCount + " > max " + ch.getMaxConsumed();
+				reason = "You consumed too many — the limit is " + ch.getMaxConsumed()
+					+ " (you've used " + s.consumedCount + ").";
 			}
 		}
 		if (why == null && Boolean.TRUE.equals(ch.getEmptyInventory()) && !inventoryCounts().isEmpty())
@@ -1479,6 +1529,8 @@ public class RaidChallengeModule extends AbstractTaskModule
 		s.defeatCount = 0;
 		s.hitStreak = 0;
 		s.lastPrayerPoints = -1;
+		s.consumedCount = 0;
+		s.consumedLastInv = -1;
 	}
 
 	/**

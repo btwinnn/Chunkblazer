@@ -939,6 +939,94 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertFalse(t.isCompleted(), "a prayer restore fails the run");
 	}
 
+	// ── max_consumed (Corrupted Gauntlet "Light Snack": eat 6 or fewer Paddlefish) ──
+
+	@Test
+	void maxConsumed_underCapCompletes()
+	{
+		setInventory(23874, 23874, 23874, 23874, 23874, 23874, 23874, 23874); // 8 paddlefish
+		NuzlockeTask t = addTask("cg_light_snack", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setMaxConsumedItemIds(Arrays.asList(23874, 25958));
+			c.setMaxConsumed(6);
+		});
+		fireHit(ICE_DEMON); // open encounter
+		fireTick();         // seed count = 8
+		setInventory(23874, 23874, 23874, 23874); // ate 4 (8 -> 4)
+		fireTick();         // consumed += 4
+		fireDeath(ICE_DEMON);
+		assertTrue(t.isCompleted(), "eating 4 (<= 6) completes it");
+	}
+
+	@Test
+	void maxConsumed_overCapFails()
+	{
+		setInventory(23874, 23874, 23874, 23874, 23874, 23874, 23874, 23874); // 8
+		NuzlockeTask t = addTask("cg_light_snack", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setMaxConsumedItemIds(Arrays.asList(23874, 25958));
+			c.setMaxConsumed(6);
+		});
+		fireHit(ICE_DEMON);
+		fireTick();         // seed count = 8
+		setInventory(23874); // ate 7 (8 -> 1)
+		fireTick();         // consumed += 7 -> over cap
+		fireDeath(ICE_DEMON);
+		assertFalse(t.isCompleted(), "eating 7 (> 6) fails it");
+	}
+
+	// ── forbidden_weapon_ids (Corrupted Gauntlet "Second Rate": no perfected weapon) ──
+
+	@Test
+	void forbiddenWeaponIds_usingForbiddenWeaponFails()
+	{
+		setEquipment(slot(WEAPON, 23857)); // a perfected weapon
+		NuzlockeTask t = addTask("cg_second_rate", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setForbiddenWeaponIds(Arrays.asList(23851, 23854, 23857));
+		});
+		encounterKill(ICE_DEMON);
+		assertFalse(t.isCompleted(), "wielding a forbidden weapon fails the run");
+	}
+
+	@Test
+	void forbiddenWeaponIds_otherWeaponCompletes()
+	{
+		setEquipment(slot(WEAPON, 4587)); // a non-forbidden weapon
+		NuzlockeTask t = addTask("cg_second_rate", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setForbiddenWeaponIds(Arrays.asList(23851, 23854, 23857));
+		});
+		encounterKill(ICE_DEMON);
+		assertTrue(t.isCompleted(), "a non-forbidden weapon completes it");
+	}
+
+	// ── required_inventory_groups (Yama "Holy Diver": any SGS variant in inventory) ──
+
+	@Test
+	void requiredInventoryGroups_completesWithAnyOneHeld()
+	{
+		setInventory(20372); // the ornamented SGS variant
+		NuzlockeTask t = addTask("yama_holy_diver", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setRequiredInventoryGroups(Arrays.asList(Arrays.asList(11806, 20372)));
+		});
+		encounterKill(ICE_DEMON);
+		assertTrue(t.isCompleted(), "carrying either variant satisfies the group");
+	}
+
+	@Test
+	void requiredInventoryGroups_failsWhenNoneHeld()
+	{
+		setInventory(995); // coins, neither SGS variant
+		NuzlockeTask t = addTask("yama_holy_diver", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setRequiredInventoryGroups(Arrays.asList(Arrays.asList(11806, 20372)));
+		});
+		encounterKill(ICE_DEMON);
+		assertFalse(t.isCompleted(), "carrying neither variant fails the run");
+	}
+
 	// ── hitsplat_values + gear gate (Amoxliatl "Pendant of Eights": hit 8 w/ pendant) ──
 
 	@Test

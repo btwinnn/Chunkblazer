@@ -2865,6 +2865,12 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("phosani_nightmare");
 		}
+		// Yama (duo or solo) — gate the token on the KC line "Your Yama kill count is: N",
+		// which fires per-player on a real clear regardless of team size.
+		else if (plain.contains("yama") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("yama");
+		}
 	}
 
 	/**
