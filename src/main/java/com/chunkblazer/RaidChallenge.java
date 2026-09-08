@@ -305,6 +305,28 @@ public class RaidChallenge
 	private Boolean noPrayerRestore;
 
 	/**
+	 * Sustained: the player's Prayer points must never RISE ABOVE this ("defeat X without
+	 * Prayer points ever exceeding 50"). Sampled each tick; going over taints the attempt.
+	 */
+	@SerializedName("max_prayer")
+	private Integer maxPrayer;
+
+	/**
+	 * Sustained: none of the player's five equipped DEFENCE bonuses (stab/slash/crush/magic/
+	 * ranged defence) may exceed this ("without any Defence bonus going above +125"). The
+	 * highest of the five is checked each tick; going over taints the attempt.
+	 */
+	@SerializedName("max_defence_bonus")
+	private Integer maxDefenceBonus;
+
+	/**
+	 * Sustained: the inventory must keep AT LEAST this many free slots for the whole fight
+	 * ("maintain 3 empty inventory spaces"). Dropping below taints the attempt.
+	 */
+	@SerializedName("min_empty_inventory_slots")
+	private Integer minEmptyInventorySlots;
+
+	/**
 	 * Checked at completion: none of these NPC ids may be ALIVE in the scene when the task
 	 * would complete ("Defeat the Kalphite Queen without any other enemies alive"). A living
 	 * add blocks the completion (retry on the next kill). Point-in-time, not sustained — a

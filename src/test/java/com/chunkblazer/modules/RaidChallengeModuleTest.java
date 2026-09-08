@@ -939,6 +939,75 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertFalse(t.isCompleted(), "a prayer restore fails the run");
 	}
 
+	// ── Inferno caps: max_prayer / max_defence_bonus / min_empty_inventory_slots ──
+
+	@Test
+	void maxPrayer_underCapCompletes()
+	{
+		lenient().when(client.getBoostedSkillLevel(Skill.PRAYER)).thenReturn(45);
+		NuzlockeTask t = addTask("inferno_halfway_prayer", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setMaxPrayer(50);
+		});
+		encounterKill(ICE_DEMON);
+		assertTrue(t.isCompleted(), "45 prayer stays at/under 50");
+	}
+
+	@Test
+	void maxPrayer_overCapFails()
+	{
+		lenient().when(client.getBoostedSkillLevel(Skill.PRAYER)).thenReturn(70);
+		NuzlockeTask t = addTask("inferno_halfway_prayer", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setMaxPrayer(50);
+		});
+		encounterKill(ICE_DEMON);
+		assertFalse(t.isCompleted(), "70 prayer is over the 50 cap");
+	}
+
+	@Test
+	void maxDefenceBonus_overCapFails()
+	{
+		ItemEquipmentStats eq = mock(ItemEquipmentStats.class);
+		lenient().when(eq.getDstab()).thenReturn(200); // one defence bonus over 125
+		ItemStats stats = mock(ItemStats.class);
+		lenient().when(stats.getEquipment()).thenReturn(eq);
+		lenient().when(itemManager.getItemStats(4749, false)).thenReturn(stats);
+		setEquipment(slot(BODY, 4749));
+		NuzlockeTask t = addTask("inferno_half_past_noon", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setMaxDefenceBonus(125);
+		});
+		encounterKill(ICE_DEMON);
+		assertFalse(t.isCompleted(), "a +200 stab defence exceeds the +125 cap");
+	}
+
+	@Test
+	void minEmptyInventorySlots_belowMinFails()
+	{
+		int[] full = new int[27];
+		java.util.Arrays.fill(full, 995); // 27 items -> only 1 free slot
+		setInventory(full);
+		NuzlockeTask t = addTask("inferno_triple_caution", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setMinEmptyInventorySlots(3);
+		});
+		encounterKill(ICE_DEMON);
+		assertFalse(t.isCompleted(), "1 free slot is below the required 3");
+	}
+
+	@Test
+	void minEmptyInventorySlots_atOrAboveMinCompletes()
+	{
+		setInventory(995, 995, 995); // 3 items -> 25 free slots
+		NuzlockeTask t = addTask("inferno_triple_caution", c -> {
+			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
+			c.setMinEmptyInventorySlots(3);
+		});
+		encounterKill(ICE_DEMON);
+		assertTrue(t.isCompleted(), "25 free slots satisfies the 3-slot minimum");
+	}
+
 	// ── max_consumed (Corrupted Gauntlet "Light Snack": eat 6 or fewer Paddlefish) ──
 
 	@Test

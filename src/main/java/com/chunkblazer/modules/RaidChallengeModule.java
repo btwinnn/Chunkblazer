@@ -38,6 +38,7 @@ import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
+import net.runelite.http.api.item.ItemEquipmentStats;
 import net.runelite.http.api.item.ItemStats;
 import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.RaidChallenge;
@@ -1230,6 +1231,36 @@ public class RaidChallengeModule extends AbstractTaskModule
 			}
 			s.lastPrayerPoints = prayer;
 		}
+		if (why == null && ch.getMaxPrayer() != null)
+		{
+			int prayer = client.getBoostedSkillLevel(Skill.PRAYER);
+			if (prayer > ch.getMaxPrayer())
+			{
+				why = "prayer " + prayer + " > max " + ch.getMaxPrayer();
+				reason = "Your Prayer points went above " + ch.getMaxPrayer()
+					+ " — keep them at or below that.";
+			}
+		}
+		if (why == null && ch.getMaxDefenceBonus() != null)
+		{
+			int def = equippedMaxDefenceBonus();
+			if (def > ch.getMaxDefenceBonus())
+			{
+				why = "defence bonus " + def + " > max " + ch.getMaxDefenceBonus();
+				reason = "A Defence bonus went above +" + ch.getMaxDefenceBonus()
+					+ " (highest is +" + def + ") — keep them at or below that.";
+			}
+		}
+		if (why == null && ch.getMinEmptyInventorySlots() != null)
+		{
+			int free = freeInventorySlots();
+			if (free < ch.getMinEmptyInventorySlots())
+			{
+				why = "free slots " + free + " < min " + ch.getMinEmptyInventorySlots();
+				reason = "You must keep at least " + ch.getMinEmptyInventorySlots()
+					+ " empty inventory spaces (you have " + free + ").";
+			}
+		}
 		if (why != null)
 		{
 			s.violated = true;
@@ -1782,6 +1813,54 @@ public class RaidChallengeModule extends AbstractTaskModule
 			}
 		}
 		return total;
+	}
+
+	/** The highest of the five summed equipped defence bonuses (stab/slash/crush/magic/ranged). */
+	private int equippedMaxDefenceBonus()
+	{
+		ItemContainer eq = client.getItemContainer(InventoryID.EQUIPMENT);
+		if (eq == null)
+		{
+			return 0;
+		}
+		int stab = 0, slash = 0, crush = 0, magic = 0, ranged = 0;
+		for (Item it : eq.getItems())
+		{
+			if (it == null || it.getId() <= 0)
+			{
+				continue;
+			}
+			ItemStats stats = itemManager.getItemStats(it.getId(), false);
+			if (stats != null && stats.getEquipment() != null)
+			{
+				ItemEquipmentStats e = stats.getEquipment();
+				stab += e.getDstab();
+				slash += e.getDslash();
+				crush += e.getDcrush();
+				magic += e.getDmagic();
+				ranged += e.getDrange();
+			}
+		}
+		return Math.max(Math.max(Math.max(stab, slash), Math.max(crush, magic)), ranged);
+	}
+
+	/** Free (empty) inventory slots, 0-28. */
+	private int freeInventorySlots()
+	{
+		ItemContainer inv = client.getItemContainer(InventoryID.INVENTORY);
+		if (inv == null)
+		{
+			return 28;
+		}
+		int used = 0;
+		for (Item it : inv.getItems())
+		{
+			if (it != null && it.getId() > 0)
+			{
+				used++;
+			}
+		}
+		return 28 - used;
 	}
 
 	/** Compact gp for chat feedback: 12345678 → "12m". */
