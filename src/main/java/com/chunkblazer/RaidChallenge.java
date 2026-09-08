@@ -66,6 +66,14 @@ public class RaidChallenge
 	@SerializedName("weapon_ids")
 	private List<Integer> weaponIds;
 
+	/**
+	 * Weapon (equipment slot 3) must NEVER be one of these for the whole fight ("defeat X
+	 * without using a Perfected weapon"). The inverse of {@link #weaponIds}: equipping any
+	 * listed weapon taints the attempt.
+	 */
+	@SerializedName("forbidden_weapon_ids")
+	private List<Integer> forbiddenWeaponIds;
+
 	/** These equipment slot indices must stay empty for the whole window. */
 	@SerializedName("empty_slots")
 	private List<Integer> emptySlots;
@@ -356,6 +364,27 @@ public class RaidChallenge
 	/** These item ids must ALL stay in the INVENTORY for the whole fight (e.g. Bag of Salt). */
 	@SerializedName("required_inventory_ids")
 	private List<Integer> requiredInventoryIds;
+
+	/**
+	 * Like {@link #requiredInventoryIds} but grouped: at least one item from EVERY group must
+	 * stay in the inventory for the whole fight. Each group is a set of interchangeable
+	 * variants (e.g. a Saradomin godsword or its ornamented version). The inventory parallel
+	 * to {@link #requiredEquippedGroups} — use it for "carry any variant of X".
+	 */
+	@SerializedName("required_inventory_groups")
+	private List<List<Integer>> requiredInventoryGroups;
+
+	/**
+	 * Sustained CAP: the player may consume AT MOST {@link #maxConsumed} of these item ids
+	 * during the fight ("Light Snack: eat 6 or fewer Paddlefish"). Consumption is measured as
+	 * the cumulative DROP in the combined inventory count of these ids over the window;
+	 * exceeding the cap taints the attempt. (In an instanced solo boss, a count drop is an
+	 * eat — you can't drop/trade items there.)
+	 */
+	@SerializedName("max_consumed_item_ids")
+	private List<Integer> maxConsumedItemIds;
+	@SerializedName("max_consumed")
+	private Integer maxConsumed;
 
 	/** The whole inventory must stay EMPTY for the fight ("Forgot Lunch"). */
 	@SerializedName("empty_inventory")
