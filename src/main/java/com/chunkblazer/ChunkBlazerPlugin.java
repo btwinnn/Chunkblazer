@@ -2966,8 +2966,8 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return;
 		}
-		// Just look for the nonce anywhere in the message. The nonce is 8
-		// digits (~100M keyspace) so casual chat won't false-positive, and
+		// Just look for the nonce anywhere in the message. The nonce is 6
+		// digits (~1M keyspace) so casual chat won't false-positive, and
 		// it sidesteps the entire "OSRS auto-capitalizes the first letter"
 		// + "font lowercase-n vs uppercase-N" mess we had with a word prefix.
 		String msg = event.getMessage();
