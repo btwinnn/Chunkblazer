@@ -2865,6 +2865,19 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("phantom_muspah");
 		}
+		// Vorkath (solo, instanced) — gate the token on the KC line "Your Vorkath kill count
+		// is: N". Its acid/zombie phases are the same NPC, but the chat line is unambiguous.
+		else if (plain.contains("vorkath") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("vorkath");
+		}
+		// The Nightmare chunk uses PHOSANI'S Nightmare only (a solo instance) — regular
+		// Nightmare is group content. Match "phosani's nightmare kill count is" so the regular
+		// Nightmare's "Your Nightmare kill count is: N" never mints this token.
+		else if (plain.contains("phosani's nightmare") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("phosani_nightmare");
+		}
 	}
 
 	/**
