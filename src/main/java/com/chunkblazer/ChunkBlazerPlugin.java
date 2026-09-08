@@ -2871,6 +2871,13 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("yama");
 		}
+		// The Inferno (solo, instanced) — gate Zuk's token on "Your TzKal-Zuk kill count is: N".
+		// This chunk (Karamja Volcano) hosts two bosses: Zuk here and Jad (Fight Caves) later,
+		// each earning its own token via boss_keys.
+		else if (plain.contains("tzkal-zuk") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("zuk");
+		}
 	}
 
 	/**
