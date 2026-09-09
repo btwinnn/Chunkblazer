@@ -209,11 +209,6 @@ public interface ChunkBlazerConfig extends Config
 		return "";
 	}
 
-	// The old "Server Sync" @ConfigSection was removed: its three items are all hidden
-	// and server verification is always on, but an all-hidden section still renders an
-	// empty header in the config panel. The items now declare no section, so nothing
-	// shows. Their keyNames are unchanged, so stored values still resolve.
-
 	@ConfigItem(
 		keyName = "apiBaseUrl",
 		name = "API Base URL",
@@ -230,18 +225,18 @@ public interface ChunkBlazerConfig extends Config
 	 * Master switch for ALL server communication — login, sync, event reports, and the
 	 * catalog/sound fetches all gate on this. OFF by default: nothing is sent, or even
 	 * downloaded, until the player turns it on (the plugin runs on the bundled seed
-	 * meanwhile). This matches how RuneLite's own XP Updater and the WOM/TempleOSRS
-	 * integrations default their third-party sync to opt-in.
+	 * meanwhile).
 	 *
 	 * A FRESH keyName ("serverSyncEnabled") means no stored value carries over from the
 	 * old always-on build, so everyone starts opted-out. The in-panel prompt explains
 	 * what enabling gains; PRIVACY.md carries the full data-use disclosure.
 	 */
+
 	@ConfigItem(
 		keyName = "serverSyncEnabled",
 		name = "Enable Server Sync",
-		description = "Sync your progress to chunkblazer.com — cross-device saves, leaderboards, "
-			+ "player discovery, and Competitive eligibility. OFF by default; nothing is sent until "
+		description = "Sync your progress to chunkblazer.com. Features include cross-device saves, leaderboards, "
+			+ "player discovery, and Competitive eligibility. Nothing is sent until "
 			+ "you turn it on, and your existing progress uploads when you do.",
 		position = 1
 	)
@@ -370,10 +365,7 @@ public interface ChunkBlazerConfig extends Config
 	@Range(min = 0, max = 100)
 	default int taskCompletionSoundVolume()
 	{
-		// 3% baseline (~-30dB): a deliberately quiet default so the jingle sits
-		// under game audio. Note it can be hard to hear over loud game sound (an
-		// earlier 25% default was chosen for that reason); raise it (0-100) if you
-		// want the jingle louder.
+		// 3% baseline (~-30dB): a deliberately quiet default
 		return 3;
 	}
 
