@@ -6113,19 +6113,14 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
-		int ledger = 0;
-		for (String id : getUnlockedRegionIds())
-		{
-			try
-			{
-				ledger += getRegionUnlockCost(Integer.parseInt(id.trim()));
-			}
-			catch (NumberFormatException ignored)
-			{
-				// a malformed region id contributes nothing
-			}
-		}
-		ledger = Math.max(0, ledger - getRegionUnlockCost(DEFAULT_START_REGION));
+		// The chunks a player owns ARE the spend ledger. Under the scaling curve the
+		// k-th paid unlock cost curveUnlockCost(k), so the true spend for n paid chunks
+		// is the running sum. countPayableUnlockedChunks() already excludes the granted
+		// starting chunk and every 0-cost (free/charter/boss) chunk. For accounts
+		// grandfathered off the old flat-1 economy this sum errs HIGH (they paid less),
+		// which only makes this lower-only repair more conservative — it never lowers
+		// spent below what a curve player would legitimately owe.
+		int ledger = curveLedgerTotal(countPayableUnlockedChunks());
 
 		if (ledger >= spent)
 		{
@@ -6554,6 +6549,85 @@ public class ChunkBlazerPlugin extends Plugin
 		return "Unknown Region (" + regionId + ")";
 	}
 
+	// ── Chunk unlock cost curve ─────────────────────────────────────────────
+	// The r-th PAID chunk unlock costs 1 + CURVE_B * r^CURVE_GAMMA, rounded to a
+	// whole number (never below 1). Calibrated 2026-09 against the live catalog
+	// (388 payable chunks, a 9,096-point pool) so that unlocking the entire map
+	// costs about 80% of every point available. Price rises with how many paid
+	// chunks the account already owns, so the early game stays cheap and the
+	// endgame asks for most of a player's tasks. r is the account's current paid
+	// chunk count + 1, which means chunks already unlocked are GRANDFATHERED
+	// (pointsSpent is a stored, monotonic counter and is never recomputed here) and
+	// only new unlocks follow the curve. Re-derive CURVE_B deliberately if the
+	// catalog grows a lot; do not nudge it casually, because it reprices every
+	// player's next unlock.
+	static final double CURVE_B = 0.0913;
+	static final double CURVE_GAMMA = 1.0;
+
+	/** Points cost of the r-th paid chunk unlock (r &gt;= 1). Whole number, minimum 1. */
+	public static int curveUnlockCost(int rank)
+	{
+		if (rank < 1)
+		{
+			rank = 1;
+		}
+		double c = 1.0 + CURVE_B * Math.pow(rank, CURVE_GAMMA);
+		return (int) Math.max(1L, Math.round(c));
+	}
+
+	/** Sum of curveUnlockCost(1..n): the total paid to own n paid chunks under the curve. */
+	public static int curveLedgerTotal(int n)
+	{
+		int total = 0;
+		for (int k = 1; k <= n; k++)
+		{
+			total += curveUnlockCost(k);
+		}
+		return total;
+	}
+
+	/**
+	 * Number of PAID chunks the account currently owns, counted per chunk (not per
+	 * region id, so a multi-region chunk counts once). Free / charter / boss chunks
+	 * and the granted starting chunk are excluded, because none of them are priced by
+	 * the points curve. This is the "rank" the next paid unlock is charged at.
+	 */
+	private int countPayableUnlockedChunks()
+	{
+		java.util.Set<Integer> seenChunks = new java.util.HashSet<>();
+		for (String s : getUnlockedRegionIds())
+		{
+			int id;
+			try
+			{
+				id = Integer.parseInt(s.trim());
+			}
+			catch (NumberFormatException ignored)
+			{
+				continue;
+			}
+			if (id == DEFAULT_START_REGION || freeUnlockableRegionIds.contains(id))
+			{
+				continue;
+			}
+			NuzlockeChunk c = chunksByRegionId.get(id);
+			if (c == null)
+			{
+				seenChunks.add(id); // unknown region: treat as its own single-region chunk
+				continue;
+			}
+			if (c.isCharter() || c.isBoss() || c.getUnlockCostValue() == 0)
+			{
+				continue;
+			}
+			// Dedupe multi-region chunks by their first region id.
+			Integer key = (c.getRegionIds() != null && !c.getRegionIds().isEmpty())
+				? c.getRegionIds().get(0) : id;
+			seenChunks.add(key);
+		}
+		return seenChunks.size();
+	}
+
 	public int getRegionUnlockCost(int regionId)
 	{
 		// Free chunks (Free_Chunks.json) cost nothing to unlock.
@@ -6567,11 +6641,20 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return 0;
 		}
-		if (chunk != null)
+		// Boss chunks cost a Boss Token, not points — never curve-priced.
+		if (chunk != null && chunk.isBoss())
 		{
-			return chunk.getUnlockCostValue();
+			return 0;
 		}
-		return 1; // Default cost
+		int base = (chunk != null) ? chunk.getUnlockCostValue() : 1;
+		if (base == 0)
+		{
+			return 0; // explicitly free-in-points chunk
+		}
+		// Payable geographic chunk: charge the scaling curve at the account's current
+		// rank. Reading the count BEFORE the region is added (see unlockRegion) makes
+		// this unlock the (count + 1)-th paid chunk.
+		return curveUnlockCost(countPayableUnlockedChunks() + 1);
 	}
 
 	// Overworld surface lives in regionY 39..64 (world y 2496..4159). Everything
