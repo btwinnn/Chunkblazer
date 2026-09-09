@@ -285,6 +285,11 @@ public class ChunkBlazerPlugin extends Plugin
 	// completing the chat-code handshake. Non-null means "commit a NUZLOCKE lock
 	// (with this snapshot) the moment verification succeeds". Cleared on logout.
 	private volatile EligibilitySnapshot pendingNuzlockeSnapshot;
+	// Set when the player picks Competitive from the panel with sync OFF and accepts
+	// the "enable Server Sync?" prompt. The lock can't run until we've logged in (the
+	// eligibility + verify calls need the api_key), so it's deferred to loginToServer's
+	// success branch. Cleared on logout.
+	private volatile boolean pendingCompetitiveLock;
 
 	// --- Plugin Lifecycle ---
 
@@ -629,6 +634,7 @@ public class ChunkBlazerPlugin extends Plugin
 			// pre-logout session. Also drop any in-flight Nuzlocke lock.
 			pendingVerificationNonce = null;
 			pendingNuzlockeSnapshot = null;
+			pendingCompetitiveLock = false;
 			panel.hideVerificationPrompt();
 			// Drop the recognition roster; it'll repopulate after next login.
 			roster.clear();
@@ -2260,7 +2266,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			// Without the server we can't authoritatively verify eligibility.
 			// Fail closed rather than locking an unchecked account into Nuzlocke.
-			addPluginChatMessage("Competitive mode needs a connection to the ChunkBlazer server to verify your account. Try again when online.");
+			addPluginChatMessage("Competitive mode needs a connection to the ChunkBlazer server to verify your RuneScape account. Please enable Server Sync and try again.");
 			return;
 		}
 
@@ -2453,7 +2459,7 @@ public class ChunkBlazerPlugin extends Plugin
 		else if (mode == GameMode.NUZLOCKE)
 		{
 			// No server to confirm eligibility — cannot safely lock Competitive.
-			addPluginChatMessage("Competitive needs the ChunkBlazer server to confirm your account. Try again when online.");
+			addPluginChatMessage("Competitive mode needs a connection to the ChunkBlazer server to verify your RuneScape account. Please enable Server Sync and try again.");
 			return;
 		}
 
@@ -2651,6 +2657,27 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 	}
 
+	/**
+	 * From the panel's "enable Server Sync?" prompt (player picked Competitive with
+	 * sync off and chose Yes): turn sync on, then start the Competitive lock as soon
+	 * as we're logged in — deferred because the eligibility + verification calls need
+	 * the api_key that login provides. If sync is already on, start the lock now.
+	 */
+	public void enableServerSyncAndLockCompetitive()
+	{
+		if (config.apiEnabled())
+		{
+			lockGameMode(GameMode.NUZLOCKE);
+			return;
+		}
+		pendingCompetitiveLock = true;
+		enableServerSync(); // flips the toggle and logs in (if in-game)
+		if (client.getGameState() != GameState.LOGGED_IN)
+		{
+			addPluginChatMessage("Server Sync enabled. Log in and pick Competitive to continue.");
+		}
+	}
+
 	private void loginToServer()
 	{
 		if (!config.apiEnabled())
@@ -2681,6 +2708,14 @@ public class ChunkBlazerPlugin extends Plugin
 					// heartbeat is committed, refresh the roster so our own chat
 					// icon — and anyone already online — lights up within ~a second.
 					kickPresence();
+					// A Competitive lock the player asked for while sync was off:
+					// now that we're logged in (api_key is set), start it. beginNuzlockeLock
+					// handles the eligibility check + verification handshake from here.
+					if (pendingCompetitiveLock)
+					{
+						pendingCompetitiveLock = false;
+						beginNuzlockeLock();
+					}
 				}
 				hydrateFromLoginResponse(resp);
 				maybeStartVerification(resp);
