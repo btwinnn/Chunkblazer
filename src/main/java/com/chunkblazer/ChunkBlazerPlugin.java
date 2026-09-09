@@ -2607,6 +2607,37 @@ public class ChunkBlazerPlugin extends Plugin
 	 * We use the response to hydrate locally-cached config so the mode lock
 	 * survives wiping the RuneLite profile.
 	 */
+	/** Whether the player has opted into server sync. Read by the panel to show the enable prompt vs the synced notice. */
+	public boolean isServerSyncEnabled()
+	{
+		return config.apiEnabled();
+	}
+
+	/**
+	 * Turn server sync on from the panel's first-run prompt. Flips the config, then
+	 * logs in right away if we're already in-game (otherwise the next LOGGED_IN /
+	 * heartbeat picks it up). Accumulated offline progress uploads on the first sync
+	 * after login: reconcileAccountState adopts the local state (no prior owner tag),
+	 * and that first push is pure growth, so the drop guard never fires. Enabling
+	 * mid-session also lets the catalog + sounds start fetching (both gate on this).
+	 */
+	public void enableServerSync()
+	{
+		if (config.apiEnabled())
+		{
+			return;
+		}
+		configManager.setConfiguration(CONFIG_GROUP, "serverSyncEnabled", true);
+		if (client.getGameState() == GameState.LOGGED_IN)
+		{
+			loginToServer();
+		}
+		if (panel != null)
+		{
+			panel.updatePanel();
+		}
+	}
+
 	private void loginToServer()
 	{
 		if (!config.apiEnabled())

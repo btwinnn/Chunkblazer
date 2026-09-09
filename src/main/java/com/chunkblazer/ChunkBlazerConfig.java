@@ -227,23 +227,27 @@ public interface ChunkBlazerConfig extends Config
 	}
 
 	/**
-	 * Server verification is ALWAYS ON. The toggle is {@code hidden} so it never shows
-	 * in the config UI, and a FRESH keyName ("serverVerificationOn") means no player
-	 * has a stored value for it — so it always resolves to the {@code true} default,
-	 * ignoring any stale "apiEnabled=false" from an older build. It MUST keep a valid
-	 * {@code @ConfigItem}: RuneLite's config proxy throws for an un-annotated method,
-	 * which previously killed the catalog refresh (and account sync) at startup.
+	 * Master switch for ALL server communication — login, sync, event reports, and the
+	 * catalog/sound fetches all gate on this. OFF by default: nothing is sent, or even
+	 * downloaded, until the player turns it on (the plugin runs on the bundled seed
+	 * meanwhile). This matches how RuneLite's own XP Updater and the WOM/TempleOSRS
+	 * integrations default their third-party sync to opt-in.
+	 *
+	 * A FRESH keyName ("serverSyncEnabled") means no stored value carries over from the
+	 * old always-on build, so everyone starts opted-out. The in-panel prompt explains
+	 * what enabling gains; PRIVACY.md carries the full data-use disclosure.
 	 */
 	@ConfigItem(
-		keyName = "serverVerificationOn",
-		name = "Enable Server Verification",
-		description = "Server verification is always on.",
-		position = 1,
-		hidden = true
+		keyName = "serverSyncEnabled",
+		name = "Enable Server Sync",
+		description = "Sync your progress to chunkblazer.com — cross-device saves, leaderboards, "
+			+ "player discovery, and Competitive eligibility. OFF by default; nothing is sent until "
+			+ "you turn it on, and your existing progress uploads when you do.",
+		position = 1
 	)
 	default boolean apiEnabled()
 	{
-		return true;
+		return false;
 	}
 
 	@ConfigItem(

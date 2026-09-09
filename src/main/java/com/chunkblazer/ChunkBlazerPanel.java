@@ -105,6 +105,10 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JPanel lockedModePanel;
 	private JLabel lockedModeValueLabel;
 	private JPanel loggedOutPanel;
+	// Data-sync header: the "Progress synced" notice (shown when sync is ON) and the
+	// first-run "Enable Sync" prompt (shown when it's OFF, the default) — toggled in updatePanel.
+	private JPanel dataNoticeRow;
+	private JPanel syncPromptPanel;
 	private JPanel currentTaskPanel;
 	private JPanel activeTasksContentPanel; // Inner panel for active tasks
 	private JScrollPane activeTasksScrollPane;
@@ -258,8 +262,20 @@ public class ChunkBlazerPanel extends PluginPanel
 		header.setAlignmentX(LEFT_ALIGNMENT);
 		mainPanel.add(header);
 		mainPanel.add(Box.createVerticalStrut(4));
-		// Always-visible data-sync notice (data disclosure in the UI itself).
-		mainPanel.add(createDataNoticeRow());
+		// Data-sync header — one of these shows depending on the toggle (updatePanel):
+		// the compact "Progress synced" notice when sync is ON, the first-run "Enable
+		// Sync" prompt when it's OFF (the default). The notice doubles as the in-UI
+		// data disclosure.
+		dataNoticeRow = createDataNoticeRow();
+		mainPanel.add(dataNoticeRow);
+		syncPromptPanel = createSyncPromptSection();
+		syncPromptPanel.setAlignmentX(LEFT_ALIGNMENT);
+		mainPanel.add(syncPromptPanel);
+		// Initial states match the OFF default (prompt shown, notice hidden); updatePanel
+		// corrects it on the first refresh for a returning player who already opted in.
+		boolean syncOn = plugin != null && plugin.isServerSyncEnabled();
+		dataNoticeRow.setVisible(syncOn);
+		syncPromptPanel.setVisible(!syncOn);
 		mainPanel.add(Box.createVerticalStrut(8));
 
 		// Logged-out prompt — shown in place of the gameplay sections until the
@@ -613,7 +629,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	 * Compact, always-visible data notice under the header: tells players their
 	 * progress is synced to chunkblazer.com and links to the full data-use
 	 * explanation. This is the in-plugin half of the data disclosure (the config
-	 * "Enable Server Verification" description carries the other half).
+	 * "Enable Server Sync" description carries the other half).
 	 */
 	private JPanel createDataNoticeRow()
 	{
@@ -654,6 +670,64 @@ public class ChunkBlazerPanel extends PluginPanel
 	}
 
 	/**
+	 * First-run prompt shown while server sync is OFF (the default). Spells out what
+	 * turning it on gains — cross-device saves, leaderboards, player discovery, and
+	 * Competitive eligibility — with a one-click Enable button and the same data-use
+	 * link as the synced notice. Hidden once sync is on (the compact notice takes
+	 * over). See ChunkBlazerConfig#apiEnabled.
+	 */
+	private JPanel createSyncPromptSection()
+	{
+		JPanel panel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
+		panel.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(FLAME),
+			new EmptyBorder(6, 6, 6, 6)));
+		panel.setAlignmentX(LEFT_ALIGNMENT);
+
+		addLabel(panel, "Server sync is off", FontManager.getRunescapeBoldFont(), FLAME);
+		panel.add(Box.createVerticalStrut(3));
+
+		WrappingTextLabel body = new WrappingTextLabel(
+			"Turn on sync to save your progress across devices, appear on the leaderboards, "
+			+ "see other players, and be eligible for Competitive mode. Nothing is sent — or "
+			+ "even downloaded — until you enable it; your current progress uploads when you do.",
+			FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR, TASK_TEXT_WRAP_WIDTH);
+		body.setAlignmentX(LEFT_ALIGNMENT);
+		panel.add(body);
+
+		panel.add(Box.createVerticalStrut(3));
+		WrappingTextLabel comp = new WrappingTextLabel(
+			"Competitive needs a fresh account — enable early if you want it.",
+			FontManager.getRunescapeSmallFont(), new Color(255, 190, 60), TASK_TEXT_WRAP_WIDTH);
+		comp.setAlignmentX(LEFT_ALIGNMENT);
+		panel.add(comp);
+
+		panel.add(Box.createVerticalStrut(6));
+		JButton enable = new JButton("Enable Sync");
+		enable.setAlignmentX(LEFT_ALIGNMENT);
+		enable.setFocusPainted(false);
+		enable.setToolTipText("Sync your progress to chunkblazer.com");
+		enable.addActionListener(e -> plugin.enableServerSync());
+		panel.add(enable);
+
+		panel.add(Box.createVerticalStrut(4));
+		JLabel info = styledLabel("How your data is used", FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR);
+		info.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+		info.setAlignmentX(LEFT_ALIGNMENT);
+		info.addMouseListener(new java.awt.event.MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e)
+			{
+				showDataUseDialog();
+			}
+		});
+		panel.add(info);
+
+		return panel;
+	}
+
+	/**
 	 * Full in-plugin data-use disclosure: what is collected, where it goes, and
 	 * how to opt out. Mirrors PRIVACY.md. Reached from the notice row's info icon.
 	 */
@@ -664,7 +738,7 @@ public class ChunkBlazerPanel extends PluginPanel
 			+ "and rank you on the leaderboards, the plugin sends data to\n"
 			+ "ChunkBlazer's servers.\n"
 			+ "\n"
-			+ "WHAT IS SENT (only while \"Enable Server Verification\" is on):\n"
+			+ "WHAT IS SENT (only while \"Enable Server Sync\" is on):\n"
 			+ "  • Your RuneScape name\n"
 			+ "  • Your current world and map region\n"
 			+ "  • Progress events: NPC kills, XP/skill changes, items\n"
@@ -2732,6 +2806,18 @@ public class ChunkBlazerPanel extends PluginPanel
 		{
 			boolean loggedIn = plugin.isLoggedIn();
 			loggedOutPanel.setVisible(!loggedIn);
+
+			// Sync header: the enable prompt while sync is off (the default), the
+			// compact "Progress synced" notice once it's on.
+			boolean syncOn = plugin.isServerSyncEnabled();
+			if (syncPromptPanel != null)
+			{
+				syncPromptPanel.setVisible(!syncOn);
+			}
+			if (dataNoticeRow != null)
+			{
+				dataNoticeRow.setVisible(syncOn);
+			}
 
 			// Always-on gameplay sections simply follow login state.
 			statsPanel.setVisible(loggedIn);
