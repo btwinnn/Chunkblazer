@@ -2791,11 +2791,36 @@ public class ChunkBlazerPanel extends PluginPanel
 			JOptionPane.WARNING_MESSAGE
 		);
 
-		if (confirm == JOptionPane.YES_OPTION)
+		if (confirm != JOptionPane.YES_OPTION)
 		{
-			plugin.lockGameMode(selectedMode);
-			updateModeDisplay();
+			return;
 		}
+
+		// Competitive is verified server-side (fresh-account eligibility + the chat-code
+		// handshake), so it can't be locked with sync off. Instead of failing with a
+		// chat message, offer to turn Server Sync on right here — Yes enables it and
+		// continues the lock once connected; No leaves sync off and cancels.
+		if (selectedMode == GameMode.NUZLOCKE && !plugin.isServerSyncEnabled())
+		{
+			int enable = JOptionPane.showConfirmDialog(
+				this,
+				"Competitive mode needs a connection to the ChunkBlazer server to verify\n"
+				+ "your RuneScape account.\n\n"
+				+ "Do you want to enable Server Sync?",
+				"Enable Server Sync?",
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE
+			);
+			if (enable == JOptionPane.YES_OPTION)
+			{
+				plugin.enableServerSyncAndLockCompetitive();
+			}
+			updateModeDisplay();
+			return;
+		}
+
+		plugin.lockGameMode(selectedMode);
+		updateModeDisplay();
 	}
 
 	// --- Update Methods ---
