@@ -357,6 +357,16 @@ public class RaidChallenge
 	private Integer defeatWithinTicks;
 
 	/**
+	 * With {@link #defeatNpcIds}: the target must die within this many game ticks of the
+	 * encounter starting (your first hit on it), or the attempt fails and you retry on the
+	 * next one. A kill-speed challenge, e.g. "defeat a Manticore in 24 seconds" (40 ticks).
+	 * 100 ticks = 60s. Ignored unless a defeat target is set; combines with the sustained
+	 * conditions, which are scoped to the same encounter.
+	 */
+	@SerializedName("max_defeat_ticks")
+	private Integer maxDefeatTicks;
+
+	/**
 	 * Satisfy-triggered COUNTER: complete once this many counted kills happen in a single
 	 * fight window (e.g. "defeat 20 small Nylocas in one Nylocas fight", "5 Blood Spawns in
 	 * one Maiden fight"). The window is {@link #roomRegions} — so it is required, and the

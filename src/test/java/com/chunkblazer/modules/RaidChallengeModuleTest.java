@@ -127,6 +127,36 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		assertFalse(t.isCompleted(), "a kill we took no part in must not credit");
 	}
 
+	// ── max_defeat_ticks (Chili's Triple Dipper: "defeat a Manticore in 24s / 40 ticks") ──
+
+	@Test
+	void maxDefeatTicks_fastKillCompletes()
+	{
+		NuzlockeTask t = addTask("colosseum_fast_manticore", c -> {
+			c.setDefeatNpcIds(Arrays.asList(12818));
+			c.setMaxDefeatTicks(40);
+		});
+		when(client.getTickCount()).thenReturn(100);
+		fireHit(12818);                              // encounter opens at tick 100
+		when(client.getTickCount()).thenReturn(130); // 30 ticks later — inside the limit
+		fireDeath(12818);
+		assertTrue(t.isCompleted(), "a kill within the tick limit completes");
+	}
+
+	@Test
+	void maxDefeatTicks_slowKillFails()
+	{
+		NuzlockeTask t = addTask("colosseum_fast_manticore", c -> {
+			c.setDefeatNpcIds(Arrays.asList(12818));
+			c.setMaxDefeatTicks(40);
+		});
+		when(client.getTickCount()).thenReturn(100);
+		fireHit(12818);                              // encounter opens at tick 100
+		when(client.getTickCount()).thenReturn(145); // 45 ticks later — too slow
+		fireDeath(12818);
+		assertFalse(t.isCompleted(), "a kill slower than the tick limit must not complete");
+	}
+
 	// ── no_run (Don't Slip / Walking the Dog / Hotfoot) ──────────────────────
 
 	@Test
