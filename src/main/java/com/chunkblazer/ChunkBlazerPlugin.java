@@ -2353,7 +2353,7 @@ public class ChunkBlazerPlugin extends Plugin
 					pendingNuzlockeSnapshot = null;
 					if (snap != null)
 					{
-						addPluginChatMessage("Your account meets the Competitive requirements — locking it in!");
+						addPluginChatMessage("Your account meets the Competitive requirements. Locking it in!");
 						commitModeLock(GameMode.NUZLOCKE, snap);
 					}
 					return;
@@ -2412,7 +2412,7 @@ public class ChunkBlazerPlugin extends Plugin
 					{
 						if (mode == GameMode.NUZLOCKE)
 						{
-							addPluginChatMessage("Couldn't reach the server to confirm Competitive — staying on Casual. Try again later.");
+							addPluginChatMessage("Couldn't reach the server to confirm Competitive. Staying on Casual, try again later.");
 						}
 						return;
 					}
@@ -2423,7 +2423,7 @@ public class ChunkBlazerPlugin extends Plugin
 							// Server confirmed eligibility — now it is safe to persist.
 							setAccountState("accountModeHash", modeKey);
 							setAccountState("gameMode", mode);
-							addPluginChatMessage("Competitive locked in. Good luck — there's no going back!");
+							addPluginChatMessage("Competitive locked in. Good luck, there's no going back!");
 						}
 					}
 					else if (response.isAlreadyLocked())
@@ -2436,7 +2436,7 @@ public class ChunkBlazerPlugin extends Plugin
 						// Never leave a local Competitive lock the server won't honor.
 						if (mode == GameMode.NUZLOCKE)
 						{
-							addPluginChatMessage("Competitive was declined by the server — your account isn't eligible, so you're staying on Casual.");
+							addPluginChatMessage("Competitive was declined by the server. Your account isn't eligible, so you're staying on Casual.");
 						}
 						log.warn("Server lock-mode response: status={} message={}",
 							response.getStatus(), response.getMessage());
@@ -3324,7 +3324,7 @@ public class ChunkBlazerPlugin extends Plugin
 				log.warn("[CHUNKBLAZER] untagged local progress belongs to a different account "
 					+ "(per accountModeHash) — clearing it rather than letting {} adopt it", rsn);
 				clearAccountState(owner);
-				addPluginChatMessage("Different account detected — loading " + rsn + "'s progress.");
+				addPluginChatMessage("Different account detected. Loading " + rsn + "'s progress.");
 				return;
 			}
 
@@ -3337,7 +3337,7 @@ public class ChunkBlazerPlugin extends Plugin
 			+ "from the server", rsn);
 
 		clearAccountState(owner);
-		addPluginChatMessage("Different account detected — loading " + rsn + "'s progress.");
+		addPluginChatMessage("Different account detected. Loading " + rsn + "'s progress.");
 	}
 
 	/**
@@ -6123,7 +6123,7 @@ public class ChunkBlazerPlugin extends Plugin
 		setAccountState("bossCompletions", String.join(",", done));
 		addBossTokens(1);
 		persistUnlockNow();
-		addPluginChatMessage("First clear recorded — +1 Boss Token earned!");
+		addPluginChatMessage("First clear recorded. +1 Boss Token earned!");
 	}
 
 	/**

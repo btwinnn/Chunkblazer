@@ -1355,7 +1355,7 @@ public class NPCKillModule extends AbstractTaskModule
 				// than the (inert) per-task varbit constraint it replaces.
 				if (soloGated && cannonFiredDuring(fight, death.deathTick))
 				{
-					sendTaskFailure(task, "Cannon use is prohibited for restricted tasks — kill it without your cannon firing");
+					sendTaskFailure(task, "Cannon use is prohibited for restricted tasks. Kill it without your cannon firing.");
 					continue; // Skip this task, don't credit the kill
 				}
 
@@ -1366,7 +1366,7 @@ public class NPCKillModule extends AbstractTaskModule
 				if (soloGated && !fight.startedFresh)
 				{
 					sendTaskFailure(task,
-						"Restricted kill must start from full health — this monster was already damaged when you first hit it");
+						"Restricted kill must start from full health. This monster was already damaged when you first hit it.");
 					continue; // Skip this task, don't credit the kill
 				}
 
@@ -1388,7 +1388,7 @@ public class NPCKillModule extends AbstractTaskModule
 					&& fight.combatStartTick - lastLoginTick < grace)
 				{
 					sendTaskFailure(task, String.format(
-						"Restricted kill must be a fresh fight — wait ~%.0fs after logging in, then fight it start to finish",
+						"Restricted kill must be a fresh fight. Wait ~%.0fs after logging in, then fight it start to finish.",
 						grace * 0.6));
 					continue; // Skip this task, don't credit the kill
 				}
@@ -1401,7 +1401,7 @@ public class NPCKillModule extends AbstractTaskModule
 				if (soloGated && fight.contested)
 				{
 					sendTaskFailure(task,
-						"Restricted kill must be solo — another player damaged this monster");
+						"Restricted kill must be solo. Another player damaged this monster.");
 					continue; // Skip this task, don't credit the kill
 				}
 

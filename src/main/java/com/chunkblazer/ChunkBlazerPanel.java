@@ -688,16 +688,16 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(Box.createVerticalStrut(3));
 
 		WrappingTextLabel body = new WrappingTextLabel(
-			"Turn on sync to save your progress across devices, appear on the leaderboards, "
-			+ "see other players, and be eligible for Competitive mode. Nothing is sent — or "
-			+ "even downloaded — until you enable it; your current progress uploads when you do.",
+			"Turn on sync to save your progress across devices, show on the leaderboard, "
+			+ "see other players, and play Competitive mode. Nothing is sent until you enable it. "
+			+ "Your current progress will sync with the server when you do.",
 			FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR, TASK_TEXT_WRAP_WIDTH);
 		body.setAlignmentX(LEFT_ALIGNMENT);
 		panel.add(body);
 
 		panel.add(Box.createVerticalStrut(3));
 		WrappingTextLabel comp = new WrappingTextLabel(
-			"Competitive needs a fresh account — enable early if you want it.",
+			"Note that Competitive mode requires a fresh level 3 account.",
 			FontManager.getRunescapeSmallFont(), new Color(255, 190, 60), TASK_TEXT_WRAP_WIDTH);
 		comp.setAlignmentX(LEFT_ALIGNMENT);
 		panel.add(comp);
@@ -711,7 +711,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(enable);
 
 		panel.add(Box.createVerticalStrut(4));
-		JLabel info = styledLabel("How your data is used", FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR);
+		JLabel info = styledLabel("Read how your data is used", FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR);
 		info.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
 		info.setAlignmentX(LEFT_ALIGNMENT);
 		info.addMouseListener(new java.awt.event.MouseAdapter()
@@ -740,6 +740,7 @@ public class ChunkBlazerPanel extends PluginPanel
 			+ "\n"
 			+ "WHAT IS SENT (only while \"Enable Server Sync\" is on):\n"
 			+ "  • Your RuneScape name\n"
+			+ "  • Your IP address\n"
 			+ "  • Your current world and map region\n"
 			+ "  • Progress events: NPC kills, XP/skill changes, items\n"
 			+ "    obtained or equipped, and task completions\n"
@@ -758,7 +759,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		int choice = JOptionPane.showOptionDialog(
 			this,
 			msg,
-			"ChunkBlazer — How your data is used",
+			"How ChunkBlazer uses your data",
 			JOptionPane.DEFAULT_OPTION,
 			JOptionPane.INFORMATION_MESSAGE,
 			null,

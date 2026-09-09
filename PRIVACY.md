@@ -34,13 +34,14 @@ Sent **only while "Enable Server Verification" is ON** in the plugin settings:
 | Data | Why |
 |---|---|
 | Your RuneScape name (RSN) | Identifies your account and shows your name on leaderboards |
+| Your IP address | Sent automatically with every web request, as with any website. Used only for ordinary server logs and abuse prevention |
 | Your current world and map region | Powers "players online" and region-based features |
 | Progress events: NPC kills, XP / skill changes, items obtained or equipped, task completions | Verifies task completions server-side (anti-cheat) and updates your save |
 | Your unlocked chunks, points, tasks and game mode | Saves and restores your account state |
 
 ChunkBlazer does **not** collect your password, bank contents, private messages,
-real-world identity, email, IP-based tracking beyond ordinary web-server logs,
-or anything unrelated to the challenge.
+real-world identity, email, or anything unrelated to the challenge. Your IP
+address is not used for tracking or profiling beyond ordinary server logs.
 
 ---
 
