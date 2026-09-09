@@ -755,7 +755,7 @@ public class TaskCardOverlay extends Overlay
 		if (current.isFaceDown())
 		{
 			text = total > 1
-				? "Click to reveal — " + total + " cards to open"
+				? "Click to reveal. " + total + " cards to open"
 				: "Click the card to reveal your task";
 		}
 		else if (current.isFaceUp())
@@ -764,8 +764,8 @@ public class TaskCardOverlay extends Overlay
 			// card doesn't read as something still to be completed.
 			int left = total - 1;
 			text = left > 0
-				? "Task added — click for the next card (" + left + " left)"
-				: "Task added — click to close";
+				? "Task added. Click for the next card (" + left + " left)"
+				: "Task added. Click to close";
 		}
 		else
 		{

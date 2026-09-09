@@ -508,7 +508,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 				{
 					s.violated = true;
 					log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: took {} damage", task.getTaskId(), dmg);
-					announceFailure(task, "You took damage — this challenge must be done without taking a hit.");
+					announceFailure(task, "You took damage. This challenge must be done without taking a hit.");
 				}
 			}
 			return;
@@ -562,7 +562,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 				log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: hit NPC {} with {} (needs {})",
 					task.getTaskId(), npcId, current, required);
 				announceFailure(task, "You hit this boss with a " + current.label()
-					+ " attack — " + required.label() + " only.");
+					+ " attack, " + required.label() + " only.");
 			}
 		}
 
@@ -782,7 +782,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				s.violated = true; // a protected NPC died (e.g. an energy siphon)
 				log.debug("[RAIDCHALLENGE-DEBUG] {} VIOLATED: protected NPC {} died", task.getTaskId(), id);
-				announceFailure(task, "A protected NPC was killed — this run no longer counts.");
+				announceFailure(task, "A protected NPC was killed. This run no longer counts.");
 			}
 			// defeat_count: tally a counted add's death within the fight window.
 			if (ch.getDefeatCount() != null && ch.getDefeatCountNpcIds() != null
@@ -1021,7 +1021,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		if (Boolean.TRUE.equals(ch.getNoRun()) && client.getVarpValue(runVarp(ch)) != 0)
 		{
 			why = "run enabled (varp " + runVarp(ch) + ")";
-			reason = "Run was on — this challenge must be done with run disabled.";
+			reason = "Run was on. This challenge must be done with run disabled.";
 		}
 		else if (ch.getWeaponIds() != null && !ch.getWeaponIds().contains(equippedId(3)))
 		{
@@ -1097,7 +1097,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			if (s.consumedCount > ch.getMaxConsumed())
 			{
 				why = "consumed " + s.consumedCount + " > max " + ch.getMaxConsumed();
-				reason = "You consumed too many — the limit is " + ch.getMaxConsumed()
+				reason = "You consumed too many. The limit is " + ch.getMaxConsumed()
 					+ " (you've used " + s.consumedCount + ").";
 			}
 		}
@@ -1176,31 +1176,31 @@ public class RaidChallengeModule extends AbstractTaskModule
 		if (why == null && ch.getMaxGearValue() != null && equippedGearValue() >= ch.getMaxGearValue())
 		{
 			why = "gear value " + equippedGearValue() + " >= max " + ch.getMaxGearValue();
-			reason = "Your equipped gear is worth too much — must be under "
+			reason = "Your equipped gear is worth too much. Must be under "
 				+ formatGp(ch.getMaxGearValue()) + " (you have " + formatGp(equippedGearValue()) + ").";
 		}
 		if (why == null && ch.getMinGearValue() != null && equippedGearValue() < ch.getMinGearValue())
 		{
 			why = "gear value " + equippedGearValue() + " < min " + ch.getMinGearValue();
-			reason = "Your equipped gear isn't worth enough — need at least "
+			reason = "Your equipped gear isn't worth enough. Need at least "
 				+ formatGp(ch.getMinGearValue()) + " (you have " + formatGp(equippedGearValue()) + ").";
 		}
 		if (why == null && ch.getMinPrayerBonus() != null && equippedPrayerBonus() < ch.getMinPrayerBonus())
 		{
 			why = "prayer bonus " + equippedPrayerBonus() + " < min " + ch.getMinPrayerBonus();
-			reason = "Your equipped Prayer bonus is too low — need at least +"
+			reason = "Your equipped Prayer bonus is too low. Need at least +"
 				+ ch.getMinPrayerBonus() + " (you have +" + equippedPrayerBonus() + ").";
 		}
 		if (why == null && ch.getMinCrushDefence() != null && equippedCrushDefence() < ch.getMinCrushDefence())
 		{
 			why = "crush defence " + equippedCrushDefence() + " < min " + ch.getMinCrushDefence();
-			reason = "Your equipped Crush defence is too low — need at least "
+			reason = "Your equipped Crush defence is too low. Need at least "
 				+ ch.getMinCrushDefence() + " (you have " + equippedCrushDefence() + ").";
 		}
 		if (why == null && ch.getMinRangedDefence() != null && equippedRangedDefence() < ch.getMinRangedDefence())
 		{
 			why = "ranged defence " + equippedRangedDefence() + " < min " + ch.getMinRangedDefence();
-			reason = "Your equipped Ranged defence is too low — need at least "
+			reason = "Your equipped Ranged defence is too low. Need at least "
 				+ ch.getMinRangedDefence() + " (you have " + equippedRangedDefence() + ").";
 		}
 		if (why == null && ch.getMaxPlayerHitpoints() != null)
@@ -1209,7 +1209,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			if (hp > ch.getMaxPlayerHitpoints())
 			{
 				why = "hitpoints " + hp + " > max " + ch.getMaxPlayerHitpoints();
-				reason = "Your Hitpoints are too high — stay at " + ch.getMaxPlayerHitpoints()
+				reason = "Your Hitpoints are too high. Stay at " + ch.getMaxPlayerHitpoints()
 					+ " or below (you have " + hp + ").";
 			}
 		}
@@ -1221,12 +1221,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 				if (Boolean.TRUE.equals(ch.getNoPrayerLoss()) && prayer < s.lastPrayerPoints)
 				{
 					why = "prayer dropped " + s.lastPrayerPoints + " -> " + prayer;
-					reason = "You lost a Prayer point — this challenge must be done without losing any.";
+					reason = "You lost a Prayer point. This challenge must be done without losing any.";
 				}
 				else if (Boolean.TRUE.equals(ch.getNoPrayerRestore()) && prayer > s.lastPrayerPoints)
 				{
 					why = "prayer restored " + s.lastPrayerPoints + " -> " + prayer;
-					reason = "You restored Prayer points — this challenge must be done without restoring any.";
+					reason = "You restored Prayer points. This challenge must be done without restoring any.";
 				}
 			}
 			s.lastPrayerPoints = prayer;
@@ -1238,7 +1238,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				why = "prayer " + prayer + " > max " + ch.getMaxPrayer();
 				reason = "Your Prayer points went above " + ch.getMaxPrayer()
-					+ " — keep them at or below that.";
+					+ ". Keep them at or below that.";
 			}
 		}
 		if (why == null && ch.getMaxDefenceBonus() != null)
@@ -1248,7 +1248,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				why = "defence bonus " + def + " > max " + ch.getMaxDefenceBonus();
 				reason = "A Defence bonus went above +" + ch.getMaxDefenceBonus()
-					+ " (highest is +" + def + ") — keep them at or below that.";
+					+ " (highest is +" + def + "). Keep them at or below that.";
 			}
 		}
 		if (why == null && ch.getMinEmptyInventorySlots() != null)
@@ -1591,7 +1591,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		else
 		{
 			log.debug("[RAIDCHALLENGE-DEBUG] {} died without a vengeance rebound this tick", task.getTaskId());
-			announceFailure(task, "The finishing blow wasn't a Vengeance rebound — Vengeance must land the kill.");
+			announceFailure(task, "The finishing blow wasn't a Vengeance rebound. Vengeance must land the kill.");
 			resetAttempt(s);
 		}
 	}
@@ -2134,7 +2134,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 	{
 		if (ch.getMinRaidLevel() != null && raidLevel(ch) < ch.getMinRaidLevel())
 		{
-			return "Raid level was too low — need " + ch.getMinRaidLevel()
+			return "Raid level was too low. Need " + ch.getMinRaidLevel()
 				+ "+ (was " + raidLevel(ch) + ").";
 		}
 		if (Boolean.TRUE.equals(ch.getSolo()) && teamSize(ch) != 1)
@@ -2146,11 +2146,11 @@ public class RaidChallengeModule extends AbstractTaskModule
 			int weight = client.getWeight();
 			if (ch.getMinWeightKg() != null && weight < ch.getMinWeightKg())
 			{
-				return "Your weight was too low — need at least " + ch.getMinWeightKg() + "kg.";
+				return "Your weight was too low. Need at least " + ch.getMinWeightKg() + "kg.";
 			}
 			if (ch.getMaxWeightKg() != null && weight > ch.getMaxWeightKg())
 			{
-				return "Your weight was too high — must be at most " + ch.getMaxWeightKg() + "kg.";
+				return "Your weight was too high. Must be at most " + ch.getMaxWeightKg() + "kg.";
 			}
 			if (ch.getMaxGearValue() != null && equippedGearValue() >= ch.getMaxGearValue())
 			{
