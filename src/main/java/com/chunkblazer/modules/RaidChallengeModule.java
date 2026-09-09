@@ -111,6 +111,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		final Set<Integer> obtainedGroups = new HashSet<>();       // obtain_all: group indices completed this window
 		final Map<Integer, Integer> obtainSnapshot = new HashMap<>(); // item id -> last-seen inventory count
 		boolean encounterActive;  // defeat_npc: true from first hit on the target until it dies
+		int encounterStartTick = -1; // max_defeat_ticks: tick the current encounter opened (-1 = none)
 		boolean arenaHpGateLatched; // arena_hp_gate: the watched NPC has hit the HP threshold this attempt
 		int defeatCount;          // defeat_count: counted kills so far this fight window
 		int hitStreak;            // consecutive_hitsplat_value: back-to-back matching hits so far
@@ -534,6 +535,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			}
 			resetAttempt(s);          // fresh fight — clear any stale violation/flags
 			s.encounterActive = true;
+			s.encounterStartTick = client.getTickCount();
 			log.debug("[RAIDCHALLENGE-DEBUG] {} encounter START (npc={})", task.getTaskId(), npcId);
 		}
 
@@ -850,10 +852,14 @@ public class RaidChallengeModule extends AbstractTaskModule
 				{
 					boolean gates = gatesPass(ch);
 					boolean pit = pointInTimeOk(ch);
-					log.debug("[RAIDCHALLENGE-DEBUG] {} defeat_npc {} died; violated={} gates={} pointInTime={}",
-						task.getTaskId(), id, s.violated, gates, pit);
+					// max_defeat_ticks: the kill must land within N ticks of the first hit
+					// ("defeat a Manticore in 24 seconds"). A slow kill fails the attempt.
+					boolean tooSlow = ch.getMaxDefeatTicks() != null && s.encounterStartTick >= 0
+						&& (client.getTickCount() - s.encounterStartTick) > ch.getMaxDefeatTicks();
+					log.debug("[RAIDCHALLENGE-DEBUG] {} defeat_npc {} died; violated={} gates={} pointInTime={} tooSlow={}",
+						task.getTaskId(), id, s.violated, gates, pit, tooSlow);
 					s.encounterActive = false;
-					if (!s.violated && gates && pit)
+					if (!s.violated && gates && pit && !tooSlow)
 					{
 						complete(task, s);
 					}
@@ -861,7 +867,10 @@ public class RaidChallengeModule extends AbstractTaskModule
 					{
 						if (!s.violated)
 						{
-							announceFailure(task, gateFailReason(ch, pit));
+							announceFailure(task, tooSlow
+								? "You did not defeat it fast enough. Kill it within "
+									+ ch.getMaxDefeatTicks() + " ticks."
+								: gateFailReason(ch, pit));
 						}
 						resetAttempt(s);
 					}
@@ -1556,6 +1565,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		s.obtainedGroups.clear();
 		s.obtainSnapshot.clear();
 		s.encounterActive = false;
+		s.encounterStartTick = -1;
 		s.arenaHpGateLatched = false;
 		s.defeatCount = 0;
 		s.hitStreak = 0;

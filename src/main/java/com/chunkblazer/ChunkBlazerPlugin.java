@@ -2944,6 +2944,36 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("zuk");
 		}
+		// Desert Treasure II bosses share one chunk (the Ancient Vault), each earning its own
+		// token via boss_keys. The Leviathan (solo, instanced) gates on its KC line.
+		else if (plain.contains("leviathan") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("leviathan");
+		}
+		// The Whisperer (solo, instanced) is a second Ancient Vault boss. Gate on its KC
+		// line "Your Whisperer kill count is: N", earning its own token via boss_keys.
+		else if (plain.contains("whisperer") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("whisperer");
+		}
+		// Duke Sucellus (solo, instanced) is a third Ancient Vault boss. Gate on its KC
+		// line "Your Duke Sucellus kill count is: N", earning its own token via boss_keys.
+		else if (plain.contains("duke sucellus") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("duke_sucellus");
+		}
+		// Vardorvis (solo, instanced) is the fourth and last Ancient Vault boss. Gate on
+		// its KC line "Your Vardorvis kill count is: N", earning its own token via boss_keys.
+		else if (plain.contains("vardorvis") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("vardorvis");
+		}
+		// Fortis Colosseum (solo, instanced) — clearing it prints "Your Sol Heredit kill
+		// count is: N" alongside the run duration, which fires only on a full clear.
+		else if (plain.contains("sol heredit") && plain.contains("kill count is"))
+		{
+			recordBossCompletion("sol_heredit");
+		}
 	}
 
 	/**
