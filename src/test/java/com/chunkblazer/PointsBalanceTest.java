@@ -318,6 +318,21 @@ class PointsBalanceTest
 	}
 
 	/**
+	 * Owns the granted start chunk (region 12850, excluded from the paid rank) plus
+	 * {@code paid} payable chunks, mirroring a real account: the starter is in the
+	 * unlocked set but was never sold, so only the paid chunks drive the curve.
+	 */
+	private void ownsStartChunkPlusPaid(int paid)
+	{
+		StringBuilder ids = new StringBuilder("12850"); // DEFAULT_START_REGION
+		for (int i = 0; i < paid; i++)
+		{
+			ids.append(',').append(12800 + i);
+		}
+		lenient().when(config.unlockedChunks()).thenReturn(ids.toString());
+	}
+
+	/**
 	 * any(Object.class), not a bare any(): per-account writes go through
 	 * setAccountState(String, Object), which binds ConfigManager's generic
 	 * setConfiguration(String, String, T). An untyped any() can resolve to the
@@ -385,12 +400,16 @@ class PointsBalanceTest
 	{
 		seedEarned(SWITCH_EARNED);
 		when(config.pointsSpent()).thenReturn(SWITCH_SERVER_SPENT);
-		ownsChunks(40);                 // 40 owned, minus the granted start chunk
+		// The granted start chunk (region 12850) plus 39 PAID chunks. Under the
+		// scaling unlock curve the real spend is the running sum curveUnlockCost(1..39),
+		// not 39 flat points — so the repair rebuilds to that, not to 39.
+		ownsStartChunkPlusPaid(39);
 
 		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
 
-		assertEquals(39, capturedInt("pointsSpent"),
-			"spend must come from chunks actually owned, not the corrupt counter");
+		int expected = ChunkBlazerPlugin.curveLedgerTotal(39); // 109 with the shipped curve
+		assertEquals(expected, capturedInt("pointsSpent"),
+			"spend must be rebuilt from the curve cost of the chunks actually owned");
 	}
 
 	/** A healthy account is never touched. */
