@@ -591,7 +591,13 @@ public class ChunkBlazerPlugin extends Plugin
 			// destructive, so it would erase the account's real progress. Losing
 			// one session's unsynced play is recoverable; erasing the server copy
 			// is not.
-			PlayerSyncRequest finalSync = serverStateMerged ? buildSyncRequest() : null;
+			// isAccountStateAvailable() guard is the logout-race fix: rsProfileKey can go
+			// null before this handler runs (AccountHashChanged/WorldChanged are unordered
+			// vs this), and with reads coming from RSProfile a null key makes buildSyncRequest
+			// read EMPTY and push it over the server record. Skipping a logout sync loses at
+			// most one unsynced session (re-synced next login); pushing empty is unrecoverable.
+			PlayerSyncRequest finalSync = (serverStateMerged && isAccountStateAvailable())
+				? buildSyncRequest() : null;
 			if (finalSync != null && config.apiEnabled())
 			{
 				apiClient.syncPlayerState(finalSync)
@@ -602,6 +608,11 @@ public class ChunkBlazerPlugin extends Plugin
 			{
 				log.warn("[CHUNKBLAZER] skipping logout sync — server state was never "
 					+ "merged this session, so local progress is not authoritative");
+			}
+			else
+			{
+				log.warn("[CHUNKBLAZER] skipping logout sync — RS profile already cleared, so "
+					+ "per-account state is unreadable and a sync would push empty over the record");
 			}
 			// Logout beacon — tells the server we're offline now so it can snapshot
 			// this just-ended session's hi-scores immediately instead of waiting for
@@ -717,6 +728,9 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		log.info("[CHUNKBLAZER] RS profile available — bootstrapping account state");
+		// One-time move of any legacy profile-global progress into this account's RSProfile,
+		// BEFORE the bootstrap, so ensureStartingChunkUnlocked sees the migrated unlocks.
+		migrateLegacyGlobalStateToRSProfile();
 		ensureStartingChunkUnlocked();
 		loadActiveTasks();
 		if (panel != null)
@@ -1034,7 +1048,7 @@ public class ChunkBlazerPlugin extends Plugin
 		boolean wasAlreadyUnlocked = getUnlockedRegionIds().contains(String.valueOf(regionId));
 
 		// Add to unlocked list without deducting points
-		String unlocked = config.unlockedChunks();
+		String unlocked = acStr("unlockedChunks", "12850");
 		if (unlocked == null || unlocked.isEmpty())
 		{
 			unlocked = String.valueOf(regionId);
@@ -1090,7 +1104,7 @@ public class ChunkBlazerPlugin extends Plugin
 		boolean needsUpdate = false;
 
 		// Start with current unlocked regions
-		String existing = config.unlockedChunks();
+		String existing = acStr("unlockedChunks", "12850");
 		if (existing != null && !existing.isEmpty())
 		{
 			newUnlocked.append(existing);
@@ -1626,7 +1640,7 @@ public class ChunkBlazerPlugin extends Plugin
 	// whose it is — see progressionBaselineOwner().
 	private static final String BASELINE_OWNER_SEP = "|";
 
-	// Parsed form of config.progressionBaseline(). Cached because the panel asks
+	// Parsed form of acStr("progressionBaseline", ""). Cached because the panel asks
 	// about visibility once per task per repaint (239 progression rungs), and the
 	// value is immutable once frozen. cachedBaselineOwner records which account
 	// it was parsed for, so hopping accounts can't reuse the wrong one.
@@ -1669,7 +1683,7 @@ public class ChunkBlazerPlugin extends Plugin
 			return cachedProgressionBaseline;
 		}
 
-		String raw = config.progressionBaseline();
+		String raw = acStr("progressionBaseline", "");
 		Map<String, Integer> parsed = new HashMap<>();
 		if (raw != null && raw.contains(BASELINE_OWNER_SEP))
 		{
@@ -1907,7 +1921,7 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	public void migrateRepairBogusProgressionBaseline()
 	{
-		String raw = config.progressionBaseline();
+		String raw = acStr("progressionBaseline", "");
 		if (raw == null || raw.trim().isEmpty())
 		{
 			return;
@@ -2182,7 +2196,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public GameMode getGameMode()
 	{
-		String hash = config.accountModeHash();
+		String hash = acStr("accountModeHash", "");
 		if (hash != null && !hash.isEmpty() && hash.contains(":"))
 		{
 			String modeName = hash.split(":")[1];
@@ -2195,7 +2209,7 @@ public class ChunkBlazerPlugin extends Plugin
 				return GameMode.CASUAL;
 			}
 		}
-		return config.gameMode();
+		return acGameMode();
 	}
 
 	public boolean isLoggedIn()
@@ -2205,7 +2219,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public boolean isModeLocked()
 	{
-		String hash = config.accountModeHash();
+		String hash = acStr("accountModeHash", "");
 		if (hash == null || hash.isEmpty())
 		{
 			return false;
@@ -2636,8 +2650,8 @@ public class ChunkBlazerPlugin extends Plugin
 	 * Turn server sync on from the panel's first-run prompt. Flips the config, then
 	 * logs in right away if we're already in-game (otherwise the next LOGGED_IN /
 	 * heartbeat picks it up). Accumulated offline progress uploads on the first sync
-	 * after login: reconcileAccountState adopts the local state (no prior owner tag),
-	 * and that first push is pure growth, so the drop guard never fires. Enabling
+	 * after login: the account's own RSProfile state is what gets pushed, and that
+	 * first push is pure growth, so the drop guard never fires. Enabling
 	 * mid-session also lets the catalog + sounds start fetching (both gate on this).
 	 */
 	public void enableServerSync()
@@ -3202,16 +3216,16 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private static final String CONFIG_GROUP = "chunkblazer";
 
-	// pointsSpent was added by the points-balance work AFTER this array was
-	// written, and was never added here. clearAccountState() therefore wiped an
-	// alt's EARNED points while leaving the main's SPEND in place — and the
-	// balance is (earned - spent), so the alt was clamped to 0 and could not
-	// unlock anything until it had out-earned the main's total spending.
-	private static final String[] ACCOUNT_STATE_KEYS = {
+	// Every per-account key copied from the legacy profile-global store into RSProfile,
+	// once, by its owning account (see migrateLegacyGlobalStateToRSProfile). Also the full
+	// set of keys the RSProfile store holds. apiKey is excluded on purpose (a user-typed
+	// @ConfigItem, profile-scoped by construction).
+	private static final String[] MIGRATION_KEYS = {
 		"unlockedChunks", "completedTasks", "assignedTasks", "regionRolledTasks",
 		"currentTaskId", "currentTaskQuantity", "currentTaskProgress",
 		"totalPoints", "pointsSpent", "bossTokens", "taskProgressData",
 		"progressionBaseline", "bossCompletions",
+		"unrevealedTasks", "gameMode", "accountModeHash",
 	};
 
 	// --- Per-account state accessors ---------------------------------------
@@ -3246,7 +3260,66 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private String getAccountState(String key)
 	{
-		return configManager.getConfiguration(CONFIG_GROUP, key);
+		return configManager.getRSProfileConfiguration(CONFIG_GROUP, key);
+	}
+
+	/**
+	 * Typed per-account reads over the RSProfile store. Every per-account read routes
+	 * through {@link #getAccountState} (now RSProfile-scoped, so multiple accounts on one
+	 * RuneLite profile keep fully independent progress) and applies the same default the
+	 * old typed accessor did. {@code getRSProfileConfiguration} returns null when no
+	 * account is active, which yields the default here — a read before login must never
+	 * be mistaken for real, empty data.
+	 */
+	private String acStr(String key, String def)
+	{
+		String v = getAccountState(key);
+		return v != null ? v : def;
+	}
+
+	private int acInt(String key, int def)
+	{
+		String v = getAccountState(key);
+		if (v == null || v.isEmpty())
+		{
+			return def;
+		}
+		try
+		{
+			return Integer.parseInt(v.trim());
+		}
+		catch (NumberFormatException e)
+		{
+			return def;
+		}
+	}
+
+	/** Current per-account game mode, read from the RSProfile store (default Casual). */
+	private GameMode acGameMode()
+	{
+		String v = getAccountState("gameMode");
+		if (v == null || v.isEmpty())
+		{
+			return GameMode.CASUAL;
+		}
+		try
+		{
+			return GameMode.valueOf(v);
+		}
+		catch (IllegalArgumentException e)
+		{
+			return GameMode.CASUAL;
+		}
+	}
+
+	/**
+	 * Raw stored value of the pending (unrevealed) task list. The card overlay reads this
+	 * for cheap change-detection; exposed so that read goes through the per-account
+	 * abstraction rather than the global typed accessor.
+	 */
+	public String getUnrevealedTasksRaw()
+	{
+		return acStr("unrevealedTasks", "");
 	}
 
 	/**
@@ -3255,10 +3328,10 @@ public class ChunkBlazerPlugin extends Plugin
 	 * default of {@code "12850"}.
 	 *
 	 * <p>Those two states are indistinguishable through the typed accessor, and
-	 * that gap shipped a bug. {@link #clearAccountState} unsets the key on an
-	 * account switch; {@link #mergeUnlockedRegionsFromServer} then returns early
+	 * that gap shipped a bug. The old account-switch wipe unset the key, and
+	 * {@link #mergeUnlockedRegionsFromServer} then returned early
 	 * for an account the server has no regions for (i.e. every brand-new one), so
-	 * nothing rewrites it. {@code config.unlockedChunks()} still answered
+	 * nothing rewrote it. {@code ChunkBlazerConfig#unlockedChunks()} still answered
 	 * {@code "12850"} from the default, so {@link #ensureStartingChunkUnlocked}
 	 * concluded there was nothing to do and never persisted anything.
 	 *
@@ -3283,138 +3356,115 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Write one per-account value.
+	 * Write one per-account value into the RSProfile store.
 	 *
-	 * <p>Deliberately WARNS AND WRITES when no account is known, rather than
-	 * refusing. Storage is still profile-scoped, so the write does land; the
-	 * warning exists to enumerate — from a real session's log rather than from
-	 * guesswork — every code path that writes progress before RuneLite can say
-	 * whose it is. Each one of those is a write that would silently vanish the
-	 * moment the backing store moves to RSProfile.
-	 *
-	 * <p>When the store moves, this becomes a hard refusal.
+	 * <p>HARD REFUSAL when no account is active: {@code setRSProfileConfiguration}
+	 * silently drops writes issued with no RS profile (it logs "trying to create a
+	 * profile while not logged in" and returns). Writing anyway would vanish, so the
+	 * bootstrap must be gated on {@link #isAccountStateAvailable()} rather than relying
+	 * on this to land — every per-account writer runs from {@code onRuneScapeProfileChanged}
+	 * or later, once the profile is known.
 	 */
 	private void setAccountState(String key, Object value)
 	{
+		if (!isAccountStateAvailable())
+		{
+			log.warn("[CHUNKBLAZER] per-account write '{}' refused — no RS profile is active, so an "
+				+ "RSProfile write would be silently dropped. This caller must be gated on the profile.", key);
+			return;
+		}
 		// Skip no-op writes: a single completion can re-run the same save path
 		// several times per tick with identical data. Rewriting the stored value
 		// fires a redundant ConfigChanged and disk write for nothing.
 		String newVal = value == null ? null : String.valueOf(value);
-		if (newVal != null && newVal.equals(configManager.getConfiguration(CONFIG_GROUP, key)))
+		if (newVal != null && newVal.equals(getAccountState(key)))
 		{
 			return;
 		}
+		configManager.setRSProfileConfiguration(CONFIG_GROUP, key, value);
+	}
+
+	/**
+	 * One-time move of a legacy account's progress from the old profile-global store into
+	 * its own RSProfile store. Runs from {@link #onRuneScapeProfileChanged} when the profile
+	 * first becomes available. Follows docs/RSPROFILE-MIGRATION-PLAN.md section 4:
+	 * <ul>
+	 *   <li>The PRESENCE of the destination (RSProfile unlockedChunks/completedTasks) is the
+	 *       completion marker, never a boolean flag that could be set without the data moving.</li>
+	 *   <li>Only a blob this account OWNS is migrated (accountModeHash / accountStateOwner tag);
+	 *       a foreign blob is left untouched for its own account to migrate on its next login.</li>
+	 *   <li>Copy only: the global originals are KEPT this release as the sole rollback and are
+	 *       inert now that every read comes from RSProfile. Cleanup is a later release.</li>
+	 * </ul>
+	 */
+	private void migrateLegacyGlobalStateToRSProfile()
+	{
 		if (!isAccountStateAvailable())
 		{
-			log.warn("[CHUNKBLAZER] per-account write '{}' issued with no RS profile available — "
-				+ "harmless today (storage is still profile-scoped) but this write would be "
-				+ "SILENTLY DISCARDED once the store moves to RSProfile. Gate this caller.", key);
+			return;
 		}
-		configManager.setConfiguration(CONFIG_GROUP, key, value);
-	}
-
-	/**
-	 * Stop one account's progress leaking into another's.
-	 *
-	 * <p>ChunkBlazer's progress lives in RuneLite config, which is scoped to the
-	 * PROFILE, not the account. Before this, an alt logging in on the same
-	 * profile would find the main's completed tasks still sitting there;
-	 * {@link #hydrateFromLoginResponse} only fills state in when local is EMPTY,
-	 * so it skipped, and the next sync — which is destructive and
-	 * client-authoritative — wrote the main's progress over the alt's server
-	 * record. Silent, and it destroyed the alt's real data.
-	 *
-	 * <p>So the profile records WHOSE progress it currently holds. On a
-	 * mismatch, the old account's state is cleared and hydration (running
-	 * immediately after this) repopulates from the server record of the account
-	 * actually logging in.
-	 *
-	 * <p>Only ever called from a SUCCESSFUL login response, which matters: the
-	 * wipe is safe precisely because the server has just told us the authoritative
-	 * state for this account. It must never run off a failed or offline login,
-	 * or it would discard progress with nothing to restore it from.
-	 *
-	 * <p>Not a substitute for per-account config (RuneLite's
-	 * {@code setRSProfileConfiguration}) — that would let two accounts coexist on
-	 * one profile. This keeps the plugin's existing one-account-at-a-time model
-	 * and just stops it corrupting data.
-	 */
-	private void reconcileAccountState(String rsn)
-	{
-		String owner = hashRsn(rsn);
-		String stored = config.accountStateOwner();
-
-		if (owner.equals(stored))
+		// (1) Destination already populated: this account migrated already, or was born
+		// under RSProfile. Never run again.
+		if (configManager.getRSProfileConfiguration(CONFIG_GROUP, "unlockedChunks") != null
+			|| configManager.getRSProfileConfiguration(CONFIG_GROUP, "completedTasks") != null)
 		{
 			return;
 		}
-
-		if (stored == null || stored.isEmpty())
+		// (2) Nothing in the legacy store: nothing to move.
+		boolean anyLegacy = false;
+		for (String key : MIGRATION_KEYS)
 		{
-			// First login after this shipped — there is no owner tag yet, and the
-			// local progress is almost always this player's own, so the default
-			// is to ADOPT it. Wiping on sight would delete every existing
-			// player's progress on upgrade.
-			//
-			// accountModeHash is the one pre-existing per-account tag (format
-			// "<rsnHash>:<MODE>"), so when it IS present it settles the question
-			// without guessing: a mismatch proves the resident state belongs to a
-			// different account, and adopting it would let this account sync over
-			// that account's server record — the exact corruption this method
-			// exists to stop. Absent (mode never locked) → fall through to adopt.
-			if (localStateBelongsToAnotherAccount(owner))
+			if (configManager.getConfiguration(CONFIG_GROUP, key) != null)
 			{
-				log.warn("[CHUNKBLAZER] untagged local progress belongs to a different account "
-					+ "(per accountModeHash) — clearing it rather than letting {} adopt it", rsn);
-				clearAccountState(owner);
-				addPluginChatMessage("Different account detected. Loading " + rsn + "'s progress.");
-				return;
+				anyLegacy = true;
+				break;
 			}
-
-			configManager.setConfiguration("chunkblazer", "accountStateOwner", owner);
+		}
+		if (!anyLegacy)
+		{
 			return;
 		}
-
-		log.warn("[CHUNKBLAZER] account switch detected on this RuneLite profile — "
-			+ "clearing the previous account's local progress so {}'s own state can load "
-			+ "from the server", rsn);
-
-		clearAccountState(owner);
-		addPluginChatMessage("Different account detected. Loading " + rsn + "'s progress.");
-	}
-
-	/**
-	 * Whether the progress sitting in this profile demonstrably belongs to some
-	 * other account, judged by {@code accountModeHash} ("&lt;rsnHash&gt;:&lt;MODE&gt;").
-	 * Only ever returns true on a POSITIVE mismatch — an absent or malformed tag
-	 * yields false, so the caller adopts rather than destroys progress it can't
-	 * prove is foreign.
-	 */
-	private boolean localStateBelongsToAnotherAccount(String owner)
-	{
-		String modeHash = config.accountModeHash();
-		if (modeHash == null || !modeHash.contains(":"))
+		// (3) Ownership evidence: migrate only a blob that belongs to THIS account.
+		String rsn = getPlayerName();
+		if (rsn == null)
 		{
-			return false;
+			return; // name not loaded yet; this fires again once it is
 		}
-		return !modeHash.startsWith(owner);
-	}
-
-	/** Drop every per-account key plus the in-memory mirrors, and take ownership. */
-	private void clearAccountState(String owner)
-	{
-		for (String key : ACCOUNT_STATE_KEYS)
+		String owner = hashRsn(rsn);
+		String modeHash = configManager.getConfiguration(CONFIG_GROUP, "accountModeHash");   // "<rsnHash>:<MODE>"
+		String storedOwner = configManager.getConfiguration(CONFIG_GROUP, "accountStateOwner");
+		boolean mine;
+		if (modeHash != null && modeHash.contains(":"))
 		{
-			configManager.unsetConfiguration("chunkblazer", key);
+			mine = modeHash.startsWith(owner);
 		}
-		configManager.setConfiguration("chunkblazer", "accountStateOwner", owner);
-
-		activeTasks.clear();
-		activeTask = null;
-		completedTaskCache.clear();
-		cachedProgressionBaseline = null;
-		cachedBaselineOwner = null;
-		taskModuleManager.clearTask();
+		else if (storedOwner != null && !storedOwner.isEmpty())
+		{
+			mine = owner.equals(storedOwner);
+		}
+		else
+		{
+			mine = true; // no tag: the overwhelmingly common single-account case
+		}
+		if (!mine)
+		{
+			log.info("[CHUNKBLAZER] legacy global progress belongs to a different account; {} starts "
+				+ "clean under RSProfile (foreign blob left for its owner to migrate)", rsn);
+			return;
+		}
+		// (4) Copy into RSProfile; never clobber a value already there. Keep the originals.
+		int copied = 0;
+		for (String key : MIGRATION_KEYS)
+		{
+			String legacy = configManager.getConfiguration(CONFIG_GROUP, key);
+			if (legacy != null && configManager.getRSProfileConfiguration(CONFIG_GROUP, key) == null)
+			{
+				configManager.setRSProfileConfiguration(CONFIG_GROUP, key, legacy);
+				copied++;
+			}
+		}
+		log.info("[CHUNKBLAZER] migrated {} legacy key(s) into the RSProfile store for {} "
+			+ "(global originals kept as rollback this release)", copied, rsn);
 	}
 
 	/**
@@ -3491,7 +3541,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return;
 		}
-		String localRoll = config.regionRolledTasks();
+		String localRoll = acStr("regionRolledTasks", "");
 		if (localRoll != null && !localRoll.isEmpty())
 		{
 			return; // local roll is authoritative — never clobber it
@@ -3533,12 +3583,11 @@ public class ChunkBlazerPlugin extends Plugin
 				return;
 			}
 
-			// MUST run before the hydrate steps below. If this login is a
-			// different account than the one whose state is sitting in config,
-			// that state is cleared here so the "hydrate only when local is
-			// empty" rules below actually fire and repopulate from THIS account's
-			// server record.
-			reconcileAccountState(rsn);
+			// Account isolation is now structural: per-account state lives in the
+			// RSProfile store, so a different account simply reads a different store and
+			// there is nothing to reconcile or wipe. The old reconcileAccountState() call
+			// (and its accountStateOwner tag / clearAccountState wipe) is retired; the
+			// merge steps below union this account's RSProfile state with its server record.
 
 			// 1. Mode lock reconciliation, both directions.
 			if (response.isModeLocked() && response.getGameMode() != null && !isModeLocked())
@@ -3614,10 +3663,10 @@ public class ChunkBlazerPlugin extends Plugin
 			// maximum is the correct merge and is safe across profiles), and
 			// the balance falls out of the two.
 			deriveInitialPointsSpent();
-			if (pdata != null && pdata.getPointsSpent() > config.pointsSpent())
+			if (pdata != null && pdata.getPointsSpent() > acInt("pointsSpent", 0))
 			{
 				log.info("[CHUNKBLAZER] restored points spent from the server (had {}, now {})",
-					config.pointsSpent(), pdata.getPointsSpent());
+					acInt("pointsSpent", 0), pdata.getPointsSpent());
 				setAccountState("pointsSpent", pdata.getPointsSpent());
 			}
 			// AFTER the monotonic merge, deliberately. The corrupt figure this
@@ -3750,6 +3799,12 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return;
 		}
+		if (!isAccountStateAvailable())
+		{
+			// No RS profile active: per-account reads return null, so a sync would push
+			// empty state over the server record. Refuse outright (RSPROFILE plan section 3).
+			return;
+		}
 		if (!serverStateMerged)
 		{
 			// The login response hasn't been merged yet. Syncing now would push
@@ -3862,14 +3917,14 @@ public class ChunkBlazerPlugin extends Plugin
 			// clientPoints is the BALANCE, kept for the Tier-0 mismatch check;
 			// pointsSpent is what actually needs preserving server-side, since
 			// the balance is derived and the server has no concept of spending.
-			.clientPoints(config.totalPoints())
-			.pointsSpent(config.pointsSpent())
+			.clientPoints(acInt("totalPoints", 0))
+			.pointsSpent(acInt("pointsSpent", 0))
 			.completedTasks(completed)
 			.bossCompletions(new ArrayList<>(getCompletedBossKeys()))
 			// The roll + reveal state, verbatim, so it survives a profile switch or
 			// reinstall instead of being regenerated wholesale on the next login.
-			.regionRolledTasks(config.regionRolledTasks())
-			.unrevealedTasks(config.unrevealedTasks())
+			.regionRolledTasks(acStr("regionRolledTasks", ""))
+			.unrevealedTasks(acStr("unrevealedTasks", ""))
 			.intentionalReset(pendingIntentionalReset)
 			.timestamp(System.currentTimeMillis())
 			.clientVersion("1.0.0")
@@ -3897,7 +3952,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public Set<String> getUnlockedRegionIds()
 	{
-		String chunkList = config.unlockedChunks();
+		String chunkList = acStr("unlockedChunks", "12850");
 		if (chunkList == null || chunkList.isEmpty())
 		{
 			return new HashSet<>();
@@ -4191,7 +4246,7 @@ public class ChunkBlazerPlugin extends Plugin
 		if (!settledIds.isEmpty())
 		{
 			LinkedHashSet<String> merged = new LinkedHashSet<>();
-			String existing = config.completedTasks();
+			String existing = acStr("completedTasks", "");
 			if (existing != null && !existing.isEmpty())
 			{
 				for (String s : existing.split(","))
@@ -4678,7 +4733,7 @@ public class ChunkBlazerPlugin extends Plugin
 	/** Task ids rolled but not yet flipped, in a stable order for a stable card layout. */
 	public List<String> getUnrevealedTaskIds()
 	{
-		String data = config.unrevealedTasks();
+		String data = acStr("unrevealedTasks", "");
 		if (data == null || data.isEmpty())
 		{
 			return new ArrayList<>();
@@ -4798,7 +4853,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public Set<String> getRolledTasksForRegion(int regionId)
 	{
-		String data = config.regionRolledTasks();
+		String data = acStr("regionRolledTasks", "");
 		if (data == null || data.isEmpty())
 		{
 			return new HashSet<>();
@@ -4840,7 +4895,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private void saveRolledTasksForRegion(int regionId, Set<String> taskIds)
 	{
-		String data = config.regionRolledTasks();
+		String data = acStr("regionRolledTasks", "");
 		Map<Integer, Set<String>> regionTasks = new HashMap<>();
 
 		// Parse existing data
@@ -4892,7 +4947,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private Set<String> getAssignedTaskIds()
 	{
-		String assigned = config.assignedTasks();
+		String assigned = acStr("assignedTasks", "");
 		if (assigned == null || assigned.isEmpty())
 		{
 			return new HashSet<>();
@@ -4905,7 +4960,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private void markTaskAssigned(String taskId)
 	{
-		String assigned = config.assignedTasks();
+		String assigned = acStr("assignedTasks", "");
 		if (assigned == null || assigned.isEmpty())
 		{
 			assigned = taskId;
@@ -5057,7 +5112,7 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void clearRolledTasksForRegion(int regionId)
 	{
-		String data = config.regionRolledTasks();
+		String data = acStr("regionRolledTasks", "");
 		if (data == null || data.isEmpty())
 		{
 			return;
@@ -5326,7 +5381,7 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
-		String completed = config.completedTasks();
+		String completed = acStr("completedTasks", "");
 		StringBuilder sb = new StringBuilder(completed == null ? "" : completed);
 		for (String taskId : taskIds)
 		{
@@ -5341,7 +5396,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private void markTaskCompleted(String taskId)
 	{
-		String completed = config.completedTasks();
+		String completed = acStr("completedTasks", "");
 		if (completed == null || completed.isEmpty())
 		{
 			completed = taskId;
@@ -5365,7 +5420,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private Set<String> getCompletedTaskIds()
 	{
-		String completed = config.completedTasks();
+		String completed = acStr("completedTasks", "");
 		if (completed == null || completed.isEmpty())
 		{
 			return new HashSet<>();
@@ -5430,7 +5485,7 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	public int findRegionForTask(String taskId)
 	{
-		String data = config.regionRolledTasks();
+		String data = acStr("regionRolledTasks", "");
 		if (data != null && !data.isEmpty())
 		{
 			for (String regionEntry : data.split("\\|"))
@@ -5745,7 +5800,7 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private int[] loadTaskProgressAndTarget(String taskId)
 	{
-		String data = config.taskProgressData();
+		String data = acStr("taskProgressData", "");
 		if (data == null || data.isEmpty())
 		{
 			return new int[]{0, 0};
@@ -5782,7 +5837,7 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	public void saveTaskProgress(String taskId, int progress, int targetQty)
 	{
-		String data = config.taskProgressData();
+		String data = acStr("taskProgressData", "");
 		Map<String, int[]> progressMap = new HashMap<>();
 
 		if (data != null && !data.isEmpty())
@@ -5851,12 +5906,12 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public int getTotalPoints()
 	{
-		return config.totalPoints();
+		return acInt("totalPoints", 0);
 	}
 
 	public int getCompletedTaskCount()
 	{
-		String completed = config.completedTasks();
+		String completed = acStr("completedTasks", "");
 		if (completed == null || completed.isEmpty())
 		{
 			return 0;
@@ -5920,7 +5975,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private void addPoints(int points)
 	{
-		int current = config.totalPoints();
+		int current = acInt("totalPoints", 0);
 		setAccountState("totalPoints", current + points);
 	}
 
@@ -5976,7 +6031,7 @@ public class ChunkBlazerPlugin extends Plugin
 	private void recomputePointsBalance()
 	{
 		int earned = computeEarnedPoints();
-		int spent = config.pointsSpent();
+		int spent = acInt("pointsSpent", 0);
 		int balance = Math.max(0, earned - spent);
 
 		// max(0, ...) silently absorbs a state that play cannot produce, and that
@@ -5991,10 +6046,10 @@ public class ChunkBlazerPlugin extends Plugin
 				spent, earned);
 		}
 
-		if (balance != config.totalPoints())
+		if (balance != acInt("totalPoints", 0))
 		{
 			log.info("[CHUNKBLAZER] points balance recomputed: earned {} - spent {} = {} (was {})",
-				earned, spent, balance, config.totalPoints());
+				earned, spent, balance, acInt("totalPoints", 0));
 			setAccountState("totalPoints", balance);
 		}
 	}
@@ -6006,7 +6061,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return;
 		}
-		setAccountState("pointsSpent", config.pointsSpent() + cost);
+		setAccountState("pointsSpent", acInt("pointsSpent", 0) + cost);
 		recomputePointsBalance();
 	}
 
@@ -6023,18 +6078,18 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void deriveInitialPointsSpent()
 	{
-		if (config.pointsSpent() > 0)
+		if (acInt("pointsSpent", 0) > 0)
 		{
 			return;
 		}
 
 		// The whole derivation rests on the local balance being a REAL record of
 		// past spending. When the key is absent that reading is not merely
-		// unreliable, it is inverted: config.totalPoints() answers 0 from its
+		// unreliable, it is inverted: acInt("totalPoints", 0) answers 0 from its
 		// default, and "balance 0" is then taken to mean SPENT EVERYTHING when it
 		// actually means NOTHING IS KNOWN.
 		//
-		// clearAccountState() unsets totalPoints and pointsSpent together, so
+		// The old account-switch wipe unset totalPoints and pointsSpent together, so
 		// every account switch landed in exactly that state and charged the
 		// incoming account its entire lifetime earnings. Cruk, 2026-08-01
 		// 17:23:19 — cleared, then "earned 414 - balance 0 = 414" one line later.
@@ -6053,7 +6108,7 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		int earned = computeEarnedPoints();
-		int balance = config.totalPoints();
+		int balance = acInt("totalPoints", 0);
 		if (earned <= 0 || balance >= earned)
 		{
 			return;
@@ -6107,7 +6162,7 @@ public class ChunkBlazerPlugin extends Plugin
 	private void migrateRepairImpossiblePointsSpent()
 	{
 		int earned = computeEarnedPoints();
-		int spent = config.pointsSpent();
+		int spent = acInt("pointsSpent", 0);
 		if (earned <= 0 || spent <= earned)
 		{
 			return;
@@ -6140,7 +6195,7 @@ public class ChunkBlazerPlugin extends Plugin
 	/** Current Boss Token balance. New players start with 2 (config default). */
 	public int getBossTokens()
 	{
-		return config.bossTokens();
+		return acInt("bossTokens", 2);
 	}
 
 	/**
@@ -6151,7 +6206,7 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	public void addBossTokens(int amount)
 	{
-		int updated = Math.max(0, config.bossTokens() + amount);
+		int updated = Math.max(0, acInt("bossTokens", 2) + amount);
 		setAccountState("bossTokens", updated);
 		if (panel != null)
 		{
@@ -6166,7 +6221,7 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	public boolean spendBossToken()
 	{
-		int current = config.bossTokens();
+		int current = acInt("bossTokens", 2);
 		if (current <= 0)
 		{
 			return false;

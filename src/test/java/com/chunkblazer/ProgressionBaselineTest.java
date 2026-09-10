@@ -41,6 +41,8 @@ class ProgressionBaselineTest
 	@Mock
 	private ConfigManager configManager;
 
+	private java.util.Map<String, String> writes;
+
 	@Mock
 	private Client client;
 
@@ -57,6 +59,7 @@ class ProgressionBaselineTest
 		plugin = new ChunkBlazerPlugin();
 		setField(plugin, "config", config);
 		setField(plugin, "configManager", configManager);
+		writes = RsProfileTestSupport.install(configManager, config);
 		setField(plugin, "client", client);
 
 		// Baselines are tagged with the owning account's RSN hash, so the tests
@@ -211,7 +214,7 @@ class ProgressionBaselineTest
 		Map<String, Integer> baseline = ensureBaseline();
 
 		assertTrue(baseline.isEmpty(), "no baseline may be derived from an unloaded skill table");
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("progressionBaseline"), any());
+		assertFalse(writes.containsKey("progressionBaseline"), "no progressionBaseline write");
 	}
 
 	@Test
@@ -227,9 +230,9 @@ class ProgressionBaselineTest
 		assertEquals(75, baseline.get("HITPOINTS"));
 		assertEquals(70, baseline.get("THIEVING"));
 
-		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
-		verify(configManager).setConfiguration(eq("chunkblazer"), eq("progressionBaseline"), written.capture());
-		assertTrue(String.valueOf(written.getValue()).contains("HITPOINTS:75"), String.valueOf(written.getValue()));
+		String written = writes.get("progressionBaseline");
+		assertNotNull(written, "expected a progressionBaseline write");
+		assertTrue(written.contains("HITPOINTS:75"), written);
 	}
 
 	@Test
@@ -240,7 +243,7 @@ class ProgressionBaselineTest
 		Map<String, Integer> baseline = ensureBaseline();
 
 		assertEquals(42, baseline.get("HITPOINTS"));
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("progressionBaseline"), any());
+		assertFalse(writes.containsKey("progressionBaseline"), "no progressionBaseline write");
 		verify(client, never()).getRealSkillLevel(any(Skill.class));
 	}
 
@@ -414,10 +417,10 @@ class ProgressionBaselineTest
 
 		ensureBaseline();
 
-		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
-		verify(configManager).setConfiguration(eq("chunkblazer"), eq("progressionBaseline"), written.capture());
-		assertTrue(String.valueOf(written.getValue()).startsWith(hashOf(ACCOUNT) + "|"),
-			"stored baseline must name its owning account: " + written.getValue());
+		String written = writes.get("progressionBaseline");
+		assertNotNull(written, "expected a progressionBaseline write");
+		assertTrue(written.startsWith(hashOf(ACCOUNT) + "|"),
+			"stored baseline must name its owning account: " + written);
 	}
 
 	/** No RSN yet means no way to tag it — wait rather than write an orphan. */
@@ -428,7 +431,7 @@ class ProgressionBaselineTest
 		when(client.getLocalPlayer()).thenReturn(null);
 
 		assertTrue(ensureBaseline().isEmpty());
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("progressionBaseline"), any());
+		assertFalse(writes.containsKey("progressionBaseline"), "no progressionBaseline write");
 	}
 
 	// --- Self-healing repair ----------------------------------------------
@@ -443,11 +446,8 @@ class ProgressionBaselineTest
 
 		plugin.migrateRepairBogusProgressionBaseline();
 
-		verify(configManager).setConfiguration("chunkblazer", "progressionBaseline", (Object) "");
-
-		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
-		verify(configManager).setConfiguration(eq("chunkblazer"), eq("completedTasks"), written.capture());
-		assertEquals("defeat_mugger", String.valueOf(written.getValue()),
+		assertEquals("", writes.get("progressionBaseline"), "bogus baseline must be cleared");
+		assertEquals("defeat_mugger", writes.get("completedTasks"),
 			"every progression_* id must be dropped, non-progression tasks kept");
 	}
 
@@ -476,7 +476,7 @@ class ProgressionBaselineTest
 
 		plugin.migrateRepairBogusProgressionBaseline();
 
-		verify(configManager).setConfiguration("chunkblazer", "progressionBaseline", (Object) "");
+		assertEquals("", writes.get("progressionBaseline"), "bogus baseline must be cleared");
 	}
 
 	@Test
@@ -495,8 +495,8 @@ class ProgressionBaselineTest
 
 		plugin.migrateRepairBogusProgressionBaseline();
 
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("progressionBaseline"), any());
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("completedTasks"), any());
+		assertFalse(writes.containsKey("progressionBaseline"), "no progressionBaseline write");
+		assertFalse(writes.containsKey("completedTasks"), "no completedTasks write");
 	}
 
 	@Test
@@ -506,6 +506,6 @@ class ProgressionBaselineTest
 
 		plugin.migrateRepairBogusProgressionBaseline();
 
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("progressionBaseline"), any());
+		assertFalse(writes.containsKey("progressionBaseline"), "no progressionBaseline write");
 	}
 }

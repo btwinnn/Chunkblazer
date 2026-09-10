@@ -36,6 +36,8 @@ class TaskCardRevealGateTest
 	@Mock
 	private ConfigManager configManager;
 
+	private java.util.Map<String, String> writes;
+
 	private ChunkBlazerPlugin plugin;
 
 	/** Mirrors what setAccountState would have written, so reads see writes. */
@@ -47,6 +49,7 @@ class TaskCardRevealGateTest
 		plugin = new ChunkBlazerPlugin();
 		setField(plugin, "config", config);
 		setField(plugin, "configManager", configManager);
+		writes = RsProfileTestSupport.install(configManager, config);
 
 		lenient().when(config.showTaskCards()).thenReturn(true);
 		lenient().when(config.unrevealedTasks()).thenAnswer(inv -> storedPending);
@@ -155,6 +158,9 @@ class TaskCardRevealGateTest
 		if (pending.remove(taskId))
 		{
 			storedPending = String.join(",", pending);
+			// Reads now come from the RSProfile store (the writes map), which shadows the
+			// delegated storedPending, so keep it in sync.
+			writes.put("unrevealedTasks", storedPending);
 		}
 	}
 
@@ -183,25 +189,9 @@ class TaskCardRevealGateTest
 	 */
 	private String lastWrittenPending(String before) throws Exception
 	{
-		org.mockito.ArgumentCaptor<String> key = org.mockito.ArgumentCaptor.forClass(String.class);
-		org.mockito.ArgumentCaptor<Object> value = org.mockito.ArgumentCaptor.forClass(Object.class);
-		try
-		{
-			org.mockito.Mockito.verify(configManager, org.mockito.Mockito.atLeastOnce())
-				.setConfiguration(org.mockito.ArgumentMatchers.anyString(), key.capture(), value.capture());
-		}
-		catch (Throwable t)
-		{
-			return before;
-		}
-		for (int i = key.getAllValues().size() - 1; i >= 0; i--)
-		{
-			if ("unrevealedTasks".equals(key.getAllValues().get(i)))
-			{
-				return String.valueOf(value.getAllValues().get(i));
-			}
-		}
-		return before;
+		// Per-account writes land in the RSProfile store (the writes map); if nothing was
+		// written this run, the pending set is unchanged from what went in.
+		return writes.getOrDefault("unrevealedTasks", before);
 	}
 
 	private interface ThrowingRunnable

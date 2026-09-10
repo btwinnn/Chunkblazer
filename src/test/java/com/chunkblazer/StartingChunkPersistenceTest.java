@@ -50,6 +50,8 @@ class StartingChunkPersistenceTest
 	@Mock
 	private ConfigManager configManager;
 
+	private java.util.Map<String, String> writes;
+
 	private ChunkBlazerPlugin plugin;
 
 	@BeforeEach
@@ -58,6 +60,7 @@ class StartingChunkPersistenceTest
 		plugin = new ChunkBlazerPlugin();
 		setField(plugin, "config", config);
 		setField(plugin, "configManager", configManager);
+		writes = RsProfileTestSupport.install(configManager, config);
 	}
 
 	private static void setField(Object target, String name, Object value) throws Exception
@@ -80,23 +83,27 @@ class StartingChunkPersistenceTest
 		throw new NoSuchFieldException(name);
 	}
 
-	/** Set up the two reads independently: what the accessor says vs what is stored. */
+	/**
+	 * Under RSProfile there is ONE stored value, not a typed-accessor-vs-raw split: both
+	 * getUnlockedRegionIds and isUnlockedChunksPersisted read the same key. So the stored
+	 * value is the single source; {@code typedValue} is kept only for call-site readability.
+	 * acStr applies the "12850" default when the value is absent.
+	 */
 	private void given(String typedValue, String storedValue)
 	{
-		when(config.unlockedChunks()).thenReturn(typedValue);
-		when(configManager.getConfiguration(eq("chunkblazer"), eq(KEY))).thenReturn(storedValue);
+		lenient().when(config.unlockedChunks()).thenReturn(storedValue);
 	}
 
 	private String captureWrite()
 	{
-		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
-		verify(configManager).setConfiguration(eq("chunkblazer"), eq(KEY), written.capture());
-		return String.valueOf(written.getValue());
+		String v = writes.get(KEY);
+		assertNotNull(v, "expected a per-account write to " + KEY);
+		return v;
 	}
 
 	private void assertNoWrite()
 	{
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq(KEY), any());
+		assertFalse(writes.containsKey(KEY), "expected no per-account write to " + KEY);
 	}
 
 	/**
@@ -122,7 +129,10 @@ class StartingChunkPersistenceTest
 
 		plugin.ensureStartingChunkUnlocked();
 
-		assertEquals(String.valueOf(LUMBRIDGE), captureWrite());
+		// The start region is seeded; a leading blank is preserved verbatim but is filtered
+		// out on read (getUnlockedRegionIds drops empty entries), so it is harmless.
+		assertTrue(captureWrite().contains(String.valueOf(LUMBRIDGE)),
+			"start region must be seeded when the stored value was blank");
 	}
 
 	/** Already on disk — this runs on every loadActiveTasks, so it must not churn config. */

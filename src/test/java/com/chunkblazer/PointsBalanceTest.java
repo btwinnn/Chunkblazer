@@ -45,6 +45,7 @@ class PointsBalanceTest
 	private ConfigManager configManager;
 
 	private ChunkBlazerPlugin plugin;
+	private Map<String, String> writes;
 
 	@BeforeEach
 	void setUp() throws Exception
@@ -52,6 +53,9 @@ class PointsBalanceTest
 		plugin = new ChunkBlazerPlugin();
 		setField(plugin, "config", config);
 		setField(plugin, "configManager", configManager);
+		// Per-account state now lives in the RSProfile store; back it with an in-memory
+		// map that delegates initial reads to the existing config stubs.
+		writes = RsProfileTestSupport.install(configManager, config);
 	}
 
 	private static void setField(Object target, String name, Object value) throws Exception
@@ -113,9 +117,8 @@ class PointsBalanceTest
 
 	private int capturedInt(String key)
 	{
-		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
-		verify(configManager).setConfiguration(eq("chunkblazer"), eq(key), written.capture());
-		return ((Number) written.getValue()).intValue();
+		assertTrue(writes.containsKey(key), "expected a per-account write to '" + key + "'");
+		return Integer.parseInt(writes.get(key));
 	}
 
 	// --- Derived balance --------------------------------------------------
@@ -172,7 +175,7 @@ class PointsBalanceTest
 
 		invoke("recomputePointsBalance", new Class<?>[]{});
 
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("totalPoints"), any());
+		assertNoWriteTo("totalPoints");
 	}
 
 	// --- Spending ---------------------------------------------------------
@@ -186,9 +189,7 @@ class PointsBalanceTest
 
 		invoke("recordPointsSpent", new Class<?>[]{ int.class }, 15);
 
-		ArgumentCaptor<Object> spent = ArgumentCaptor.forClass(Object.class);
-		verify(configManager).setConfiguration(eq("chunkblazer"), eq("pointsSpent"), spent.capture());
-		assertEquals(25, ((Number) spent.getValue()).intValue(), "spend accumulates");
+		assertEquals(25, capturedInt("pointsSpent"), "spend accumulates");
 	}
 
 	@Test
@@ -196,7 +197,7 @@ class PointsBalanceTest
 	{
 		invoke("recordPointsSpent", new Class<?>[]{ int.class }, 0);
 
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("pointsSpent"), any());
+		assertNoWriteTo("pointsSpent");
 	}
 
 	// --- One-time derivation for pre-existing accounts ---------------------
@@ -215,7 +216,6 @@ class PointsBalanceTest
 	{
 		seedEarned(CRUK_EARNED);
 		when(config.pointsSpent()).thenReturn(0);
-		when(config.totalPoints()).thenReturn(CRUK_BALANCE);
 		balanceStoredAs(String.valueOf(CRUK_BALANCE));
 
 		invoke("deriveInitialPointsSpent", new Class<?>[]{});
@@ -231,7 +231,7 @@ class PointsBalanceTest
 
 		invoke("deriveInitialPointsSpent", new Class<?>[]{});
 
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("pointsSpent"), any());
+		assertNoWriteTo("pointsSpent");
 	}
 
 	/**
@@ -245,14 +245,13 @@ class PointsBalanceTest
 	{
 		seedEarned(CRUK_EARNED);
 		when(config.pointsSpent()).thenReturn(0);
-		when(config.totalPoints()).thenReturn(CRUK_EARNED);
 		// Stored, so the run gets past the persistence gate and reaches the
 		// balance >= earned check this test is actually about.
 		balanceStoredAs(String.valueOf(CRUK_EARNED));
 
 		invoke("deriveInitialPointsSpent", new Class<?>[]{});
 
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("pointsSpent"), any());
+		assertNoWriteTo("pointsSpent");
 	}
 
 	@Test
@@ -264,7 +263,7 @@ class PointsBalanceTest
 
 		invoke("deriveInitialPointsSpent", new Class<?>[]{});
 
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("pointsSpent"), any());
+		assertNoWriteTo("pointsSpent");
 	}
 
 	// --- Catalog drift ----------------------------------------------------
@@ -299,8 +298,16 @@ class PointsBalanceTest
 
 	private void balanceStoredAs(String raw)
 	{
-		lenient().when(configManager.getConfiguration(eq("chunkblazer"), eq("totalPoints")))
-			.thenReturn(raw);
+		// The stored balance now lives in the RSProfile store. A null/blank raw means the
+		// key is absent (nothing stored); a concrete value seeds it there.
+		if (raw == null || raw.trim().isEmpty())
+		{
+			writes.remove("totalPoints");
+		}
+		else
+		{
+			writes.put("totalPoints", raw);
+		}
 	}
 
 	private void ownsChunks(int count)
@@ -332,16 +339,10 @@ class PointsBalanceTest
 		lenient().when(config.unlockedChunks()).thenReturn(ids.toString());
 	}
 
-	/**
-	 * any(Object.class), not a bare any(): per-account writes go through
-	 * setAccountState(String, Object), which binds ConfigManager's generic
-	 * setConfiguration(String, String, T). An untyped any() can resolve to the
-	 * all-String overload instead and then verifies a method nothing ever calls,
-	 * which passes no matter what the code does.
-	 */
+	/** No per-account write to this key landed in the RSProfile store this test. */
 	private void assertNoWriteTo(String key)
 	{
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq(key), any(Object.class));
+		assertFalse(writes.containsKey(key), "expected no per-account write to '" + key + "'");
 	}
 
 	/**
@@ -383,7 +384,6 @@ class PointsBalanceTest
 	{
 		seedEarned(SWITCH_EARNED);
 		when(config.pointsSpent()).thenReturn(0);
-		when(config.totalPoints()).thenReturn(100);
 		balanceStoredAs("100");         // genuinely stored, not a default
 
 		invoke("deriveInitialPointsSpent", new Class<?>[]{});
@@ -448,24 +448,27 @@ class PointsBalanceTest
 	@Test
 	void switchedAccountEndsWithASpendableBalance() throws Exception
 	{
-		seedEarned(SWITCH_EARNED);
-		balanceStoredAs(null);
-		ownsChunks(40);
+		seedEarned(SWITCH_EARNED);          // earned 414
+		balanceStoredAs(null);              // no local balance yet (freshly switched in)
+		ownsChunks(40);                     // 40 payable chunks actually owned
 
-		// Post-clear the counter is absent; the server then supplies its inflated
-		// figure through the monotonic merge, exactly as PlayerLoginResponse does.
-		when(config.pointsSpent())
-			.thenReturn(0)                   // deriveInitialPointsSpent()
-			.thenReturn(SWITCH_SERVER_SPENT) // migrateRepair...() sees the merged value
-			.thenReturn(39);                 // recomputePointsBalance() sees the repair
-
+		// No local balance means a 0 balance is UNKNOWN, not "spent everything", so the
+		// derivation writes nothing.
 		invoke("deriveInitialPointsSpent", new Class<?>[]{});
-		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
-		invoke("recomputePointsBalance", new Class<?>[]{});
+		assertNoWriteTo("pointsSpent");
 
-		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
-		verify(configManager).setConfiguration(eq("chunkblazer"), eq("totalPoints"), written.capture());
-		assertEquals(375, ((Number) written.getValue()).intValue(),
-			"earned 414 - repaired spend 39; the old code pinned this at 0");
+		// The server then supplies its inflated spend through the monotonic login merge.
+		writes.put("pointsSpent", String.valueOf(SWITCH_SERVER_SPENT)); // 453, impossible vs 414 earned
+
+		// The repair rebuilds spend from the chunks actually owned (the curve ledger),
+		// which is far below the corrupt 453, so it lowers it.
+		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
+		int repaired = ChunkBlazerPlugin.curveLedgerTotal(40);
+		assertEquals(repaired, capturedInt("pointsSpent"),
+			"spend rebuilt from the curve cost of owned chunks, not the corrupt counter");
+
+		invoke("recomputePointsBalance", new Class<?>[]{});
+		assertEquals(SWITCH_EARNED - repaired, capturedInt("totalPoints"),
+			"earned 414 minus the repaired curve spend; the old code pinned this at 0");
 	}
 }
