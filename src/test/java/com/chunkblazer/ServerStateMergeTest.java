@@ -52,6 +52,8 @@ class ServerStateMergeTest
 	@Mock
 	private ConfigManager configManager;
 
+	private java.util.Map<String, String> writes;
+
 	private ChunkBlazerPlugin plugin;
 
 	@BeforeEach
@@ -60,6 +62,7 @@ class ServerStateMergeTest
 		plugin = new ChunkBlazerPlugin();
 		setField(plugin, "config", config);
 		setField(plugin, "configManager", configManager);
+		writes = RsProfileTestSupport.install(configManager, config);
 	}
 
 	private static void setField(Object target, String name, Object value) throws Exception
@@ -108,14 +111,10 @@ class ServerStateMergeTest
 
 	private Set<String> capturedCsv(String key)
 	{
-		// Object, not String: per-account writes route through
-		// setAccountState(String, Object), which binds ConfigManager's generic
-		// setConfiguration(String, String, T) overload rather than the all-String
-		// one. Same ConfigData, same stringification — this just names the
-		// overload Mockito watches.
-		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
-		verify(configManager).setConfiguration(eq("chunkblazer"), eq(key), written.capture());
-		return new LinkedHashSet<>(Arrays.asList(String.valueOf(written.getValue()).split(",")));
+		// Per-account writes land in the RSProfile store (backed by the writes map here).
+		String v = writes.get(key);
+		assertNotNull(v, "expected a per-account write to '" + key + "'");
+		return new LinkedHashSet<>(Arrays.asList(v.split(",")));
 	}
 
 	/**
@@ -183,7 +182,7 @@ class ServerStateMergeTest
 
 		mergeRegions(pdata(SERVER_CHUNKS, null));
 
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("unlockedChunks"), any());
+		assertFalse(writes.containsKey("unlockedChunks"), "no unlockedChunks write expected");
 	}
 
 	@Test
@@ -207,8 +206,8 @@ class ServerStateMergeTest
 		mergeRegions(pdata(Collections.emptyList(), null));
 		mergeTasks(pdata(null, Collections.emptyList()));
 
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("unlockedChunks"), any());
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("completedTasks"), any());
+		assertFalse(writes.containsKey("unlockedChunks"), "no unlockedChunks write expected");
+		assertFalse(writes.containsKey("completedTasks"), "no completedTasks write expected");
 	}
 
 	/**

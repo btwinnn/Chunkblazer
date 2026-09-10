@@ -381,7 +381,7 @@ public class TaskCardOverlay extends Overlay
 	 */
 	private void syncCards()
 	{
-		String raw = config.unrevealedTasks();
+		String raw = plugin.getUnrevealedTasksRaw();
 		if (raw == null)
 		{
 			raw = "";

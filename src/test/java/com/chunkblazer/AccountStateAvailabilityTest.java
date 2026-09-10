@@ -95,25 +95,24 @@ class AccountStateAvailabilityTest
 	@Test
 	void readsReturnNothingWhenNoAccountIsKnown() throws Exception
 	{
-		when(configManager.getConfiguration("chunkblazer", "unlockedChunks")).thenReturn(null);
+		// getRSProfileConfiguration answers null when no RS profile is active.
+		when(configManager.getRSProfileConfiguration("chunkblazer", "unlockedChunks")).thenReturn(null);
 		assertNull(getAccountState("unlockedChunks"));
 	}
 
 	/**
-	 * Deliberate for THIS stage only: warn, but still write. Storage is
-	 * profile-scoped so the write lands, and refusing here would lose data that
-	 * currently survives. The warning is the deliverable — it names the pre-login
-	 * writers in a real session's log so they can be gated before step 3 turns
-	 * this into a refusal.
+	 * Now that the store is RSProfile-scoped, a write with no account is a HARD REFUSAL:
+	 * setRSProfileConfiguration silently drops such writes, so setAccountState must not
+	 * even attempt it. Every real writer runs once the profile is known.
 	 */
 	@Test
-	void writesStillLandWhenNoAccountIsKnown() throws Exception
+	void writesAreRefusedWhenNoAccountIsKnown() throws Exception
 	{
 		when(configManager.getRSProfileKey()).thenReturn(null);
 
 		setAccountState("totalPoints", 42);
 
-		verify(configManager).setConfiguration("chunkblazer", "totalPoints", (Object) 42);
+		verify(configManager, never()).setRSProfileConfiguration(eq("chunkblazer"), eq("totalPoints"), any());
 	}
 
 	@Test
@@ -123,7 +122,7 @@ class AccountStateAvailabilityTest
 
 		setAccountState("totalPoints", 42);
 
-		verify(configManager).setConfiguration("chunkblazer", "totalPoints", (Object) 42);
+		verify(configManager).setRSProfileConfiguration("chunkblazer", "totalPoints", (Object) 42);
 	}
 
 	// --- the bootstrap gate -----------------------------------------------

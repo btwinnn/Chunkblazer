@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -46,6 +47,8 @@ class ChunkBlazerPluginTest
 	@Mock
 	private ConfigManager configManager;
 
+	private java.util.Map<String, String> writes;
+
 	private ChunkBlazerPlugin plugin;
 
 	@BeforeEach
@@ -54,6 +57,9 @@ class ChunkBlazerPluginTest
 		plugin = new ChunkBlazerPlugin();
 		setField(plugin, "config", config);
 		setField(plugin, "configManager", configManager);
+		// Per-account state lives in the RSProfile store; back it with an in-memory map
+		// that delegates initial reads to the existing config stubs.
+		writes = RsProfileTestSupport.install(configManager, config);
 
 		// Register a charter-port chunk at CHARTER_REGION.
 		NuzlockeChunk charter = new NuzlockeChunk();
@@ -105,12 +111,12 @@ class ChunkBlazerPluginTest
 		// setConfiguration(String, String, T) overload rather than the all-String
 		// one. Both stringify into the same ConfigData, so this is purely about
 		// naming the overload Mockito should watch.
-		ArgumentCaptor<Object> written = ArgumentCaptor.forClass(Object.class);
-		verify(configManager).setConfiguration(eq("chunkblazer"), eq("unlockedChunks"), written.capture());
-		assertTrue(String.valueOf(written.getValue()).contains(String.valueOf(NON_CHARTER_REGION)));
-		assertFalse(String.valueOf(written.getValue()).contains(String.valueOf(CHARTER_REGION)));
+		String rewritten = writes.get("unlockedChunks");
+		assertNotNull(rewritten, "unlockedChunks should have been rewritten");
+		assertTrue(rewritten.contains(String.valueOf(NON_CHARTER_REGION)));
+		assertFalse(rewritten.contains(String.valueOf(CHARTER_REGION)));
 
-		// Flag set so the migration never runs again.
+		// Flag set so the migration never runs again (a global flag, not per-account).
 		verify(configManager).setConfiguration("chunkblazer", "charterSeedStripped", "true");
 	}
 
@@ -121,7 +127,7 @@ class ChunkBlazerPluginTest
 
 		plugin.migrateStripSeededCharterChunks();
 
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("unlockedChunks"), any());
+		assertFalse(writes.containsKey("unlockedChunks"), "no per-account unlockedChunks write expected");
 	}
 
 	// --- Boss Tokens (secondary currency) ---
@@ -138,7 +144,7 @@ class ChunkBlazerPluginTest
 	{
 		when(config.bossTokens()).thenReturn(2);
 		assertTrue(plugin.spendBossToken());
-		verify(configManager).setConfiguration("chunkblazer", "bossTokens", 1);
+		assertEquals("1", writes.get("bossTokens"));
 	}
 
 	@Test
@@ -146,7 +152,7 @@ class ChunkBlazerPluginTest
 	{
 		when(config.bossTokens()).thenReturn(0);
 		assertFalse(plugin.spendBossToken());
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("bossTokens"), any());
+		assertFalse(writes.containsKey("bossTokens"), "no bossTokens write when none to spend");
 	}
 
 	@Test
@@ -154,15 +160,17 @@ class ChunkBlazerPluginTest
 	{
 		when(config.bossTokens()).thenReturn(2);
 		plugin.addBossTokens(1);
-		verify(configManager).setConfiguration("chunkblazer", "bossTokens", 3);
+		assertEquals("3", writes.get("bossTokens"));
 	}
 
 	@Test
 	void addBossTokensClampsAtZero()
 	{
-		when(config.bossTokens()).thenReturn(0);
+		// Start from 2 so the clamp actually changes the value (and thus writes): 2 - 5
+		// would be negative, so it must land on 0.
+		when(config.bossTokens()).thenReturn(2);
 		plugin.addBossTokens(-5);
-		verify(configManager).setConfiguration("chunkblazer", "bossTokens", 0);
+		assertEquals("0", writes.get("bossTokens"));
 	}
 
 	// --- Free chunks (Free_Chunks.json: 0-cost, unlock-on-demand, no tasks) ---
