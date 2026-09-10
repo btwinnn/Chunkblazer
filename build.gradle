@@ -74,6 +74,16 @@ checkstyle {
 	maxWarnings = 0
 }
 
+// checkstyle 10.12.7 transitively pulls BOTH guava and the ancient
+// google-collections (via doxia -> plexus), which declare the same capability
+// and make Gradle's resolution fail before checkstyle can even run. Prefer
+// guava. This only affects our local pre-submission lint runner.
+configurations.checkstyle {
+	resolutionStrategy.capabilitiesResolution.withCapability('com.google.collections:google-collections') {
+		select('com.google.guava:guava:0')
+	}
+}
+
 // The dev workflow deliberately skips linting for fast iteration; this build's
 // checkstyle is the pre-submission gate, so let it report the full list instead
 // of failing the run on the first file. Flip to false once the list is clean.
