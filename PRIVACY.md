@@ -1,9 +1,8 @@
 # ChunkBlazer Data & Privacy
 
-ChunkBlazer is a **server-backed game mode**, similar to
-[Wise Old Man](https://wiseoldman.net) and [TempleOSRS](https://templeosrs.com).
+ChunkBlazer is a **server-backed game mode**.
 To save your progress across sessions and rank you on the leaderboards, the
-plugin sends some data to ChunkBlazer's own servers. This document explains
+plugin sends data to ChunkBlazer's own servers. This document explains
 exactly **what** is gathered, **where** it goes, and **how it works**, so you
 can make an informed choice before enabling it.
 
@@ -17,13 +16,10 @@ track your account progress any time at **https://chunkblazer.com**.
 ChunkBlazer is a chunk-unlock challenge: you unlock map regions ("chunks") and
 complete randomly-assigned tasks for points. So that your save state, points,
 unlocked chunks and leaderboard rank persist across logins and devices (and so
-completions can be verified fairly), the plugin syncs that progress to the
+completions can be verified fairly). The plugin syncs that progress to the
 ChunkBlazer server while you play. If you turn syncing off, the plugin still
 works locally, but your progress is **not** saved to the server, and
 leaderboards / player discovery are unavailable.
-
-This is the same model Wise Old Man and TempleOSRS use: a RuneLite plugin that
-reports your in-game progress to an external companion service.
 
 ---
 
