@@ -4155,6 +4155,7 @@ public class ChunkBlazerPlugin extends Plugin
 		migrateRepairBogusProgressionBaseline();
 		migrateResetStaleSoundVolume();
 		ensureBossChunkTasksGranted();
+		migrateHealBobbyRerolledTasks();
 
 		activeTasks.clear();
 		taskModuleManager.clearTask(); // Clear module state to prevent duplicates
@@ -4891,6 +4892,122 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		return new HashSet<>();
+	}
+
+	// One-off, run-once, gated to a single account: Bobby Blazer's tasks were all
+	// rerolled (his regionRolledTasks was lost, so loadActiveTasks re-rolled every owned
+	// region fresh — and because a roll EXCLUDES completed tasks, his finished tasks fell
+	// out of the display and new un-done ones took their place). His completedTasks and
+	// points are intact, so rebuild each owned region's roll to exactly the tasks he has
+	// COMPLETED there: his done tasks show as done again and the reroll's new tasks are
+	// dropped. Any legit in-progress pick he had is not recoverable (only completed data
+	// survives), which he accepted. Boss chunks are skipped — they grant every task at
+	// once (ensureBossChunkTasksGranted), so rebuilding them to completed-only would hide
+	// their un-done tasks. Uses the state accessors, so it is correct whether the store is
+	// still profile-global or already RSProfile-scoped.
+	private static final String BOBBY_ROLL_HEAL_KEY = "bobbyRollHeal_2026_09_all";
+	// H.A.M. Hideout (region 12594): the un-done ACTIVE tasks Bobby had before the reroll,
+	// recovered from his last-good client screenshot. The reroll dropped them and the server
+	// no longer holds them (it was overwritten last-write-wins), so they are re-added here so
+	// they return as active instead of being lost. The other regions' un-done picks (a
+	// Fishing task + one more) spanned different chunks and could not be pinned exactly; he
+	// re-rolls those.
+	private static final int BOBBY_HAM_REGION = 12594;
+	private static final String[] BOBBY_HAM_UNDONE = {
+		"polish_buttons", "obtain_uncut_opal", "pickpocket_HAM", "equip_steel_dagger",
+	};
+
+	private void migrateHealBobbyRerolledTasks()
+	{
+		if ("true".equals(acStr(BOBBY_ROLL_HEAL_KEY, "")))
+		{
+			return;
+		}
+		if (!"Bobby Blazer".equals(getPlayerName()))
+		{
+			return; // not the affected account — leave armed (do NOT mark done)
+		}
+
+		Set<String> completed = getCompletedTaskIds();
+		int healed = 0;
+
+		for (String regionIdStr : getUnlockedRegionIds())
+		{
+			int regionId;
+			try
+			{
+				regionId = Integer.parseInt(regionIdStr.trim());
+			}
+			catch (NumberFormatException e)
+			{
+				continue;
+			}
+			NuzlockeChunk chunk = chunksByRegionId.get(regionId);
+			if (chunk == null || chunk.isBoss() || chunk.getTasks() == null)
+			{
+				continue;
+			}
+
+			// The region's roll becomes the tasks he has completed here...
+			Set<String> target = new LinkedHashSet<>();
+			Set<String> regionTaskIds = new HashSet<>();
+			for (NuzlockeTask t : chunk.getTasks())
+			{
+				String id = t.getTaskId();
+				if (id == null)
+				{
+					continue;
+				}
+				regionTaskIds.add(id);
+				if (completed.contains(id))
+				{
+					target.add(id);
+				}
+			}
+			// ...plus, for H.A.M. Hideout, his specific un-done active tasks so they return.
+			if (regionId == BOBBY_HAM_REGION)
+			{
+				for (String id : BOBBY_HAM_UNDONE)
+				{
+					if (regionTaskIds.contains(id))
+					{
+						target.add(id);
+					}
+				}
+			}
+			// Writing an empty roll would just re-roll fresh junk; rewriting an identical
+			// roll is pointless churn. Skip both.
+			if (target.isEmpty() || getRolledTasksForRegion(regionId).equals(target))
+			{
+				continue;
+			}
+
+			saveRolledTasksForRegion(regionId, target);
+
+			// Drop any leftover face-down cards for this region's tasks (the reroll parked
+			// its new junk behind cards).
+			List<String> pending = getUnrevealedTaskIds();
+			if (pending.removeIf(regionTaskIds::contains))
+			{
+				setAccountState("unrevealedTasks", String.join(",", pending));
+			}
+			healed++;
+		}
+
+		// Balance: his spend counter was ratcheted to a corrupt 22, far above the real cost
+		// of the chunks he owns (which left his balance at 1). Rebuild spend from the chunks
+		// actually owned — the same figure the impossible-spend repair uses — since that
+		// repair only fires when spent > earned and his corrupt value sits just under.
+		// PAIRED with a one-time server-side spend correction: the sync is monotonic
+		// (GREATEST), so the server's inflated value must be lowered too or it re-inflates.
+		int correctSpent = curveLedgerTotal(countPayableUnlockedChunks());
+		setAccountState("pointsSpent", correctSpent);
+		recomputePointsBalance();
+
+		log.info("[CHUNKBLAZER] Bobby heal: rebuilt {} region roll(s) from completed tasks "
+			+ "(+ H.A.M. Hideout un-done tasks restored); spend rebuilt to {} from owned chunks "
+			+ "(was a corrupt 22). Lower the server's points_spent to match, once.", healed, correctSpent);
+		setAccountState(BOBBY_ROLL_HEAL_KEY, "true");
 	}
 
 	private void saveRolledTasksForRegion(int regionId, Set<String> taskIds)
