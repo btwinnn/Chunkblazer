@@ -3432,6 +3432,7 @@ public class ChunkBlazerPlugin extends Plugin
 		if (configManager.getRSProfileConfiguration(CONFIG_GROUP, "unlockedChunks") != null
 			|| configManager.getRSProfileConfiguration(CONFIG_GROUP, "completedTasks") != null)
 		{
+			log.debug("[CHUNKBLAZER] legacy migration: RSProfile already populated — nothing to do");
 			return;
 		}
 		// (2) Nothing in the legacy store: nothing to move.
@@ -3446,17 +3447,22 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		if (!anyLegacy)
 		{
+			log.info("[CHUNKBLAZER] legacy migration: no global data to move (RSProfile empty AND "
+				+ "no legacy global keys) — this account has no local progress in either store");
 			return;
 		}
 		// (3) Ownership evidence: migrate only a blob that belongs to THIS account.
 		String rsn = getPlayerName();
 		if (rsn == null)
 		{
+			log.debug("[CHUNKBLAZER] legacy migration: name not loaded yet — deferring");
 			return; // name not loaded yet; this fires again once it is
 		}
 		String owner = hashRsn(rsn);
 		String modeHash = configManager.getConfiguration(CONFIG_GROUP, "accountModeHash");   // "<rsnHash>:<MODE>"
 		String storedOwner = configManager.getConfiguration(CONFIG_GROUP, "accountStateOwner");
+		log.info("[CHUNKBLAZER] legacy migration: legacy data present for RS profile of {}; ownership "
+			+ "tags accountModeHash='{}', accountStateOwner='{}'", rsn, modeHash, storedOwner);
 		boolean mine;
 		if (modeHash != null && modeHash.contains(":"))
 		{
@@ -4929,7 +4935,7 @@ public class ChunkBlazerPlugin extends Plugin
 	// once (ensureBossChunkTasksGranted), so rebuilding them to completed-only would hide
 	// their un-done tasks. Uses the state accessors, so it is correct whether the store is
 	// still profile-global or already RSProfile-scoped.
-	private static final String BOBBY_ROLL_HEAL_KEY = "bobbyRollHeal_2026_09_all";
+	private static final String BOBBY_ROLL_HEAL_KEY = "bobbyRollHeal_2026_09_v2";
 	// H.A.M. Hideout (region 12594): the un-done ACTIVE tasks Bobby had before the reroll,
 	// recovered from his last-good client screenshot. The reroll dropped them and the server
 	// no longer holds them (it was overwritten last-write-wins), so they are re-added here so
@@ -4961,9 +4967,21 @@ public class ChunkBlazerPlugin extends Plugin
 		log.info("[CHUNKBLAZER] Bobby heal: matched player '{}', applying", bobbyRsn);
 
 		Set<String> completed = getCompletedTaskIds();
+		Set<String> unlockedRegions = getUnlockedRegionIds();
+		log.info("[CHUNKBLAZER] Bobby heal: state — completedTasks={}, unlockedRegions={}",
+			completed.size(), unlockedRegions.size());
+		if (completed.isEmpty())
+		{
+			// His progress isn't in this store yet (RSProfile not populated, or a server merge
+			// still pending). Healing now would rebuild empty rolls and burn the run-once flag
+			// on a no-op — exactly what happened last time. Wait and retry on a later tick.
+			log.info("[CHUNKBLAZER] Bobby heal: no completed tasks present yet — waiting, NOT "
+				+ "consuming the run-once flag");
+			return;
+		}
 		int healed = 0;
 
-		for (String regionIdStr : getUnlockedRegionIds())
+		for (String regionIdStr : unlockedRegions)
 		{
 			int regionId;
 			try
