@@ -2,6 +2,7 @@ package com.chunkblazer;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -60,5 +61,108 @@ class TaskCompletionSoundManagerTest
 			assertTrue(folder.endsWith("_Sounds"),
 				"folder for area '" + e.getKey() + "' should end in _Sounds, got " + folder);
 		}
+	}
+
+	// --- µ-law -> PCM expansion (server jingles are µ-law; AudioPlayer needs PCM) ---
+
+	/** ITU-T G.711 reference points: 0xFF is silence, 0x00 / 0x80 are the extremes. */
+	@Test
+	void ulawDecodesToKnownReferenceSamples()
+	{
+		assertEquals(0, TaskCompletionSoundManager.ulawToPcm((byte) 0xFF), "0xFF is µ-law silence");
+		assertEquals(-32124, TaskCompletionSoundManager.ulawToPcm((byte) 0x00), "0x00 is the max negative");
+		assertEquals(32124, TaskCompletionSoundManager.ulawToPcm((byte) 0x80), "0x80 is the max positive");
+	}
+
+	@Test
+	void muLawWavIsExpandedToSixteenBitPcm()
+	{
+		byte[] samples = {(byte) 0xFF, (byte) 0x00, (byte) 0x80};
+		byte[] out = TaskCompletionSoundManager.toPcmWav(wav(7, 8, 1, 8000, samples));
+
+		assertEquals("RIFF", ascii(out, 0), "still a RIFF/WAVE");
+		assertEquals("WAVE", ascii(out, 8), "still a RIFF/WAVE");
+		assertEquals(1, le16(out, 20), "format tag must now be PCM");
+		assertEquals(16, le16(out, 34), "must be 16-bit");
+		assertEquals(samples.length * 2, le32(out, 40), "one 16-bit sample per µ-law byte");
+
+		assertEquals(0, sampleAt(out, 0));
+		assertEquals(-32124, sampleAt(out, 1));
+		assertEquals(32124, sampleAt(out, 2));
+	}
+
+	@Test
+	void pcmWavIsPassedThroughUnchanged()
+	{
+		byte[] pcm = wav(1, 16, 1, 22050, new byte[]{0x11, 0x22, 0x33, 0x44});
+		assertSame(pcm, TaskCompletionSoundManager.toPcmWav(pcm),
+			"PCM input needs no expansion and must be handed to the player as-is");
+	}
+
+	// --- tiny WAV helpers ---
+
+	private static byte[] wav(int formatTag, int bits, int channels, int rate, byte[] data)
+	{
+		int blockAlign = channels * bits / 8;
+		ByteArrayOutputStream o = new ByteArrayOutputStream();
+		putAscii(o, "RIFF");
+		putLe32(o, 36 + data.length);
+		putAscii(o, "WAVE");
+		putAscii(o, "fmt ");
+		putLe32(o, 16);
+		putLe16(o, formatTag);
+		putLe16(o, channels);
+		putLe32(o, rate);
+		putLe32(o, rate * blockAlign);
+		putLe16(o, blockAlign);
+		putLe16(o, bits);
+		putAscii(o, "data");
+		putLe32(o, data.length);
+		o.write(data, 0, data.length);
+		return o.toByteArray();
+	}
+
+	private static short sampleAt(byte[] wav, int index)
+	{
+		int off = 44 + index * 2;
+		return (short) ((wav[off] & 0xff) | (wav[off + 1] << 8));
+	}
+
+	private static String ascii(byte[] b, int off)
+	{
+		return new String(b, off, 4, java.nio.charset.StandardCharsets.US_ASCII);
+	}
+
+	private static int le16(byte[] b, int off)
+	{
+		return (b[off] & 0xff) | ((b[off + 1] & 0xff) << 8);
+	}
+
+	private static int le32(byte[] b, int off)
+	{
+		return (b[off] & 0xff) | ((b[off + 1] & 0xff) << 8)
+			| ((b[off + 2] & 0xff) << 16) | ((b[off + 3] & 0xff) << 24);
+	}
+
+	private static void putAscii(ByteArrayOutputStream o, String s)
+	{
+		for (int i = 0; i < s.length(); i++)
+		{
+			o.write(s.charAt(i));
+		}
+	}
+
+	private static void putLe16(ByteArrayOutputStream o, int v)
+	{
+		o.write(v & 0xff);
+		o.write((v >> 8) & 0xff);
+	}
+
+	private static void putLe32(ByteArrayOutputStream o, int v)
+	{
+		o.write(v & 0xff);
+		o.write((v >> 8) & 0xff);
+		o.write((v >> 16) & 0xff);
+		o.write((v >> 24) & 0xff);
 	}
 }
