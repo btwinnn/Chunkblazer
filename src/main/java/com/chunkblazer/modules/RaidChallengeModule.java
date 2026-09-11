@@ -64,8 +64,8 @@ import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
-import net.runelite.http.api.item.ItemEquipmentStats;
-import net.runelite.http.api.item.ItemStats;
+import net.runelite.client.game.ItemEquipmentStats;
+import net.runelite.client.game.ItemStats;
 import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.RaidChallenge;
 
@@ -1795,7 +1795,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				continue;
 			}
-			ItemStats stats = itemManager.getItemStats(it.getId(), false);
+			ItemStats stats = itemManager.getItemStats(it.getId());
 			if (stats != null && stats.getEquipment() != null)
 			{
 				total += stats.getEquipment().getPrayer();
@@ -1819,7 +1819,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				continue;
 			}
-			ItemStats stats = itemManager.getItemStats(it.getId(), false);
+			ItemStats stats = itemManager.getItemStats(it.getId());
 			if (stats != null && stats.getEquipment() != null)
 			{
 				total += stats.getEquipment().getDcrush();
@@ -1842,7 +1842,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				continue;
 			}
-			ItemStats stats = itemManager.getItemStats(it.getId(), false);
+			ItemStats stats = itemManager.getItemStats(it.getId());
 			if (stats != null && stats.getEquipment() != null)
 			{
 				total += stats.getEquipment().getDrange();
@@ -1866,7 +1866,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				continue;
 			}
-			ItemStats stats = itemManager.getItemStats(it.getId(), false);
+			ItemStats stats = itemManager.getItemStats(it.getId());
 			if (stats != null && stats.getEquipment() != null)
 			{
 				ItemEquipmentStats e = stats.getEquipment();

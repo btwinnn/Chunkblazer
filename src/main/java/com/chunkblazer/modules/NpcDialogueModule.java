@@ -39,7 +39,7 @@ import net.runelite.api.NPC;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.InteractingChanged;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.widgets.ComponentID;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.eventbus.Subscribe;
@@ -237,14 +237,14 @@ public class NpcDialogueModule extends AbstractTaskModule
 	{
 		// Check various dialogue widget groups
 		// NPC dialogue
-		Widget npcDialogue = client.getWidget(WidgetInfo.DIALOG_NPC_TEXT);
+		Widget npcDialogue = client.getWidget(ComponentID.DIALOG_NPC_TEXT);
 		if (npcDialogue != null && !npcDialogue.isHidden())
 		{
 			return true;
 		}
 
 		// Player dialogue options
-		Widget playerDialogue = client.getWidget(WidgetInfo.DIALOG_OPTION_OPTIONS);
+		Widget playerDialogue = client.getWidget(ComponentID.DIALOG_OPTION_OPTIONS);
 		if (playerDialogue != null && !playerDialogue.isHidden())
 		{
 			return true;
