@@ -233,11 +233,11 @@ public interface ChunkBlazerConfig extends Config
 
 	@ConfigItem(
 		keyName = "apiKey",
-		name = "API Key",
-		description = "Your ChunkBlazer API key for server verification",
-		position = 2,
-		secret = true,
-		hidden = true
+		name = "Sync recovery key",
+		description = "Your account's server sync key, set automatically on your first sync. Copy it "
+			+ "somewhere safe as a backup. To restore access after a reinstall or on a new RuneLite "
+			+ "profile, paste it back here. Leave blank otherwise.",
+		position = 2
 	)
 	default String apiKey()
 	{

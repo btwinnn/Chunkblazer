@@ -1,17 +1,8 @@
 // ChunkBlazer — RuneLite Plugin Hub build file.
 //
-// This is the standalone Gradle build used for a Plugin Hub submission. It is
-// additive: it coexists with the existing pom.xml and the in-tree dev workflow
-// (run-chunkblazer.bat / sync-to-runelite.bat), which are unaffected. The Hub
-// only ever reads this build.gradle. See SUBMISSION.md for the remaining steps.
-//
-// TODO before submitting (see SUBMISSION.md):
-//   1. [DONE 2026-08-10] Package renamed net.runelite.client.plugins.chunkblazer
-//      -> com.chunkblazer (sources, resources, tests, descriptor, dev bats).
-//   2. [DONE 2026-08-10] `plugins=` in runelite-plugin.properties points at the
-//      new FQN com.chunkblazer.ChunkBlazerPlugin.
-//   3. Run `gradle wrapper` once so gradlew + gradle-wrapper.jar are committed
-//      (needs a local Gradle install; not doable in the review sandbox).
+// The Plugin Hub builds the plugin from this file only. Dev-only tooling (the
+// launcher and helper scripts) lives on the 'dev' branch and is kept off 'main'
+// by the pre-push hook, so 'main' stays submission-clean. See SUBMISSION.md.
 
 plugins {
 	id 'java'

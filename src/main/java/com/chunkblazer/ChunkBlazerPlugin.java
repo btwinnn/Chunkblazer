@@ -2732,6 +2732,10 @@ public class ChunkBlazerPlugin extends Plugin
 			log.warn("[CB-DIAG] apiClient is NULL — Guice injection failed for plugin class");
 			return;
 		}
+		// Load this account's stored API key BEFORE login. The server now discloses the
+		// key only on first claim (security C1), so a returning account authenticates
+		// with the copy it persisted, not one re-fetched every login.
+		loadPersistedApiKey();
 		apiClient.login(rsn, fullHashRsn(rsn))
 			.thenAccept(resp ->
 			{
@@ -2741,6 +2745,9 @@ public class ChunkBlazerPlugin extends Plugin
 				if (resp != null && resp.isSuccess())
 				{
 					serverLoginDone = true;
+					// First-claim logins return a fresh key; capture it per-account and
+					// mirror it into the visible recovery field. Idempotent afterwards.
+					persistApiKey(apiClient.getPlayerApiKey());
 					// Recognition is roster-driven; don't make the player wait for
 					// the next 30s poll. Announce presence now and, once the
 					// heartbeat is committed, refresh the roster so our own chat
@@ -2763,6 +2770,52 @@ public class ChunkBlazerPlugin extends Plugin
 				log.warn("[CB-DIAG] login failed: {}", e.toString());
 				return null;
 			});
+	}
+
+	/**
+	 * Load the current account's ChunkBlazer API key into the api client before login.
+	 * Preference is the per-account RSProfile copy; failing that, the copy-paste recovery
+	 * field under Server Sync (used on a fresh install or a new RuneLite profile). Since
+	 * the server discloses the key only on first claim, a returning account authenticates
+	 * with this stored copy instead of re-fetching it.
+	 */
+	private void loadPersistedApiKey()
+	{
+		if (apiClient == null)
+		{
+			return;
+		}
+		String key = acStr("apiKey", "");
+		if ((key == null || key.isEmpty()) && config.apiKey() != null)
+		{
+			key = config.apiKey().trim();
+		}
+		if (key != null && !key.isEmpty())
+		{
+			apiClient.setPlayerApiKey(key);
+		}
+	}
+
+	/**
+	 * Persist the account's API key so it survives restarts without a re-fetch. Stored
+	 * per-account (RSProfile) and mirrored into the visible Server Sync field so the player
+	 * can copy it as a backup and paste it to restore access on a new install. No-op for an
+	 * empty key or one already stored, so it is safe to call on every login.
+	 */
+	private void persistApiKey(String key)
+	{
+		if (key == null || key.isEmpty())
+		{
+			return;
+		}
+		if (isAccountStateAvailable() && !key.equals(acStr("apiKey", "")))
+		{
+			setAccountState("apiKey", key);
+		}
+		if (!key.equals(config.apiKey()))
+		{
+			configManager.setConfiguration("chunkblazer", "apiKey", key);
+		}
 	}
 
 	/**
