@@ -65,6 +65,25 @@ class BobbyRollHealTest
 	}
 
 	@Test
+	void hamHideoutGetsHisUndoneActiveTasksBack() throws Exception
+	{
+		loggedInAs("Bobby Blazer");
+		// H.A.M. Hideout (12594) with his real tasks; the reroll left only a goblin task.
+		chunk(12594, false, "polish_buttons", "obtain_uncut_opal", "pickpocket_HAM",
+			"equip_steel_dagger", "defeat_goblin_15 seconds");
+		owns("12594");
+		completed(); // nothing completed there yet — all 4 were active/un-done
+		currentRoll("12594:defeat_goblin_15 seconds");
+
+		heal();
+
+		assertEquals(
+			Set.of("polish_buttons", "obtain_uncut_opal", "pickpocket_HAM", "equip_steel_dagger"),
+			rolledFor(12594),
+			"his 4 un-done H.A.M. tasks are restored; the reroll's goblin task is dropped");
+	}
+
+	@Test
 	void aBossRegionIsLeftAlone() throws Exception
 	{
 		loggedInAs("Bobby Blazer");
