@@ -4890,16 +4890,21 @@ public class ChunkBlazerPlugin extends Plugin
 	// once (ensureBossChunkTasksGranted), so rebuilding them to completed-only would hide
 	// their un-done tasks. Uses the state accessors, so it is correct whether the store is
 	// still profile-global or already RSProfile-scoped.
-	private static final String BOBBY_ROLL_HEAL_KEY = "bobbyRollHeal_2026_09_v2";
-	// H.A.M. Hideout (region 12594): the un-done ACTIVE tasks Bobby had before the reroll,
-	// recovered from his last-good client screenshot. The reroll dropped them and the server
-	// no longer holds them (it was overwritten last-write-wins), so they are re-added here so
-	// they return as active instead of being lost. The other regions' un-done picks (a
-	// Fishing task + one more) spanned different chunks and could not be pinned exactly; he
-	// re-rolls those.
+	private static final String BOBBY_ROLL_HEAL_KEY = "bobbyRollHeal_2026_09_v3";
+	// The un-done ACTIVE tasks Bobby had before the reroll, recovered from his last-good
+	// client screenshots. The reroll dropped them and replaced them with junk; the server no
+	// longer holds the originals (it was overwritten last-write-wins), so they are re-added
+	// here per region so they return as active instead of being lost.
+	//
+	// H.A.M. Hideout (12594): four starter tasks. Lumbridge East Swamp (12849): his two
+	// picks, both recovered from his screenshots: catch_some_raw_shrimp and cook_anchovies.
 	private static final int BOBBY_HAM_REGION = 12594;
 	private static final String[] BOBBY_HAM_UNDONE = {
 		"polish_buttons", "obtain_uncut_opal", "pickpocket_HAM", "equip_steel_dagger",
+	};
+	private static final int BOBBY_SWAMP_REGION = 12849;
+	private static final String[] BOBBY_SWAMP_UNDONE = {
+		"catch_some_raw_shrimp", "cook_anchovies",
 	};
 
 	private void migrateHealBobbyRerolledTasks()
@@ -4969,10 +4974,20 @@ public class ChunkBlazerPlugin extends Plugin
 					target.add(id);
 				}
 			}
-			// ...plus, for H.A.M. Hideout, his specific un-done active tasks so they return.
+			// ...plus his specific un-done active tasks for the regions the reroll wiped, so
+			// they return as active instead of the reroll's replacements.
+			String[] pinned = null;
 			if (regionId == BOBBY_HAM_REGION)
 			{
-				for (String id : BOBBY_HAM_UNDONE)
+				pinned = BOBBY_HAM_UNDONE;
+			}
+			else if (regionId == BOBBY_SWAMP_REGION)
+			{
+				pinned = BOBBY_SWAMP_UNDONE;
+			}
+			if (pinned != null)
+			{
+				for (String id : pinned)
 				{
 					if (regionTaskIds.contains(id))
 					{
@@ -4999,19 +5014,14 @@ public class ChunkBlazerPlugin extends Plugin
 			healed++;
 		}
 
-		// Balance: his spend counter was ratcheted to a corrupt 22, far above the real cost
-		// of the chunks he owns (which left his balance at 1). Rebuild spend from the chunks
-		// actually owned — the same figure the impossible-spend repair uses — since that
-		// repair only fires when spent > earned and his corrupt value sits just under.
-		// PAIRED with a one-time server-side spend correction: the sync is monotonic
-		// (GREATEST), so the server's inflated value must be lowered too or it re-inflates.
-		int correctSpent = curveLedgerTotal(countPayableUnlockedChunks());
-		setAccountState("pointsSpent", correctSpent);
-		recomputePointsBalance();
-
-		log.info("[CHUNKBLAZER] Bobby heal: rebuilt {} region roll(s) from completed tasks "
-			+ "(+ H.A.M. Hideout un-done tasks restored); spend rebuilt to {} from owned chunks "
-			+ "(was a corrupt 22). Lower the server's points_spent to match, once.", healed, correctSpent);
+		// Points are NOT touched here. His spend counter was ratcheted to a corrupt 22, but
+		// the login server-restore is monotonic (GREATEST) and would re-raise anything this
+		// rebuilt before it. The corruption is repaired at the correct point instead:
+		// migrateRepairImpossiblePointsSpent() runs AFTER that restore and lowers spend to the
+		// true owned-chunk ledger, so the balance settles without a tug of war.
+		log.info("[CHUNKBLAZER] Bobby heal: rebuilt {} region roll(s) so his completed tasks show as "
+			+ "done and his pre-reroll active tasks (H.A.M. Hideout + Lumbridge East Swamp) return; "
+			+ "the reroll's replacements are dropped.", healed);
 		setAccountState(BOBBY_ROLL_HEAL_KEY, "true");
 	}
 
@@ -6139,9 +6149,8 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void migrateRepairImpossiblePointsSpent()
 	{
-		int earned = computeEarnedPoints();
 		int spent = acInt("pointsSpent", 0);
-		if (earned <= 0 || spent <= earned)
+		if (spent <= 0)
 		{
 			return;
 		}
@@ -6151,19 +6160,25 @@ public class ChunkBlazerPlugin extends Plugin
 		// is the running sum. countPayableUnlockedChunks() already excludes the granted
 		// starting chunk and every 0-cost (free/charter/boss) chunk. For accounts
 		// grandfathered off the old flat-1 economy this sum errs HIGH (they paid less),
-		// which only makes this lower-only repair more conservative — it never lowers
+		// which only makes this lower-only repair more conservative: it never lowers
 		// spent below what a curve player would legitimately owe.
+		//
+		// The ledger, NOT lifetime earned, is the ceiling. A spend counter can be
+		// corrupt while still sitting below earned: Bobby Blazer carried spent 22 with
+		// earned 23, yet the chunks he owns could only ever have cost 3. Gating on
+		// "spent > earned" let that through and left his balance stuck at 1. The
+		// comparison that matters is spent vs the ledger the owned chunks imply.
 		int ledger = curveLedgerTotal(countPayableUnlockedChunks());
-
 		if (ledger >= spent)
 		{
 			return;
 		}
 
-		log.warn("[CHUNKBLAZER] impossible spend counter repaired: spent {} exceeded earned {}, "
-				+ "which play cannot produce. Rebuilt from the {} chunk(s) actually owned: spent = {}. "
-				+ "Balance goes {} -> { }.",
-			spent, earned, getUnlockedRegionIds().size(), ledger,
+		int earned = computeEarnedPoints();
+		log.warn("[CHUNKBLAZER] impossible spend counter repaired: spent {} exceeds the {} its {} owned "
+				+ "chunk(s) could ever cost (lifetime earned {}). Rebuilt from the chunks actually owned: "
+				+ "spent = {}. Balance goes {} to {}.",
+			spent, ledger, getUnlockedRegionIds().size(), earned, ledger,
 			Math.max(0, earned - spent), Math.max(0, earned - ledger));
 		setAccountState("pointsSpent", ledger);
 	}

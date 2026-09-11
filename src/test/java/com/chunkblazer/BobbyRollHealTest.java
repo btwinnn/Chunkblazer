@@ -85,6 +85,27 @@ class BobbyRollHealTest
 	}
 
 	@Test
+	void lumbridgeEastSwampGetsHisPreRerollTasksBack() throws Exception
+	{
+		loggedInAs("Bobby Blazer");
+		// Lumbridge East Swamp (12849) with his real picks; the reroll replaced them with
+		// cook/mine/chop junk from the same region.
+		chunk(12849, false, "catch_some_raw_shrimp", "cook_anchovies",
+			"Cook_meat", "mine_tin", "chop_tree");
+		chunk(300, false, "some_done_task"); // another owned region, fully done
+		owns("12849,300");
+		completed("some_done_task"); // he has completed progress (so the heal runs), none in 12849
+		currentRoll("12849:Cook_meat,mine_tin,chop_tree");
+
+		heal();
+
+		assertEquals(
+			Set.of("catch_some_raw_shrimp", "cook_anchovies"),
+			rolledFor(12849),
+			"his shrimp fishing and cook anchovies picks return; the reroll's junk is dropped");
+	}
+
+	@Test
 	void aBossRegionIsLeftAlone() throws Exception
 	{
 		loggedInAs("Bobby Blazer");

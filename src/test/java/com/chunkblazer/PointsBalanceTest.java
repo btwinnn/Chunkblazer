@@ -411,16 +411,41 @@ class PointsBalanceTest
 			"spend must be rebuilt from the curve cost of the chunks actually owned");
 	}
 
-	/** A healthy account is never touched. */
+	/**
+	 * A healthy account is never touched. The ceiling is the owned-chunk ledger, not
+	 * lifetime earned: 40 spent against 40 owned chunks is a grandfathered flat spender
+	 * sitting well under the curve ledger those chunks imply, so the repair declines.
+	 */
 	@Test
 	void repairLeavesAHealthyAccountAlone() throws Exception
 	{
 		seedEarned(SWITCH_EARNED);
-		when(config.pointsSpent()).thenReturn(40);   // well under earned
+		when(config.pointsSpent()).thenReturn(40);   // under the ledger 40 owned chunks imply
+		ownsChunks(40);
 
 		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
 
 		assertNoWriteTo("pointsSpent");
+	}
+
+	/**
+	 * The Bobby Blazer case the earned-based guard missed: spent sits BELOW lifetime
+	 * earned yet far above what the owned chunks could ever have cost. Earned 23,
+	 * spent 22, but only 3 payable chunks (curve ledger 3). The old "spent {@literal >}
+	 * earned" gate skipped it and left the balance stuck at 1; the ledger gate repairs it.
+	 */
+	@Test
+	void impossibleSpendBelowEarnedIsStillRepaired() throws Exception
+	{
+		seedEarned(23);
+		when(config.pointsSpent()).thenReturn(22);
+		ownsStartChunkPlusPaid(3);
+
+		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
+
+		int expected = ChunkBlazerPlugin.curveLedgerTotal(3);
+		assertEquals(expected, capturedInt("pointsSpent"),
+			"spend above the owned-chunk ledger is repaired even when it is under lifetime earned");
 	}
 
 	/**
