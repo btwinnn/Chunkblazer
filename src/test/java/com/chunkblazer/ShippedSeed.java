@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 /**
