@@ -71,8 +71,6 @@ retrieve them.
 - **Play offline:** turn off **"Enable Server Verification"** in the plugin
   settings. With it off, nothing leaves your client, but server saves,
   leaderboards, and seeing other players are disabled.
-- **Stay hidden:** turn off **"Visible to Others"** to keep your name off the
-  "players online" list while still saving your progress.
 - The plugin's side panel shows a permanent "Progress synced to chunkblazer.com"
   notice with an (ⓘ) link to this same explanation.
 

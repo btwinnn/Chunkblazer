@@ -2027,6 +2027,15 @@ public class ChunkBlazerPanel extends PluginPanel
 		modePanel.add(sectionDivider());
 		modePanel.add(Box.createVerticalStrut(5));
 
+		// Verify-first prompt: verification (the chat-code handshake) proves account
+		// ownership and is required for Competitive, so lead with it here in the same
+		// amber as the "Verify Your Account" banner it points back to.
+		addLabel(modePanel, "<html><table width='190' cellpadding='0' cellspacing='0'><tr><td>"
+			+ "Verify your account, then choose your game mode. Type the code from the verify "
+			+ "banner in public chat first."
+			+ "</td></tr></table></html>", FontManager.getRunescapeSmallFont(), new Color(255, 190, 60));
+		modePanel.add(Box.createVerticalStrut(8));
+
 		// Warning text
 		addLabel(modePanel, "<html><i>This choice is permanent for this account!</i></html>",
 			FontManager.getRunescapeSmallFont(), Color.YELLOW);
