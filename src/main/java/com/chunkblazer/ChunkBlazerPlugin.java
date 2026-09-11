@@ -4900,12 +4900,20 @@ public class ChunkBlazerPlugin extends Plugin
 	{
 		if ("true".equals(acStr(BOBBY_ROLL_HEAL_KEY, "")))
 		{
+			log.debug("[CHUNKBLAZER] Bobby heal: skipping, already applied (flag set)");
 			return;
 		}
-		if (!"Bobby Blazer".equals(getPlayerName()))
+		String bobbyRsn = getPlayerName();
+		if (!"Bobby Blazer".equals(bobbyRsn))
 		{
-			return; // not the affected account — leave armed (do NOT mark done)
+			// Diagnostic: reveals whether the name is null (the login race), a different
+			// account, or a formatting mismatch. Stays armed so it fires once the right
+			// account/name is present.
+			log.info("[CHUNKBLAZER] Bobby heal armed, NOT running yet: current player name is '{}' "
+				+ "(need exactly 'Bobby Blazer')", bobbyRsn);
+			return;
 		}
+		log.info("[CHUNKBLAZER] Bobby heal: matched player '{}', applying", bobbyRsn);
 
 		Set<String> completed = getCompletedTaskIds();
 		int healed = 0;
