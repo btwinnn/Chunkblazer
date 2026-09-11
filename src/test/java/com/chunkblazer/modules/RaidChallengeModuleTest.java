@@ -16,8 +16,8 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.game.ItemManager;
-import net.runelite.http.api.item.ItemStats;
-import net.runelite.http.api.item.ItemEquipmentStats;
+import net.runelite.client.game.ItemStats;
+import net.runelite.client.game.ItemEquipmentStats;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -1002,7 +1002,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		lenient().when(eq.getDstab()).thenReturn(200); // one defence bonus over 125
 		ItemStats stats = mock(ItemStats.class);
 		lenient().when(stats.getEquipment()).thenReturn(eq);
-		lenient().when(itemManager.getItemStats(4749, false)).thenReturn(stats);
+		lenient().when(itemManager.getItemStats(4749)).thenReturn(stats);
 		setEquipment(slot(BODY, 4749));
 		NuzlockeTask t = addTask("inferno_half_past_noon", c -> {
 			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
@@ -1412,7 +1412,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		lenient().when(eq.getPrayer()).thenReturn(prayer);
 		ItemStats stats = mock(ItemStats.class);
 		lenient().when(stats.getEquipment()).thenReturn(eq);
-		lenient().when(itemManager.getItemStats(itemId, false)).thenReturn(stats);
+		lenient().when(itemManager.getItemStats(itemId)).thenReturn(stats);
 	}
 
 	/** Stub an equipped item's Crush defence bonus for equippedCrushDefence(). */
@@ -1422,7 +1422,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		lenient().when(eq.getDcrush()).thenReturn(dcrush);
 		ItemStats stats = mock(ItemStats.class);
 		lenient().when(stats.getEquipment()).thenReturn(eq);
-		lenient().when(itemManager.getItemStats(itemId, false)).thenReturn(stats);
+		lenient().when(itemManager.getItemStats(itemId)).thenReturn(stats);
 	}
 
 	/** Stub an equipped item's Ranged defence bonus for equippedRangedDefence(). */
@@ -1432,7 +1432,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 		lenient().when(eq.getDrange()).thenReturn(drange);
 		ItemStats stats = mock(ItemStats.class);
 		lenient().when(stats.getEquipment()).thenReturn(eq);
-		lenient().when(itemManager.getItemStats(itemId, false)).thenReturn(stats);
+		lenient().when(itemManager.getItemStats(itemId)).thenReturn(stats);
 	}
 
 	/** Fire a hitsplat ON the local player (damage taken), for no_damage. */
