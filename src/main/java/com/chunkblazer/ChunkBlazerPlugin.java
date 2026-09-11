@@ -537,6 +537,12 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private volatile boolean pendingServerLogin = false;
 
+	// The RS profile becomes available (account HASH known) before the display name
+	// loads (the LOGGED_IN race), so name-gated bootstrap steps — the legacy→RSProfile
+	// migration and any per-account heal — skip when onRuneScapeProfileChanged fires.
+	// This defers them to the first onGameTick where getName() is non-null. Reset on logout.
+	private volatile boolean pendingProfileBootstrap = false;
+
 	/**
 	 * Set to true once a server login response comes back successfully, reset on
 	 * LOGIN_SCREEN. Guards against world hops / fairy rings / brief connection
@@ -622,10 +628,7 @@ public class ChunkBlazerPlugin extends Plugin
 			activeTask = null;
 			lastRegionId = -1;
 			pendingServerLogin = false;
-			// Drop dev authorization with the session. Without this it would carry
-			// over to whichever account logs in next on this client, handing a
-			// normal account the dev tools until its own login response arrived.
-			devAuthorized = false;
+			pendingProfileBootstrap = false;
 			// Same reasoning for the cached Progression baseline: it is parsed
 			// for one account, and the next one to log in must re-read (and, if
 			// the stored baseline isn't theirs, capture their own).
@@ -719,6 +722,7 @@ public class ChunkBlazerPlugin extends Plugin
 		if (!isAccountStateAvailable())
 		{
 			log.debug("[CHUNKBLAZER] RS profile cleared (logout) — dropping in-memory task state");
+			pendingProfileBootstrap = false;
 			loadActiveTasks(); // clears, since state is unavailable
 			if (panel != null)
 			{
@@ -726,6 +730,11 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 			return;
 		}
+
+		// The display name may not be loaded yet (LOGGED_IN race). Arm a deferred re-run on
+		// onGameTick so the name-gated steps (migration, per-account heals) run once it is,
+		// even if the immediate bootstrap below runs against a null name.
+		pendingProfileBootstrap = true;
 
 		log.info("[CHUNKBLAZER] RS profile available — bootstrapping account state");
 		// One-time move of any legacy profile-global progress into this account's RSProfile,
@@ -779,6 +788,21 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			pendingServerLogin = false;
 			loginToServer();
+		}
+
+		// Name-gated bootstrap: onRuneScapeProfileChanged fires when the account HASH is
+		// known but getName() can still be null, so the legacy→RSProfile migration and any
+		// per-account heal skip there. Re-run them the moment the name is loaded. Idempotent:
+		// the migration no-ops once its destination exists, and heals are run-once flagged.
+		if (pendingProfileBootstrap && player.getName() != null)
+		{
+			pendingProfileBootstrap = false;
+			migrateLegacyGlobalStateToRSProfile();
+			loadActiveTasks();
+			if (panel != null)
+			{
+				panel.updatePanel();
+			}
 		}
 
 		WorldPoint wp = player.getWorldLocation();
