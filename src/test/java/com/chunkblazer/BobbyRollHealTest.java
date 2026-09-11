@@ -71,8 +71,9 @@ class BobbyRollHealTest
 		// H.A.M. Hideout (12594) with his real tasks; the reroll left only a goblin task.
 		chunk(12594, false, "polish_buttons", "obtain_uncut_opal", "pickpocket_HAM",
 			"equip_steel_dagger", "defeat_goblin_15 seconds");
-		owns("12594");
-		completed(); // nothing completed there yet — all 4 were active/un-done
+		chunk(300, false, "some_done_task"); // another owned region, fully done
+		owns("12594,300");
+		completed("some_done_task"); // he has completed progress (so the heal runs), but none in H.A.M.
 		currentRoll("12594:defeat_goblin_15 seconds");
 
 		heal();
