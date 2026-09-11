@@ -28,10 +28,12 @@ package com.chunkblazer;
 
 import com.chunkblazer.api.AssetStore;
 import com.chunkblazer.api.AudioAsset;
-import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,15 +41,17 @@ import java.util.Map;
 import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.client.audio.AudioPlayer;
 
 /**
  * Manages and plays region-specific sounds for task completion.
+ *
+ * <p>Playback goes through RuneLite's {@link AudioPlayer}. That opens a
+ * {@code Clip} on the audio stream as-is and a Clip output line cannot open
+ * compressed encodings, so the server-delivered µ-law jingles are expanded to
+ * 16-bit PCM here first ({@link #toPcmWav}). The expansion is pure arithmetic
+ * (no javax.sound), and bundled PCM seeds pass straight through.
  */
 @Slf4j
 @Singleton
@@ -91,17 +95,22 @@ public class TaskCompletionSoundManager
 	// loaded (offline / first run) — so a completion is never totally silent.
 	private static final String SEED_SOUND = SOUNDS_BASE_PATH + DEFAULT_SOUND_FOLDER + "/Quest_Complete_1.wav";
 
+	// µ-law expansion bias (ITU-T G.711).
+	private static final int ULAW_BIAS = 0x84;
+	private static final int WAV_FORMAT_PCM = 1;
+	private static final int WAV_FORMAT_MULAW = 7;
+
 	private final Random random = new Random();
 	private final ChunkBlazerConfig config;
 	private final AssetStore assetStore;
-
-	private Clip currentClip;
+	private final AudioPlayer audioPlayer;
 
 	@Inject
-	public TaskCompletionSoundManager(ChunkBlazerConfig config, AssetStore assetStore)
+	public TaskCompletionSoundManager(ChunkBlazerConfig config, AssetStore assetStore, AudioPlayer audioPlayer)
 	{
 		this.config = config;
 		this.assetStore = assetStore;
+		this.audioPlayer = audioPlayer;
 	}
 
 	/**
@@ -182,31 +191,23 @@ public class TaskCompletionSoundManager
 	 */
 	private void playSeed()
 	{
-		playSound(SEED_SOUND);
+		playResource(SEED_SOUND);
 	}
 
 	/**
 	 * Play a sound file bundled in plugin resources.
 	 * @param resourcePath Path to the sound file relative to the plugin package
 	 */
-	private void playSound(String resourcePath)
+	private void playResource(String resourcePath)
 	{
-		try
+		try (InputStream is = getClass().getResourceAsStream(resourcePath))
 		{
-			InputStream is = getClass().getResourceAsStream(resourcePath);
 			if (is == null)
 			{
 				log.error("Sound file not found at path: {}", resourcePath);
 				return;
 			}
-			try (AudioInputStream ais = AudioSystem.getAudioInputStream(new BufferedInputStream(is)))
-			{
-				startClip(ais);
-			}
-		}
-		catch (javax.sound.sampled.UnsupportedAudioFileException e)
-		{
-			log.error("Unsupported audio format for: {} - OGG files require conversion to WAV", resourcePath, e);
+			play(is.readAllBytes());
 		}
 		catch (Exception e)
 		{
@@ -216,20 +217,13 @@ public class TaskCompletionSoundManager
 
 	/**
 	 * Play a sound from a cached asset file on disk (the server-delivered copy).
-	 * Streamed straight off disk — nothing is held decoded in memory between
-	 * plays. µ-law WAVs are decoded natively by javax.sound.sampled.
 	 * @param file The cached .wav file
 	 */
 	private void playFile(File file)
 	{
-		try (FileInputStream fis = new FileInputStream(file);
-			AudioInputStream ais = AudioSystem.getAudioInputStream(new BufferedInputStream(fis)))
+		try
 		{
-			startClip(ais);
-		}
-		catch (javax.sound.sampled.UnsupportedAudioFileException e)
-		{
-			log.error("Unsupported audio format for cached asset: {}", file, e);
+			play(Files.readAllBytes(file.toPath()));
 		}
 		catch (Exception e)
 		{
@@ -238,71 +232,166 @@ public class TaskCompletionSoundManager
 	}
 
 	/**
-	 * Open and start a clip from an already-opened audio stream, applying the
-	 * configured volume. Stops any currently-playing clip first. Shared by the
-	 * bundled-resource and cached-file play paths.
+	 * Expand µ-law to PCM if needed, then hand the PCM WAV to RuneLite's
+	 * {@link AudioPlayer} at the configured volume.
 	 */
-	private void startClip(AudioInputStream ais) throws Exception
+	private void play(byte[] wav) throws Exception
 	{
-		// Stop any currently playing sound
-		stopCurrentSound();
-
-		// A Clip output line can't open compressed encodings (µ-law/A-law) directly
-		// on most mixers — javax.sound can READ them but not play them raw. Decode
-		// to 16-bit signed PCM first (still no external dependency; Java Sound does
-		// the conversion in-memory). Bundled PCM WAVs pass through unchanged.
-		AudioFormat src = ais.getFormat();
-		if (src.getEncoding() != AudioFormat.Encoding.PCM_SIGNED
-			&& src.getEncoding() != AudioFormat.Encoding.PCM_UNSIGNED)
-		{
-			AudioFormat pcm = new AudioFormat(
-				AudioFormat.Encoding.PCM_SIGNED,
-				src.getSampleRate(),
-				16,
-				src.getChannels(),
-				src.getChannels() * 2,
-				src.getSampleRate(),
-				false);
-			ais = AudioSystem.getAudioInputStream(pcm, ais);
-		}
-
-		currentClip = AudioSystem.getClip();
-		currentClip.open(ais);
-
-		// Set volume if available
-		if (currentClip.isControlSupported(FloatControl.Type.MASTER_GAIN))
-		{
-			FloatControl volume = (FloatControl) currentClip.getControl(FloatControl.Type.MASTER_GAIN);
-			// Convert percentage to decibels (-80 to 6 dB range typically).
-			// 0.03f (3%) was hardcoded here, which works out to -30dB — the
-			// clip really did play, it was just inaudible. Now player-tunable.
-			int configured = config != null ? config.taskCompletionSoundVolume() : 3;
-			float volumePercent = Math.max(0.001f, Math.min(1.0f, configured / 100.0f));
-			float dB = (float) (Math.log(volumePercent) / Math.log(10.0) * 20.0);
-			volume.setValue(Math.max(volume.getMinimum(), Math.min(volume.getMaximum(), dB)));
-		}
-
-		currentClip.start();
+		byte[] pcm = toPcmWav(wav);
+		audioPlayer.play(new ByteArrayInputStream(pcm), gainDb());
 	}
 
 	/**
-	 * Stop the currently playing sound if any.
+	 * The configured volume as an {@code AudioPlayer} gain (MASTER_GAIN decibels).
+	 * A percentage converts to dB via {@code 20*log10(pct)}: 100% is 0 dB, and it
+	 * falls away below that. The floor keeps {@code log10(0)} out of the maths.
+	 */
+	private float gainDb()
+	{
+		int configured = config != null ? config.taskCompletionSoundVolume() : 3;
+		float volumePercent = Math.max(0.001f, Math.min(1.0f, configured / 100.0f));
+		return (float) (Math.log10(volumePercent) * 20.0);
+	}
+
+	/**
+	 * Kept for API compatibility. {@code AudioPlayer} owns its one-shot clips and
+	 * closes each when it finishes, so there is nothing to stop here.
 	 */
 	public void stopCurrentSound()
 	{
-		if (currentClip != null && currentClip.isRunning())
-		{
-			currentClip.stop();
-			currentClip.close();
-			currentClip = null;
-		}
 	}
 
 	/**
-	 * Clean up resources.
+	 * Clean up resources. Nothing to release now that playback is fire-and-forget.
 	 */
 	public void shutdown()
 	{
-		stopCurrentSound();
+	}
+
+	// --- µ-law -> PCM (pure arithmetic; no javax.sound) --------------------
+
+	/**
+	 * If {@code wav} is a µ-law WAVE (format tag 7), expand it to a 16-bit signed
+	 * PCM WAVE that a Clip output line can open. PCM input (and anything we don't
+	 * recognise) is returned unchanged for the player to handle.
+	 */
+	static byte[] toPcmWav(byte[] wav)
+	{
+		if (wav == null || wav.length < 44
+			|| wav[0] != 'R' || wav[1] != 'I' || wav[2] != 'F' || wav[3] != 'F')
+		{
+			return wav;
+		}
+
+		int fmtOff = -1;
+		int dataOff = -1;
+		int dataLen = 0;
+		int p = 12; // skip "RIFF"<size>"WAVE"
+		while (p + 8 <= wav.length)
+		{
+			String id = new String(wav, p, 4, StandardCharsets.US_ASCII);
+			int sz = le32(wav, p + 4);
+			int body = p + 8;
+			if (sz < 0 || body + sz > wav.length)
+			{
+				break;
+			}
+			if ("fmt ".equals(id))
+			{
+				fmtOff = body;
+			}
+			else if ("data".equals(id))
+			{
+				dataOff = body;
+				dataLen = sz;
+			}
+			p = body + sz + (sz & 1); // chunks are word-aligned
+		}
+
+		if (fmtOff < 0 || dataOff < 0 || le16(wav, fmtOff) != WAV_FORMAT_MULAW)
+		{
+			return wav; // PCM or unrecognised: leave it to the player
+		}
+
+		int channels = le16(wav, fmtOff + 2);
+		int sampleRate = le32(wav, fmtOff + 4);
+
+		// One µ-law byte per sample expands to one 16-bit PCM sample, frame order
+		// preserved, so mono and stereo both round-trip correctly.
+		byte[] pcm = new byte[dataLen * 2];
+		for (int i = 0; i < dataLen; i++)
+		{
+			short s = ulawToPcm(wav[dataOff + i]);
+			pcm[i * 2] = (byte) (s & 0xff);
+			pcm[i * 2 + 1] = (byte) ((s >> 8) & 0xff);
+		}
+		return buildPcmWav(pcm, channels, sampleRate);
+	}
+
+	/** ITU-T G.711 µ-law byte to a linear 16-bit sample. */
+	static short ulawToPcm(byte mu)
+	{
+		int u = (~mu) & 0xff;
+		int t = ((u & 0x0f) << 3) + ULAW_BIAS;
+		t <<= (u & 0x70) >> 4;
+		return (short) ((u & 0x80) != 0 ? (ULAW_BIAS - t) : (t - ULAW_BIAS));
+	}
+
+	private static byte[] buildPcmWav(byte[] pcmData, int channels, int sampleRate)
+	{
+		int bitsPerSample = 16;
+		int blockAlign = channels * bitsPerSample / 8;
+		int byteRate = sampleRate * blockAlign;
+		int dataLen = pcmData.length;
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream(44 + dataLen);
+		writeAscii(out, "RIFF");
+		writeLe32(out, 36 + dataLen);
+		writeAscii(out, "WAVE");
+		writeAscii(out, "fmt ");
+		writeLe32(out, 16);
+		writeLe16(out, WAV_FORMAT_PCM);
+		writeLe16(out, channels);
+		writeLe32(out, sampleRate);
+		writeLe32(out, byteRate);
+		writeLe16(out, blockAlign);
+		writeLe16(out, bitsPerSample);
+		writeAscii(out, "data");
+		writeLe32(out, dataLen);
+		out.write(pcmData, 0, dataLen);
+		return out.toByteArray();
+	}
+
+	private static int le16(byte[] b, int off)
+	{
+		return (b[off] & 0xff) | ((b[off + 1] & 0xff) << 8);
+	}
+
+	private static int le32(byte[] b, int off)
+	{
+		return (b[off] & 0xff) | ((b[off + 1] & 0xff) << 8)
+			| ((b[off + 2] & 0xff) << 16) | ((b[off + 3] & 0xff) << 24);
+	}
+
+	private static void writeAscii(ByteArrayOutputStream o, String s)
+	{
+		for (int i = 0; i < s.length(); i++)
+		{
+			o.write(s.charAt(i));
+		}
+	}
+
+	private static void writeLe16(ByteArrayOutputStream o, int v)
+	{
+		o.write(v & 0xff);
+		o.write((v >> 8) & 0xff);
+	}
+
+	private static void writeLe32(ByteArrayOutputStream o, int v)
+	{
+		o.write(v & 0xff);
+		o.write((v >> 8) & 0xff);
+		o.write((v >> 16) & 0xff);
+		o.write((v >> 24) & 0xff);
 	}
 }
