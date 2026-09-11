@@ -19,15 +19,10 @@ data-use disclosure. Full detail in `PRIVACY.md`.
 
 ## Blockers (all cleared 2026-08-22)
 1. **Shrink resources.** ✅ Done. The 83 WAVs (~60 MB) moved to the server as
-   content-addressed µ-law via `AssetStore` (one seed jingle kept), then the task
-   JSON (~3 MB) moved to the server too (blocker #2). **Plugin resources
-   64 MB → ~1.5 MB** (seed jingle + PNGs + gzipped catalog seed). See
-   `Chunkblazer-Server/docs/MEDIA-PIPELINE-PLAN.md`.
-2. **Under the reviewer token limit.** ✅ Done. Task JSON is served from
-   `GET /api/tasks` and cached client-side (see
-   `Chunkblazer-Server/docs/TASK-CATALOG-MIGRATION-PLAN.md`). Comment-stripped
-   `src/main/java` is ~129k tokens, under the ~200k cap. Tests live in `src/test`
-   (not counted). Removing dead code + dev tools from `main` trimmed it further.
+   content-addressed µ-law via `AssetStore` (one seed jingle kept), and the task
+   JSON (~3 MB) moved to the server too, served from `GET /api/tasks` and cached
+   client-side. **Plugin resources 64 MB → ~1.5 MB** (seed jingle + PNGs +
+   gzipped catalog seed). See `Chunkblazer-Server/docs/MEDIA-PIPELINE-PLAN.md`.
 
 ## Before submit (done)
 - ✅ Gradle wrapper committed (`gradlew` / `gradlew.bat` + `gradle/wrapper/*`,
