@@ -706,7 +706,58 @@ public class ChunkBlazerPanel extends PluginPanel
 		});
 		row.add(info);
 
+		// On-demand backup of the account sync key, for moving it to another computer that
+		// does not share RuneLite config sync. The key is otherwise never shown.
+		JLabel keyLink = styledLabel("(key)", FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR);
+		keyLink.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+		keyLink.setToolTipText("Back up your account sync key to move it to another computer");
+		keyLink.addMouseListener(new java.awt.event.MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e)
+			{
+				showSyncKeyBackup();
+			}
+		});
+		row.add(keyLink);
+
 		return row;
+	}
+
+	/**
+	 * Show and clipboard-copy the account's sync key on the player's explicit request, so they
+	 * can save it and paste it into the "Sync recovery key" field on another computer. Only
+	 * needed for a local RuneLite profile with no cross-device config sync.
+	 */
+	private void showSyncKeyBackup()
+	{
+		String key = plugin.getSyncRecoveryKey();
+		if (key == null || key.isEmpty())
+		{
+			JOptionPane.showMessageDialog(this,
+				"No sync key yet. Turn on Server Sync and log in once, and your key is created automatically.",
+				"Sync key", JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
+		try
+		{
+			java.awt.Toolkit.getDefaultToolkit().getSystemClipboard()
+				.setContents(new java.awt.datatransfer.StringSelection(key), null);
+		}
+		catch (Exception ignored)
+		{
+			// Clipboard may be unavailable; the field below still lets them select and copy.
+		}
+		JTextField field = new JTextField(key);
+		field.setEditable(false);
+		field.setCaretPosition(0);
+		JPanel content = new JPanel(new BorderLayout(0, 6));
+		content.add(new JLabel("<html><body style='width:260px'>Copied to your clipboard. Save it "
+			+ "somewhere safe, like a password manager. To sync this account on another computer, "
+			+ "paste it into the \"Sync recovery key\" setting there.<br><br><b>Anyone with this key "
+			+ "can access your account. Do not share it.</b></body></html>"), BorderLayout.NORTH);
+		content.add(field, BorderLayout.CENTER);
+		JOptionPane.showMessageDialog(this, content, "Your account sync key", JOptionPane.WARNING_MESSAGE);
 	}
 
 	/**

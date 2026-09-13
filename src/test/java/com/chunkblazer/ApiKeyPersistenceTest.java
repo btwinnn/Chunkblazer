@@ -48,12 +48,12 @@ class ApiKeyPersistenceTest
 	}
 
 	@Test
-	void firstClaimKeyIsStoredPerAccountAndMirroredToTheRecoveryField() throws Exception
+	void firstClaimKeyIsStoredPerAccountAndNeverInTheVisibleField() throws Exception
 	{
 		persist("KEY-abc");
 
 		assertEquals("KEY-abc", rsProfile.get("apiKey"), "key persisted per-account (RSProfile)");
-		verify(configManager).setConfiguration("chunkblazer", "apiKey", "KEY-abc");
+		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("apiKey"), any());
 	}
 
 	@Test
@@ -88,14 +88,16 @@ class ApiKeyPersistenceTest
 	}
 
 	@Test
-	void loadFallsBackToThePastedRecoveryKey() throws Exception
+	void loadAdoptsAPastedKeyIntoRsProfileAndClearsTheField() throws Exception
 	{
-		// RSProfile empty (fresh install / new profile); the player pasted a backup key.
+		// RSProfile empty (fresh install / new profile); the player pasted a saved key.
 		lenient().when(config.apiKey()).thenReturn("  PASTED-KEY  ");
 
 		load();
 
 		verify(apiClient).setPlayerApiKey("PASTED-KEY"); // trimmed
+		assertEquals("PASTED-KEY", rsProfile.get("apiKey"), "pasted key moves into the RSProfile store");
+		verify(configManager).unsetConfiguration("chunkblazer", "apiKey"); // input field cleared
 	}
 
 	// --- helpers -----------------------------------------------------------
