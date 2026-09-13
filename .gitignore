@@ -38,3 +38,12 @@ session_logs/
 logs/
 *-log.txt
 *.log.txt
+.bat/drift-check.bat
+.bat/drift-check.ps1
+.bat/jagex-wrapper.bat
+.bat/nuke-gradle-cache.bat
+.bat/README.md
+.bat/run-chunkblazer.bat
+.bat/setup-chunkblazer.bat
+.bat/sync-to-runelite.bat
+.bat/update-runelite.bat
