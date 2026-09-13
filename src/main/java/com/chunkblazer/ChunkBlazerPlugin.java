@@ -2791,11 +2791,11 @@ public class ChunkBlazerPlugin extends Plugin
 
 	/**
 	 * Load the current account's ChunkBlazer API key into the api client before login.
-	 * The authoritative copy is the per-account RSProfile store: it survives a settings
-	 * Reset (which only clears declared config items, never RSProfile keys) and is not
-	 * user-editable. If that is empty (a fresh install or new RuneLite profile), a key the
-	 * player pasted into the visible recovery field is adopted into the RSProfile store and
-	 * the field is cleared, so the key never lives in a resettable or on-screen field.
+	 * The authoritative copy is the per-account RSProfile store, which survives a settings
+	 * Reset (Reset only clears declared config items, never RSProfile keys). If it is empty
+	 * (a fresh install or new RuneLite profile), a key the player pasted into the visible
+	 * "Sync recovery key" field is adopted. The masked field is then kept mirrored to the
+	 * true key so the player can reveal it in settings to move the account to another device.
 	 */
 	private void loadPersistedApiKey()
 	{
@@ -2804,33 +2804,34 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 		String key = acStr("apiKey", "");
-		String pasted = config.apiKey() == null ? "" : config.apiKey().trim();
-		if ((key == null || key.isEmpty()) && !pasted.isEmpty())
+		String field = config.apiKey() == null ? "" : config.apiKey().trim();
+		if ((key == null || key.isEmpty()) && !field.isEmpty())
 		{
-			// Fresh install / new profile: adopt the pasted recovery key as this account's.
-			key = pasted;
+			// Fresh install / new profile: adopt a pasted recovery key as this account's.
+			key = field;
 			if (isAccountStateAvailable())
 			{
 				setAccountState("apiKey", key);
 			}
 		}
-		// The key must never linger in the visible, resettable field: once it is in the
-		// RSProfile store, clear the input (also tidies keys pasted before this change).
-		if (!pasted.isEmpty())
-		{
-			configManager.unsetConfiguration(CONFIG_GROUP, "apiKey");
-		}
 		if (key != null && !key.isEmpty())
 		{
 			apiClient.setPlayerApiKey(key);
+			// Keep the masked "Sync recovery key" field showing the true key so it is viewable
+			// in settings (via the reveal eye). Self-heals after a Reset clears it or an edit
+			// changes it, because the RSProfile copy stays authoritative.
+			if (!key.equals(config.apiKey()))
+			{
+				configManager.setConfiguration(CONFIG_GROUP, "apiKey", key);
+			}
 		}
 	}
 
 	/**
-	 * Persist the account's API key so it survives restarts without a re-fetch. Stored ONLY
-	 * in the per-account RSProfile key, never the visible field: it is then Reset-proof, not
-	 * user-editable, and never displayed. The visible field is purely a paste-to-restore
-	 * input, which loadPersistedApiKey adopts and clears. No-op for an empty or unchanged key.
+	 * Persist the account's API key so it survives restarts without a re-fetch. The
+	 * authoritative copy is the per-account RSProfile key (survives a settings Reset); the
+	 * visible masked field mirrors it so the player can reveal it in settings to move the
+	 * account to another computer. loadPersistedApiKey keeps the two in sync.
 	 */
 	private void persistApiKey(String key)
 	{
@@ -2842,13 +2843,16 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			setAccountState("apiKey", key);
 		}
+		if (!key.equals(config.apiKey()))
+		{
+			configManager.setConfiguration(CONFIG_GROUP, "apiKey", key);
+		}
 	}
 
 	/**
-	 * The current account's sync (API) key, so a player can back it up and paste it into the
-	 * "Sync recovery key" field on another computer (needed only for a local RuneLite profile
-	 * with no cross-device config sync). Empty until sync is on and login has issued or loaded
-	 * it. This is the ONLY place the key is surfaced, and only on the player's explicit request.
+	 * The current account's sync key, read from the authoritative per-account store so it works
+	 * even right after a settings Reset (Reset clears the visible field but not the RSProfile
+	 * copy). Lets the panel reveal and copy it on request. Empty until sync is on and login runs.
 	 */
 	public String getSyncRecoveryKey()
 	{

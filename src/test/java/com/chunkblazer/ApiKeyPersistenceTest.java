@@ -48,12 +48,12 @@ class ApiKeyPersistenceTest
 	}
 
 	@Test
-	void firstClaimKeyIsStoredPerAccountAndNeverInTheVisibleField() throws Exception
+	void firstClaimKeyIsStoredPerAccountAndMirroredToTheField() throws Exception
 	{
 		persist("KEY-abc");
 
 		assertEquals("KEY-abc", rsProfile.get("apiKey"), "key persisted per-account (RSProfile)");
-		verify(configManager, never()).setConfiguration(eq("chunkblazer"), eq("apiKey"), any());
+		verify(configManager).setConfiguration("chunkblazer", "apiKey", "KEY-abc"); // mirrored for reveal
 	}
 
 	@Test
@@ -77,18 +77,20 @@ class ApiKeyPersistenceTest
 	}
 
 	@Test
-	void loadPrefersThePerAccountKey() throws Exception
+	void loadPrefersThePerAccountKeyAndSelfHealsTheField() throws Exception
 	{
 		rsProfile.put("apiKey", "ACCOUNT-KEY");
-		lenient().when(config.apiKey()).thenReturn("PASTED-KEY");
+		lenient().when(config.apiKey()).thenReturn("PASTED-KEY"); // a stale/edited field value
 
 		load();
 
 		verify(apiClient).setPlayerApiKey("ACCOUNT-KEY");
+		// The authoritative RSProfile key wins and the visible field is corrected back to it.
+		verify(configManager).setConfiguration("chunkblazer", "apiKey", "ACCOUNT-KEY");
 	}
 
 	@Test
-	void loadAdoptsAPastedKeyIntoRsProfileAndClearsTheField() throws Exception
+	void loadAdoptsAPastedKeyIntoRsProfileAndMirrorsItBack() throws Exception
 	{
 		// RSProfile empty (fresh install / new profile); the player pasted a saved key.
 		lenient().when(config.apiKey()).thenReturn("  PASTED-KEY  ");
@@ -97,7 +99,7 @@ class ApiKeyPersistenceTest
 
 		verify(apiClient).setPlayerApiKey("PASTED-KEY"); // trimmed
 		assertEquals("PASTED-KEY", rsProfile.get("apiKey"), "pasted key moves into the RSProfile store");
-		verify(configManager).unsetConfiguration("chunkblazer", "apiKey"); // input field cleared
+		verify(configManager).setConfiguration("chunkblazer", "apiKey", "PASTED-KEY"); // normalized in the field
 	}
 
 	// --- helpers -----------------------------------------------------------
