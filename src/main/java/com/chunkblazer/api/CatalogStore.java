@@ -92,12 +92,20 @@ public class CatalogStore
 	private final ChunkBlazerConfig config;
 	private final Gson gson;
 
-	private final ExecutorService refreshExecutor = Executors.newSingleThreadExecutor(r ->
+	// NOT final: this is a singleton, and disabling the plugin runs shutdown() which
+	// terminates the pool, so a re-enable in the same session must build a fresh one
+	// or every submit throws RejectedExecutionException. init() rebuilds it.
+	private ExecutorService refreshExecutor;
+
+	private static ExecutorService newRefreshExecutor()
 	{
-		Thread t = new Thread(r, "chunkblazer-catalog-refresh");
-		t.setDaemon(true);
-		return t;
-	});
+		return Executors.newSingleThreadExecutor(r ->
+		{
+			Thread t = new Thread(r, "chunkblazer-catalog-refresh");
+			t.setDaemon(true);
+			return t;
+		});
+	}
 
 	private final File cacheDir;
 	private final File catalogFile;
@@ -138,6 +146,13 @@ public class CatalogStore
 	 */
 	public void init()
 	{
+		// Build (or rebuild, after a disable/enable) the refresh pool before anything
+		// submits to it, or a re-enable hits a terminated executor.
+		if (refreshExecutor == null || refreshExecutor.isShutdown())
+		{
+			refreshExecutor = newRefreshExecutor();
+		}
+
 		//noinspection ResultOfMethodCallIgnored
 		cacheDir.mkdirs();
 
@@ -273,7 +288,10 @@ public class CatalogStore
 
 	public void shutdown()
 	{
-		refreshExecutor.shutdownNow();
+		if (refreshExecutor != null)
+		{
+			refreshExecutor.shutdownNow();
+		}
 	}
 
 	// ==================== internals ====================
