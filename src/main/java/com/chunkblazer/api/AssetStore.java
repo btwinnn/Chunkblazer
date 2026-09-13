@@ -96,14 +96,21 @@ public class AssetStore
 	private final Gson gson;
 
 	// Single dedicated warm thread: downloads are serialized and can never
-	// starve gameplay calls (/sync, /heartbeat) on the main executor.
-	private final ExecutorService warmExecutor =
-		Executors.newSingleThreadExecutor(r ->
+	// starve gameplay calls (/sync, /heartbeat) on the main executor. NOT final:
+	// this is a singleton, and disabling the plugin runs shutdown() which
+	// terminates the pool, so a re-enable in the same session must build a fresh
+	// one or every submit throws RejectedExecutionException. init() rebuilds it.
+	private ExecutorService warmExecutor;
+
+	private static ExecutorService newWarmExecutor()
+	{
+		return Executors.newSingleThreadExecutor(r ->
 		{
 			Thread t = new Thread(r, "chunkblazer-asset-warm");
 			t.setDaemon(true);
 			return t;
 		});
+	}
 
 	// Guards against enqueuing the same asset twice while a download is in
 	// flight (the render-path storm guard).
@@ -145,6 +152,13 @@ public class AssetStore
 	 */
 	public void init()
 	{
+		// Build (or rebuild, after a disable/enable) the warm pool before anything
+		// submits to it, or a re-enable hits a terminated executor.
+		if (warmExecutor == null || warmExecutor.isShutdown())
+		{
+			warmExecutor = newWarmExecutor();
+		}
+
 		//noinspection ResultOfMethodCallIgnored
 		cacheDir.mkdirs();
 
@@ -298,7 +312,10 @@ public class AssetStore
 
 	public void shutdown()
 	{
-		warmExecutor.shutdownNow();
+		if (warmExecutor != null)
+		{
+			warmExecutor.shutdownNow();
+		}
 	}
 
 	// ==================== internals ====================
