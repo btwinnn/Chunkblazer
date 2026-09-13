@@ -247,9 +247,8 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "serverSyncEnabled",
 		name = "Enable Server Sync",
-		description = "Sync your progress to chunkblazer.com. Features include cross-device saves, leaderboards, "
-			+ "player discovery, and Competitive eligibility. Nothing is sent until "
-			+ "you turn it on, and your existing progress uploads when you do.",
+		description = "Save your progress to chunkblazer.com for cross-device saves and leaderboards. "
+			+ "Nothing is sent until you enable it.",
 		position = 1
 	)
 	default boolean apiEnabled()
@@ -260,10 +259,8 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "apiKey",
 		name = "Sync recovery key",
-		description = "Your account sync key, kept per account and filled in automatically. Click the eye "
-			+ "to reveal it and move this account to another computer, or paste a saved key here to "
-			+ "restore access on a new install. Masked on purpose: anyone with a key can act as that "
-			+ "account. A settings Reset does not lose it; it comes back on your next login.",
+		description = "Your account key, set automatically. Paste a saved key here to restore sync on a "
+			+ "new device. Keep it private.",
 		position = 2,
 		secret = true
 	)
@@ -282,9 +279,7 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "showTaskCards",
 		name = "Task Reveal Cards",
-		description = "Newly rolled tasks arrive as face-down cards you click to flip. "
-			+ "A task is not added to your list or tracked until its card is turned over. "
-			+ "Turn this off to have rolled tasks go straight into your list as before.",
+		description = "New tasks arrive as face-down cards you flip to reveal.",
 		section = displaySection,
 		position = 0
 	)
@@ -496,8 +491,7 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "showOtherPlayers",
 		name = "Show General Info",
-		description = "Show an icon and general info (e.g. account type and mode, like \"Main Casual\") "
-			+ "above other ChunkBlazer players in-game.",
+		description = "Show an icon and account info over other ChunkBlazer players.",
 		section = playerDiscoverySection,
 		position = 0
 	)
