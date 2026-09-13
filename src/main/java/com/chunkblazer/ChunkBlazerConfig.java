@@ -26,8 +26,6 @@
 
 package com.chunkblazer;
 
-import java.awt.Color;
-import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -479,101 +477,5 @@ public interface ChunkBlazerConfig extends Config
 	default Keybind worldMapUnlockKey()
 	{
 		return Keybind.SHIFT;
-	}
-
-	@ConfigSection(
-		name = "Player Discovery",
-		description = "Settings for seeing other ChunkBlazer players",
-		position = 5
-	)
-	String playerDiscoverySection = "playerDiscovery";
-
-	@ConfigItem(
-		keyName = "showOtherPlayers",
-		name = "Show General Info",
-		description = "Show an icon and account info over other ChunkBlazer players.",
-		section = playerDiscoverySection,
-		position = 0
-	)
-	default boolean showOtherPlayers()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "showChatIcons",
-		name = "Show Chat Icons",
-		description = "Display a ChunkBlazer icon next to player names in chat",
-		section = playerDiscoverySection,
-		position = 1
-	)
-	default boolean showChatIcons()
-	{
-		return true;
-	}
-
-
-	@ConfigItem(
-		keyName = "showPlayerPoints",
-		name = "Show Player Points",
-		description = "Display point totals above other players",
-		section = playerDiscoverySection,
-		position = 3
-	)
-	default boolean showPlayerPoints()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "showPlayerRank",
-		name = "Show Player Rank",
-		description = "Display leaderboard rank above other players",
-		section = playerDiscoverySection,
-		position = 4
-	)
-	default boolean showPlayerRank()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "showMinimapHighlight",
-		name = "Highlight on Minimap",
-		description = "Mark nearby ChunkBlazer players with a coloured dot on the minimap",
-		section = playerDiscoverySection,
-		position = 5
-	)
-	default boolean showMinimapHighlight()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "showPlayerOutline",
-		name = "Outline Players",
-		description = "Draw a glowing outline around nearby ChunkBlazer players' models",
-		section = playerDiscoverySection,
-		position = 6
-	)
-	default boolean showPlayerOutline()
-	{
-		return true;
-	}
-
-	@Alpha
-	@ConfigItem(
-		// Key bumped from "recognitionColor" to drop stale persisted values (an old
-		// default saved a dark blue into existing profiles); this re-applies the
-		// flame-orange default for everyone. Still user-customisable.
-		keyName = "recognitionColorV2",
-		name = "Highlight Colour",
-		description = "Colour for the overhead tag, model outline, and minimap dot on other ChunkBlazer players",
-		section = playerDiscoverySection,
-		position = 7
-	)
-	default Color recognitionColor()
-	{
-		return new Color(255, 152, 0); // flame orange (matches the ChunkBlazer theme)
 	}
 }

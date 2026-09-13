@@ -56,7 +56,6 @@ import java.util.Collection;
 import java.util.Collections;
 import net.runelite.api.GameState;
 import net.runelite.api.MenuAction;
-import net.runelite.api.MessageNode;
 import net.runelite.api.Player;
 import net.runelite.api.Skill;
 import net.runelite.api.NPC;
@@ -88,7 +87,6 @@ import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.Text;
-import net.runelite.client.game.ChatIconManager;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import com.chunkblazer.api.ChunkBlazerApiClient;
 import com.chunkblazer.api.EligibilitySnapshot;
@@ -137,22 +135,10 @@ public class ChunkBlazerPlugin extends Plugin
 	private ChunkBlazerSceneOverlay sceneOverlay;
 
 	@Inject
-	private ChunkBlazerPlayerOverlay playerOverlay;
-
-	@Inject
-	private ChunkBlazerMinimapPlayerOverlay minimapPlayerOverlay;
-
-	@Inject
 	private ChunkBlazerOrbOverlay orbOverlay;
 
 	@Inject
 	private ChunkBlazerBossTokenOverlay bossTokenOverlay;
-
-	@Inject
-	private ChunkBlazerRoster roster;
-
-	@Inject
-	private ChatIconManager chatIconManager;
 
 	@Inject
 	private TaskCompletionAnimationOverlay taskCompletionAnimationOverlay;
@@ -284,22 +270,6 @@ public class ChunkBlazerPlugin extends Plugin
 	private ScheduledFuture<?> syncFuture;
 	private static final long SYNC_INTERVAL_SECONDS = 30;
 
-	/** Handle for the periodic presence heartbeat; cancelled on shutDown(). */
-	private ScheduledFuture<?> heartbeatFuture;
-	private static final long HEARTBEAT_INTERVAL_SECONDS = 30;
-
-	/** Handle for the periodic online-roster refresh; cancelled on shutDown(). */
-	private ScheduledFuture<?> rosterFuture;
-	private static final long ROSTER_INTERVAL_SECONDS = 30;
-
-	/**
-	 * ChatIconManager handle for the ChunkBlazer chat icon. -1 until registered.
-	 * The renderable index ({@code <img=N>}) is resolved lazily per message via
-	 * {@link ChatIconManager#chatIconIndex(int)} since it isn't valid until the
-	 * client has loaded mod icons after login.
-	 */
-	private int chatIconId = -1;
-
 	/**
 	 * Verification handshake state. Non-null when we have an outstanding nonce
 	 * waiting to be typed in public chat. Cleared on success, on logout, or
@@ -415,17 +385,6 @@ public class ChunkBlazerPlugin extends Plugin
 		syncFuture = executorService.scheduleAtFixedRate(
 			this::syncToServer, SYNC_INTERVAL_SECONDS, SYNC_INTERVAL_SECONDS, TimeUnit.SECONDS);
 
-		// Presence heartbeat — updates players.last_heartbeat_at + current
-		// world/region so the server knows who's currently online and where.
-		heartbeatFuture = executorService.scheduleAtFixedRate(
-			this::sendHeartbeatToServer, HEARTBEAT_INTERVAL_SECONDS, HEARTBEAT_INTERVAL_SECONDS, TimeUnit.SECONDS);
-
-		// Online-roster refresh — pulls the live list of ChunkBlazer players so
-		// the recognition surfaces (chat icon, minimap dot, overhead tag,
-		// outline) know who to decorate. First run delayed one interval.
-		rosterFuture = executorService.scheduleAtFixedRate(
-			this::refreshRoster, ROSTER_INTERVAL_SECONDS, ROSTER_INTERVAL_SECONDS, TimeUnit.SECONDS);
-
 		// Create and register the sidebar panel
 		panel = new ChunkBlazerPanel();
 		panel.init(this);
@@ -465,23 +424,8 @@ public class ChunkBlazerPlugin extends Plugin
 		overlayManager.add(taskCardOverlay);
 		mouseManager.registerMouseListener(taskCardInput);
 
-		// Player recognition surfaces: overhead tag + model outline (scene) and
-		// minimap dots. Each render path is individually config-gated.
-		overlayManager.add(playerOverlay);
-		overlayManager.add(minimapPlayerOverlay);
 		overlayManager.add(orbOverlay);
 		overlayManager.add(bossTokenOverlay);
-
-		// Register the ChunkBlazer chat icon shown next to other plugin users'
-		// names in public chat. chat_icon.png is a purpose-built 16x16
-		// ChunkBlazer glyph drawn to read crisply at chat size. Register it at
-		// its native size — resizing here was anti-aliasing the edges into
-		// faint, washed-out pixels.
-		BufferedImage chatIcon = ImageUtil.loadImageResource(getClass(), "chat_icon.png");
-		if (chatIcon != null && chatIconId < 0)
-		{
-			chatIconId = chatIconManager.registerChatIcon(chatIcon);
-		}
 
 		// Load or assign a task if player is logged in
 		if (client.getGameState() == GameState.LOGGED_IN)
@@ -491,8 +435,7 @@ public class ChunkBlazerPlugin extends Plugin
 			// The plugin was enabled (or hot-reloaded) while already logged in,
 			// so there's no LOGGED_IN transition coming to kick off the server
 			// login. Queue it here; onGameTick fires it once the local player's
-			// name is readable. Without this we'd never obtain an api_key, so
-			// heartbeats no-op and recognition never lights up.
+			// name is readable. Without this we'd never obtain an api_key.
 			if (!serverLoginDone)
 			{
 				pendingServerLogin = true;
@@ -509,25 +452,12 @@ public class ChunkBlazerPlugin extends Plugin
 			syncFuture.cancel(false);
 			syncFuture = null;
 		}
-		if (heartbeatFuture != null)
-		{
-			heartbeatFuture.cancel(false);
-			heartbeatFuture = null;
-		}
-		if (rosterFuture != null)
-		{
-			rosterFuture.cancel(false);
-			rosterFuture = null;
-		}
-		roster.clear();
 		clientToolbar.removeNavigation(navButton);
 		overlayManager.remove(worldMapOverlay);
 		keyManager.unregisterKeyListener(inputListener);
 		worldMapUnlockKeyPressed = false;
 		overlayManager.remove(minimapOverlay);
 		overlayManager.remove(sceneOverlay);
-		overlayManager.remove(playerOverlay);
-		overlayManager.remove(minimapPlayerOverlay);
 		overlayManager.remove(orbOverlay);
 		overlayManager.remove(bossTokenOverlay);
 		overlayManager.remove(taskCompletionAnimationOverlay);
@@ -646,11 +576,6 @@ public class ChunkBlazerPlugin extends Plugin
 				log.warn("[CHUNKBLAZER] skipping logout sync — RS profile already cleared, so "
 					+ "per-account state is unreadable and a sync would push empty over the record");
 			}
-			// Logout beacon — tells the server we're offline now so it can snapshot
-			// this just-ended session's hi-scores immediately instead of waiting for
-			// heartbeats to go stale. Fire-and-forget; goOffline() no-ops when the
-			// API is disabled or no api_key is set.
-			apiClient.goOffline();
 			activeTask = null;
 			lastRegionId = -1;
 			pendingServerLogin = false;
@@ -676,8 +601,6 @@ public class ChunkBlazerPlugin extends Plugin
 			pendingNuzlockeSnapshot = null;
 			pendingCompetitiveLock = false;
 			panel.hideVerificationPrompt();
-			// Drop the recognition roster; it'll repopulate after next login.
-			roster.clear();
 			// Refresh the side panel into its logged-out state (gates the
 			// gameplay sections behind being in-game).
 			panel.updatePanel();
@@ -2774,11 +2697,6 @@ public class ChunkBlazerPlugin extends Plugin
 					// First-claim logins return a fresh key; capture it per-account and
 					// mirror it into the visible recovery field. Idempotent afterwards.
 					persistApiKey(apiClient.getPlayerApiKey());
-					// Recognition is roster-driven; don't make the player wait for
-					// the next 30s poll. Announce presence now and, once the
-					// heartbeat is committed, refresh the roster so our own chat
-					// icon — and anyone already online — lights up within ~a second.
-					kickPresence();
 					// A Competitive lock the player asked for while sync was off:
 					// now that we're logged in (api_key is set), start it. beginNuzlockeLock
 					// handles the eligibility check + verification handshake from here.
@@ -2880,10 +2798,7 @@ public class ChunkBlazerPlugin extends Plugin
 	@Subscribe
 	public void onChatMessage(ChatMessage event)
 	{
-		// Decorate other ChunkBlazer players' names with our chat icon, then
-		// run the verification handshake check (which no-ops unless a nonce is
-		// outstanding).
-		maybeAddChatIcon(event);
+		// Run the verification handshake check (no-ops unless a nonce is outstanding).
 		handleVerificationChat(event);
 		handleBossCompletionChat(event);
 	}
@@ -3133,53 +3048,6 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			recordBossCompletion("sol_heredit");
 		}
-	}
-
-	/**
-	 * If the message's sender is an online ChunkBlazer player, prepend our chat
-	 * icon to their name so plugin users recognize each other in chat. Runs on
-	 * the client thread (event-bus), so mutating the message node is safe.
-	 */
-	private void maybeAddChatIcon(ChatMessage event)
-	{
-		if (!config.showChatIcons() || chatIconId < 0)
-		{
-			return;
-		}
-		ChatMessageType type = event.getType();
-		if (type != ChatMessageType.PUBLICCHAT && type != ChatMessageType.MODCHAT
-			&& type != ChatMessageType.FRIENDSCHAT && type != ChatMessageType.CLAN_CHAT
-			&& type != ChatMessageType.CLAN_GUEST_CHAT)
-		{
-			return;
-		}
-		String name = event.getName();
-		if (name == null || !roster.isMember(name))
-		{
-			return;
-		}
-		int index = chatIconManager.chatIconIndex(chatIconId);
-		if (index < 0)
-		{
-			return; // icons not loaded into the client yet
-		}
-		MessageNode node = event.getMessageNode();
-		if (node == null)
-		{
-			return;
-		}
-		String imgTag = "<img=" + index + ">";
-		String currentName = node.getName();
-		if (currentName == null || currentName.contains(imgTag))
-		{
-			return; // already tagged this message
-		}
-		// ChunkBlazer dev/tester accounts get an orange [Dev] tag ahead of the
-		// chat icon so they're recognizable in chat. The img-tag guard above also
-		// prevents the [Dev] tag from being re-applied on message re-render.
-		ChunkBlazerRoster.Entry entry = roster.get(name);
-		String devTag = (entry != null && entry.isDev()) ? "<col=ff9d3c>[Dev]</col>" : "";
-		node.setName(devTag + imgTag + currentName);
 	}
 
 	/**
@@ -3836,94 +3704,6 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Presence heartbeat. Reads world + lastRegionId on the client thread,
-	 * then fires apiClient.sendHeartbeat which itself short-circuits if
-	 * playerApiKey hasn't been set by login yet. Safe to fire blindly.
-	 */
-	private void sendHeartbeatToServer()
-	{
-		if (!config.apiEnabled())
-		{
-			return;
-		}
-		if (client.getGameState() != GameState.LOGGED_IN)
-		{
-			return;
-		}
-		clientThread.invoke(() ->
-		{
-			// Self-heal: if we're in-game but never completed the server login
-			// (plugin enabled while already logged in, or the server was down
-			// when we first tried), recover it here rather than waiting for a
-			// fresh LOGGED_IN event that may never come. Heartbeats no-op until
-			// login stores our api_key, so without this the player stays
-			// invisible — no presence, no recognition icons. On success
-			// loginToServer() calls kickPresence(), which heartbeats and
-			// refreshes the roster, so recognition lights up within ~a second.
-			if (!serverLoginDone)
-			{
-				loginToServer();
-				return;
-			}
-			int world = client.getWorld();
-			int region = lastRegionId;
-			// Always visible: the "Visible to Others" toggle was removed (was broken).
-			apiClient.sendHeartbeat(world, region, true);
-		});
-	}
-
-	/**
-	 * Refresh the online-player roster that powers the recognition surfaces.
-	 * Skips the network call entirely when every recognition toggle is off, or
-	 * when we're not in-game, so we stay polite to the server's rate caps.
-	 */
-	private void refreshRoster()
-	{
-		if (!config.apiEnabled() || client.getGameState() != GameState.LOGGED_IN)
-		{
-			return;
-		}
-		if (!config.showOtherPlayers() && !config.showChatIcons()
-			&& !config.showMinimapHighlight() && !config.showPlayerOutline())
-		{
-			return;
-		}
-		apiClient.getOnlinePlayers(-1)
-			.thenAccept(roster::update)
-			.exceptionally(e ->
-			{
-				return null;
-			});
-	}
-
-	/**
-	 * Immediate presence kick, fired once on login instead of waiting for the
-	 * 30s scheduled heartbeat. Announces this player to the server now, and once
-	 * the heartbeat is committed (we chain on the returned future) refreshes the
-	 * roster so the player's own chat icon and anyone already online light up
-	 * within roughly a second of logging in.
-	 */
-	private void kickPresence()
-	{
-		if (!config.apiEnabled() || apiClient == null)
-		{
-			return;
-		}
-		clientThread.invoke(() ->
-		{
-			if (client.getGameState() != GameState.LOGGED_IN)
-			{
-				return;
-			}
-			int world = client.getWorld();
-			int region = lastRegionId;
-			// Always visible: the "Visible to Others" toggle was removed (was broken).
-			apiClient.sendHeartbeat(world, region, true)
-				.whenComplete((v, t) -> refreshRoster());
-		});
-	}
-
-	/**
 	 * Periodic save-state sync. Runs on the executor thread; client state is
 	 * read by hopping to the client thread first.
 	 */
@@ -3935,6 +3715,15 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		if (client.getGameState() != GameState.LOGGED_IN)
 		{
+			return;
+		}
+		if (!serverLoginDone)
+		{
+			// Self-heal a server login that never completed (plugin enabled while already
+			// in-game, or the server was down on the first attempt) rather than waiting for a
+			// fresh LOGGED_IN event. loginToServer reads the player name, so hop to the client
+			// thread; it no-ops if the name isn't ready yet and this retries next interval.
+			clientThread.invoke(this::loginToServer);
 			return;
 		}
 		if (!isAccountStateAvailable())
