@@ -133,6 +133,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	// Data-sync header: the "Progress synced" notice (shown when sync is ON) and the
 	// first-run "Enable Sync" prompt (shown when it's OFF, the default) — toggled in updatePanel.
 	private JPanel dataNoticeRow;
+	private JButton showKeyButton;
 	private JPanel syncPromptPanel;
 	private JPanel currentTaskPanel;
 	private JPanel activeTasksContentPanel; // Inner panel for active tasks
@@ -298,6 +299,15 @@ public class ChunkBlazerPanel extends PluginPanel
 		// data disclosure.
 		dataNoticeRow = createDataNoticeRow();
 		mainPanel.add(dataNoticeRow);
+		// Reset-proof "Show my key" button. Reads the key from the authoritative per-account
+		// store (not the resettable settings field), so it works even right after a Reset. Lives
+		// here in the plugin panel because RuneLite auto-generates the gear config panel from
+		// config items and cannot host a button.
+		showKeyButton = actionButton("Show my sync key", new Color(60, 90, 130));
+		showKeyButton.setAlignmentX(LEFT_ALIGNMENT);
+		showKeyButton.setToolTipText("Reveal your account sync key to move this account to another computer");
+		showKeyButton.addActionListener(e -> showSyncKeyBackup());
+		mainPanel.add(showKeyButton);
 		syncPromptPanel = createSyncPromptSection();
 		syncPromptPanel.setAlignmentX(LEFT_ALIGNMENT);
 		mainPanel.add(syncPromptPanel);
@@ -305,6 +315,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		// corrects it on the first refresh for a returning player who already opted in.
 		boolean syncOn = plugin != null && plugin.isServerSyncEnabled();
 		dataNoticeRow.setVisible(syncOn);
+		showKeyButton.setVisible(syncOn);
 		syncPromptPanel.setVisible(!syncOn);
 		mainPanel.add(Box.createVerticalStrut(8));
 
@@ -706,28 +717,14 @@ public class ChunkBlazerPanel extends PluginPanel
 		});
 		row.add(info);
 
-		// On-demand backup of the account sync key, for moving it to another computer that
-		// does not share RuneLite config sync. The key is otherwise never shown.
-		JLabel keyLink = styledLabel("(key)", FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR);
-		keyLink.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
-		keyLink.setToolTipText("Back up your account sync key to move it to another computer");
-		keyLink.addMouseListener(new java.awt.event.MouseAdapter()
-		{
-			@Override
-			public void mouseClicked(java.awt.event.MouseEvent e)
-			{
-				showSyncKeyBackup();
-			}
-		});
-		row.add(keyLink);
-
 		return row;
 	}
 
 	/**
-	 * Show and clipboard-copy the account's sync key on the player's explicit request, so they
-	 * can save it and paste it into the "Sync recovery key" field on another computer. Only
-	 * needed for a local RuneLite profile with no cross-device config sync.
+	 * Show the account's sync key on request, in a selectable field the player copies themselves
+	 * (no plugin clipboard access). Reads it from the authoritative per-account store, so it is
+	 * reliable even right after a settings Reset (which clears the masked settings field but not
+	 * the stored key). For moving an account to another computer.
 	 */
 	private void showSyncKeyBackup()
 	{
@@ -739,24 +736,16 @@ public class ChunkBlazerPanel extends PluginPanel
 				"Sync key", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
-		try
-		{
-			java.awt.Toolkit.getDefaultToolkit().getSystemClipboard()
-				.setContents(new java.awt.datatransfer.StringSelection(key), null);
-		}
-		catch (Exception ignored)
-		{
-			// Clipboard may be unavailable; the field below still lets them select and copy.
-		}
-		JTextField field = new JTextField(key);
-		field.setEditable(false);
-		field.setCaretPosition(0);
+		JTextField keyField = new JTextField(key);
+		keyField.setEditable(false);
+		keyField.setCaretPosition(0);
 		JPanel content = new JPanel(new BorderLayout(0, 6));
-		content.add(new JLabel("<html><body style='width:260px'>Copied to your clipboard. Save it "
-			+ "somewhere safe, like a password manager. To sync this account on another computer, "
+		content.add(new JLabel("<html><body style='width:260px'>Select the key below and copy it "
+			+ "(Ctrl+C), then save it somewhere safe like a password manager. To sync this account "
+			+ "on another computer, "
 			+ "paste it into the \"Sync recovery key\" setting there.<br><br><b>Anyone with this key "
 			+ "can access your account. Do not share it.</b></body></html>"), BorderLayout.NORTH);
-		content.add(field, BorderLayout.CENTER);
+		content.add(keyField, BorderLayout.CENTER);
 		JOptionPane.showMessageDialog(this, content, "Your account sync key", JOptionPane.WARNING_MESSAGE);
 	}
 
@@ -3375,6 +3364,10 @@ public class ChunkBlazerPanel extends PluginPanel
 			if (dataNoticeRow != null)
 			{
 				dataNoticeRow.setVisible(syncOn);
+			}
+			if (showKeyButton != null)
+			{
+				showKeyButton.setVisible(syncOn);
 			}
 
 			// Always-on gameplay sections simply follow login state.
