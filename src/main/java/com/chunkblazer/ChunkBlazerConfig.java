@@ -260,10 +260,10 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "apiKey",
 		name = "Sync recovery key",
-		description = "Your account's server sync key. It is set and kept automatically per account, so "
-			+ "you normally never touch it. To restore access after a reinstall or on a new RuneLite "
-			+ "profile, paste a saved key here. Masked on purpose: anyone with this key can act as your "
-			+ "account, so keep it private.",
+		description = "Recovery input only. Your account key is stored automatically per account and is "
+			+ "NOT kept here, so leave this blank. To restore access after a reinstall or on a new "
+			+ "RuneLite profile, paste a saved key here and it is adopted and cleared. Masked on "
+			+ "purpose: anyone with a key can act as that account.",
 		position = 2,
 		secret = true
 	)
