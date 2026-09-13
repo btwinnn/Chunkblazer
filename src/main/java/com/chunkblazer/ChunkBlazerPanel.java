@@ -299,15 +299,6 @@ public class ChunkBlazerPanel extends PluginPanel
 		// data disclosure.
 		dataNoticeRow = createDataNoticeRow();
 		mainPanel.add(dataNoticeRow);
-		// Reset-proof "Show my key" button. Reads the key from the authoritative per-account
-		// store (not the resettable settings field), so it works even right after a Reset. Lives
-		// here in the plugin panel because RuneLite auto-generates the gear config panel from
-		// config items and cannot host a button.
-		showKeyButton = actionButton("Show my sync key", new Color(60, 90, 130));
-		showKeyButton.setAlignmentX(LEFT_ALIGNMENT);
-		showKeyButton.setToolTipText("Reveal your account sync key to move this account to another computer");
-		showKeyButton.addActionListener(e -> showSyncKeyBackup());
-		mainPanel.add(showKeyButton);
 		syncPromptPanel = createSyncPromptSection();
 		syncPromptPanel.setAlignmentX(LEFT_ALIGNMENT);
 		mainPanel.add(syncPromptPanel);
@@ -315,7 +306,6 @@ public class ChunkBlazerPanel extends PluginPanel
 		// corrects it on the first refresh for a returning player who already opted in.
 		boolean syncOn = plugin != null && plugin.isServerSyncEnabled();
 		dataNoticeRow.setVisible(syncOn);
-		showKeyButton.setVisible(syncOn);
 		syncPromptPanel.setVisible(!syncOn);
 		mainPanel.add(Box.createVerticalStrut(8));
 
@@ -393,6 +383,21 @@ public class ChunkBlazerPanel extends PluginPanel
 		unlockedListPanel = createUnlockedListSection();
 		setupSectionPanel(unlockedListPanel);
 		mainPanel.add(unlockedListPanel);
+
+		// Subtle "Show my sync key" link, tucked below Unlocked Chunks so it stays out of the
+		// way. Reads the key from the authoritative per-account store for reliability
+		showKeyButton = new JButton("Show my sync key");
+		showKeyButton.setFont(FontManager.getRunescapeSmallFont());
+		showKeyButton.setForeground(new Color(140, 140, 140));
+		showKeyButton.setBorderPainted(false);
+		showKeyButton.setContentAreaFilled(false);
+		showKeyButton.setFocusPainted(false);
+		showKeyButton.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+		showKeyButton.setAlignmentX(LEFT_ALIGNMENT);
+		showKeyButton.setToolTipText("Reveal your account sync key to move this account to another computer");
+		showKeyButton.addActionListener(e -> showSyncKeyBackup());
+		showKeyButton.setVisible(plugin != null && plugin.isServerSyncEnabled());
+		mainPanel.add(showKeyButton);
 		mainPanel.add(Box.createVerticalStrut(8));
 
 		// Dev/Test Controls Section (at the bottom, collapsible). Built for every
