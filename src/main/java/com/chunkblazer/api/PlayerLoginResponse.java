@@ -178,7 +178,6 @@ public class PlayerLoginResponse
 
 		/**
 		 * Whether the server marks this account as a ChunkBlazer dev/tester.
-		 * Drives the {@code [Dev]} badge in the roster and player overlay.
 		 * Server-issued on purpose so it can't be self-granted from local
 		 * config; defaults false, so an old or malformed response leaves the
 		 * account unmarked.
