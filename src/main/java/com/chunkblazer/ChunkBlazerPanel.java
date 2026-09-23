@@ -1733,7 +1733,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 
 		unlockedListPanel.setAlignmentX(LEFT_ALIGNMENT);
-		
+
 		// Collapsible header: title + count on the left, a toggle on the right.
 		// Collapsed by default so a long unlock list doesn't dominate the panel —
 		// the rows only render when expanded.
