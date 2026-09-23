@@ -925,6 +925,7 @@ public class ChunkBlazerPlugin extends Plugin
 									"You need a Boss Token to unlock " + chunkName + ".")
 							.option("OK", () ->
 							{
+								panel.hideUnlockSection();
 							})
 							.build();
 				}
@@ -936,10 +937,12 @@ public class ChunkBlazerPlugin extends Plugin
 											"(Remaining: " + (currentTokens - 1) + ")")
 							.option("Yes, unlock!", () ->
 							{
+								panel.hideUnlockSection();
 								unlockRegion(regionId);
 							})
 							.option("No, not yet", () ->
 							{
+								panel.hideUnlockSection();
 							})
 							.build();
 				}
@@ -951,6 +954,7 @@ public class ChunkBlazerPlugin extends Plugin
 								"You need " + (cost - currentPoints) + " more points to unlock " + chunkName + ".")
 						.option("OK", () ->
 						{
+							panel.hideUnlockSection();
 						})
 						.build();
 			}
@@ -962,10 +966,12 @@ public class ChunkBlazerPlugin extends Plugin
 										"(Remaining: " + (currentPoints - cost) + ")")
 						.option("Yes, unlock!", () ->
 						{
+							panel.hideUnlockSection();
 							unlockRegion(regionId);
 						})
 						.option("No, not yet", () ->
 						{
+							panel.hideUnlockSection();
 						})
 						.build();
 			}
