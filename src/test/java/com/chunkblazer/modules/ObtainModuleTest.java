@@ -303,7 +303,7 @@ class ObtainModuleTest extends AbstractTaskModuleTest
 	 * only once every distinct piece is held.
 	 */
 	@Test
-	void testObtainSet_DuplicatePiecesFillOnlyTheirOwnSlot()
+	void testObtainSet_DuplicatesFillOwnSlot()
 	{
 		NuzlockeTask task = new NuzlockeTask();
 		task.setName("Obtain a Splitbark Set");
@@ -363,7 +363,7 @@ class ObtainModuleTest extends AbstractTaskModuleTest
 	 * silently misses the range and the slot ends up sized at 1.
 	 */
 	@Test
-	void testRequiredItem_QuantityRangeDeserializesToRange()
+	void testRequiredItem_ParsesRange()
 	{
 		String json = "{ \"item\": \"Shrimp\", \"item_ids\": [315], \"quantity\": [5, 25] }";
 		RequiredItem item = new Gson().fromJson(json, RequiredItem.class);

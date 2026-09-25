@@ -222,7 +222,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	 * 30 keeps obstacles from crediting and lets the bonus through.
 	 */
 	@Test
-	void testDraynorLap_OnlyCompletesOnLapBonusNotEachObstacle()
+	void testDraynorLap_OnlyCompletesOnLap()
 	{
 		runOneLap("Draynor Lap", "complete_draynor_roof",
 			new int[]{5, 8, 8, 7, 7, 5, 5}, 79, DRAYNOR_LAP_END);
@@ -465,7 +465,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	 * the player is also running. No shortcut object of its own was ever used.
 	 */
 	@Test
-	void testObjectlessShortcut_creditedByUnrelatedXp_documentsBug()
+	void testObjectlessShortcut_anyXpCredits_bug()
 	{
 		NuzlockeTask shortcut = createTestTask(
 			"Use the Rocks Agility Shortcut", "agility_rocks_shortcut", "AGILITY", 1);
@@ -486,7 +486,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	 * uses ONE shortcut, and BOTH complete off the single XP event.
 	 */
 	@Test
-	void testTwoObjectlessShortcuts_oneUseCreditsBoth_documentsBug()
+	void testObjectlessShortcuts_creditBoth_bug()
 	{
 		NuzlockeTask tunnel = createTestTask(
 			"Use the Level 21 Agility Underwall Tunnel", "agility_level_21_underwall_tunnel", "AGILITY", 1);
@@ -516,7 +516,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	 * real id so the JSON can be corrected.)
 	 */
 	@Test
-	void testWrongWikiId_creditsDifferentTask_documentsBug()
+	void testWrongWikiId_creditsOtherTask_bug()
 	{
 		final int WIKI_ID_WRONG = 16545;    // taken from the wiki, but NOT what the client reports
 		final int REAL_RUNTIME_ID = 11631;  // what MenuOptionClicked actually carries
@@ -550,7 +550,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	 * task, even with several shortcuts active.
 	 */
 	@Test
-	void testObjectGatedShortcuts_onlyTheUsedOneCredits()
+	void testObjectGatedShortcuts_onlyUsedCredits()
 	{
 		final int TUNNEL_ID = 16529;
 		final int STONES_ID = 16533;
@@ -595,7 +595,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	 * a player animation — so a no-XP obstacle still credits.
 	 */
 	@Test
-	void testObjectGatedTask_creditsOnAnimationWithNoXp()
+	void testObjectGatedTask_creditsOnAnimation()
 	{
 		NuzlockeTask stones = shiloSteppingTask();
 
@@ -612,7 +612,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	 * uses it (no animation, no XP) — must NOT credit.
 	 */
 	@Test
-	void testObjectGatedTask_clickWithNoUse_notCredited()
+	void testObjectGatedTask_clickOnlyNotCredited()
 	{
 		NuzlockeTask stones = shiloSteppingTask();
 
@@ -646,7 +646,7 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 	 * a rooftop lap (no shortcut object clicked) does not credit a gated shortcut.
 	 */
 	@Test
-	void testObjectGatedShortcut_notCreditedByUnrelatedXp()
+	void testObjectGatedShortcut_ignoresOtherXp()
 	{
 		final int TUNNEL_ID = 16529;
 		NuzlockeTask tunnel = createTaskWithRequiredObject(

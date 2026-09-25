@@ -194,7 +194,7 @@ class RollCacheTest
 	private static final Gson GSON = new Gson();
 
 	@Test
-	void requiredItemDeserializer_RangeArrayParsesToQuantityRange()
+	void requiredItem_parsesRange()
 	{
 		String json = "{\"item\": \"Cowhide\", \"item_ids\": [1739], \"quantity\": [1, 36]}";
 		RequiredItem item = GSON.fromJson(json, RequiredItem.class);
@@ -208,7 +208,7 @@ class RollCacheTest
 	}
 
 	@Test
-	void requiredItemDeserializer_SingleElementArrayParsesToFixedQuantity()
+	void requiredItem_parsesSingleValue()
 	{
 		String json = "{\"item\": \"Cowhide\", \"item_ids\": [1739], \"quantity\": [5]}";
 		RequiredItem item = GSON.fromJson(json, RequiredItem.class);
@@ -220,7 +220,7 @@ class RollCacheTest
 	}
 
 	@Test
-	void requiredItemDeserializer_IntParsesToFixedQuantity()
+	void requiredItem_parsesInt()
 	{
 		String json = "{\"item\": \"Cowhide\", \"item_ids\": [1739], \"quantity\": 5}";
 		RequiredItem item = GSON.fromJson(json, RequiredItem.class);
@@ -230,7 +230,7 @@ class RollCacheTest
 	}
 
 	@Test
-	void requiredObjectDeserializer_RangeArrayParsesToQuantityRange()
+	void requiredObject_parsesRange()
 	{
 		String json = "{\"object\": [\"Falador Rooftop Edge\"], \"object_id\": [14925], \"quantity\": [1, 20]}";
 		RequiredObject ro = GSON.fromJson(json, RequiredObject.class);
@@ -244,7 +244,7 @@ class RollCacheTest
 	}
 
 	@Test
-	void requiredObjectDeserializer_SingleElementArrayParsesToFixedQuantity()
+	void requiredObject_parsesSingleValue()
 	{
 		String json = "{\"object\": [\"Seed Stall\"], \"object_id\": [7053], \"quantity\": [1]}";
 		RequiredObject ro = GSON.fromJson(json, RequiredObject.class);
@@ -254,7 +254,7 @@ class RollCacheTest
 	}
 
 	@Test
-	void targetNpcDeserializer_RangeArrayParsesToQuantityRange()
+	void targetNpc_parsesRange()
 	{
 		String json = "{\"npc\": [\"Man\"], \"npc_ids\": [3106], \"quantity\": [1, 28]}";
 		TargetNpc npc = GSON.fromJson(json, TargetNpc.class);
@@ -268,7 +268,7 @@ class RollCacheTest
 	}
 
 	@Test
-	void targetNpcDeserializer_IntParsesToFixedQuantity()
+	void targetNpc_parsesInt()
 	{
 		String json = "{\"npc\": [\"Man\"], \"npc_ids\": [3106], \"quantity\": 1}";
 		TargetNpc npc = GSON.fromJson(json, TargetNpc.class);
@@ -280,7 +280,7 @@ class RollCacheTest
 	// --- End-to-end: deserialize a real-shape rooftop task and roll the quantity ---------------
 
 	@Test
-	void requiredObject_EndToEnd_RooftopTaskRollsInRange()
+	void requiredObject_rooftopRollsInRange()
 	{
 		// Same shape as Asgarnia_Tasks.json's "complete_falador_roof":
 		// "required_object": { "object": [...], "object_id": [...], "quantity": [1, 20] }
@@ -302,7 +302,7 @@ class RollCacheTest
 	}
 
 	@Test
-	void nuzlockeTask_AcceptsRequiredFinishedObjectAlias()
+	void acceptsFinishedObjectAlias()
 	{
 		// CONSTRUCTION tasks in the canonical Tasks_JSON tree use the field name
 		// `required_finished_object` instead of `required_object`. The data shape
@@ -328,7 +328,7 @@ class RollCacheTest
 	}
 
 	@Test
-	void nuzlockeTask_RequiredObjectAndFinishedObjectBehaveIdentically()
+	void requiredAndFinishedObjectMatch()
 	{
 		// Same data shape, two field-name aliases — both should produce the same
 		// parsed task. This locks in the alias contract so a future refactor

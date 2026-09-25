@@ -54,7 +54,7 @@ class MigrationToRsProfileTest
 	// --- the branches ------------------------------------------------------
 
 	@Test
-	void untaggedLegacyStateIsMigratedAndOriginalsAreKept() throws Exception
+	void legacyStateMigratedAndKept() throws Exception
 	{
 		loggedInAs("Main");
 		legacy("unlockedChunks", "12850,12851");

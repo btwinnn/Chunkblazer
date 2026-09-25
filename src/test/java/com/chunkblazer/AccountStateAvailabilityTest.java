@@ -65,7 +65,7 @@ class AccountStateAvailabilityTest
 	}
 
 	@Test
-	void stateBecomesAvailableOnceRuneLiteKnowsTheAccount() throws Exception
+	void stateAvailableOnceAccountKnown() throws Exception
 	{
 		when(configManager.getRSProfileKey()).thenReturn(PROFILE_KEY);
 		assertTrue(available());
@@ -134,7 +134,7 @@ class AccountStateAvailabilityTest
 	 * attributed to whoever logs in next.
 	 */
 	@Test
-	void loadActiveTasksWritesNothingWhileNoAccountIsKnown() throws Exception
+	void loadActiveTasksWritesNothingNoAccount() throws Exception
 	{
 		when(configManager.getRSProfileKey()).thenReturn(null);
 
@@ -156,7 +156,7 @@ class AccountStateAvailabilityTest
 	 * specifically.
 	 */
 	@Test
-	void loadActiveTasksReturnsEarlyAndDropsInMemoryStateWhileNoAccountIsKnown() throws Exception
+	void loadActiveTasksBailsWithoutAccount() throws Exception
 	{
 		when(configManager.getRSProfileKey()).thenReturn(null);
 

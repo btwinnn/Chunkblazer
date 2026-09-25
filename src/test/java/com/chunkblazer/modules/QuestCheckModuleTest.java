@@ -164,7 +164,7 @@ class QuestCheckModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void everyShippedQuestTaskHasResolvableQuestConstant() throws Exception
+	void everyQuestTaskResolves() throws Exception
 	{
 		for (NuzlockeTask task : loadShippedQuestTasks())
 		{
@@ -278,7 +278,7 @@ class QuestCheckModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void unknownQuestConstantIsNotTrackedAndDoesNotThrow()
+	void unknownQuestIsIgnoredSafely()
 	{
 		NuzlockeTask task = questTask("quest_not_a_real_quest", "THIS_QUEST_DOES_NOT_EXIST");
 

@@ -65,7 +65,7 @@ class ChunkBlazerPluginTest
 	}
 
 	@Test
-	void isCharterRegion_trueForCharterChunk_falseForOthers()
+	void isCharterRegion_onlyCharterChunks()
 	{
 		assertTrue(plugin.isCharterRegion(CHARTER_REGION));
 		assertFalse(plugin.isCharterRegion(NON_CHARTER_REGION));
@@ -93,7 +93,7 @@ class ChunkBlazerPluginTest
 	}
 
 	@Test
-	void migrationStripsSeededCharterRegionsAndSetsFlag()
+	void migrationStripsCharterRegions()
 	{
 		when(configManager.getConfiguration("chunkblazer", "charterSeedStripped")).thenReturn(null);
 		when(config.unlockedChunks()).thenReturn(NON_CHARTER_REGION + "," + CHARTER_REGION);
@@ -240,7 +240,7 @@ class ChunkBlazerPluginTest
 	}
 
 	@Test
-	void freeChunkWithoutAuthoredNeighborsStillOffersFourCardinals() throws Exception
+	void freeChunkAlwaysOffersCardinals() throws Exception
 	{
 		// Invariant: a free chunk ALWAYS opens its 4 cardinal neighbours, even
 		// when its Free_Chunks.json entry has no neighbor_ids (derived from the
@@ -255,7 +255,7 @@ class ChunkBlazerPluginTest
 	// --- Prifddinas: real city regions in instance coordinates (regionY 94-95) ---
 
 	@Test
-	void prifCityRegionsAreNotAutoFreedByCoordinateRule()
+	void prifCityIsNotAutoFreed()
 	{
 		// The city's regionY (94-95) is outside the surface band [39,64], which
 		// used to auto-free it like a dungeon. It must be exempt...
@@ -268,7 +268,7 @@ class ChunkBlazerPluginTest
 	}
 
 	@Test
-	void prifCityLockedAndNotUnlockableWithoutGateChunk()
+	void prifCityNeedsGateChunk()
 	{
 		when(config.unlockedChunks()).thenReturn("");
 		assertFalse(plugin.isRegionUnlocked(12894));
@@ -298,7 +298,7 @@ class ChunkBlazerPluginTest
 	// --- initializeTask: saved-target restore must not corrupt multi-item sets ---
 
 	@Test
-	void restoreDoesNotPinSummedTargetOntoFirstSetPiece() throws Exception
+	void restoreDoesNotPinSumToFirstPiece() throws Exception
 	{
 		// Mike's obtain_set bug: for a multi-item set the saved target is the
 		// SUM across items (5 for Splitbark). Restoring pinned that sum onto the

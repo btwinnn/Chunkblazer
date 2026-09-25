@@ -158,7 +158,7 @@ class EquipModuleTest extends AbstractTaskModuleTest
 	// ── require_all_equipped: Barrows full sets vs "any piece" default ──
 
 	@Test
-	void requireAllEquipped_completesOnlyWithTheFullSet() throws Exception
+	void requireAllEquipped_needsFullSet() throws Exception
 	{
 		NuzlockeTask t = createTestTask("Verac's set", "veracs_set", "EQUIP", 4);
 		t.setRequireAllEquipped(true);

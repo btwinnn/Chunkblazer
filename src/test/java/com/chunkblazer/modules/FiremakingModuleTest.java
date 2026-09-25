@@ -259,7 +259,7 @@ class FiremakingModuleTest extends AbstractTaskModuleTest
 	 * consumed inside the match window counts once the XP confirms the burn.
 	 */
 	@Test
-	void bonfireBatchCreditsEveryLogConsumedInTheWindow()
+	void bonfireCreditsEveryLogInWindow()
 	{
 		NuzlockeTask task = startBurnTask(LOGS, 10, 27);
 

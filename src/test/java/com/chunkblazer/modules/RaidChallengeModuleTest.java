@@ -375,7 +375,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void consecutiveHitsplat_brokenStreakDoesNotComplete()
+	void consecutiveHitsplat_brokenStreakFails()
 	{
 		NuzlockeTask t = addTask("zulrah_snake_eyes", c -> {
 			c.setDefeatNpcIds(Arrays.asList(ICE_DEMON));
@@ -468,7 +468,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	// ── required_equipped_groups (Wrong Cave: full Prospector, per-slot variants)
 
 	@Test
-	void requiredEquippedGroups_oneVariantPerGroupCompletes()
+	void requiredEquippedGroups_oneEachCompletes()
 	{
 		NuzlockeTask t = addTask("cox_wrong_cave", c -> {
 			c.setDefeatNpcIds(Arrays.asList(OLM_HEAD));
@@ -742,7 +742,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void crossRaidGuard_toaKillCountCompletesToaTaskWhenInToa()
+	void crossRaidGuard_toaKcCompletesInToa()
 	{
 		NuzlockeTask toa = addTask("toa_next_level", c -> {
 			c.setCompleteMessage("count is");
@@ -1103,7 +1103,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	// ── required_inventory_groups (Yama "Holy Diver": any SGS variant in inventory) ──
 
 	@Test
-	void requiredInventoryGroups_completesWithAnyOneHeld()
+	void requiredInventoryGroups_anyOneCompletes()
 	{
 		setInventory(20372); // the ornamented SGS variant
 		NuzlockeTask t = addTask("yama_holy_diver", c -> {
@@ -1129,7 +1129,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	// ── hitsplat_values + gear gate (Amoxliatl "Pendant of Eights": hit 8 w/ pendant) ──
 
 	@Test
-	void hitsplatValues_withGearGate_completesWhenGearWorn()
+	void hitsplatValues_completesWithGear()
 	{
 		setEquipment(slot(2, 29893)); // pendant of ates equipped (amulet slot)
 		NuzlockeTask t = addTask("amoxliatl_pendant_of_eights", c -> {
@@ -1144,7 +1144,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void hitsplatValues_withGearGate_blockedWhenGearMissing()
+	void hitsplatValues_blockedWithoutGear()
 	{
 		setEquipment(slot(BODY, 4749)); // pendant NOT equipped
 		NuzlockeTask t = addTask("amoxliatl_pendant_of_eights", c -> {
@@ -1161,7 +1161,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	// ── chat completion: specific-message boss (Royal Titans) vs raid-gated (ToA/CoX) ──
 
 	@Test
-	void chatCompletion_specificMessageWithoutRaidGateCompletes()
+	void chatCompletion_ungatedMessageCompletes()
 	{
 		// Royal Titans has a specific KC message and NO raid-level gate; the cross-raid
 		// "count is" guard must not block it (that guard is only for raid-level-gated tasks).
@@ -1172,7 +1172,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void chatCompletion_raidGatedTaskStillBlockedWhenRaidInactive()
+	void chatCompletion_blockedWhenRaidInactive()
 	{
 		// The ToA/CoX cross-raid protection: a raid-level-gated task must stay blocked when
 		// its raid isn't active (raidLevel reads 0). Guards against the relaxation above.
@@ -1232,7 +1232,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	// ── arena_hp_gate: Maiden's "Red Carpet" (arena only enforced from 50% HP) ──
 
 	@Test
-	void arenaHpGate_completesOnKillWithoutSpuriousFailure()
+	void arenaHpGate_completesOnKill()
 	{
 		// Red Carpet is a health-gated arena. With no player location mocked the arena
 		// position check is inert (fromLocalInstance needs a live scene), so this guards
@@ -1271,7 +1271,7 @@ class RaidChallengeModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void defeatCount_bloodSpawnNpcDeathsCompleteStainless() throws Exception
+	void defeatCount_bloodSpawnsComplete() throws Exception
 	{
 		NuzlockeTask t = addTask("tob_stainless", c -> {
 			c.setRoomRegions(Arrays.asList(12613, 12869));

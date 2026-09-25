@@ -182,7 +182,7 @@ class VarbitCheckModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void testBitMaskPath_OtherBitsSetButNotTarget_DoesNotCredit()
+	void testBitMaskPath_WrongBit_DoesNotCredit()
 	{
 		// Task wants bit 17 (Smite). Other prayers are on (bits 22 Eagle Eye +
 		// 23 Mystic Might), but NOT bit 17. Must NOT credit.
@@ -198,7 +198,7 @@ class VarbitCheckModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void testBitMaskPath_TargetBitPlusOthers_StillCredits()
+	void testBitMaskPath_ExtraBits_StillCredits()
 	{
 		// Task wants bit 17 (Smite). Player has Smite + Eagle Eye both active
 		// (bits 17 + 22). Other prayers being on is irrelevant — the task only
@@ -215,7 +215,7 @@ class VarbitCheckModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void testBitMaskPath_DistinctPrayerTasks_OnlyMatchingOneCredits()
+	void testBitMaskPath_OnlyMatchingPrayerCredits()
 	{
 		// Two prayer tasks on the same bitmap varbit. Player activates Eagle Eye
 		// (bit 22). The Eagle Eye task credits; the Smite task does not.
@@ -272,7 +272,7 @@ class VarbitCheckModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void testNewSchema_ConstraintsCarriesVarbitBoolean_Credits()
+	void testNewSchema_VarbitBoolean_Credits()
 	{
 		// varbit_boolean lives in constraints (no top-level mirror). Equality
 		// check fires correctly because the module reads constraints first.
@@ -289,7 +289,7 @@ class VarbitCheckModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void testNewSchema_ConstraintsCarriesVarbitBit_Credits()
+	void testNewSchema_VarbitBit_Credits()
 	{
 		// Bit-mask check from constraints (the prayer-style task post-migration).
 		// Top-level varbit_bit is null on this task; the module must pick up the
@@ -308,7 +308,7 @@ class VarbitCheckModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void testNewSchema_ConstraintsBit_OtherBitsSetButNotTarget_DoesNotCredit()
+	void testNewSchema_WrongBit_DoesNotCredit()
 	{
 		// Same wrong-bit semantics as before, but reading from constraints.
 		NuzlockeTask piety = taskWithConstraintsOnly(
@@ -326,7 +326,7 @@ class VarbitCheckModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void testFallback_ConstraintsHasIdOnly_TopLevelVarbitBoolean_StillWorks()
+	void testFallback_TopLevelVarbitBoolean_StillWorks()
 	{
 		// Pre-migration shape: varbit_id in constraints, varbit_boolean at top
 		// level. The fallback chain must still credit this task — otherwise we

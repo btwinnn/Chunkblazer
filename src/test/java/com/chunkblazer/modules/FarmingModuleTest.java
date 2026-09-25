@@ -185,7 +185,7 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void allotmentPlantingCreditsOneActionNotThreeSeeds()
+	void allotmentCreditsOneActionNotSeeds()
 	{
 		// Hypothetical "plant twice" task: a single 3-seed planting must credit
 		// one ACTION, not three items.
@@ -234,7 +234,7 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void rakingWeedsIntoInventoryWithXpCompletesRakeTask()
+	void rakingWeedsCompletesRakeTask()
 	{
 		// The two "Rake a Farming Patch" tasks watch Weeds, which APPEAR in the
 		// inventory when raking grants Farming XP — the opposite direction from
@@ -259,7 +259,7 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 	 * for those crops.
 	 */
 	@Test
-	void treeSaplingPlantWithNoXpCreditsViaPlantMessage()
+	void saplingCreditsViaPlantMessage()
 	{
 		NuzlockeTask task = farmingTask("Plant a Dragonfruit Tree Sapling",
 			"plant_dragonfruit_tree_sapling", DRAGONFRUIT_SAPLING, 1);
@@ -282,7 +282,7 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void plantMessageBeforeItemChangeSameTickStillCredits()
+	void plantMessageFirstSameTickCredits()
 	{
 		NuzlockeTask task = farmingTask("Plant a Dragonfruit Tree Sapling",
 			"plant_dragonfruit_tree_sapling", DRAGONFRUIT_SAPLING, 1);
@@ -304,7 +304,7 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void plantMessageWithoutWatchedItemChangeDoesNotCredit()
+	void plantMessageAloneDoesNotCredit()
 	{
 		// Someone plants a DIFFERENT crop: the message fires, the watched
 		// sapling is untouched — no credit.
@@ -356,7 +356,7 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 	 * credited by the message.
 	 */
 	@Test
-	void plantAnimationGap_PendingChangeClaimedByLaterMessage()
+	void plantGap_laterMessageClaimsChange()
 	{
 		NuzlockeTask task = farmingTask("Plant some Onions", "plant_onions", ONION_SEED, 1);
 
@@ -414,7 +414,7 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void withdrawnSeedsIncreaseNotClaimedByPlantMessage()
+	void withdrawnSeedsNotClaimedByPlant()
 	{
 		// Withdrawing the watched seeds (count INCREASES) followed by
 		// planting a different crop within the window must not credit — only
@@ -437,7 +437,7 @@ class FarmingModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void farmingXpWithoutWatchedItemChangeDoesNotCredit()
+	void farmingXpAloneDoesNotCredit()
 	{
 		// Watering / composting / harvesting grant Farming XP but never touch
 		// the watched seed.

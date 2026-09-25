@@ -417,7 +417,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * explicitly rather than hidden in a helper: XP strictly AFTER the death.
 	 */
 	@Test
-	void testSlayerGate_waitsForXpThatArrivesAfterTheDeath() throws Exception
+	void testSlayerGate_waitsForLateXp() throws Exception
 	{
 		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 11, Arrays.asList(3034));
 		npcKillModule.addActiveTask(goblin);
@@ -467,7 +467,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * AFTER the verdict. A 2-tick hold simply lost the race about a third of the time.
 	 */
 	@Test
-	void testSlayerGate_creditsWhenEvidenceArrivesSeveralTicksLate() throws Exception
+	void testSlayerGate_creditsLateEvidence() throws Exception
 	{
 		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 19, Arrays.asList(3031));
 		npcKillModule.addActiveTask(goblin);
@@ -495,7 +495,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * the Slayer XP — accepting either is what closes the race.
 	 */
 	@Test
-	void testSlayerGate_creditsOnSlayerCountDecrementAlone() throws Exception
+	void testSlayerGate_creditsOnCountDrop() throws Exception
 	{
 		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 19, Arrays.asList(3031));
 		npcKillModule.addActiveTask(goblin);
@@ -520,7 +520,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * matching kill.
 	 */
 	@Test
-	void testSlayerGate_firstSlayerCountSightingIsNotAKill() throws Exception
+	void testSlayerGate_firstCountIsNotAKill() throws Exception
 	{
 		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 19, Arrays.asList(3031));
 		npcKillModule.addActiveTask(goblin);
@@ -616,7 +616,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * that one signal would pay out for every extra rat killed in the next 3.6s.
 	 */
 	@Test
-	void testSlayerGate_killsAfterTaskEnds_doNotReuseTheLastSignal() throws Exception
+	void testSlayerGate_noCreditAfterTaskEnds() throws Exception
 	{
 		NuzlockeTask rats = createTaskWithNpc("Defeat a Rat on Task", "defeat_rat_on_task", "SLAYER", 5, Arrays.asList(2854));
 		npcKillModule.addActiveTask(rats);
@@ -655,7 +655,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * lack of evidence its own kill produced.
 	 */
 	@Test
-	void testSlayerGate_oneKillCreditsTwoGatedTasksOnOneSignal() throws Exception
+	void testSlayerGate_oneKillCreditsBoth() throws Exception
 	{
 		NuzlockeTask a = createTaskWithNpc("Defeat a Rat on Task", "defeat_rat_on_task_a", "SLAYER", 5, Arrays.asList(2854));
 		NuzlockeTask b = createTaskWithNpc("Defeat a Rat on Task", "defeat_rat_on_task_b", "SLAYER", 5, Arrays.asList(2854));
@@ -682,7 +682,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * 2-tick hold; not at six.
 	 */
 	@Test
-	void testSlayerGate_heldDeathSurvivesRoutineRefresh() throws Exception
+	void testSlayerGate_heldDeathSurvivesRefresh() throws Exception
 	{
 		NuzlockeTask goblin = createTaskWithNpc("Defeat a Goblin on Task", "defeat_goblin_on_task", "SLAYER", 19, Arrays.asList(3031));
 		npcKillModule.addActiveTask(goblin);
@@ -728,7 +728,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * period after the session began.
 	 */
 	@Test
-	void testSpeedKill_rejectedWhenFightStartsRightAfterRelog() throws Exception
+	void testSpeedKill_rejectedRightAfterRelog() throws Exception
 	{
 		NuzlockeTask task = speedTask(200, 10);
 		npcKillModule.addActiveTask(task);
@@ -749,7 +749,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void testSpeedKill_creditsWhenFightStartsWellAfterLogin() throws Exception
+	void testSpeedKill_creditsLongAfterLogin() throws Exception
 	{
 		NuzlockeTask task = speedTask(200, 10);
 		npcKillModule.addActiveTask(task);
@@ -820,7 +820,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * duo-partner variant of the relog cheat (friend softens it, you last-hit).
 	 */
 	@Test
-	void testRestrictedKill_rejectedWhenAnotherPlayerDamagedTarget() throws Exception
+	void testRestrictedKill_rejectsOtherPlayerDamage() throws Exception
 	{
 		NuzlockeTask task = speedTask(200, 10);
 		npcKillModule.addActiveTask(task);
@@ -856,7 +856,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * runtime must stay completable if such a task ever slips through.
 	 */
 	@Test
-	void testGroupContentTask_creditsDespiteAnotherPlayerDamage() throws Exception
+	void testGroupContentTask_allowsOtherPlayerDamage() throws Exception
 	{
 		NuzlockeTask task = speedTask(200, 10);
 		task.setGroupContent(true);
@@ -876,7 +876,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * first hit ever sees the boss at full health.
 	 */
 	@Test
-	void testGroupContentTask_creditsWhenBossAlreadyDamaged() throws Exception
+	void testGroupContentTask_allowsPreDamaged() throws Exception
 	{
 		NuzlockeTask task = speedTask(200, 10);
 		task.setGroupContent(true);
@@ -896,7 +896,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * for a kill the player took no part in. The damage > 0 check is always on.
 	 */
 	@Test
-	void testGroupContentTask_stillRequiresOurOwnDamage() throws Exception
+	void testGroupContentTask_requiresOwnDamage() throws Exception
 	{
 		NuzlockeTask task = createTaskWithNpc("Defeat Nex", "defeat_nex", "NPC_KILL", 1, Arrays.asList(200));
 		task.setGroupContent(true);
@@ -928,7 +928,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void testExclusiveDamage_doesNotAffectPlainKillTasks() throws Exception
+	void testExclusiveDamage_ignoresPlainKills() throws Exception
 	{
 		// A plain "defeat X" task (no time/equip constraint) credits even if
 		// another player also hit the monster — exclusivity is only for
@@ -998,7 +998,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * around a relog) must not launder the earlier hits.
 	 */
 	@Test
-	void testEquipRestriction_violationMidFightNotLaunderedByUnequip() throws Exception
+	void testEquipRestriction_unequipDoesNotClear() throws Exception
 	{
 		NuzlockeTask task = createTaskWithNpc("Defeat a Mugger with No Equipment", "defeat_mugger_naked", "NPC_KILL", 1, Arrays.asList(200));
 		TaskConstraints c = new TaskConstraints();
@@ -1177,7 +1177,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * the clock like any other damage of ours, so the real fight length is measured.
 	 */
 	@Test
-	void testCannonSoftenedThenFinished_doesNotPassAsAOneHitKill() throws Exception
+	void testOneHitKill_rejectsCannonSoftening() throws Exception
 	{
 		NuzlockeTask task = speedTask(3024, 1); // "Defeat a Scorpion in the First Hit"
 		npcKillModule.addActiveTask(task);
@@ -1199,7 +1199,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * at full health when we first hit it, a restricted kill can't be judged.
 	 */
 	@Test
-	void testRestrictedKill_rejectedWhenMonsterWasAlreadyDamaged() throws Exception
+	void testRestrictedKill_rejectsPreDamaged() throws Exception
 	{
 		NuzlockeTask task = speedTask(200, 10);
 		npcKillModule.addActiveTask(task);
@@ -1225,7 +1225,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * it dies.
 	 */
 	@Test
-	void testRestrictedKill_fullHealthMonsterStillCredits() throws Exception
+	void testRestrictedKill_creditsFullHealth() throws Exception
 	{
 		NuzlockeTask task = speedTask(200, 10);
 		npcKillModule.addActiveTask(task);
@@ -1302,7 +1302,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * fight must not taint a later honest one.
 	 */
 	@Test
-	void testRestrictedKill_creditsWhenCannonDidNotFireDuringTheFight() throws Exception
+	void testRestrictedKill_creditsWhenCannonIdle() throws Exception
 	{
 		NuzlockeTask task = speedTask(200, 10);
 		npcKillModule.addActiveTask(task);
@@ -1331,7 +1331,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * silently completed an unrelated 1-of-1 task.
 	 */
 	@Test
-	void testAck_appliesToReportedTaskNotWhicheverRegisteredFirst() throws Exception
+	void testAck_appliesToReportedTask() throws Exception
 	{
 		// Registered first → this is what `activeTask` points at.
 		NuzlockeTask highwayman = createTaskWithNpc("Defeat a Highwayman in 24 Seconds", "defeat_highwayman_fast", "NPC_KILL", 1, Arrays.asList(2234));
@@ -1355,7 +1355,7 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	 * Ogre task, so killing an Ogress credits ONLY the Ogress task, not the Ogre one.
 	 */
 	@Test
-	void testMostSpecificMatch_subMonsterCreditsOnlySpecificTask() throws Exception
+	void testMostSpecificMatch_creditsSubMonsterOnly() throws Exception
 	{
 		NuzlockeTask ogre = createTaskWithNpc("Defeat an Ogre on Task", "slay_ogre", "SLAYER", 1,
 			Arrays.asList(136, 866, 867, 868, 7989, 7990, 7991, 7992));

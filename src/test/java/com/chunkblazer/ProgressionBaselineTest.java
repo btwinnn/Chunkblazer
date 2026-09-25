@@ -170,7 +170,7 @@ class ProgressionBaselineTest
 	 * baseline froze half-real and the late skills paid out retroactively.
 	 */
 	@Test
-	void skillDataIsNotCompleteWhilstLaterSkillsAreStillZero()
+	void skillDataIncompleteWhileZeros()
 	{
 		when(client.getGameState()).thenReturn(GameState.LOGGED_IN);
 		stubAllSkills(99);
@@ -365,7 +365,7 @@ class ProgressionBaselineTest
 	 * hiding on an empty baseline would blank the whole tier.
 	 */
 	@Test
-	void everythingIsVisibleBeforeTheBaselineIsCaptured() throws Exception
+	void allVisibleBeforeBaseline() throws Exception
 	{
 		when(config.progressionBaseline()).thenReturn("");
 
@@ -435,7 +435,7 @@ class ProgressionBaselineTest
 	// --- Self-healing repair ----------------------------------------------
 
 	@Test
-	void repairClearsABogusZeroBaselineAndUncompletesProgressionTasks()
+	void repairDropsBogusBaselineAndTasks()
 	{
 		when(config.progressionBaseline()).thenReturn(owned("HITPOINTS:0,THIEVING:0"));
 		when(config.completedTasks()).thenReturn(

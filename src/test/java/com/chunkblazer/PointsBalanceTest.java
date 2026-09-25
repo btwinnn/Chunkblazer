@@ -179,7 +179,7 @@ class PointsBalanceTest
 	// --- Spending ---------------------------------------------------------
 
 	@Test
-	void unlockingAChunkRecordsSpendRatherThanEditingTheBalance() throws Exception
+	void chunkUnlockRecordsSpend() throws Exception
 	{
 		seedEarned(100);
 		when(config.pointsSpent()).thenReturn(10);
@@ -239,7 +239,7 @@ class PointsBalanceTest
 	 * value.
 	 */
 	@Test
-	void derivationRefusesWhenTheBalanceIsNotTrustworthy() throws Exception
+	void derivationRefusesUntrustedBalance() throws Exception
 	{
 		seedEarned(CRUK_EARNED);
 		when(config.pointsSpent()).thenReturn(0);
@@ -253,7 +253,7 @@ class PointsBalanceTest
 	}
 
 	@Test
-	void derivationIsSkippedForAnAccountThatHasEarnedNothing() throws Exception
+	void derivationSkippedWithNoEarnings() throws Exception
 	{
 		seedEarned(0);
 		when(config.pointsSpent()).thenReturn(0);

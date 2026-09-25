@@ -89,7 +89,7 @@ class TaskCardRevealGateTest
 	}
 
 	@Test
-	void alreadyCompletedTasksAreNeverParkedBehindACard() throws Exception
+	void completedTasksSkipTheCard() throws Exception
 	{
 		// Resurrecting a completed task as a card would put it back in the active list
 		// the moment it was flipped.

@@ -121,7 +121,7 @@ class ServerStateMergeTest
 	 * sync then pushed that over the server's 15.
 	 */
 	@Test
-	void bootstrapOnlyProfileRecoversEveryChunkFromTheServer() throws Exception
+	void bootstrapProfileRecoversChunks() throws Exception
 	{
 		when(config.unlockedChunks()).thenReturn(String.valueOf(LUMBRIDGE));
 

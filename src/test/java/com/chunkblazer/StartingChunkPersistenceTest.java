@@ -109,7 +109,7 @@ class StartingChunkPersistenceTest
 	 * merge, accessor still answers "12850" off the default. Must write anyway.
 	 */
 	@Test
-	void absentKeyIsSeededEvenThoughTheAccessorClaimsLumbridge() throws Exception
+	void absentKeyIsSeeded() throws Exception
 	{
 		given(String.valueOf(LUMBRIDGE), null);
 
@@ -164,7 +164,7 @@ class StartingChunkPersistenceTest
 	 * consulted. Strict stubbing enforces that short-circuit.
 	 */
 	@Test
-	void missingStartRegionIsAppendedWithoutLosingOthers() throws Exception
+	void missingStartRegionIsAppended() throws Exception
 	{
 		when(config.unlockedChunks()).thenReturn("12851,12595");
 

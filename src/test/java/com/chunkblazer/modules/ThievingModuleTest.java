@@ -236,7 +236,7 @@ class ThievingModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void testStallTheft_XpGainAfterTimeoutDoesNotCredit()
+	void testStallTheft_LateXpDoesNotCredit()
 	{
 		// If the XP gain arrives more than INTERACTION_TIMEOUT_TICKS (5) after the click,
 		// it must not be associated with that click.

@@ -71,7 +71,7 @@ public class ItemEquippedReport
 	private long timestamp;
 
 	/** GE value of equipped item */
-	private int geValue;
+	private long geValue;
 
 	/** Player's current combat level */
 	private int playerCombatLevel;

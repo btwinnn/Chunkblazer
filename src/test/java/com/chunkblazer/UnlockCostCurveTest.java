@@ -49,7 +49,7 @@ class UnlockCostCurveTest
 	}
 
 	@Test
-	void owningTheWholeMapCostsAboutEightyPercentOfThePool()
+	void fullMapCostsAboutEightyPercent()
 	{
 		int total = ChunkBlazerPlugin.curveLedgerTotal(CHUNKS);
 		double pct = 100.0 * total / POOL;

@@ -161,7 +161,7 @@ class ProgressionModuleTest extends AbstractTaskModuleTest
 	}
 
 	@Test
-	void rungAlreadyReachedAtRegistrationCompletesImmediately()
+	void reachedRungCompletesOnRegister()
 	{
 		// Levelled past an ELIGIBLE rung while the plugin was off — real forward
 		// progress we didn't witness, so it still pays.

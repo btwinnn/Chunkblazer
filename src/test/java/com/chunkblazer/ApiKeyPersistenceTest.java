@@ -114,7 +114,7 @@ class ApiKeyPersistenceTest
 	}
 
 	@Test
-	void loadAdoptsValidPastedKeyAsPendingCandidateOnly() throws Exception
+	void pastedKeyLoadsAsPendingOnly() throws Exception
 	{
 		// RSProfile empty (fresh install / new profile); the player pasted a saved UUID key.
 		lenient().when(config.apiKey()).thenReturn("  " + KEY_B + "  ");
