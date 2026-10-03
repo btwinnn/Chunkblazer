@@ -61,6 +61,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import lombok.extern.slf4j.Slf4j;
+import com.chunkblazer.ui.ScreenshotThumbnail;
+import com.chunkblazer.ui.ScrollableColumnPanel;
 import com.chunkblazer.ui.WrappingTextLabel;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
@@ -144,6 +146,8 @@ public class ChunkBlazerPanel extends PluginPanel
 	private JPanel completedTasksPanel;
 	private JPanel completedTasksContentPanel; // Inner panel for completed tasks
 	private JScrollPane completedTasksScrollPane;
+	// Thumbnails on the current completed-task cards, paged in and out by scroll position.
+	private final List<ScreenshotThumbnail> completedThumbnails = new ArrayList<>();
 	private JPanel taskListPanel;
 	private JPanel taskListContentPanel; // Inner panel for region tasks
 	private JScrollPane taskListScrollPane;
@@ -1068,7 +1072,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(completedTasksFilterPanel);
 
 		// Scrollable content panel
-		completedTasksContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
+		completedTasksContentPanel = new ScrollableColumnPanel(ColorScheme.DARKER_GRAY_COLOR);
 		completedTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		completedTasksScrollPane = new JScrollPane(completedTasksContentPanel);
@@ -1077,6 +1081,8 @@ public class ChunkBlazerPanel extends PluginPanel
 		completedTasksScrollPane.setBorder(null);
 		completedTasksScrollPane.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		completedTasksScrollPane.getViewport().setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		// Scrolling the list is what pages screenshot thumbnails in and out.
+		completedTasksScrollPane.getViewport().addChangeListener(e -> refreshVisibleThumbnails());
 		completedTasksScrollPane.setAlignmentX(LEFT_ALIGNMENT);
 		// Initially hidden - size will be set when expanded
 		completedTasksScrollPane.setVisible(false);
@@ -1109,6 +1115,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 		else
 		{
+			// A collapsed list shows no thumbnails, so it shouldn't hold any.
+			completedThumbnails.forEach(ScreenshotThumbnail::unload);
+
 			// Reset to collapsed size
 			completedTasksScrollPane.setMinimumSize(new Dimension(CONTENT_WIDTH, 0));
 			completedTasksScrollPane.setPreferredSize(new Dimension(CONTENT_WIDTH, 0));
@@ -1250,7 +1259,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		panel.add(globalTasksFilterPanel);
 
-		globalTasksContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
+		globalTasksContentPanel = new ScrollableColumnPanel(ColorScheme.DARKER_GRAY_COLOR);
 		globalTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		globalTasksScrollPane = new JScrollPane(globalTasksContentPanel);
@@ -2449,7 +2458,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		taskPanel.add(activeTasksFilterPanel);
 
 		// === SCROLLABLE TASK LIST ===
-		activeTasksContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
+		activeTasksContentPanel = new ScrollableColumnPanel(ColorScheme.DARKER_GRAY_COLOR);
 
 		activeTasksScrollPane = new JScrollPane(activeTasksContentPanel);
 		activeTasksScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -2841,7 +2850,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		listPanel.add(Box.createVerticalStrut(3));
 
 		// Scrollable task list content
-		taskListContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
+		taskListContentPanel = new ScrollableColumnPanel(ColorScheme.DARKER_GRAY_COLOR);
 		taskListContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		taskListScrollPane = new JScrollPane(taskListContentPanel);
@@ -3844,6 +3853,9 @@ public class ChunkBlazerPanel extends PluginPanel
 		final java.awt.Point savedCompletedViewPos = completedTasksScrollPane.getViewport().getViewPosition();
 
 		completedTasksContentPanel.removeAll();
+		// The old cards are gone; drop their thumbnails so the pixels can be freed.
+		completedThumbnails.forEach(ScreenshotThumbnail::unload);
+		completedThumbnails.clear();
 
 		List<CompletedTaskInfo> allTasks = plugin.getCompletedTasksWithInfo();
 
@@ -3943,7 +3955,50 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 
 		// Restore viewport AFTER the layout pass; revalidate resets it to (0,0) otherwise.
-		SwingUtilities.invokeLater(() -> completedTasksScrollPane.getViewport().setViewPosition(savedCompletedViewPos));
+		SwingUtilities.invokeLater(() ->
+		{
+			completedTasksScrollPane.getViewport().setViewPosition(savedCompletedViewPos);
+			// setViewPosition doesn't fire a change when the position is unchanged.
+			refreshVisibleThumbnails();
+		});
+	}
+
+	/**
+	 * Load thumbnails for cards on screen or within one screen of it, and
+	 * release the rest. Keeps memory bounded by the viewport no matter how many
+	 * completed tasks have screenshots, and means a collapsed list holds none.
+	 */
+	private void refreshVisibleThumbnails()
+	{
+		if (completedThumbnails.isEmpty())
+		{
+			return;
+		}
+		if (!completedTasksScrollPane.isShowing())
+		{
+			completedThumbnails.forEach(ScreenshotThumbnail::unload);
+			return;
+		}
+
+		java.awt.Rectangle range = completedTasksScrollPane.getViewport().getViewRect();
+		range.grow(0, range.height);
+		for (ScreenshotThumbnail thumbnail : completedThumbnails)
+		{
+			if (thumbnail.getParent() == null)
+			{
+				continue;
+			}
+			java.awt.Rectangle bounds = SwingUtilities.convertRectangle(
+				thumbnail.getParent(), thumbnail.getBounds(), completedTasksContentPanel);
+			if (bounds.intersects(range))
+			{
+				thumbnail.load();
+			}
+			else
+			{
+				thumbnail.unload();
+			}
+		}
 	}
 
 	private JPanel createEnhancedCompletedTaskItem(CompletedTaskInfo info)
@@ -3999,7 +4054,74 @@ public class ChunkBlazerPanel extends PluginPanel
 			TASK_TEXT_WRAP_WIDTH);
 		itemPanel.add(regionLabel);
 
+		java.io.File screenshot = plugin.getTaskScreenshot(info.getTaskId());
+		if (screenshot != null)
+		{
+			itemPanel.add(createScreenshotRow(screenshot));
+		}
+
 		return itemPanel;
+	}
+
+	/**
+	 * The screenshot taken when the task completed: a thumbnail (if enabled)
+	 * that opens the full image, plus a link to its folder. Thumbnails start
+	 * empty and are filled in by {@link #refreshVisibleThumbnails()} only once
+	 * the card is near the visible part of the list.
+	 */
+	private JPanel createScreenshotRow(java.io.File screenshot)
+	{
+		JPanel row = new JPanel();
+		row.setLayout(new BoxLayout(row, BoxLayout.Y_AXIS));
+		row.setOpaque(false);
+		row.setAlignmentX(LEFT_ALIGNMENT);
+		row.setBorder(new EmptyBorder(4, 0, 0, 0));
+
+		java.awt.event.MouseAdapter openImage = new java.awt.event.MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e)
+			{
+				LinkBrowser.open(screenshot.getAbsolutePath());
+			}
+		};
+
+		if (plugin.showScreenshotThumbnails())
+		{
+			// Card insets (12 + 6) plus the thumbnail's 1px border leave a little less than the text wrap width.
+			ScreenshotThumbnail thumbnail = new ScreenshotThumbnail(
+				screenshot, TASK_TEXT_WRAP_WIDTH - 8, plugin::loadTaskScreenshotThumbnail,
+				FontManager.getRunescapeSmallFont());
+			thumbnail.setAlignmentX(LEFT_ALIGNMENT);
+			thumbnail.addMouseListener(openImage);
+			completedThumbnails.add(thumbnail);
+			row.add(thumbnail);
+		}
+		else
+		{
+			row.add(linkLabel("View screenshot", screenshot.getName(), openImage));
+		}
+
+		row.add(linkLabel("Open screenshot folder", screenshot.getParent(), new java.awt.event.MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e)
+			{
+				LinkBrowser.open(screenshot.getParent());
+			}
+		}));
+
+		return row;
+	}
+
+	private JLabel linkLabel(String text, String tooltip, java.awt.event.MouseAdapter onClick)
+	{
+		JLabel link = styledLabel(text, FontManager.getRunescapeSmallFont(), new Color(255, 152, 0));
+		link.setAlignmentX(LEFT_ALIGNMENT);
+		link.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+		link.setToolTipText(tooltip);
+		link.addMouseListener(onClick);
+		return link;
 	}
 
 

@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Provides;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -41,6 +42,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -163,6 +165,9 @@ public class ChunkBlazerPlugin extends Plugin
 
 	@Inject
 	private TaskCompletionSoundManager soundManager;
+
+	@Inject
+	private TaskScreenshotManager screenshotManager;
 
 	@Inject
 	private ChatboxPanelManager chatboxPanelManager;
@@ -402,6 +407,8 @@ public class ChunkBlazerPlugin extends Plugin
 		});
 		taskModuleManager.startUp();
 
+		screenshotManager.setOnSaved(this::recordTaskScreenshot);
+
 		// Schedule periodic server save-state sync. First run is delayed by one
 		// interval so we don't race the login flow on plugin startup.
 		syncFuture = executorService.scheduleAtFixedRate(
@@ -481,6 +488,7 @@ public class ChunkBlazerPlugin extends Plugin
 		overlayManager.remove(minimapOverlay);
 		overlayManager.remove(sceneOverlay);
 		overlayManager.remove(bossTokenOverlay);
+		screenshotManager.shutDown();
 		overlayManager.remove(taskCompletionAnimationOverlay);
 		overlayManager.remove(taskCardOverlay);
 		clientThread.invoke(orbWidget::shutDown);
@@ -3174,6 +3182,10 @@ public class ChunkBlazerPlugin extends Plugin
 				panel.updatePanel();
 			}
 		}
+		if ("chunkblazer".equals(event.getGroup()) && "showScreenshotThumbnails".equals(event.getKey()) && panel != null)
+		{
+			panel.updateCompletedTasks();
+		}
 	}
 
 	/**
@@ -5603,6 +5615,8 @@ public class ChunkBlazerPlugin extends Plugin
 			playAreaSoundAsync(getTaskArea(batch.get(0)));
 		}
 
+		screenshotManager.onTasksCompleted(batch);
+
 		// The expensive part, ONCE regardless of batch size.
 		completeTasks(batch);
 	}
@@ -5841,6 +5855,80 @@ public class ChunkBlazerPlugin extends Plugin
 		return completedTasks;
 	}
 
+
+	private static final String TASK_SCREENSHOTS_KEY = "taskScreenshots";
+	private static final Type TASK_SCREENSHOTS_TYPE = new TypeToken<Map<String, String>>()
+	{
+	}.getType();
+
+	// Parsed form of TASK_SCREENSHOTS_KEY, re-parsed only when the stored string
+	// changes. The panel asks once per completed card on every rebuild.
+	private String taskScreenshotsRaw;
+	private Map<String, String> taskScreenshots = Collections.emptyMap();
+
+	/**
+	 * Task id -> screenshot path, relative to RuneLite's screenshot folder so the
+	 * index survives the .runelite folder moving. Per account, like the rest of
+	 * the completion state.
+	 */
+	private synchronized Map<String, String> getTaskScreenshotIndex()
+	{
+		String raw = acStr(TASK_SCREENSHOTS_KEY, "");
+		if (!raw.equals(taskScreenshotsRaw))
+		{
+			Map<String, String> parsed = null;
+			try
+			{
+				parsed = raw.isEmpty() ? null : gson.fromJson(raw, TASK_SCREENSHOTS_TYPE);
+			}
+			catch (com.google.gson.JsonSyntaxException e)
+			{
+				log.warn("[CHUNKBLAZER] Ignoring unreadable task screenshot index", e);
+			}
+			taskScreenshots = parsed != null ? parsed : Collections.emptyMap();
+			taskScreenshotsRaw = raw;
+		}
+		return taskScreenshots;
+	}
+
+	/** Called by TaskScreenshotManager once a completion screenshot is on disk. */
+	private synchronized void recordTaskScreenshot(List<String> taskIds, File file)
+	{
+		String relative = net.runelite.client.RuneLite.SCREENSHOT_DIR.toPath()
+			.relativize(file.toPath()).toString().replace(File.separatorChar, '/');
+		Map<String, String> updated = new HashMap<>(getTaskScreenshotIndex());
+		for (String taskId : taskIds)
+		{
+			updated.put(taskId, relative);
+		}
+		setAccountState(TASK_SCREENSHOTS_KEY, gson.toJson(updated));
+		if (panel != null)
+		{
+			panel.updateCompletedTasks();
+		}
+	}
+
+	/** The screenshot taken when this task was completed, or null if there isn't one on disk. */
+	public File getTaskScreenshot(String taskId)
+	{
+		String relative = taskId != null ? getTaskScreenshotIndex().get(taskId) : null;
+		if (relative == null)
+		{
+			return null;
+		}
+		File file = new File(net.runelite.client.RuneLite.SCREENSHOT_DIR, relative);
+		return file.isFile() ? file : null;
+	}
+
+	public void loadTaskScreenshotThumbnail(File file, int width, int height, Consumer<BufferedImage> callback)
+	{
+		screenshotManager.loadThumbnail(file, width, height, callback);
+	}
+
+	public boolean showScreenshotThumbnails()
+	{
+		return config.showScreenshotThumbnails();
+	}
 
 	/**
 	 * Get list of completed tasks with full info including region.
