@@ -61,6 +61,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import lombok.extern.slf4j.Slf4j;
+import com.chunkblazer.ui.ScrollableColumnPanel;
 import com.chunkblazer.ui.WrappingTextLabel;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
@@ -1068,7 +1069,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(completedTasksFilterPanel);
 
 		// Scrollable content panel
-		completedTasksContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
+		completedTasksContentPanel = new ScrollableColumnPanel(ColorScheme.DARKER_GRAY_COLOR);
 		completedTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		completedTasksScrollPane = new JScrollPane(completedTasksContentPanel);
@@ -1250,7 +1251,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		panel.add(globalTasksFilterPanel);
 
-		globalTasksContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
+		globalTasksContentPanel = new ScrollableColumnPanel(ColorScheme.DARKER_GRAY_COLOR);
 		globalTasksContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		globalTasksScrollPane = new JScrollPane(globalTasksContentPanel);
@@ -2449,7 +2450,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		taskPanel.add(activeTasksFilterPanel);
 
 		// === SCROLLABLE TASK LIST ===
-		activeTasksContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
+		activeTasksContentPanel = new ScrollableColumnPanel(ColorScheme.DARKER_GRAY_COLOR);
 
 		activeTasksScrollPane = new JScrollPane(activeTasksContentPanel);
 		activeTasksScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -2841,7 +2842,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		listPanel.add(Box.createVerticalStrut(3));
 
 		// Scrollable task list content
-		taskListContentPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
+		taskListContentPanel = new ScrollableColumnPanel(ColorScheme.DARKER_GRAY_COLOR);
 		taskListContentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		taskListScrollPane = new JScrollPane(taskListContentPanel);
