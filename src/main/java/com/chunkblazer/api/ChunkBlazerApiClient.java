@@ -26,6 +26,7 @@
 
 package com.chunkblazer.api;
 
+import static com.chunkblazer.Strings.t;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -406,8 +407,8 @@ public class ChunkBlazerApiClient
 		String key = currentApiKey();
 		if (key.isEmpty())
 		{
-			log.warn("Cannot lock mode: no API key (neither login-issued nor configured)");
-			return CompletableFuture.completedFuture(LockModeResponse.error("Not logged in to server"));
+			log.warn(t("api.log.noKey"));
+			return CompletableFuture.completedFuture(LockModeResponse.error(t("api.noLogin")));
 		}
 		LockModeRequest request = LockModeRequest.builder()
 			.gameMode(mode.name())
@@ -546,7 +547,7 @@ public class ChunkBlazerApiClient
 						PlayerSyncResponse syncResponse = gson.fromJson(body, PlayerSyncResponse.class);
 						if (syncResponse == null)
 						{
-							log.warn("Player sync returned an empty body");
+							log.warn(t("api.log.syncEmpty"));
 							future.complete(failedSync(ApiOutcome.TRANSIENT, 0));
 							return;
 						}
@@ -555,7 +556,7 @@ public class ChunkBlazerApiClient
 					}
 					else
 					{
-						log.warn("Player sync returned error {}: {}", response.code(), body);
+						log.warn(t("api.log.syncError"), response.code(), body);
 						future.complete(failedSync(
 							ApiOutcome.classify(response.code(), errorCode(gson, body)),
 							parseRetryAfterMs(response.header("Retry-After"))));
