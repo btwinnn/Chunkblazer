@@ -250,8 +250,8 @@ public class StringsPluginTest
 		assertLog("unlockRegion({}) refused, region is not adjacent to any unlocked chunk (neighbors: {})",
 			"plugin.log.notAdjacent", new Object[]{"S0", 8});
 		// line 7144
-		assertEquals("Unlocked " + "S0" + " for " + 8 + "S2" + 10 + " remaining.",
-			Strings.t("plugin.unlocked", "S0", 8, "S2", 10));
+		assertEquals("Unlocked " + "S0" + " for " + 8 + " points. " + 10 + " remaining.",
+			Strings.t("plugin.unlocked", "S0", 8, "s", 10));
 	}
 
 	@Test
@@ -272,7 +272,7 @@ public class StringsPluginTest
 		{
 			assertEquals("Unlocked " + region + " for " + cost
 					+ (cost == 1 ? " point. " : " points. ") + (currentPoints - cost) + " remaining.",
-				Strings.t("plugin.unlocked", region, cost, cost == 1 ? " point. " : " points. ", currentPoints - cost));
+				Strings.t("plugin.unlocked", region, cost, cost == 1 ? "" : "s", currentPoints - cost));
 		}
 	}
 }

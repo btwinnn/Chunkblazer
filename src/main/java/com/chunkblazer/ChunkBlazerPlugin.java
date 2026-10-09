@@ -7112,7 +7112,7 @@ public class ChunkBlazerPlugin extends Plugin
 		panel.updatePanel();
 
 		// Confirm in chat so the player doesn't have to watch the side panel.
-		addPluginChatMessage(t("plugin.unlocked", getRegionName(regionId), cost, cost == 1 ? " point. " : " points. ", currentPoints - cost));
+		addPluginChatMessage(t("plugin.unlocked", getRegionName(regionId), cost, cost == 1 ? "" : "s", currentPoints - cost));
 
 		if (!wasAlreadyUnlocked)
 		{
