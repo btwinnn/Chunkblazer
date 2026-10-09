@@ -398,10 +398,7 @@ public class ChunkNameBanner extends Overlay
 
 		int titleY = y + PAD_Y + titleMetrics.getAscent();
 		graphics.setFont(titleFont);
-		graphics.setColor(Color.BLACK);
-		graphics.drawString(title, x + (width - titleMetrics.stringWidth(title)) / 2 + 1, titleY + 1);
-		graphics.setColor(TITLE);
-		graphics.drawString(title, x + (width - titleMetrics.stringWidth(title)) / 2, titleY);
+		Draw.shadow(graphics, title, x + (width - titleMetrics.stringWidth(title)) / 2, titleY, Color.BLACK, TITLE);
 
 		int subtitleY = titleY + titleMetrics.getDescent() + subtitleMetrics.getAscent();
 		graphics.setFont(subtitleFont);

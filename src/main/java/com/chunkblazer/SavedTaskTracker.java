@@ -39,7 +39,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -200,23 +199,6 @@ public class SavedTaskTracker extends Overlay
 
 	// --- Which tasks, in what order -----------------------------------------
 
-	private Set<String> savedIds()
-	{
-		String raw = configManager.getRSProfileConfiguration(CONFIG_GROUP, SAVED_KEY);
-		Set<String> ids = new HashSet<>();
-		if (raw != null)
-		{
-			for (String id : raw.split(","))
-			{
-				if (!id.trim().isEmpty())
-				{
-					ids.add(id.trim());
-				}
-			}
-		}
-		return ids;
-	}
-
 	/** Take a task off the saved list (the same list as the task window's Saved tab). */
 	private void unsave(String taskId)
 	{
@@ -275,7 +257,7 @@ public class SavedTaskTracker extends Overlay
 		itemsBuiltAt = now;
 		itemsBuiltRegion = here;
 
-		Set<String> saved = savedIds();
+		Set<String> saved = plugin.savedTaskIds();
 		Set<String> archived = archive.ids();
 		Set<String> completed = plugin.getCompletedTaskIdSet();
 		Map<String, NuzlockeTask> candidates = new HashMap<>();
@@ -431,7 +413,7 @@ public class SavedTaskTracker extends Overlay
 			{
 				graphics.setFont(small);
 				graphics.setColor(SUBTEXT);
-				drawCentered(graphics, "Star tasks in the task window", new Rectangle(0, PAD / 2, WIDTH, ROW));
+				Draw.centered(graphics, "Star tasks in the task window", new Rectangle(0, PAD / 2, WIDTH, ROW));
 			}
 
 			boolean scrollable = contentHeight > viewHeight;
@@ -498,7 +480,7 @@ public class SavedTaskTracker extends Overlay
 		graphics.setFont(bold);
 		FontMetrics fm = graphics.getFontMetrics();
 		graphics.setColor(TITLE);
-		graphics.drawString("Saved tasks (" + list.size() + ")", bar.x + PAD, bar.y + (BAR + fm.getAscent()) / 2 - 2);
+		graphics.drawString("Saved tasks (" + list.size() + ")", bar.x + PAD, Draw.textY(fm, bar.y, BAR));
 		drawChevron(graphics, bar.x + bar.width - 12, bar.y + BAR / 2, expanded, barHover ? Color.WHITE : SUBTEXT);
 
 		hoveredAction = hovered;
@@ -543,7 +525,7 @@ public class SavedTaskTracker extends Overlay
 		String name = task.getName() == null ? task.getTaskId() : task.getName();
 		// Leave room for the "Remove" hint while Shift is held over this row.
 		int nameRight = removing ? rightEdge - fm.stringWidth("Remove") - 6 : rightEdge;
-		graphics.drawString(fit(fm, name, nameRight - textX), textX, row.y + 12);
+		graphics.drawString(Draw.fit(fm, name, nameRight - textX), textX, row.y + 12);
 
 		// The chunk it's in (green when you're standing in it); quests and level-ups
 		// have no chunk, so they show their category instead.
@@ -559,28 +541,7 @@ public class SavedTaskTracker extends Overlay
 			graphics.drawString(progress, rightEdge - fm.stringWidth(progress), row.y + 25);
 		}
 		graphics.setColor(item.distance == 0 ? new Color(120, 220, 120) : SUBTEXT);
-		graphics.drawString(fit(fm, where, rightEdge - progressWidth - textX), textX, row.y + 25);
-	}
-
-	private static void drawCentered(Graphics2D graphics, String text, Rectangle area)
-	{
-		FontMetrics fm = graphics.getFontMetrics();
-		graphics.drawString(text, area.x + (area.width - fm.stringWidth(text)) / 2,
-			area.y + (area.height + fm.getAscent()) / 2 - 2);
-	}
-
-	private static String fit(FontMetrics fm, String text, int width)
-	{
-		if (fm.stringWidth(text) <= width)
-		{
-			return text;
-		}
-		int end = text.length();
-		while (end > 0 && fm.stringWidth(text.substring(0, end) + "...") > width)
-		{
-			end--;
-		}
-		return text.substring(0, end) + "...";
+		graphics.drawString(Draw.fit(fm, where, rightEdge - progressWidth - textX), textX, row.y + 25);
 	}
 
 	/** Points up when closed (the list opens upwards), down when open. */
