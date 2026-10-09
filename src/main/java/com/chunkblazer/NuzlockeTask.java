@@ -26,6 +26,7 @@
 
 package com.chunkblazer;
 
+import static com.chunkblazer.Strings.t;
 import com.google.gson.*;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -233,11 +234,11 @@ public class NuzlockeTask
 		}
 		if (constraints.hasTimeLimit())
 		{
-			return "group_content tasks cannot have a time limit (the solo-only gates it enables can't be met in a team)";
+			return t("ui.groupTimeLimit");
 		}
 		if (constraints.hasEquipmentConstraints())
 		{
-			return "group_content tasks cannot have equipment constraints (the solo-only gates they enable can't be met in a team)";
+			return t("ui.groupEquipment");
 		}
 		return null;
 	}

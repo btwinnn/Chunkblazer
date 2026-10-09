@@ -26,6 +26,7 @@
 
 package com.chunkblazer;
 
+import static com.chunkblazer.Strings.t;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -267,7 +268,7 @@ public class TaskCardOverlay extends Overlay
 			}
 			catch (Exception e)
 			{
-				log.warn("Failed to load task card art {}: {}", candidate, e.getMessage());
+				log.warn(t("ui.log.cardArtFailed"), candidate, e.getMessage());
 			}
 		}
 		return null;
@@ -436,7 +437,7 @@ public class TaskCardOverlay extends Overlay
 			{
 				// A pending id with no task behind it can never be revealed by clicking,
 				// so it would wedge the queue forever. Drop it rather than draw nothing.
-				log.warn("[CHUNKBLAZER] unrevealed task '{}' has no definition, discarding", taskId);
+				log.warn(t("ui.log.cardNoDefinition"), taskId);
 				plugin.revealTaskCard(taskId);
 				continue;
 			}
@@ -791,8 +792,8 @@ public class TaskCardOverlay extends Overlay
 		if (current.isFaceDown())
 		{
 			text = total > 1
-				? "Click to reveal. " + total + " cards to open"
-				: "Click the card to reveal your task";
+				? t("ui.cardsToOpen", total)
+				: t("ui.cardClickToReveal");
 		}
 		else if (current.isFaceUp())
 		{
@@ -800,8 +801,8 @@ public class TaskCardOverlay extends Overlay
 			// card doesn't read as something still to be completed.
 			int left = total - 1;
 			text = left > 0
-				? "Task added. Click for the next card (" + left + " left)"
-				: "Task added. Click to close";
+				? t("ui.cardAddedNext", left)
+				: t("ui.cardAddedClose");
 		}
 		else
 		{
@@ -822,13 +823,13 @@ public class TaskCardOverlay extends Overlay
 			int by = current.bounds.y + current.bounds.height + 10;
 			if (total > 5)
 			{
-				revealFiveBounds = drawButton(graphics, "Send 5 To Task List", cx, by);
-				revealAllBounds = drawButton(graphics, "Send All To Task List (" + total + ")",
+				revealFiveBounds = drawButton(graphics, t("ui.cardSendFive"), cx, by);
+				revealAllBounds = drawButton(graphics, t("ui.cardSendAll", total),
 					cx, by + revealFiveBounds.height + 6);
 			}
 			else
 			{
-				revealAllBounds = drawButton(graphics, "Send All To Task List (" + total + ")", cx, by);
+				revealAllBounds = drawButton(graphics, t("ui.cardSendAll", total), cx, by);
 			}
 		}
 	}

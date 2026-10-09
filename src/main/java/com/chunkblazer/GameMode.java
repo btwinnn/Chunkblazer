@@ -26,6 +26,7 @@
 
 package com.chunkblazer;
 
+import static com.chunkblazer.Strings.t;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -33,8 +34,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum GameMode
 {
-	CASUAL("Casual", "Start anywhere. Play on any account. Featured on the casual leaderboard."),
-	NUZLOCKE("Competitive", "Featured on the main page of the leaderboard and website. Requires new Ironman, Hardcore Ironman, or Ultimate Ironman account with combat level 9 or lower and no skills above level 3.");
+	CASUAL("Casual", t("ui.modeCasual")),
+	NUZLOCKE("Competitive", t("ui.modeCompetitive"));
 
 	private final String name;
 	private final String description;
