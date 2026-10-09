@@ -26,6 +26,7 @@
 
 package com.chunkblazer;
 
+import static com.chunkblazer.Strings.t;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -145,26 +146,21 @@ public class ChunkBlazerPanel extends PluginPanel
 		overlayHint.setBorder(BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(FLAME),
 			new EmptyBorder(5, 6, 5, 6)));
-		overlayHint.add(new WrappingTextLabel("Click a task to track it, right-click to star it, "
-			+ "click a heading to fold it.", FontManager.getRunescapeSmallFont(), FLAME, CONTENT_WIDTH - 16));
+		overlayHint.add(new WrappingTextLabel(t("panel.overlayHint"), FontManager.getRunescapeSmallFont(), FLAME, CONTENT_WIDTH - 16));
 		overlayHint.setVisible(false);
 		mainPanel.add(overlayHint);
 		mainPanel.add(Box.createVerticalStrut(8));
 
-		historyButton = linkButton("View my task history", new Color(140, 140, 140),
-			"Every task you've completed, newest first, on chunkblazer.com");
+		historyButton = linkButton("View my task history", new Color(140, 140, 140), t("panel.historyTip"));
 		historyButton.addActionListener(e -> openLink("https://chunkblazer.com/player.html?rsn="
 			+ java.net.URLEncoder.encode(String.valueOf(plugin.getPlayerName()), java.nio.charset.StandardCharsets.UTF_8)));
 		mainPanel.add(historyButton);
-		showKeyButton = linkButton("Show my sync key", new Color(140, 140, 140),
-			"Reveal your account sync key to move this account to another computer");
+		showKeyButton = linkButton("Show my sync key", new Color(140, 140, 140), t("panel.showKeyTip"));
 		showKeyButton.addActionListener(e -> showSyncKeyBackup());
 		mainPanel.add(showKeyButton);
 		// Repair link for a contaminated account: clears only THIS account's local data
 		// so it restores fresh from the server.
-		resetAccountButton = linkButton("Reset this account's sync data", new Color(170, 110, 110),
-			"Wipe this account's local ChunkBlazer data and restore it fresh from the server. "
-			+ "Your server progress is not touched.");
+		resetAccountButton = linkButton("Reset this account's sync data", new Color(170, 110, 110), t("panel.resetTip"));
 		resetAccountButton.addActionListener(e -> confirmResetAccountData());
 		mainPanel.add(resetAccountButton);
 		mainPanel.add(Box.createVerticalStrut(6));
@@ -296,7 +292,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(Box.createVerticalStrut(5));
 
 		WrappingTextLabel body = new WrappingTextLabel(
-			"Type this code in public chat and hit Enter to verify your ChunkBlazer account:",
+			t("panel.verifyBody"),
 			FontManager.getRunescapeSmallFont(),
 			Color.WHITE,
 			CONTENT_WIDTH - 4);
@@ -369,7 +365,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		JLabel site = styledLabel("chunkblazer.com", FontManager.getRunescapeSmallFont(), new Color(255, 152, 0));
 		site.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
-		site.setToolTipText("Track your account progress at chunkblazer.com");
+		site.setToolTipText(t("panel.siteTip"));
 		site.addMouseListener(new java.awt.event.MouseAdapter()
 		{
 			@Override
@@ -409,7 +405,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		if (key == null || key.isEmpty())
 		{
 			JOptionPane.showMessageDialog(this,
-				"No sync key yet. Turn on Server Sync and log in once, and your key is created automatically.",
+				t("panel.noSyncKey"),
 				"Sync key", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
@@ -417,9 +413,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		// credential and RuneLite is often streamed or screen-shared, so we never put
 		// it on screen until the player says so.
 		int confirm = JOptionPane.showConfirmDialog(this,
-			"This will reveal your account's Sync Key on screen. Anyone who can see your "
-				+ "screen, including a stream or screen share, will be able to read it. "
-				+ "Are you sure you want to show it?",
+			t("panel.revealConfirm"),
 			"Reveal sync key?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 		if (confirm != JOptionPane.YES_OPTION)
 		{
@@ -429,11 +423,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		keyField.setEditable(false);
 		keyField.setCaretPosition(0);
 		JPanel content = new JPanel(new BorderLayout(0, 6));
-		content.add(new JLabel("<html><body style='width:260px'>Select the key below and copy it "
-			+ "(Ctrl+C), then save it somewhere safe like a password manager. To sync this account "
-			+ "on another computer, "
-			+ "paste it into the \"Sync recovery key\" setting there.<br><br><b>Anyone with this key "
-			+ "can access your account. Do not share it.</b></body></html>"), BorderLayout.NORTH);
+		content.add(new JLabel(t("panel.keyBackupHtml")), BorderLayout.NORTH);
 		content.add(keyField, BorderLayout.CENTER);
 		JOptionPane.showMessageDialog(this, content, "Your account sync key", JOptionPane.WARNING_MESSAGE);
 	}
@@ -448,12 +438,7 @@ public class ChunkBlazerPanel extends PluginPanel
 	private void confirmResetAccountData()
 	{
 		int confirm = JOptionPane.showConfirmDialog(this,
-			"<html><body style='width:270px'>This clears this account's ChunkBlazer data on THIS "
-				+ "computer (mode, tasks, points, chunks, and the stored sync key) and restores it "
-				+ "fresh from the server the next time you log in. Your server progress is not "
-				+ "touched.<br><br>Use this only if this account is showing the wrong mode or another "
-				+ "account's progress. After it finishes, restart RuneLite and log back in.<br><br>"
-				+ "Continue?</body></html>",
+			t("panel.resetConfirmHtml"),
 			"Reset this account's local data?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 		if (confirm != JOptionPane.YES_OPTION)
 		{
@@ -461,9 +446,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		}
 		plugin.resetAccountLocalData();
 		JOptionPane.showMessageDialog(this,
-			"Local data cleared. Restart RuneLite and log back in to restore this account from the "
-				+ "server. If sync does not come back on its own, paste this account's key into the "
-				+ "\"Sync recovery key\" setting.",
+			t("panel.resetDone"),
 			"Done", JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -486,16 +469,14 @@ public class ChunkBlazerPanel extends PluginPanel
 		panel.add(Box.createVerticalStrut(3));
 
 		WrappingTextLabel body = new WrappingTextLabel(
-			"Turn on sync to save your progress across devices, show on the leaderboard, "
-			+ "see other players, and play Competitive mode. Nothing is sent until you enable it. "
-			+ "Your current progress will sync with the server when you do.",
+			t("panel.syncBody"),
 			FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR, TASK_TEXT_WRAP_WIDTH);
 		body.setAlignmentX(LEFT_ALIGNMENT);
 		panel.add(body);
 
 		panel.add(Box.createVerticalStrut(3));
 		WrappingTextLabel comp = new WrappingTextLabel(
-			"Competitive mode requires a new Ironman, Hardcore Ironman, or Ultimate Ironman account with combat level 9 or lower and no skill above level 3.",
+			t("panel.competitiveReq"),
 			FontManager.getRunescapeSmallFont(), new Color(255, 190, 60), TASK_TEXT_WRAP_WIDTH);
 		comp.setAlignmentX(LEFT_ALIGNMENT);
 		panel.add(comp);
@@ -504,7 +485,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		// deal Lumbridge before it knows whether the server already has a roll.
 		panel.add(Box.createVerticalStrut(3));
 		WrappingTextLabel hint = new WrappingTextLabel(
-			"Your starting tasks are dealt once you choose Enable Sync or Play offline.",
+			t("panel.syncChoiceHint"),
 			FontManager.getRunescapeSmallFont(), ColorScheme.LIGHT_GRAY_COLOR, TASK_TEXT_WRAP_WIDTH);
 		hint.setAlignmentX(LEFT_ALIGNMENT);
 		syncChoiceHint = hint;
@@ -514,7 +495,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		JButton enable = new JButton("Enable Sync");
 		enable.setAlignmentX(LEFT_ALIGNMENT);
 		enable.setFocusPainted(false);
-		enable.setToolTipText("Sync your progress to chunkblazer.com");
+		enable.setToolTipText(t("panel.enableTip"));
 		// Same confirmation RuneLite shows for the config toggle's warning.
 		enable.addActionListener(e ->
 		{
@@ -531,7 +512,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		playOfflineButton = new JButton("Play offline");
 		playOfflineButton.setAlignmentX(LEFT_ALIGNMENT);
 		playOfflineButton.setFocusPainted(false);
-		playOfflineButton.setToolTipText("Keep progress on this computer only. You can enable sync later.");
+		playOfflineButton.setToolTipText(t("panel.offlineTip"));
 		playOfflineButton.addActionListener(e -> plugin.choosePlayOffline());
 		panel.add(playOfflineButton);
 
@@ -558,35 +539,12 @@ public class ChunkBlazerPanel extends PluginPanel
 	 */
 	private void showDataUseDialog()
 	{
-		String msg =
-			"ChunkBlazer is a server-backed game mode. To save your progress\n"
-			+ "and rank you on the leaderboards, the plugin sends data to\n"
-			+ "ChunkBlazer's servers.\n"
-			+ "\n"
-			+ "WHAT IS SENT (only while \"Enable Server Sync\" is on):\n"
-			+ "  • Your RuneScape name\n"
-			+ "  • Your IP address\n"
-			+ "  • Your current world and map region\n"
-			+ "  • Progress events: NPC kills, XP/skill changes, items\n"
-			+ "    obtained or equipped, and task completions\n"
-			+ "  • If you're a Hardcore Ironman and lose that status: where\n"
-			+ "    it happened and what killed you (shown on chunkblazer.com)\n"
-			+ "\n"
-			+ "WHAT IT IS USED FOR:\n"
-			+ "  • Saving your unlocked chunks, tasks, points and game mode\n"
-			+ "  • Server-side verification of completions (anti-cheat)\n"
-			+ "  • Leaderboards and seeing other ChunkBlazer players online\n"
-			+ "\n"
-			+ "WHERE IT GOES:\n"
-			+ "  • Over HTTPS to api.chunkblazer.com. Not shared with any\n"
-			+ "    third parties.\n"
-			+ "\n"
-			+ "Track your account progress at chunkblazer.com.";
+		String msg = t("panel.dataUse");
 
 		int choice = JOptionPane.showOptionDialog(
 			this,
 			msg,
-			"How ChunkBlazer uses your data",
+			t("panel.dataUseTitle"),
 			JOptionPane.DEFAULT_OPTION,
 			JOptionPane.INFORMATION_MESSAGE,
 			null,
@@ -650,14 +608,11 @@ public class ChunkBlazerPanel extends PluginPanel
 		// Verify-first prompt: verification (the chat-code handshake) proves account
 		// ownership and is required for Competitive, so lead with it here in the same
 		// amber as the "Verify Your Account" banner it points back to.
-		addLabel(modePanel, "<html><table width='190' cellpadding='0' cellspacing='0'><tr><td>"
-			+ "Verify your account, then choose your game mode. Type the code from the verify "
-			+ "banner in public chat first."
-			+ "</td></tr></table></html>", FontManager.getRunescapeSmallFont(), new Color(255, 190, 60));
+		addLabel(modePanel, t("panel.verifyFirstHtml"), FontManager.getRunescapeSmallFont(), new Color(255, 190, 60));
 		modePanel.add(Box.createVerticalStrut(8));
 
 		// Warning text
-		addLabel(modePanel, "<html><i>This choice is permanent for this account!</i></html>",
+		addLabel(modePanel, t("panel.permanentHtml"),
 			FontManager.getRunescapeSmallFont(), Color.YELLOW);
 		modePanel.add(Box.createVerticalStrut(10));
 
@@ -665,7 +620,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		ButtonGroup modeGroup = new ButtonGroup();
 
 		casualRadio = new JRadioButton("Casual Mode");
-		casualRadio.setToolTipText("Start anywhere. Play on any account. Featured on the casual leaderboard.");
+		casualRadio.setToolTipText(t("panel.casualTip"));
 		casualRadio.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		casualRadio.setForeground(Color.WHITE);
 		casualRadio.setSelected(true);
@@ -675,22 +630,18 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		// Fixed-width table keeps the blurb inside CONTENT_WIDTH; Swing's CSS
 		// subset ignores width on div/body/p, so a table is the reliable wrap.
-		addLabel(modePanel, "<html><table width='190' cellpadding='0' cellspacing='0'><tr><td>"
-			+ "Start anywhere. Play on any account. Featured on the casual leaderboard."
-			+ "</td></tr></table></html>", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
+		addLabel(modePanel, t("panel.casualHtml"), FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
 		modePanel.add(Box.createVerticalStrut(5));
 
 		nuzlockeRadio = new JRadioButton("Competitive");
-		nuzlockeRadio.setToolTipText("Featured on the main page of the leaderboard and website. You must start on a new Ironman, Hardcore Ironman or Ultimate Ironman account (combat level 9 or lower).");
+		nuzlockeRadio.setToolTipText(t("panel.competitiveTip"));
 		nuzlockeRadio.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 		nuzlockeRadio.setForeground(Color.WHITE);
 		nuzlockeRadio.setAlignmentX(LEFT_ALIGNMENT);
 		modeGroup.add(nuzlockeRadio);
 		modePanel.add(nuzlockeRadio);
 
-		addLabel(modePanel, "<html><table width='190' cellpadding='0' cellspacing='0'><tr><td>"
-			+ "Featured on the main page of the leaderboard and website. You must start on a new Ironman, Hardcore Ironman or Ultimate Ironman account (combat level 9 or lower)."
-			+ "</td></tr></table></html>", FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
+		addLabel(modePanel, t("panel.competitiveHtml"), FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
 		modePanel.add(Box.createVerticalStrut(10));
 
 		// Confirm button
@@ -718,7 +669,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		addLabel(panel, "Not logged in", FontManager.getRunescapeBoldFont(), Color.WHITE);
 		panel.add(Box.createVerticalStrut(5));
 
-		addLabel(panel, "<html>Log into Old School RuneScape to start playing ChunkBlazer.</html>",
+		addLabel(panel, t("panel.loggedOutHtml"),
 			FontManager.getRunescapeSmallFont(), Color.LIGHT_GRAY);
 
 		return panel;
@@ -732,8 +683,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 		int confirm = JOptionPane.showConfirmDialog(
 			this,
-			"Are you sure you want to select " + selectedMode.getName() + " mode?\n\n" +
-			"This choice is PERMANENT for this account!",
+			t("panel.confirmMode", selectedMode.getName()),
 			"Confirm Game Mode",
 			JOptionPane.YES_NO_OPTION,
 			JOptionPane.WARNING_MESSAGE
@@ -752,9 +702,7 @@ public class ChunkBlazerPanel extends PluginPanel
 		{
 			int enable = JOptionPane.showConfirmDialog(
 				this,
-				"Competitive mode needs a connection to the ChunkBlazer server to verify\n"
-				+ "your RuneScape account.\n\n"
-				+ "Do you want to enable Server Sync?",
+				t("panel.competitiveNeedsSync"),
 				"Enable Server Sync?",
 				JOptionPane.YES_NO_OPTION,
 				JOptionPane.QUESTION_MESSAGE
