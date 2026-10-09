@@ -712,9 +712,9 @@ public class TaskCardOverlay extends Overlay
 		// limited panel height, the description fills whatever is left (ellipsised if
 		// it can't all fit). Most non-raid tasks have no description, so this collapses
 		// back to just the name.
-		List<String> nameLines = wrap(card.taskName, fm, textWidth);
+		List<String> nameLines = Draw.wrap(fm, card.taskName, textWidth);
 		List<String> descLines = (card.description != null && !card.description.trim().isEmpty())
-			? wrap(card.description.trim(), fm, textWidth)
+			? Draw.wrap(fm, card.description.trim(), textWidth)
 			: new ArrayList<>();
 
 		// "Quantity: 23" sits under the name; a single-item task doesn't need it.
@@ -852,50 +852,13 @@ public class TaskCardOverlay extends Overlay
 
 		int tx = centreX - fm.stringWidth(text) / 2;
 		int ty = top + padY + fm.getAscent();
-		graphics.setColor(TEXT_SHADOW);
-		graphics.drawString(text, tx + 1, ty + 1);
-		graphics.setColor(PROMPT);
-		graphics.drawString(text, tx, ty);
+		Draw.shadow(graphics, text, tx, ty, TEXT_SHADOW, PROMPT);
 		return bounds;
 	}
 
 	private void drawCentered(Graphics2D graphics, String text, int centreX, int y, Color colour)
 	{
-		FontMetrics fm = graphics.getFontMetrics();
-		int x = centreX - fm.stringWidth(text) / 2;
-		graphics.setColor(TEXT_SHADOW);
-		graphics.drawString(text, x + 1, y + 1);
-		graphics.setColor(colour);
-		graphics.drawString(text, x, y);
-	}
-
-	/** Greedy word wrap. Task names are short, so this never needs to be clever. */
-	private static List<String> wrap(String text, FontMetrics fm, int maxWidth)
-	{
-		List<String> lines = new ArrayList<>();
-		if (text == null || text.isEmpty())
-		{
-			return lines;
-		}
-		StringBuilder line = new StringBuilder();
-		for (String word : text.split(" "))
-		{
-			String candidate = line.length() == 0 ? word : line + " " + word;
-			if (fm.stringWidth(candidate) > maxWidth && line.length() > 0)
-			{
-				lines.add(line.toString());
-				line = new StringBuilder(word);
-			}
-			else
-			{
-				line = new StringBuilder(candidate);
-			}
-		}
-		if (line.length() > 0)
-		{
-			lines.add(line.toString());
-		}
-		return lines;
+		Draw.shadow(graphics, text, centreX - graphics.getFontMetrics().stringWidth(text) / 2, y, TEXT_SHADOW, colour);
 	}
 
 	/** Drop every card without revealing anything — for shutdown / logout. */

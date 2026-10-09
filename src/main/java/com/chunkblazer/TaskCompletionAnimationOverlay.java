@@ -75,8 +75,6 @@ public class TaskCompletionAnimationOverlay extends Overlay
 	private static final Font FONT_VALUES = new Font("Verdana", Font.PLAIN, 10);
 	private static final Color COLOR_TEXT = new Color(255, 255, 255);
 	private static final Color COLOR_SHADOW = new Color(0, 0, 0, 180);
-	private static final int SHADOW_OFFSET_X = 1;
-	private static final int SHADOW_OFFSET_Y = 1;
 
 	private final ChunkBlazerConfig config;
 	private final Client client;
@@ -296,46 +294,22 @@ public class TaskCompletionAnimationOverlay extends Overlay
 		// Task name - centered in the top area of the box (above "Region Assigned")
 		graphics.setFont(FONT_TASK_NAME);
 		FontMetrics fm = graphics.getFontMetrics();
-		String displayName = truncateText(taskName, fm, boxWidth - 30);
+		String displayName = Draw.fit(fm, taskName, boxWidth - 30);
 		int nameX = boxX + (boxWidth - fm.stringWidth(displayName)) / 2;
 		int nameY = boxY + 25; // Near the top
-		// Draw shadow then text
-		graphics.setColor(COLOR_SHADOW);
-		graphics.drawString(displayName, nameX + SHADOW_OFFSET_X, nameY + SHADOW_OFFSET_Y);
-		graphics.setColor(COLOR_TEXT);
-		graphics.drawString(displayName, nameX, nameY);
+		Draw.shadow(graphics, displayName, nameX, nameY, COLOR_SHADOW, COLOR_TEXT);
 
 		// Region value - below and slightly left of "Region Assigned:" label
 		graphics.setFont(FONT_VALUES);
-		fm = graphics.getFontMetrics();
 		int regionX = boxX + 175; // Slightly left
 		int regionY = boxY + 58; // Moved down
-		// Draw shadow then text
-		graphics.setColor(COLOR_SHADOW);
-		graphics.drawString(regionName, regionX + SHADOW_OFFSET_X, regionY + SHADOW_OFFSET_Y);
-		graphics.setColor(COLOR_TEXT);
-		graphics.drawString(regionName, regionX, regionY);
+		Draw.shadow(graphics, regionName, regionX, regionY, COLOR_SHADOW, COLOR_TEXT);
 
 		// Points value - underneath region value
 		String pointsStr = String.valueOf(pointsAwarded);
 		int pointsX = boxX + 175; // Same X as region
 		int pointsY = boxY + 78; // Below region
-		// Draw shadow then text
-		graphics.setColor(COLOR_SHADOW);
-		graphics.drawString(pointsStr, pointsX + SHADOW_OFFSET_X, pointsY + SHADOW_OFFSET_Y);
-		graphics.setColor(COLOR_TEXT);
-		graphics.drawString(pointsStr, pointsX, pointsY);
-	}
-
-	private String truncateText(String text, FontMetrics fm, int maxWidth)
-	{
-		if (fm.stringWidth(text) <= maxWidth) return text;
-		for (int i = text.length() - 1; i > 0; i--)
-		{
-			String t = text.substring(0, i) + "...";
-			if (fm.stringWidth(t) <= maxWidth) return t;
-		}
-		return "...";
+		Draw.shadow(graphics, pointsStr, pointsX, pointsY, COLOR_SHADOW, COLOR_TEXT);
 	}
 
 	private float easeInOutCubic(float t)
