@@ -26,6 +26,7 @@
 
 package com.chunkblazer.modules;
 
+import static com.chunkblazer.Strings.t;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -210,13 +211,13 @@ public class ObtainModule extends AbstractTaskModule
 					}
 					else
 					{
-						log.warn("      >>> WARNING: itemIds is NULL/empty for this RequiredItem, slot ignored!");
+						log.warn(t("module.log.obtainNullItemIds"));
 					}
 				}
 			}
 			else
 			{
-				log.warn("  >>> WARNING: No required_items defined for this OBTAIN task!");
+				log.warn(t("module.log.obtainNoRequiredItems"));
 			}
 
 			taskSlots.put(task.getTaskId(), slots);

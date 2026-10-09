@@ -26,6 +26,7 @@
 
 package com.chunkblazer.modules;
 
+import static com.chunkblazer.Strings.t;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableSet;
 import java.util.HashMap;
@@ -370,8 +371,7 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 			}
 		}
 		MessageNode taskMessage = chatLine(
-			"<col=" + COLOR_BLUE + ">[ChunkBlazer]</col> <col=" + headingColor + ">" + heading + "</col> <col="
-				+ COLOR_BLACK + ">" + task.getName() + "</col>" + suffix);
+			t("module.announce", COLOR_BLUE, headingColor, heading, COLOR_BLACK, task.getName(), suffix));
 
 		MessageNode detailMessage = null;
 		if (detail != null && !detail.isEmpty())

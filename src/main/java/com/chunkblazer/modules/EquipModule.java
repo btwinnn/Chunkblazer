@@ -26,6 +26,7 @@
 
 package com.chunkblazer.modules;
 
+import static com.chunkblazer.Strings.t;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -134,13 +135,13 @@ public class EquipModule extends AbstractTaskModule
 					}
 					else
 					{
-						log.warn("EquipModule: itemIds is NULL for a RequiredItem on task '{}'", task.getName());
+						log.warn(t("module.log.equipNullItemIds"), task.getName());
 					}
 				}
 			}
 			else
 			{
-				log.warn("EquipModule: no required_items defined for EQUIP task '{}'", task.getName());
+				log.warn(t("module.log.equipNoRequiredItems"), task.getName());
 			}
 
 			taskTargetItems.put(task.getTaskId(), targetItems);
@@ -450,8 +451,7 @@ public class EquipModule extends AbstractTaskModule
 				int playerLevel = client.getRealSkillLevel(requiredSkill);
 				if (playerLevel < requiredLevel)
 				{
-					return String.format("Requires %s level %d (you have %d)",
-						requiredSkill.getName(), requiredLevel, playerLevel);
+					return t("module.requiresSkillLevel", requiredSkill.getName(), requiredLevel, playerLevel);
 				}
 			}
 		}
@@ -466,8 +466,7 @@ public class EquipModule extends AbstractTaskModule
 				int playerLevel = client.getRealSkillLevel(skill);
 				if (playerLevel < constraints.getRequiredLevel())
 				{
-					return String.format("Requires %s level %d (you have %d)",
-						skill.getName(), constraints.getRequiredLevel(), playerLevel);
+					return t("module.requiresSkillLevel", skill.getName(), constraints.getRequiredLevel(), playerLevel);
 				}
 			}
 
@@ -477,8 +476,7 @@ public class EquipModule extends AbstractTaskModule
 				Player player = client.getLocalPlayer();
 				if (player != null && player.getCombatLevel() < constraints.getMinCombatLevel())
 				{
-					return String.format("Requires combat level %d (you have %d)",
-						constraints.getMinCombatLevel(), player.getCombatLevel());
+					return t("module.requiresCombatLevel", constraints.getMinCombatLevel(), player.getCombatLevel());
 				}
 			}
 		}
@@ -519,7 +517,7 @@ public class EquipModule extends AbstractTaskModule
 			int currentRegion = getCurrentRegionId();
 			if (!allowedRegions.contains(currentRegion))
 			{
-				return "Must be in an allowed region to equip this item";
+				return t("module.equipNeedsAllowedRegion");
 			}
 		}
 
@@ -529,7 +527,7 @@ public class EquipModule extends AbstractTaskModule
 			int currentRegion = getCurrentRegionId();
 			if (currentRegion != constraints.getRequiredRegion())
 			{
-				return "Must be in specific region to equip this item";
+				return t("module.equipNeedsRegion");
 			}
 		}
 
@@ -798,7 +796,7 @@ public class EquipModule extends AbstractTaskModule
 			{
 				if (response != null && !response.isSuccess())
 				{
-					log.warn("EquipModule: server rejected equip report: {}", response.getErrorMessage());
+					log.warn(t("module.log.equipReportRejected"), response.getErrorMessage());
 				}
 			})
 			.exceptionally(ex -> null);
