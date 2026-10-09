@@ -26,6 +26,7 @@
 
 package com.chunkblazer;
 
+import static com.chunkblazer.Strings.t;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -837,7 +838,7 @@ public class TaskBrowserOverlay extends Overlay
 		if (item instanceof Integer)
 		{
 			int extra = (Integer) item;
-			JLabel more = new JLabel(extra > 0 ? "+" + extra + " more in the task window" : "Nothing here");
+			JLabel more = new JLabel(extra > 0 ? t("ui.moreInTaskWindow", extra) : "Nothing here");
 			more.setForeground(Color.GRAY);
 			more.setBorder(new EmptyBorder(4, 8, 6, 4));
 			return more;
@@ -1590,13 +1591,13 @@ public class TaskBrowserOverlay extends Overlay
 		if (currentChunkOnly)
 		{
 			String here = currentChunkName();
-			return here.isEmpty() ? "You're not in a chunk with tasks." : "No tasks here in " + here + ".";
+			return here.isEmpty() ? t("ui.notInTaskChunk") : "No tasks here in " + here + ".";
 		}
 		if (search.isEmpty() && tab != Tab.ACTIVE)
 		{
 			return tab == Tab.NEW ? "No new tasks left to show."
-				: tab == Tab.ARCHIVED ? "Click a task's book icon to archive it here."
-				: "Star tasks in the Active tab to save them here.";
+				: tab == Tab.ARCHIVED ? t("ui.archiveEmpty")
+				: t("ui.savedEmpty");
 		}
 		return "No tasks match.";
 	}
@@ -1856,7 +1857,7 @@ public class TaskBrowserOverlay extends Overlay
 		{
 			if (f.ordinal() == 0 || f.condition != filters[f.ordinal() - 1].condition)
 			{
-				rowY = menuHeading(graphics, box, rowY, f.condition ? "Only if (all ticked)" : "Type (any ticked)");
+				rowY = menuHeading(graphics, box, rowY, f.condition ? t("ui.filterOnlyIf") : t("ui.filterType"));
 			}
 			Rectangle row = new Rectangle(box.x + 2, rowY, box.width - 4 - HIDE_BUTTON, MENU_ROW);
 			Rectangle eye = new Rectangle(row.x + row.width, rowY, HIDE_BUTTON, MENU_ROW);
@@ -1918,7 +1919,7 @@ public class TaskBrowserOverlay extends Overlay
 		skills.remove(Skill.OVERALL);
 		int rowsNeeded = (skills.size() + SKILL_COLUMNS - 1) / SKILL_COLUMNS;
 		Rectangle box = openMenu(graphics, button, SKILL_COLUMNS * SKILL_CELL + 8, rowsNeeded * SKILL_CELL + 26);
-		String caption = filterSkill == null ? "Pick a skill" : "Click " + filterSkill.getName() + " again to clear";
+		String caption = filterSkill == null ? "Pick a skill" : t("ui.clickSkillToClear", filterSkill.getName());
 		for (int i = 0; i < skills.size(); i++)
 		{
 			Skill skill = skills.get(i);
@@ -2027,8 +2028,7 @@ public class TaskBrowserOverlay extends Overlay
 		int points = entry.members.stream().mapToInt(NuzlockeTask::getBasePoints).sum();
 		int left = entry.members.size();
 		String name = entry.group.charAt(0) + entry.group.substring(1).toLowerCase() + " levels";
-		String info = left + (left == 1 ? " level-up left" : " level-ups left") + " - next: level "
-			+ requiredLevel(entry.members.get(0));
+		String info = t("ui.levelUpsLeft", left, left == 1 ? "" : "s", requiredLevel(entry.members.get(0)));
 		drawRowText(graphics, row, row.x + 42, name, Color.WHITE, points + " pts", info, regular, small);
 	}
 
@@ -2215,7 +2215,7 @@ public class TaskBrowserOverlay extends Overlay
 			.findFirst().orElse(null);
 		if (found == null)
 		{
-			chat(display + " isn't in your task list (it's done, or not a ChunkBlazer quest).");
+			chat(t("ui.questNotInList", display));
 			return;
 		}
 		String id = found.getTaskId();
@@ -2242,7 +2242,7 @@ public class TaskBrowserOverlay extends Overlay
 		{
 			if (!worldMap.isMapOpen())
 			{
-				client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Open the world map to see " + name + ".", null);
+				client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", t("ui.openMapToSee", name), null);
 			}
 		});
 	}
@@ -2300,41 +2300,41 @@ public class TaskBrowserOverlay extends Overlay
 			Arrays.asList(
 				heading("Task box & tracking"),
 				choice("Task box", "taskTrackerStyle", config.taskTrackerStyle(),
-					"How the task you track is shown in game. Off hides it.",
+					t("ui.setTaskBox"),
 					"Net", TaskTrackerStyle.NET, "Vani", TaskTrackerStyle.VANI, "Off", TaskTrackerStyle.OFF),
 				toggle("Auto-track tasks", config.autoTrackTasks(),
-					"Using an NPC or object a task needs (attack, talk, chop, mine...) tracks that task.", "autoTrackTasks"),
+					t("ui.setAutoTrack"), "autoTrackTasks"),
 				toggle("Saved tasks tracker", config.showSavedTaskTracker(),
-					"A bar at the bottom of the screen with your saved tasks, nearest first.", "showSavedTaskTracker"),
+					t("ui.setSavedTracker"), "showSavedTaskTracker"),
 				toggle("Right-click Tasks menu", config.taskRightClickMenu(),
-					"Adds a Tasks submenu when right-clicking NPCs and objects your tasks need.", "taskRightClickMenu"),
+					t("ui.setRightClick"), "taskRightClickMenu"),
 				toggle("Task chat messages", config.showChatProgress() || config.showChatSuccess() || config.showChatFailed(),
-					"Task progress (3/10), completed and failed messages in the chat box. Pick them one by one in RuneLite's plugin settings.",
+					t("ui.setChatMessages"),
 					"showChatProgress", "showChatSuccess", "showChatFailed")),
 			Arrays.asList(
 				heading("Highlights"),
 				choice("Outlines", "taskOutlineMode", config.taskOutlineMode(),
-					"Which task targets get an outline: all of them, saved tasks, ones you can do now, or none.",
+					t("ui.setOutlines"),
 					"All", OutlineMode.ALL, "Saved", OutlineMode.SAVED, "Can do", OutlineMode.CAN_DO, "Off", OutlineMode.OFF),
 				toggle("Highlight task items", config.highlightEquipItems(),
-					"Outlines items your tasks need (gear to equip, tools like a knife or tinderbox).", "highlightEquipItems")),
+					t("ui.setTaskItems"), "highlightEquipItems")),
 			Arrays.asList(
 				heading("Chunks in the world"),
 				toggle("Chunk borders", config.showSceneChunks(), "Draws chunk borders on the ground.", "showSceneChunks"),
 				toggle("Locked chunk walls", config.showChunkWalls(),
-					"A see-through wall between unlocked and locked chunks.", "showChunkWalls"),
+					t("ui.setChunkWalls"), "showChunkWalls"),
 				toggle("Chunk name banner", config.showChunkNamePopups(),
-					"Shows the chunk's name at the top of the screen when you walk into a new one.", "showChunkNamePopups")),
+					t("ui.setNameBanner"), "showChunkNamePopups")),
 			Arrays.asList(
 				heading("World map"),
 				toggle("Chunk borders", config.showWorldMapChunks(),
-					"Draws chunk borders and colours on the world map.", "showWorldMapChunks"),
+					t("ui.setMapChunks"), "showWorldMapChunks"),
 				toggle("Lines between unlocked", config.showChunkGridLines(),
-					"Outlines each unlocked chunk. Off shows your unlocked area as one piece.", "showChunkGridLines"),
+					t("ui.setGridLines"), "showChunkGridLines"),
 				toggle("Chunk costs", config.showChunkCostLabels(),
-					"Writes what each unlockable chunk costs inside it (free, points or a boss token).", "showChunkCostLabels"),
+					t("ui.setCostLabels"), "showChunkCostLabels"),
 				toggle("Colour legend", config.showChunkLegend(),
-					"A key to the chunk colours in the corner of the world map.", "showChunkLegend")));
+					t("ui.setLegend"), "showChunkLegend")));
 	}
 
 	/** Back button, the sections in one or two columns, and a footer explaining the hovered setting. */
@@ -2405,7 +2405,7 @@ public class TaskBrowserOverlay extends Overlay
 		graphics.setColor(hovered != null ? DETAIL : SUBTEXT);
 		int lineY = footerY + 6 + fm.getAscent();
 		for (String line : wrap(fm, hovered != null ? hovered
-			: "Hover a setting to see what it does. Colours are in RuneLite's plugin settings.", page.width - PAD * 2))
+			: t("ui.settingsFooter"), page.width - PAD * 2))
 		{
 			graphics.drawString(line, page.x + PAD, lineY);
 			lineY += DETAIL_LINE;
