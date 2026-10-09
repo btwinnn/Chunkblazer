@@ -103,10 +103,7 @@ public class WorldMapLegendOverlay extends Overlay
 		int x = (int) worldMapRect.getX() + 8;
 		int y = (int) (worldMapRect.getY() + worldMapRect.getHeight()) - height - 8;
 
-		graphics.setColor(new Color(30, 30, 30, 220));
-		graphics.fillRect(x, y, width, height);
-		graphics.setColor(new Color(90, 90, 90));
-		graphics.drawRect(x, y, width, height);
+		Draw.box(graphics, x, y, width, height, new Color(30, 30, 30, 220), new Color(90, 90, 90));
 
 		int rowY = y + padding;
 		for (ChunkUnlockType row : ROWS)
@@ -123,7 +120,7 @@ public class WorldMapLegendOverlay extends Overlay
 			graphics.drawRect(sx, sy, swatch, swatch);
 
 			graphics.setColor(Color.WHITE);
-			graphics.drawString(row.legend, sx + swatch + padding, rowY + (lineHeight + fm.getAscent()) / 2 - 2);
+			graphics.drawString(row.legend, sx + swatch + padding, Draw.textY(fm, rowY, lineHeight));
 			rowY += lineHeight;
 		}
 		return null;

@@ -360,13 +360,8 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 					// Make sure text position is within the map bounds
 					if (textX > worldMapRect.getX() && textY > worldMapRect.getY())
 					{
-						// Simple drop shadow (single offset, bottom-right)
-						graphics.setColor(Color.BLACK);
-						graphics.drawString(idText, textX + 1, textY + 1);
-
-						// Same colour family as the chunk's tint, solid so it stays readable.
-						graphics.setColor(type.color);
-						graphics.drawString(idText, textX, textY);
+						// Black drop shadow; the text uses the chunk's tint, solid so it stays readable.
+						Draw.shadow(graphics, idText, textX, textY, Color.BLACK, type.color);
 					}
 				}
 			}
@@ -420,41 +415,10 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 		{
 			return;
 		}
-
-		String regionName = plugin.getRegionName(regionId);
-		String regionIdText = "Region: " + regionId;
-
-		Font font = FontManager.getRunescapeSmallFont();
-		graphics.setFont(font);
-		FontMetrics fm = graphics.getFontMetrics();
-
-		int padding = 4;
-		int lineHeight = fm.getHeight();
-		int maxWidth = Math.max(fm.stringWidth(regionName), fm.stringWidth(regionIdText));
-		int boxWidth = maxWidth + padding * 2;
-		int boxHeight = lineHeight * 2 + padding * 2;
-
-		int boxX = (int) worldMapRect.getX() + 5;
-		int boxY = (int) worldMapRect.getY() + 5;
-
-		// Draw background
-		graphics.setColor(new Color(0, 0, 0, 180));
-		graphics.fillRect(boxX, boxY, boxWidth, boxHeight);
-
-		// Draw border
-		graphics.setColor(new Color(255, 215, 0, 200));
-		graphics.drawRect(boxX, boxY, boxWidth, boxHeight);
-
-		// Draw region name
-		int textX = boxX + padding;
-		int textY = boxY + padding + fm.getAscent();
-		graphics.setColor(Color.WHITE);
-		graphics.drawString(regionName, textX, textY);
-
-		// Draw region ID
-		textY += lineHeight;
-		graphics.setColor(new Color(200, 200, 200));
-		graphics.drawString(regionIdText, textX, textY);
+		drawLinesBox(graphics, (int) worldMapRect.getX() + 5, (int) worldMapRect.getY() + 5, false, 4,
+			new Color(0, 0, 0, 180), new Color(255, 215, 0, 200),
+			new String[]{plugin.getRegionName(regionId), "Region: " + regionId},
+			new Color[]{Color.WHITE, new Color(200, 200, 200)});
 	}
 
 	private void drawHoverTooltip(Graphics2D graphics, Point mousePos, int regionId)
@@ -502,46 +466,11 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 			line3 = "Hold " + config.worldMapUnlockKey() + " + click to unlock";
 		}
 
-
-		// Setup font
-		Font font = FontManager.getRunescapeSmallFont();
-		graphics.setFont(font);
-		FontMetrics fm = graphics.getFontMetrics();
-
-		// Calculate tooltip size
-		int padding = 6;
-		int lineHeight = fm.getHeight();
-		int maxWidth = Math.max(fm.stringWidth(line1), Math.max(fm.stringWidth(line2), fm.stringWidth(line3)));
-		int tooltipWidth = maxWidth + padding * 2;
-		int tooltipHeight = lineHeight * 3 + padding * 2;
-
-		// Position tooltip near mouse (offset to not cover cursor)
-		int tooltipX = mousePos.getX() + 15;
-		int tooltipY = mousePos.getY() - tooltipHeight - 5;
-
-		// Draw background
-		graphics.setColor(new Color(30, 30, 30, 230));
-		graphics.fillRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
-
-		// Draw border
 		ChunkUnlockType type = ChunkUnlockType.of(plugin, regionId, false, true);
-		graphics.setColor(canAfford ? type.color : LOCKED_BORDER);
-		graphics.drawRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight);
-
-		// Draw text
-		int textX = tooltipX + padding;
-		int textY = tooltipY + padding + fm.getAscent();
-
-		graphics.setColor(Color.WHITE);
-		graphics.drawString(line1, textX, textY);
-
-		textY += lineHeight;
-		graphics.setColor(new Color(255, 215, 0)); // Gold for cost
-		graphics.drawString(line2, textX, textY);
-
-		textY += lineHeight;
-		graphics.setColor(canAfford ? new Color(100, 255, 100) : new Color(255, 100, 100));
-		graphics.drawString(line3, textX, textY);
+		// Name in white, cost in gold, then green if affordable or red if not.
+		drawTooltip(graphics, mousePos, canAfford ? type.color : LOCKED_BORDER,
+			new String[]{line1, line2, line3},
+			new Color[]{Color.WHITE, new Color(255, 215, 0), canAfford ? new Color(100, 255, 100) : new Color(255, 100, 100)});
 	}
 
 
@@ -558,34 +487,47 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 		{
 			return;
 		}
-		String line1 = plugin.getRegionName(regionId);
-		String line2 = "Unlocked";
-		String line3 = "Hold " + config.worldMapTasksKey() + " + click to view tasks";
+		drawTooltip(graphics, mousePos, ChunkUnlockType.UNLOCKED.color,
+			new String[]{plugin.getRegionName(regionId), "Unlocked", "Hold " + config.worldMapTasksKey() + " + click to view tasks"},
+			new Color[]{Color.WHITE, ChunkUnlockType.UNLOCKED.color, new Color(255, 215, 0)});
+	}
 
+	/** Hover tooltip: just above and right of the mouse, so it doesn't cover the cursor. */
+	private static void drawTooltip(Graphics2D graphics, Point mousePos, Color border, String[] lines, Color[] colours)
+	{
+		drawLinesBox(graphics, mousePos.getX() + 15, mousePos.getY() - 5, true, 6, new Color(30, 30, 30, 230), border, lines, colours);
+	}
+
+	/**
+	 * A bordered box of small-font text, one colour per line. With {@code above} the box's bottom
+	 * edge sits at y instead of its top.
+	 */
+	private static void drawLinesBox(Graphics2D graphics, int x, int y, boolean above, int padding,
+		Color fill, Color border, String[] lines, Color[] colours)
+	{
 		graphics.setFont(FontManager.getRunescapeSmallFont());
 		FontMetrics fm = graphics.getFontMetrics();
-		int padding = 6;
 		int lineHeight = fm.getHeight();
-		int width = Math.max(fm.stringWidth(line1), Math.max(fm.stringWidth(line2), fm.stringWidth(line3))) + padding * 2;
-		int height = lineHeight * 3 + padding * 2;
-		int x = mousePos.getX() + 15;
-		int y = mousePos.getY() - height - 5;
+		int width = 0;
+		for (String line : lines)
+		{
+			width = Math.max(width, fm.stringWidth(line));
+		}
+		width += padding * 2;
+		int height = lineHeight * lines.length + padding * 2;
+		if (above)
+		{
+			y -= height;
+		}
 
-		graphics.setColor(new Color(30, 30, 30, 230));
-		graphics.fillRect(x, y, width, height);
-		graphics.setColor(ChunkUnlockType.UNLOCKED.color);
-		graphics.drawRect(x, y, width, height);
-
-		int textX = x + padding;
+		Draw.box(graphics, x, y, width, height, fill, border);
 		int textY = y + padding + fm.getAscent();
-		graphics.setColor(Color.WHITE);
-		graphics.drawString(line1, textX, textY);
-		textY += lineHeight;
-		graphics.setColor(ChunkUnlockType.UNLOCKED.color);
-		graphics.drawString(line2, textX, textY);
-		textY += lineHeight;
-		graphics.setColor(new Color(255, 215, 0));
-		graphics.drawString(line3, textX, textY);
+		for (int i = 0; i < lines.length; i++)
+		{
+			graphics.setColor(colours[i]);
+			graphics.drawString(lines[i], x + padding, textY);
+			textY += lineHeight;
+		}
 	}
 
 	/** Cost text centred in a chunk, on a dark backing so it reads on any map colour. */
@@ -599,7 +541,7 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 		FontMetrics fm = graphics.getFontMetrics();
 		int width = fm.stringWidth(text);
 		int x = xPos + (size - width) / 2;
-		int y = yPos + (size + fm.getAscent()) / 2 - 2;
+		int y = Draw.textY(fm, yPos, size);
 
 		graphics.setColor(new Color(0, 0, 0, 170));
 		graphics.fillRect(x - 3, y - fm.getAscent(), width + 6, fm.getHeight());
