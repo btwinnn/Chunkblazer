@@ -32,6 +32,8 @@ import com.google.gson.reflect.TypeToken;
 import com.google.inject.Provides;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -3201,18 +3203,27 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 	}
 
+	/** boss_kc_phrases.json rules, loaded on first use. */
+	private String[][] bossPhrases;
+
 	/**
 	 * Watch for a boss/raid completion message and award the once-per-boss Boss
 	 * Token via {@link #recordBossCompletion} (which no-ops unless that boss chunk
 	 * is unlocked and not already recorded).
 	 *
-	 * <p>ToA bosses despawn rather than dying, so ActorDeath is unreliable — the
-	 * game's completion-count GAMEMESSAGE is the signal both RuneLite and the
-	 * official ToA plugin key off. The Normal / Entry Mode / Expert Mode variants
-	 * all contain "Tombs of Amascut" and "count is", so a substring match covers
-	 * every difficulty. See docs/BOSS-CHUNKS.md for the researched signals; the
-	 * per-raid-level "Defeat ToA (150+/300+)" TASKS (varbit 14380) are a separate,
-	 * still-to-be-verified module.
+	 * <p>The signals live in boss_kc_phrases.json as an ORDERED rule list (see
+	 * {@link #bossKey}); the first matching rule wins, so order matters. Why chat and
+	 * not ActorDeath: ToA bosses despawn rather than dying; Royal Titans is a duo whose
+	 * titans revive; Zulrah dives between forms; Nex, Hueycoatl, Phantom Muspah and
+	 * Doom of Mokhaiotl are phased; Barrows and the Perilous Moons end by looting a
+	 * chest; so each is gated on its KC (or chest / delve) line, which fires only on a
+	 * real clear. ToA's Normal / Entry / Expert variants all contain "Tombs of Amascut"
+	 * and "count is". CoX also grants on "your raid is complete". Phosani's Nightmare
+	 * matches "phosani's nightmare" so the regular (group) Nightmare never mints it.
+	 * Scurrius + Bryophyta, and the four Ancient Vault bosses, share a chunk but each
+	 * earns its own token via boss_keys. See docs/BOSS-CHUNKS.md for the researched
+	 * signals; the per-raid-level "Defeat ToA (150+/300+)" TASKS (varbit 14380) are a
+	 * separate, still-to-be-verified module.
 	 */
 	private void handleBossCompletionChat(ChatMessage event)
 	{
@@ -3226,151 +3237,51 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return;
 		}
+		if (bossPhrases == null)
+		{
+			bossPhrases = loadBossPhrases(gson);
+		}
+		String key = bossKey(msg, bossPhrases);
+		if (key != null)
+		{
+			recordBossCompletion(key);
+		}
+	}
+
+	/**
+	 * The boss key of the FIRST rule whose phrases all occur in the lower-cased
+	 * message, or null. Each rule is its phrases followed by the key.
+	 */
+	static String bossKey(String msg, String[][] rules)
+	{
 		String plain = msg.toLowerCase();
-		// Tombs of Amascut completion (Normal / Entry Mode / Expert Mode all match).
-		if (plain.contains("tombs of amascut") && plain.contains("count is"))
+		for (String[] rule : rules)
 		{
-			recordBossCompletion("toa");
+			int i = 0;
+			while (i < rule.length - 1 && plain.contains(rule[i]))
+			{
+				i++;
+			}
+			if (i == rule.length - 1)
+			{
+				return rule[i];
+			}
 		}
-		// Scurrius + Bryophyta share ONE boss chunk (region 12854, boss_keys), each
-		// earning its own token on first KC. Their kill-count GAMEMESSAGE fires the
-		// same in public and private, so no instance handling is needed here. Wording
-		// confirmed in-game: "Your Scurrius kill count is: N".
-		else if (plain.contains("scurrius") && plain.contains("kill count is"))
+		return null;
+	}
+
+	/** Reads boss_kc_phrases.json. Missing or broken data just means no chat-gated tokens. */
+	static String[][] loadBossPhrases(Gson gson)
+	{
+		try (Reader reader = new InputStreamReader(
+			ChunkBlazerPlugin.class.getResourceAsStream("boss_kc_phrases.json"), StandardCharsets.UTF_8))
 		{
-			recordBossCompletion("scurrius");
+			return gson.fromJson(reader, String[][].class);
 		}
-		else if (plain.contains("bryophyta") && plain.contains("kill count is"))
+		catch (Exception e)
 		{
-			recordBossCompletion("bryophyta");
-		}
-		else if (plain.contains("brutus") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("brutus");
-		}
-		// Royal Titans is a DUO (Branda + Eldric): a single titan's death is not a
-		// completion (the other revives), so the token is chat-gated on the KC line —
-		// "Your Royal Titans kill count is: N" — which fires only on a real clear, rather
-		// than the data-driven NPC-death path a solo world boss would use.
-		else if (plain.contains("royal titans") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("royal_titans");
-		}
-		// Barrows has no single boss NPC — a run ends by LOOTING THE CHEST. Gate the token
-		// on that KC line so it grants on a real completed run, not merely killing one
-		// brother. Wording confirmed in-game: "Your Barrows chest count is: N".
-		else if (plain.contains("barrows chest count is"))
-		{
-			recordBossCompletion("barrows");
-		}
-		// Chambers of Xeric completion. The KC line ("Your completed Chambers of Xeric
-		// count is: N") and the raid-complete banner ("Congratulations - your raid is
-		// complete!") both fire on a finished CoX; either grants the token. NOTE: verify
-		// the exact wording in-game — see docs/BOSS-CHUNKS.md capture note.
-		else if ((plain.contains("chambers of xeric") && plain.contains("count is"))
-			|| plain.contains("your raid is complete"))
-		{
-			recordBossCompletion("cox");
-		}
-		// Zulrah rotates through phases and DIVES between them (a form change, not a death),
-		// so ActorDeath on a form is ambiguous. Gate the token on the KC line — "Your Zulrah
-		// kill count is: N" — which fires only on a real kill. No boss_npc_ids for Zulrah.
-		else if (plain.contains("zulrah") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("zulrah");
-		}
-		// Perilous Moons (Cam Torum): a run ends by LOOTING THE LUNAR CHEST after all three
-		// moons fall — there is no single boss NPC. Gate the token on that KC line — "Your
-		// Lunar Chest count is: N" — like Barrows' chest. First clear after unlock mints one
-		// token; recordBossCompletion is idempotent so later chests never grant more.
-		else if (plain.contains("lunar chest count is"))
-		{
-			recordBossCompletion("moons_of_peril");
-		}
-		// Nex (God Wars) transitions through 5 phases via INVULNERABILITY, not death, so
-		// keying the token off a phase NPC's ActorDeath is ambiguous. Gate it on the KC line —
-		// "Your Nex kill count is: N" — which fires only on a real clear. The other four GWD
-		// bosses die cleanly and stay on the data-driven NPC-death path (boss_npc_ids).
-		else if (plain.contains("nex") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("nex");
-		}
-		// The Hueycoatl (Varlamore) is a massable, multi-part/phased boss whose segments
-		// break apart mid-fight, so a part's ActorDeath is an unreliable kill signal. Gate
-		// the token on the KC line — "Your Hueycoatl kill count is: N" — a real clear only.
-		else if (plain.contains("hueycoatl") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("hueycoatl");
-		}
-		// Doom of Mokhaiotl is a solo, multi-phase delve boss — a phase NPC's ActorDeath is an
-		// unreliable kill signal. Gate the token on the deep-delve completion line — "Deep delves
-		// completed: N" (delve 8+) — the same signal the Clear Deep Delves task tracks.
-		else if (plain.contains("deep delves completed"))
-		{
-			recordBossCompletion("doom_of_mokhaiotl");
-		}
-		// Phantom Muspah is a solo, multi-phase boss (melee/ranged/shielded/post-shield forms),
-		// so a form's ActorDeath is an unreliable kill signal. Gate the token on the KC line —
-		// "Your Phantom Muspah kill count is: N" — a real clear only.
-		else if (plain.contains("phantom muspah") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("phantom_muspah");
-		}
-		// Vorkath (solo, instanced) — gate the token on the KC line "Your Vorkath kill count
-		// is: N". Its acid/zombie phases are the same NPC, but the chat line is unambiguous.
-		else if (plain.contains("vorkath") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("vorkath");
-		}
-		// The Nightmare chunk uses PHOSANI'S Nightmare only (a solo instance) — regular
-		// Nightmare is group content. Match "phosani's nightmare kill count is" so the regular
-		// Nightmare's "Your Nightmare kill count is: N" never mints this token.
-		else if (plain.contains("phosani's nightmare") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("phosani_nightmare");
-		}
-		// Yama (duo or solo) — gate the token on the KC line "Your Yama kill count is: N",
-		// which fires per-player on a real clear regardless of team size.
-		else if (plain.contains("yama") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("yama");
-		}
-		// The Inferno (solo, instanced) — gate Zuk's token on "Your TzKal-Zuk kill count is: N".
-		// This chunk (Karamja Volcano) hosts two bosses: Zuk here and Jad (Fight Caves) later,
-		// each earning its own token via boss_keys.
-		else if (plain.contains("tzkal-zuk") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("zuk");
-		}
-		// Desert Treasure II bosses share one chunk (the Ancient Vault), each earning its own
-		// token via boss_keys. The Leviathan (solo, instanced) gates on its KC line.
-		else if (plain.contains("leviathan") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("leviathan");
-		}
-		// The Whisperer (solo, instanced) is a second Ancient Vault boss. Gate on its KC
-		// line "Your Whisperer kill count is: N", earning its own token via boss_keys.
-		else if (plain.contains("whisperer") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("whisperer");
-		}
-		// Duke Sucellus (solo, instanced) is a third Ancient Vault boss. Gate on its KC
-		// line "Your Duke Sucellus kill count is: N", earning its own token via boss_keys.
-		else if (plain.contains("duke sucellus") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("duke_sucellus");
-		}
-		// Vardorvis (solo, instanced) is the fourth and last Ancient Vault boss. Gate on
-		// its KC line "Your Vardorvis kill count is: N", earning its own token via boss_keys.
-		else if (plain.contains("vardorvis") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("vardorvis");
-		}
-		// Fortis Colosseum (solo, instanced) — clearing it prints "Your Sol Heredit kill
-		// count is: N" alongside the run duration, which fires only on a full clear.
-		else if (plain.contains("sol heredit") && plain.contains("kill count is"))
-		{
-			recordBossCompletion("sol_heredit");
+			log.warn("Could not read boss_kc_phrases.json", e);
+			return new String[0][];
 		}
 	}
 
