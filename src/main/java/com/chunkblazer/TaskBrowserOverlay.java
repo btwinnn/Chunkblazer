@@ -630,19 +630,7 @@ public class TaskBrowserOverlay extends Overlay
 	private Set<String> idSet(String key)
 	{
 		String raw = configManager.getRSProfileConfiguration(CONFIG_GROUP, key);
-		if (raw == null)
-		{
-			return null;
-		}
-		Set<String> ids = new LinkedHashSet<>();
-		for (String id : raw.split(","))
-		{
-			if (!id.trim().isEmpty())
-			{
-				ids.add(id.trim());
-			}
-		}
-		return ids;
+		return raw == null ? null : ChunkBlazerPlugin.parseIds(raw);
 	}
 
 	private void storeIds(String key, Set<String> ids)
@@ -1081,8 +1069,7 @@ public class TaskBrowserOverlay extends Overlay
 	/** Level checks, real requirements (TaskTargetExtras) and, for quests, their requirements. */
 	private boolean canDo(NuzlockeTask task)
 	{
-		return plugin.meetsLevelRequirement(task) && TaskTargetExtras.missingRequirement(client, task) == null
-			&& quests.isReady(task);
+		return plugin.canDo(task) && quests.isReady(task);
 	}
 
 	/** "(20 Defence, 20 Ranged)", "(Lvl 40)" or "(Not ready)" for a task you can't do yet. */
@@ -1175,7 +1162,7 @@ public class TaskBrowserOverlay extends Overlay
 		drawCog(graphics, cog.x + 8, cog.y + 8, settingsOpen || cog.contains(wx, my) ? Color.WHITE : SUBTEXT);
 		graphics.setFont(small);
 		FontMetrics sm = graphics.getFontMetrics();
-		String chunkLabel = pinnedChunk != null ? fit(sm, pinnedChunk, 120) : "Current chunk";
+		String chunkLabel = pinnedChunk != null ? Draw.fit(sm, pinnedChunk, 120) : "Current chunk";
 		int toggleWidth = sm.stringWidth(chunkLabel) + 18;
 		Rectangle chunkToggle = new Rectangle(cog.x - 8 - toggleWidth, y + 6, toggleWidth, 19);
 		int searchX = x + PAD + titleWidth + 12;
@@ -1283,7 +1270,7 @@ public class TaskBrowserOverlay extends Overlay
 				for (QuestRequirements.Line line : detailLines(entry.task))
 				{
 					boolean first = true;
-					for (String part : wrap(sm, line.text, detailWidth - lineIndent(line)))
+					for (String part : Draw.wrap(sm, line.text, detailWidth - lineIndent(line)))
 					{
 						wrapped.add(line.withText(part, first));
 						first = false;
@@ -1311,7 +1298,7 @@ public class TaskBrowserOverlay extends Overlay
 		{
 			graphics.setFont(regular);
 			graphics.setColor(SUBTEXT);
-			drawCentered(graphics, emptyMessage(), list);
+			Draw.centered(graphics, emptyMessage(), list);
 		}
 		int rowY = list.y - scroll;
 		for (int i = 0; i < entries.size(); i++)
@@ -1437,7 +1424,7 @@ public class TaskBrowserOverlay extends Overlay
 			graphics.setColor(TITLE);
 			graphics.drawRoundRect(boxX, boxY, boxWidth, boxHeight, 8, 8);
 			graphics.setColor(Color.WHITE);
-			graphics.drawString(text, boxX + 6, boxY + (boxHeight + fm.getAscent()) / 2 - 2);
+			graphics.drawString(text, boxX + 6, Draw.textY(fm, boxY, boxHeight));
 		}
 		graphics.setComposite(previousComposite);
 		graphics.setStroke(previousStroke);
@@ -1531,7 +1518,7 @@ public class TaskBrowserOverlay extends Overlay
 			fill(graphics, new Rectangle(area.x, area.y + area.height - 2, area.width, 2), TITLE);
 		}
 		graphics.setColor(tab == which || area.contains(mx, my) ? Color.WHITE : SUBTEXT);
-		drawCentered(graphics, label, area);
+		Draw.centered(graphics, label, area);
 	}
 
 	/** A button; a null action makes it inert. */
@@ -1545,7 +1532,7 @@ public class TaskBrowserOverlay extends Overlay
 		fill(graphics, area, active || area.contains(mx, my) ? TAB_ON : TAB_OFF);
 		graphics.setColor(active ? Color.WHITE : SUBTEXT);
 		FontMetrics fm = graphics.getFontMetrics();
-		graphics.drawString(fit(fm, label, area.width - 18), area.x + 6, area.y + (area.height + fm.getAscent()) / 2 - 2);
+		graphics.drawString(fit(fm, label, area.width - 18), area.x + 6, Draw.textY(fm, area.y, area.height));
 	}
 
 	// --- Dropdowns -------------------------------------------------------------
@@ -1665,7 +1652,7 @@ public class TaskBrowserOverlay extends Overlay
 		FontMetrics fm = graphics.getFontMetrics();
 		String shown = value == null ? "Any" : value;
 		graphics.setColor(value != null ? TITLE : SUBTEXT);
-		graphics.drawString(shown, row.x + row.width - 20 - fm.stringWidth(shown), row.y + (MENU_ROW + fm.getAscent()) / 2 - 2);
+		graphics.drawString(shown, row.x + row.width - 20 - fm.stringWidth(shown), Draw.textY(fm, row.y, MENU_ROW));
 		arrow(graphics, row.x + row.width - 10, row.y + MENU_ROW / 2, RIGHT, SUBTEXT);
 	}
 
@@ -1699,7 +1686,7 @@ public class TaskBrowserOverlay extends Overlay
 			}
 		}
 		graphics.setColor(SUBTEXT);
-		drawCentered(graphics, caption, new Rectangle(box.x, box.y + box.height - 20, box.width, 18));
+		Draw.centered(graphics, caption, new Rectangle(box.x, box.y + box.height - 20, box.width, 18));
 	}
 
 	/** Tier picker, Easy to Master with card colours. Picking the current tier clears it. */
@@ -1722,7 +1709,7 @@ public class TaskBrowserOverlay extends Overlay
 			int points = tier.ordinal() + 1;
 			graphics.setColor(tier == filterTier ? Color.WHITE : SUBTEXT);
 			graphics.drawString(tier.getDisplayName() + " (" + points + (points == 1 ? " pt)" : " pts)"),
-				row.x + 22, row.y + (MENU_ROW + graphics.getFontMetrics().getAscent()) / 2 - 2);
+				row.x + 22, Draw.textY(graphics.getFontMetrics(), row.y, MENU_ROW));
 		}
 	}
 
@@ -1743,7 +1730,7 @@ public class TaskBrowserOverlay extends Overlay
 		fill(graphics, row, hover ? ROW_HOVER : null);
 		FontMetrics fm = graphics.getFontMetrics();
 		graphics.setColor(labelColor != null ? labelColor : on || hover ? Color.WHITE : SUBTEXT);
-		graphics.drawString(label, row.x + 6, row.y + (row.height + fm.getAscent()) / 2 - 2);
+		graphics.drawString(label, row.x + 6, Draw.textY(fm, row.y, row.height));
 		if (box)
 		{
 			checkbox(graphics, row.x + row.width - 18, row.y + (row.height - 10) / 2, on, hover);
@@ -2106,7 +2093,7 @@ public class TaskBrowserOverlay extends Overlay
 			scroll = 0;
 		});
 		graphics.setColor(TITLE);
-		graphics.drawString("Settings", back.x + back.width + 10, page.y + (back.height + fm.getAscent()) / 2 - 2);
+		graphics.drawString("Settings", back.x + back.width + 10, Draw.textY(fm, page.y, back.height));
 
 		Rectangle body = new Rectangle(page.x, page.y + TABS, page.width, page.height - TABS - SETTINGS_FOOTER);
 		List<List<Setting>> sections = settingSections();
@@ -2162,7 +2149,7 @@ public class TaskBrowserOverlay extends Overlay
 		graphics.drawLine(page.x + PAD, footerY + 2, page.x + page.width - PAD, footerY + 2);
 		graphics.setColor(hovered != null ? DETAIL : SUBTEXT);
 		int lineY = footerY + 6 + fm.getAscent();
-		for (String line : wrap(fm, hovered != null ? hovered
+		for (String line : Draw.wrap(fm, hovered != null ? hovered
 			: "Hover a setting to see what it does. Colours are in RuneLite's plugin settings.", page.width - PAD * 2))
 		{
 			graphics.drawString(line, page.x + PAD, lineY);
@@ -2320,53 +2307,9 @@ public class TaskBrowserOverlay extends Overlay
 		}
 	}
 
-	private static void drawCentered(Graphics2D graphics, String text, Rectangle area)
-	{
-		FontMetrics fm = graphics.getFontMetrics();
-		graphics.drawString(text, area.x + (area.width - fm.stringWidth(text)) / 2, area.y + (area.height + fm.getAscent()) / 2 - 2);
-	}
-
-	/** Shorten text with "..." so it fits the width. */
+	/** Shorten text with "..." so it fits the width ("" if the width is not positive). */
 	private static String fit(FontMetrics fm, String text, int width)
 	{
-		if (width <= 0)
-		{
-			return "";
-		}
-		if (fm.stringWidth(text) <= width)
-		{
-			return text;
-		}
-		int end = text.length();
-		while (end > 0 && fm.stringWidth(text.substring(0, end) + "...") > width)
-		{
-			end--;
-		}
-		return text.substring(0, end) + "...";
-	}
-
-	/** Split text into lines that fit the width, breaking between words. */
-	private static List<String> wrap(FontMetrics fm, String text, int width)
-	{
-		List<String> lines = new ArrayList<>();
-		String line = "";
-		for (String word : text.split(" "))
-		{
-			String candidate = line.isEmpty() ? word : line + " " + word;
-			if (fm.stringWidth(candidate) > width && !line.isEmpty())
-			{
-				lines.add(line);
-				line = word;
-			}
-			else
-			{
-				line = candidate;
-			}
-		}
-		if (!line.isEmpty())
-		{
-			lines.add(line);
-		}
-		return lines;
+		return width <= 0 ? "" : Draw.fit(fm, text, width);
 	}
 }
