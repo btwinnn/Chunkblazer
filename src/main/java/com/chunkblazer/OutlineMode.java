@@ -26,6 +26,9 @@
 
 package com.chunkblazer;
 
+import java.awt.Color;
+import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -44,6 +47,34 @@ public enum OutlineMode
 	OFF("Off");
 
 	private final String name;
+
+	/**
+	 * The outline colour for a target with these tasks, or null for no outline (the same
+	 * rules for NPCs, objects and items). All: any task, normal colour if one is doable,
+	 * the "level too low" colour if not. Saved: only saved tasks count, coloured the same
+	 * way. Have requirements: only when one is doable, in the normal colour. Off: never.
+	 */
+	Color color(List<NuzlockeTask> tasks, ChunkBlazerPlugin plugin, Color doable, Color unavailable)
+	{
+		if (this == OFF)
+		{
+			return null;
+		}
+		Set<String> saved = this == SAVED ? plugin.savedTaskIds() : null;
+		boolean counted = false;
+		for (NuzlockeTask task : tasks)
+		{
+			if (saved == null || saved.contains(task.getTaskId()))
+			{
+				if (plugin.canDo(task))
+				{
+					return doable;
+				}
+				counted = true;
+			}
+		}
+		return counted && this != CAN_DO ? unavailable : null;
+	}
 
 	@Override
 	public String toString()

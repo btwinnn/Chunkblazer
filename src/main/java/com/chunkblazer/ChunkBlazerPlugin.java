@@ -5404,6 +5404,8 @@ public class ChunkBlazerPlugin extends Plugin
 
 	// Real (unboosted) skill levels, kept current from StatChanged, for the panel's level filter.
 	private final Map<Skill, Integer> realLevels = new ConcurrentHashMap<>();
+	private String savedRaw;
+	private Set<String> savedIds = Collections.emptySet();
 
 	@Subscribe
 	public void onStatChanged(StatChanged event)
@@ -5424,6 +5426,45 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		Integer have = realLevels.get(skill);
 		return have == null || have >= task.getLevelRequirement();
+	}
+
+	/** The task's own level check, plus any real requirements it's missing (see TaskTargetExtras). */
+	boolean canDo(NuzlockeTask task)
+	{
+		return meetsLevelRequirement(task) && TaskTargetExtras.missingRequirement(client, task) == null;
+	}
+
+	/** Saved (starred) task ids for this account, the task window's Saved tab. Cached and shared; do not modify. */
+	Set<String> savedTaskIds()
+	{
+		String raw = configManager.getRSProfileConfiguration(CONFIG_GROUP, "savedTasks");
+		if (raw == null)
+		{
+			raw = "";
+		}
+		if (!raw.equals(savedRaw))
+		{
+			savedIds = parseIds(raw);
+			savedRaw = raw;
+		}
+		return savedIds;
+	}
+
+	/** A comma-separated id list (as stored in config) as an ordered set, blanks dropped. Null reads as empty. */
+	static Set<String> parseIds(String raw)
+	{
+		Set<String> ids = new LinkedHashSet<>();
+		if (raw != null)
+		{
+			for (String id : raw.split(","))
+			{
+				if (!id.trim().isEmpty())
+				{
+					ids.add(id.trim());
+				}
+			}
+		}
+		return ids;
 	}
 
 	/** The skill a task category names ("Mining", "Runecrafting"), or null for Combat, Quest, etc. */
