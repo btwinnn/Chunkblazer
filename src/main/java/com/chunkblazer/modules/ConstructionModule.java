@@ -26,6 +26,7 @@
 
 package com.chunkblazer.modules;
 
+import static com.chunkblazer.Strings.t;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
@@ -229,7 +230,7 @@ public class ConstructionModule extends AbstractTaskModule
 				// Every authored construction task names its finished object;
 				// a task without one can never credit. Shout so the authoring
 				// gap is visible instead of silently untrackable.
-				log.warn("CONSTRUCTION task '{}' ({}) has no required_finished_object, cannot track it",
+				log.warn(t("module.log.constructionNoObject"),
 					task.getName(), task.getTaskId());
 				return;
 			}
@@ -576,7 +577,7 @@ public class ConstructionModule extends AbstractTaskModule
 		}
 		catch (Exception e)
 		{
-			log.warn("ConstructionModule: failed to resolve region for task '{}'", task.getTaskId(), e);
+			log.warn(t("module.log.constructionRegionFailed"), task.getTaskId(), e);
 		}
 		int playerRegionId = getCurrentRegionId();
 		if (taskRegionId > 0 && playerRegionId > 0 && taskRegionId != playerRegionId)

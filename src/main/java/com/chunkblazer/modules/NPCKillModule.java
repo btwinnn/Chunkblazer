@@ -26,6 +26,7 @@
 
 package com.chunkblazer.modules;
 
+import static com.chunkblazer.Strings.t;
 import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -666,8 +667,7 @@ public class NPCKillModule extends AbstractTaskModule
 				if (elapsed > PENDING_DROP_TIMEOUT_TICKS)
 				{
 					String dropName = pending.task.getConstraints().getDroppedItem();
-					String reason = String.format("Required drop '%s' was not received (collected %d/%d)",
-						dropName, pending.collectedQuantity, pending.requiredQuantity);
+					String reason = t("module.dropNotReceived", dropName, pending.collectedQuantity, pending.requiredQuantity);
 
 					sendTaskFailure(pending.task, reason);
 
@@ -1119,8 +1119,7 @@ public class NPCKillModule extends AbstractTaskModule
 				String dropName = pending.task.getConstraints().getDroppedItem();
 
 				// Send progress to chatbox
-				String details = String.format("Killed %s and received %s drop",
-					pending.death.npcName, dropName);
+				String details = t("module.killedWithDrop", pending.death.npcName, dropName);
 				sendTaskProgress(pending.task, details);
 
 				// Credit the kill
@@ -1290,7 +1289,7 @@ public class NPCKillModule extends AbstractTaskModule
 				}
 				if (!onTaskVerdict)
 				{
-					sendTaskFailure(task, "Not on a slayer task for this monster");
+					sendTaskFailure(task, t("module.notOnSlayerTask"));
 					continue; // Skip this task, don't credit the kill
 				}
 			}
@@ -1324,7 +1323,7 @@ public class NPCKillModule extends AbstractTaskModule
 				// than the (inert) per-task varbit constraint it replaces.
 				if (soloGated && cannonFiredDuring(fight, death.deathTick))
 				{
-					sendTaskFailure(task, "Cannon use is prohibited for restricted tasks. Kill it without your cannon firing.");
+					sendTaskFailure(task, t("module.cannonProhibited"));
 					continue; // Skip this task, don't credit the kill
 				}
 
@@ -1335,7 +1334,7 @@ public class NPCKillModule extends AbstractTaskModule
 				if (soloGated && (!fight.startedFresh || softenedBeforeFight(fight, death.npcId)))
 				{
 					sendTaskFailure(task,
-						"Restricted kill must start from full health. This monster was already damaged when you first hit it.");
+						t("module.restrictedFullHealth"));
 					continue; // Skip this task, don't credit the kill
 				}
 
@@ -1356,9 +1355,7 @@ public class NPCKillModule extends AbstractTaskModule
 					&& lastLoginTick >= 0 && fight.combatStartTick >= 0
 					&& fight.combatStartTick - lastLoginTick < grace)
 				{
-					sendTaskFailure(task, String.format(
-						"Restricted kill must be a fresh fight. Wait ~%.0fs after logging in, then fight it start to finish.",
-						grace * 0.6));
+					sendTaskFailure(task, t("module.restrictedFreshFight", grace * 0.6));
 					continue; // Skip this task, don't credit the kill
 				}
 
@@ -1370,7 +1367,7 @@ public class NPCKillModule extends AbstractTaskModule
 				if (soloGated && fight.contested)
 				{
 					sendTaskFailure(task,
-						"Restricted kill must be solo. Another player damaged this monster.");
+						t("module.restrictedSolo"));
 					continue; // Skip this task, don't credit the kill
 				}
 
@@ -1387,7 +1384,7 @@ public class NPCKillModule extends AbstractTaskModule
 				// launder the earlier hits.
 				if (hasEquipConstraint && fight.equipViolatedTaskIds.contains(task.getTaskId()))
 				{
-					sendTaskFailure(task, "Equipment: restricted gear was worn during the fight");
+					sendTaskFailure(task, t("module.restrictedGearWorn"));
 					continue; // Skip this task, don't credit the kill
 				}
 
@@ -1424,7 +1421,7 @@ public class NPCKillModule extends AbstractTaskModule
 				if (foundQuantity >= requiredQuantity)
 				{
 					// Send progress to chatbox
-					String details = String.format("Killed %s and received %s drop", death.npcName, dropName)
+					String details = t("module.killedWithDrop", death.npcName, dropName)
 						+ killTimeSuffix(fight, death.deathTick);
 					sendTaskProgress(task, details);
 
@@ -1769,7 +1766,7 @@ public class NPCKillModule extends AbstractTaskModule
 		{
 			if (!equippedIds.isEmpty())
 			{
-				return "Must have no equipment - currently have " + equippedIds.size() + " items equipped";
+				return t("module.mustHaveNoEquipment", equippedIds.size());
 			}
 		}
 
@@ -1778,7 +1775,7 @@ public class NPCKillModule extends AbstractTaskModule
 		{
 			if (!equippedIds.isEmpty())
 			{
-				return "Equip nothing required - currently have " + equippedIds.size() + " items equipped";
+				return t("module.equipNothingRequired", equippedIds.size());
 			}
 		}
 
@@ -1790,7 +1787,7 @@ public class NPCKillModule extends AbstractTaskModule
 			{
 				if (!equippedIds.contains(requiredId))
 				{
-					return "Missing required equipment: item ID " + requiredId;
+					return t("module.missingRequiredEquipment", requiredId);
 				}
 			}
 		}
@@ -1803,7 +1800,7 @@ public class NPCKillModule extends AbstractTaskModule
 			{
 				if (!allowedIds.contains(equippedId))
 				{
-					return "Forbidden equipment detected: item ID " + equippedId + " is not in allowed list";
+					return t("module.equipmentNotAllowed", equippedId);
 				}
 			}
 		}
@@ -1816,7 +1813,7 @@ public class NPCKillModule extends AbstractTaskModule
 			{
 				if (equippedIds.contains(forbiddenId))
 				{
-					return "Forbidden equipment detected: item ID " + forbiddenId;
+					return t("module.forbiddenEquipment", forbiddenId);
 				}
 			}
 		}
@@ -1830,7 +1827,7 @@ public class NPCKillModule extends AbstractTaskModule
 				int itemId = getItemAtSlot(slotIndex);
 				if (itemId > 0)
 				{
-					return getSlotName(slotIndex) + " slot must be empty (has item ID " + itemId + ")";
+					return t("module.slotMustBeEmpty", getSlotName(slotIndex), itemId);
 				}
 			}
 		}
@@ -1848,11 +1845,11 @@ public class NPCKillModule extends AbstractTaskModule
 				if (itemId > 0 && !slotAllowed)
 				{
 					// Item in a slot that's not allowed
-					return getSlotName(slotIndex) + " slot must be empty - only allowed slots: " +
+					return t("module.slotMustBeEmptyAllowed", getSlotName(slotIndex),
 						equippableSlots.stream()
 							.map(this::getSlotName)
 							.reduce((a, b) -> a + ", " + b)
-							.orElse("none");
+							.orElse("none"));
 				}
 			}
 		}
@@ -1885,7 +1882,7 @@ public class NPCKillModule extends AbstractTaskModule
 				{
 					return failMsg;
 				}
-				return "Varbit " + vc.getVarbitId() + " must be " + vc.getMustBeValue() + " but is " + currentValue;
+				return t("module.varbitMismatch", vc.getVarbitId(), vc.getMustBeValue(), currentValue);
 			}
 		}
 
@@ -1911,7 +1908,7 @@ public class NPCKillModule extends AbstractTaskModule
 		// Check if we have a valid combat start tick
 		if (fight.combatStartTick < 0)
 		{
-			return "Time constraint failed - no combat start recorded";
+			return t("module.noCombatStart");
 		}
 
 		// Measured to the DEATH, not to now: a death held for its Slayer XP is decided
@@ -1922,8 +1919,7 @@ public class NPCKillModule extends AbstractTaskModule
 
 		if (elapsedTicks > allowedTicks)
 		{
-			return String.format("Kill took %d ticks (%.1f sec), max allowed is %d ticks (%.1f sec)",
-				elapsedTicks, elapsedSeconds, allowedTicks, allowedTicks * 0.6);
+			return t("module.killTooSlow", elapsedTicks, elapsedSeconds, allowedTicks, allowedTicks * 0.6);
 		}
 
 		return null; // Constraint satisfied

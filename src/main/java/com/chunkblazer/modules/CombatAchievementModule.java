@@ -26,6 +26,7 @@
 
 package com.chunkblazer.modules;
 
+import static com.chunkblazer.Strings.t;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -134,7 +135,7 @@ public class CombatAchievementModule extends AbstractTaskModule
 		List<Integer> caIds = task.getCaIds();
 		if (caIds == null || caIds.isEmpty())
 		{
-			log.warn("COMBAT_ACHIEVEMENT task {} has no ca_ids, it can never complete", task.getTaskId());
+			log.warn(t("module.log.caNoIds"), task.getTaskId());
 			return;
 		}
 		taskCaIds.put(task.getTaskId(), new ArrayList<>(caIds));

@@ -26,6 +26,7 @@
 
 package com.chunkblazer.modules;
 
+import static com.chunkblazer.Strings.t;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -129,7 +130,7 @@ public class QuestCheckModule extends AbstractTaskModule
 
 		if (questName == null || questName.isEmpty())
 		{
-			log.warn("QUEST_CHECK task '{}' has no constraints.quest, not tracking", task.getTaskId());
+			log.warn(t("module.log.questNoQuest"), task.getTaskId());
 			return;
 		}
 
@@ -142,8 +143,7 @@ public class QuestCheckModule extends AbstractTaskModule
 		{
 			if (unknownQuestNames.add(questName))
 			{
-				log.warn("QUEST_CHECK task '{}' names unknown quest constant '{}', "
-					+ "task data is likely newer than the RuneLite API this plugin was built against",
+				log.warn(t("module.log.questUnknown"),
 					task.getTaskId(), questName);
 			}
 			return;
