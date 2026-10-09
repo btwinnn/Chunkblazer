@@ -26,6 +26,7 @@
 
 package com.chunkblazer.api;
 
+import static com.chunkblazer.Strings.t;
 import com.chunkblazer.ChunkBlazerConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -177,7 +178,7 @@ public class CatalogStore
 			}
 			catch (IOException e)
 			{
-				log.warn("Could not create catalog cache dir: {}", e.getMessage());
+				log.warn(t("api.log.cacheDir"), e.getMessage());
 			}
 		}
 
@@ -202,7 +203,7 @@ public class CatalogStore
 			// stale cache so it can't keep winning; the async refresh re-populates it.
 			// This kills the "rebuilt the plugin but it still shows old content" trap.
 			loadedFiles = seed;
-			source = "seed (v" + seedV + " newer than stale cache v" + cacheV + ")";
+			source = t("api.seedSource", seedV, cacheV);
 			deleteStaleCache();
 		}
 		else
@@ -222,7 +223,7 @@ public class CatalogStore
 			// Loaders will fall back to bundled raw JSON (still present during the
 			// migration transition); once that's deleted this would be fatal, which
 			// is why the seed must always ship.
-			log.error("Task catalog: no cache and no seed available");
+			log.error(t("api.log.noCatalog"));
 		}
 
 		// Async refresh. Never blocks startup and never re-parses the running task
@@ -342,7 +343,7 @@ public class CatalogStore
 		}
 		catch (Exception e)
 		{
-			log.warn("Failed to read cached task catalog, will use seed: {}", e.getMessage());
+			log.warn(t("api.log.cacheRead"), e.getMessage());
 			return null;
 		}
 	}
@@ -361,7 +362,7 @@ public class CatalogStore
 			}
 			catch (Exception e)
 			{
-				log.error("Failed to load bundled task seed {}: {}", p, e.getMessage());
+				log.error(t("api.log.seedFailed"), p, e.getMessage());
 			}
 		}
 		return null;
@@ -406,7 +407,7 @@ public class CatalogStore
 			}
 			if (!resp.isSuccessful())
 			{
-				log.warn("Task catalog fetch returned HTTP {}, keeping last-good; server sync may be stale", resp.code());
+				log.warn(t("api.log.fetchHttp"), resp.code());
 				return; // keep last-good
 			}
 
@@ -422,7 +423,7 @@ public class CatalogStore
 			if (!isComplete(fresh))
 			{
 				// Never let a short/partial catalog blank good local data.
-				log.warn("Rejecting incomplete task catalog from server");
+				log.warn(t("api.log.incomplete"));
 				return;
 			}
 
@@ -447,7 +448,7 @@ public class CatalogStore
 			// A code/config bug in the refresh path (e.g. the apiEnabled proxy throw)
 			// would otherwise surface only as a generic RuneLite "uncaught exception".
 			// Attribute it clearly so a dead sync layer never hides again.
-			log.warn("Task catalog refresh crashed, server sync is down this session", e);
+			log.warn(t("api.log.refreshCrashed"), e);
 		}
 	}
 
