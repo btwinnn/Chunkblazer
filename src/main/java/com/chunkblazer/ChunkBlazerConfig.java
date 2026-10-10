@@ -339,8 +339,8 @@ public interface ChunkBlazerConfig extends Config
 
 	@ConfigItem(
 		keyName = "showSavedTaskTracker",
-		name = "Saved Tasks Tracker",
-		description = "A bar by the inventory that opens your saved tasks, nearest first (Alt + drag to move it)",
+		name = "Saved Tasks Bubble",
+		description = "A bubble that opens your saved tasks over the inventory (Alt + drag to move it)",
 		section = taskSection,
 		position = 3
 	)

@@ -55,8 +55,8 @@ import net.runelite.client.ui.overlay.OverlayPosition;
  * the chatbox and other overlays never cover it; registered by TaskBrowserOverlay.
  *
  * In a chunk you haven't unlocked, the banner stays up for as long as you're there.
- * It only goes once you unlock the chunk (it flashes "Unlocked!" first) or walk into
- * another chunk; when one banner replaces another, the old one slides away quickly
+ * It only goes once you unlock the chunk (it flashes "Unlocked!" first) or walk out of
+ * it, even into a chunk that gets no banner of its own; when one banner replaces another, the old one slides away quickly
  * before the new one comes in.
  *
  * An unlocked chunk among the last few you were in doesn't get its banner again, so
@@ -303,6 +303,13 @@ public class ChunkNameBanner extends Overlay
 		lastRegionId = regionId;
 
 		String name = chunkName(regionId);
+		// Left the locked chunk the sign is waiting on (declined it, walked back out):
+		// let it go, even if where you are now doesn't get a banner of its own.
+		if (sticky && (phase == Phase.ENTER || phase == Phase.HOLD) && (name == null || !name.equals(title)))
+		{
+			sticky = false;
+			leave(System.currentTimeMillis(), SLIDE_MS);
+		}
 		// Nothing for unnamed areas, or when moving between two regions of the same
 		// chunk (a surface and its dungeon share a name).
 		if (name == null || name.equals(lastName))
