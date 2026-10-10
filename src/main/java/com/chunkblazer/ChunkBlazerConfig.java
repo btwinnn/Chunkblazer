@@ -813,4 +813,61 @@ public interface ChunkBlazerConfig extends Config
 	{
 		return Keybind.SHIFT;
 	}
+
+	// ── Screenshots ──────────────────────────────────────────────────────
+
+	@ConfigSection(
+		name = "Screenshots",
+		description = "Save a screenshot when you complete a task",
+		position = 8
+	)
+	String screenshotSection = "screenshots";
+
+	@ConfigItem(
+		keyName = "screenshotOnTaskComplete",
+		name = "Screenshot Task Completions",
+		description = "Save a screenshot when you complete a task, in a ChunkBlazer folder inside RuneLite's screenshots folder for your character.",
+		section = screenshotSection,
+		position = 0
+	)
+	default boolean screenshotOnTaskComplete()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "screenshotIncludeFrame",
+		name = "Include Client Frame",
+		description = "Include the RuneLite client frame (title bar and sidebar) in the screenshot",
+		section = screenshotSection,
+		position = 1
+	)
+	default boolean screenshotIncludeFrame()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "screenshotNotify",
+		name = "Notify When Taken",
+		description = "Send a desktop notification when a task screenshot is saved",
+		section = screenshotSection,
+		position = 2
+	)
+	default boolean screenshotNotify()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "screenshotCopyToClipboard",
+		name = "Copy To Clipboard",
+		description = "Also copy the task screenshot to the clipboard",
+		section = screenshotSection,
+		position = 3
+	)
+	default boolean screenshotCopyToClipboard()
+	{
+		return false;
+	}
 }

@@ -167,6 +167,9 @@ public class ChunkBlazerPlugin extends Plugin
 	private TaskCompletionSoundManager soundManager;
 
 	@Inject
+	private TaskScreenshotManager screenshotManager;
+
+	@Inject
 	private ChatboxPanelManager chatboxPanelManager;
 
 	@Inject
@@ -503,6 +506,7 @@ public class ChunkBlazerPlugin extends Plugin
 		mouseManager.unregisterMouseListener(selectedTaskOverlayInput);
 		overlayManager.remove(taskTargetHighlighter);
 		taskTargetHighlighter.reset();
+		screenshotManager.shutDown();
 		overlayManager.remove(taskCompletionAnimationOverlay);
 		overlayManager.remove(taskCardOverlay);
 		overlayManager.remove(taskOverlay);
@@ -5658,12 +5662,16 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		int shown = 0;
+		// Each popup call replaces the previous one, so the last task shown is the
+		// one left on screen; the screenshot is named after it.
+		NuzlockeTask featured = null;
 		for (NuzlockeTask task : batch)
 		{
 			if (taskCompletionAnimationOverlay != null && shown < COMPLETION_ANIM_CAP)
 			{
 				taskCompletionAnimationOverlay.showTaskCompletion(
 					task, task.getBasePoints(), getTaskCompletionLabel(task));
+				featured = task;
 				shown++;
 			}
 		}
@@ -5676,6 +5684,9 @@ public class ChunkBlazerPlugin extends Plugin
 
 		// The expensive part, ONCE regardless of batch size.
 		completeTasks(batch);
+
+		// After the settle-up, so the optional screenshot can never get in its way.
+		screenshotManager.onTasksCompleted(batch, featured);
 	}
 
 

@@ -66,8 +66,8 @@ public class TaskCompletionAnimationOverlay extends Overlay
 	private static final long PHASE_4_DURATION = 2500;   // Reverse
 
 	private static final long PHASE_2_START = PHASE_1_DURATION;
-	private static final long PHASE_3_START = PHASE_2_START + PHASE_2_DURATION;
-	private static final long PHASE_4_START = PHASE_3_START + PHASE_3_DURATION;
+	static final long PHASE_3_START = PHASE_2_START + PHASE_2_DURATION;
+	static final long PHASE_4_START = PHASE_3_START + PHASE_3_DURATION;
 	private static final long TOTAL_DURATION = PHASE_4_START + PHASE_4_DURATION;
 
 	// Fonts
