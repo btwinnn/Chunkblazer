@@ -167,6 +167,9 @@ public class ChunkBlazerPlugin extends Plugin
 	private TaskCompletionSoundManager soundManager;
 
 	@Inject
+	private TaskScreenshotManager screenshotManager;
+
+	@Inject
 	private ChatboxPanelManager chatboxPanelManager;
 
 	@Inject
@@ -503,6 +506,7 @@ public class ChunkBlazerPlugin extends Plugin
 		mouseManager.unregisterMouseListener(selectedTaskOverlayInput);
 		overlayManager.remove(taskTargetHighlighter);
 		taskTargetHighlighter.reset();
+		screenshotManager.shutDown();
 		overlayManager.remove(taskCompletionAnimationOverlay);
 		overlayManager.remove(taskCardOverlay);
 		overlayManager.remove(taskOverlay);
@@ -5673,6 +5677,8 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			playAreaSoundAsync(getTaskArea(batch.get(0)));
 		}
+
+		screenshotManager.onTasksCompleted(batch);
 
 		// The expensive part, ONCE regardless of batch size.
 		completeTasks(batch);
