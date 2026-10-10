@@ -814,6 +814,8 @@ public interface ChunkBlazerConfig extends Config
 		return Keybind.SHIFT;
 	}
 
+	// ── Screenshots ──────────────────────────────────────────────────────
+
 	@ConfigSection(
 		name = "Screenshots",
 		description = "Save a screenshot when you complete a task",
@@ -824,7 +826,7 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "screenshotOnTaskComplete",
 		name = "Screenshot Task Completions",
-		description = "Save a screenshot when you complete a task. Files go to .runelite/screenshots/<RSN>/ChunkBlazer.",
+		description = "Save a screenshot when you complete a task, in a ChunkBlazer folder inside RuneLite's screenshots folder for your character.",
 		section = screenshotSection,
 		position = 0
 	)
