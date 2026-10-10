@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -58,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import javax.inject.Inject;
@@ -75,6 +77,7 @@ import javax.swing.border.EmptyBorder;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
+import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
 import net.runelite.api.Skill;
 import net.runelite.api.events.FocusChanged;
@@ -105,6 +108,7 @@ import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
+import net.runelite.client.util.LinkBrowser;
 
 /**
  * Leagues-style task window, opened from the Points orb (ChunkBlazerOrbWidget).
@@ -303,6 +307,11 @@ public class TaskBrowserOverlay extends Overlay
 	// A quest link was clicked: scroll to and briefly outline this task.
 	// The quest whose requirements are shown over the side panel (null when closed).
 	private volatile NuzlockeTask questPane;
+	// Stands in for the saved-tasks list in the pane, so Back and closing work the same.
+	private static final NuzlockeTask SAVED_PANE = new NuzlockeTask();
+	private long questPaneAt;
+	// Quests opened from inside the pane, newest first, for its Back link.
+	private final Deque<NuzlockeTask> questBack = new ConcurrentLinkedDeque<>();
 
 	// New-task alert: unseen active tasks, the snapshot the New tab shows, the Points orb.
 	private final Set<String> newIds = ConcurrentHashMap.newKeySet();
@@ -335,8 +344,25 @@ public class TaskBrowserOverlay extends Overlay
 	private final Map<String, List<String>> requirements = new HashMap<>();
 	private long rowsBuiltAt;
 
+	// The real mouse spot while over the quest pane; the game is told it's off-screen.
+	private volatile java.awt.Point paneMouse = new java.awt.Point(-1, -1);
+
 	private final MouseAdapter mouse = new MouseAdapter()
 	{
+		// Over the quest pane, the game sees the mouse leave, so nothing under it
+		// (inventory items, prayers...) shows its hover text or tooltips.
+		@Override
+		public MouseEvent mouseMoved(MouseEvent event)
+		{
+			if (open || questPane == null)
+			{
+				return event;
+			}
+			paneMouse = event.getPoint();
+			return mouseInWindow ? new MouseEvent(event.getComponent(), event.getID(), event.getWhen(),
+				event.getModifiersEx(), -1, -1, 0, false) : event;
+		}
+
 		@Override
 		public MouseEvent mousePressed(MouseEvent event)
 		{
@@ -413,7 +439,13 @@ public class TaskBrowserOverlay extends Overlay
 				tasksKeyHeld = true;
 			}
 			// Any key (a tab hotkey, Esc...) closes the quest pane, so it never blocks a prayer switch.
-			questPane = null;
+			// Shift, Ctrl, Alt and the arrow keys (camera) don't: Shift + click unsaves in the saved list.
+			int code = event.getKeyCode();
+			if (code != KeyEvent.VK_SHIFT && code != KeyEvent.VK_CONTROL && code != KeyEvent.VK_ALT
+				&& (code < KeyEvent.VK_LEFT || code > KeyEvent.VK_DOWN))
+			{
+				questPane = null;
+			}
 			if (open && !searchFocused && event.getKeyCode() == KeyEvent.VK_ESCAPE)
 			{
 				close();
@@ -799,6 +831,19 @@ public class TaskBrowserOverlay extends Overlay
 			Arrays.stream(TaskCardTier.values()).forEach(t -> sideTier.addItem(t.getDisplayName()));
 			JPanel filters = new JPanel(new GridLayout(0, 2, 4, 4));
 			filters.setOpaque(false);
+			filters.setVisible(false);
+			// The filters fold under one button, shut to start, which counts what's set.
+			JButton fold = new JButton();
+			scaled.add(fold);
+			Runnable foldText = () -> fold.setText((filters.isVisible() ? "\u25BC Filters" : "\u25B6 Filters")
+				+ " (" + (sideOn.size() + sideHidden.size() + (sideSkill.getSelectedIndex() > 0 ? 1 : 0)
+				+ (sideTier.getSelectedIndex() > 0 ? 1 : 0)) + ")");
+			fold.addActionListener(e ->
+			{
+				filters.setVisible(!filters.isVisible());
+				foldText.run();
+				panel.revalidate();
+			});
 			filters.add(sideSkill);
 			filters.add(sideTier);
 			// Each sort field twice: its usual direction first, so "Points" high to low leads.
@@ -813,7 +858,11 @@ public class TaskBrowserOverlay extends Overlay
 			{
 				box.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 				box.setForeground(Color.WHITE);
-				box.addActionListener(e -> research.run());
+				box.addActionListener(e ->
+				{
+					foldText.run();
+					research.run();
+				});
 			}
 			for (Filter f : Filter.values())
 			{
@@ -834,13 +883,15 @@ public class TaskBrowserOverlay extends Overlay
 					box.setText((sideOn.contains(f) ? "\u2713 " : sideHidden.contains(f) ? "\u2717 " : "") + f.shortLabel);
 					box.setForeground(sideOn.contains(f) ? new Color(120, 220, 120)
 						: sideHidden.contains(f) ? new Color(255, 110, 110) : Color.WHITE);
+					foldText.run();
 					research.run();
 				});
 				filters.add(box);
 			}
 			rescale.run();
+			foldText.run();
 			panel.addTaskList(sideStats);
-			for (JComponent c : Arrays.asList(sizes, search, filters, sideSort))
+			for (JComponent c : Arrays.asList(sizes, search, fold, filters, sideSort))
 			{
 				c.setMaximumSize(new Dimension(Integer.MAX_VALUE, c.getPreferredSize().height));
 				panel.addTaskList(c);
@@ -890,7 +941,7 @@ public class TaskBrowserOverlay extends Overlay
 
 		// The stat boxes from the original panel's top row.
 		String stats = "<html><table width=190 cellpadding=1><tr>" + stat(plugin.getTotalPoints(), "Points")
-			+ stat(plugin.getUnlockedRegionIds().size(), "Chunks") + stat(plugin.getCompletedTaskIdSet().size(), "Tasks")
+			+ stat(paidChunks(), "Chunks") + stat(plugin.getCompletedTaskIdSet().size(), "Tasks")
 			+ stat(plugin.getBossTokens(), "Tokens") + "</tr></table></html>";
 		// Only rebuild when something changed, so the panel doesn't jump while scrolling.
 		StringBuilder key = new StringBuilder(stats + query + skill + tier + sideSort.getSelectedIndex() + sideOn + sideHidden + saved);
@@ -912,6 +963,13 @@ public class TaskBrowserOverlay extends Overlay
 			panel.revalidate();
 			panel.repaint();
 		});
+	}
+
+	/** Chunks paid for with points or a boss token; free, charter and starting chunks don't count. */
+	private int paidChunks()
+	{
+		return plugin.countPayableUnlockedChunks() + (int) plugin.getUnlockedRegionIds().stream()
+			.filter(id -> id.trim().matches("\\d+") && plugin.isBossRegion(Integer.parseInt(id.trim()))).count();
 	}
 
 	private static String stat(int value, String label)
@@ -980,11 +1038,11 @@ public class TaskBrowserOverlay extends Overlay
 		String description = task.getDescription() == null ? "" : task.getDescription().trim();
 		// Name; category, points and level; chunk; description. Then a progress bar.
 		JLabel card = new JLabel("<html><table cellpadding=0 cellspacing=0 width=165><tr><td>"
-			+ "<font color='#96ff96'>"
+			+ "<span style='font-size:" + Math.round(sideSize + 2) + "pt'><font color='#96ff96'>"
 			+ (saved(task) ? "&#9733; " : "") + (task.getName() == null ? task.getTaskId() : task.getName())
-			+ "</font><br><font color='#ffc800'>" + NuzlockeTask.displayCategory(task.getCategory()) + "  "
-			+ task.getBasePoints() + "pt" + (task.getLevelRequirement() > 1 ? "  L" + task.getLevelRequirement() : "")
-			+ "</font><br><font color='#8cc8e6'>" + (global ? "Global" : "Chunk: " + chunkNames.getOrDefault(task.getTaskId(), ""))
+			+ "</font></span><br><font color='#ffc800'>" + NuzlockeTask.displayCategory(task.getCategory())
+			+ (task.getLevelRequirement() > 1 ? "  Lvl " + task.getLevelRequirement() : "")
+			+ "</font><br><font color='#8cc8e6'>" + (global ? "Global" : chunkNames.getOrDefault(task.getTaskId(), ""))
 			+ "</font>" + (description.isEmpty() ? "" : "<br><font color='#b9b9b9'>" + description + "</font>")
 			+ "</td></tr></table></html>")
 		{
@@ -1032,6 +1090,36 @@ public class TaskBrowserOverlay extends Overlay
 	private boolean saved(NuzlockeTask task)
 	{
 		return savedIds().contains(task.getTaskId());
+	}
+
+	/** Saved tasks still to do, in the order they were starred. */
+	List<NuzlockeTask> savedTasks()
+	{
+		Map<String, NuzlockeTask> byId = new HashMap<>();
+		pool(true).forEach(t -> byId.put(t.getTaskId(), t));
+		Set<String> archived = archive.ids();
+		List<NuzlockeTask> list = new ArrayList<>();
+		for (String id : savedIds())
+		{
+			if (byId.containsKey(id) && !archived.contains(id))
+			{
+				list.add(byId.get(id));
+			}
+		}
+		return list;
+	}
+
+	/** The saved bubble: open the saved list over the side panel, or close it. */
+	void toggleSavedPane()
+	{
+		if (questPane == SAVED_PANE)
+		{
+			questPane = null;
+		}
+		else
+		{
+			openQuestPane(SAVED_PANE);
+		}
 	}
 
 	/** A comma-separated id set stored per account, or null if never stored. */
@@ -1542,17 +1630,25 @@ public class TaskBrowserOverlay extends Overlay
 			}
 		}
 
-		int width = Math.min(MAX_WIDTH, client.getViewportWidth() - 20);
-		int height = Math.min(MAX_HEIGHT, client.getViewportHeight() - 20);
-		int x = client.getViewportXOffset() + (client.getViewportWidth() - width) / 2;
-		int y = client.getViewportYOffset() + (client.getViewportHeight() - height) / 2;
+		// Window Scale setting: everything below is laid out at 100% and drawn scaled
+		// from the window's corner, with the mouse scaled back to match.
+		float scale = config.widgetScale() / 100f;
+		int width = Math.min(MAX_WIDTH, (int) ((client.getViewportWidth() - 20) / scale));
+		int height = Math.min(MAX_HEIGHT, (int) ((client.getViewportHeight() - 20) / scale));
+		int x = client.getViewportXOffset() + (client.getViewportWidth() - (int) (width * scale)) / 2;
+		int y = client.getViewportYOffset() + (client.getViewportHeight() - (int) (height * scale)) / 2;
 		if (moved)
 		{
-			x = Math.max(0, Math.min(customX, client.getCanvasWidth() - width - 1));
-			y = Math.max(0, Math.min(customY, client.getCanvasHeight() - height - 1));
+			x = Math.max(0, Math.min(customX, client.getCanvasWidth() - (int) (width * scale) - 1));
+			y = Math.max(0, Math.min(customY, client.getCanvasHeight() - (int) (height * scale) - 1));
 		}
 		windowX = x;
 		windowY = y;
+		graphics.translate(x, y);
+		graphics.scale(scale, scale);
+		graphics.translate(-x, -y);
+		mx = mx < 0 ? mx : x + (int) ((mx - x) / scale);
+		my = my < 0 ? my : y + (int) ((my - y) / scale);
 		Rectangle window = new Rectangle(x, y, width, height);
 		boolean menuOpen = menu != Menu.NONE;
 		// The mouse as the window's own controls see it: nowhere while a dropdown is open.
@@ -2383,7 +2479,16 @@ public class TaskBrowserOverlay extends Overlay
 	void openQuestPane(NuzlockeTask task)
 	{
 		close();
+		if (questPane == null)
+		{
+			questBack.clear();
+		}
+		else if (questPane != task)
+		{
+			questBack.push(questPane);
+		}
 		questPane = task;
+		questPaneAt = System.currentTimeMillis();
 		scroll = 0;
 	}
 
@@ -2391,9 +2496,8 @@ public class TaskBrowserOverlay extends Overlay
 	{
 		NuzlockeTask task = questPane;
 		Rectangle pane = sidePanel();
-		net.runelite.api.Point point = client.getMouseCanvasPosition();
-		int mx = point == null ? -1 : point.getX();
-		int my = point == null ? -1 : point.getY();
+		int mx = paneMouse.x;
+		int my = paneMouse.y;
 		hits.clear();
 		menuHits.clear();
 		menuBox = null;
@@ -2404,19 +2508,130 @@ public class TaskBrowserOverlay extends Overlay
 		Rectangle close = new Rectangle(pane.x + pane.width - 20, pane.y + 6, 14, 14);
 		hits.add(new Hit(close, () -> questPane = null));
 		cross(graphics, close.x + 7, close.y + 7, 5, close.contains(mx, my) ? NO_LEVEL : SUBTEXT);
+		// The quest's OSRS Wiki page, beside the close button.
+		boolean savedList = task == SAVED_PANE;
+		List<NuzlockeTask> saved = savedList ? savedTasks() : null;
+		graphics.setFont(FontManager.getRunescapeSmallFont());
+		Rectangle wiki = new Rectangle(close.x - 28, close.y, 24, 14);
+		if (!savedList)
+		{
+			// The wiki's search jumps straight to the page when the name matches, and
+			// lists the closest pages when it doesn't (the Recipe for Disaster parts).
+			String quest = task.getName().replaceFirst("^Complete ", "").replace("&", "%26").replace(' ', '+');
+			hits.add(new Hit(wiki, () -> LinkBrowser.browse("https://oldschool.runescape.wiki/?title=Special:Search&go=Go&search=" + quest)));
+			graphics.setColor(wiki.contains(mx, my) ? Color.WHITE : SUBTEXT);
+			graphics.drawString("Wiki", wiki.x + 2, wiki.y + 11);
+		}
+		// Back to the quest this one was opened from.
+		Rectangle back = new Rectangle(wiki.x - 30, close.y, 28, 14);
+		if (!questBack.isEmpty())
+		{
+			hits.add(new Hit(back, () ->
+			{
+				questPane = questBack.pop();
+				questPaneAt = System.currentTimeMillis();
+				scroll = 0;
+			}));
+			graphics.setColor(back.contains(mx, my) ? Color.WHITE : SUBTEXT);
+			graphics.drawString("Back", back.x + 2, back.y + 11);
+		}
+		// A quick fade and slide in, so moving to a required quest reads as a new page.
+		float in = Math.min(1f, (System.currentTimeMillis() - questPaneAt) / 200f);
+		Composite oldComposite = graphics.getComposite();
+		graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, in));
+		graphics.translate((int) (16 * (1 - in) * (1 - in)), 0);
+		// The whole name, wrapped, without the "Complete" every quest task starts with.
 		graphics.setFont(FontManager.getRunescapeBoldFont());
 		graphics.setColor(TITLE);
-		graphics.drawString(fit(graphics.getFontMetrics(), task.getName(), pane.width - 32), pane.x + 6, pane.y + 18);
+		List<String> title = wrap(graphics.getFontMetrics(), savedList ? "Saved tasks (" + saved.size() + ")"
+			: task.getName().replaceFirst("^Complete ", ""), pane.width - (questBack.isEmpty() ? 56 : 86));
+		for (int i = 0; i < title.size(); i++)
+		{
+			graphics.drawString(title.get(i), pane.x + 6, pane.y + 18 + i * 15);
+		}
 
 		Font small = FontManager.getRunescapeSmallFont();
-		List<QuestRequirements.Line> lines = wrapDetail(graphics.getFontMetrics(small), task, pane.width - 12);
-		Rectangle body = new Rectangle(pane.x + 1, pane.y + 24, pane.width - 2, pane.height - 25);
-		scroll = Math.max(0, Math.min(scroll, detailHeight(lines) - body.height));
+		int top = pane.y + 9 + title.size() * 15;
+		Rectangle body = new Rectangle(pane.x + 1, top, pane.width - 2, pane.y + pane.height - 1 - top);
 		Shape oldClip = graphics.getClip();
 		graphics.clip(body);
-		drawDetail(graphics, lines, pane.x + 6, body.y - scroll, body, mx, my, small);
+		if (savedList)
+		{
+			drawSavedList(graphics, saved, body, mx, my, small);
+		}
+		else
+		{
+			List<QuestRequirements.Line> lines = wrapDetail(graphics.getFontMetrics(small), task, pane.width - 12);
+			scroll = Math.max(0, Math.min(scroll, detailHeight(lines) - body.height));
+			drawDetail(graphics, lines, pane.x + 6, body.y - scroll, body, mx, my, small);
+		}
 		graphics.setClip(oldClip);
+		graphics.translate(-(int) (16 * (1 - in) * (1 - in)), 0);
+		graphics.setComposite(oldComposite);
 		finishHover(pane, mx, my);
+	}
+
+	/**
+	 * The saved list in the pane: name (red if your level's too low), then its chunk or
+	 * category and progress. Click to track or untrack (a quest opens its requirements),
+	 * Shift + click to unsave.
+	 */
+	private void drawSavedList(Graphics2D graphics, List<NuzlockeTask> saved, Rectangle body, int mx, int my, Font small)
+	{
+		graphics.setFont(small);
+		FontMetrics fm = graphics.getFontMetrics();
+		if (saved.isEmpty())
+		{
+			graphics.setColor(SUBTEXT);
+			graphics.drawString("Star tasks in the task window", body.x + 5, body.y + 14);
+			return;
+		}
+		scroll = Math.max(0, Math.min(scroll, saved.size() * 30 - body.height));
+		NuzlockeTask tracked = plugin.getSelectedTask();
+		boolean shift = client.isKeyPressed(KeyCode.KC_SHIFT);
+		for (int i = 0; i < saved.size(); i++)
+		{
+			NuzlockeTask task = saved.get(i);
+			Rectangle row = new Rectangle(body.x, body.y + i * 30 - scroll, body.width, 30);
+			boolean hover = row.contains(mx, my) && body.contains(mx, my);
+			boolean isTracked = tracked != null && task.getTaskId().equals(tracked.getTaskId());
+			if (hover || isTracked)
+			{
+				fill(graphics, row, hover && shift ? new Color(255, 70, 70, 50) : hover ? ROW_HOVER : TRACKED_FILL);
+			}
+			if (body.contains(mx, my))
+			{
+				hits.add(new Hit(row, () ->
+				{
+					if (client.isKeyPressed(KeyCode.KC_SHIFT))
+					{
+						toggleSaved(task.getTaskId());
+					}
+					else if (QuestRequirements.isQuestTask(task))
+					{
+						openQuestPane(task);
+					}
+					else if (isTracked)
+					{
+						plugin.clearSelectedTask();
+					}
+					else
+					{
+						plugin.selectTaskFromGame(task);
+					}
+				}));
+			}
+			int target = Math.max(1, task.getTargetQuantity());
+			String progress = target > 1 ? Math.min(task.getCurrentProgress(), target) + "/" + target : "";
+			String where = plugin.isGlobalTask(task.getTaskId()) ? NuzlockeTask.displayCategory(task.getCategory())
+				: chunkNames.computeIfAbsent(task.getTaskId(), k -> chunkName(task));
+			graphics.setColor(hover && shift ? NO_LEVEL : plugin.meetsLevelRequirement(task) ? Color.WHITE : NO_LEVEL);
+			graphics.drawString(fit(fm, hover && shift ? "Remove " + task.getName() : task.getName(), row.width - 12),
+				row.x + 5, row.y + 12);
+			graphics.setColor(SUBTEXT);
+			graphics.drawString(fit(fm, where, row.width - 16 - fm.stringWidth(progress)), row.x + 5, row.y + 25);
+			graphics.drawString(progress, row.x + row.width - 5 - fm.stringWidth(progress), row.y + 25);
+		}
 	}
 
 	/** The side panel's area in whichever layout is on; a spot by the right edge if it's closed. */

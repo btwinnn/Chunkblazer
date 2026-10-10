@@ -32,6 +32,7 @@ import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.Range;
 import net.runelite.client.config.ConfigSection;
 import net.runelite.client.config.Keybind;
+import net.runelite.client.config.Units;
 
 /**
  * Settings, grouped by what they affect: Server Sync, Tasks, World Map, Minimap,
@@ -339,14 +340,28 @@ public interface ChunkBlazerConfig extends Config
 
 	@ConfigItem(
 		keyName = "showSavedTaskTracker",
-		name = "Saved Tasks Tracker",
-		description = "A bar by the inventory that opens your saved tasks, nearest first (Alt + drag to move it)",
+		name = "Saved Tasks Bubble",
+		description = "A bubble that opens your saved tasks over the inventory (Alt + drag to move it)",
 		section = taskSection,
 		position = 3
 	)
 	default boolean showSavedTaskTracker()
 	{
 		return true;
+	}
+
+	@Range(min = 50, max = 200)
+	@Units(Units.PERCENT)
+	@ConfigItem(
+		keyName = "widgetScale",
+		name = "Window Scale",
+		description = "Size of the task window and the saved tasks bubble",
+		section = taskSection,
+		position = 3
+	)
+	default int widgetScale()
+	{
+		return 100;
 	}
 
 	@ConfigItem(
