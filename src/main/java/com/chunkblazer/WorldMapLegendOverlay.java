@@ -31,11 +31,15 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.Client;
+import net.runelite.api.Point;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
+import net.runelite.client.config.ConfigManager;
+import net.runelite.client.input.MouseAdapter;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -44,7 +48,7 @@ import net.runelite.client.ui.overlay.OverlayPosition;
  * The chunk colour key in the bottom-left corner of the world map. Its own overlay on
  * the always-on-top layer, so map icons and other overlays never cover it. Uses the
  * same colours as the map (ChunkBlazerWorldMapOverlay.fillFor). Registered by
- * TaskBrowserOverlay.
+ * TaskBrowserOverlay. Its X turns it off (the "Colour Legend" setting).
  */
 @Singleton
 public class WorldMapLegendOverlay extends Overlay
@@ -58,11 +62,32 @@ public class WorldMapLegendOverlay extends Overlay
 	private final Client client;
 	private final ChunkBlazerConfig config;
 	private final ChunkBlazerWorldMapOverlay worldMap;
+	private final ConfigManager configManager;
+	// The legend's X where it was last drawn (null when it isn't showing).
+	private volatile Rectangle close;
+
+	/** The X turns the "Colour Legend" setting off; ticking it in the settings brings it back. */
+	final MouseAdapter mouse = new MouseAdapter()
+	{
+		@Override
+		public MouseEvent mousePressed(MouseEvent event)
+		{
+			Rectangle c = close;
+			if (c != null && event.getButton() == MouseEvent.BUTTON1 && c.contains(event.getPoint()))
+			{
+				configManager.setConfiguration("chunkblazer", "showChunkLegend", false);
+				event.consume();
+			}
+			return event;
+		}
+	};
 
 	@Inject
-	public WorldMapLegendOverlay(Client client, ChunkBlazerConfig config, ChunkBlazerWorldMapOverlay worldMap)
+	public WorldMapLegendOverlay(Client client, ChunkBlazerConfig config, ChunkBlazerWorldMapOverlay worldMap,
+		ConfigManager configManager)
 	{
 		this.client = client;
+		this.configManager = configManager;
 		this.config = config;
 		this.worldMap = worldMap;
 		setPosition(OverlayPosition.DYNAMIC);
@@ -73,6 +98,7 @@ public class WorldMapLegendOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
+		close = null;
 		Widget map = client.getWidget(InterfaceID.Worldmap.MAP_CONTAINER);
 		if (map == null || map.isHidden())
 		{
@@ -105,12 +131,17 @@ public class WorldMapLegendOverlay extends Overlay
 		{
 			textWidth = Math.max(textWidth, fm.stringWidth(row.legend));
 		}
-		int width = padding * 3 + swatch + textWidth;
+		// Room on the right for the X.
+		int width = padding * 3 + swatch + textWidth + 14;
 		int height = padding * 2 + lineHeight * ROWS.length;
 		int x = (int) worldMapRect.getX() + 8;
 		int y = (int) (worldMapRect.getY() + worldMapRect.getHeight()) - height - 8;
 
 		Skin.panel(graphics, new Rectangle(x - 2, y - 2, width + 5, height + 5), 0, null);
+		Rectangle cross = new Rectangle(x + width - 13, y + 1, 13, 13);
+		Point m = client.getMouseCanvasPosition();
+		Skin.close(graphics, cross, m != null && cross.contains(m.getX(), m.getY()));
+		close = cross;
 
 		int rowY = y + padding;
 		for (ChunkUnlockType row : ROWS)

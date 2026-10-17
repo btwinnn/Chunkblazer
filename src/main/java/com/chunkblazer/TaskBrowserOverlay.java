@@ -36,6 +36,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -569,6 +570,7 @@ public class TaskBrowserOverlay extends Overlay
 		overlayManager.add(this);
 		overlayManager.add(freeBox);
 		mouseManager.registerMouseListener(mouse);
+		mouseManager.registerMouseListener(legend.mouse);
 		mouseManager.registerMouseWheelListener(wheel);
 		keyManager.registerKeyListener(keys);
 		eventBus.register(this);
@@ -583,6 +585,7 @@ public class TaskBrowserOverlay extends Overlay
 		overlayManager.remove(this);
 		overlayManager.remove(freeBox);
 		mouseManager.unregisterMouseListener(mouse);
+		mouseManager.unregisterMouseListener(legend.mouse);
 		mouseManager.unregisterMouseWheelListener(wheel);
 		keyManager.unregisterKeyListener(keys);
 		eventBus.unregister(this);
@@ -774,7 +777,8 @@ public class TaskBrowserOverlay extends Overlay
 	private final JButton sideFold = new JButton();
 	private final JButton sideClear = new JButton("Clear");
 	// The list's text size (A- / A+), remembered per account.
-	private volatile float sideSize = 16f;
+	// Text size step (A- / A+): 0 the small font, 1 the regular font, 2 the small font doubled.
+	private volatile int sideSize;
 	private final JPanel sideFilterBox = new JPanel(new GridLayout(0, 2, 4, 4));
 	private boolean sideSyncing;
 
@@ -1127,16 +1131,16 @@ public class TaskBrowserOverlay extends Overlay
 		});
 		JPanel sizes = new JPanel(new GridLayout(1, 2, 2, 0));
 		sizes.setOpaque(false);
-		String size = configManager.getRSProfileConfiguration(CONFIG_GROUP, "sideTextSize");
-		sideSize = size == null ? 16f : Float.parseFloat(size);
-		for (int step : new int[]{-2, 2})
+		String size = configManager.getRSProfileConfiguration(CONFIG_GROUP, "sideTextStep");
+		sideSize = size == null ? 0 : Integer.parseInt(size);
+		for (int step : new int[]{-1, 1})
 		{
 			JButton button = smooth(new JButton(step < 0 ? "A-" : "A+"));
 			button.setFont(FontManager.getRunescapeSmallFont());
 			button.addActionListener(e ->
 			{
-				sideSize = Math.max(12, Math.min(24, sideSize + step));
-				configManager.setRSProfileConfiguration(CONFIG_GROUP, "sideTextSize", sideSize);
+				sideSize = Math.max(0, Math.min(2, sideSize + step));
+				configManager.setRSProfileConfiguration(CONFIG_GROUP, "sideTextStep", sideSize);
 				sideChanged();
 			});
 			sizes.add(button);
@@ -1391,19 +1395,37 @@ public class TaskBrowserOverlay extends Overlay
 	 * A section heading (a stone bar) or a task card (stone, with its tier and points), made
 	 * once for each thing it can show and reused after that.
 	 */
+	/**
+	 * The side panel's card font at the A- / A+ step. The game fonts are pixel fonts drawn on
+	 * a 16px grid, so the size lands on a whole multiple of 16 screen pixels, Windows display
+	 * scaling included: any other size splits their pixels and the text looks choppy. The
+	 * multiple is the one nearest the scaling (2x at 200%, so 4K text isn't tiny). Every step
+	 * grows every line: the first two by font (small and regular text, regular and bold names),
+	 * the last one multiple up. {@code kind}: 0 card text, 1 a task's name, 2 a heading.
+	 */
+	private Font sideFont(int kind)
+	{
+		GraphicsConfiguration screen = sideList.getGraphicsConfiguration();
+		double scale = screen == null ? 1 : screen.getDefaultTransform().getScaleX();
+		long grid = Math.max(1, Math.round(scale)) + (sideSize == 2 ? 1 : 0);
+		Font font = kind == 2 || kind == 1 && sideSize > 0 ? FontManager.getRunescapeBoldFont()
+			: kind == 1 || sideSize > 0 ? FontManager.getRunescapeFont() : FontManager.getRunescapeSmallFont();
+		return font.deriveFont((float) (16 * grid / scale));
+	}
+
 	private JLabel sideRow(Object item, boolean hover)
 	{
 		String key = item instanceof String ? item + "|" + sideFolded.contains(((String) item).replaceAll(" \\(.*", ""))
 			: ((NuzlockeTask) item).getTaskId() + "|" + ((NuzlockeTask) item).getCurrentProgress() + "|"
 				+ isTracked((NuzlockeTask) item) + sideSaved.contains(((NuzlockeTask) item).getTaskId());
-		key += "|" + hover + "|" + sideSize;
+		Font small = sideFont(0);
+		key += "|" + hover + "|" + small + sideSize;
 		if (sideCards.size() > 2000)
 		{
 			sideCards.clear();
 		}
 		return sideCards.computeIfAbsent(key, k ->
 		{
-			Font small = FontManager.getRunescapeSmallFont().deriveFont(sideSize);
 			return item instanceof String ? sideHeader((String) item, hover, small) : sideCard((NuzlockeTask) item, hover, small);
 		});
 	}
@@ -1453,7 +1475,7 @@ public class TaskBrowserOverlay extends Overlay
 				super.paintComponent(g);
 			}
 		};
-		header.setFont(FontManager.getRunescapeBoldFont().deriveFont(sideSize));
+		header.setFont(sideFont(2));
 		header.setForeground(name.startsWith("Selected") ? Color.WHITE : PanelStyle.YELLOW);
 		header.setBorder(new EmptyBorder(9, 22, 4, 4));
 		return smooth(header);
@@ -1471,14 +1493,19 @@ public class TaskBrowserOverlay extends Overlay
 		int progress = Math.min(task.getCurrentProgress(), target);
 		Color tier = TaskCardTier.fromTask(task).getAccent();
 		String description = task.getDescription() == null ? "" : task.getDescription().trim();
-		JLabel card = new JLabel("<html><table cellpadding=0 cellspacing=0 width=150><tr><td>"
-			+ "<span style='font-family:RuneScape;font-weight:bold'><font color='#ffffff'>"
-			+ (sideSaved.contains(task.getTaskId()) ? "<font color='#ffff00'>&#9733;</font> " : "") + (task.getName() == null ? task.getTaskId() : task.getName())
-			+ "</font></span><br><font color='#ffff00'>" + NuzlockeTask.displayCategory(task.getCategory())
-			+ (task.getLevelRequirement() > 1 ? "  Lvl " + task.getLevelRequirement() : "")
-			+ "</font>" + (global ? "" : "<br><font color='#ff981f'>" + chunkNames.getOrDefault(task.getTaskId(), "") + "</font>")
-			+ (description.isEmpty() ? "" : "<br><font color='#c8b48c'>" + description + "</font>")
-			+ "</td></tr></table></html>")
+		boolean saved = sideSaved.contains(task.getTaskId());
+		// Drawn line by line, not as HTML: HTML rounds the font to whole points, which undoes
+		// sideFont's exact size (and the name kept one size whatever the step).
+		List<Object[]> lines = new ArrayList<>();
+		sideLines(lines, task.getName() == null ? task.getTaskId() : task.getName(), Color.WHITE, sideFont(1));
+		sideLines(lines, NuzlockeTask.displayCategory(task.getCategory())
+			+ (task.getLevelRequirement() > 1 ? "  Lvl " + task.getLevelRequirement() : ""), Color.YELLOW, small);
+		if (!global)
+		{
+			sideLines(lines, chunkNames.getOrDefault(task.getTaskId(), ""), new Color(255, 152, 31), small);
+		}
+		sideLines(lines, description, new Color(200, 180, 140), small);
+		JLabel card = new JLabel()
 		{
 			@Override
 			protected void paintComponent(java.awt.Graphics g)
@@ -1489,6 +1516,12 @@ public class TaskBrowserOverlay extends Overlay
 				Rectangle box = new Rectangle(0, 0, w, h);
 				g2.setPaint(Skin.stone(true));
 				g2.fillRect(0, 0, w, h);
+				// Saved: a warm gold wash over the whole card, easy to spot down the list.
+				if (saved)
+				{
+					g2.setColor(new Color(255, 200, 40, 34));
+					g2.fillRect(0, 0, w, h);
+				}
 				if (selected || hover)
 				{
 					g2.setColor(selected ? new Color(255, 152, 31, 40) : new Color(255, 255, 255, 22));
@@ -1516,13 +1549,39 @@ public class TaskBrowserOverlay extends Overlay
 					g2.setColor(PanelStyle.YELLOW);
 					g2.drawString(count, w - 12 - textWidth, h - 7);
 				}
+				g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+				int y = 6;
+				for (Object[] line : lines)
+				{
+					FontMetrics fm = g2.getFontMetrics((Font) line[2]);
+					g2.setFont((Font) line[2]);
+					g2.setColor((Color) line[1]);
+					g2.drawString((String) line[0], 12, y + fm.getAscent());
+					y += fm.getHeight();
+				}
 				g2.dispose();
-				super.paintComponent(g);
 			}
 		};
 		card.setFont(small);
-		card.setBorder(new EmptyBorder(6, 12, global ? 9 : 25, 6));
-		return smooth(card);
+		int height = 6 + (global ? 9 : 25);
+		for (Object[] line : lines)
+		{
+			height += card.getFontMetrics((Font) line[2]).getHeight();
+		}
+		card.setPreferredSize(new Dimension(168, height));
+		return card;
+	}
+
+	/** Text wrapped to a card's width, each line with its colour and font, for sideCard to draw. */
+	private void sideLines(List<Object[]> lines, String text, Color color, Font font)
+	{
+		if (!text.isEmpty())
+		{
+			for (String line : wrap(sideList.getFontMetrics(font), text, 150))
+			{
+				lines.add(new Object[]{line, color, font});
+			}
+		}
 	}
 
 	/** A small hanging banner in the tier's colour with the task's points on it (side panel cards). */
@@ -3306,7 +3365,7 @@ public class TaskBrowserOverlay extends Overlay
 			: Arrays.asList(lines.get(0), lines.get(1), Skin.fit(fm, String.join(" ", lines.subList(2, lines.size())), width));
 	}
 
-	private static List<String> wrap(FontMetrics fm, String text, int width)
+	static List<String> wrap(FontMetrics fm, String text, int width)
 	{
 		List<String> lines = new ArrayList<>();
 		String line = "";

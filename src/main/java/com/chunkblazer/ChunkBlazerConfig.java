@@ -473,7 +473,7 @@ public interface ChunkBlazerConfig extends Config
 	)
 	default java.awt.Color worldMapLockedColor()
 	{
-		return new java.awt.Color(0, 0, 0, 160);
+		return new java.awt.Color(0, 0, 0, 200);
 	}
 
 	@net.runelite.client.config.Alpha

@@ -215,44 +215,30 @@ public class SelectedTaskOverlay extends OverlayPanel
 		}
 		Skin.panel(graphics, new Rectangle(0, 0, fullSize.width, fullSize.height), 0, tier);
 
-		// The heading is the task's category and level, in its tier colour (which is its points).
+		// The heading is the task's category, in its tier colour (which is its points). Its level
+		// only shows below, and only when you don't have it.
 		panelComponent.getChildren().add(TitleComponent.builder()
-				.text(NuzlockeTask.displayCategory(task.getCategory())
-					+ (task.getLevelRequirement() > 1 ? "  Lvl " + task.getLevelRequirement() : ""))
+				.text(NuzlockeTask.displayCategory(task.getCategory()))
 				.color(tier)
 				.build());
 
-		// LineComponent wraps long text onto extra lines automatically.
-		panelComponent.getChildren().add(LineComponent.builder()
-				.left(task.getName())
-				.leftColor(new Color(255, 152, 31))
-				.build());
+		centred(graphics, task.getName(), new Color(255, 152, 31));
 
 		// What the task actually asks for, when the name alone doesn't say. A timed task's
 		// limit isn't repeated as text when the countdown bar below shows it.
 		for (String requirement : requirementLines(task, timeLimitTicks(task) == 0))
 		{
-			panelComponent.getChildren().add(LineComponent.builder()
-					.left(requirement)
-					.leftColor(REQUIREMENT_TEXT)
-					.build());
+			centred(graphics, requirement, REQUIREMENT_TEXT);
 		}
 		// Every level you're missing, e.g. "20 Defence, 20 Ranged".
 		String missing = TaskTargetExtras.missingRequirement(client, task);
 		if (missing != null)
 		{
-			panelComponent.getChildren().add(LineComponent.builder()
-					.left(missing)
-					.leftColor(MISSING_LEVEL)
-					.build());
+			centred(graphics, missing, MISSING_LEVEL);
 		}
 		else if (!plugin.meetsLevelRequirement(task))
 		{
-			panelComponent.getChildren().add(LineComponent.builder()
-					.left(task.getLevelRequirement() + " "
-							+ NuzlockeTask.displayCategory(task.getCategory()))
-					.leftColor(MISSING_LEVEL)
-					.build());
+			centred(graphics, task.getLevelRequirement() + " " + NuzlockeTask.displayCategory(task.getCategory()), MISSING_LEVEL);
 		}
 
 		int progress = task.getCurrentProgress();
@@ -371,6 +357,16 @@ public class SelectedTaskOverlay extends OverlayPanel
 		graphics.setColor(new Color(255, 255, 0));
 		Skin.text(graphics, count, width - 6 - fm.stringWidth(count), 14);
 		return new Dimension(width, height);
+	}
+
+	/** A line of the box, centred, wrapped onto as many lines as it needs to fit. */
+	private void centred(Graphics2D graphics, String text, Color color)
+	{
+		int width = panelComponent.getPreferredSize().width - 12;
+		for (String line : TaskBrowserOverlay.wrap(graphics.getFontMetrics(), text, width))
+		{
+			panelComponent.getChildren().add(TitleComponent.builder().text(line).color(color).build());
+		}
 	}
 
 	/**

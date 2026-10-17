@@ -96,7 +96,9 @@ class ChunkBlazerWorldMapOverlay extends Overlay
 		ChatboxPanelManager chatboxPanelManager, ClientThread clientThread)
 	{
 		setPosition(OverlayPosition.DYNAMIC);
-		setPriority(PRIORITY_HIGH);
+		// Just above RuneLite's own map icons (its WorldMapOverlay is PRIORITY_HIGHEST, and on the
+		// map a higher priority draws later), so locked chunks' tint covers the icons inside them.
+		setPriority(PRIORITY_HIGHEST + 0.01f);
 		setLayer(OverlayLayer.MANUAL);
 		drawAfterInterface(InterfaceID.WORLDMAP);
 		this.client = client;
