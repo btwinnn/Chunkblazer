@@ -680,6 +680,8 @@ public class TaskSidePanel
 	{
 		// Search matches name, description, category and chunk, in the side panel and the window alike.
 		sideSearch.setIcon(IconTextField.Icon.SEARCH);
+		sideSearch.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		sideSearch.setHoverBackgroundColor(ColorScheme.DARK_GRAY_HOVER_COLOR);
 		sideSearch.setPreferredSize(new Dimension(0, 30));
 		sideSearch.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 		sideSearch.getDocument().addDocumentListener(new DocumentListener()

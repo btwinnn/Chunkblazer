@@ -27,6 +27,7 @@
 package com.chunkblazer;
 
 import com.chunkblazer.modules.NPCKillModule;
+import com.chunkblazer.modules.RaidChallengeModule;
 import com.google.gson.Gson;
 import java.awt.Graphics2D;
 import java.lang.reflect.Modifier;
@@ -78,6 +79,8 @@ public class UiBridge
 	private TaskLists lists;
 	@Inject
 	private NPCKillModule killModule;
+	@Inject
+	private RaidChallengeModule challengeModule;
 
 	private Gson gson;
 
@@ -319,6 +322,11 @@ public class UiBridge
 			{
 				NuzlockeTask task = task(a, 0);
 				return task == null ? -1 : killModule.getActiveFightStartTick(task.getTargetNpc());
+			}
+			case "challengeStatus":
+			{
+				NuzlockeTask task = task(a, 0);
+				return task == null ? null : challengeModule.attemptStatus(task.getTaskId());
 			}
 			case "targetExtrasJson":
 				return plugin.readTaskFileContent("_Target_Extras.json");

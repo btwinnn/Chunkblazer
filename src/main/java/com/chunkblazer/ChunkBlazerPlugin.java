@@ -192,6 +192,9 @@ public class ChunkBlazerPlugin extends Plugin
 	private CompanionPrompt companionPrompt;
 
 	@Inject
+	private RegionLockerSync regionLockerSync;
+
+	@Inject
 	private ChunkBlazerInput inputListener;
 
 	// ChunkBlazer UI (the task window, animated cards, tutorial...), or CoreOnlyUi without it.
@@ -313,6 +316,7 @@ public class ChunkBlazerPlugin extends Plugin
 	{
 		migrateSceneChunkBorders();
 		companionPrompt.start();
+		regionLockerSync.start();
 		// @Singleton survives disable/enable.
 		serverBackoff.reset();
 		syncRejectedKey = null;
@@ -472,6 +476,7 @@ public class ChunkBlazerPlugin extends Plugin
 	protected void shutDown()
 	{
 		companionPrompt.stop();
+		regionLockerSync.stop();
 		if (syncFuture != null)
 		{
 			syncFuture.cancel(false);

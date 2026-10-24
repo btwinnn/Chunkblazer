@@ -49,8 +49,6 @@ public class CoreOnlyUi implements ChunkBlazerUi
 	@Inject
 	private TaskCompletionAnimationOverlay completion;
 	@Inject
-	private UiInstallPrompt installPrompt;
-	@Inject
 	private TaskLists lists;
 	@Inject
 	private ChunkBlazerPlugin plugin;
@@ -121,11 +119,11 @@ public class CoreOnlyUi implements ChunkBlazerUi
 	{
 	}
 
-	/** No task window: offer ChunkBlazer UI instead. */
+	/** No task window: the add-ons box, to turn on or install ChunkBlazer UI. */
 	@Override
 	public void toggleWindow()
 	{
-		installPrompt.show();
+		companions.open();
 	}
 
 	@Override

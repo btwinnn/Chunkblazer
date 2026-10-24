@@ -193,6 +193,10 @@ final class PanelStyle
 				: new LineBorder(edge));
 			c.setBackground(p.panelField);
 			c.setForeground(c instanceof JTextField ? Color.WHITE : p.panelAccent);
+			if (c instanceof JTextField)
+			{
+				((JTextField) c).setCaretColor(Color.WHITE);
+			}
 		}
 		else if (c instanceof JRadioButton || c instanceof JList)
 		{
@@ -232,20 +236,7 @@ final class PanelStyle
 			field.setBorder(o.border);
 			field.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 			field.setHoverBackgroundColor(ColorScheme.DARK_GRAY_HOVER_COLOR);
-			for (Component inner : field.getComponents())
-			{
-				if (inner instanceof JTextField)
-				{
-					JTextField text = (JTextField) inner;
-					Object orig = text.getClientProperty(ORIGINAL);
-					if (orig instanceof Original)
-					{
-						text.setBorder(((Original) orig).border);
-					}
-					text.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-					text.setForeground(Color.WHITE);
-				}
-			}
+			restoreField(field);
 			return;
 		}
 		c.setBorder(o.border);
@@ -269,6 +260,38 @@ final class PanelStyle
 				? new Color(255, 90, 70) : ColorScheme.LIGHT_GRAY_COLOR);
 			b.setBorder(new CompoundBorder(new LineBorder(ColorScheme.MEDIUM_GRAY_COLOR), new EmptyBorder(3, 8, 3, 8)));
 			b.setFocusPainted(false);
+		}
+	}
+
+	/**
+	 * The search box's insides as RuneLite has them: its text field sits inside another panel,
+	 * so this goes all the way down. White text and caret, or the typing can't be seen.
+	 */
+	private static void restoreField(Container box)
+	{
+		for (Component inner : box.getComponents())
+		{
+			if (inner instanceof JTextField)
+			{
+				JTextField text = (JTextField) inner;
+				Object orig = text.getClientProperty(ORIGINAL);
+				if (orig instanceof Original)
+				{
+					text.setBorder(((Original) orig).border);
+				}
+				text.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+				text.setForeground(Color.WHITE);
+				text.setCaretColor(Color.WHITE);
+				text.setSelectedTextColor(Color.WHITE);
+			}
+			else if (inner instanceof Container)
+			{
+				if (inner instanceof JPanel)
+				{
+					inner.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+				}
+				restoreField((Container) inner);
+			}
 		}
 	}
 
