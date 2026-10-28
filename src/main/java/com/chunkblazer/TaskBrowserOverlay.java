@@ -272,6 +272,19 @@ public class TaskBrowserOverlay extends Overlay
 		}
 	}
 
+	/** A scrollbar drawn this frame: the area it runs down and the height of the content it scrolls. */
+	private static final class ScrollbarHit
+	{
+		final Rectangle area;
+		final int contentHeight;
+
+		ScrollbarHit(Rectangle area, int contentHeight)
+		{
+			this.area = area;
+			this.contentHeight = contentHeight;
+		}
+	}
+
 	private final Client client;
 	private final ChunkBlazerPlugin plugin;
 	private final ConfigManager configManager;
@@ -305,6 +318,13 @@ public class TaskBrowserOverlay extends Overlay
 	private volatile Skill filterSkill;
 	private volatile TaskCardTier filterTier;
 	private volatile int scroll;
+	// The scrollbars as last drawn (null when the content fits), so the mouse can grab them.
+	private volatile ScrollbarHit listBar;
+	private volatile ScrollbarHit paneBar;
+	// Dragging a scrollbar thumb: which bar, and how far down the thumb the mouse took hold.
+	private volatile boolean draggingBar;
+	private volatile boolean draggingPane;
+	private volatile int barGrab;
 	// A quest link was clicked: scroll to and briefly outline this task.
 	// The quest whose requirements are shown over the side panel (null when closed).
 	private volatile NuzlockeTask questPane;
@@ -400,7 +420,11 @@ public class TaskBrowserOverlay extends Overlay
 			{
 				return event;
 			}
-			if (event.getButton() == MouseEvent.BUTTON1 && titleHovered)
+			if (event.getButton() == MouseEvent.BUTTON1 && pressScrollbar(event.getPoint()))
+			{
+				// Taken: the thumb is held, or the list has paged.
+			}
+			else if (event.getButton() == MouseEvent.BUTTON1 && titleHovered)
 			{
 				pressX = event.getX();
 				pressY = event.getY();
@@ -425,6 +449,16 @@ public class TaskBrowserOverlay extends Overlay
 		@Override
 		public MouseEvent mouseDragged(MouseEvent event)
 		{
+			if (draggingBar)
+			{
+				ScrollbarHit bar = draggingPane ? paneBar : listBar;
+				if (bar != null)
+				{
+					setScroll(draggingPane, ScrollbarMath.scrollForThumbY(event.getY() - barGrab, bar.area.y, bar.area.height, bar.contentHeight));
+				}
+				event.consume();
+				return event;
+			}
 			if (dragging)
 			{
 				customX = startX + event.getX() - pressX;
@@ -438,6 +472,12 @@ public class TaskBrowserOverlay extends Overlay
 		@Override
 		public MouseEvent mouseReleased(MouseEvent event)
 		{
+			if (draggingBar)
+			{
+				draggingBar = false;
+				event.consume();
+				return event;
+			}
 			if (dragging)
 			{
 				dragging = false;
@@ -2557,7 +2597,7 @@ public class TaskBrowserOverlay extends Overlay
 			rowY += rowHeight + ROW_GAP;
 		}
 		graphics.setClip(oldClip);
-		drawScrollbar(graphics, list, contentHeight, scroll);
+		drawScrollbar(graphics, list, contentHeight, scroll, false);
 		return tasks;
 	}
 
@@ -3125,14 +3165,14 @@ public class TaskBrowserOverlay extends Overlay
 		graphics.clip(body);
 		if (savedList)
 		{
-			drawScrollbar(graphics, body, drawSavedList(graphics, saved, body, mx, my, small), paneScroll);
+			drawScrollbar(graphics, body, drawSavedList(graphics, saved, body, mx, my, small), paneScroll, true);
 		}
 		else
 		{
 			List<QuestRequirements.Line> lines = wrapDetail(graphics.getFontMetrics(small), task, pane.width - 12);
 			paneScroll = Math.max(0, Math.min(paneScroll, detailHeight(lines) - body.height));
 			drawDetail(graphics, lines, pane.x + 6, body.y - paneScroll, body, mx, my, small);
-			drawScrollbar(graphics, body, detailHeight(lines), paneScroll);
+			drawScrollbar(graphics, body, detailHeight(lines), paneScroll, true);
 		}
 		graphics.setClip(oldClip);
 		graphics.translate(-(int) (16 * (1 - in) * (1 - in)), 0);
@@ -3346,15 +3386,66 @@ public class TaskBrowserOverlay extends Overlay
 		graphics.drawImage(ARROWS[(open ? 2 : 0) + (hover ? 1 : 0)], cx - 5, cy - 5, null);
 	}
 
-	private void drawScrollbar(Graphics2D graphics, Rectangle area, int contentHeight, int scroll)
+	private void drawScrollbar(Graphics2D graphics, Rectangle area, int contentHeight, int scroll, boolean pane)
 	{
 		if (contentHeight <= area.height)
 		{
+			setScrollbar(pane, null);
 			return;
 		}
-		int thumbHeight = Math.max(20, area.height * area.height / contentHeight);
-		int thumbY = area.y + (area.height - thumbHeight) * scroll / Math.max(1, contentHeight - area.height);
+		setScrollbar(pane, new ScrollbarHit(new Rectangle(area), contentHeight));
+		int thumbHeight = ScrollbarMath.thumbHeight(area.height, contentHeight);
+		int thumbY = ScrollbarMath.thumbY(area.y, area.height, contentHeight, scroll);
 		Skin.scrollbar(graphics, area, thumbY, thumbHeight);
+	}
+
+	private void setScrollbar(boolean pane, ScrollbarHit bar)
+	{
+		if (pane)
+		{
+			paneBar = bar;
+		}
+		else
+		{
+			listBar = bar;
+		}
+	}
+
+	private void setScroll(boolean pane, int value)
+	{
+		if (pane)
+		{
+			paneScroll = value;
+		}
+		else
+		{
+			scroll = value;
+		}
+	}
+
+	/** A press on a scrollbar: on the thumb it takes hold, on the track it pages toward the click. */
+	private boolean pressScrollbar(Point point)
+	{
+		// The same bar the wheel scrolls.
+		boolean pane = paneIn && questPane != null;
+		ScrollbarHit bar = pane ? paneBar : open ? listBar : null;
+		if (bar == null || !Skin.scrollbarTrack(bar.area).contains(point))
+		{
+			return false;
+		}
+		int current = pane ? paneScroll : scroll;
+		int thumbY = Math.max(bar.area.y + 1, ScrollbarMath.thumbY(bar.area.y, bar.area.height, bar.contentHeight, current));
+		if (point.y >= thumbY && point.y < thumbY + ScrollbarMath.thumbHeight(bar.area.height, bar.contentHeight))
+		{
+			draggingBar = true;
+			draggingPane = pane;
+			barGrab = point.y - thumbY;
+		}
+		else
+		{
+			setScroll(pane, ScrollbarMath.pageTarget(current, point.y, thumbY, bar.area.height, bar.contentHeight));
+		}
+		return true;
 	}
 
 	private static void drawCentered(Graphics2D graphics, String text, Rectangle area)
