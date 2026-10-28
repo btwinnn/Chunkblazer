@@ -412,13 +412,14 @@ class PointsBalanceTest
 		seedEarned(SWITCH_EARNED);
 		when(config.pointsSpent()).thenReturn(SWITCH_SERVER_SPENT);
 		// The granted start chunk (region 12850) plus 39 PAID chunks. Under the
-		// scaling unlock curve the real spend is the running sum curveUnlockCost(1..39),
-		// not 39 flat points — so the repair rebuilds to that, not to 39.
+		// scaling unlock curve the most they can have cost is the legacy curve's running
+		// sum (no refund for the 2026-10 price cut), not 39 flat points — so the repair
+		// rebuilds to that, not to 39.
 		ownsStartChunkPlusPaid(39);
 
 		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
 
-		int expected = ChunkBlazerPlugin.curveLedgerTotal(39); // 109 with the shipped curve
+		int expected = ChunkBlazerPlugin.legacyCurveLedgerTotal(39); // 109
 		assertEquals(expected, capturedInt("pointsSpent"),
 			"spend must be rebuilt from the curve cost of the chunks actually owned");
 	}
@@ -455,7 +456,7 @@ class PointsBalanceTest
 
 		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
 
-		int expected = ChunkBlazerPlugin.curveLedgerTotal(3);
+		int expected = ChunkBlazerPlugin.legacyCurveLedgerTotal(3);
 		assertEquals(expected, capturedInt("pointsSpent"),
 			"spend above the owned-chunk ledger is repaired even when it is under lifetime earned");
 	}
@@ -499,7 +500,7 @@ class PointsBalanceTest
 		// The repair rebuilds spend from the chunks actually owned (the curve ledger),
 		// which is far below the corrupt 453, so it lowers it.
 		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
-		int repaired = ChunkBlazerPlugin.curveLedgerTotal(40);
+		int repaired = ChunkBlazerPlugin.legacyCurveLedgerTotal(40);
 		assertEquals(repaired, capturedInt("pointsSpent"),
 			"spend rebuilt from the curve cost of owned chunks, not the corrupt counter");
 
