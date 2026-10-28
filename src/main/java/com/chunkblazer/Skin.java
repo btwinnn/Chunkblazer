@@ -226,12 +226,6 @@ final class Skin
 		button(g, thumb, false, false);
 	}
 
-	/** The track {@link #scrollbar} paints down the right of {@code area}. */
-	static Rectangle scrollbarTrack(Rectangle area)
-	{
-		return new Rectangle(area.x + area.width - 8, area.y + 1, 7, area.height - 2);
-	}
-
 	/** A hint by the mouse: the game's yellow examine box. */
 	static void tooltip(Graphics2D g, Rectangle box, String text)
 	{
