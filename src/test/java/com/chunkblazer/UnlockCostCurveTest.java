@@ -17,13 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 
-/**
- * The scaling chunk-unlock cost curve. cost(r) = 1 + b*r^gamma, rounded, minimum 1,
- * calibrated (2026-10) so owning the whole map costs about 80% of the points refill can
- * deal. The pool is counted from the shipped catalog the way the plugin deals it, so a
- * catalog change or a casual tweak to CURVE_B that moves the endgame off ~80% fails here
- * rather than shipping.
- */
+/** The chunk unlock price curve: cost(r) = 1 + b*r, rounded, minimum 1. */
 class UnlockCostCurveTest
 {
 	private static final int CHUNKS = 384;
@@ -71,10 +65,7 @@ class UnlockCostCurveTest
 			"curveLedgerTotal(n) must equal the sum of curveUnlockCost(1..n)");
 	}
 
-	/**
-	 * No refund for the 2026-10 price cut: the spend repair caps spend at the legacy
-	 * ledger, which only works if no one can have paid more than it for any n chunks.
-	 */
+	/** No refund: the repair's legacy-curve ceiling must cover what the current curve charges. */
 	@Test
 	void legacyCoversCurrent()
 	{
@@ -86,11 +77,8 @@ class UnlockCostCurveTest
 	}
 
 	/**
-	 * Owning every paid chunk costs about 80% of the points refill can deal: every live
-	 * non-boss task once (a chunk deals new tasks until it runs out, never one already
-	 * dealt elsewhere) plus the quest and progression pools. Boss tasks are left out so
-	 * the map stays reachable without them. The server's spend floor (curveB in
-	 * spendfloor.go) checks the same band; recalibrate both together.
+	 * All paid chunks cost about 80% of what refill can deal: each live non-boss task
+	 * once, plus quests and progression. The server checks the same band (curveB).
 	 */
 	@Test
 	void mapCostsEightyPercent() throws Exception
@@ -103,7 +91,7 @@ class UnlockCostCurveTest
 				free.addAll(c.getRegionIds());
 			}
 		}
-		// The plugin's region map: last file loaded wins (chunksByRegionId.put).
+		// Last file loaded wins, as in the plugin.
 		Map<Integer, NuzlockeChunk> byRegion = new HashMap<>();
 		List<NuzlockeChunk> all = new ArrayList<>();
 		for (String file : chunkFiles())

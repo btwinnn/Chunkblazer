@@ -14,20 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * The points model: EARNED is derived, SPENT is tracked, BALANCE is the
- * difference.
- *
- * <p>These exist because of a live incident (2026-07-21, account "Cruk"). The
- * client's {@code totalPoints} is a spendable BALANCE — unlocking a chunk
- * decrements it, and it gates affordability. The server's {@code total_points}
- * is a different quantity: lifetime EARNED, recomputed from the completed task
- * list with no notion of spending. Login hydration wrote the latter into the
- * former, erasing every chunk purchase the player had made and handing them 939
- * phantom points. It could not self-correct, because the server holds no
- * balance to correct it from.
- *
- * <p>Real numbers from that account are used below deliberately: 1386 earned
- * over 208 tasks, 939 spent on 66 paid chunks, 447 actually spendable.
+ * Points model: earned is derived from completed tasks, spent is tracked, and the
+ * balance is earned minus spent. Numbers are Cruk's (2026-07-21): 1386 earned,
+ * 939 spent, 447 spendable.
  */
 @ExtendWith(MockitoExtension.class)
 class PointsBalanceTest
@@ -51,8 +40,7 @@ class PointsBalanceTest
 		plugin = new ChunkBlazerPlugin();
 		setField(plugin, "config", config);
 		setField(plugin, "configManager", configManager);
-		// Per-account state now lives in the RSProfile store; back it with an in-memory
-		// map that delegates initial reads to the existing config stubs.
+		// Per-account state, backed by a map that falls back to the config stubs.
 		writes = RsProfileTestSupport.install(configManager, config);
 	}
 
@@ -83,10 +71,7 @@ class PointsBalanceTest
 		return m.invoke(plugin, args);
 	}
 
-	/**
-	 * Seed the task index so {@code computeEarnedPoints()} has base_points to sum,
-	 * and point completedTasks at those ids.
-	 */
+	/** Seeds the task index with 1-point tasks and marks them all completed. */
 	@SuppressWarnings("unchecked")
 	private void seedEarned(int totalPoints) throws Exception
 	{
@@ -98,7 +83,6 @@ class PointsBalanceTest
 		StringBuilder ids = new StringBuilder();
 		for (int i = 0; i < totalPoints; i++)
 		{
-			// One point per task keeps the arithmetic obvious.
 			String id = "task_" + i;
 			NuzlockeTask t = new NuzlockeTask();
 			t.setTaskId(id);
@@ -134,11 +118,7 @@ class PointsBalanceTest
 			"1386 earned minus 939 spent is 447 spendable");
 	}
 
-	/**
-	 * THE incident. The server's EARNED total had been written into the balance,
-	 * inflating it by exactly what the player had spent. A recompute must pull it
-	 * back down — the old max(local, server) rule could only ever ratchet up.
-	 */
+	/** The server's earned total was written into the balance; a recompute brings it back down. */
 	@Test
 	void anInflatedBalanceIsCorrectedDownward() throws Exception
 	{
@@ -200,15 +180,7 @@ class PointsBalanceTest
 
 	// --- One-time derivation for pre-existing accounts ---------------------
 
-	/**
-	 * An account from before the counter existed already has a balance that
-	 * reflects everything it ever spent, so the spend recovers exactly — no
-	 * guessing which chunks were granted free.
-	 *
-	 * <p>The stored balance is stubbed explicitly: the derivation now requires a
-	 * PERSISTED balance, because a merely-defaulted 0 means "unknown" rather than
-	 * "spent everything". A legacy account always has one.
-	 */
+	/** A pre-counter account's stored balance gives its spend exactly. */
 	@Test
 	void spendIsDerivedFromAnExistingBalance() throws Exception
 	{
@@ -232,19 +204,12 @@ class PointsBalanceTest
 		assertNoWriteTo("pointsSpent");
 	}
 
-	/**
-	 * On a profile whose balance was inflated by the bug, balance >= earned, so
-	 * there is nothing trustworthy to derive from. Recording 0 is correct: the
-	 * real figure then arrives from the server, which holds the higher monotonic
-	 * value.
-	 */
+	/** A balance at or above earned can't be trusted; the server supplies the real spend. */
 	@Test
 	void derivationRefusesUntrustedBalance() throws Exception
 	{
 		seedEarned(CRUK_EARNED);
 		when(config.pointsSpent()).thenReturn(0);
-		// Stored, so the run gets past the persistence gate and reaches the
-		// balance >= earned check this test is actually about.
 		balanceStoredAs(String.valueOf(CRUK_EARNED));
 
 		invoke("deriveInitialPointsSpent", new Class<?>[]{});
@@ -266,11 +231,7 @@ class PointsBalanceTest
 
 	// --- Catalog drift ----------------------------------------------------
 
-	/**
-	 * Unknown ids are skipped, exactly as the server's Recompute does, so a
-	 * plugin/server catalog difference moves both sides identically instead of
-	 * silently diverging the balance.
-	 */
+	/** Unknown ids are skipped, as the server's Recompute does. */
 	@Test
 	void unknownTaskIdsAreIgnoredWhenSummingEarned() throws Exception
 	{
@@ -284,20 +245,15 @@ class PointsBalanceTest
 		assertEquals(2, capturedInt("totalPoints"), "only the two known tasks count");
 	}
 
-	// ---- Account switching must not charge the incoming account -----------
-	//
-	// Second live incident, 2026-08-01, same player. clearAccountState() unsets
-	// totalPoints and pointsSpent together; deriveInitialPointsSpent() then read
-	// the config DEFAULT of 0 as a real balance and concluded the account had
-	// spent everything it ever earned. Numbers below are from his session logs.
+	// ---- Account switching (2026-08-01) ------------------------------------
+	// A cleared balance reads as the default 0, which must not count as spending.
 
 	private static final int SWITCH_EARNED = 414;   // Cruk, after the server merge
 	private static final int SWITCH_SERVER_SPENT = 453;
 
 	private void balanceStoredAs(String raw)
 	{
-		// The stored balance now lives in the RSProfile store. A null/blank raw means the
-		// key is absent (nothing stored); a concrete value seeds it there.
+		// null or blank means nothing stored
 		if (raw == null || raw.trim().isEmpty())
 		{
 			writes.remove("totalPoints");
@@ -323,11 +279,7 @@ class PointsBalanceTest
 		lenient().when(config.unlockedChunks()).thenReturn(ids.toString());
 	}
 
-	/**
-	 * Owns the granted start chunk (region 12850, excluded from the paid rank) plus
-	 * {@code paid} payable chunks, mirroring a real account: the starter is in the
-	 * unlocked set but was never sold, so only the paid chunks drive the curve.
-	 */
+	/** The granted start chunk (12850, never sold) plus {@code paid} paid chunks. */
 	private void ownsStartChunkPlusPaid(int paid) throws Exception
 	{
 		StringBuilder ids = new StringBuilder("12850"); // DEFAULT_START_REGION
@@ -339,7 +291,7 @@ class PointsBalanceTest
 		lenient().when(config.unlockedChunks()).thenReturn(ids.toString());
 	}
 
-	/** Registers a catalog task chunk (default cost, so it counts toward the paid rank). */
+	/** A default-cost chunk, so it counts toward the paid rank. */
 	@SuppressWarnings("unchecked")
 	private void paidChunk(int regionId) throws Exception
 	{
@@ -350,17 +302,13 @@ class PointsBalanceTest
 		((Map<Integer, NuzlockeChunk>) f.get(plugin)).put(regionId, c);
 	}
 
-	/** No per-account write to this key landed in the RSProfile store this test. */
+	/** No per-account write to this key. */
 	private void assertNoWriteTo(String key)
 	{
 		assertFalse(writes.containsKey(key), "expected no per-account write to '" + key + "'");
 	}
 
-	/**
-	 * THE regression. Post-clear, the balance key is ABSENT — the accessor's 0 is
-	 * a default, not a record of spending. Deriving from it charged Cruk all 414
-	 * points he had ever earned.
-	 */
+	/** After a switch the balance is absent; deriving from its default 0 charged Cruk all 414 points. */
 	@Test
 	void accountSwitchDoesNotChargeLifetimeEarnings() throws Exception
 	{
@@ -386,10 +334,7 @@ class PointsBalanceTest
 		assertNoWriteTo("pointsSpent");
 	}
 
-	/**
-	 * The case the derivation was actually written for must still work: a legacy
-	 * account with a REAL persisted balance and no spend counter yet.
-	 */
+	/** A legacy account with a real stored balance still derives its spend. */
 	@Test
 	void legacyAccountWithARealBalanceStillDerives() throws Exception
 	{
@@ -402,19 +347,13 @@ class PointsBalanceTest
 		assertEquals(314, capturedInt("pointsSpent"), "earned 414 - balance 100");
 	}
 
-	/**
-	 * Repairing the damage already done. Cruk arrived at earned 414 / spent 453 —
-	 * a state play cannot produce. The chunks he owns are the real ledger.
-	 */
+	/** Spent 453 against 414 earned is impossible; it's rebuilt from the chunks owned. */
 	@Test
 	void impossibleSpendIsRebuiltFromChunksOwned() throws Exception
 	{
 		seedEarned(SWITCH_EARNED);
 		when(config.pointsSpent()).thenReturn(SWITCH_SERVER_SPENT);
-		// The granted start chunk (region 12850) plus 39 PAID chunks. Under the
-		// scaling unlock curve the most they can have cost is the legacy curve's running
-		// sum (no refund for the 2026-10 price cut), not 39 flat points — so the repair
-		// rebuilds to that, not to 39.
+		// 39 paid chunks cost at most the legacy curve's sum (no refund for the price cut).
 		ownsStartChunkPlusPaid(39);
 
 		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
@@ -424,16 +363,12 @@ class PointsBalanceTest
 			"spend must be rebuilt from the curve cost of the chunks actually owned");
 	}
 
-	/**
-	 * A healthy account is never touched. The ceiling is the owned-chunk ledger, not
-	 * lifetime earned: 40 spent against 40 owned chunks is a grandfathered flat spender
-	 * sitting well under the curve ledger those chunks imply, so the repair declines.
-	 */
+	/** Spend under the owned-chunk ledger is left alone. */
 	@Test
 	void repairLeavesAHealthyAccountAlone() throws Exception
 	{
 		seedEarned(SWITCH_EARNED);
-		when(config.pointsSpent()).thenReturn(40);   // under the ledger 40 owned chunks imply
+		when(config.pointsSpent()).thenReturn(40);   // under the ledger
 		ownsChunks(40);
 
 		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
@@ -441,12 +376,7 @@ class PointsBalanceTest
 		assertNoWriteTo("pointsSpent");
 	}
 
-	/**
-	 * The Bobby Blazer case the earned-based guard missed: spent sits BELOW lifetime
-	 * earned yet far above what the owned chunks could ever have cost. Earned 23,
-	 * spent 22, but only 3 payable chunks (curve ledger 3). The old "spent {@literal >}
-	 * earned" gate skipped it and left the balance stuck at 1; the ledger gate repairs it.
-	 */
+	/** Spend under earned but over the owned-chunk ledger is still repaired (Bobby Blazer: 23 earned, 22 spent, 3 chunks). */
 	@Test
 	void impossibleSpendBelowEarnedIsStillRepaired() throws Exception
 	{
@@ -461,10 +391,7 @@ class PointsBalanceTest
 			"spend above the owned-chunk ledger is repaired even when it is under lifetime earned");
 	}
 
-	/**
-	 * One-directional: the repair may only ever LOWER the counter. If the chunk
-	 * ledger came out higher it would be handing out points, so it must decline.
-	 */
+	/** The repair only ever lowers spend. */
 	@Test
 	void repairNeverRaisesTheSpendCounter() throws Exception
 	{
@@ -477,28 +404,22 @@ class PointsBalanceTest
 		assertNoWriteTo("pointsSpent");
 	}
 
-	/**
-	 * End to end, in the order the login merge runs them: a switched-in account
-	 * with a wiped balance and the server's inflated counter still lands on a
-	 * spendable balance instead of zero.
-	 */
+	/** In login merge order, a switched-in account ends with a spendable balance, not zero. */
 	@Test
 	void switchedAccountEndsWithASpendableBalance() throws Exception
 	{
 		seedEarned(SWITCH_EARNED);          // earned 414
-		balanceStoredAs(null);              // no local balance yet (freshly switched in)
-		ownsChunks(40);                     // 40 payable chunks actually owned
+		balanceStoredAs(null);              // freshly switched in
+		ownsChunks(40);
 
-		// No local balance means a 0 balance is UNKNOWN, not "spent everything", so the
-		// derivation writes nothing.
+		// Unknown balance: nothing derived.
 		invoke("deriveInitialPointsSpent", new Class<?>[]{});
 		assertNoWriteTo("pointsSpent");
 
-		// The server then supplies its inflated spend through the monotonic login merge.
-		writes.put("pointsSpent", String.valueOf(SWITCH_SERVER_SPENT)); // 453, impossible vs 414 earned
+		// The server's inflated spend arrives through the login merge.
+		writes.put("pointsSpent", String.valueOf(SWITCH_SERVER_SPENT)); // 453
 
-		// The repair rebuilds spend from the chunks actually owned (the curve ledger),
-		// which is far below the corrupt 453, so it lowers it.
+		// The repair lowers it to the owned-chunk ledger.
 		invoke("migrateRepairImpossiblePointsSpent", new Class<?>[]{});
 		int repaired = ChunkBlazerPlugin.legacyCurveLedgerTotal(40);
 		assertEquals(repaired, capturedInt("pointsSpent"),
