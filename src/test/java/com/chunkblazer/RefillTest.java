@@ -36,7 +36,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -170,12 +169,13 @@ class RefillTest
 		assertEquals(LUMBRIDGE + ":t1,t2,t3,t4,t5", state.get("regionRolledTasks"));
 	}
 
+	/** Refills every owned chunk; Lumbridge is owned by default, the Swamp isn't. */
 	@SuppressWarnings("unchecked")
 	private Map<Integer, List<NuzlockeTask>> refill() throws Exception
 	{
-		Method m = ChunkBlazerPlugin.class.getDeclaredMethod("refillChunks", Collection.class);
+		Method m = ChunkBlazerPlugin.class.getDeclaredMethod("refillChunks");
 		m.setAccessible(true);
-		return (Map<Integer, List<NuzlockeTask>>) m.invoke(plugin, Arrays.asList(LUMBRIDGE, SWAMP));
+		return (Map<Integer, List<NuzlockeTask>>) m.invoke(plugin);
 	}
 
 	private void restore(String serverRoll) throws Exception

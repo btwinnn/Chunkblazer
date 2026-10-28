@@ -27,6 +27,7 @@
 package com.chunkblazer;
 
 import com.google.common.hash.Hashing;
+import com.google.common.primitives.Ints;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Provides;
@@ -4149,7 +4150,7 @@ public class ChunkBlazerPlugin extends Plugin
 			// refills dealt since the last sync, which the server hasn't heard of yet.
 			// A roll that differs any other way is stale or re-rolled; the server's stands.
 			String server = reconciled.get(e.getKey());
-			if (server == null || rollSet(e.getValue()).containsAll(rollSet(server)))
+			if (server == null || csvSet(e.getValue()).containsAll(csvSet(server)))
 			{
 				reconciled.put(e.getKey(), e.getValue());
 			}
@@ -4791,18 +4792,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			if (!java.util.Objects.equals(raw, unlockedViewRaw))
 			{
-				Set<String> parsed = new HashSet<>();
-				if (raw != null)
-				{
-					for (String s : raw.split(","))
-					{
-						if (!s.trim().isEmpty())
-						{
-							parsed.add(s.trim());
-						}
-					}
-				}
-				unlockedView = Collections.unmodifiableSet(parsed);
+				unlockedView = Collections.unmodifiableSet(csvSet(raw));
 				unlockedViewRaw = raw;
 			}
 			return unlockedView;
@@ -4896,27 +4886,10 @@ public class ChunkBlazerPlugin extends Plugin
 		// For an account from before refill this is the one-time backfill: each chunk deals
 		// what its old 4-5 roll never did, quietly, with one line to say how many. After
 		// that it only tops up chunks whose tasks settled without a live completion.
-		List<Integer> owned = new ArrayList<>();
-		for (String id : getUnlockedRegionIds())
-		{
-			try
-			{
-				owned.add(Integer.parseInt(id.trim()));
-			}
-			catch (NumberFormatException ignored)
-			{
-				// not a region id
-			}
-		}
-		int refilled = 0;
-		for (List<NuzlockeTask> picks : refillChunks(owned).values())
-		{
-			refilled += picks.size();
-		}
+		int refilled = refillChunks().values().stream().mapToInt(List::size).sum();
 		if (refilled > 0)
 		{
-			addPluginChatMessage(refilled == 1 ? "Your chunks dealt you 1 new task."
-				: "Your chunks dealt you " + refilled + " new tasks.");
+			addPluginChatMessage("Your chunks dealt you " + refilled + (refilled == 1 ? " new task." : " new tasks."));
 		}
 
 		activeTasks.clear();
@@ -5015,21 +4988,7 @@ public class ChunkBlazerPlugin extends Plugin
 		// runs its own completed-check.
 		if (!settledIds.isEmpty())
 		{
-			LinkedHashSet<String> merged = new LinkedHashSet<>();
-			String existing = acStr("completedTasks", "");
-			if (existing != null && !existing.isEmpty())
-			{
-				for (String s : existing.split(","))
-				{
-					String t = s.trim();
-					if (!t.isEmpty())
-					{
-						merged.add(t);
-					}
-				}
-			}
-			merged.addAll(settledIds);
-			setAccountState("completedTasks", String.join(",", merged));
+			markTasksCompleted(settledIds);
 			addPoints(settledPoints);
 		}
 
@@ -5471,74 +5430,67 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 	}
 
-	// More refills than this from one batch of completions get one summary chat line.
-	private static final int REFILL_CHAT_CAP = 3;
-
 	/**
-	 * Refill: top each of these regions back up to TASKS_PER_CHUNK unfinished tasks from
-	 * the chunk's own tasks the account hasn't been dealt yet, picked with the unlock
-	 * roll's rules and weights (not retired, not out in any chunk, not completed). A chunk
-	 * that runs out just shrinks as its last tasks are finished. Boss chunks (every task
+	 * Refill: top every owned chunk back up to TASKS_PER_CHUNK unfinished tasks from the
+	 * chunk's own tasks the account hasn't been dealt yet, picked with the unlock roll's
+	 * rules and weights (not retired, not out in any chunk, not completed). A chunk that
+	 * runs out just shrinks as its last tasks are finished. Boss chunks (every task
 	 * already granted), free-list chunks (no tasks) and regions with no roll yet (the
 	 * loadActiveTasks backfill rolls those) are skipped, and nothing is dealt while a
 	 * server roll may still be on its way. Returns what each region was dealt; the caller
 	 * announces it and brings it into play.
 	 */
-	private Map<Integer, List<NuzlockeTask>> refillChunks(Collection<Integer> regionIds)
+	private Map<Integer, List<NuzlockeTask>> refillChunks()
 	{
 		Map<Integer, List<NuzlockeTask>> dealt = new LinkedHashMap<>();
+		Map<String, String> roll = parseRollBlob(acStr("regionRolledTasks", ""));
 		if (!canRollMissing())
 		{
 			return dealt;
 		}
-		Map<String, String> roll = parseRollBlob(acStr("regionRolledTasks", ""));
 		Set<String> completed = getCompletedTaskIds();
-		Set<String> rolledAnywhere = new HashSet<>(getAssignedTaskIds());
-		for (String tasks : roll.values())
+		Set<String> taken = getAssignedTaskIds();
+		roll.values().forEach(csv -> taken.addAll(csvSet(csv)));
+		for (String id : getUnlockedRegionIds())
 		{
-			rolledAnywhere.addAll(rollSet(tasks));
-		}
-		for (int regionId : new LinkedHashSet<>(regionIds))
-		{
-			String csv = roll.get(String.valueOf(regionId));
-			NuzlockeChunk chunk = chunksByRegionId.get(regionId);
-			if (csv == null || csv.isEmpty() || chunk == null || chunk.isBoss() || chunk.getTasks() == null
-				|| isFreeUnlockableRegion(regionId))
+			Integer region = Ints.tryParse(id);
+			NuzlockeChunk chunk = region == null ? null : chunksByRegionId.get(region);
+			Set<String> rolled = csvSet(roll.get(id));
+			if (chunk == null || chunk.isBoss() || chunk.getTasks() == null || rolled.isEmpty()
+				|| isFreeUnlockableRegion(region))
 			{
 				continue;
 			}
-			Set<String> rolled = rollSet(csv);
-			Set<String> open = new HashSet<>();
+			int open = 0;
 			List<NuzlockeTask> pool = new ArrayList<>();
 			for (NuzlockeTask t : chunk.getTasks())
 			{
-				String id = t.getTaskId();
-				if (id == null || t.isLocked() || completed.contains(id))
+				if (t.getTaskId() == null || t.isLocked() || completed.contains(t.getTaskId()))
 				{
 					continue;
 				}
-				if (rolled.contains(id))
+				if (rolled.contains(t.getTaskId()))
 				{
-					open.add(id);
+					open++;
 				}
-				else if (!rolledAnywhere.contains(id))
+				else if (!taken.contains(t.getTaskId()))
 				{
 					pool.add(t);
 				}
 			}
 			List<NuzlockeTask> picks = new ArrayList<>();
-			while (open.size() + picks.size() < TASKS_PER_CHUNK && !pool.isEmpty())
+			for (; open < TASKS_PER_CHUNK && !pool.isEmpty(); open++)
 			{
 				NuzlockeTask pick = selectWeightedRandom(pool);
-				pool.removeIf(t -> t.getTaskId().equals(pick.getTaskId()));
+				pool.remove(pick);
 				picks.add(pick);
 				rolled.add(pick.getTaskId());
-				rolledAnywhere.add(pick.getTaskId());
+				taken.add(pick.getTaskId());
 			}
 			if (!picks.isEmpty())
 			{
-				roll.put(String.valueOf(regionId), String.join(",", rolled));
-				dealt.put(regionId, picks);
+				roll.put(id, String.join(",", rolled));
+				dealt.put(region, picks);
 			}
 		}
 		if (!dealt.isEmpty())
@@ -5550,68 +5502,24 @@ public class ChunkBlazerPlugin extends Plugin
 
 	/**
 	 * Announce and bring into play what refillChunks dealt for finished tasks: a chat line
-	 * per new task (one summary line for a burst), then each goes straight into the active
-	 * list the way a flipped card does. Refills are never parked behind cards.
+	 * per new task, then each goes straight into the active list the way a flipped card
+	 * does. Refills are never parked behind cards.
 	 */
 	private void dealRefills(Map<Integer, List<NuzlockeTask>> dealt)
 	{
-		int count = 0;
-		for (List<NuzlockeTask> picks : dealt.values())
+		dealt.forEach((region, picks) -> picks.forEach(task ->
 		{
-			count += picks.size();
-		}
-		if (count == 0)
-		{
-			return;
-		}
-		if (count > REFILL_CHAT_CAP)
-		{
-			addPluginChatMessage("Your chunks dealt you " + count + " new tasks.");
-		}
-		for (Map.Entry<Integer, List<NuzlockeTask>> e : dealt.entrySet())
-		{
-			NuzlockeChunk chunk = chunksByRegionId.get(e.getKey());
-			for (NuzlockeTask task : e.getValue())
-			{
-				if (count <= REFILL_CHAT_CAP && chunk != null)
-				{
-					addPluginChatMessage(chunk.getName() + " gave you a new task: " + task.getName() + ".");
-				}
-				activateTask(task);
-			}
-		}
-		if (panel != null)
+			addPluginChatMessage(chunksByRegionId.get(region).getName() + " gave you a new task: " + task.getName() + ".");
+			activateTask(task);
+		}));
+		if (!dealt.isEmpty() && panel != null)
 		{
 			panel.updatePanel();
 		}
 	}
 
-	/** Regions whose roll lists any of these tasks. */
-	private Set<Integer> regionsHolding(Collection<String> taskIds)
-	{
-		Set<String> wanted = new HashSet<>(taskIds);
-		Set<Integer> out = new LinkedHashSet<>();
-		for (Map.Entry<String, String> e : parseRollBlob(acStr("regionRolledTasks", "")).entrySet())
-		{
-			Set<String> tasks = rollSet(e.getValue());
-			tasks.retainAll(wanted);
-			if (!tasks.isEmpty())
-			{
-				try
-				{
-					out.add(Integer.parseInt(e.getKey()));
-				}
-				catch (NumberFormatException ignored)
-				{
-					// a malformed region key holds nothing to refill
-				}
-			}
-		}
-		return out;
-	}
-
-	/** One region's task list from the roll blob, as a set (blank entries dropped). */
-	private static Set<String> rollSet(String csv)
+	/** A comma-separated list as an ordered set (trimmed, blanks and repeats dropped). */
+	private static Set<String> csvSet(String csv)
 	{
 		Set<String> out = new LinkedHashSet<>();
 		if (csv == null)
@@ -5687,21 +5595,7 @@ public class ChunkBlazerPlugin extends Plugin
 	/** Task ids rolled but not yet flipped, in a stable order for a stable card layout. */
 	public List<String> getUnrevealedTaskIds()
 	{
-		String data = acStr("unrevealedTasks", "");
-		if (data == null || data.isEmpty())
-		{
-			return new ArrayList<>();
-		}
-		List<String> ids = new ArrayList<>();
-		for (String id : data.split(","))
-		{
-			String trimmed = id.trim();
-			if (!trimmed.isEmpty() && !ids.contains(trimmed))
-			{
-				ids.add(trimmed);
-			}
-		}
-		return ids;
+		return new ArrayList<>(csvSet(acStr("unrevealedTasks", "")));
 	}
 
 	/**
@@ -5917,109 +5811,21 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public Set<String> getRolledTasksForRegion(int regionId)
 	{
-		String data = acStr("regionRolledTasks", "");
-		if (data == null || data.isEmpty())
-		{
-			return new HashSet<>();
-		}
-
-		// Format: "regionId:task1,task2,task3|regionId2:task4,task5"
-		for (String regionEntry : data.split("\\|"))
-		{
-			if (regionEntry.isEmpty()) continue;
-
-			String[] parts = regionEntry.split(":");
-			if (parts.length == 2)
-			{
-				try
-				{
-					int entryRegionId = Integer.parseInt(parts[0]);
-					if (entryRegionId == regionId)
-					{
-						Set<String> taskIds = new HashSet<>();
-						for (String taskId : parts[1].split(","))
-						{
-							if (!taskId.isEmpty())
-							{
-								taskIds.add(taskId);
-							}
-						}
-						return taskIds;
-					}
-				}
-				catch (NumberFormatException e)
-				{
-					log.warn("Invalid region ID in rolled tasks: {}", parts[0]);
-				}
-			}
-		}
-
-		return new HashSet<>();
+		return csvSet(parseRollBlob(acStr("regionRolledTasks", "")).get(String.valueOf(regionId)));
 	}
 
 	private void saveRolledTasksForRegion(int regionId, Set<String> taskIds)
 	{
-		String data = acStr("regionRolledTasks", "");
-		Map<Integer, Set<String>> regionTasks = new HashMap<>();
-
-		// Parse existing data
-		if (data != null && !data.isEmpty())
-		{
-			for (String regionEntry : data.split("\\|"))
-			{
-				if (regionEntry.isEmpty()) continue;
-
-				String[] parts = regionEntry.split(":");
-				if (parts.length == 2)
-				{
-					try
-					{
-						int entryRegionId = Integer.parseInt(parts[0]);
-						Set<String> existingTasks = new HashSet<>();
-						for (String taskId : parts[1].split(","))
-						{
-							if (!taskId.isEmpty())
-							{
-								existingTasks.add(taskId);
-							}
-						}
-						regionTasks.put(entryRegionId, existingTasks);
-					}
-					catch (NumberFormatException e)
-					{
-						// Skip invalid entries
-					}
-				}
-			}
-		}
-
-		// Update with new data
-		regionTasks.put(regionId, taskIds);
-
-		// Serialize back
-		StringBuilder sb = new StringBuilder();
-		for (Map.Entry<Integer, Set<String>> entry : regionTasks.entrySet())
-		{
-			if (sb.length() > 0) sb.append('|');
-			sb.append(entry.getKey()).append(':').append(String.join(",", entry.getValue()));
-		}
-
-		setAccountState("regionRolledTasks", sb.toString());
+		Map<String, String> roll = parseRollBlob(acStr("regionRolledTasks", ""));
+		roll.put(String.valueOf(regionId), String.join(",", taskIds));
+		setAccountState("regionRolledTasks", serializeRollBlob(roll));
 	}
 
 	// --- Assigned Tasks Management ---
 
 	private Set<String> getAssignedTaskIds()
 	{
-		String assigned = acStr("assignedTasks", "");
-		if (assigned == null || assigned.isEmpty())
-		{
-			return new HashSet<>();
-		}
-		return Arrays.stream(assigned.split(","))
-			.map(String::trim)
-			.filter(s -> !s.isEmpty())
-			.collect(Collectors.toSet());
+		return csvSet(acStr("assignedTasks", ""));
 	}
 
 
@@ -6137,7 +5943,7 @@ public class ChunkBlazerPlugin extends Plugin
 		markTasksCompleted(completedIds);
 
 		// Refill: each chunk a finished task came from deals a new one in its place.
-		dealRefills(refillChunks(regionsHolding(completedIds)));
+		dealRefills(refillChunks());
 
 		// Clear progress data for these tasks
 		saveActiveTasks();
@@ -6156,22 +5962,9 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void markTasksCompleted(Collection<String> taskIds)
 	{
-		if (taskIds == null || taskIds.isEmpty())
-		{
-			return;
-		}
-
-		String completed = acStr("completedTasks", "");
-		StringBuilder sb = new StringBuilder(completed == null ? "" : completed);
-		for (String taskId : taskIds)
-		{
-			if (sb.length() > 0)
-			{
-				sb.append(',');
-			}
-			sb.append(taskId);
-		}
-		setAccountState("completedTasks", sb.toString());
+		Set<String> completed = getCompletedTaskIds();
+		completed.addAll(taskIds);
+		setAccountState("completedTasks", String.join(",", completed));
 	}
 
 
@@ -6187,33 +5980,13 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private Set<String> getCompletedTaskIds()
 	{
-		String completed = acStr("completedTasks", "");
-		if (completed == null || completed.isEmpty())
-		{
-			return new HashSet<>();
-		}
-		return Arrays.stream(completed.split(","))
-			.map(String::trim)
-			.filter(s -> !s.isEmpty())
-			.collect(Collectors.toSet());
+		return csvSet(acStr("completedTasks", ""));
 	}
 
 	/** Completed task IDs in the order they were completed (the stored CSV order), deduplicated. */
 	private List<String> getCompletedTaskIdsOrdered()
 	{
-		String completed = acStr("completedTasks", "");
-		Set<String> ordered = new LinkedHashSet<>();
-		if (completed != null)
-		{
-			for (String id : completed.split(","))
-			{
-				if (!id.trim().isEmpty())
-				{
-					ordered.add(id.trim());
-				}
-			}
-		}
-		return new ArrayList<>(ordered);
+		return new ArrayList<>(getCompletedTaskIds());
 	}
 
 	/**
@@ -7320,12 +7093,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private static int unlockCost(int rank, double b)
 	{
-		if (rank < 1)
-		{
-			rank = 1;
-		}
-		double c = 1.0 + b * Math.pow(rank, CURVE_GAMMA);
-		return (int) Math.max(1L, Math.round(c));
+		return (int) Math.max(1L, Math.round(1.0 + b * Math.pow(Math.max(rank, 1), CURVE_GAMMA)));
 	}
 
 	private static int ledgerTotal(int n, double b)
