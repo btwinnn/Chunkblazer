@@ -150,7 +150,7 @@ class UnlockCostCurveTest
 			}
 		}
 		Map<String, Integer> global = new HashMap<>();
-		for (String file : new String[]{"Quest_Tasks.json", "Progression_Tasks.json"})
+		for (String file : new String[]{"Quest_Tasks.json", "Progression_Tasks.json", "Diary_Tasks.json"})
 		{
 			for (NuzlockeChunk group : chunksIn(file))
 			{

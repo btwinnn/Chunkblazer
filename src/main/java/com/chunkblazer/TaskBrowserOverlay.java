@@ -1828,14 +1828,15 @@ public class TaskBrowserOverlay extends Overlay
 	 * True if a task done away from RuneLite (on mobile) still completes at the next
 	 * RuneLite login: it's checked against saved game state. Quests (QuestCheckModule
 	 * sweep), real levels (ProgressionModule), combat achievement varps, persistent unlock
-	 * varbits, items held in inventory/bank/worn (ObtainModule; the bank once opened) and
+	 * and achievement diary varbits, items held in inventory/bank/worn (ObtainModule; the bank once opened) and
 	 * worn equipment (EquipModule). Kills, skilling XP drops, dialogue and the active-prayer
 	 * varbit (it resets) need RuneLite watching.
 	 */
 	static boolean isOfflineTrackable(NuzlockeTask task)
 	{
 		return typeIs(task, "QUEST_CHECK", "SKILL_THRESHOLD", "COMBAT_ACHIEVEMENT", "EQUIP", "OBTAIN")
-			|| (typeIs(task, "VARBIT_CHECK", "VARP_CHECK") && "unlock".equalsIgnoreCase(task.getCategory()));
+			|| (typeIs(task, "VARBIT_CHECK", "VARP_CHECK") && ("unlock".equalsIgnoreCase(task.getCategory())
+			|| "Achievement Diary".equalsIgnoreCase(task.getCategory())));
 	}
 
 	private boolean anyFilter()

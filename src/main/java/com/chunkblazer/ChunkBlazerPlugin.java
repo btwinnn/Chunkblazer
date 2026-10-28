@@ -107,6 +107,7 @@ import com.chunkblazer.api.PlayerLoginResponse;
 import com.chunkblazer.api.PlayerSyncRequest;
 import com.chunkblazer.api.ServerBackoff;
 import com.chunkblazer.modules.TaskModuleManager;
+import com.chunkblazer.modules.VarbitCheckModule;
 
 @Slf4j
 @PluginDescriptor(
@@ -1671,9 +1672,9 @@ public class ChunkBlazerPlugin extends Plugin
 		globalTasks.clear();
 
 		// Quest_Tasks = the quest pool; Progression_Tasks = the per-skill level
-		// ladder. Both are region-independent and both land in globalTasks; the
-		// only thing that distinguishes them downstream is completion_type.
-		for (String file : new String[]{ "Quest_Tasks.json", "Progression_Tasks.json" })
+		// ladder; Diary_Tasks = the achievement diaries. All are region-independent
+		// and land in globalTasks; only completion_type tells them apart downstream.
+		for (String file : new String[]{ "Quest_Tasks.json", "Progression_Tasks.json", "Diary_Tasks.json" })
 		{
 			loadGlobalTaskFile(file);
 		}
@@ -1843,11 +1844,11 @@ public class ChunkBlazerPlugin extends Plugin
 			task.setCurrentProgress(0);
 			task.setCompleted(false);
 
-			// Already-satisfied global tasks settle in one batch. For quests that
-			// means "finished before we looked"; for Progression it means a rung
-			// ABOVE the baseline that was crossed while the plugin was off — real
+			// Already-satisfied global tasks settle in one batch. For quests and
+			// diaries that means "finished before we looked"; for Progression it means
+			// a rung ABOVE the baseline that was crossed while the plugin was off — real
 			// forward progress we simply didn't witness, so it still pays.
-			if (isQuestFinished(task) || isProgressionRungReached(task))
+			if (isQuestFinished(task) || isProgressionRungReached(task) || VarbitCheckModule.isSatisfied(client, task))
 			{
 				task.setCurrentProgress(1);
 				task.setCompleted(true);
