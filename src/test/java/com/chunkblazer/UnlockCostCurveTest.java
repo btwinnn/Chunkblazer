@@ -14,10 +14,11 @@ import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 
-/** The chunk unlock price curve: cost(r) = 1 + b*r, rounded, minimum 1. */
+/** The chunk unlock price curve: 1.0.9's prices up to the knee, a gentler climb to 17 after. */
 class UnlockCostCurveTest
 {
 	private static final int CHUNKS = 384;
@@ -34,9 +35,21 @@ class UnlockCostCurveTest
 	{
 		assertEquals(3, ChunkBlazerPlugin.curveUnlockCost(38), "10% of the map");
 		assertEquals(7, ChunkBlazerPlugin.curveUnlockCost(96), "25% of the map");
-		assertEquals(12, ChunkBlazerPlugin.curveUnlockCost(192), "halfway");
-		assertEquals(18, ChunkBlazerPlugin.curveUnlockCost(288), "75% of the map");
-		assertEquals(24, ChunkBlazerPlugin.curveUnlockCost(CHUNKS), "the last chunk");
+		assertEquals(11, ChunkBlazerPlugin.curveUnlockCost(168), "Ben's next chunk, same as 1.0.9");
+		assertEquals(12, ChunkBlazerPlugin.curveUnlockCost(192), "halfway, the knee");
+		assertEquals(15, ChunkBlazerPlugin.curveUnlockCost(288), "75% of the map");
+		assertEquals(17, ChunkBlazerPlugin.curveUnlockCost(CHUNKS), "the last chunk");
+	}
+
+	/** Up to the knee every price is exactly 1.0.9's, so current players never feel the change. */
+	@Test
+	void earlyGameUnchanged()
+	{
+		for (int r = 1; r <= ChunkBlazerPlugin.CURVE_KNEE; r++)
+		{
+			assertEquals(Math.max(1, Math.round(1 + 0.059 * r)), ChunkBlazerPlugin.curveUnlockCost(r), "rank " + r);
+		}
+		assertTrue(ChunkBlazerPlugin.curveUnlockCost(300) < Math.round(1 + 0.059 * 300), "late game is cheaper than 1.0.9");
 	}
 
 	@Test
@@ -77,11 +90,12 @@ class UnlockCostCurveTest
 	}
 
 	/**
-	 * All paid chunks cost about 80% of what refill can deal: each live non-boss task
-	 * once, plus quests and progression. The server checks the same band (curveB).
+	 * All paid chunks cost 80-92% of what the game deals: every chunk's 5-task unlock deal
+	 * (averaged over seeded runs), plus the global pools. A hard late game, but
+	 * finishable. The server checks the same band.
 	 */
 	@Test
-	void mapCostsEightyPercent() throws Exception
+	void mapCostInBand() throws Exception
 	{
 		Set<Integer> free = new HashSet<>();
 		for (NuzlockeChunk c : chunksIn("Free_Chunks.json"))
@@ -106,7 +120,8 @@ class UnlockCostCurveTest
 			}
 		}
 		Set<NuzlockeChunk> seen = Collections.newSetFromMap(new IdentityHashMap<>());
-		Map<String, Integer> pool = new HashMap<>();
+		NuzlockeChunk start = null;
+		List<NuzlockeChunk> dealing = new ArrayList<>();
 		int paid = 0;
 		for (NuzlockeChunk c : all)
 		{
@@ -123,28 +138,84 @@ class UnlockCostCurveTest
 			{
 				continue;
 			}
-			if (!isStart && !c.isCharter() && c.getUnlockCostValue() != 0)
+			if (isStart)
+			{
+				start = c;
+				continue;
+			}
+			dealing.add(c);
+			if (!c.isCharter() && c.getUnlockCostValue() != 0)
 			{
 				paid++;
 			}
-			addLive(pool, c.getTasks());
 		}
+		Map<String, Integer> global = new HashMap<>();
 		for (String file : new String[]{"Quest_Tasks.json", "Progression_Tasks.json"})
 		{
 			for (NuzlockeChunk group : chunksIn(file))
 			{
-				addLive(pool, group.getTasks());
+				addLive(global, group.getTasks());
 			}
 		}
-		int points = 0;
-		for (int p : pool.values())
+		double points = 0;
+		for (int p : global.values())
 		{
 			points += p;
 		}
+		// Own every chunk, in a random order after the start chunk, as the plugin deals it.
+		int runs = 50;
+		for (int run = 0; run < runs; run++)
+		{
+			Random rnd = new Random(run);
+			List<NuzlockeChunk> order = new ArrayList<>(dealing);
+			Collections.shuffle(order, rnd);
+			order.add(0, start);
+			Set<String> taken = new HashSet<>();
+			for (NuzlockeChunk c : order)
+			{
+				points += (double) deal(c, taken, rnd) / runs;
+			}
+		}
 		int cost = ChunkBlazerPlugin.curveLedgerTotal(paid);
 		double pct = 100.0 * cost / points;
-		assertTrue(pct >= 75.0 && pct <= 85.0, "owning all " + paid + " paid chunks costs " + cost + ", "
-			+ Math.round(pct) + "% of the " + points + " points refill can deal (want 75-85%)");
+		assertTrue(pct >= 80.0 && pct <= 92.0, "owning all " + paid + " paid chunks costs " + cost + ", "
+			+ Math.round(pct) + "% of the " + Math.round(points) + " points the game deals (want 80-92%)");
+	}
+
+	/** The unlock roll: TASKS_PER_CHUNK live tasks by weight, never one already taken. Returns their points. */
+	private static int deal(NuzlockeChunk chunk, Set<String> taken, Random rnd)
+	{
+		List<NuzlockeTask> avail = new ArrayList<>();
+		Set<String> ids = new HashSet<>();
+		for (NuzlockeTask t : chunk.getTasks())
+		{
+			if (t.getTaskId() != null && !t.isLocked() && !taken.contains(t.getTaskId()) && ids.add(t.getTaskId()))
+			{
+				avail.add(t);
+			}
+		}
+		int points = 0;
+		for (int n = 0; n < ChunkBlazerPlugin.TASKS_PER_CHUNK && !avail.isEmpty(); n++)
+		{
+			int total = 0;
+			for (NuzlockeTask t : avail)
+			{
+				total += Math.max(t.getAssignmentWeight(), 1);
+			}
+			int x = rnd.nextInt(total);
+			for (NuzlockeTask t : avail)
+			{
+				x -= Math.max(t.getAssignmentWeight(), 1);
+				if (x < 0)
+				{
+					points += t.getBasePoints();
+					taken.add(t.getTaskId());
+					avail.remove(t);
+					break;
+				}
+			}
+		}
+		return points;
 	}
 
 	private static void addLive(Map<String, Integer> pool, List<NuzlockeTask> tasks)
