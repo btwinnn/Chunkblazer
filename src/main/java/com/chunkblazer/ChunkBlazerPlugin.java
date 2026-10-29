@@ -6943,22 +6943,23 @@ public class ChunkBlazerPlugin extends Plugin
 
 	// ── Chunk unlock cost curve ─────────────────────────────────────────────
 	// The r-th PAID chunk unlock costs 1 + CURVE_B * r up to CURVE_KNEE, then climbs
-	// more gently at CURVE_LATE_B, rounded to a whole number (never below 1). Up to the
-	// knee (half of the 384 payable chunks; the furthest players were at 45% when 1.0.10
+	// faster at CURVE_LATE_B, rounded to a whole number (never below 1). Up to the knee
+	// (half of the 384 payable chunks; the furthest players were at 45% when 1.0.10
 	// shipped) every price is exactly 1.0.9's, so no current player feels the change;
-	// after it the price reaches 17 at the last chunk. The whole map then costs about
-	// 88% of the points the game deals (every chunk's TASKS_PER_CHUNK unlock deal plus
-	// the quest, progression and diary pools): a hard late game, but finishable. Boss
-	// tasks are left out, so the map is reachable without them. r is the account's
-	// current paid chunk count + 1, which means chunks already unlocked are
+	// after it the price reaches 31 at the last chunk. The whole map then costs about
+	// 80% of every point the game deals: every chunk's TASKS_PER_CHUNK unlock deal,
+	// every task in the boss chunks (bought with Boss Tokens, they grant all their
+	// tasks), and the quest, progression and diary pools. So the endgame needs boss
+	// points: a player who never bosses tops out around 93% of the map. r is the
+	// account's current paid chunk count + 1, which means chunks already unlocked are
 	// GRANDFATHERED (pointsSpent is a stored, monotonic counter and is never recomputed
 	// here) and only new unlocks follow the curve. UnlockCostCurveTest checks the share
-	// against the shipped catalog, and the server's spend floor has its own copy
-	// (spendfloor.go): change both together. Do not nudge it casually, because it
-	// reprices every player's next unlock.
+	// against the shipped catalog. The server's spend floor (spendfloor.go) and the
+	// website's route planner (route.js) have their own copies: change them together.
+	// Do not nudge it casually, because it reprices every player's next unlock.
 	static final double CURVE_B = 0.059;
 	static final int CURVE_KNEE = 192;
-	static final double CURVE_LATE_B = 0.0243;
+	static final double CURVE_LATE_B = 0.0998;
 	// The first curve (2026-09). It was sized against every task in a chunk while a
 	// chunk only dealt 4 or 5, so the whole map was out of reach. Chunks bought on it
 	// keep the price paid (no refund): the spend repair's ceiling is its ledger.

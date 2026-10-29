@@ -18,7 +18,7 @@ import java.util.Random;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 
-/** The chunk unlock price curve: 1.0.9's prices up to the knee, a gentler climb to 17 after. */
+/** The chunk unlock price curve: 1.0.9's prices up to the knee, then a steeper climb to 31 that counts boss points. */
 class UnlockCostCurveTest
 {
 	private static final int CHUNKS = 384;
@@ -37,8 +37,8 @@ class UnlockCostCurveTest
 		assertEquals(7, ChunkBlazerPlugin.curveUnlockCost(96), "25% of the map");
 		assertEquals(11, ChunkBlazerPlugin.curveUnlockCost(168), "Ben's next chunk, same as 1.0.9");
 		assertEquals(12, ChunkBlazerPlugin.curveUnlockCost(192), "halfway, the knee");
-		assertEquals(15, ChunkBlazerPlugin.curveUnlockCost(288), "75% of the map");
-		assertEquals(17, ChunkBlazerPlugin.curveUnlockCost(CHUNKS), "the last chunk");
+		assertEquals(22, ChunkBlazerPlugin.curveUnlockCost(288), "75% of the map");
+		assertEquals(31, ChunkBlazerPlugin.curveUnlockCost(CHUNKS), "the last chunk");
 	}
 
 	/** Up to the knee every price is exactly 1.0.9's, so current players never feel the change. */
@@ -49,7 +49,7 @@ class UnlockCostCurveTest
 		{
 			assertEquals(Math.max(1, Math.round(1 + 0.059 * r)), ChunkBlazerPlugin.curveUnlockCost(r), "rank " + r);
 		}
-		assertTrue(ChunkBlazerPlugin.curveUnlockCost(300) < Math.round(1 + 0.059 * 300), "late game is cheaper than 1.0.9");
+		assertTrue(ChunkBlazerPlugin.curveUnlockCost(300) > Math.round(1 + 0.059 * 300), "past the knee it climbs faster than 1.0.9");
 	}
 
 	@Test
@@ -90,9 +90,10 @@ class UnlockCostCurveTest
 	}
 
 	/**
-	 * All paid chunks cost 80-92% of what the game deals: every chunk's 5-task unlock deal
-	 * (averaged over seeded runs), plus the global pools. A hard late game, but
-	 * finishable. The server checks the same band.
+	 * All paid chunks cost about 80% (76-84%) of every point the game deals: every chunk's
+	 * 5-task unlock deal (averaged over seeded runs), every task in the boss chunks, which
+	 * grant all of theirs, and the global pools. Finishing the map takes boss points. The
+	 * server checks the same band.
 	 */
 	@Test
 	void mapCostInBand() throws Exception
@@ -122,6 +123,8 @@ class UnlockCostCurveTest
 		Set<NuzlockeChunk> seen = Collections.newSetFromMap(new IdentityHashMap<>());
 		NuzlockeChunk start = null;
 		List<NuzlockeChunk> dealing = new ArrayList<>();
+		// What a player earns outside the unlock deals: every boss chunk task, then the global pools.
+		Map<String, Integer> granted = new HashMap<>();
 		int paid = 0;
 		for (NuzlockeChunk c : all)
 		{
@@ -134,8 +137,13 @@ class UnlockCostCurveTest
 				isFree |= free.contains(r);
 				isStart |= r == 12850;
 			}
-			if (!reachable || c.isBoss() || isFree || !seen.add(c))
+			if (!reachable || isFree || !seen.add(c))
 			{
+				continue;
+			}
+			if (c.isBoss())
+			{
+				addLive(granted, c.getTasks());
 				continue;
 			}
 			if (isStart)
@@ -149,16 +157,15 @@ class UnlockCostCurveTest
 				paid++;
 			}
 		}
-		Map<String, Integer> global = new HashMap<>();
 		for (String file : new String[]{"Quest_Tasks.json", "Progression_Tasks.json", "Diary_Tasks.json"})
 		{
 			for (NuzlockeChunk group : chunksIn(file))
 			{
-				addLive(global, group.getTasks());
+				addLive(granted, group.getTasks());
 			}
 		}
 		double points = 0;
-		for (int p : global.values())
+		for (int p : granted.values())
 		{
 			points += p;
 		}
@@ -178,8 +185,8 @@ class UnlockCostCurveTest
 		}
 		int cost = ChunkBlazerPlugin.curveLedgerTotal(paid);
 		double pct = 100.0 * cost / points;
-		assertTrue(pct >= 80.0 && pct <= 92.0, "owning all " + paid + " paid chunks costs " + cost + ", "
-			+ Math.round(pct) + "% of the " + Math.round(points) + " points the game deals (want 80-92%)");
+		assertTrue(pct >= 76.0 && pct <= 84.0, "owning all " + paid + " paid chunks costs " + cost + ", "
+			+ Math.round(pct) + "% of the " + Math.round(points) + " points the game deals (want 76-84%)");
 	}
 
 	/** The unlock roll: TASKS_PER_CHUNK live tasks by weight, never one already taken. Returns their points. */
