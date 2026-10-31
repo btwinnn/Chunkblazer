@@ -40,7 +40,6 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GridLayout;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
@@ -302,12 +301,39 @@ public class TaskSidePanel
 			sideList.addMouseListener(sideMouse);
 			sideList.addMouseMotionListener(sideMouse);
 			sideList.setBackground(new Color(40, 40, 40));
-			JPanel stats = new JPanel(new GridLayout(1, STAT_NAMES.length, 4, 0));
+			// The four stat boxes (ChunkBlazer UI's theme may draw the row and each box its own way).
+			JPanel stats = new JPanel(new GridLayout(1, STAT_NAMES.length, 4, 0))
+			{
+				@Override
+				protected void paintComponent(java.awt.Graphics g)
+				{
+					SidePaint.draw("stats", g, this);
+				}
+			};
 			stats.setOpaque(false);
 			for (int i = 0; i < sideStats.length; i++)
 			{
 				// Plain labels, not HTML, so the game's pixel fonts stay their real size.
-				JPanel box = new JPanel(new GridLayout(2, 1));
+				JPanel box = new JPanel(new GridLayout(2, 1))
+				{
+					@Override
+					protected void paintComponent(java.awt.Graphics g)
+					{
+						if (!SidePaint.draw("stat", g, this))
+						{
+							super.paintComponent(g);
+						}
+					}
+
+					@Override
+					protected void paintBorder(java.awt.Graphics g)
+					{
+						if (!SidePaint.draw("stat", g, this))
+						{
+							super.paintBorder(g);
+						}
+					}
+				};
 				box.setBackground(PanelStyle.FIELD);
 				box.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK),
 					new EmptyBorder(2, 0, 3, 0)));
@@ -680,6 +706,8 @@ public class TaskSidePanel
 	{
 		// Search matches name, description, category and chunk, in the side panel and the window alike.
 		sideSearch.setIcon(IconTextField.Icon.SEARCH);
+		sideSearch.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		sideSearch.setHoverBackgroundColor(ColorScheme.DARK_GRAY_HOVER_COLOR);
 		sideSearch.setPreferredSize(new Dimension(0, 30));
 		sideSearch.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 		sideSearch.getDocument().addDocumentListener(new DocumentListener()
@@ -1034,6 +1062,14 @@ public class TaskSidePanel
 		return font.deriveFont((float) (16 * grid / scale));
 	}
 
+	/** The look changed (ChunkBlazer UI's theme, or the panel's own): draw every row again. */
+	void restyle()
+	{
+		sideCards.clear();
+		sideKey = "";
+		clientThread.invoke(this::updateSideList);
+	}
+
 	private JLabel sideRow(Object item, boolean hover)
 	{
 		String key = item instanceof String ? item + "|" + sideFolded.contains(((String) item).replaceAll(" \\(.*", ""))
@@ -1041,7 +1077,7 @@ public class TaskSidePanel
 				+ lists.isTracked((NuzlockeTask) item) + sideSaved.contains(((NuzlockeTask) item).getTaskId());
 		Font small = sideFont(0);
 		detail(SideDetail.CATEGORY);
-		key += "|" + hover + "|" + small + sideSize + "|" + Skin.theme() + "|" + sideDetail;
+		key += "|" + hover + "|" + small + sideSize + "|" + SidePaint.version + "|" + sideDetail;
 		if (sideCards.size() > 2000)
 		{
 			sideCards.clear();
@@ -1061,44 +1097,24 @@ public class TaskSidePanel
 		String name = title.replaceAll(" \\(.*", "");
 		String count = title.substring(name.length()).replaceAll("[ ()]", "");
 		boolean folded = sideFolded.contains(name);
-		if (Skin.theme() == Theme.ORIGINAL)
+		if (SidePaint.painter == null)
 		{
 			return originalHeader(name, count, folded);
 		}
+		// ChunkBlazer UI's theme draws the heading: its bar, arrow, name and count.
 		JLabel header = new JLabel(name)
 		{
 			@Override
 			protected void paintComponent(java.awt.Graphics g)
 			{
 				Graphics2D g2 = (Graphics2D) g.create();
-				Rectangle bar = new Rectangle(0, 6, getWidth(), getHeight() - 8);
-				g2.setPaint(Skin.stone(false));
-				g2.fillRect(bar.x, bar.y, bar.width, bar.height);
-				if (hover)
-				{
-					g2.setColor(new Color(255, 255, 255, 30));
-					g2.fillRect(bar.x, bar.y, bar.width, bar.height);
-				}
-				g2.setColor(Color.BLACK);
-				g2.drawRect(bar.x, bar.y, bar.width - 1, bar.height - 1);
-				Skin.bevel(g2, new Rectangle(bar.x + 1, bar.y + 1, bar.width - 2, bar.height - 2), true);
-				// Drawn, not a text arrow, as the game's fonts have no arrow glyphs.
-				int cy = bar.y + bar.height / 2;
-				g2.setColor(getForeground());
-				g2.fillPolygon(folded ? new int[]{9, 9, 15} : new int[]{8, 16, 12}, folded ? new int[]{cy - 4, cy + 4, cy}
-					: new int[]{cy - 2, cy - 2, cy + 3}, 3);
-				g2.setFont(small);
-				FontMetrics fm = g2.getFontMetrics();
-				Rectangle chip = new Rectangle(bar.x + bar.width - fm.stringWidth(count) - 16, bar.y + 4,
-					fm.stringWidth(count) + 10, bar.height - 8);
-				g2.setColor(PanelStyle.FIELD);
-				g2.fillRect(chip.x, chip.y, chip.width, chip.height);
-				g2.setColor(Color.BLACK);
-				g2.drawRect(chip.x, chip.y, chip.width - 1, chip.height - 1);
-				g2.setColor(PanelStyle.ORANGE);
-				g2.drawString(count, chip.x + 5, chip.y + (chip.height + fm.getAscent()) / 2 - 1);
+				boolean drawn = SidePaint.draw("header", g2, new Rectangle(0, 6, getWidth(), getHeight() - 8), name, count, folded,
+					hover, small, getFont(), getForeground());
 				g2.dispose();
-				super.paintComponent(g);
+				if (!drawn)
+				{
+					super.paintComponent(g);
+				}
 			}
 		};
 		header.setFont(sideFont(2));
@@ -1124,7 +1140,7 @@ public class TaskSidePanel
 		// sideFont's exact size (and the name kept one size whatever the step).
 		// The ChunkBlazer theme keeps the original card colours: green name, gold category,
 		// blue chunk, grey description, on a card filled with the tier's colour.
-		boolean original = Skin.theme() == Theme.ORIGINAL;
+		boolean original = SidePaint.painter == null;
 		List<Object[]> lines = new ArrayList<>();
 		sideLines(lines, task.getName() == null ? task.getTaskId() : task.getName(),
 			original ? new Color(150, 255, 150) : Color.WHITE, sideFont(1));
@@ -1171,13 +1187,9 @@ public class TaskSidePanel
 				Graphics2D g2 = (Graphics2D) g.create();
 				int w = getWidth();
 				int h = getHeight() - 3;
-				if (original)
+				if (original || !SidePaint.draw("card", g2, w, h, tier, selected, hover, saved, bar, progress, target, getFont()))
 				{
 					originalCard(g2, w, h, tier, selected, hover, saved, !bar, progress, target, getFont());
-				}
-				else
-				{
-					themedCard(g2, w, h, tier, selected, hover, saved, bar, progress, target, getFont());
 				}
 				if (points)
 				{
@@ -1354,7 +1366,7 @@ public class TaskSidePanel
 			public void paintIcon(java.awt.Component c, java.awt.Graphics g, int x, int y)
 			{
 				Graphics2D g2 = (Graphics2D) g.create();
-				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				Skin.smooth(g2);
 				g2.setColor(ColorScheme.DARK_GRAY_COLOR);
 				g2.fillRect(x, y, 10, 10);
 				g2.setColor(ColorScheme.MEDIUM_GRAY_COLOR);
@@ -1389,8 +1401,7 @@ public class TaskSidePanel
 	/** A small gear: a toothed ring with a hole. */
 	private static void gear(Graphics2D g, Rectangle r, Color color)
 	{
-		Object aa = g.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Object aa = Skin.smooth(g);
 		double cx = r.getCenterX();
 		double cy = r.getCenterY();
 		double outer = r.width / 2.0;
@@ -1418,7 +1429,7 @@ public class TaskSidePanel
 		g.fill(java.awt.geom.AffineTransform.getTranslateInstance(1, 1).createTransformedShape(shape));
 		g.setColor(color);
 		g.fill(shape);
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, aa == null ? RenderingHints.VALUE_ANTIALIAS_DEFAULT : aa);
+		Skin.restore(g, aa);
 	}
 
 	/** Text wrapped to a card's width, each line with its colour and font, for sideCard to draw. */
@@ -1433,53 +1444,6 @@ public class TaskSidePanel
 		}
 	}
 
-	/** A side panel card's background in the other themes: stone, a tier stripe, the progress bar. */
-	private static void themedCard(Graphics2D g2, int w, int h, Color tier, boolean selected, boolean hover,
-		boolean saved, boolean bar, int progress, int target, Font font)
-	{
-		Rectangle box = new Rectangle(0, 0, w, h);
-		g2.setPaint(Skin.stone(true));
-		g2.fillRect(0, 0, w, h);
-		if (Skin.palette().theme == Theme.OLD_SCHOOL)
-		{
-			// Old School's cards are near black, the stone only just showing through.
-			g2.setColor(new Color(0, 0, 0, 108));
-			g2.fillRect(0, 0, w, h);
-		}
-		// Saved: a warm gold wash over the whole card, easy to spot down the list.
-		if (saved)
-		{
-			g2.setColor(new Color(255, 200, 40, 34));
-			g2.fillRect(0, 0, w, h);
-		}
-		if (selected || hover)
-		{
-			g2.setColor(selected ? new Color(255, 152, 31, 40) : new Color(255, 255, 255, 22));
-			g2.fillRect(0, 0, w, h);
-		}
-		Skin.bevel(g2, box, true);
-		g2.setColor(tier);
-		g2.fillRect(3, 3, 3, h - 6);
-		if (selected)
-		{
-			g2.setColor(PanelStyle.ORANGE);
-			g2.drawRect(0, 0, w - 1, h - 1);
-		}
-		if (bar)
-		{
-			String count = progress + "/" + target;
-			g2.setFont(font);
-			int textWidth = g2.getFontMetrics().stringWidth(count);
-			int barWidth = w - 32 - textWidth;
-			Skin.bar(g2, 13, h - 15, barWidth, 7, (float) (progress / (double) Math.max(1, target)), null, 0, false);
-			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			g2.setColor(Color.BLACK);
-			g2.drawString(count, w - 11 - textWidth, h - 6);
-			g2.setColor(PanelStyle.YELLOW);
-			g2.drawString(count, w - 12 - textWidth, h - 7);
-		}
-	}
-
 	/**
 	 * The ChunkBlazer theme's side panel card, as the plugin first drew it: a rounded card filled
 	 * with the tier's colour (brighter when hovered or tracked), a flame strip down the left,
@@ -1489,7 +1453,7 @@ public class TaskSidePanel
 		boolean saved, boolean global, int progress, int target, Font font)
 	{
 		Color flame = new Color(255, 152, 0);
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Skin.smooth(g2);
 		java.awt.geom.RoundRectangle2D box = new java.awt.geom.RoundRectangle2D.Float(0.5f, 0.5f, w - 1.5f, h - 1.5f, 12, 12);
 		float shade = selected ? 0.66f : hover ? 0.58f : 0.48f;
 		g2.setColor(new Color((int) (tier.getRed() * shade), (int) (tier.getGreen() * shade), (int) (tier.getBlue() * shade)));
@@ -1552,65 +1516,30 @@ public class TaskSidePanel
 	}
 
 	/**
-	 * The task's points on a small badge in the tier's colour (side panel cards), shaped for
-	 * the theme: a round coin for ChunkBlazer, a shield with a gold chief for Varlamore (its
-	 * crest is a shield), and a hanging banner for Old School.
+	 * The task's points on a small round coin in the tier's colour (side panel cards), or
+	 * ChunkBlazer UI's badge for its theme.
 	 */
 	private static void banner(Graphics2D g, int x, int y, Color tier, int points)
 	{
 		int w = 14;
 		int h = 18;
 		Object aa = g.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
-		Theme theme = Skin.theme();
-		double centreX;
-		double centreY;
-		if (theme == Theme.ORIGINAL)
+		if (SidePaint.draw("badge", g, x, y, tier, points))
 		{
-			int d = 16;
-			int cx = x - 1;
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g.setColor(tier);
-			g.fillOval(cx, y, d, d);
-			g.setColor(new Color(255, 255, 255, 70));
-			g.fillArc(cx + 2, y + 1, d - 4, d - 6, 20, 140);
-			g.setColor(Color.BLACK);
-			g.drawOval(cx, y, d, d);
-			centreX = cx + d / 2.0;
-			centreY = y + d / 2.0;
+			return;
 		}
-		else if (theme == Theme.ROYAL)
-		{
-			java.awt.geom.Path2D shield = new java.awt.geom.Path2D.Double();
-			shield.moveTo(x, y);
-			shield.lineTo(x + w, y);
-			shield.lineTo(x + w, y + h * 0.5);
-			shield.quadTo(x + w, y + h * 0.85, x + w / 2.0, y + h);
-			shield.quadTo(x, y + h * 0.85, x, y + h * 0.5);
-			shield.closePath();
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g.setColor(tier);
-			g.fill(shield);
-			// The gold chief across the top, as on Varlamore's crest.
-			g.setColor(new Color(211, 174, 84));
-			g.fillRect(x + 1, y + 1, w - 1, 3);
-			g.setColor(new Color(60, 40, 20));
-			g.draw(shield);
-			centreX = x + w / 2.0;
-			centreY = y + 4 + (h - 4) * 0.42;
-		}
-		else
-		{
-			Polygon flag = new Polygon(new int[]{x, x + w, x + w, x + w / 2, x}, new int[]{y, y, y + h, y + h - 5, y + h}, 5);
-			g.setColor(tier);
-			g.fillPolygon(flag);
-			g.setColor(new Color(255, 255, 255, 60));
-			g.fillRect(x + 1, y + 1, w - 2, 2);
-			g.setColor(Color.BLACK);
-			g.drawPolygon(flag);
-			centreX = x + w / 2.0;
-			centreY = y + (h - 5) / 2.0 + 1;
-		}
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, aa == null ? RenderingHints.VALUE_ANTIALIAS_DEFAULT : aa);
+		int d = 16;
+		int cx = x - 1;
+		Skin.smooth(g);
+		g.setColor(tier);
+		g.fillOval(cx, y, d, d);
+		g.setColor(new Color(255, 255, 255, 70));
+		g.fillArc(cx + 2, y + 1, d - 4, d - 6, 20, 140);
+		g.setColor(Color.BLACK);
+		g.drawOval(cx, y, d, d);
+		double centreX = cx + d / 2.0;
+		double centreY = y + d / 2.0;
+		Skin.restore(g, aa);
 		// Bold, and centred on the badge by the digits' own drawn outline, not the font's box.
 		// Two-digit numbers too wide for the badge in bold drop to the small font.
 		String text = String.valueOf(points);

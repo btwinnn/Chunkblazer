@@ -126,6 +126,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 	{
 		boolean windowOpen;
 		boolean violated;       // a sustained condition was broken this attempt
+		String failReason;      // what broke it, for ChunkBlazer UI's task box
 		int damageFreeTicks;    // consecutive in-window ticks without taking damage
 		int surviveTicks;       // in-window ticks with the phase active
 		int progress;           // qualifying completions so far
@@ -1351,6 +1352,7 @@ public class RaidChallengeModule extends AbstractTaskModule
 		if (why != null)
 		{
 			s.violated = true;
+			s.failReason = reason;
 			announceFailure(task, reason);
 		}
 	}
@@ -1628,9 +1630,25 @@ public class RaidChallengeModule extends AbstractTaskModule
 		activeTasks.remove(task);
 	}
 
+	/**
+	 * For ChunkBlazer UI's task box: "1|" while an attempt is going, "0|" when not, with
+	 * the reason it broke after the bar ("1|Run was on. Keep run off."); null if none yet.
+	 */
+	public String attemptStatus(String taskId)
+	{
+		State s = taskId == null ? null : states.get(taskId);
+		if (s == null)
+		{
+			return null;
+		}
+		String why = s.violated ? (s.failReason != null ? s.failReason : "A rule was broken.") : "";
+		return (s.encounterActive || s.windowOpen ? "1|" : "0|") + why;
+	}
+
 	private void resetAttempt(State s)
 	{
 		s.violated = false;
+		s.failReason = null;
 		s.damageFreeTicks = 0;
 		s.surviveTicks = 0;
 		s.satisfyFailTold = false;

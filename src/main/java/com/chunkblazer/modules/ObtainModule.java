@@ -712,7 +712,7 @@ public class ObtainModule extends AbstractTaskModule
 		if (newProgress >= totalRequired && !task.isCompleted())
 		{
 			task.setCompleted(true);
-			sendTaskSuccess(task, "Task complete!");
+			sendTaskSuccess(task, "");
 			if (completionCallback != null)
 			{
 				completionCallback.onTaskCompleted(task, newProgress);

@@ -387,11 +387,37 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 		taskMessages.put(task, messages);
 	}
 
+	/**
+	 * A task's progress moved to {@code progress}: say so in chat and to ChunkBlazer, and at
+	 * {@code required} complete it. True if this completed it (the module then stops watching it).
+	 */
+	protected boolean credit(NuzlockeTask task, int progress, int required, String details)
+	{
+		task.setCurrentProgress(progress);
+		sendTaskProgress(task, details, progress, required);
+		if (completionCallback != null)
+		{
+			completionCallback.onProgressUpdated(task, progress);
+		}
+		if (progress < required || task.isCompleted())
+		{
+			return false;
+		}
+		task.setCompleted(true);
+		sendTaskSuccess(task, details);
+		if (completionCallback != null)
+		{
+			completionCallback.onTaskCompleted(task, progress);
+		}
+		return true;
+	}
+
 	protected void sendTaskSuccess(NuzlockeTask task, String details)
 	{
 		if (config.showChatSuccess())
 		{
-			announce(COLOR_DARK_BLUE, "Task Complete!", task, "", details);
+			// The task's name says what was done, so no detail line under it.
+			announce(COLOR_DARK_BLUE, "Task Complete!", task, "", null);
 		}
 	}
 

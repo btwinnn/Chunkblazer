@@ -572,23 +572,8 @@ public class ConstructionModule extends AbstractTaskModule
 		{
 			return;
 		}
-		task.setCurrentProgress(newProgress);
-
-		sendTaskProgress(task, details, newProgress, totalRequired);
-		if (completionCallback != null)
+		if (credit(task, newProgress, totalRequired, details))
 		{
-			completionCallback.onProgressUpdated(task, newProgress);
-		}
-
-		if (newProgress >= totalRequired && !task.isCompleted())
-		{
-			task.setCompleted(true);
-			sendTaskSuccess(task, details);
-			if (completionCallback != null)
-			{
-				completionCallback.onTaskCompleted(task, newProgress);
-			}
-
 			// Clean up task tracking
 			taskRequiredObjectIds.remove(task.getTaskId());
 			activeTasks.remove(task);

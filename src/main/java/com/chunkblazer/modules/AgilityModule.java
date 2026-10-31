@@ -26,6 +26,7 @@
 
 package com.chunkblazer.modules;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,10 +49,13 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
+import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.widgets.WidgetUtil;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.Text;
 import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.RequiredObject;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Module for handling AGILITY completion type tasks.
@@ -99,6 +103,19 @@ public class AgilityModule extends AbstractTaskModule
 	// One use is a few ticks; using the same obstacle again for real (next lap, or a
 	// shortcut and back) takes longer than this.
 	private static final int REUSE_COOLDOWN_TICKS = 10;
+
+	// Interfaces whose buttons never move the player or play an animation (see panelClick):
+	// the side panel tab buttons on each window layout, the minimap orbs, and the side
+	// panels that are only lists or toggles.
+	private static final Set<Integer> PANEL_INTERFACES = ImmutableSet.of(
+		InterfaceID.TOPLEVEL, InterfaceID.TOPLEVEL_OSRS_STRETCH, InterfaceID.TOPLEVEL_PRE_EOC,
+		InterfaceID.ORBS, InterfaceID.ORBS_NOMAP, InterfaceID.PRAYERBOOK, InterfaceID.QUICKPRAYER,
+		InterfaceID.CHATBOX, InterfaceID.SETTINGS_SIDE, InterfaceID.STATS, InterfaceID.QUESTLIST,
+		InterfaceID.SIDE_JOURNAL, InterfaceID.FRIENDS, InterfaceID.SIDE_CHANNELS,
+		InterfaceID.SIDE_CHANNELS_LARGE, InterfaceID.ACCOUNT, InterfaceID.MUSIC, InterfaceID.XP_DROPS);
+	private static final Set<String> GEAR_OPTIONS = ImmutableSet.of("Wield", "Wear", "Equip", "Remove", "Examine");
+	private static final Set<MenuAction> EXAMINE_ACTIONS = EnumSet.of(MenuAction.EXAMINE_OBJECT,
+		MenuAction.EXAMINE_NPC, MenuAction.EXAMINE_ITEM_GROUND, MenuAction.EXAMINE_WORLD_ENTITY);
 
 	// Track Agility XP for detecting gains
 	private int previousAgilityXp = -1;
@@ -276,10 +293,10 @@ public class AgilityModule extends AbstractTaskModule
 
 		// Cancel a pending traversal if the player clicks away before using the
 		// obstacle — a walk somewhere, an attack, or a different object. (Auto-walk
-		// to the clicked obstacle does NOT fire its own click, so any click here
-		// other than re-selecting the same obstacle means "I changed my mind".)
+		// to the clicked obstacle does NOT fire its own click.) Working the interface on
+		// the way there, like toggling run or switching tabs, doesn't change their mind.
 		boolean reSelectingPending = objectClick && objectId == pendingObjectId;
-		if (pendingObjectId > 0 && !reSelectingPending)
+		if (pendingObjectId > 0 && !reSelectingPending && !panelClick(event))
 		{
 			pendingObjectId = -1;
 			pendingTick = -1;
@@ -325,6 +342,34 @@ public class AgilityModule extends AbstractTaskModule
 		// tick, once any hit on us is known: the flinch from a chicken's peck isn't a fence
 		// jump either (Niddy).
 		animatedThisTick |= !(local.getInteracting() instanceof NPC);
+	}
+
+	/**
+	 * A click that only works the interface: a side panel tab, the run or prayer orb, a
+	 * prayer, putting gear on or taking it off, an examine, or "Cancel" on a right-click
+	 * menu. None of these moves the player or plays an animation, so the obstacle clicked
+	 * before it still counts. That matters most where the animation is the only proof, like a
+	 * grapple, which gives no XP (Eirund, Catherby cliff). Eating, drinking, teleports,
+	 * spells, emotes and the special attack orb all animate, so they still cancel it.
+	 */
+	private static boolean panelClick(MenuOptionClicked event)
+	{
+		MenuAction action = event.getMenuAction();
+		if (action == MenuAction.CANCEL || EXAMINE_ACTIONS.contains(action))
+		{
+			return true;
+		}
+		if (action != MenuAction.CC_OP && action != MenuAction.CC_OP_LOW_PRIORITY)
+		{
+			return false;
+		}
+		int widget = event.getParam1();
+		if (widget == InterfaceID.Orbs.SPECBUTTON || widget == InterfaceID.OrbsNomap.SPECBUTTON)
+		{
+			return false; // some specs fire straight from the orb (dragon battleaxe)
+		}
+		return PANEL_INTERFACES.contains(WidgetUtil.componentToInterface(widget))
+			|| GEAR_OPTIONS.contains(Text.removeTags(event.getMenuOption()));
 	}
 
 	/** Moving in a pose that isn't one of the player's own: balancing on a log or a rope. */
@@ -509,27 +554,8 @@ public class AgilityModule extends AbstractTaskModule
 			required = 1;
 		}
 
-		task.setCurrentProgress(newProgress);
-
-		sendTaskProgress(task, null, newProgress, required);
-
-		if (completionCallback != null)
+		if (credit(task, newProgress, required, null))
 		{
-			completionCallback.onProgressUpdated(task, newProgress);
-		}
-
-		// Check for completion
-		if (newProgress >= required && !task.isCompleted())
-		{
-			task.setCompleted(true);
-
-			sendTaskSuccess(task, null);
-
-			if (completionCallback != null)
-			{
-				completionCallback.onTaskCompleted(task, newProgress);
-			}
-
 			// Clean up — drop the per-task object IDs and rebuild the watched union so
 			// other tasks' lap-end objects keep firing but this task's no longer do.
 			activeTasks.remove(task);

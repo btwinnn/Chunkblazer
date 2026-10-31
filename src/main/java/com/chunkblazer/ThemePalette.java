@@ -32,10 +32,10 @@ import java.awt.image.BufferedImage;
 
 /**
  * The colours and materials of one {@link Theme}: what Skin paints windows, boxes, buttons
- * and bars with, the text colours the overlays use, and the side panel's (PanelStyle).
+ * and bars with, and the text colours the overlays use.
  * Old School's materials are the stone images in {@code ui/}; the other themes' are
- * small tiles made by the UI's Themes. Plain AWT only. ChunkBlazer itself only knows the
- * ChunkBlazer (original) palette; ChunkBlazer UI's Themes makes the rest and hands them to Skin.
+ * small tiles. Plain AWT only. ChunkBlazer itself only knows the
+ * ChunkBlazer (original) palette; ChunkBlazer UI draws its own themes.
  */
 public final class ThemePalette
 {
@@ -48,12 +48,9 @@ public final class ThemePalette
 	public BufferedImage tileDark;
 	/** Corner radius of windows and boxes (0: square). */
 	public int radius;
-	/** Outer and inner frame lines, and the frame's width in pixels. */
+	/** The frame line, and its width in pixels. */
 	public Color frameOuter;
-	public Color frameInner;
 	public int frameWidth = 1;
-	/** Gold corner flourishes (Royal) and a soft glow round the frame. */
-	public boolean flourishes;
 	public boolean glow;
 
 	// Buttons, bevels, grooves and fields.
@@ -76,14 +73,6 @@ public final class ThemePalette
 	public Color sidebar;
 	public Color itemSlot;
 	public Color rowAlt;
-
-	// The side panel.
-	public Color panelBg;
-	public Color panelSection;
-	public Color panelBorder;
-	public Color panelField;
-	public Color panelAccent;
-	public Color panelButton;
 
 	public ThemePalette(Theme theme)
 	{
@@ -114,62 +103,6 @@ public final class ThemePalette
 			p.sidebar = new Color(0, 0, 0, 40);
 			p.itemSlot = new Color(70, 60, 45);
 			p.rowAlt = new Color(255, 255, 255, 10);
-			// The side panel as it first was: RuneLite's own greys.
-			p.panelBg = new Color(40, 40, 40);
-			p.panelSection = new Color(30, 30, 30);
-			p.panelBorder = new Color(77, 77, 77);
-			p.panelField = new Color(30, 30, 30);
-			p.panelAccent = new Color(255, 152, 0);
-			p.panelButton = new Color(55, 55, 55);
-		return p;
-	}
-
-	/** The palette ChunkBlazer UI sent for its theme (see its ThemePalette.toMap). */
-	public static ThemePalette fromMap(java.util.Map<?, ?> m)
-	{
-		Theme theme;
-		try
-		{
-			theme = Theme.valueOf(String.valueOf(m.get("theme")));
-		}
-		catch (IllegalArgumentException e)
-		{
-			theme = Theme.ORIGINAL;
-		}
-		ThemePalette p = new ThemePalette(theme);
-		p.base = m.get("base") instanceof Color ? (Color) m.get("base") : null;
-		p.baseDark = m.get("baseDark") instanceof Color ? (Color) m.get("baseDark") : null;
-		p.tile = m.get("tile") instanceof BufferedImage ? (BufferedImage) m.get("tile") : null;
-		p.tileDark = m.get("tileDark") instanceof BufferedImage ? (BufferedImage) m.get("tileDark") : null;
-		p.radius = m.get("radius") instanceof Integer ? (Integer) m.get("radius") : p.radius;
-		p.frameOuter = m.get("frameOuter") instanceof Color ? (Color) m.get("frameOuter") : null;
-		p.frameInner = m.get("frameInner") instanceof Color ? (Color) m.get("frameInner") : null;
-		p.frameWidth = m.get("frameWidth") instanceof Integer ? (Integer) m.get("frameWidth") : p.frameWidth;
-		p.flourishes = m.get("flourishes") instanceof Boolean ? (Boolean) m.get("flourishes") : p.flourishes;
-		p.glow = m.get("glow") instanceof Boolean ? (Boolean) m.get("glow") : p.glow;
-		p.button = m.get("button") instanceof Color ? (Color) m.get("button") : null;
-		p.buttonActive = m.get("buttonActive") instanceof Color ? (Color) m.get("buttonActive") : null;
-		p.edge = m.get("edge") instanceof Color ? (Color) m.get("edge") : null;
-		p.bevelLight = m.get("bevelLight") instanceof Color ? (Color) m.get("bevelLight") : null;
-		p.bevelDark = m.get("bevelDark") instanceof Color ? (Color) m.get("bevelDark") : null;
-		p.dividerDark = m.get("dividerDark") instanceof Color ? (Color) m.get("dividerDark") : null;
-		p.dividerLight = m.get("dividerLight") instanceof Color ? (Color) m.get("dividerLight") : null;
-		p.field = m.get("field") instanceof Color ? (Color) m.get("field") : null;
-		p.barFill = m.get("barFill") instanceof Color ? (Color) m.get("barFill") : null;
-		p.title = m.get("title") instanceof Color ? (Color) m.get("title") : null;
-		p.subtext = m.get("subtext") instanceof Color ? (Color) m.get("subtext") : null;
-		p.label = m.get("label") instanceof Color ? (Color) m.get("label") : null;
-		p.dark = m.get("dark") instanceof Color ? (Color) m.get("dark") : null;
-		p.tracked = m.get("tracked") instanceof Color ? (Color) m.get("tracked") : null;
-		p.sidebar = m.get("sidebar") instanceof Color ? (Color) m.get("sidebar") : null;
-		p.itemSlot = m.get("itemSlot") instanceof Color ? (Color) m.get("itemSlot") : null;
-		p.rowAlt = m.get("rowAlt") instanceof Color ? (Color) m.get("rowAlt") : null;
-		p.panelBg = m.get("panelBg") instanceof Color ? (Color) m.get("panelBg") : null;
-		p.panelSection = m.get("panelSection") instanceof Color ? (Color) m.get("panelSection") : null;
-		p.panelBorder = m.get("panelBorder") instanceof Color ? (Color) m.get("panelBorder") : null;
-		p.panelField = m.get("panelField") instanceof Color ? (Color) m.get("panelField") : null;
-		p.panelAccent = m.get("panelAccent") instanceof Color ? (Color) m.get("panelAccent") : null;
-		p.panelButton = m.get("panelButton") instanceof Color ? (Color) m.get("panelButton") : null;
 		return p;
 	}
 }

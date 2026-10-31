@@ -56,6 +56,20 @@ public final class Skin
 	private static Paint STONE = OS_STONE;
 	private static Paint STONE_DARK = OS_STONE_DARK;
 	private static Color FIELD = new Color(30, 26, 21);
+	/** Antialiasing on; returns what it was, for {@link #restore}. */
+	public static Object smooth(Graphics2D g)
+	{
+		Object was = g.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		return was;
+	}
+
+	/** Antialiasing back to {@code was}, from {@link #smooth}. */
+	public static void restore(Graphics2D g, Object was)
+	{
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, was == null ? RenderingHints.VALUE_ANTIALIAS_DEFAULT : was);
+	}
+
 	public static Color FILL = new Color(66, 160, 70);
 	private static volatile ThemePalette palette = ThemePalette.original();
 
@@ -243,8 +257,7 @@ public final class Skin
 			return;
 		}
 		ThemePalette p = palette;
-		Object aa = g.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Object aa = smooth(g);
 		int rad = Math.min(p.radius, r.height / 2) * 2;
 		g.setColor(active ? p.buttonActive : p.button);
 		g.fillRoundRect(r.x, r.y, r.width, r.height, rad, rad);
@@ -253,7 +266,7 @@ public final class Skin
 			g.setColor(new Color(255, 255, 255, 26));
 			g.fillRoundRect(r.x, r.y, r.width, r.height, rad, rad);
 		}
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, aa == null ? RenderingHints.VALUE_ANTIALIAS_DEFAULT : aa);
+		restore(g, aa);
 		bevel(g, r, !active);
 		if (active && p.glow)
 		{

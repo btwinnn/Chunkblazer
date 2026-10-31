@@ -109,6 +109,7 @@ import com.chunkblazer.api.PlayerLoginResponse;
 import com.chunkblazer.api.PlayerSyncRequest;
 import com.chunkblazer.api.ServerBackoff;
 import com.chunkblazer.modules.TaskModuleManager;
+import com.chunkblazer.modules.VarbitCheckModule;
 
 @Slf4j
 @PluginDescriptor(
@@ -125,7 +126,7 @@ public class ChunkBlazerPlugin extends Plugin
 {
 	// Shown on the Plugin Hub (runelite-plugin.properties) and sent to the server.
 	// Bump it there and in build.gradle too; PluginVersionTest catches a mismatch.
-	public static final String VERSION = "1.0.8";
+	public static final String VERSION = "1.0.10";
 
 	// --- Injected Dependencies ---
 	@Inject
@@ -192,6 +193,9 @@ public class ChunkBlazerPlugin extends Plugin
 	private CompanionPrompt companionPrompt;
 
 	@Inject
+	private RegionLockerSync regionLockerSync;
+
+	@Inject
 	private ChunkBlazerInput inputListener;
 
 	// ChunkBlazer UI (the task window, animated cards, tutorial...), or CoreOnlyUi without it.
@@ -233,6 +237,10 @@ public class ChunkBlazerPlugin extends Plugin
 	// to the client thread, so without this a burst of reloads queues a pile of
 	// overlapping backfills.
 	private volatile boolean questBackfillInFlight;
+	// The first backfill this login has run: what finishes after it was done during play.
+	private volatile boolean globalsSettled;
+	// ChunkBlazer UI's theme plays its own completion sound in place of the area jingle.
+	volatile boolean uiCompletionSound;
 
 	private final List<NuzlockeChunk> allChunks = new ArrayList<>();
 	private final Map<Integer, NuzlockeChunk> chunksByRegionId = new HashMap<>();
@@ -313,6 +321,7 @@ public class ChunkBlazerPlugin extends Plugin
 	{
 		migrateSceneChunkBorders();
 		companionPrompt.start();
+		regionLockerSync.start();
 		// @Singleton survives disable/enable.
 		serverBackoff.reset();
 		syncRejectedKey = null;
@@ -472,6 +481,7 @@ public class ChunkBlazerPlugin extends Plugin
 	protected void shutDown()
 	{
 		companionPrompt.stop();
+		regionLockerSync.stop();
 		if (syncFuture != null)
 		{
 			syncFuture.cancel(false);
@@ -763,6 +773,7 @@ public class ChunkBlazerPlugin extends Plugin
 		if (event.getGameState() == GameState.HOPPING || event.getGameState() == GameState.LOGIN_SCREEN)
 		{
 			bossEngagement.reset();
+			globalsSettled = false;
 		}
 		if (event.getGameState() == GameState.LOGGED_IN)
 		{
@@ -1819,9 +1830,9 @@ public class ChunkBlazerPlugin extends Plugin
 		globalTasks.clear();
 
 		// Quest_Tasks = the quest pool; Progression_Tasks = the per-skill level
-		// ladder. Both are region-independent and both land in globalTasks; the
-		// only thing that distinguishes them downstream is completion_type.
-		for (String file : new String[]{ "Quest_Tasks.json", "Progression_Tasks.json" })
+		// ladder; Diary_Tasks = the achievement diaries. All are region-independent
+		// and land in globalTasks; only completion_type tells them apart downstream.
+		for (String file : new String[]{ "Quest_Tasks.json", "Progression_Tasks.json", "Diary_Tasks.json" })
 		{
 			loadGlobalTaskFile(file);
 		}
@@ -1991,14 +2002,24 @@ public class ChunkBlazerPlugin extends Plugin
 			task.setCurrentProgress(0);
 			task.setCompleted(false);
 
-			// Already-satisfied global tasks settle in one batch. For quests that
-			// means "finished before we looked"; for Progression it means a rung
-			// ABOVE the baseline that was crossed while the plugin was off — real
+			// Already-satisfied global tasks settle in one batch. For quests and
+			// diaries that means "finished before we looked"; for Progression it means
+			// a rung ABOVE the baseline that was crossed while the plugin was off — real
 			// forward progress we simply didn't witness, so it still pays.
-			if (isQuestFinished(task) || isProgressionRungReached(task))
+			if (isQuestFinished(task) || isProgressionRungReached(task) || VarbitCheckModule.isSatisfied(client, task))
 			{
 				task.setCurrentProgress(1);
 				task.setCompleted(true);
+				if (globalsSettled)
+				{
+					// Finished during play (a reload got here before the quest sweep did): it
+					// gets its popup like any other completion, not the silent backfill.
+					synchronized (pendingCompletions)
+					{
+						pendingCompletions.add(task);
+					}
+					continue;
+				}
 				backfilled.add(task);
 				backfilledPoints += task.getBasePoints();
 				continue;
@@ -2006,6 +2027,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 			taskModuleManager.registerActiveTask(task);
 		}
+		globalsSettled = true;
 
 		if (backfilled.isEmpty())
 		{
@@ -5079,18 +5101,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			if (!java.util.Objects.equals(raw, unlockedViewRaw))
 			{
-				Set<String> parsed = new HashSet<>();
-				if (raw != null)
-				{
-					for (String s : raw.split(","))
-					{
-						if (!s.trim().isEmpty())
-						{
-							parsed.add(s.trim());
-						}
-					}
-				}
-				unlockedView = Collections.unmodifiableSet(parsed);
+				unlockedView = Collections.unmodifiableSet(csvSet(raw));
 				unlockedViewRaw = raw;
 			}
 			return unlockedView;
@@ -5145,7 +5156,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	/**
 	 * Load and activate all rolled tasks for unlocked regions.
-	 * All 5 rolled tasks per region are active simultaneously.
+	 * Every rolled task per region is active simultaneously.
 	 */
 	private void loadActiveTasks()
 	{
@@ -5279,21 +5290,7 @@ public class ChunkBlazerPlugin extends Plugin
 		// runs its own completed-check.
 		if (!settledIds.isEmpty())
 		{
-			LinkedHashSet<String> merged = new LinkedHashSet<>();
-			String existing = acStr("completedTasks", "");
-			if (existing != null && !existing.isEmpty())
-			{
-				for (String s : existing.split(","))
-				{
-					String t = s.trim();
-					if (!t.isEmpty())
-					{
-						merged.add(t);
-					}
-				}
-			}
-			merged.addAll(settledIds);
-			setAccountState("completedTasks", String.join(",", merged));
+			markTasksCompleted(settledIds);
 			addPoints(settledPoints);
 		}
 
@@ -5497,11 +5494,12 @@ public class ChunkBlazerPlugin extends Plugin
 
 	// --- Rolled Tasks Management ---
 
-	private static final int MIN_TASKS_PER_REGION = 4;
-	private static final int MAX_TASKS_PER_REGION = 5;
+	// A chunk deals this many tasks when it's unlocked. The curve is sized against it
+	// (dealPerChunk in the server's economy_test.go mirrors it).
+	static final int TASKS_PER_CHUNK = 5;
 
 	/**
-	 * Roll 4-5 random tasks for a region using weighted selection.
+	 * Roll TASKS_PER_CHUNK random tasks for a region using weighted selection.
 	 * Tasks are globally unique - once a task is assigned anywhere, it cannot be rolled again.
 	 */
 	private Set<String> rollTasksForRegion(int regionId)
@@ -5516,7 +5514,7 @@ public class ChunkBlazerPlugin extends Plugin
 
 	/**
 	 * Roll tasks for a region. When {@code rollAll} is true (boss chunks), EVERY
-	 * eligible task is granted — no weighted 4-5 subset — and the tasks are made
+	 * eligible task is granted — no weighted subset — and the tasks are made
 	 * active immediately instead of being parked behind reveal cards, so a boss
 	 * chunk hands the player its whole task list at once.
 	 *
@@ -5606,9 +5604,8 @@ public class ChunkBlazerPlugin extends Plugin
 			return rolledIds;
 		}
 
-		// Determine how many tasks to roll (4-5, or all if fewer available)
-		int numToRoll = MIN_TASKS_PER_REGION + random.nextInt(MAX_TASKS_PER_REGION - MIN_TASKS_PER_REGION + 1);
-		numToRoll = Math.min(numToRoll, availableTasks.size());
+		// Deal TASKS_PER_CHUNK, or all if fewer are available
+		int numToRoll = Math.min(TASKS_PER_CHUNK, availableTasks.size());
 
 		// Use weighted random selection based on assignment_weight
 		List<NuzlockeTask> remainingTasks = new ArrayList<>(availableTasks);
@@ -5738,6 +5735,24 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 	}
 
+	/** A comma-separated list as an ordered set (trimmed, blanks and repeats dropped). */
+	private static Set<String> csvSet(String csv)
+	{
+		Set<String> out = new LinkedHashSet<>();
+		if (csv == null)
+		{
+			return out;
+		}
+		for (String id : csv.split(","))
+		{
+			if (!id.trim().isEmpty())
+			{
+				out.add(id.trim());
+			}
+		}
+		return out;
+	}
+
 	private NuzlockeTask selectWeightedRandom(List<NuzlockeTask> tasks)
 	{
 		if (tasks.isEmpty())
@@ -5811,21 +5826,7 @@ public class ChunkBlazerPlugin extends Plugin
 	/** This account's own pending cards, never the tutorial's practice ones. */
 	private List<String> storedUnrevealedTaskIds()
 	{
-		String data = acStr("unrevealedTasks", "");
-		if (data == null || data.isEmpty())
-		{
-			return new ArrayList<>();
-		}
-		List<String> ids = new ArrayList<>();
-		for (String id : data.split(","))
-		{
-			String trimmed = id.trim();
-			if (!trimmed.isEmpty() && !ids.contains(trimmed))
-			{
-				ids.add(trimmed);
-			}
-		}
-		return ids;
+		return new ArrayList<>(csvSet(acStr("unrevealedTasks", "")));
 	}
 
 	/**
@@ -5874,47 +5875,51 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		setAccountState("unrevealedTasks", String.join(",", pending));
 
-		// Incremental activation via the O(1) index. A card flip must NOT re-run a
-		// full loadActiveTasks: that clears and re-registers EVERY active task with
-		// its module and (through saveActiveTasks) rewrites the whole progress blob
-		// once per active task — a 30-card boss pack would do all that 30 times.
-		// Instead bring in just this one task exactly the way loadActiveTasks would:
-		// look it up in the index, initialize it, then either settle an already-
-		// satisfied one through the batched path or add it active and register it
-		// (registerActiveTask runs the module's retroactive check). Same indexing and
-		// retroactive behaviour as a normal roll, at O(1) per flip.
+		// Incremental activation via the O(1) index (see activateTask): a 30-card boss
+		// pack must not re-run a full loadActiveTasks 30 times.
 		// A card whose task left the roll (replaced by the server's) just goes away.
 		NuzlockeTask task = findTaskById(taskId);
 		boolean rolled = !keepRolledCards(taskId, parseRollBlob(acStr("regionRolledTasks", ""))).isEmpty();
 		if (task != null && rolled && !task.isLocked()
 			&& !getCompletedTaskIds().contains(taskId) && !isTaskActive(taskId))
 		{
-			initializeTask(task);
-			if (task.getCurrentProgress() >= task.getTargetQuantity())
-			{
-				// Already satisfied when granted — settle through the batched flush
-				// like every other completion (never the per-task freeze path).
-				synchronized (pendingCompletions)
-				{
-					pendingCompletions.add(task);
-				}
-			}
-			else
-			{
-				activeTasks.add(task);
-				if (activeTask == null)
-				{
-					activeTask = task;
-				}
-				taskModuleManager.registerActiveTask(task);
-				saveTaskProgress(taskId, task.getCurrentProgress(), task.getTargetQuantity());
-			}
+			activateTask(task);
 		}
 
 		if (panel != null)
 		{
 			panel.updatePanel();
 		}
+	}
+
+	/**
+	 * Bring one rolled task into play without a full loadActiveTasks, which clears and
+	 * re-registers EVERY active task with its module and (through saveActiveTasks)
+	 * rewrites the whole progress blob once per active task. Bring in just this one task
+	 * exactly the way loadActiveTasks would: initialize it, then either settle an
+	 * already-satisfied one through the batched path or add it active and register it
+	 * (registerActiveTask runs the module's retroactive check).
+	 */
+	private void activateTask(NuzlockeTask task)
+	{
+		initializeTask(task);
+		if (task.getCurrentProgress() >= task.getTargetQuantity())
+		{
+			// Already satisfied when granted — settle through the batched flush
+			// like every other completion (never the per-task freeze path).
+			synchronized (pendingCompletions)
+			{
+				pendingCompletions.add(task);
+			}
+			return;
+		}
+		activeTasks.add(task);
+		if (activeTask == null)
+		{
+			activeTask = task;
+		}
+		taskModuleManager.registerActiveTask(task);
+		saveTaskProgress(task.getTaskId(), task.getCurrentProgress(), task.getTargetQuantity());
 	}
 
 	/** True if a task with this id is already in the active list. */
@@ -6042,109 +6047,21 @@ public class ChunkBlazerPlugin extends Plugin
 
 	public Set<String> getRolledTasksForRegion(int regionId)
 	{
-		String data = acStr("regionRolledTasks", "");
-		if (data == null || data.isEmpty())
-		{
-			return new HashSet<>();
-		}
-
-		// Format: "regionId:task1,task2,task3|regionId2:task4,task5"
-		for (String regionEntry : data.split("\\|"))
-		{
-			if (regionEntry.isEmpty()) continue;
-
-			String[] parts = regionEntry.split(":");
-			if (parts.length == 2)
-			{
-				try
-				{
-					int entryRegionId = Integer.parseInt(parts[0]);
-					if (entryRegionId == regionId)
-					{
-						Set<String> taskIds = new HashSet<>();
-						for (String taskId : parts[1].split(","))
-						{
-							if (!taskId.isEmpty())
-							{
-								taskIds.add(taskId);
-							}
-						}
-						return taskIds;
-					}
-				}
-				catch (NumberFormatException e)
-				{
-					log.warn("Invalid region ID in rolled tasks: {}", parts[0]);
-				}
-			}
-		}
-
-		return new HashSet<>();
+		return csvSet(parseRollBlob(acStr("regionRolledTasks", "")).get(String.valueOf(regionId)));
 	}
 
 	private void saveRolledTasksForRegion(int regionId, Set<String> taskIds)
 	{
-		String data = acStr("regionRolledTasks", "");
-		Map<Integer, Set<String>> regionTasks = new HashMap<>();
-
-		// Parse existing data
-		if (data != null && !data.isEmpty())
-		{
-			for (String regionEntry : data.split("\\|"))
-			{
-				if (regionEntry.isEmpty()) continue;
-
-				String[] parts = regionEntry.split(":");
-				if (parts.length == 2)
-				{
-					try
-					{
-						int entryRegionId = Integer.parseInt(parts[0]);
-						Set<String> existingTasks = new HashSet<>();
-						for (String taskId : parts[1].split(","))
-						{
-							if (!taskId.isEmpty())
-							{
-								existingTasks.add(taskId);
-							}
-						}
-						regionTasks.put(entryRegionId, existingTasks);
-					}
-					catch (NumberFormatException e)
-					{
-						// Skip invalid entries
-					}
-				}
-			}
-		}
-
-		// Update with new data
-		regionTasks.put(regionId, taskIds);
-
-		// Serialize back
-		StringBuilder sb = new StringBuilder();
-		for (Map.Entry<Integer, Set<String>> entry : regionTasks.entrySet())
-		{
-			if (sb.length() > 0) sb.append('|');
-			sb.append(entry.getKey()).append(':').append(String.join(",", entry.getValue()));
-		}
-
-		setAccountState("regionRolledTasks", sb.toString());
+		Map<String, String> roll = parseRollBlob(acStr("regionRolledTasks", ""));
+		roll.put(String.valueOf(regionId), String.join(",", taskIds));
+		setAccountState("regionRolledTasks", serializeRollBlob(roll));
 	}
 
 	// --- Assigned Tasks Management ---
 
 	private Set<String> getAssignedTaskIds()
 	{
-		String assigned = acStr("assignedTasks", "");
-		if (assigned == null || assigned.isEmpty())
-		{
-			return new HashSet<>();
-		}
-		return Arrays.stream(assigned.split(","))
-			.map(String::trim)
-			.filter(s -> !s.isEmpty())
-			.collect(Collectors.toSet());
+		return csvSet(acStr("assignedTasks", ""));
 	}
 
 
@@ -6192,7 +6109,7 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		// One sound for the whole batch — N clips at once on a login storm is both a
 		// cacophony and needless load.
-		if (config.playTaskCompletionSound() && soundManager != null)
+		if (config.playTaskCompletionSound() && soundManager != null && !uiCompletionSound)
 		{
 			playAreaSoundAsync(getTaskArea(batch.get(0)));
 		}
@@ -6278,22 +6195,9 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void markTasksCompleted(Collection<String> taskIds)
 	{
-		if (taskIds == null || taskIds.isEmpty())
-		{
-			return;
-		}
-
-		String completed = acStr("completedTasks", "");
-		StringBuilder sb = new StringBuilder(completed == null ? "" : completed);
-		for (String taskId : taskIds)
-		{
-			if (sb.length() > 0)
-			{
-				sb.append(',');
-			}
-			sb.append(taskId);
-		}
-		setAccountState("completedTasks", sb.toString());
+		Set<String> completed = getCompletedTaskIds();
+		completed.addAll(taskIds);
+		setAccountState("completedTasks", String.join(",", completed));
 	}
 
 
@@ -6309,33 +6213,13 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private Set<String> getCompletedTaskIds()
 	{
-		String completed = acStr("completedTasks", "");
-		if (completed == null || completed.isEmpty())
-		{
-			return new HashSet<>();
-		}
-		return Arrays.stream(completed.split(","))
-			.map(String::trim)
-			.filter(s -> !s.isEmpty())
-			.collect(Collectors.toSet());
+		return csvSet(acStr("completedTasks", ""));
 	}
 
 	/** Completed task IDs in the order they were completed (the stored CSV order), deduplicated. */
 	private List<String> getCompletedTaskIdsOrdered()
 	{
-		String completed = acStr("completedTasks", "");
-		Set<String> ordered = new LinkedHashSet<>();
-		if (completed != null)
-		{
-			for (String id : completed.split(","))
-			{
-				if (!id.trim().isEmpty())
-				{
-					ordered.add(id.trim());
-				}
-			}
-		}
-		return new ArrayList<>(ordered);
+		return new ArrayList<>(getCompletedTaskIds());
 	}
 
 	/**
@@ -6950,19 +6834,23 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		// The chunks a player owns ARE the spend ledger. Under the scaling curve the
-		// k-th paid unlock cost curveUnlockCost(k), so the true spend for n paid chunks
-		// is the running sum. countPayableUnlockedChunks() already excludes the granted
-		// starting chunk and every 0-cost (free/charter/boss) chunk. For accounts
-		// grandfathered off the old flat-1 economy this sum errs HIGH (they paid less),
-		// which only makes this lower-only repair more conservative: it never lowers
-		// spent below what a curve player would legitimately owe.
+		// k-th paid unlock cost at most legacyCurveLedgerTotal's k-th step (the first
+		// curve, which every later price is at or under), so the most anyone can have
+		// paid for n paid chunks is that running sum. Using the legacy curve, not the
+		// current one, is what makes the 2026-10 price cut no-refund: a player who paid
+		// the old prices is never "repaired" down to the new ones.
+		// countPayableUnlockedChunks() already excludes the granted starting chunk and
+		// every 0-cost (free/charter/boss) chunk. For accounts grandfathered off the old
+		// flat-1 economy this sum errs HIGH (they paid less), which only makes this
+		// lower-only repair more conservative: it never lowers spent below what a curve
+		// player would legitimately owe.
 		//
 		// The ledger, NOT lifetime earned, is the ceiling. A spend counter can be
 		// corrupt while still sitting below earned: Bobby Blazer carried spent 22 with
 		// earned 23, yet the chunks he owns could only ever have cost 3. Gating on
 		// "spent > earned" let that through and left his balance stuck at 1. The
 		// comparison that matters is spent vs the ledger the owned chunks imply.
-		int ledger = curveLedgerTotal(countPayableUnlockedChunks());
+		int ledger = legacyCurveLedgerTotal(countPayableUnlockedChunks());
 		if (ledger >= spent)
 		{
 			return;
@@ -7409,29 +7297,34 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	// ── Chunk unlock cost curve ─────────────────────────────────────────────
-	// The r-th PAID chunk unlock costs 1 + CURVE_B * r^CURVE_GAMMA, rounded to a
-	// whole number (never below 1). Calibrated 2026-09 against the live catalog
-	// (388 payable chunks, a 9,096-point pool) so that unlocking the entire map
-	// costs about 80% of every point available. Price rises with how many paid
-	// chunks the account already owns, so the early game stays cheap and the
-	// endgame asks for most of a player's tasks. r is the account's current paid
-	// chunk count + 1, which means chunks already unlocked are GRANDFATHERED
-	// (pointsSpent is a stored, monotonic counter and is never recomputed here) and
-	// only new unlocks follow the curve. Re-derive CURVE_B deliberately if the
-	// catalog grows a lot; do not nudge it casually, because it reprices every
-	// player's next unlock.
-	static final double CURVE_B = 0.0913;
-	static final double CURVE_GAMMA = 1.0;
+	// The r-th PAID chunk unlock costs 1 + CURVE_B * r up to CURVE_KNEE, then climbs
+	// faster at CURVE_LATE_B, rounded to a whole number (never below 1). Up to the knee
+	// (half of the 384 payable chunks; the furthest players were at 45% when 1.0.10
+	// shipped) every price is exactly 1.0.9's, so no current player feels the change;
+	// after it the price reaches 31 at the last chunk. The whole map then costs about
+	// 80% of every point the game deals: every chunk's TASKS_PER_CHUNK unlock deal,
+	// every task in the boss chunks (bought with Boss Tokens, they grant all their
+	// tasks), and the quest, progression and diary pools. So the endgame needs boss
+	// points: a player who never bosses tops out around 93% of the map. r is the
+	// account's current paid chunk count + 1, which means chunks already unlocked are
+	// GRANDFATHERED (pointsSpent is a stored, monotonic counter and is never recomputed
+	// here) and only new unlocks follow the curve. UnlockCostCurveTest checks the share
+	// against the shipped catalog. The server's spend floor (spendfloor.go) and the
+	// website's route planner (route.js) have their own copies: change them together.
+	// Do not nudge it casually, because it reprices every player's next unlock.
+	static final double CURVE_B = 0.059;
+	static final int CURVE_KNEE = 192;
+	static final double CURVE_LATE_B = 0.0998;
+	// The first curve (2026-09). It was sized against every task in a chunk while a
+	// chunk only dealt 4 or 5, so the whole map was out of reach. Chunks bought on it
+	// keep the price paid (no refund): the spend repair's ceiling is its ledger.
+	static final double LEGACY_CURVE_B = 0.0913;
 
 	/** Points cost of the r-th paid chunk unlock (r &gt;= 1). Whole number, minimum 1. */
 	public static int curveUnlockCost(int rank)
 	{
-		if (rank < 1)
-		{
-			rank = 1;
-		}
-		double c = 1.0 + CURVE_B * Math.pow(rank, CURVE_GAMMA);
-		return (int) Math.max(1L, Math.round(c));
+		int r = Math.max(rank, 1);
+		return price(CURVE_B * Math.min(r, CURVE_KNEE) + CURVE_LATE_B * Math.max(0, r - CURVE_KNEE));
 	}
 
 	/** Sum of curveUnlockCost(1..n): the total paid to own n paid chunks under the curve. */
@@ -7443,6 +7336,22 @@ public class ChunkBlazerPlugin extends Plugin
 			total += curveUnlockCost(k);
 		}
 		return total;
+	}
+
+	/** The total n paid chunks cost on the legacy curve: the most anyone can have paid for them. */
+	public static int legacyCurveLedgerTotal(int n)
+	{
+		int total = 0;
+		for (int k = 1; k <= n; k++)
+		{
+			total += price(LEGACY_CURVE_B * k);
+		}
+		return total;
+	}
+
+	private static int price(double climb)
+	{
+		return (int) Math.max(1L, Math.round(1.0 + climb));
 	}
 
 	/**
@@ -7678,7 +7587,7 @@ public class ChunkBlazerPlugin extends Plugin
 	/** The task complete sound for the chunk you're in, as a real completion would play it (the popup's Test). */
 	void playTaskCompleteSound()
 	{
-		if (!config.playTaskCompletionSound() || soundManager == null)
+		if (!config.playTaskCompletionSound() || soundManager == null || uiCompletionSound)
 		{
 			return;
 		}
@@ -7695,7 +7604,7 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void playRegionUnlockJingle(int regionId)
 	{
-		if (!config.playRegionUnlockSound())
+		if (!config.playRegionUnlockSound() || gpuPlaysUnlockSound())
 		{
 			return;
 		}
@@ -7714,6 +7623,17 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 		playAreaSoundAsync(area);
+	}
+
+	/**
+	 * ChunkBlazer GPU plays its own sound with its unlock sweep (on, with its sweep and sound
+	 * on): the area jingle stays quiet so it can be heard. RuneLite keeps plugins' on/off under "runelite".
+	 */
+	private boolean gpuPlaysUnlockSound()
+	{
+		return Boolean.parseBoolean(configManager.getConfiguration("runelite", "chunkblazergpu"))
+			&& !"false".equals(configManager.getConfiguration("chunkblazergpu", "gpuUnlockSweep"))
+			&& !"false".equals(configManager.getConfiguration("chunkblazergpu", "gpuSweepSound"));
 	}
 
 	/**

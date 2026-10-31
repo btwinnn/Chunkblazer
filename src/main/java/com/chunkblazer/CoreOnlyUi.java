@@ -49,8 +49,6 @@ public class CoreOnlyUi implements ChunkBlazerUi
 	@Inject
 	private TaskCompletionAnimationOverlay completion;
 	@Inject
-	private UiInstallPrompt installPrompt;
-	@Inject
 	private TaskLists lists;
 	@Inject
 	private ChunkBlazerPlugin plugin;
@@ -79,6 +77,8 @@ public class CoreOnlyUi implements ChunkBlazerUi
 	public void startUp()
 	{
 		// ChunkBlazer's own look, the side panel included (also when ChunkBlazer UI is switched off).
+		SidePaint.painter = null;
+		plugin.uiCompletionSound = false;
 		Skin.setPalette(ThemePalette.original());
 		ChunkBlazerPanel panel = plugin.getPanel();
 		if (panel != null)
@@ -121,11 +121,11 @@ public class CoreOnlyUi implements ChunkBlazerUi
 	{
 	}
 
-	/** No task window: offer ChunkBlazer UI instead. */
+	/** No task window: the add-ons box, to turn on or install ChunkBlazer UI. */
 	@Override
 	public void toggleWindow()
 	{
-		installPrompt.show();
+		companions.open();
 	}
 
 	@Override

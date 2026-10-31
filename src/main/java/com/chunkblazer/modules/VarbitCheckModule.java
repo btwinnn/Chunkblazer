@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Client;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.eventbus.Subscribe;
@@ -306,6 +307,24 @@ public class VarbitCheckModule extends AbstractTaskModule
 				}
 			}
 		}
+	}
+
+	/**
+	 * Whether a VARBIT_CHECK task's varbit already holds its target, by the same test as
+	 * checkTaskCompletion. The global backfill uses it to settle achievement diaries done
+	 * before ChunkBlazer in one silent batch. Client thread only.
+	 */
+	public static boolean isSatisfied(Client client, NuzlockeTask task)
+	{
+		TaskConstraints c = task.getConstraints();
+		if (!VARBIT_TYPE.equalsIgnoreCase(task.getCompletionType()) || c == null || c.getVarbitId() == null || c.getVarbitId() <= 0)
+		{
+			return false;
+		}
+		Integer bit = c.getVarbitBit() != null ? c.getVarbitBit() : task.getVarbitBit();
+		Integer want = c.getVarbitBoolean() != null ? c.getVarbitBoolean() : task.getVarbitBoolean();
+		int value = client.getVarbitValue(c.getVarbitId());
+		return bit != null && bit >= 0 ? (value & (1 << bit)) != 0 : value == (want != null ? want : 1);
 	}
 
 	private void checkTaskCompletion(NuzlockeTask task)

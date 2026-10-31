@@ -307,7 +307,7 @@ public class SimpleCardOverlay extends Overlay implements TaskCardShow
 	{
 		BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = img.createGraphics();
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Skin.smooth(g);
 		CardArt.paint(g, new Rectangle(0, 0, w, h), tier, face, name);
 		g.dispose();
 		return img;
