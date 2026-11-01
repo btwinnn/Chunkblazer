@@ -346,8 +346,8 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		// Task catalog: load synchronously (disk cache → bundled gzipped seed)
-		// BEFORE the loaders below read it, then refresh from the server async for
-		// next launch. Falls back to bundled raw JSON if the store has nothing.
+		// BEFORE the loaders below read it. Falls back to bundled raw JSON if the
+		// store has nothing.
 		if (catalogStore != null)
 		{
 			catalogStore.init(pluginDir);
@@ -356,6 +356,8 @@ public class ChunkBlazerPlugin extends Plugin
 		// Load task data — sourced from the catalog store (server/cache/seed),
 		// with a bundled-resource fallback during the migration transition.
 		loadChunkData();
+		// Then ask the server for anything newer; it applies at the login screen.
+		checkCatalog();
 
 		// The starting-chunk bootstrap deliberately does NOT run here.
 		//
@@ -768,6 +770,9 @@ public class ChunkBlazerPlugin extends Plugin
 			panel.hideVerificationPrompt();
 			// After the logout sync above has been built from the old task data.
 			reloadCatalogIfNewer();
+			// And check the server again, so a fix deployed since launch arrives with
+			// this relog instead of waiting for a RuneLite restart.
+			checkCatalog();
 			// Refresh the side panel into its logged-out state (gates the
 			// gameplay sections behind being in-game).
 			panel.updatePanel();
@@ -1452,6 +1457,28 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		loadChunkData();
 		return true;
+	}
+
+	/** Check the server for a newer task catalog in the background; see applyCatalogIfLoggedOut(). */
+	private void checkCatalog()
+	{
+		if (catalogStore != null)
+		{
+			catalogStore.refresh(() -> clientThread.invokeLater(this::applyCatalogIfLoggedOut));
+		}
+	}
+
+	/**
+	 * Apply a catalog the background check just downloaded, if nobody is logged in.
+	 * A check that finishes after the player is back in game waits for the next
+	 * logout, so the task data is never swapped mid-session.
+	 */
+	void applyCatalogIfLoggedOut()
+	{
+		if (client.getGameState() == GameState.LOGIN_SCREEN)
+		{
+			reloadCatalogIfNewer();
+		}
 	}
 
 	private void loadChunkData()

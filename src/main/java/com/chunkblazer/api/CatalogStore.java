@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import javax.inject.Inject;
@@ -63,10 +64,10 @@ import okhttp3.ResponseBody;
  * <ol>
  *   <li><b>The cache/seed load is SYNCHRONOUS.</b> {@link #init(Filepath)} must populate
  *       the in-memory catalog before {@code loadChunkData()} runs, so it loads
- *       from disk cache (or the bundled gzipped seed) on the calling thread, then
- *       schedules only the network refresh in the background. The running session
- *       uses whatever loaded at startup; a newer server catalog applies on the
- *       NEXT launch (no mid-session task reload = zero risk to a live game).</li>
+ *       from disk cache (or the bundled gzipped seed) on the calling thread. The
+ *       network check runs in the background via {@link #refresh(Runnable)}. A newer
+ *       server catalog applies at the next login screen, never mid-session (no
+ *       mid-session task reload = zero risk to a live game).</li>
  *   <li><b>Completeness check.</b> A server response is accepted only if it
  *       contains every file the current floor (cache/seed) has and no empty
  *       values — see {@link #isComplete}. This is the guard against a partial
@@ -147,9 +148,9 @@ public class CatalogStore
 
 	/**
 	 * SYNCHRONOUS load order cache → bundled seed, so the task loaders can read
-	 * the catalog immediately, then an async server refresh for next launch. MUST
-	 * be called before {@code loadChunkData()}/{@code loadGlobalTasks()}/
-	 * {@code loadFreeChunks()}.
+	 * the catalog immediately. MUST be called before {@code loadChunkData()}/
+	 * {@code loadGlobalTasks()}/{@code loadFreeChunks()}, and before
+	 * {@link #refresh(Runnable)}.
 	 *
 	 * @param pluginDir the plugin's sandboxed data directory (from
 	 *                  {@code getPluginDirectory()}), or null to run cache-less
@@ -223,10 +224,35 @@ public class CatalogStore
 			// is why the seed must always ship.
 			log.error("Task catalog: no cache and no seed available");
 		}
+	}
 
-		// Async refresh. Never blocks startup and never re-parses the running task
-		// set itself; the plugin picks up a newer catalog at the login screen.
-		refreshExecutor.execute(this::refreshCatalog);
+	/**
+	 * Check the server for a newer catalog in the background, then run
+	 * {@code whenChecked} on the refresh thread, whatever the outcome. An unchanged
+	 * catalog costs one 304. Never re-parses the running task set itself: the plugin
+	 * calls this at launch and at every login screen, and applies a newer catalog
+	 * only while nobody is logged in. Checking at the login screen too is what lets
+	 * a fix deployed while the client is open arrive with a relog, not a restart.
+	 */
+	public void refresh(Runnable whenChecked)
+	{
+		ExecutorService executor = refreshExecutor;
+		if (executor == null || executor.isShutdown())
+		{
+			return;
+		}
+		try
+		{
+			executor.execute(() ->
+			{
+				refreshCatalog();
+				whenChecked.run();
+			});
+		}
+		catch (RejectedExecutionException e)
+		{
+			// The plugin is shutting down; the next startup checks again.
+		}
 	}
 
 	/**

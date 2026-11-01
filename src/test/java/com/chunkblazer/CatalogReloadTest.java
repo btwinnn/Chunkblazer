@@ -37,6 +37,8 @@ import com.chunkblazer.api.CatalogStore;
 import com.google.gson.Gson;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import net.runelite.api.Client;
+import net.runelite.api.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,6 +52,9 @@ class CatalogReloadTest
 	@Mock
 	private CatalogStore catalogStore;
 
+	@Mock
+	private Client client;
+
 	private ChunkBlazerPlugin plugin;
 
 	@BeforeEach
@@ -57,6 +62,7 @@ class CatalogReloadTest
 	{
 		plugin = new ChunkBlazerPlugin();
 		set("catalogStore", catalogStore);
+		set("client", client);
 		set("gson", new Gson());
 		lenient().when(catalogStore.getFileContent(anyString())).thenReturn(null);
 	}
@@ -79,6 +85,33 @@ class CatalogReloadTest
 		serve(5, "completed tombs of amascut");
 		loadChunkData();
 		assertFalse(plugin.reloadCatalogIfNewer());
+	}
+
+	/** A catalog the logout check downloads applies while the player is still on the login screen. */
+	@Test
+	void appliesLoggedOut() throws Exception
+	{
+		serve(1, "count is");
+		loadChunkData();
+
+		serve(2, "completed tombs of amascut");
+		when(client.getGameState()).thenReturn(GameState.LOGIN_SCREEN);
+		plugin.applyCatalogIfLoggedOut();
+		assertEquals("completed tombs of amascut", trigger());
+	}
+
+	/** One that lands after the player is back in game waits for the next logout. */
+	@Test
+	void waitsLoggedIn() throws Exception
+	{
+		serve(1, "count is");
+		loadChunkData();
+
+		when(catalogStore.getCatalogVersion()).thenReturn(2L);
+		when(client.getGameState()).thenReturn(GameState.LOGGED_IN);
+		plugin.applyCatalogIfLoggedOut();
+		assertEquals("count is", trigger());
+		assertTrue(plugin.reloadCatalogIfNewer(), "the newer catalog is still waiting");
 	}
 
 	private void serve(long version, String completeMessage)
