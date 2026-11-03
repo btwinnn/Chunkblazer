@@ -400,7 +400,11 @@ public class TaskBrowserOverlay extends Overlay
 			{
 				return event;
 			}
-			if (event.getButton() == MouseEvent.BUTTON1 && titleHovered)
+			if (event.getButton() == MouseEvent.BUTTON1 && startScrollDrag(event))
+			{
+				// Dragging a scrollbar.
+			}
+			else if (event.getButton() == MouseEvent.BUTTON1 && titleHovered)
 			{
 				pressX = event.getX();
 				pressY = event.getY();
@@ -425,6 +429,12 @@ public class TaskBrowserOverlay extends Overlay
 		@Override
 		public MouseEvent mouseDragged(MouseEvent event)
 		{
+			if (drag != null)
+			{
+				dragScroll(event);
+				event.consume();
+				return event;
+			}
 			if (dragging)
 			{
 				customX = startX + event.getX() - pressX;
@@ -438,6 +448,12 @@ public class TaskBrowserOverlay extends Overlay
 		@Override
 		public MouseEvent mouseReleased(MouseEvent event)
 		{
+			if (drag != null)
+			{
+				drag = null;
+				event.consume();
+				return event;
+			}
 			if (dragging)
 			{
 				dragging = false;
@@ -2558,7 +2574,7 @@ public class TaskBrowserOverlay extends Overlay
 			rowY += rowHeight + ROW_GAP;
 		}
 		graphics.setClip(oldClip);
-		drawScrollbar(graphics, list, contentHeight, scroll);
+		winBar = drawScrollbar(graphics, list, contentHeight, scroll);
 		return tasks;
 	}
 
@@ -3126,14 +3142,14 @@ public class TaskBrowserOverlay extends Overlay
 		graphics.clip(body);
 		if (savedList)
 		{
-			drawScrollbar(graphics, body, drawSavedList(graphics, saved, body, mx, my, small), paneScroll);
+			paneBar = drawScrollbar(graphics, body, drawSavedList(graphics, saved, body, mx, my, small), paneScroll);
 		}
 		else
 		{
 			List<QuestRequirements.Line> lines = wrapDetail(graphics.getFontMetrics(small), task, pane.width - 12);
 			paneScroll = Math.max(0, Math.min(paneScroll, detailHeight(lines) - body.height));
 			drawDetail(graphics, lines, pane.x + 6, body.y - paneScroll, body, mx, my, small);
-			drawScrollbar(graphics, body, detailHeight(lines), paneScroll);
+			paneBar = drawScrollbar(graphics, body, detailHeight(lines), paneScroll);
 		}
 		graphics.setClip(oldClip);
 		graphics.translate(-(int) (16 * (1 - in) * (1 - in)), 0);
@@ -3347,15 +3363,60 @@ public class TaskBrowserOverlay extends Overlay
 		graphics.drawImage(ARROWS[(open ? 2 : 0) + (hover ? 1 : 0)], cx - 5, cy - 5, null);
 	}
 
-	private void drawScrollbar(Graphics2D graphics, Rectangle area, int contentHeight, int scroll)
+	private Object[] drawScrollbar(Graphics2D graphics, Rectangle area, int contentHeight, int scroll)
 	{
 		if (contentHeight <= area.height)
 		{
-			return;
+			return null;
 		}
 		int thumbHeight = Math.max(20, area.height * area.height / contentHeight);
 		int thumbY = area.y + (area.height - thumbHeight) * scroll / Math.max(1, contentHeight - area.height);
 		Skin.scrollbar(graphics, area, thumbY, thumbHeight);
+		double scale = Math.max(0.01, graphics.getTransform().getScaleY());
+		return new Object[]{graphics.getTransform().createTransformedShape(
+			new Rectangle(area.x + area.width - 10, area.y, 11, area.height)).getBounds(),
+			new double[]{(contentHeight - area.height) / Math.max(1.0, (area.height - thumbHeight) * scale), scroll, thumbHeight * scale, 0, 0}};
+	}
+
+	// Scrollbars on screen: {track, {scroll per pixel, scroll when drawn, thumb height, in the box?, mouse y}}.
+	private volatile Object[] winBar;
+	private volatile Object[] paneBar;
+	private double[] drag;
+
+	/** A press on a scrollbar: the list jumps there (if off the thumb) and follows the mouse. True if it took it. */
+	private boolean startScrollDrag(MouseEvent event)
+	{
+		boolean pane = paneIn && questPane != null;
+		Object[] bar = pane ? paneBar : open ? winBar : null;
+		if (bar == null || !((Rectangle) bar[0]).contains(event.getPoint()))
+		{
+			return false;
+		}
+		double[] d = (double[]) bar[1];
+		double off = event.getY() - ((Rectangle) bar[0]).y;
+		d[3] = pane ? 1 : 0;
+		d[4] = event.getY();
+		if (off < d[1] / d[0] || off > d[1] / d[0] + d[2])
+		{
+			d[1] = Math.round((off - d[2] / 2) * d[0]);
+		}
+		drag = d;
+		dragScroll(event);
+		return true;
+	}
+
+	/** The dragged list to where the mouse has taken it from where it started; the draw holds it at the ends. */
+	private void dragScroll(MouseEvent event)
+	{
+		int to = (int) Math.max(0, Math.round(drag[1] + (event.getY() - drag[4]) * drag[0]));
+		if (drag[3] > 0)
+		{
+			paneScroll = to;
+		}
+		else
+		{
+			scroll = to;
+		}
 	}
 
 	private static void drawCentered(Graphics2D graphics, String text, Rectangle area)
