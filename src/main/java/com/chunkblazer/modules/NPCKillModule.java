@@ -556,6 +556,21 @@ public class NPCKillModule extends AbstractTaskModule
 	{
 		int currentTick = client.getTickCount();
 
+		// Read the slayer counter from the game whenever we don't know it. Change events
+		// alone can leave it unknown (after the plugin is turned back on, for one), and
+		// then the next on-task kill's drop is taken as the starting value instead of as
+		// proof. Probably what refused C Pyrewaltz's on-task Kalphite Guardian (2026-11).
+		// Zero means no task and needs no starting value: an assignment raises the
+		// counter, and that event sets it.
+		if (previousSlayerCount < 0)
+		{
+			int remaining = client.getVarpValue(SLAYER_TASK_COUNT_VARP);
+			if (remaining > 0)
+			{
+				previousSlayerCount = remaining;
+			}
+		}
+
 		// Deaths held for their Slayer XP. Decide as soon as the XP lands; give up
 		// (and rule off-task) once the wait expires.
 		if (!heldDeaths.isEmpty())
@@ -939,6 +954,7 @@ public class NPCKillModule extends AbstractTaskModule
 					lastCannonFiredTick = -1;
 					// Same for the slayer counter: it is re-sent on login, and a
 					// lower value than last session would otherwise read as a kill.
+					// The next GameTick reads the current value from the game.
 					previousSlayerCount = -1;
 					lastSlayerCountDropTick = -1;
 					// heldDeaths was just cleared, so nothing can claim these.

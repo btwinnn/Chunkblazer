@@ -544,6 +544,35 @@ class NPCKillModuleTest extends AbstractTaskModuleTest
 	}
 
 	/**
+	 * C Pyrewaltz killed a Kalphite Guardian on a kalphite task and was told "Not on a
+	 * slayer task". The plugin only knew the slayer counter from change events, so when
+	 * it had missed them (turned off and on mid-task, say) the kill's drop became the
+	 * starting value, and the Slayer XP right behind it was ignored. Reading the counter
+	 * from the game each tick makes the drop count as a drop.
+	 */
+	@Test
+	void readsLiveCount()
+	{
+		NuzlockeTask guardian = createTaskWithNpc("Defeat a Kalphite Guardian on Task",
+			"defeat_kalphite_guardian_on_task", "SLAYER", 1, Arrays.asList(959, 960, 962));
+		npcKillModule.addActiveTask(guardian);
+		when(client.getVarpValue(394)).thenReturn(16);
+		advance(1); // no counter event this session, so the tick reads 16 from the game
+
+		NPC npc = mockNpc(959, 1, "Kalphite guardian");
+		fireMyHitsplat(npc, 10);
+		killAndDrain(npc);
+
+		setTick(now + 1);
+		setSlayerCount(15); // the drop lands first
+		grantSlayerXp();    // then its Slayer XP
+		npcKillModule.onGameTick(new GameTick());
+
+		assertEquals(1, guardian.getCurrentProgress(),
+			"a counter drop is proof even when no change event set the starting value");
+	}
+
+	/**
 	 * Cruk's black bear (session_2026-07-31 19:38:27). An NPC handle is only valid
 	 * while the actor is in the scene: once it despawns at the end of its death
 	 * animation the client clears it and getId() starts returning -1. A gated death is
