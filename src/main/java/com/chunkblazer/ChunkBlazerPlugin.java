@@ -3484,6 +3484,7 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			configManager.unsetRSProfileConfiguration(CONFIG_GROUP, key);
 		}
+		rememberCompleted(null);
 		configManager.unsetRSProfileConfiguration(CONFIG_GROUP, "apiKey");
 		configManager.setConfiguration(CONFIG_GROUP, "apiKey", "");
 		unsavedApiKey = null;
@@ -4248,6 +4249,10 @@ public class ChunkBlazerPlugin extends Plugin
 		// several times per tick with identical data. Rewriting the stored value
 		// fires a redundant ConfigChanged and disk write for nothing.
 		String newVal = value == null ? null : String.valueOf(value);
+		if ("completedTasks".equals(key))
+		{
+			rememberCompleted(newVal);
+		}
 		if (newVal != null && newVal.equals(getAccountState(key)))
 		{
 			return;
@@ -6096,6 +6101,13 @@ public class ChunkBlazerPlugin extends Plugin
 			batch = new ArrayList<>(pendingCompletions);
 			pendingCompletions.clear();
 		}
+		// Already done (a hop that briefly lost the completed set): no popup, no points again.
+		Set<String> done = getCompletedTaskIds();
+		batch.removeIf(t -> t == null || t.getTaskId() == null || done.contains(t.getTaskId()));
+		if (batch.isEmpty())
+		{
+			return;
+		}
 
 		int shown = 0;
 		for (NuzlockeTask task : batch)
@@ -6211,9 +6223,45 @@ public class ChunkBlazerPlugin extends Plugin
 		return isPracticeShown() ? ui.tutorial().practiceCompleted() : getCompletedTaskIds();
 	}
 
+	// The completed set as last read or written for this account. A world hop can briefly read
+	// it back empty; trusting that read re-registers every finished task and completes them all
+	// again (a chat line and popup each). An empty read only counts once something wrote it.
+	private final Set<String> knownCompleted = new LinkedHashSet<>();
+	private String knownCompletedFor;
+
 	private Set<String> getCompletedTaskIds()
 	{
-		return csvSet(acStr("completedTasks", ""));
+		Set<String> read = csvSet(acStr("completedTasks", ""));
+		String account = configManager != null ? configManager.getRSProfileKey() : null;
+		synchronized (knownCompleted)
+		{
+			if (account == null || !account.equals(knownCompletedFor))
+			{
+				knownCompleted.clear();
+				knownCompletedFor = account;
+			}
+			if (!read.isEmpty())
+			{
+				knownCompleted.clear();
+				knownCompleted.addAll(read);
+			}
+			else if (!knownCompleted.isEmpty())
+			{
+				return new LinkedHashSet<>(knownCompleted);
+			}
+		}
+		return read;
+	}
+
+	/** A write of the completed set (or a reset) is the truth, even when it's empty. */
+	private void rememberCompleted(String csv)
+	{
+		synchronized (knownCompleted)
+		{
+			knownCompleted.clear();
+			knownCompleted.addAll(csvSet(csv));
+			knownCompletedFor = configManager != null ? configManager.getRSProfileKey() : null;
+		}
 	}
 
 	/** Completed task IDs in the order they were completed (the stored CSV order), deduplicated. */
