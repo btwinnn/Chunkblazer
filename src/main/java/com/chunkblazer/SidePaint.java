@@ -26,36 +26,38 @@
 
 package com.chunkblazer;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import net.runelite.client.callback.ClientThread;
-import net.runelite.client.game.chatbox.ChatboxPanelManager;
-import net.runelite.client.util.LinkBrowser;
+import java.util.function.BiPredicate;
 
 /**
- * The Points orb's "Tasks" without ChunkBlazer UI: a chatbox prompt offering its Plugin Hub
- * page (plugins can't install other plugins, so the player clicks Install there).
+ * ChunkBlazer UI's hand in the side panel. Without it, the panel is ChunkBlazer's own look.
+ * With it, the UI styles the panel's parts and draws its headings, cards, badges and stat
+ * boxes in whatever theme it has, so no theme lives in ChunkBlazer.
+ *
+ * <p>Parts asked for: "restyle" (the panel root, after anything's added), "background",
+ * "header", "card", "badge", "stats" and "stat". The painter returns true if it drew it.
  */
-@Singleton
-public class UiInstallPrompt
+final class SidePaint
 {
-	/** ChunkBlazer UI's Plugin Hub page. */
-	static final String HUB_PAGE = "https://runelite.net/plugin-hub/show/chunkblazer-ui";
+	// Set by ChunkBlazer UI (through the bridge), null without it.
+	static volatile BiPredicate<String, Object[]> painter;
+	// Moves on each restyle, so cached side panel rows are drawn again.
+	static volatile int version;
 
-	@Inject
-	private ChatboxPanelManager chatboxPanelManager;
-	@Inject
-	private ClientThread clientThread;
-
-	/** Any thread. */
-	public void show()
+	private SidePaint()
 	{
-		// The title is one line of the chatbox: kept short so it isn't cut off at the sides.
-		clientThread.invokeLater(() -> chatboxPanelManager.openTextMenuInput("The task window needs ChunkBlazer UI")
-			.option("Open its Plugin Hub page", () -> LinkBrowser.browse(HUB_PAGE))
-			.option("Not now", () ->
-			{
-			})
-			.build());
+	}
+
+	/** Ask ChunkBlazer UI to draw {@code part}: true if it did. */
+	static boolean draw(String part, Object... args)
+	{
+		BiPredicate<String, Object[]> p = painter;
+		try
+		{
+			return p != null && p.test(part, args);
+		}
+		catch (RuntimeException e)
+		{
+			return false;
+		}
 	}
 }

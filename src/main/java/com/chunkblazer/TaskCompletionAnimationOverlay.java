@@ -119,7 +119,7 @@ public class TaskCompletionAnimationOverlay extends Overlay
 		{
 			t = Math.max(0, (long) (OPEN * (1 - (t - HOLD_END) / (float) (TOTAL - HOLD_END))));
 		}
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Skin.smooth(g);
 		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		// Over the game view: in the fixed-size client that's the game window near its top
 		// (the title box rises above this line), not the middle of the whole client.

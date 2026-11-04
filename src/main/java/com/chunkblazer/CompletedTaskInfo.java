@@ -56,9 +56,4 @@ public class CompletedTaskInfo
 	{
 		return task != null ? task.getName() : taskId;
 	}
-
-	public int getPoints()
-	{
-		return task != null ? task.getBasePoints() : 0;
-	}
 }

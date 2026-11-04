@@ -529,27 +529,8 @@ public class FiremakingModule extends AbstractTaskModule
 			int newProgress = previousProgress + progressIncrement;
 			int required = task.getTargetQuantity();
 
-			task.setCurrentProgress(newProgress);
-
-			sendTaskProgress(task, null, newProgress, required);
-
-			if (completionCallback != null)
+			if (credit(task, newProgress, required, null))
 			{
-				completionCallback.onProgressUpdated(task, newProgress);
-			}
-
-			// Check for completion
-			if (newProgress >= required && !task.isCompleted())
-			{
-				task.setCompleted(true);
-
-				sendTaskSuccess(task, null);
-
-				if (completionCallback != null)
-				{
-					completionCallback.onTaskCompleted(task, newProgress);
-				}
-
 				// Clean up
 				taskTargetItems.remove(task.getTaskId());
 				activeTasks.remove(task);

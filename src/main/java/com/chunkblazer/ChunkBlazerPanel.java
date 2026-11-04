@@ -94,7 +94,7 @@ public class ChunkBlazerPanel extends PluginPanel
 
 
 
-	/** Give the panel the current theme's look (PanelStyle); called once its task list is in, and on a theme change. */
+	/** Give the panel its look (PanelStyle, or ChunkBlazer UI's theme); once its task list is in, and on a theme change. */
 	public void applyTheme()
 	{
 		SwingUtilities.invokeLater(() ->
@@ -109,9 +109,11 @@ public class ChunkBlazerPanel extends PluginPanel
 	protected void paintComponent(java.awt.Graphics g)
 	{
 		java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
-		ThemePalette p = Skin.palette();
-		g2.setPaint(p.theme == Theme.OLD_SCHOOL || p.tile != null ? Skin.stone(false) : p.panelBg);
-		g2.fillRect(0, 0, getWidth(), getHeight());
+		if (!SidePaint.draw("background", g2, getWidth(), getHeight()))
+		{
+			g2.setColor(new Color(40, 40, 40));
+			g2.fillRect(0, 0, getWidth(), getHeight());
+		}
 		g2.dispose();
 	}
 
@@ -632,19 +634,24 @@ public class ChunkBlazerPanel extends PluginPanel
 	{
 		JPanel headerPanel = boxPanel(ColorScheme.DARKER_GRAY_COLOR);
 		frame(headerPanel, ColorScheme.MEDIUM_GRAY_COLOR, 3, 6);
+		// Marked for ChunkBlazer UI's themes (Varlamore draws it as a centred banner).
+		headerPanel.putClientProperty("chunkblazer.banner", true);
 
 		titleRow = styledPanel(new BorderLayout(3, 0), ColorScheme.DARKER_GRAY_COLOR);
 		titleRow.setAlignmentX(CENTER_ALIGNMENT);
 		titleRow.setMaximumSize(new Dimension(CONTENT_WIDTH, 20));
 
 		// Orange title
-		titleRow.add(styledLabel("ChunkBlazer", BOLD, new Color(255, 152, 0)), BorderLayout.WEST);
+		JLabel title = styledLabel("ChunkBlazer", BOLD, new Color(255, 152, 0));
+		title.putClientProperty("chunkblazer.centred", true);
+		titleRow.add(title, BorderLayout.CENTER);
 
 
 		headerPanel.add(titleRow);
 
 		// Region and mode on same line
 		JPanel infoRow = styledPanel(new FlowLayout(FlowLayout.LEFT, 0, 0), ColorScheme.DARKER_GRAY_COLOR);
+		infoRow.putClientProperty("chunkblazer.centred", true);
 		infoRow.setAlignmentX(CENTER_ALIGNMENT);
 
 		regionLabel = styledLabel("Unknown (0)", SMALL, Color.WHITE);
