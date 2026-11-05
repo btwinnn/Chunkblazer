@@ -3826,7 +3826,7 @@ public class ChunkBlazerPlugin extends Plugin
 	private static final String[] MIGRATION_KEYS = {
 		"unlockedChunks", "completedTasks", "assignedTasks", "regionRolledTasks",
 		"currentTaskId", "currentTaskQuantity", "currentTaskProgress",
-		"totalPoints", "pointsSpent", "bossTokens", "taskProgressData",
+		"totalPoints", "pointsSpent", "spendReset", "bossTokens", "taskProgressData",
 		"progressionBaseline", "bossCompletions",
 		"unrevealedTasks", "gameMode", "accountModeHash", "rollVersion",
 	};
@@ -4096,6 +4096,31 @@ public class ChunkBlazerPlugin extends Plugin
 	 * otherwise show the starting 2 until its first successful sync. Older servers
 	 * don't send it (null), so the local value stays.
 	 */
+	/**
+	 * Take the server's spend when it's higher: spend only ever grows, so the maximum is
+	 * the right merge. The one exception is an admin correcting it by hand, which bumps
+	 * spend_reset. Nothing else can lower a spend that went wrong, because both sides keep
+	 * the higher figure, so a computer that hasn't seen this reset takes the server's
+	 * number as it stands. Later logins go back to the maximum, which keeps anything
+	 * bought since the reset.
+	 */
+	private void adoptServerSpend(PlayerLoginResponse.PlayerData pdata)
+	{
+		if (pdata == null)
+		{
+			return;
+		}
+		if (pdata.getSpendReset() > acInt("spendReset", 0))
+		{
+			setAccountState("spendReset", pdata.getSpendReset());
+			setAccountState("pointsSpent", pdata.getPointsSpent());
+		}
+		else if (pdata.getPointsSpent() > acInt("pointsSpent", 0))
+		{
+			setAccountState("pointsSpent", pdata.getPointsSpent());
+		}
+	}
+
 	private void adoptServerBossTokens(PlayerLoginResponse.PlayerData pdata)
 	{
 		if (pdata != null && pdata.getBossTokens() != null)
@@ -4107,6 +4132,12 @@ public class ChunkBlazerPlugin extends Plugin
 	/** Union the server's completed tasks into local config. */
 	private void mergeCompletedTasksFromServer(PlayerLoginResponse.PlayerData pdata)
 	{
+		// Before the union, deliberately. Derivation reads earned minus balance, and that
+		// only means anything while both come from this computer. After the union it took
+		// every task this computer never saw as points spent, leaving a player who moved
+		// to a new computer with just what they'd earned there.
+		deriveInitialPointsSpent();
+
 		if (pdata == null || pdata.getCompletedTasks() == null || pdata.getCompletedTasks().isEmpty())
 		{
 			return;
@@ -4486,11 +4517,7 @@ public class ChunkBlazerPlugin extends Plugin
 			// (it only ever grows — you cannot un-unlock a chunk — so the
 			// maximum is the correct merge and is safe across profiles), and
 			// the balance falls out of the two.
-			deriveInitialPointsSpent();
-			if (pdata != null && pdata.getPointsSpent() > acInt("pointsSpent", 0))
-			{
-				setAccountState("pointsSpent", pdata.getPointsSpent());
-			}
+			adoptServerSpend(pdata);
 			adoptServerBossTokens(pdata);
 			// AFTER the monotonic merge, deliberately. The corrupt figure this
 			// repairs is already stored server-side, so running it any earlier

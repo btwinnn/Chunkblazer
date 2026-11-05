@@ -163,6 +163,14 @@ public class PlayerLoginResponse
 		@SerializedName("points_spent")
 		private int pointsSpent;
 
+		/**
+		 * Goes up each time an admin corrects points_spent by hand. A computer that hasn't
+		 * seen this number yet takes points_spent as given, even when it's lower. 0 from
+		 * older servers.
+		 */
+		@SerializedName("spend_reset")
+		private int spendReset;
+
 		/** Spendable Boss Tokens as the server works them out. Null from older servers. */
 		@SerializedName("boss_tokens")
 		private Integer bossTokens;
