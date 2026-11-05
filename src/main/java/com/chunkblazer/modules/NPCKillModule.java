@@ -85,83 +85,47 @@ public class NPCKillModule extends AbstractTaskModule
 	// Slayer task VarPlayer IDs (from RuneLite's SlayerPlugin)
 	private static final int SLAYER_TASK_COUNT_VARP = VarPlayerID.SLAYER_COUNT;
 
-	// On-task slayer kills award Slayer XP; off-task kills award none. So a Slayer
-	// XP gain in the same tick window as a kill means the dead NPC was the player's
-	// ASSIGNED monster — a name-agnostic "on the right task" signal.
+	// On-task kills award Slayer XP and off-task kills none, so a Slayer XP gain near a
+	// kill is a name-agnostic on-task signal.
 	//
-	// TIMING (Mike's goblin, session_2026-07-16 14:57:04): the XP arrives AFTER the
-	// death, not during its tick. The log is unambiguous — the kill is confirmed and
-	// the verdict sent at 14:57:04, and the Slayer XP / SLAYER_COUNT decrement land at
-	// 14:57:05. An earlier version of this comment claimed the gain was "already
-	// recorded" by end-of-tick and the gate only looked BACKWARDS, so a genuinely
-	// on-task kill was refused every time. No backwards window can fix that — widening
-	// it only reaches further into the past, where the evidence still isn't. So
-	// on-task-gated deaths are HELD (see heldDeaths) until the XP arrives or the wait
-	// expires. The window then covers skew in either direction.
-	//
-	// HOW LATE (Cruk's goblin task, session_2026-07-30 16:17–16:20): the delay is not
-	// a fixed one tick — it VARIES kill to kill, and a 2-tick wait loses the race
-	// roughly a third of the time. Of 17 verifiably on-task goblin kills (the in-game
-	// counter ran 17 → 0), only 11 were credited; 6 were refused with "Not on a slayer
-	// task for this monster" and the SLAYER_COUNT decrement is right there in the log
-	// AFTER the verdict, one to two ticks too late. The wait is now generous, which
-	// costs nothing when the evidence is prompt: the hold resolves the moment it
-	// arrives, so only genuinely off-task kills ever wait the full duration.
+	// The XP and SLAYER_COUNT decrement arrive AFTER the death, by a delay that varies
+	// per kill (2 ticks is too short), so no backwards window works. On-task-gated deaths
+	// are HELD (see heldDeaths) until the evidence arrives or the wait expires. A long
+	// wait is free: the hold resolves on arrival, so only off-task kills wait it out.
 	private static final int SLAYER_XP_WINDOW_TICKS = 6;
 	// How long a gated death waits for its on-task evidence before we rule it off-task.
 	private static final int ON_TASK_WAIT_TICKS = 6;
 	private int previousSlayerXp = -1;
 	private int lastSlayerXpGainTick = -1;
 
-	// Second, independent on-task signal: SLAYER_COUNT (varp 394) counts DOWN by one
-	// per kill of the assigned monster and moves for nothing else. Slayer XP can in
-	// principle arrive from another source, so a decrement here is the more precise
-	// evidence of the two — and the two do not always land on the same tick, so
-	// accepting EITHER wins races that either alone would lose.
-	//
-	// Caveat, deliberately accepted: cancelling a task also drops the counter (to 0).
-	// That would have to coincide with a gated kill of the matching monster inside the
-	// window to matter, and it errs toward crediting the player.
+	// Second on-task signal: SLAYER_COUNT (varp 394) drops by one per kill of the
+	// assigned monster. It is more precise than Slayer XP, which could come from
+	// elsewhere, and the two don't always share a tick, so accept EITHER. Accepted
+	// caveat: cancelling a task also drops it (to 0), which errs toward crediting the
+	// player.
 	private int previousSlayerCount = -1;
 	private int lastSlayerCountDropTick = -1;
 
 	// ── On-task evidence, as a CONSUMABLE queue of tick numbers ───────────
-	// One on-task kill produces exactly one entry, and a gated death CLAIMS one.
-	// A bare "was there a signal near this death" timestamp check can't survive
-	// fast kills once the window is six ticks wide: killing rats or cows in quick
-	// succession puts several deaths inside one signal's window, and every one of
-	// them would read that single signal as its own evidence. Two ways that pays
-	// out credit nobody earned — kills landing in the 3.6s after a slayer task
-	// FINISHES (the last on-task signal is still in range), and a gated task for
-	// monster X being credited by the evidence from your actual assignment to Y
-	// when both die close together. Claiming makes evidence one-kill-one-credit.
+	// One on-task kill produces one entry, and a gated death CLAIMS one. With a six-tick
+	// window, a plain "signal near this death" check lets fast kills share one signal,
+	// crediting kills just after a task finishes, or a gated task for X on evidence from
+	// an assignment to Y.
 	//
-	// Pairing: the counter decrement and the Slayer XP for the SAME kill land on
-	// the same tick, so whichever arrives first creates the entry and the other
-	// tops up rather than duplicating. Multi-kills are handled honestly because
-	// the counter drops by the number killed, not by one.
+	// The counter drop and Slayer XP for one kill land on the same tick: the first
+	// creates the entry, the other tops up. Multi-kills drop the counter by the number
+	// killed.
 	private final List<Integer> onTaskSignalTicks = new ArrayList<>();
 
 	// ── Cannon detection for RESTRICTED kills ────────────────────────────
-	// VarPlayer 3 is the remaining cannonball count — the same value RuneLite's own
-	// CannonPlugin reads as `cballsLeft` (verified by disassembly, 2026-07-16). A
-	// DECREASE means our cannon just fired. That is the only clean, first-party
-	// signal available: a cannonball's hitsplat is an ordinary DAMAGE_ME splat with
-	// nothing to distinguish it from a whip hit.
+	// VarPlayer 3 is the remaining cannonball count (CannonPlugin's `cballsLeft`), so a
+	// DECREASE means our cannon just fired. It is the only clean signal: a cannonball
+	// hitsplat is an ordinary DAMAGE_ME splat.
 	//
-	// Why a rule is needed at all, when the fight timer now starts at the cannon's
-	// first hit: a cannon fires up to 4 balls in ONE tick, so it genuinely one-shots
-	// small NPCs. Cruk's scorpion (session_2026-07-16_20-00-46) took 17 damage and
-	// died in the same tick it was first hit — a real 0-tick kill that satisfied
-	// "Defeat a Scorpion in the First Hit" honestly. No timing logic can refuse that;
-	// only an explicit "no cannon" rule can.
-	//
-	// NOTE: this REPLACES the `varbit_id: 57` constraint that 35 tasks carried with
-	// the message "Cannon use is prohibited for timed combat tasks". Varbit 57 is
-	// BOARDGAMES_DRAUGHTS_MUSTTAKE — a draughts board game — so it read 0 forever and
-	// the constraint never once blocked a cannon. Those dead constraints have been
-	// removed from the task JSON; the rule now lives here and covers EVERY restricted
-	// task automatically rather than the 35 that happened to be authored with it.
+	// A cannon fires up to 4 balls in ONE tick, so it can one-shot small NPCs: a real
+	// 0-tick kill no timing logic can refuse, only an explicit "no cannon" rule. That
+	// rule lives here and covers every restricted task. Varbit 57 is a draughts flag, not
+	// a cannon one.
 	private static final int CANNONBALL_VARP = VarPlayerID.ROCKTHROWER;
 	private int previousCannonballs = -1;
 	private int lastCannonFiredTick = -1;
@@ -181,28 +145,11 @@ public class NPCKillModule extends AbstractTaskModule
 	private NPCManager npcManager;
 
 	// ── Fights we have a stake in, keyed by NPC index ────────────────────
-	// One record per NPC we have personally damaged. This REPLACED a single
-	// currentTarget/damageDealtToTarget/combatStartTick triple that was only ever
-	// populated from onInteractingChanged — i.e. it required the player to have
-	// manually clicked the NPC. Two consequences, both reported by testers on
-	// 2026-07-16 and both visible in session_2026-07-16_14-49-35:
-	//
-	//   1. A CANNON kill involves no interaction, so no target was ever set, every
-	//      hitsplat was dropped, and the death was rejected for having 0 damage.
-	//      Cannon kills produced no [NPCKILL-DEBUG] line at all — the plugin never
-	//      saw them (Mike: "killed some goblins with a cannon — did not get [any]
-	//      message from these"). Cannon-only kills credited nothing.
-	//   2. Worse, cannon damage did not start the clock. Cruk chunked a scorpion to
-	//      10% with a cannon and finished it with a whip: combat "started" at the
-	//      whip hit, so a 1-tick "in the First Hit" task (that is how those are
-	//      authored — see defeat_scorpion_first_hit, max allowed 1 tick) passed.
-	//      Cannon-softening laundered every timed task.
-	//
-	// Keying by index rather than holding one target is what makes cannon safe: a
-	// cannon hits several NPCs per tick, and a single slot would thrash between them
-	// and mis-attribute damage. A record is created by the FIRST hitsplat WE land,
-	// whatever the source (melee, cannon, thrall, poison), so the fight timer starts
-	// at the first damage we are responsible for.
+	// One record per NPC we have damaged, created by the FIRST hitsplat WE land from any
+	// source (melee, cannon, thrall, poison), so the fight timer starts at our first
+	// damage. Never hang this off player interaction: a cannon kill involves none, and
+	// cannon softening must start the clock. Keyed by index because a cannon hits several
+	// NPCs per tick.
 	private final Map<Integer, FightRecord> fights = new ConcurrentHashMap<>();
 
 	// Records with no hit for this long are dropped so the map can't grow without
@@ -233,12 +180,10 @@ public class NPCKillModule extends AbstractTaskModule
 		int lastHitTick = -1;
 		int killingBlowAnimation;
 
-		// True once ANOTHER player has damaged this NPC (a Hitsplat.isOthers() splat).
-		// Restricted (time/equipment) kills require EXCLUSIVE damage: closes the
-		// shared-spawn / friend-softens-it variant of the relog cheat. isOthers()
-		// matches only the DAMAGE_OTHER* family, so our OWN cannon (renders DAMAGE_ME)
-		// and our own poison/venom/burn (distinct types) never trip it. Does NOT
-		// affect plain "defeat X" kills.
+		// True once ANOTHER player has damaged this NPC. Restricted (time/equipment)
+		// kills require EXCLUSIVE damage; plain "defeat X" kills don't.
+		// Hitsplat.isOthers() matches only the DAMAGE_OTHER* family, so our own cannon
+		// and poison/venom/burn never trip it.
 		boolean contested;
 
 		// True if the NPC was at full health (or had never shown a health bar) when we
@@ -263,13 +208,10 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	// ── Health of each NPC as of the END of the previous tick ─────────────
-	// Read by wasAtFullHealth() when we land our first hit. It must be a snapshot,
-	// not a live read: hitsplat and health-bar packets both arrive within a tick with
-	// no guaranteed order, so reading getHealthRatio() inside onHitsplatApplied could
-	// see our OWN hit already applied and call a genuinely fresh NPC pre-damaged —
-	// which would reject every legitimate speed kill. Sampling at GameTick (after
-	// that tick's hitsplats, before the next tick's) gives a clean "before we hit it"
-	// reading. Only maintained while a restricted task is active.
+	// Read by wasAtFullHealth(). Must be a snapshot: hitsplat and health-bar packets have
+	// no guaranteed order within a tick, so a live getHealthRatio() could see our own hit
+	// and reject a legitimate speed kill. Only maintained while a restricted task is
+	// active.
 	private final Map<Integer, HealthSample> healthAtPreviousTick = new ConcurrentHashMap<>();
 
 	private static class HealthSample
@@ -285,12 +227,9 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	// ── Fight-integrity sensors for RESTRICTED kills (time/equipment) ─────
-	// A relog or world hop wipes client-side combat tracking, so a fight that
-	// resumes right after logging back in is only measured from its post-relog
-	// tail: pre-soften the NPC, relog, finish it "in 2.4s" or "with nothing
-	// equipped" (internal tester report, 2026-07-16). Restricted kills
-	// therefore require the fight to have STARTED at least a grace period
-	// after the session began.
+	// A relog or world hop wipes combat tracking, so a resumed fight is measured only
+	// from its post-relog tail. Restricted kills must have STARTED at least a grace
+	// period after the session began.
 	private int lastLoginTick = -1;
 	private static final int FRESH_FIGHT_GRACE_TICKS = 50; // ~30s
 
@@ -306,13 +245,9 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	// Armed by any pre-login state (LOGIN_SCREEN / LOGGING_IN / HOPPING /
-	// CONNECTION_LOST) and consumed by the next LOGGED_IN. This is how a real
-	// session start is told apart from a region crossing: a REAL login goes
-	// LOGIN_SCREEN → LOGGING_IN → LOADING → LOGGED_IN (Cruk's relog log,
-	// session_2026-07-16), so the naive "previous state != LOADING" guard
-	// classified every genuine login as a region crossing and never armed the
-	// fresh-fight gate. Region crossings (LOGGED_IN → LOADING → LOGGED_IN)
-	// never pass through a pre-login state, so they can't arm this flag.
+	// CONNECTION_LOST), consumed by the next LOGGED_IN. A real login also passes through
+	// LOADING, so "previous state != LOADING" can't tell it from a region crossing; a
+	// crossing never passes a pre-login state.
 	private boolean sessionStartPending = false;
 
 	// Pending drop-based kills: tasks waiting for a specific item to drop
@@ -339,21 +274,14 @@ public class NPCKillModule extends AbstractTaskModule
 	private final List<DeathRecord> heldDeaths = new ArrayList<>();
 
 	/**
-	 * A death with its fight already resolved out of {@link #fights}, plus the tick it
-	 * happened on. Carrying deathTick matters for held deaths: elapsed fight time must
-	 * be measured to the DEATH, not to whenever we get around to deciding, or the wait
-	 * for Slayer XP would inflate every speed kill by the length of the wait.
+	 * A death with its fight already resolved out of {@link #fights}, plus its tick.
+	 * Elapsed fight time must be measured to the DEATH, or the wait for Slayer XP
+	 * inflates every speed kill.
 	 *
-	 * <p>The NPC's IDENTITY is snapshotted here too, and every downstream consumer must
-	 * read it from this record rather than from {@link #npc}. An {@code NPC} handle is
-	 * only valid while the actor is in the scene: once it despawns at the end of its
-	 * death animation the client clears it, and {@code getId()} starts returning -1
-	 * with {@code getName()} null. A decision deferred past that point matches no task
-	 * at all and the kill vanishes silently — Cruk's black bear, session_2026-07-31
-	 * 19:38:27, logged as {@code confirmed kill: id=-1 name='null' damage=25} in the
-	 * same second RuneLite's own loot tracker recorded {@code npc=2839}. The window
-	 * between death and despawn is only a handful of ticks, so ANY hold can straddle
-	 * it; snapshotting is what makes the hold length a free parameter.
+	 * <p>The NPC's identity is snapshotted here; read it from this record, not
+	 * {@link #npc}. Once the actor despawns, {@code getId()} returns -1 and
+	 * {@code getName()} null, so a held decision would match no task and the kill
+	 * vanishes silently.
 	 */
 	private static class DeathRecord
 	{
@@ -488,31 +416,17 @@ public class NPCKillModule extends AbstractTaskModule
 		super.onTaskCleared();
 		pendingDropKills.clear();
 		pendingDeaths.clear();
-		// IMPORTANT: do NOT clear `heldDeaths` here. onTaskCleared() fires on every
-		// loadActiveTasks() — chunk unlocks, task rolls, region changes, and the
-		// re-register that follows each progress save — so a kill waiting for its
-		// Slayer evidence would be dropped mid-hold: no credit, no failure message,
-		// no log line. It was survivable at a 2-tick hold and is not at six. A held
-		// death carries no task reference (see DeathRecord); processNpcDeath resolves
-		// matching tasks from activeTasks when it decides, so surviving a refresh
-		// credits the freshly-registered task objects correctly.
-		//
-		// IMPORTANT: do NOT clear `fights` here, for the same reason the Slayer XP
-		// sensor below survives. onTaskCleared() fires on ROUTINE refreshes, and a
-		// fight in progress is player-state, not task-state: wiping it mid-fight
-		// would restart the combat timer (handing out free speed kills) and forgive
-		// an equipment violation already recorded for this fight. Hard reset lives
-		// in shutDown() and on session start.
-		//
-		// IMPORTANT: do NOT reset previousSlayerXp / lastSlayerXpGainTick here.
-		// onTaskCleared() fires on ROUTINE task-list refreshes (chunk unlocks,
-		// task rolls, region changes — constantly during play), and resetting
-		// the Slayer XP sensor made onStatChanged swallow the NEXT Slayer XP
-		// gain as a "first sighting" baseline. A single on-task kill produces
-		// exactly ONE Slayer XP event, so the on-task gate refused genuinely
-		// on-task kills every time (Mike's goblin, session_2026-07-15). The
-		// sensor is player-state, not task-state — same lesson as the
-		// ConstructionModule spawn sensor. Hard reset lives in shutDown().
+		// Do NOT clear these here: onTaskCleared() fires on every loadActiveTasks()
+		// (chunk unlocks, task rolls, region changes, each progress save).
+		// - heldDeaths: a kill waiting for Slayer evidence would vanish silently. A held
+		//   death carries no task reference; processNpcDeath resolves tasks from
+		//   activeTasks when it decides.
+		// - fights: player-state. Wiping restarts the combat timer (free speed kills) and
+		//   forgives a recorded equipment violation. Hard reset is in shutDown() and on
+		//   session start.
+		// - previousSlayerXp / lastSlayerXpGainTick: player-state. onStatChanged would
+		//   swallow the next gain as a "first sighting" baseline, and an on-task kill
+		//   gives ONE XP event, so the gate refuses it. Hard reset is in shutDown().
 	}
 
 	@Override
@@ -556,12 +470,10 @@ public class NPCKillModule extends AbstractTaskModule
 	{
 		int currentTick = client.getTickCount();
 
-		// Read the slayer counter from the game whenever we don't know it. Change events
-		// alone can leave it unknown (after the plugin is turned back on, for one), and
-		// then the next on-task kill's drop is taken as the starting value instead of as
-		// proof. Probably what refused C Pyrewaltz's on-task Kalphite Guardian (2026-11).
-		// Zero means no task and needs no starting value: an assignment raises the
-		// counter, and that event sets it.
+		// Read the slayer counter whenever it's unknown (after the plugin is turned back
+		// on, for one), or the next on-task kill's drop is taken as the starting value
+		// instead of as proof. Zero means no task: an assignment raises the counter, and
+		// that event sets it.
 		if (previousSlayerCount < 0)
 		{
 			int remaining = client.getVarpValue(SLAYER_TASK_COUNT_VARP);
@@ -825,16 +737,13 @@ public class NPCKillModule extends AbstractTaskModule
 		return true;
 	}
 
-	// NOTE: there is deliberately no onInteractingChanged handler any more. Tracking
-	// used to hang off it, which meant a fight only existed if the player had CLICKED
-	// the NPC — the root of both cannon bugs (see the `fights` field). Damage is the
-	// signal now: if one of our hitsplats landed on it, we have a stake in it, however
-	// it was delivered.
+	// No onInteractingChanged handler: a fight must not depend on the player having
+	// CLICKED the NPC, or cannon kills break (see the `fights` field). Damage is the
+	// signal.
 
 	/**
-	 * Record every NPC's health as of the end of this tick, for next tick's
-	 * first-hit freshness check. Skipped entirely unless a restricted (time or
-	 * equipment) task is active, since nothing else consults it.
+	 * Record every NPC's health at the end of this tick for next tick's first-hit
+	 * freshness check. Skipped unless a restricted (time or equipment) task is active.
 	 */
 	private void sampleNpcHealth()
 	{
@@ -885,15 +794,11 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	/**
-	 * Was this NPC undamaged when we first hit it? Consults the END-OF-PREVIOUS-TICK
-	 * health sample, never a live read — our own hit may already be reflected in the
-	 * live value by the time HitsplatApplied fires, which would make every legitimate
-	 * speed kill look pre-softened.
+	 * Was this NPC undamaged when we first hit it? Reads the END-OF-PREVIOUS-TICK sample,
+	 * never a live value, which may already include our own hit.
 	 *
-	 * A ratio of -1 means no health bar is being shown, i.e. nobody has touched it.
-	 * No sample at all (just spawned, or the first tick a restricted task is active)
-	 * is treated as fresh: this gate exists to catch a specific cheat, and it must
-	 * fail OPEN on missing evidence rather than refuse honest kills.
+	 * A ratio of -1 means no health bar, i.e. untouched. No sample at all counts as
+	 * fresh: fail OPEN on missing evidence rather than refuse honest kills.
 	 */
 	private static final Set<Integer> DAMAGE_OVER_TIME = ImmutableSet.of(
 		HitsplatID.POISON, HitsplatID.VENOM, HitsplatID.BURN, HitsplatID.DISEASE, HitsplatID.BLEED);
@@ -1151,13 +1056,9 @@ public class NPCKillModule extends AbstractTaskModule
 
 		FightRecord fight = death.fight;
 
-		// Diagnostic for collecting real runtime NPC ids in-game: the wiki id often
-		// differs from / is incomplete vs what the client reports (level/spawn/hue
-		// variants). If a kill doesn't credit a task you expected, grep this line
-		// for the actual id and add it to the task's npc_ids. Reads the SNAPSHOT: a
-		// held death's NPC handle may already be a despawned husk reporting id=-1.
-
-		// Check all active tasks for a match
+		// Wiki NPC ids often miss what the client reports (level/spawn/hue variants).
+		// Read the SNAPSHOT: a held death's NPC handle may already be a despawned husk
+		// reporting id=-1.
 		List<NuzlockeTask> matchingTasks = mostSpecificMatches(findMatchingTasks(death), death.npcName);
 
 		if (matchingTasks.isEmpty())
@@ -1207,14 +1108,12 @@ public class NPCKillModule extends AbstractTaskModule
 			boolean hasEquipConstraint = constraints != null && constraints.hasEquipmentConstraints();
 			boolean hasVarbitConstraint = constraints != null && constraints.hasVarbitConstraints();
 
-			// Group content (raids, Nex, group bosses) is exempt from the solo-only
-			// gates below. A teammate's hitsplat sets `contested`, and the boss is
-			// only at full health for whoever lands the encounter's first hit, so
-			// those gates would make a group task impossible rather than hard. Task
-			// JSON carrying group_content alongside a time/equipment constraint is
-			// rejected at load (NuzlockeTask#getGroupContentSchemaError), so this is
-			// the belt to that braces — it keeps a task that slipped through
-			// completable instead of silently unwinnable.
+			// Group content (raids, Nex, group bosses) is exempt from the solo-only gates
+			// below: a teammate's hitsplat sets `contested`, and the boss is at full
+			// health only for the first hitter, so those gates would make the task
+			// impossible. Load rejects group_content with a time/equipment constraint
+			// (NuzlockeTask#getGroupContentSchemaError); this keeps one that slipped
+			// through completable.
 			boolean soloGated = (hasTimeConstraint || hasEquipConstraint) && !task.isGroupContent();
 
 			// If task ONLY has dropped_item constraint (no time/equipment/varbit constraints),
@@ -1245,18 +1144,11 @@ public class NPCKillModule extends AbstractTaskModule
 					continue; // Skip this task, don't credit the kill
 				}
 
-				// Fight-integrity gate for RESTRICTED kills: a relog/world hop wipes
-				// combat tracking, so a fight resumed right after logging back in is
-				// only measured from its post-relog tail. Testers pre-softened an NPC,
-				// relogged, and finished it "in 2.4s" / "with nothing equipped".
-				// Restricted kills must belong to a fight that STARTED at least a grace
-				// period after the session began.
-				//
-				// This is NOT made redundant by the full-health gate above: a relog
-				// also clears the client's health bars, so a pre-softened NPC reports
-				// ratio -1 ("untouched") on the first hit after logging back in and
-				// would sail through freshness. The two gates cover different halves
-				// of the same cheat — keep both.
+				// RESTRICTED kills must belong to a fight that STARTED a grace period
+				// after the session began: a relog/world hop wipes combat tracking. Keep
+				// this alongside the full-health gate above: a relog also clears health
+				// bars, so a pre-softened NPC reports ratio -1 ("untouched") on the first
+				// hit after logging back in.
 				int grace = freshFightGraceTicks(constraints);
 				if (soloGated
 					&& lastLoginTick >= 0 && fight.combatStartTick >= 0
@@ -1387,26 +1279,16 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	/**
-	 * When a kill matches several tasks, credit only the MOST SPECIFIC — the
-	 * task(s) with the smallest target-NPC id set. This stops a kill of a
-	 * sub-monster (e.g. an Ogress, ids {7989-7992}) from also crediting a broader
-	 * superset task (e.g. Ogre, a 28-id list that contains those). Tasks with
-	 * equal-size id sets (genuine duplicates — e.g. two tasks both pinned to the
-	 * single id 14704) can't be told apart, so they're all kept.
+	 * When a kill matches several tasks, credit only the MOST SPECIFIC: the smallest
+	 * target-NPC id set, so an Ogress doesn't also credit the broader Ogre task.
+	 * Equal-size sets can't be told apart, so all are kept.
 	 *
-	 * Plain kill tasks and conditional ones (on task, timed, gear, drop) are narrowed
-	 * separately: a conditional task is a different challenge, not a narrower version
-	 * of the plain one. Narrowed together, "Defeat a White Wolf on Task" ({107, 108})
-	 * took the kill from "Defeat a White Wolf" ({107, 108, 109}) and then failed its
-	 * own condition, so the plain task never counted anything.
+	 * Plain and conditional (on task, timed, gear, drop) tasks are narrowed separately,
+	 * and conditional ones per KIND of condition. Otherwise a task could take the kill,
+	 * fail its own condition, and leave the task it displaced counting nothing.
 	 *
-	 * Conditional tasks are narrowed per KIND of condition too: the timed "Defeat a
-	 * Mountain Troll fast" (8 ids) took every mountain troll kill from "Defeat a Troll
-	 * on Task" (58 ids), so the on-task task never saw one.
-	 *
-	 * A broader task named for the monster killed still counts: a level 63 Ogre is an
-	 * Ogre, so it credits "Defeat an Ogre" as well as "Defeat a Level 63 Ogre" (Sebarak).
-	 * An Ogress isn't called Ogre, so it still only counts for the Ogress task.
+	 * A broader task named for the monster killed still counts: a level 63 Ogre credits
+	 * "Defeat an Ogre" as well as "Defeat a Level 63 Ogre".
 	 */
 	List<NuzlockeTask> mostSpecificMatches(List<NuzlockeTask> matches, String npcName)
 	{
@@ -1628,12 +1510,9 @@ public class NPCKillModule extends AbstractTaskModule
 	private static final int[] VALID_EQUIPMENT_SLOTS = {0, 1, 2, 3, 4, 5, 7, 9, 10, 12, 13};
 
 	/**
-	 * Whether this task's kill must pass the on-task slayer gate. True for
-	 * SLAYER-typed tasks, and ALSO for any task whose NAME promises "on Task" —
-	 * an "on Task" task mistyped as NPC_Kill used to skip the gate entirely and
-	 * credit off-task kills. The data has been cleaned (no mistypes remain as
-	 * of 2026-07-14), but the name check makes a future authoring slip fail
-	 * SAFE (gated) instead of fail OPEN (free credit).
+	 * Whether this task's kill must pass the on-task slayer gate: SLAYER-typed tasks, and
+	 * any task whose NAME says "on Task", so an authoring slip fails SAFE (gated) instead
+	 * of OPEN (free credit).
 	 */
 	private static boolean requiresOnTaskGate(NuzlockeTask task)
 	{
@@ -1646,14 +1525,10 @@ public class NPCKillModule extends AbstractTaskModule
 	}
 
 	/**
-	 * True if the kill that happened on deathTick was an on-task slayer kill: it must
-	 * CLAIM a piece of on-task evidence recorded within SLAYER_XP_WINDOW_TICKS of the
-	 * DEATH, in either direction. Off-task kills produce no Slayer XP and no
-	 * SLAYER_COUNT movement, so this distinguishes "killed my assigned monster" from
-	 * "killed a monster that merely matches the task while assigned to something else".
-	 *
-	 * Compares against deathTick, NOT the current tick: gated deaths are held until
-	 * the evidence arrives, so "now" drifts away from the kill while we wait.
+	 * True if the kill on deathTick was on-task: it must CLAIM on-task evidence recorded
+	 * within SLAYER_XP_WINDOW_TICKS of the DEATH, in either direction. Compares against
+	 * deathTick, NOT the current tick: gated deaths are held, so "now" drifts away from
+	 * the kill.
 	 */
 	private boolean wasOnTaskKill(int deathTick)
 	{

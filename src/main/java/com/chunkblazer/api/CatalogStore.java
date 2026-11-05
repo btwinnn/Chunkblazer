@@ -53,29 +53,22 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
- * Fetches the ChunkBlazer task catalog from the server so the plugin can stop
- * bundling ~2.2M tokens of raw {@code *_Tasks.json}. Serves the same combined
- * document {@code GET /api/tasks} returns — a JSON object mapping each source
- * filename to that file's original content — so the three task loaders
- * (region / global / free-chunks) only change their BYTE SOURCE, not their parse.
+ * Fetches the task catalog from the server instead of bundling raw
+ * {@code *_Tasks.json}. Serves the document {@code GET /api/tasks} returns (each source
+ * filename to its original content), so the task loaders only change their BYTE SOURCE.
  *
- * <p>Mirrors {@code AssetStore}'s outage discipline, with two catalog-specific
- * differences that matter:
+ * <p>Mirrors {@code AssetStore}'s outage discipline, with two differences:
  * <ol>
  *   <li><b>The cache/seed load is SYNCHRONOUS.</b> {@link #init(Filepath)} must populate
- *       the in-memory catalog before {@code loadChunkData()} runs, so it loads
- *       from disk cache (or the bundled gzipped seed) on the calling thread. The
- *       network check runs in the background via {@link #refresh(Runnable)}. A newer
- *       server catalog applies at the next login screen, never mid-session (no
- *       mid-session task reload = zero risk to a live game).</li>
- *   <li><b>Completeness check.</b> A server response is accepted only if it
- *       contains every file the current floor (cache/seed) has and no empty
- *       values — see {@link #isComplete}. This is the guard against a partial
- *       catalog silently dropping tasks (the plan's "1 chunk instead of 15"
- *       failure). Empty/short/error responses keep the last-good copy.</li>
+ *       the catalog before {@code loadChunkData()} runs. The network check runs in the
+ *       background via {@link #refresh(Runnable)}; a newer catalog applies at the next
+ *       login screen, never mid-session.</li>
+ *   <li><b>Completeness check.</b> A server response is accepted only if it has every
+ *       file the current floor (cache/seed) has and no empty values (see
+ *       {@link #isComplete}), so a partial catalog can't silently drop tasks.</li>
  * </ol>
- * The bundled gzipped seed is a hard floor: {@link #getFileContent} can always
- * return the seed's copy, so tasks can never fully fail to load.
+ * The bundled gzipped seed is a hard floor: {@link #getFileContent} can always return
+ * its copy.
  */
 @Slf4j
 @Singleton
@@ -147,13 +140,10 @@ public class CatalogStore
 	}
 
 	/**
-	 * SYNCHRONOUS load order cache → bundled seed, so the task loaders can read
-	 * the catalog immediately. MUST be called before {@code loadChunkData()}/
-	 * {@code loadGlobalTasks()}/{@code loadFreeChunks()}, and before
-	 * {@link #refresh(Runnable)}.
+	 * SYNCHRONOUS load (cache, then bundled seed). MUST be called before the task loaders
+	 * and {@link #refresh(Runnable)}.
 	 *
-	 * @param pluginDir the plugin's sandboxed data directory (from
-	 *                  {@code getPluginDirectory()}), or null to run cache-less
+	 * @param pluginDir the plugin's sandboxed data directory, or null to run cache-less
 	 */
 	public void init(Filepath pluginDir)
 	{
@@ -227,12 +217,10 @@ public class CatalogStore
 	}
 
 	/**
-	 * Check the server for a newer catalog in the background, then run
-	 * {@code whenChecked} on the refresh thread, whatever the outcome. An unchanged
-	 * catalog costs one 304. Never re-parses the running task set itself: the plugin
-	 * calls this at launch and at every login screen, and applies a newer catalog
-	 * only while nobody is logged in. Checking at the login screen too is what lets
-	 * a fix deployed while the client is open arrive with a relog, not a restart.
+	 * Check the server for a newer catalog in the background, then run {@code whenChecked}
+	 * on the refresh thread, whatever the outcome. Never re-parses the running task set: a
+	 * newer catalog applies only while nobody is logged in. Called at launch and at every
+	 * login screen, so a fix arrives with a relog.
 	 */
 	public void refresh(Runnable whenChecked)
 	{
@@ -330,12 +318,9 @@ public class CatalogStore
 		{
 			return v;
 		}
-		// Per-file fallback to the bundled seed. The active catalog can be a stale
-		// on-disk cache (or a server not yet redeployed) that predates a newly added
-		// file — e.g. Boss_Tasks.json. Without this, that file is silently missing
-		// until the server serves it, and its chunks never load (a boss chunk then
-		// looks like an ordinary region and can be unlocked with points). The seed
-		// ships every file, so it is the correct floor for anything the cache lacks.
+		// Per-file fallback to the bundled seed, which ships every file. A stale cache or
+		// old server can lack a new file (e.g. Boss_Tasks.json); its chunks then never
+		// load, and a boss chunk looks like an ordinary region unlockable with points.
 		if (seedFiles == null)
 		{
 			Map<String, String> s = loadFromSeed();

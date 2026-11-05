@@ -31,11 +31,9 @@ import lombok.Data;
 /**
  * One servable audio asset as listed in the server's asset manifest.
  *
- * <p>The {@code path} is content-addressed ({@code assets/audio/<sha256[:12]>/name}),
- * which is what makes the whole cache safe: the url IS the identity, so a
- * changed asset is a new url and every downloaded file can be trusted forever
- * once its bytes hash to the {@code sha256} recorded here. See
- * {@code Chunkblazer-Server/docs/MEDIA-PIPELINE-PLAN.md}.
+ * <p>The {@code path} is content-addressed ({@code assets/audio/<sha256[:12]>/name}): a
+ * changed asset is a new url, so a file can be trusted forever once its bytes hash to
+ * the {@code sha256} here.
  */
 @Data
 public class AudioAsset

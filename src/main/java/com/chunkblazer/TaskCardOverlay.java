@@ -46,18 +46,13 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 
 /**
- * The task-roll reveal: freshly rolled tasks arrive as face-down cards in the middle of
- * the viewport and stay there until the player flips them.
+ * The task-roll reveal: rolled tasks arrive as face-down cards mid-viewport until
+ * flipped.
  *
- * <p><b>Why this exists as a gate, not just decoration.</b> A rolled task is not added to
- * the active list — and is not registered with any tracking module — until its card is
- * turned over. That is the whole point of the feature: the roll should feel like opening
- * a pack rather than silently gaining five list entries. The pending set lives in config
- * ({@code unrevealedTasks}), so cards left unflipped are still waiting after a relog.
- *
- * <p><b>What flipping does NOT do.</b> It does not decide the task. The roll itself is
- * already committed to {@code regionRolledTasks} the moment it happens, so refusing to
- * flip a card you don't like cannot reroll it — the card is a reveal, never a gamble.
+ * <p>This is a gate: a rolled task isn't added to the active list or any tracking
+ * module until its card is turned over. The pending set lives in config
+ * ({@code unrevealedTasks}), so unflipped cards survive a relog. The roll is already
+ * committed to {@code regionRolledTasks}, so refusing to flip can't reroll it.
  *
  * <p>The cards are drawn in the game's style by {@link CardArt}.
  */
@@ -110,16 +105,11 @@ public class TaskCardOverlay extends Overlay
 	private volatile int batchRevealRequest = 0;
 
 	/**
-	 * One card and where it is in its life.
+	 * One card and where it is in its life:
+	 * FACE_DOWN → (click) → turning → FACE_UP → (click) → leaving → gone.
 	 *
-	 * <p>FACE_DOWN → (click) → turning → FACE_UP → (click) → leaving → gone. A card sits
-	 * FACE_UP for as long as the player wants: there is nothing to read on a card that
-	 * has already faded, and a fixed hold either rushes a slow reader or annoys a fast
-	 * one. Dismissal is a second click on the card.
-	 *
-	 * <p>The task is activated at the END OF THE TURN, not on dismissal — the reveal is
-	 * what earns it. Leaving a card up therefore parks nothing: the task is already in
-	 * the list, and the card is just a receipt you close when you've read it.
+	 * <p>The task is activated at the END OF THE TURN, not on dismissal, so a card left
+	 * FACE_UP parks nothing. It stays up until a second click dismisses it.
 	 */
 	private static class Card
 	{
@@ -298,14 +288,11 @@ public class TaskCardOverlay extends Overlay
 
 	/**
 	 * Rebuild the card list from the plugin's pending set, preserving the flip state of
-	 * cards already on screen, so a roll that happens while the overlay is up simply
-	 * appears.
+	 * cards on screen.
 	 *
-	 * <p>Guarded by a string compare against the last seen value. render() runs every
-	 * frame, and parsing the pending list per frame would mean a config read, a split
-	 * and a task lookup per id, forever — this plugin has already hard-locked a client
-	 * once by doing per-repaint work that looked individually cheap (see
-	 * ChunkBlazerPlugin#tasksById). The pending set only changes on a roll or a flip.
+	 * <p>Guarded by a string compare against the last seen value: render() runs every
+	 * frame, and per-repaint parsing has hard-locked a client (see
+	 * ChunkBlazerPlugin#tasksById).
 	 */
 	private void syncCards()
 	{

@@ -32,11 +32,9 @@ import javax.inject.Singleton;
 import net.runelite.client.input.MouseAdapter;
 
 /**
- * Makes the X, the archive book and the compact/detailed switch on the Selected Task box clickable. Overlays can't
- * take clicks by themselves, so this listens to the game canvas (like TaskCardInput
- * does for the task cards) and swallows a click on either button so it doesn't also
- * walk the player. The overlay works out what's hovered while drawing, so no
- * coordinate maths happens here.
+ * Makes the Selected Task box's buttons clickable. Overlays can't take clicks, so this
+ * listens to the game canvas and swallows a click on a button so it doesn't also walk
+ * the player.
  */
 @Singleton
 public class SelectedTaskOverlayInput extends MouseAdapter

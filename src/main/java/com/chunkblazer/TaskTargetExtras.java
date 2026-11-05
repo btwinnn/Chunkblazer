@@ -38,21 +38,14 @@ import net.runelite.api.Client;
 import net.runelite.api.Skill;
 
 /**
- * Extra knowledge of where tasks happen, for the UI only: outlines, the right-click
- * Tasks menu and auto-tracking. The task data and completion tracking never read
- * this, so nothing here changes how a task is completed.
+ * Extra knowledge of where tasks happen, for the UI only (outlines, the right-click
+ * Tasks menu, auto-tracking). Completion tracking never reads this. Only used for tasks
+ * with no NPC or object ids of their own.
  *
- * Three kinds of extra:
- *  - Name rules, for tasks whose target can be told from the task's own wording:
- *    farming (crop to patch), hunter creatures, stalls, pickpocketing, STASH units,
- *    Imp Catcher beads (imps), and the few kill tasks with no NPC ids.
- *  - Ids, for tasks whose target has a generic name (agility shortcuts and courses,
- *    cocktails, drops from monsters in the same chunk).
- *  - Inventory tools, for tasks done from the inventory: right-clicking a knife lists
- *    fletching tasks, a tinderbox firemaking, a pestle and mortar herblore, and so on
- *    (see matchesItem).
- *
- * Only used for tasks that have no NPC or object ids of their own.
+ * Three kinds of extra: name rules, for targets told from the task's wording (farming,
+ * hunter creatures, stalls, STASH units...); ids, for targets with a generic name
+ * (agility shortcuts and courses, cocktails, same-chunk monster drops); and inventory
+ * tools, for tasks done from the inventory (a knife lists fletching; see matchesItem).
  */
 public final class TaskTargetExtras
 {

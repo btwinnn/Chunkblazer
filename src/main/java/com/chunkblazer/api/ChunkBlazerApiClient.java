@@ -95,12 +95,10 @@ public class ChunkBlazerApiClient
 	}
 
 	/**
-	 * The single gated chokepoint for every asynchronous networking call. Its body
-	 * is only the opt-in check and the call, so no request can reach the network
-	 * without {@code serverSyncEnabled} being true (Plugin Hub 3rd-party-networking
-	 * rule). Callers still return-early on the same flag first, so a disabled call
-	 * completes its future correctly rather than being silently dropped here; this
-	 * gate is the belt-and-suspenders that also covers any future call site.
+	 * The single gated chokepoint for every asynchronous networking call: nothing reaches
+	 * the network unless {@code serverSyncEnabled} is true (Plugin Hub 3rd-party-networking
+	 * rule). Callers still return early on the same flag, so a disabled call completes its
+	 * future rather than being dropped here.
 	 */
 	private void enqueueGated(Request req, Callback cb)
 	{
@@ -208,9 +206,8 @@ public class ChunkBlazerApiClient
 	// ==================== Player Account Endpoints ====================
 
 	/**
-	 * Login or register a player. Called when the player logs into the game.
-	 * If the player is new, they will be registered and receive an API key.
-	 * If existing, their full state (mode, points, regions, tasks) is returned.
+	 * Login or register a player. New players receive an API key; existing ones get their
+	 * full state back.
 	 *
 	 * @param rsn The player's RuneScape name
 	 * @param rsnHash SHA-256 hash of the lowercase RSN
@@ -350,10 +347,8 @@ public class ChunkBlazerApiClient
 	}
 
 	/**
-	 * Ask the server whether this account qualifies for a Full Nuzlocke start
-	 * (a fresh "level 3" account). The server is authoritative — it re-derives
-	 * the verdict from the submitted snapshot. Used as a pre-check so the plugin
-	 * can show the player the right message before starting the lock handshake.
+	 * Pre-check whether this account qualifies for a Full Nuzlocke start, so the plugin can
+	 * show the right message before the lock handshake. The server is authoritative.
 	 *
 	 * @param snapshot the live account state read from the game client
 	 * @return CompletableFuture with the eligibility verdict
@@ -389,12 +384,10 @@ public class ChunkBlazerApiClient
 	}
 
 	/**
-	 * Permanently lock the player's game mode, optionally carrying the Nuzlocke
-	 * eligibility snapshot. This cannot be undone (except by a server admin).
+	 * Permanently lock the player's game mode. Only a server admin can undo this.
 	 *
 	 * @param mode The game mode to lock (CASUAL or NUZLOCKE)
-	 * @param eligibility Fresh-account snapshot; required by the server for
-	 *                    NUZLOCKE, ignored (pass null) for CASUAL
+	 * @param eligibility Fresh-account snapshot; required for NUZLOCKE, null for CASUAL
 	 * @return CompletableFuture with the lock response
 	 */
 	public CompletableFuture<LockModeResponse> lockGameMode(GameMode mode, EligibilitySnapshot eligibility)

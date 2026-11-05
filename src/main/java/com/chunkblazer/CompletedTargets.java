@@ -34,10 +34,9 @@ import java.util.Map;
 /**
  * Picks which completed tasks' rolled target quantities to send with a sync.
  *
- * <p>Each quantity is sent once. The completed list only grows at the end, so a
- * single index ("sent through") marks progress: everything before it has been
- * sent. A sync sends the next batch after it, and the plugin moves the index
- * only once the server accepts. A first run from 0 is the backfill.
+ * <p>The completed list only grows at the end, so one "sent through" index marks
+ * progress. The plugin moves it only once the server accepts. A run from 0 is the
+ * backfill.
  */
 final class CompletedTargets
 {

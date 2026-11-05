@@ -56,48 +56,24 @@ import com.chunkblazer.RequiredObject;
 /**
  * Module for CONSTRUCTION completion type tasks.
  *
- * <p>Every authored construction task (80 as of 2026-07) names the FINISHED
- * furniture via {@code required_finished_object} object_ids at quantity 1 —
- * "Build an Oak Larder", "Build a Medium STASH", "Build a Mounted Glory".
- * Detection is therefore a single rule: the watched finished-object SPAWNS
- * within {@link #MATCH_WINDOW_TICKS} of a Construction XP gain, in either
- * order. (The old module's item-consumption fallback served zero tasks and
- * was deleted with the rewrite.)
+ * <p>Tasks name finished furniture via {@code required_finished_object}. Rule: the
+ * watched object spawns within {@link #MATCH_WINDOW_TICKS} of a Construction XP gain.
+ * They land on the same tick in no guaranteed order, so either order must credit.
  *
- * <p>Lessons this rewrite encodes:
  * <ul>
- *   <li><b>Wall-mounted furniture is not a GameObject.</b> Mounted glory /
- *       mounted capes / portraits spawn as {@link DecorativeObjectSpawned}
- *       (some hotspots as {@link WallObjectSpawned}); rugs as
- *       {@link GroundObjectSpawned}. The old module only heard
- *       GameObjectSpawned, so mounted builds could never credit. All four
- *       spawn streams now funnel into one sensor.</li>
- *   <li><b>Either event order must credit.</b> The XP StatChanged and the
- *       object spawn land on the same tick, but their order within the tick
- *       is not guaranteed. Spawn-then-XP and XP-then-spawn both credit via
- *       symmetric recent-spawn / recent-XP memories.</li>
- *   <li><b>POHs are instanced regions.</b> The region gate (needed because
- *       STASH object_ids repeat across the overworld) compared the POH's
- *       instanced region id against the task's overworld chunk and blocked
- *       every indoor build. The gate is now skipped while
- *       {@code client.isInInstancedRegion()} — inside a POH the furniture
- *       object_ids are unique enough, and which portal was used cannot be
- *       determined anyway.</li>
- *   <li><b>Scene loads replay spawns.</b> Walking into an area (or toggling
- *       POH build mode) re-fires spawn events for furniture that already
- *       exists. Spawns within {@link #SCENE_LOAD_SUPPRESS_TICKS} of a
- *       {@link GameState#LOADING} transition are ignored so pre-existing
- *       furniture can't pair with an unrelated XP drop.</li>
- *   <li><b>STASH units never spawn when built.</b> A STASH is a varbit
- *       multiloc: the "inconspicuous bush" and the built STASH are the SAME
- *       scene object re-dressed by an impostor, so building one fires no
- *       spawn event at all (Mike's 2026-07-14 QA: build XP landed with
- *       "recent spawns: []" — the only STASH spawns in the session were
- *       scene-load replays). The build is detected instead by the player's
- *       "Build" MENU CLICK on the watched object id followed by Construction
- *       XP within {@link #BUILD_CLICK_WINDOW_TICKS} — the same
- *       MenuOptionClicked-then-XP pattern AgilityModule uses, and clicks
- *       carry the real runtime id even for varbit-morphed objects.</li>
+ *   <li><b>Wall-mounted furniture is not a GameObject.</b> Mounted items spawn as
+ *       {@link DecorativeObjectSpawned} (some hotspots as {@link WallObjectSpawned}),
+ *       rugs as {@link GroundObjectSpawned}. All four spawn streams feed one sensor.</li>
+ *   <li><b>POHs are instanced regions.</b> The region gate (STASH object_ids repeat
+ *       across the overworld) would block every indoor build, so it is skipped while
+ *       {@code client.isInInstancedRegion()}. Furniture ids are unique enough there.</li>
+ *   <li><b>Scene loads replay spawns</b> for existing furniture, so spawns within
+ *       {@link #SCENE_LOAD_SUPPRESS_TICKS} of a {@link GameState#LOADING} transition are
+ *       ignored.</li>
+ *   <li><b>STASH units never spawn when built.</b> A STASH is a varbit multiloc, one
+ *       scene object re-dressed by an impostor. Detect the "Build" click on the watched
+ *       id (clicks carry the real runtime id), then Construction XP within
+ *       {@link #BUILD_CLICK_WINDOW_TICKS}.</li>
  * </ul>
  */
 @Slf4j
@@ -338,13 +314,9 @@ public class ConstructionModule extends AbstractTaskModule
 		}
 		int objectId = event.getId();
 
-		// Authoring aid: surface the REAL runtime object id for every Build
-		// click while a construction task is active — varbit multilocs (STASH
-		// units) often have wiki ids that don't line up with what the client
-		// reports, and the click id is the ground truth to author against.
-
 		// Not only watched ids: a totem site only shows which wood it is once built
-		// (creditMatchingTasks reads its shown form then).
+		// (creditMatchingTasks reads its shown form then). The click id is the real
+		// runtime id; wiki ids for varbit multilocs often differ.
 		recentBuildClicks.put(objectId, getGameTick());
 	}
 

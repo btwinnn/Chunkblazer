@@ -124,17 +124,12 @@ import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.util.LinkBrowser;
 
 /**
- * Leagues-style task window, opened from the Points orb (ChunkBlazerOrbWidget).
+ * Leagues-style task window, opened from the Points orb (ChunkBlazerOrbWidget). The
+ * tasks key + click on an unlocked chunk on the world map opens its tasks. Filters match
+ * any ticked type and all ticked conditions. Settings live in RuneLite's plugin config.
  *
- * Tabs: Active, Saved (starred), Archived (book button) and, after new tasks arrive,
- * New. Search matches name, description, category and chunk; "Current chunk" follows
- * you. The tasks key + click on an unlocked chunk on the world map opens its tasks.
- * Filter: a skill, a tier, task types (any ticked type) and conditions (all ticked
- * conditions); the eye button hides a type or condition. Sort only changes the order.
- * Settings live in RuneLite's plugin config. Drag the title to move the window.
- *
- * Hover is worked out while drawing, from the game's own mouse position, so clicks
- * line up in stretched and resized modes.
+ * Hover is worked out while drawing, from the game's own mouse position, so clicks line
+ * up in stretched and resized modes.
  */
 @Singleton
 public class TaskBrowserOverlay extends Overlay
@@ -1219,11 +1214,9 @@ public class TaskBrowserOverlay extends Overlay
 	}
 
 	/**
-	 * The RuneScape fonts are pixel fonts on a 16-pixel grid, so they're only crisp when their
-	 * size on screen is 16 (or 32) pixels. Any other size, or Windows display scaling (150% on a
-	 * 4K screen), squeezes the grid unevenly; drawn as plain pixels, rows and columns drop out
-	 * or double up. Smoothed (greyscale) text stays whole at any size and is just as sharp on
-	 * the grid. Greyscale, not the coloured ClearType edges Windows would pick.
+	 * The RuneScape fonts are pixel fonts on a 16-pixel grid, crisp only at 16 or 32 screen
+	 * pixels. Other sizes or Windows display scaling make rows and columns drop out or
+	 * double up. Smoothed text stays whole. Greyscale, not Windows' coloured ClearType.
 	 */
 	private static <T extends JComponent> T smooth(T component)
 	{
@@ -1407,17 +1400,12 @@ public class TaskBrowserOverlay extends Overlay
 		}
 	}
 
+	/** A section heading or a task card, made once per thing it can show and reused. */
 	/**
-	 * A section heading (a stone bar) or a task card (stone, with its tier and points), made
-	 * once for each thing it can show and reused after that.
-	 */
-	/**
-	 * The side panel's card font at the A- / A+ step. The game fonts are pixel fonts drawn on
-	 * a 16px grid, so the size lands on a whole multiple of 16 screen pixels, Windows display
-	 * scaling included: any other size splits their pixels and the text looks choppy. The
-	 * multiple is the one nearest the scaling (2x at 200%, so 4K text isn't tiny). Every step
-	 * grows every line: the first two by font (small and regular text, regular and bold names),
-	 * the last one multiple up. {@code kind}: 0 card text, 1 a task's name, 2 a heading.
+	 * The side panel's card font at the A- / A+ step. The game fonts are pixel fonts on a
+	 * 16px grid, so the size lands on a whole multiple of 16 screen pixels, Windows display
+	 * scaling included; any other size looks choppy. {@code kind}: 0 card text, 1 a task's
+	 * name, 2 a heading.
 	 */
 	private Font sideFont(int kind)
 	{
@@ -1826,11 +1814,9 @@ public class TaskBrowserOverlay extends Overlay
 
 	/**
 	 * True if a task done away from RuneLite (on mobile) still completes at the next
-	 * RuneLite login: it's checked against saved game state. Quests (QuestCheckModule
-	 * sweep), real levels (ProgressionModule), combat achievement varps, persistent unlock
-	 * and achievement diary varbits, items held in inventory/bank/worn (ObtainModule; the bank once opened) and
-	 * worn equipment (EquipModule). Kills, skilling XP drops, dialogue and the active-prayer
-	 * varbit (it resets) need RuneLite watching.
+	 * RuneLite login, because it's checked against saved game state. Kills, XP drops,
+	 * dialogue and the active-prayer varbit (it resets) need RuneLite watching. Items in
+	 * the bank count only once it's opened.
 	 */
 	static boolean isOfflineTrackable(NuzlockeTask task)
 	{

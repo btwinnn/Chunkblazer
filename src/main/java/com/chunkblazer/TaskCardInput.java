@@ -32,12 +32,8 @@ import javax.inject.Singleton;
 import net.runelite.client.input.MouseAdapter;
 
 /**
- * Routes left clicks to the task-card overlay.
- *
- * <p>A click that lands on a face-down card is CONSUMED, so it flips the card instead of
- * also walking the player to that tile — the cards sit dead centre in the viewport, which
- * is exactly where a stray click would otherwise send you running. Clicks that miss every
- * card pass straight through untouched, so the overlay never interferes with normal play.
+ * Routes left clicks to the task-card overlay. A click on a face-down card is CONSUMED
+ * so it doesn't also walk the player. Clicks that miss every card pass through.
  */
 @Singleton
 public class TaskCardInput extends MouseAdapter

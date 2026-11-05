@@ -31,26 +31,21 @@ import java.util.List;
 import lombok.Data;
 
 /**
- * Data-driven definition of a raid/boss "challenge" — a completion conditioned on
- * how the fight was done (no running, gear cap, weapon used, arena half, …).
+ * Data-driven definition of a raid/boss "challenge": a completion conditioned on how
+ * the fight was done. Authored in the SERVER task catalog (which doesn't count against
+ * the plugin's reviewer token budget) and interpreted generically by
+ * {@link com.chunkblazer.modules.RaidChallengeModule}, so a new challenge is JSON-only.
  *
- * <p>Every field here is authored in the SERVER task catalog (which does not count
- * against the plugin's reviewer token budget) and interpreted generically by
- * {@link com.chunkblazer.modules.RaidChallengeModule}. Adding a new boss/raid
- * challenge is therefore JSON-only — no new plugin code — which is what keeps the
- * plugin small as more boss chunks and raids are added.
- *
- * <p>All fields are optional; a challenge enforces only the ones present. Absent =
- * not checked. Two evaluation phases:
+ * <p>All fields are optional; absent means not checked. Two evaluation phases:
  * <ul>
- *   <li><b>Sustained</b> (tracked every tick / on events while the player is inside
- *       {@link #roomRegions}): {@code noRun}, {@code arenaAxis}, {@code noNpcDeathIds},
+ *   <li><b>Sustained</b> (every tick / on events while inside {@link #roomRegions}):
+ *       {@code noRun}, {@code arenaAxis}, {@code noNpcDeathIds},
  *       {@code forbiddenItemIds}, {@code emptySlots}, {@code weaponIds},
  *       {@code noDamageTicks}, {@code surviveTicks}, {@code attackStyleVarp},
- *       {@code defenceReduceNpcIds}. A single violation fails the attempt for that run.</li>
+ *       {@code defenceReduceNpcIds}. A single violation fails that run.</li>
  *   <li><b>At completion</b> (when {@link #completeMessage} appears): the gates
- *       ({@code minRaidLevel}, {@code solo}) and point-in-time reads
- *       ({@code minWeightKg}, {@code maxWeightKg}, {@code maxGearValue}), plus a final
+ *       ({@code minRaidLevel}, {@code solo}), point-in-time reads
+ *       ({@code minWeightKg}, {@code maxWeightKg}, {@code maxGearValue}) and a final
  *       re-check of the sustained flags.</li>
  * </ul>
  */
@@ -128,12 +123,9 @@ public class RaidChallenge
 	private Integer arenaMaxY;
 
 	/**
-	 * Additional valid arena rectangles (region-local tile coords, 0–63), for when the
-	 * legal fight area isn't one clean rectangle — e.g. Ba-Ba's floor PLUS the raised
-	 * platform you stand on. The valid area is the UNION of the single box above and
-	 * every box here: the player is only "outside the arena" when they're outside ALL
-	 * of them. Each box is just four bounds (min/max x/y) — no per-tile lists — and
-	 * enforces only the bounds it sets (absent bound = unbounded on that side).
+	 * Additional valid arena rectangles (region-local tile coords, 0-63). The valid area is
+	 * the UNION of the single box above and these. Each box enforces only the bounds it
+	 * sets; an absent bound is unbounded on that side.
 	 */
 	@SerializedName("arena_boxes")
 	private List<ArenaBox> arenaBoxes;
@@ -152,12 +144,10 @@ public class RaidChallenge
 	}
 
 	/**
-	 * NPC ids whose current health gates the arena ({@link #arenaBoxes} / the single box):
-	 * the arena is enforced only once one of these NPCs has dropped to
-	 * {@link #arenaHpGateBelowPercent} percent health or below. Used for "from 50 percent
-	 * down, stay on these tiles" mechanics like Maiden's Red Carpet. Absent means the arena
-	 * is enforced for the whole window. The gate LATCHES on the first time the threshold is
-	 * reached this attempt, so a boss healing back up does not reopen free movement.
+	 * NPC ids whose health gates the arena ({@link #arenaBoxes} / the single box): enforced
+	 * only once one drops to {@link #arenaHpGateBelowPercent} percent or below. Absent
+	 * means the whole window. The gate LATCHES, so a boss healing back up doesn't reopen
+	 * free movement.
 	 */
 	@SerializedName("arena_hp_gate_npc_ids")
 	private List<Integer> arenaHpGateNpcIds;
@@ -206,13 +196,9 @@ public class RaidChallenge
 	private List<Integer> attackStyleValues;
 
 	/**
-	 * NPCs whose hits from the LOCAL player are gated on {@link #requiredAttackStyle}.
-	 * Every hit you land on one of these NPCs must use that damage style, or the run
-	 * fails. Evaluated ONLY on hitsplats to these NPCs — so switching weapons for a
-	 * side target (e.g. shooting a Zebak jug with a ranged weapon) never trips it.
-	 * The active style is derived from the equipped-weapon-type varbit + attack-style
-	 * varp; the module logs the resolved style ([STYLE-DEBUG]) so the weapon table
-	 * can be verified/extended.
+	 * NPCs whose hits from the LOCAL player must use {@link #requiredAttackStyle}, or the
+	 * run fails. Evaluated ONLY on hitsplats to these NPCs, so switching weapons for a side
+	 * target never trips it. [STYLE-DEBUG] logs the resolved style.
 	 */
 	@SerializedName("style_target_ids")
 	private List<Integer> styleTargetIds;
@@ -231,12 +217,9 @@ public class RaidChallenge
 	private List<Integer> stabTargetIds;
 
 	/**
-	 * "Obtain ALL of these item ids within a single raid." Satisfy-triggered: the
-	 * task completes the moment every listed item has been seen in the inventory
-	 * during one fight window, and progress resets when a new raid begins. Use for
-	 * in-raid crafting goals whose supplies are destroyed on exit — e.g. CoX's
-	 * "mix these four (+) potions in the same raid" — where the same-raid constraint
-	 * can't be met by a plain OBTAIN set (which counts across raids).
+	 * Complete when every listed item has been seen in the inventory during one fight
+	 * window; progress resets when a new raid begins. For in-raid crafting goals whose
+	 * supplies are destroyed on exit, since a plain OBTAIN set counts across raids.
 	 */
 	@SerializedName("obtain_all_item_ids")
 	private List<Integer> obtainAllItemIds;
@@ -362,12 +345,9 @@ public class RaidChallenge
 	private List<Integer> forbiddenAliveNpcIds;
 
 	/**
-	 * "Defeat this NPC." Completes when one of these NPCs dies while you were engaged.
-	 * For raids with no per-room completion chat (Chambers of Xeric), the boss's death
-	 * is the completion signal. The fight window for sustained conditions ({@code noRun},
-	 * {@code weaponIds}, …) is the ENCOUNTER — from your first hit on the target until it
-	 * dies — so "defeat X without running / with weapon Y" is scoped to that fight, not
-	 * the whole raid.
+	 * "Defeat this NPC." Completes when one of these NPCs dies while you were engaged, for
+	 * raids with no per-room completion chat (Chambers of Xeric). Sustained conditions are
+	 * scoped to the ENCOUNTER, from your first hit until it dies, not the whole raid.
 	 */
 	@SerializedName("defeat_npc_ids")
 	private List<Integer> defeatNpcIds;
@@ -387,22 +367,17 @@ public class RaidChallenge
 	private Integer defeatWithinTicks;
 
 	/**
-	 * With {@link #defeatNpcIds}: the target must die within this many game ticks of the
-	 * encounter starting (your first hit on it), or the attempt fails and you retry on the
-	 * next one. A kill-speed challenge, e.g. "defeat a Manticore in 24 seconds" (40 ticks).
-	 * 100 ticks = 60s. Ignored unless a defeat target is set; combines with the sustained
-	 * conditions, which are scoped to the same encounter.
+	 * With {@link #defeatNpcIds}: the target must die within this many game ticks of your
+	 * first hit, or the attempt fails and you retry on the next one. 100 ticks = 60s.
+	 * Ignored unless a defeat target is set.
 	 */
 	@SerializedName("max_defeat_ticks")
 	private Integer maxDefeatTicks;
 
 	/**
-	 * Satisfy-triggered COUNTER: complete once this many counted kills happen in a single
-	 * fight window (e.g. "defeat 20 small Nylocas in one Nylocas fight", "5 Blood Spawns in
-	 * one Maiden fight"). The window is {@link #roomRegions} — so it is required, and the
-	 * tally resets each time you re-enter the room, giving the "in one fight" scoping. The
-	 * things to count come from {@link #defeatCountNpcIds} (their death). Independent of
-	 * {@link #defeatNpcIds}, which is a single-kill completion.
+	 * Satisfy-triggered COUNTER: complete once this many {@link #defeatCountNpcIds} die in
+	 * one fight window. The window is {@link #roomRegions}, so that is required; the tally
+	 * resets on re-entering the room. Independent of {@link #defeatNpcIds}.
 	 */
 	@SerializedName("defeat_count")
 	private Integer defeatCount;
@@ -437,11 +412,9 @@ public class RaidChallenge
 	private List<List<Integer>> requiredInventoryGroups;
 
 	/**
-	 * Sustained CAP: the player may consume AT MOST {@link #maxConsumed} of these item ids
-	 * during the fight ("Light Snack: eat 6 or fewer Paddlefish"). Consumption is measured as
-	 * the cumulative DROP in the combined inventory count of these ids over the window;
-	 * exceeding the cap taints the attempt. (In an instanced solo boss, a count drop is an
-	 * eat — you can't drop/trade items there.)
+	 * Sustained CAP: consume AT MOST {@link #maxConsumed} of these item ids during the
+	 * fight. Measured as the cumulative DROP in their combined inventory count, which in
+	 * an instanced solo boss is an eat (you can't drop or trade there).
 	 */
 	@SerializedName("max_consumed_item_ids")
 	private List<Integer> maxConsumedItemIds;

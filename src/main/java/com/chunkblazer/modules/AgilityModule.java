@@ -58,36 +58,25 @@ import com.chunkblazer.RequiredObject;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * Module for handling AGILITY completion type tasks.
+ * Module for AGILITY completion type tasks.
  *
- * Two task shapes:
- *   Object-gated tasks — JSON has required_object pointing at the obstacle (e.g.
- *                 Ardougne → Gap #4, id 15612; a Shilo stepping stone, id 16466).
- *                 The player clicks THAT specific object, then we credit once their
- *                 USE of it is confirmed by a player animation OR an Agility XP gain
- *                 within {@link #TRAVERSAL_TIMEOUT_TICKS}. Confirming on use (not the
- *                 raw click) means obstacles that award NO XP still credit, while a
- *                 misclick the player walks away from — or a shortcut they lack the
- *                 level for — does not (neither animates nor grants XP). Matching is
- *                 by the task's own object id, so only the intended task credits.
- *   Objectless shortcut tasks — no required_object, e.g. some "Use the … Shortcut"
- *                 tasks. Legacy fallback: credit on any small Agility XP gain. Known
- *                 cross-credit limitation when several are active at once; the fix is
- *                 to give each a required_object id so it uses the path above.
+ * <p>Object-gated tasks (required_object) credit once a click on that object is confirmed
+ * by a player animation or Agility XP gain within {@link #TRAVERSAL_TIMEOUT_TICKS}.
+ * Confirming use lets no-XP obstacles credit, while a misclick walked away from, or a
+ * shortcut above the player's level, does not.
+ *
+ * <p>Objectless shortcut tasks are a legacy fallback: any small Agility XP gain credits,
+ * so they cross-credit when several are active. The fix is to give each a
+ * required_object.
  */
 @Slf4j
 @Singleton
 public class AgilityModule extends AbstractTaskModule
 {
 	private static final String COMPLETION_TYPE = "AGILITY";
-	// Object-gated tasks (have required_object) credit on the watched-object CLICK
-	// once the player's USE of it is confirmed by an animation or Agility XP (see
-	// onMenuOptionClicked / onAnimationChanged / confirmPendingTraversal).
-	//
-	// Legacy objectless shortcut tasks (no required_object) still credit on any
-	// small Agility XP gain. This threshold catches every legitimate shortcut XP
-	// gain (the smallest are ~5). The end goal is to give every agility task a
-	// required_object id so nothing relies on this loose XP path.
+	// Only legacy objectless shortcut tasks use this loose XP path; the smallest
+	// legitimate shortcut XP gains are ~5. Goal: a required_object id on every agility
+	// task.
 	private static final int SHORTCUT_XP_THRESHOLD = 5;
 
 	// After clicking a watched obstacle we wait this many ticks for proof the
@@ -345,12 +334,11 @@ public class AgilityModule extends AbstractTaskModule
 	}
 
 	/**
-	 * A click that only works the interface: a side panel tab, the run or prayer orb, a
-	 * prayer, putting gear on or taking it off, an examine, or "Cancel" on a right-click
-	 * menu. None of these moves the player or plays an animation, so the obstacle clicked
-	 * before it still counts. That matters most where the animation is the only proof, like a
-	 * grapple, which gives no XP (Eirund, Catherby cliff). Eating, drinking, teleports,
-	 * spells, emotes and the special attack orb all animate, so they still cancel it.
+	 * A click that only works the interface: side panel tab, run or prayer orb, prayer,
+	 * gear on or off, examine, or "Cancel". These neither move the player nor animate, so
+	 * the obstacle clicked before still counts, which matters for no-XP grapples where
+	 * the animation is the only proof. Eating, drinking, teleports, spells, emotes and
+	 * the special attack orb animate, so they still cancel it.
 	 */
 	private static boolean panelClick(MenuOptionClicked event)
 	{

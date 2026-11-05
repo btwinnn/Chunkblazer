@@ -77,31 +77,26 @@ import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.RaidChallenge;
 
 /**
- * Generic, data-driven module for raid/boss "challenge" tasks — completions gated
- * on HOW the fight was done. One evaluator interprets every condition from the
- * task's {@link RaidChallenge} block (authored server-side), so adding challenges
- * for new bosses/raids is JSON-only, keeping the plugin small as content grows.
+ * Data-driven module for raid/boss "challenge" tasks, gated on HOW the fight was done.
+ * One evaluator interprets each task's {@link RaidChallenge} block, so new challenges are
+ * JSON-only.
  *
- * <p>Two completion styles:
  * <ul>
- *   <li><b>Message-triggered</b> — on the completion GAMEMESSAGE (per-room
- *       "Challenge complete: X" or the raid KC "count is"), if the gates pass, no
- *       sustained condition was violated during the fight window, and the
- *       point-in-time reads hold, the attempt qualifies. Supports a rolled quantity.</li>
- *   <li><b>Satisfy-triggered</b> — completes the instant an in-window accumulator
- *       reaches its target: {@code no_damage_ticks} (Butterfly), {@code survive_ticks}
- *       (enrage timers), or a {@code defence_reduce} landing (Limp Pillar).</li>
+ *   <li><b>Message-triggered</b>: on the completion GAMEMESSAGE ("Challenge complete: X"
+ *       or the raid KC "count is"), the attempt qualifies if the gates pass, no sustained
+ *       condition was violated, and point-in-time reads hold. Supports a rolled
+ *       quantity.</li>
+ *   <li><b>Satisfy-triggered</b>: completes when an in-window accumulator reaches its
+ *       target: {@code no_damage_ticks}, {@code survive_ticks}, or a
+ *       {@code defence_reduce} landing.</li>
  * </ul>
  *
- * <p>Fight window: for per-room challenges it is the time inside {@code room_regions}
- * (instanced region, via {@link WorldPoint#fromLocalInstance}); for whole-raid
- * challenges (no room_regions) it is any time the raid-level varbit is &gt; 0.
- * Leaving the window resets the attempt so a later run starts clean.
+ * <p>Fight window: time inside {@code room_regions} (via
+ * {@link WorldPoint#fromLocalInstance}), or with no room_regions, any time the raid-level
+ * varbit is above 0. Leaving it resets the attempt.
  *
- * <p>NOTE: several numeric inputs must be captured in-game before their tasks can
- * pass — arena split coords, the enrage phase varbit, per-weapon attack-style varp
- * values, and defence-reducing animation ids. They are authored as data and flagged
- * in docs/BOSS-CHUNKS.md; the module logic is complete and generic.
+ * <p>Several numeric inputs must be captured in-game before their tasks can pass; see
+ * docs/BOSS-CHUNKS.md.
  */
 @Slf4j
 @Singleton
@@ -152,13 +147,11 @@ public class RaidChallengeModule extends AbstractTaskModule
 	private final Set<NPC> deadTargets = Collections.newSetFromMap(new IdentityHashMap<>());
 
 	// ── ToA Wardens enrage detection ─────────────────────────────────────────
-	// There is NO varbit for the Wardens enrage/"final lightning" phase (confirmed
-	// against RuneLite + the official ToA plugin). The final Warden is NPC id
-	// 11761/11762 (Damaged==Enraged) or 11763/11764 (brief Invulnerable) — the id
-	// does NOT change when enrage begins, so we detect enrage separately:
-	//   1. the lightning GraphicsObject (enrage-only, most precise) — CAPTURED below;
-	//   2. the HP heal-spike at enrage start (near-death -> heals ~20%) — fallback.
-	// The phase key "toa_wardens_enrage" on a survive_ticks task gates on this.
+	// No varbit exists for this phase, and the final Warden's NPC id (11761/11762, or
+	// 11763/11764 while briefly invulnerable) does NOT change when enrage begins.
+	// Detected by:
+	//   1. the lightning GraphicsObject (enrage-only, most precise), captured below;
+	//   2. the HP heal-spike at enrage start (heals ~20%) as fallback.
 	private static final String PHASE_TOA_WARDENS_ENRAGE = "toa_wardens_enrage";
 	// Enrage lightning GraphicsObject ids, captured live from the [WARDEN-GFX] logs
 	// (session 2026-08-23): the general P3 lightning (2220-2223) stops the instant
@@ -171,13 +164,9 @@ public class RaidChallengeModule extends AbstractTaskModule
 	private boolean wardenEnraged;   // true once the enrage/lightning phase has begun
 	private int wardenLowestRatio = Integer.MAX_VALUE;
 
-	// Chat-spam guard: a task's failure line is announced AT MOST ONCE per raid.
-	// Without this, re-entering a room (per-room challenges reset their attempt each
-	// time the window reopens) or the every-tick re-check would re-print the same
-	// "Challenge Failed" line over and over within a single raid. The set of already-
-	// announced taskIds is cleared only when a NEW raid begins — detected as the
-	// raid-level going from "no raid" to "in a raid" — so it survives room changes
-	// and task-state rebuilds mid-raid but resets cleanly for the next attempt.
+	// Chat-spam guard: a task's failure line is announced AT MOST ONCE per raid. Cleared
+	// only when a NEW raid begins ("no raid" to "in a raid"), so it survives room changes
+	// and task-state rebuilds.
 	private final Set<String> failureAnnouncedThisRaid = new HashSet<>();
 	private boolean wasInRaid;
 
@@ -242,13 +231,9 @@ public class RaidChallengeModule extends AbstractTaskModule
 			return;
 		}
 		State s = new State();
-		// Roll the quantity target ONCE, then keep it stable. This module's state is
-		// cleared and re-created on every loadActiveTasks (which runs several times a
-		// session), so re-rolling here each time made the target wander — and a re-roll
-		// landing on 1 completed a "do it N times" task after a single clear (Taylor's
-		// "assigned 2, finished after 1"). A persisted multi-count target arrives via
-		// task.getTargetQuantity() (initializeTask loads it from saved progress); reuse
-		// it instead of re-rolling. Only roll when it hasn't been rolled yet (<= 1).
+		// Roll the quantity target ONCE. This state is rebuilt on every loadActiveTasks,
+		// and a re-roll landing on 1 would complete a "do it N times" task after one
+		// clear. Reuse the persisted target; roll only when it is <= 1.
 		int persistedTarget = task.getTargetQuantity();
 		s.target = persistedTarget > 1 ? persistedTarget : Math.max(1, rollQuantity(task.getChallenge()));
 		s.progress = Math.max(0, task.getCurrentProgress());
@@ -271,11 +256,9 @@ public class RaidChallengeModule extends AbstractTaskModule
 	{
 		super.onTaskCleared();
 		states.clear();
-		// Deliberately do NOT touch failureAnnouncedThisRaid / wasInRaid here.
-		// onTaskCleared fires on every loadActiveTasks (varbit storms, region changes,
-		// syncs — many times per raid), and clearing the once-per-raid guard here made
-		// the same "Challenge Failed" line re-announce after each reload. The guard is
-		// reset only on a genuine new-raid transition (see onGameTick) and on shutDown.
+		// Do NOT touch failureAnnouncedThisRaid / wasInRaid here: onTaskCleared fires
+		// many times per raid, so the failure line would re-announce. They reset only on
+		// a new-raid transition (see onGameTick) and on shutDown.
 	}
 
 	@Override
@@ -448,17 +431,12 @@ public class RaidChallengeModule extends AbstractTaskModule
 			{
 				continue;
 			}
-			// Every raid prints "... count is: N" on completion (ToA AND CoX both do),
-			// so a CoX kill-count line would otherwise match a ToA task's "count is"
-			// trigger and fail it. Only honor a completion message when THIS task's raid
-			// is actually active — its raid-level varbit reads > 0. Finishing one raid can
-			// no longer fail another raid's challenges. (Off-thread raidLevel() returns 0,
-			// but onChatMessage runs on the client thread, so the read is live here.)
-			// This guard is ONLY for tasks that opt into raid-level gating (min_raid_level
-			// or an explicit raid_level_varbit); a boss with a SPECIFIC completion message
-			// and no raid-level gate — Royal Titans' "royal titans kill count is" — can't
-			// collide with another boss, so it is trusted directly rather than blocked by
-			// the default ToA varbit reading 0.
+			// Every raid prints "... count is: N", so a CoX KC line would match a ToA
+			// task's "count is" trigger and fail it. Tasks using raid-level gating
+			// (min_raid_level or raid_level_varbit) honor a completion message only while
+			// their raid is active. A specific message with no gate (Royal Titans) can't
+			// collide, so it is trusted rather than blocked by the default ToA varbit
+			// reading 0.
 			if (usesRaidLevelGate(ch) && raidLevel(ch) <= 0)
 			{
 				continue;
@@ -643,12 +621,9 @@ public class RaidChallengeModule extends AbstractTaskModule
 	}
 
 	// ── Combat-style resolution ──────────────────────────────────────────────
-	// The active damage style is derived from EQUIPPED_WEAPON_TYPE varbit (357) +
-	// ATTACK_STYLE varp (43): neither alone is enough — the varp is only a 0–3 index
-	// whose meaning depends on the weapon type. This is the general version of the
-	// old stab-only check, so tasks can now gate on any style via JSON
-	// (required_attack_style). New weapon families are added to WEAPON_STYLES; an
-	// unmapped type resolves to UNKNOWN and is treated leniently (passes).
+	// Style needs EQUIPPED_WEAPON_TYPE varbit (357) + ATTACK_STYLE varp (43): the varp is
+	// only a 0-3 index whose meaning depends on the weapon type. New weapon families go
+	// in WEAPON_STYLES; an unmapped type resolves to UNKNOWN and passes.
 	private static final int EQUIPPED_WEAPON_TYPE_VARBIT = VarbitID.COMBAT_WEAPON_CATEGORY;
 	private static final int ATTACK_STYLE_VARP = VarPlayerID.COM_MODE;
 	/** Bitmap varbit: 1 bit per active prayer (overheads at 12=magic/13=missiles/14=melee). */
@@ -690,11 +665,10 @@ public class RaidChallengeModule extends AbstractTaskModule
 		return current == required;
 	}
 
-	// Weapon category (COMBAT_WEAPON_CATEGORY) -> the damage style of each combat option,
-	// indexed by the COM_MODE varp. Categories and their options come from the game's own
-	// WEAPON_STYLES enum, damage types from the wiki: a 3-option weapon's defensive option
-	// is index 3 (2 is unused) and a staff's spell is 4. MELEE marks a melee weapon whose
-	// stab/slash/crush mix isn't mapped. Anything absent resolves to UNKNOWN.
+	// Weapon category to each option's damage style, indexed by COM_MODE. Options come
+	// from the game's WEAPON_STYLES enum, damage types from the wiki. A 3-option weapon's
+	// defensive option is index 3 (2 is unused); a staff's spell is 4. MELEE marks an
+	// unmapped stab/slash/crush mix.
 	private static final Map<Integer, CombatStyle[]> WEAPON_STYLES = buildWeaponStyles();
 
 	private static Map<Integer, CombatStyle[]> buildWeaponStyles()
@@ -1042,11 +1016,10 @@ public class RaidChallengeModule extends AbstractTaskModule
 	}
 
 	/**
-	 * Tally one counted kill toward a defeat_count task, completing once the target N is
-	 * reached in a single fight window. Only counts while the window is open and the
-	 * attempt is clean; the tally resets when the window reopens (see resetAttempt), which
-	 * is what makes it "in one fight". Counts every matching death in the room, not strictly
-	 * the local player's — attribution per add is impractical in group content.
+	 * Tally one kill toward a defeat_count task. The tally resets when the window reopens
+	 * (see resetAttempt), which makes it "in one fight". Counts every matching death in
+	 * the room, not just the local player's: attribution per add is impractical in group
+	 * content.
 	 */
 	private void tallyDefeatCount(NuzlockeTask task, RaidChallenge ch, State s)
 	{
@@ -1690,13 +1663,10 @@ public class RaidChallengeModule extends AbstractTaskModule
 
 	private int raidLevel(RaidChallenge ch)
 	{
-		// getVarbitValue asserts the CLIENT thread. addActiveTask() can run OFF it —
-		// unlockRegion() -> loadActiveTasks() fires from a minimap-unlock popup callback
-		// on the EDT — and reading the varbit there threw AssertionError, which aborted
-		// loadActiveTasks mid-registration and left an unlock half-applied until relog
-		// (Travis: "unlocked underground, then couldn't unlock upstairs"). Off the client
-		// thread there is no live raid anyway, so 0 is the correct, safe answer. The real
-		// window/gate checks all run in onGameTick/onChatMessage on the client thread.
+		// getVarbitValue asserts the CLIENT thread, but addActiveTask() can run off it
+		// (unlockRegion() from a popup callback on the EDT), and the AssertionError would
+		// abort loadActiveTasks mid-registration. Off the client thread there is no live
+		// raid, so 0 is correct.
 		if (!client.isClientThread())
 		{
 			return 0;

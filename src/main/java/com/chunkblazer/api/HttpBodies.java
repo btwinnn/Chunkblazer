@@ -32,16 +32,10 @@ import java.io.InputStream;
 import okhttp3.ResponseBody;
 
 /**
- * Helpers for reading HTTP response bodies from the ChunkBlazer server safely.
- *
- * <p>The plugin fetches its task catalog and audio assets from a remote server.
- * A hostile or compromised server (or anything able to spoof it) must not be able
- * to exhaust the client's memory with an oversized response, so bodies are read
- * through a hard ceiling here. This complements the on-disk protections in the
- * stores (sandboxed {@link net.runelite.client.util.Filepath} writes, sha256
- * content verification, and an LRU disk cap): together they bound where a download
- * can be written, whether it can be trusted, how much disk it can use, and — here —
- * how much memory it can consume.
+ * Reads HTTP response bodies through a hard ceiling, so a hostile or compromised server
+ * can't exhaust the client's memory. Complements the stores' on-disk protections:
+ * sandboxed {@link net.runelite.client.util.Filepath} writes, sha256 content
+ * verification and an LRU disk cap.
  */
 final class HttpBodies
 {
@@ -52,12 +46,9 @@ final class HttpBodies
 	/**
 	 * Read a response body fully into memory, but never more than {@code maxBytes}.
 	 *
-	 * <p>The advertised {@code Content-Length} is used only as a cheap early-out and
-	 * is never trusted: a hostile server can lie about it or omit it entirely, so the
-	 * ceiling is also enforced byte-by-byte during the read. Exceeding it throws an
-	 * {@link IOException}, which every caller already treats like any other failed
-	 * fetch (keep the last-good cache), so an oversized payload is dropped rather than
-	 * parsed or persisted.
+	 * <p>{@code Content-Length} is only a cheap early-out and is never trusted, so the
+	 * ceiling is also enforced during the read. Callers treat the {@link IOException} like
+	 * any failed fetch and keep the last-good cache.
 	 *
 	 * @param body     the response body, or null
 	 * @param maxBytes the hard ceiling on bytes read

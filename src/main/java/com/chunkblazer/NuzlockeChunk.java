@@ -83,11 +83,8 @@ public class NuzlockeChunk
 
 	/**
 	 * Boss key to the NPC ids whose DEATH signals that boss's completion (for the
-	 * once-per-boss token). Authored per boss chunk so detection is data-driven — a new
-	 * world boss needs no plugin change, just its ids here. E.g. the Scurrius+Bryophyta
-	 * chunk maps "scurrius" to [7221,7222] and "bryophyta" to [8195]. Raids (ToA/CoX)
-	 * leave this null and use the completion chat message instead (their bosses despawn
-	 * or are multi-phase).
+	 * once-per-boss token), e.g. "scurrius" to [7221,7222]. Raids (ToA/CoX) leave this
+	 * null and use the completion chat message: their bosses despawn or are multi-phase.
 	 */
 	@SerializedName("boss_npc_ids")
 	private java.util.Map<String, java.util.List<Integer>> bossNpcIds;

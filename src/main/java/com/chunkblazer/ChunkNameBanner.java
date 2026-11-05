@@ -48,23 +48,15 @@ import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
 /**
- * Pokemon-style area sign: when the player walks into a different chunk, a small
- * banner with the chunk's name slides down from the top of the game view, holds for a
- * moment, then slides back up. A second line says whether the chunk is unlocked or,
- * if not, what it costs. Its own overlay on the always-on-top layer, so game windows,
- * the chatbox and other overlays never cover it; registered by TaskBrowserOverlay.
+ * Pokemon-style area sign: on entering a different chunk, a banner with its name and
+ * unlock status or cost slides down from the top of the game view, holds, then slides
+ * back. Its own always-on-top overlay so nothing covers it; registered by
+ * TaskBrowserOverlay.
  *
- * In a chunk you haven't unlocked, the banner stays up for as long as you're there.
- * It only goes once you unlock the chunk (it flashes "Unlocked!" first) or walk out of
- * it, even into a chunk that gets no banner of its own; when one banner replaces another, the old one slides away quickly
- * before the new one comes in.
- *
- * An unlocked chunk among the last few you were in doesn't get its banner again, so
- * running laps across chunk borders (agility courses, herbiboar, a bank and a skilling
- * spot) stays quiet however long you train, while somewhere new always gets one. A
- * dungeon counts as the same place as the land above it, so going down and back up
- * stays quiet too; coming out in a different chunk doesn't. Locked chunks always get
- * their banner.
+ * In a locked chunk the banner stays until you unlock it or walk out, even into a chunk
+ * with no banner of its own. An unlocked chunk among the last few you were in gets no
+ * repeat banner, so laps across chunk borders stay quiet. A dungeon counts as the land
+ * above it, unless you come out in a different chunk.
  */
 @Singleton
 public class ChunkNameBanner extends Overlay

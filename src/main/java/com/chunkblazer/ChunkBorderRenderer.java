@@ -42,26 +42,14 @@ import net.runelite.api.Perspective;
 import net.runelite.api.coords.LocalPoint;
 
 /**
- * Renders chunk (region) borders on the 3D scene as continuous polylines,
- * one per visible region-side, instead of one disconnected segment per tile.
+ * Renders chunk (region) borders on the 3D scene as continuous polylines. One
+ * {@link Path2D} per region-side, stroked with round caps and joins, avoids the visible
+ * joints per-tile {@link Graphics2D#drawLine} calls leave across elevation changes.
  *
- * <p>Why a separate class: the previous in-line implementation drew each
- * boundary tile's segment independently. Two problems with that:
- * <ol>
- *   <li>Vertex order in the polygon returned by
- *       {@link Perspective#getCanvasTilePoly} is <code>SW, SE, NE, NW</code>
- *       — not <code>SW, NW, NE, SE</code> — so picking "vertex 0 → vertex 1"
- *       for the west side actually drew the south side, producing
- *       perpendicular stripes that looked like tally marks.</li>
- *   <li>Even with the correct vertices, drawing each tile-segment with a
- *       fresh {@link Graphics2D#drawLine} call can leave visible joints
- *       across terrain elevation changes. Building a single {@link Path2D}
- *       per region-side and stroking it with round caps + joins gives a
- *       crisp continuous outline.</li>
- * </ol>
+ * <p>{@link Perspective#getCanvasTilePoly} returns vertices as
+ * <code>SW, SE, NE, NW</code>, not <code>SW, NW, NE, SE</code>.
  *
- * <p>The chain-building logic ({@link #buildBorderChains}) is exposed
- * package-private and free of any RuneLite dependency so it can be unit
+ * <p>{@link #buildBorderChains} is free of any RuneLite dependency so it can be unit
  * tested with a stubbed {@link TilePolygonProvider}.
  */
 public class ChunkBorderRenderer
@@ -74,16 +62,10 @@ public class ChunkBorderRenderer
 	private static final Color LOCKED_BORDER = new Color(60, 60, 60, 220);
 	private static final Stroke BORDER_STROKE = new BasicStroke(
 		1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-	// NOTE: the per-tile translucent grey fill for locked chunks was removed
-	// because rendering ~10k fillPolygon() calls per frame in Java2D tanked
-	// framerate (Mike's friend hit ~15 FPS). The right place for that effect
-	// is the GPU pipeline (cf. Region Locker plugin's GPU wrapper). Until
-	// that's wired up, locked chunks are distinguished by border colour only.
+	// No per-tile grey fill for locked chunks here: ~10k fillPolygon() calls per frame
+	// in Java2D tanks framerate. That effect belongs in the GPU pipeline.
 
-	/**
-	 * Identifies which side of a region a polyline traces. The vertex picks
-	 * for that side are baked into the chain-building algorithm.
-	 */
+	/** Which side of a region a polyline traces. Vertex picks live in the chain builder. */
 	enum Side
 	{
 		WEST, EAST, NORTH, SOUTH
@@ -189,27 +171,12 @@ public class ChunkBorderRenderer
 	}
 
 	/**
-	 * Walk each region-side and group its visible boundary tiles into
-	 * continuous polylines. The result is at most 4 chains per visible
-	 * region (W/E/N/S), but a side may be split into multiple chains if a
-	 * tile in the middle is invisible (off-scene / occluded).
+	 * Group each region-side's visible boundary tiles into continuous polylines: one chain
+	 * per side, or several if an invisible tile splits it.
 	 *
-	 * <p>For a chain along the WEST side of a region, going north:
-	 * for each tile in the run we emit its <em>start</em> vertex, then
-	 * after the last tile we emit its <em>end</em> vertex. Adjacent tiles
-	 * share corners exactly, so the start of tile N+1 equals the end of
-	 * tile N — meaning the chain visits every shared corner once and
-	 * traces the boundary cleanly. Same idea reflected per side:
-	 * <table>
-	 *   <tr><th>Side</th><th>Iterate axis</th><th>Start vertex</th><th>End vertex</th></tr>
-	 *   <tr><td>WEST</td>  <td>sy ↑</td><td>SW</td><td>NW</td></tr>
-	 *   <tr><td>EAST</td>  <td>sy ↑</td><td>SE</td><td>NE</td></tr>
-	 *   <tr><td>SOUTH</td> <td>sx ↑</td><td>SW</td><td>SE</td></tr>
-	 *   <tr><td>NORTH</td> <td>sx ↑</td><td>NW</td><td>NE</td></tr>
-	 * </table>
-	 *
-	 * <p>Pure function — no Client / no graphics — so it's testable in
-	 * isolation.
+	 * <p>A chain emits each tile's start vertex, then the last tile's end vertex. Adjacent
+	 * tiles share corners, so every corner is visited once. Start/end vertices per side:
+	 * WEST SW/NW and EAST SE/NE (sy ascending), SOUTH SW/SE and NORTH NW/NE (sx ascending).
 	 */
 	static List<BorderChain> buildBorderChains(int sceneSize, int baseX, int baseY,
 		IntPredicate isRegionUnlocked, TilePolygonProvider provider, int regionSize)

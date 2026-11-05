@@ -51,32 +51,22 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
- * Fetches, caches, and serves ChunkBlazer media assets (task-completion jingles
- * today; icons/animations later) from the server, so heavy media lives out of
- * the shipped jar. Deliberately built to mirror the plugin's already-hardened
- * login/sync outage discipline (see
- * {@code Chunkblazer-Server/docs/MEDIA-PIPELINE-PLAN.md} and
- * {@code TASK-CATALOG-MIGRATION-PLAN.md}):
+ * Fetches, caches, and serves ChunkBlazer media assets from the server, so heavy media
+ * lives out of the shipped jar. See {@code Chunkblazer-Server/docs/MEDIA-PIPELINE-PLAN.md}.
  *
  * <ol>
- *   <li><b>Load order cache -&gt; network -&gt; bundled seed.</b> The newest
- *       on-disk copy loads instantly and offline; the network only ever
- *       upgrades it; the caller's bundled resource is the final fallback.</li>
- *   <li><b>Flip "loaded" only on a real success.</b> An offline/error/empty
- *       response leaves the last-good manifest in place and retries. An empty
- *       manifest is treated as a failure, never as "zero assets" — that is the
- *       exact bug the sync union-merge exists to kill, ported here.</li>
- *   <li><b>Revalidate, don't re-download.</b> The manifest ETag is persisted and
- *       sent as {@code If-None-Match}; steady state is a ~0-byte 304.</li>
+ *   <li><b>Load order cache, network, bundled seed.</b> The network only upgrades the
+ *       on-disk copy.</li>
+ *   <li><b>Flip "loaded" only on a real success.</b> An offline/error/empty response
+ *       keeps the last-good manifest and retries. An empty manifest is a failure,
+ *       never "zero assets".</li>
+ *   <li><b>Revalidate, don't re-download.</b> The manifest ETag is persisted and sent
+ *       as {@code If-None-Match}.</li>
  *   <li><b>The play/render path never touches the network.</b>
- *       {@link #isPresent(AudioAsset)} is a pure disk lookup. Downloads
- *       happen only on the single warm thread, guarded against duplicate
- *       in-flight fetches — so a 50fps overlay can't turn into a download
- *       storm (the TCG failure mode).</li>
- *   <li><b>Content-addressed + verified.</b> A download is written to a temp
- *       file, hashed, and only atomically renamed into place if its SHA-256
- *       matches the manifest. A truncated fetch can never become a permanent
- *       corrupt asset.</li>
+ *       {@link #isPresent(AudioAsset)} is a pure disk lookup. Downloads happen only on
+ *       the single warm thread, guarded against duplicate in-flight fetches.</li>
+ *   <li><b>Content-addressed + verified.</b> A download goes to a temp file and is
+ *       atomically renamed into place only if its SHA-256 matches the manifest.</li>
  * </ol>
  */
 @Slf4j
@@ -377,11 +367,9 @@ public class AssetStore
 	// ==================== internals ====================
 
 	/**
-	 * The single gated chokepoint for every synchronous networking call. Its body
-	 * is only the opt-in check and the call, so no request can reach the network
-	 * without {@code serverSyncEnabled} being true (Plugin Hub 3rd-party-networking
-	 * rule). Throwing when disabled folds into the callers' existing offline
-	 * handling (they keep last-good on any IOException).
+	 * The single gated chokepoint for every synchronous networking call: nothing reaches
+	 * the network unless {@code serverSyncEnabled} is true (Plugin Hub 3rd-party-networking
+	 * rule). Throwing when disabled folds into callers' offline handling.
 	 */
 	private Response executeGated(Request req) throws IOException
 	{
@@ -495,12 +483,10 @@ public class AssetStore
 	}
 
 	/**
-	 * Maps an /assets-rooted (server-provided) manifest path to a Filepath under
-	 * the cache dir. {@code cacheDir.join(rel)} normalizes the path and REJECTS
-	 * anything that would escape the plugin's sandbox (it throws), so a malicious or
-	 * malformed server path can never construct a location outside the assets
-	 * folder — the file I/O is provably confined to the plugin subfolder. Returns
-	 * null in cache-less mode.
+	 * Maps a server-provided manifest path to a Filepath under the cache dir.
+	 * {@code cacheDir.join(rel)} normalizes it and throws on anything escaping the plugin's
+	 * sandbox, so a malicious path can't land outside the assets folder. Returns null in
+	 * cache-less mode.
 	 */
 	private Filepath cacheFilepathFor(AudioAsset asset)
 	{

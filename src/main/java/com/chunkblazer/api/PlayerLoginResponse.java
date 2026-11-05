@@ -182,12 +182,10 @@ public class PlayerLoginResponse
 		private List<String> completedTasks = new ArrayList<>();
 
 		/**
-		 * The account's per-region task roll, stored verbatim as the plugin's own
-		 * config string ("regionId:task1,task2|regionId2:task3"). The server never
-		 * interprets it — it round-trips the blob so the roll (and, with it, which
-		 * cards are still face-down) survives an account switch, a reinstall, or a
-		 * new machine, instead of being regenerated wholesale (the 572-card dump).
-		 * Empty for accounts that have not synced a roll yet.
+		 * The account's per-region task roll, stored verbatim as the plugin's own config
+		 * string ("regionId:task1,task2|regionId2:task3"). The server never interprets it;
+		 * round-tripping the blob lets the roll and its face-down cards survive an account
+		 * switch, reinstall or new machine. Empty until a roll has synced.
 		 */
 		@SerializedName("region_rolled_tasks")
 		private String regionRolledTasks = "";

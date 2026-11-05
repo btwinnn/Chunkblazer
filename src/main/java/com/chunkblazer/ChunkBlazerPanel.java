@@ -451,11 +451,9 @@ public class ChunkBlazerPanel extends PluginPanel
 	}
 
 	/**
-	 * Confirm-gated repair for a contaminated account. Clears only this account's local
-	 * ChunkBlazer data (never the server record) so it restores fresh from the server on the
-	 * next fresh start. Used when an account is stuck on the wrong mode or showing another
-	 * account's progress after the cross-account key leak. A RuneLite profile switch does not
-	 * help, because the per-account data lives in the shared RSProfile store.
+	 * Confirm-gated repair for a contaminated account: clears only its local data (never
+	 * the server record) so it restores from the server on the next fresh start. A
+	 * RuneLite profile switch can't help: the data lives in the shared RSProfile store.
 	 */
 	private void confirmResetAccountData()
 	{
