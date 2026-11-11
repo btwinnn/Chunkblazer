@@ -251,14 +251,9 @@ public interface ChunkBlazerConfig extends Config
 	String syncSection = "sync";
 
 	/**
-	 * Master switch for ALL server communication — login, sync, event reports, and the
-	 * catalog/sound fetches all gate on this. OFF by default: nothing is sent, or even
-	 * downloaded, until the player turns it on (the plugin runs on the bundled seed
-	 * meanwhile).
-	 *
-	 * A FRESH keyName ("serverSyncEnabled") means no stored value carries over from the
-	 * old always-on build, so everyone starts opted-out. The in-panel prompt explains
-	 * what enabling gains; PRIVACY.md carries the full data-use disclosure.
+	 * Master switch for ALL server communication, including catalog and sound fetches.
+	 * OFF by default: nothing is sent or downloaded until the player opts in. The keyName
+	 * is fresh so no stored value from the old always-on build carries over.
 	 */
 	@ConfigItem(
 		keyName = "serverSyncEnabled",

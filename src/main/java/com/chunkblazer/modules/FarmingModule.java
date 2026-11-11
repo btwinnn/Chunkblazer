@@ -53,43 +53,23 @@ import net.runelite.client.util.Text;
 /**
  * Module for FARMING completion type tasks.
  *
- * <p>The authored farming tasks are ACTIONS, not item counts: "Plant a
- * Sweetcorn Seed", "Plant an Apple Tree Sapling", "Rake a Farming Patch".
- * The verification signal is a farming ACTION landing on the same game
- * tick as a change in the task's watched item count in the INVENTORY:
+ * <p>Tasks are actions, verified by a farming action landing with a change in the watched
+ * INVENTORY item: seed or sapling count DECREASES for plant tasks, Weeds INCREASES for
+ * rake tasks. Credit is per action-tick, not per item (an allotment consumes 3 seeds for
+ * one planting).
  *
+ * <p>Two markers signal the action:
  * <ul>
- *   <li><b>Plant tasks</b> — the watched seed/sapling count DECREASES
- *       (the patch consumes it). Allotments consume 3 seeds for one
- *       planting, so progress is credited per action-tick, NOT per item:
- *       a -3 seed delta in one tick is +1 progress.</li>
- *   <li><b>Rake tasks</b> — the watched item (Weeds) count INCREASES.
- *       Same rule, opposite direction; each rake tick is one action.</li>
+ *   <li>A Farming XP rise on the item-change tick, which covers raking. Planting XP lands
+ *       at harvest or check-health, never on a plant tick.</li>
+ *   <li>The "You plant ..." message. The seed leaves at the START of the animation and
+ *       the message comes at the END, about 3 ticks later, so an unarmed watched-item
+ *       change is held PENDING for {@link #PENDING_WINDOW_TICKS} ticks.</li>
  * </ul>
  *
- * <p>The action is signalled by two markers:
- * <ul>
- *   <li>A Farming XP rise, same tick as the item change — covers raking
- *       (weeds + XP land together). A game update moved PLANTING XP to
- *       harvest/check-health, so XP never fires on a plant tick anymore
- *       (proven in both Cruk's dragonfruit log and bao's guam/onion log).</li>
- *   <li>The server's "You plant ..." game message. Planting consumes the
- *       seed at the START of the animation and sends this message at the
- *       END — 3 ticks apart in bao's onion log — so the message may NOT
- *       share a tick with the item change. An unarmed watched-item change
- *       is therefore held as a PENDING change for {@link #PENDING_WINDOW_TICKS}
- *       ticks, and a plant message credits a pending DECREASE from that
- *       window.</li>
- * </ul>
- *
- * <p>Why the pending window is message-only and decrease-only: letting the
- * XP marker consume pendings would credit "bank the seeds, water a patch
- * seconds later"; letting increases through would credit "withdraw the
- * seeds, plant a different crop". Watering, composting and harvesting
- * never touch the watched item, so they never credit. Unwatched changes
- * expire out of the window at {@link #onGameTick} — the same gate model as
- * ObtainModule's skilling path, widened just enough for the plant
- * animation gap (unlike FiremakingModule's unbounded buffer).
+ * <p>Pendings are message-only and decrease-only: the XP marker would credit "bank the
+ * seeds, water a patch", and increases would credit "withdraw the seeds, plant a
+ * different crop". They expire at {@link #onGameTick}.
  */
 @Slf4j
 @Singleton
@@ -405,15 +385,10 @@ public class FarmingModule extends AbstractTaskModule
 	}
 
 	/**
-	 * Credit ONE farming action on an action-marker tick. First preference is
-	 * a LIVE watched-item delta (item change and marker on the same tick —
-	 * raking, and the marker-before-item event order). When the plant message
-	 * is the marker ({@code allowPending}), a pending DECREASE recorded within
-	 * the last {@link #PENDING_WINDOW_TICKS} ticks is claimed instead — the
-	 * seed leaves the inventory at the start of the plant animation, the
-	 * message arrives at its end. One action per marker regardless of the
-	 * delta magnitude — planting an allotment consumes 3 seeds but is one
-	 * "Plant" (and every authored task needs just 1 action anyway).
+	 * Credit ONE farming action on a marker tick, whatever the delta size. Prefers a live
+	 * watched-item delta. When the plant message is the marker ({@code allowPending}),
+	 * claims a pending DECREASE from the last {@link #PENDING_WINDOW_TICKS} ticks
+	 * instead.
 	 */
 	private void creditOnMarker(NuzlockeTask task, boolean allowPending)
 	{

@@ -30,11 +30,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Which world bosses the local player is fighting right now, so a boss NPC's death
- * only earns a token when it was "your kill". Only your own damage (a splat of yours
- * above 0) engages a boss: heals, blocks and other players' hits don't. Engagement
- * ends when the boss dies, when you die, and on a world hop or logout, so an old fight
- * can't carry over into someone else's kill later.
+ * World bosses the local player is fighting, so a boss NPC's death only earns a token for
+ * "your kill". Only your own splat above 0 engages. Engagement ends on boss death, your
+ * death, a world hop or logout.
  */
 final class BossEngagement
 {

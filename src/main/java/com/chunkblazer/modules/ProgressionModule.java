@@ -40,32 +40,22 @@ import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.TaskConstraints;
 
 /**
- * Module for SKILL_THRESHOLD tasks — the Progression tier of the Global Tasks
- * pool. Each task is "reach level N in skill S", for ten rungs per skill.
+ * Module for SKILL_THRESHOLD tasks, the Progression tier of the Global Tasks pool: "reach
+ * level N in skill S", ten rungs per skill.
  *
  * <h2>Non-retroactive by design</h2>
- * Progression only ever pays for levels gained AFTER an account starts being
- * tracked. An established account that is already 80 Thieving must not be handed
- * the 10/20/30/40/50/60/70/80 rungs for work it did before ChunkBlazer ever saw
- * it. That is enforced with a per-skill BASELINE, captured once and then frozen:
- * a rung is eligible only when {@code threshold > baseline[skill]}. Ineligible
- * rungs are never registered here at all — they don't show in the panel, can't
- * complete, and score nothing.
+ * Only levels gained after tracking starts pay. A per-skill BASELINE, captured once and
+ * frozen, makes a rung eligible only when {@code threshold > baseline[skill]}; other
+ * rungs are never registered. It lives plugin-side
+ * ({@code ChunkBlazerPlugin#getProgressionBaseline}) because it needs live client skill
+ * data.
  *
- * <p>The baseline lives plugin-side ({@code ChunkBlazerPlugin#getProgressionBaseline})
- * because it must be captured from live client skill data. This module is handed
- * only the tasks that survived that filter, so it holds no baseline logic itself
- * — it just watches for the level actually being reached.
- *
- * <p>Hitpoints has no level-10 rung: accounts spawn at 10 HP, so it would be
- * unearnable. It is omitted from the task data rather than special-cased here.
+ * <p>Hitpoints has no level-10 rung (accounts spawn at 10 HP); it is omitted from the
+ * task data.
  *
  * <h2>Why StatChanged and not a sweep</h2>
- * {@link QuestCheckModule} polls, because {@code Quest.getState()} is a script
- * invocation with no event that pinpoints the quest that changed. Skill levels
- * have exactly such an event: StatChanged carries the skill and its new level,
- * so this module checks only the rungs of the skill that just changed — no
- * polling, no rate limiting, no per-tick cost.
+ * {@link QuestCheckModule} polls because no event pinpoints the quest that changed.
+ * StatChanged carries the skill and new level, so only that skill's rungs are checked.
  */
 @Slf4j
 @Singleton

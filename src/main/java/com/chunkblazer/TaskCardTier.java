@@ -33,16 +33,9 @@ import lombok.RequiredArgsConstructor;
 /**
  * Card rarity for the task-reveal cards, and the colour each tier is shown in.
  *
- * <p><b>Where the tier comes from.</b> Task JSON has no difficulty field — {@code level}
- * is a skill-level requirement, not a rarity — so the tier is derived from
- * {@code base_points}, which is authored 1..5 across every task file and already means
- * "how much is this worth". The mapping is deliberately kept in this one method: if a
- * real {@code tier} field is ever authored into the task JSON, {@link #fromTask} is the
- * only thing that has to change.
- *
- * <p>Shipped distribution at the time of writing (4511 tasks): 1968 / 1299 / 696 / 225 /
- * 323 for points 1..5 — a sensible rarity pyramid, though Master (5) is a little more
- * common than Elite (4).
+ * <p>Task JSON has no difficulty field ({@code level} is a skill-level requirement), so
+ * the tier is derived from {@code base_points}, authored 1..5 across every task file. If
+ * a real {@code tier} field is ever authored, only {@link #fromTask} has to change.
  */
 @Getter
 @RequiredArgsConstructor

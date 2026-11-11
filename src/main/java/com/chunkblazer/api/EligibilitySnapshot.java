@@ -32,13 +32,9 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * A snapshot of the local account's state, read from the live game client, used
- * to prove the account is a fresh "level 3" start before locking Full Nuzlocke.
- *
- * <p>The server re-derives the eligibility verdict from these raw values — it
- * never trusts a client-computed boolean — so this only ever carries facts
- * (combat level, quest points, total level, and every skill's real level),
- * never a decision.
+ * The local account's state, read from the live game client, to prove a fresh "level 3"
+ * start before locking Full Nuzlocke. The server re-derives the verdict, so this
+ * carries only facts, never a client-computed decision.
  */
 @Data
 @Builder

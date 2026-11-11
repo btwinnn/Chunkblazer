@@ -53,13 +53,9 @@ public class NuzlockeTask
 	private String description;
 
 	/**
-	 * The category as it should read in the plugin UI (filters, dropdowns, card
-	 * labels). The catalog tags some item-set pools with a "_Set" suffix
-	 * ("Herblore_Set", "Obtain_Set") to group authoring, but players just think
-	 * of those as the base skill — so we fold "_Set" back onto its parent
-	 * ("Herblore", "Obtain") for display and filtering. This is presentation only;
-	 * the raw {@link #category} (and all task routing, which keys off
-	 * completion_type) is untouched.
+	 * The category as shown in the plugin UI: "_Set" pools ("Herblore_Set") fold back onto
+	 * their parent ("Herblore"). Presentation only; the raw {@link #category} and task
+	 * routing, which keys off completion_type, are untouched.
 	 */
 	public static String displayCategory(String raw)
 	{
@@ -86,26 +82,18 @@ public class NuzlockeTask
 	private Integer level;
 
 	/**
-	 * Marks a task as GROUP content (raids, Nex, group bosses) — an encounter a
-	 * player is expected to fight alongside others.
-	 *
-	 * <p>Two things follow from it in {@code NPCKillModule}:
+	 * Marks a task as GROUP content (raids, Nex, group bosses). In {@code NPCKillModule}:
 	 * <ul>
-	 *   <li>The solo-only gates (contested / startedFresh / cannon / relog-grace)
-	 *       are skipped. They exist for solo speed-and-gear challenges and are
-	 *       unsatisfiable in a team: a teammate's hitsplat sets {@code contested},
-	 *       and the boss is only at full health for whoever lands the very first
-	 *       hit of the encounter.</li>
-	 *   <li>The fight record's idle TTL is extended, so a long mechanic phase
-	 *       where you land no hits doesn't discard your stake in the kill.</li>
+	 *   <li>The solo-only gates (contested / startedFresh / cannon / relog-grace) are
+	 *       skipped: a teammate's hitsplat sets {@code contested}, and the boss is only at
+	 *       full health for whoever lands the first hit.</li>
+	 *   <li>The fight record's idle TTL is extended, so a long mechanic phase with no hits
+	 *       doesn't discard your stake in the kill.</li>
 	 * </ul>
 	 *
-	 * <p>The always-on {@code damage > 0} check still applies — you must have
-	 * personally damaged the NPC that died. This flag widens who may ALSO have
-	 * hit it; it never grants credit for a kill you took no part in.
-	 *
-	 * <p>Authoring a group task WITH a time or equipment constraint is a
-	 * contradiction and is rejected at load — see {@link #getGroupContentSchemaError()}.
+	 * <p>{@code damage > 0} still applies, so this never credits a kill you took no part
+	 * in. A group task WITH a time or equipment constraint is rejected at load; see
+	 * {@link #getGroupContentSchemaError()}.
 	 */
 	@SerializedName("group_content")
 	private Boolean groupContent;
@@ -155,13 +143,9 @@ public class NuzlockeTask
 
 	private TaskConstraints constraints;
 
-	// DEPRECATED top-level mirrors of varbit_boolean and varbit_bit. The
-	// canonical home is now inside `constraints` (alongside varbit_id) so all
-	// varbit-related schema lives in one place. The fields are kept here so
-	// any pre-migration JSON that still puts them at the top level continues
-	// to work — VarbitCheckModule falls back to these when the constraints
-	// version is null. Remove after one release cycle once all task JSON has
-	// been migrated.
+	// DEPRECATED top-level mirrors of varbit_boolean and varbit_bit. The canonical home
+	// is inside `constraints`; VarbitCheckModule falls back to these when that is null,
+	// for pre-migration JSON. Remove once all task JSON has been migrated.
 	@Deprecated
 	@SerializedName("varbit_boolean")
 	private Integer varbitBoolean;
@@ -216,14 +200,11 @@ public class NuzlockeTask
 	}
 
 	/**
-	 * Validates the group_content flag against the rest of the task, and returns
-	 * a human-readable problem or null when the task is consistent.
+	 * Validates the group_content flag, returning a human-readable problem or null.
 	 *
-	 * <p>Time and equipment constraints turn on the solo-only gates, which a
-	 * group encounter can never satisfy — the task would look authored-and-live
-	 * but be impossible to complete, failing with a baffling "must be solo"
-	 * message. That combination is a schema error, not a hard challenge, so it's
-	 * caught at load rather than in-game.
+	 * <p>Time and equipment constraints turn on the solo-only gates, which a group
+	 * encounter can never satisfy, so the task would be impossible to complete. Caught at
+	 * load rather than in-game.
 	 */
 	public String getGroupContentSchemaError()
 	{
@@ -283,12 +264,10 @@ public class NuzlockeTask
 			task.setAssignmentWeight(getIntOrDefault(obj, "assignment_weight", 1));
 			task.setLevel(getIntOrNull(obj, "level"));
 
-			// Boolean fields (with null check). NOTE: this custom deserializer bypasses
-			// the @SerializedName annotations entirely — every field must be read here by
-			// hand. A NuzlockeTask-level boolean that isn't listed silently stays null,
-			// so require_all_equipped / forbid_entry_mode must be wired in explicitly
-			// (their absence let full-set EQUIP tasks complete on one piece and let ToB
-			// Entry-mode kills count).
+			// Boolean fields (with null check). This custom deserializer bypasses
+			// @SerializedName: every field must be read here by hand. An unlisted boolean
+			// silently stays null, so without require_all_equipped / forbid_entry_mode,
+			// full-set EQUIP tasks complete on one piece and ToB Entry-mode kills count.
 			task.setIsUnlocked(getBooleanOrNull(obj, "is_unlocked"));
 			task.setGroupContent(getBooleanOrNull(obj, "group_content"));
 			task.setRequireAllEquipped(getBooleanOrNull(obj, "require_all_equipped"));

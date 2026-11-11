@@ -332,12 +332,8 @@ public class EquipModule extends AbstractTaskModule
 				sendItemEquippedReport(foundItemId, foundSlot, -1, false);
 			}
 
-			// Send success chat message. For a full-set task list every piece worn so the
-			// line reflects the whole set (e.g. "Verac's helm, brassard, plateskirt, flail"),
-			// not just the piece that happened to trigger the check — that lone-item line
-			// made a correct full-set completion look like it fired on one item. For a
-			// default (any-one) task, show only the item actually equipped, not every
-			// accepted variant id (a multi-variant item otherwise spammed a long line).
+			// A full-set task lists every piece worn; an any-one task shows only the item
+			// equipped, not every accepted variant id.
 			String successDetails;
 			if (task.isRequireAllEquipped() && !wornSetItems.isEmpty())
 			{

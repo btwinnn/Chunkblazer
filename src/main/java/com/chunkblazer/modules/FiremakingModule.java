@@ -50,45 +50,21 @@ import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.RequiredItem;
 
 /**
- * Module for handling FIREMAKING completion type tasks.
+ * Module for FIREMAKING completion type tasks ("burn N of item X").
  *
- * <p>Unlike other skilling tasks, firemaking CONSUMES logs rather than producing
- * items, so a burn is detected as a watched log leaving the inventory paired
- * with a Firemaking XP gain. Every authored firemaking task is of the form
- * "burn N of item X", so that pair is the whole rule.
+ * <p>A burn is a watched log consumed paired with a Firemaking XP gain, which covers both
+ * tinderbox-on-log and bonfires.
  *
- * <p><b>Both lighting methods must credit.</b> The traditional path is
- * tinderbox-on-log: one log leaves the inventory and the XP lands with it. The
- * bonfire path is add-log-to-an-existing-fire — less XP per log, far more AFK,
- * and the method most players actually use for bulk burning. A bonfire burn is
- * still "log consumed + Firemaking XP", so it needs no separate sensor; what it
- * needs is for the pairing not to assume a fixed event order or a same-tick
- * landing.
- *
- * <p>Lessons this encodes:
  * <ul>
- *   <li><b>Either event order must credit.</b> The original rule credited only
- *       when consumption was already banked at the moment the XP arrived, and
- *       threw the XP away otherwise. Any burn whose StatChanged is dispatched
- *       ahead of its ItemContainerChanged silently scored nothing, leaving the
- *       task permanently one short. Consumption-then-XP and XP-then-consumption
- *       now both credit, via {@link #MATCH_WINDOW_TICKS} — the same symmetric
- *       pairing ConstructionModule uses.</li>
- *   <li><b>Consumption and XP need not share a tick.</b> Adding a batch to a
- *       bonfire can drain logs faster than the XP drops arrive, so the pair is
- *       matched across a short window rather than within one tick.</li>
- *   <li><b>Unpaired consumption must expire.</b> Pending consumption used to
- *       accumulate forever, so logs banked, dropped or sold were still sitting
- *       in the map when the next real burn landed and were credited alongside
- *       it. Consumption older than the window is now discarded instead.</li>
- *   <li><b>Logs can be lit on the ground.</b> A tinderbox works on a log lying
- *       on the floor, so the log never passes through the inventory and there
- *       is no consumption to pair with. The ground item's despawn — which lands
- *       on the same tick the fire catches — stands in. See
- *       {@link #onItemDespawned}.</li>
- *   <li><b>One XP gain pays for one credit.</b> {@code lastFiremakingXpTick} is
- *       cleared once it has credited something, so a single burn's XP cannot go
- *       on crediting unrelated consumption for the rest of its window.</li>
+ *   <li><b>Either order, short window.</b> StatChanged can dispatch ahead of
+ *       ItemContainerChanged, and a bonfire batch can drain logs faster than XP drops
+ *       arrive, so the pairing is symmetric across {@link #MATCH_WINDOW_TICKS}.</li>
+ *   <li><b>Unpaired consumption must expire,</b> or logs banked, dropped or sold credit
+ *       alongside the next real burn.</li>
+ *   <li><b>Logs can be lit on the ground,</b> never passing through the inventory. The
+ *       ground item's despawn stands in. See {@link #onItemDespawned}.</li>
+ *   <li><b>One XP gain pays for one credit.</b> {@code lastFiremakingXpTick} is cleared
+ *       once it has credited something.</li>
  * </ul>
  */
 @Slf4j
@@ -124,15 +100,9 @@ public class FiremakingModule extends AbstractTaskModule
 	// Track Firemaking XP for detecting burns
 	private int previousFiremakingXp = -1;
 
-	// Watched logs seen leaving the inventory but not yet paired with a
-	// Firemaking XP gain. Ages out of MATCH_WINDOW_TICKS lazily — see
-	// expirePendingBurns().
-	//
-	// A LIST, not a map keyed by item id: entries must expire by when they were
-	// consumed, and merging same-id consumptions into one bucket would refresh
-	// the timestamp of an old batch every time a new log of that type went. A
-	// player who banked 20 logs and later burned 1 would then have all 21 still
-	// live at credit time — exactly the false credit expiry exists to stop.
+	// Watched logs consumed but not yet paired with XP, aged out lazily by
+	// expirePendingBurns(). A LIST, not a map by item id: merging would refresh an old
+	// batch's timestamp, keeping banked logs live when a later log of that type goes.
 	private final List<PendingBurn> pendingBurns = new CopyOnWriteArrayList<>();
 
 	// Tick of the most recent Firemaking XP gain, or -1 if none this session.
@@ -347,19 +317,10 @@ public class FiremakingModule extends AbstractTaskModule
 	}
 
 	/**
-	 * Lighting logs that are lying on the ground.
-	 *
-	 * <p>A tinderbox works on a log on the floor — the log never has to pass
-	 * through the inventory. The ground item simply vanishes as the fire catches,
-	 * so inventory consumption cannot see the burn at all and the task scored
-	 * nothing. That covers logs dropped by someone else, and also your OWN
-	 * dropped logs whenever lighting took longer than {@link #MATCH_WINDOW_TICKS}
-	 * — Mike's 2026-07-28 session lost two burns exactly that way (dropped
-	 * 10:29:32, fire caught 10:29:44; twelve seconds is far outside the window,
-	 * so the drop had long expired by the time the XP landed).
-	 *
-	 * <p>The despawn lands on the SAME tick the fire catches, which makes it a
-	 * tighter pairing for the XP than the drop ever was.
+	 * Lighting logs on the ground. The log never passes through the inventory (dropped by
+	 * someone else, or your own drop when lighting outlasts {@link #MATCH_WINDOW_TICKS}),
+	 * so consumption can't see the burn. The despawn lands on the SAME tick the fire
+	 * catches.
 	 */
 	@Subscribe
 	public void onItemDespawned(ItemDespawned event)
@@ -469,12 +430,9 @@ public class FiremakingModule extends AbstractTaskModule
 		}
 		pendingBurns.clear();
 
-		// Spend the XP gain that paid for this credit. Without it one XP drop
-		// keeps crediting every later consumption inside its window: a log
-		// dropped shortly after a burn scored immediately, on the PREVIOUS
-		// burn's XP. That netted out only because a drop was always followed by
-		// a light — and it would double-count outright now that the ground
-		// despawn credits the same log again when the fire finally catches.
+		// Spend the XP gain that paid for this credit. Otherwise one XP drop credits
+		// every later consumption in its window, and a dropped log double-counts: on the
+		// drop, then on the ground despawn.
 		lastFiremakingXpTick = -1;
 
 		for (NuzlockeTask task : new HashSet<>(activeTasks))

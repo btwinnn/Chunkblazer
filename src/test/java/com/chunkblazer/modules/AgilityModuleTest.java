@@ -12,6 +12,7 @@ import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.client.chat.ChatMessageManager;
 import com.chunkblazer.NuzlockeTask;
 import org.junit.jupiter.api.BeforeEach;
@@ -904,5 +905,92 @@ class AgilityModuleTest extends AbstractTaskModuleTest
 		agilityModule.onMenuOptionClicked(mockObjectClick(57715, MenuAction.GAME_OBJECT_FIRST_OPTION));
 		simulatePlayerAnimation(828);
 		assertEquals(1, task.getCurrentProgress());
+	}
+
+	// --- Interface clicks on the way to the obstacle (Eirund: the Catherby cliff grapple) ---
+
+	private static final int CATHERBY_GRAPPLE_ROCK = 17042;
+
+	private MenuOptionClicked mockWidgetClick(MenuAction action, int widget, String option)
+	{
+		MenuOptionClicked event = mock(MenuOptionClicked.class);
+		when(event.getMenuAction()).thenReturn(action);
+		lenient().when(event.getParam1()).thenReturn(widget);
+		lenient().when(event.getMenuOption()).thenReturn(option);
+		return event;
+	}
+
+	/**
+	 * Grapple the Catherby cliff with one other click between the Grapple click and the
+	 * grapple's animation. The grapple gives no Agility XP, so the animation is the only proof.
+	 */
+	private int grappleAfter(MenuOptionClicked between)
+	{
+		NuzlockeTask task = createTaskWithRequiredObject("Use the Level 32 Agility Crossbow Catherby Cliff Shortcut",
+			"agility_level_32_catherby_cliff", "AGILITY", 1, Collections.singletonList(CATHERBY_GRAPPLE_ROCK));
+		task.setHasRequiredObject(true);
+		task.setLevel(32);
+		agilityModule.addActiveTask(task);
+		lenient().when(client.getTickCount()).thenReturn(100);
+		agilityModule.onMenuOptionClicked(mockObjectClick(CATHERBY_GRAPPLE_ROCK, MenuAction.GAME_OBJECT_FIRST_OPTION));
+		agilityModule.onMenuOptionClicked(between);
+		simulatePlayerAnimation(4455); // firing the grapple
+		return task.getCurrentProgress();
+	}
+
+	/** Turning run on while walking to the rock keeps the Grapple click. */
+	@Test
+	void runOrbClick()
+	{
+		assertEquals(1, grappleAfter(mockWidgetClick(MenuAction.CC_OP, InterfaceID.Orbs.RUNBUTTON, "Toggle Run")));
+	}
+
+	/** Opening the inventory tab to check for the grapple keeps the Grapple click. */
+	@Test
+	void tabClick()
+	{
+		assertEquals(1, grappleAfter(mockWidgetClick(MenuAction.CC_OP, InterfaceID.ToplevelOsrsStretch.STONE3, "Inventory")));
+	}
+
+	/** Flicking a prayer on the way keeps the Grapple click. */
+	@Test
+	void prayerClick()
+	{
+		assertEquals(1, grappleAfter(mockWidgetClick(MenuAction.CC_OP, InterfaceID.Prayerbook.PRAYER1, "Activate")));
+	}
+
+	/** Right-clicking around the rock and picking "Cancel" keeps the Grapple click. */
+	@Test
+	void cancelClick()
+	{
+		assertEquals(1, grappleAfter(mockWidgetClick(MenuAction.CANCEL, 0, "Cancel")));
+	}
+
+	/** Wielding the crossbow from the inventory doesn't animate, so it keeps the Grapple click. */
+	@Test
+	void wieldClick()
+	{
+		assertEquals(1, grappleAfter(mockWidgetClick(MenuAction.CC_OP, InterfaceID.Inventory.ITEMS, "Wield")));
+	}
+
+	/** Eating animates, and that animation isn't the grapple, so it still cancels the click. */
+	@Test
+	void eatingCancels()
+	{
+		assertEquals(0, grappleAfter(mockWidgetClick(MenuAction.CC_OP, InterfaceID.Inventory.ITEMS, "Eat")));
+	}
+
+	/** A teleport spell animates too, so it still cancels the click. */
+	@Test
+	void teleportCancels()
+	{
+		assertEquals(0, grappleAfter(mockWidgetClick(MenuAction.CC_OP, InterfaceID.MagicSpellbook.VARROCK_TELEPORT, "Cast")));
+	}
+
+	/** Some special attacks fire straight from the orb (dragon battleaxe), so it still cancels. */
+	@Test
+	void specOrbCancels()
+	{
+		assertEquals(0, grappleAfter(mockWidgetClick(MenuAction.CC_OP, InterfaceID.Orbs.SPECBUTTON, "Use Special Attack")));
 	}
 }

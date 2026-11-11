@@ -89,18 +89,9 @@ public class ObtainModule extends AbstractTaskModule
 	private ItemManager itemManager;
 
 	/**
-	 * One "slot" of a task's required items. A slot represents a single
-	 * conceptual requirement (e.g. "the helmet of the Prospector set" or
-	 * "any elemental staff"). Variants inside the slot are OR'd: holding
-	 * any one of them counts toward the slot's quantity. Slots are AND'd
-	 * across the task: a multi-piece set requires all slots filled.
-	 *
-	 * <p>Mirrors the JSON shape: each entry in {@code required_items}
-	 * becomes one slot, with {@code item_ids} → {@link #variantIds}.
-	 *
-	 * <p>Why this exists: the previous flat {@code Map<itemId, qty>}
-	 * model AND'd everything — "Obtain an Elemental Staff" with 4
-	 * variant IDs at qty 1 each demanded all 4 staves, not any one.
+	 * One conceptual requirement, from one {@code required_items} entry (e.g. "any
+	 * elemental staff"). Variants ({@link #variantIds}) are OR'd toward the slot's
+	 * quantity; slots are AND'd across the task.
 	 */
 	static final class Slot
 	{
@@ -121,28 +112,19 @@ public class ObtainModule extends AbstractTaskModule
 	// Use thread-safe set to avoid ConcurrentModificationException
 	private final Set<Integer> watchedItemIds = ConcurrentHashMap.newKeySet();
 
-	// Per-task per-item snapshot of the current INVENTORY-only count of each
-	// watched item. Used by skilling tasks: when a matching-skill XP drop fires
-	// and a watched item count in inventory has increased since the snapshot,
-	// the +delta is credited directly to task progress. The snapshot then moves
-	// to current. Inventory changes that DON'T coincide with a matching XP drop
-	// (banking, dropping, GE buys, ground pickups) just slide the snapshot to
-	// current — no progress credit. This is the "you mined an ore = +1" model:
-	// the only way to get an XP drop in Mining is to actually mine.
-	// OBTAIN tasks (no associated skill) ignore this map and use the
-	// inv+bank+equip held count via checkTaskProgress instead.
+	// Per-task per-item INVENTORY-only counts of watched items, for skilling tasks. A
+	// rise on a matching XP drop is credited; changes without one (banking, dropping, GE
+	// buys, pickups) just slide the snapshot. OBTAIN tasks (no skill) use the
+	// inv+bank+equip count via checkTaskProgress instead.
 	private final Map<String, Map<Integer, Integer>> inventoryHeldSnapshot = new ConcurrentHashMap<>();
 
 	// Last observed XP per skill, used to detect XP gains in onStatChanged.
 	// Seeded from initial StatChanged events; null for a skill we haven't seen yet.
 	private final Map<Skill, Integer> previousXp = new ConcurrentHashMap<>();
 
-	// Skills that gained XP during the CURRENT game tick. This makes the skilling
-	// credit order-independent: a produced item is credited whether the matching
-	// StatChanged or the ItemContainerChanged fires first, as long as both happen
-	// on the same tick (gathering skills fire XP-then-item; production skills like
-	// crafting/fletching fire item-then-XP — the old onStatChanged-only path only
-	// caught the former). Cleared at the end of every tick in onGameTick.
+	// Skills that gained XP this tick, so skilling credit doesn't depend on event order:
+	// gathering skills fire XP then item, production skills (crafting, fletching) item
+	// then XP. Cleared at the end of every tick in onGameTick.
 	private final Set<Skill> skillsXpGainedThisTick = ConcurrentHashMap.newKeySet();
 
 	// Cooking tasks already credited this tick (see the +1 cap in creditSkillingDelta).
@@ -229,44 +211,20 @@ public class ObtainModule extends AbstractTaskModule
 			}
 
 			taskSlots.put(task.getTaskId(), slots);
-			// Skilling tasks: track inventory-only counts of watched items so we
-			// can detect "you produced one" deltas in onStatChanged. Seeded by
-			// the deferred client-thread block below — getItemCount() / countIn()
-			// require the client thread. Until the seed runs, an empty snapshot
-			// means any XP drop that fires would see "no prior count" and skip
-			// crediting (safe default).
-
-			// Run initial setup on the client thread. countIn() asserts the client
-			// thread. Seed the inventory-only snapshot so future XP drops compare
-			// against today's starting state — a watched item already in inventory
-			// at task-load time is NOT credited (no XP drop produced it now).
-			// For OBTAIN (no-skill) tasks, also run checkTaskProgress so anything
-			// the player already holds in inv+bank+equip (e.g. a forestry kit
-			// stockpiled in the bank) counts immediately.
+			// Skilling tasks: seed the inventory-only snapshot on the client thread
+			// (countIn() asserts it). Until then an XP drop sees no prior count and skips
+			// crediting. Items already held at task load are NOT credited. OBTAIN
+			// (no-skill) tasks also run checkTaskProgress, so anything held in
+			// inv+bank+equip counts immediately.
 			final List<Slot> slotsRef = slots;
 			final Skill xpSkill = skillForCompletionType(task.getCompletionType());
 			// invokeLater(BooleanSupplier): returning false retries next tick.
 			//
-			// THIS MUST NOT RUN BEFORE THE LOGIN SYNC COMPLETES. Both values seeded
-			// below are read straight off the client, and at LOGGED_IN neither the
-			// inventory container nor the skill table is necessarily populated yet.
-			// Seeding from an empty client produced a false completion on every cold
-			// start (FullOfSodium, 2026-07-19: "log out, CLOSE the client, log back
-			// in" completed runecraft tasks for runes he already held):
-			//
-			//   1. snapshotInventoryCounts() saw a null/empty inventory -> snapshot 0
-			//      for every watched item.
-			//   2. getSkillExperience() returned 0 -> previousXp seeded to 0.
-			//   3. The login StatChanged then arrived with the player's real XP.
-			//      Because previousXp was 0 rather than null, it passed the
-			//      "first sighting" guard in onStatChanged and looked like a
-			//      genuine gain of the player's entire lifetime XP, which flagged
-			//      skillsXpGainedThisTick.
-			//   4. The real inventory arrived; delta vs the 0 snapshot equalled
-			//      everything held, and the XP flag from (3) let it be credited.
-			//
-			// Both halves had to be wrong for the bug to fire, which is why it only
-			// reproduced on a cold client (a warm relog keeps previousXp in memory).
+			// THIS MUST NOT RUN BEFORE THE LOGIN SYNC COMPLETES. At LOGGED_IN neither the
+			// inventory nor the skill table is necessarily populated. Seeding from an
+			// empty client gives a 0 snapshot and previousXp 0, so on a cold start the
+			// login StatChanged passes the "first sighting" guard as a huge gain, and the
+			// real inventory then credits as a delta of everything held.
 			clientThread.invokeLater(() ->
 			{
 				if (client.getGameState() != GameState.LOGGED_IN
@@ -286,13 +244,9 @@ public class ObtainModule extends AbstractTaskModule
 				}
 				else
 				{
-					// Seed the XP baseline for this skill from the player's CURRENT xp so
-					// the FIRST xp drop after a (re)load produces a real delta. previousXp
-					// is cleared on startUp and otherwise seeded lazily from StatChanged, so
-					// without this the first skilling action is swallowed as a "first
-					// sighting" baseline (onStatChanged returns at prevXp == null) — and a
-					// quantity-1 skilling task (e.g. Spin a Ball of Wool, Fletch a Shortbow(u))
-					// consumes the single action it needs and never completes.
+					// Seed the XP baseline from CURRENT xp. Otherwise onStatChanged
+					// swallows the first drop as a "first sighting" (prevXp == null), and
+					// a quantity-1 skilling task never completes.
 					previousXp.put(xpSkill, client.getSkillExperience(xpSkill));
 				}
 				return true;
@@ -429,16 +383,9 @@ public class ObtainModule extends AbstractTaskModule
 	}
 
 	/**
-	 * Total count of an item across inventory + bank + equipment.
-	 *
-	 * <p>Why all three: progress for OBTAIN-style tasks is "items the player
-	 * actually possesses". Dropped items are intentionally NOT counted, which
-	 * defeats the drop-and-pick-up cheat — the count can't be inflated by
-	 * dropping then re-collecting because the dropped item wasn't in any of
-	 * these containers in the first place. Banking is preserved because banked
-	 * items still belong to the player.
-	 *
-	 * <p>Uses canonicalized IDs so noted items count toward the requirement.
+	 * Total count of an item across inventory + bank + equipment. Dropped items are NOT
+	 * counted, which defeats the drop-and-pick-up cheat. Uses canonicalized IDs so noted
+	 * items count.
 	 */
 	private int getItemCount(int itemId)
 	{
@@ -565,15 +512,8 @@ public class ObtainModule extends AbstractTaskModule
 			return;
 		}
 
-		// For every active task whose skill matches this XP drop, look at each
-		// watched item: if its INVENTORY count went up since the last snapshot,
-		// the player just produced one — credit +delta to task progress. The
-		// snapshot then moves to current. Inventory items already in the bank
-		// or equipment, or that arrived without a matching XP drop (banking,
-		// GE buys, pickups), don't count. This is the "+1 progress when an
-		// ore lands in your inventory at the same time a Mining XP drop fires"
-		// model — the only way an XP drop in skill X reaches you is by doing
-		// skill X.
+		// For each active task matching this XP drop's skill, a watched item's INVENTORY
+		// rise since the last snapshot was just produced: credit +delta.
 		for (NuzlockeTask task : new HashSet<>(activeTasks))
 		{
 			Skill taskSkill = skillForCompletionType(task.getCompletionType());
@@ -618,19 +558,12 @@ public class ObtainModule extends AbstractTaskModule
 		int lastGainedId = -1;
 		StringBuilder details = new StringBuilder();
 		Map<Integer, Integer> nextSnapshot = new HashMap<>();
-		// Per-slot delta = the PRODUCTION this tick (how much the inventory rose),
-		// capped at the slot's requirement:
+		// Per-slot delta = this tick's PRODUCTION, capped at the slot's requirement:
 		//   slotDelta = clamp(currSumOfVariants - prevSumOfVariants, 0..slot.required)
-		// The snapshot is rolled forward every tick (and after every credit), so
-		// prevSum is last tick's count and (currSum - prevSum) is exactly what was
-		// produced this tick. Crucially this uses the RAW rise, not
-		// min(curr,req) - min(prev,req): items the player already HELD when the task
-		// started no longer suppress the credit. Before, spinning a 2nd ball of wool
-		// while already holding one gave min(2,1)-min(1,1)=0 and never completed; now
-		// it credits the +1 you just made. The XP-drop gate already proves you skilled
-		// it, and the task-level cap below still prevents over-crediting past target.
-		// Per-slot cap keeps a single over-producing tick from completing a
-		// multi-item task on one item alone.
+		// Use the raw rise, not min(curr,req) - min(prev,req), or items already held
+		// suppress the credit. The XP gate proves the skilling, and the task-level cap
+		// below stops over-crediting. The per-slot cap keeps one over-producing tick from
+		// completing a multi-item task.
 		for (Slot slot : slots)
 		{
 			totalRequired += slot.requiredQuantity;
@@ -833,12 +766,9 @@ public class ObtainModule extends AbstractTaskModule
 		gainedThisTick.clear();
 		creditedThisTick.clear();
 
-		// End-of-tick reconciliation for skilling tasks. GameTick fires after this
-		// tick's StatChanged / ItemContainerChanged, so all production crediting for
-		// the tick has already happened. Roll each skilling task's inventory snapshot
-		// forward to "now" — this moves the baseline past any non-skilling inventory
-		// change (banking, GE, pickups) that didn't gain XP, so it can't be
-		// miscredited next tick. Then clear the per-tick XP-gain markers.
+		// GameTick fires after this tick's StatChanged / ItemContainerChanged, so
+		// crediting is done. Roll snapshots to "now" so non-skilling changes (banking,
+		// GE, pickups) can't be miscredited next tick.
 		rollSnapshots();
 		skillsXpGainedThisTick.clear();
 		cookedThisTick.clear();
@@ -881,15 +811,10 @@ public class ObtainModule extends AbstractTaskModule
 			checkTaskProgress(task);
 		}
 
-		// Skilling tasks: PRODUCTION skills (crafting/fletching/cooking/smithing)
-		// update the inventory BEFORE the XP event fires this tick — the opposite
-		// of gathering skills (mining/woodcutting/fishing), where the XP fires
-		// first. The onStatChanged path only catches the XP-first order. So here,
-		// if this skill ALSO gained XP this tick, the item that just landed is a
-		// genuine production — credit the delta now. If no XP has fired yet this
-		// tick, leave the snapshot alone: either onStatChanged will credit it when
-		// the XP arrives later this same tick, or it was a non-skilling change
-		// (banking/GE/pickup) that the end-of-tick slide in onGameTick rolls past.
+		// Item and XP order varies by skill (see skillsXpGainedThisTick). If this skill
+		// also gained XP this tick, the item is genuine production: credit it now.
+		// Otherwise leave the snapshot: onStatChanged credits it when the XP arrives, or
+		// the end-of-tick slide rolls past a non-skilling change.
 		if (CARRIED.contains(containerId))
 		{
 			// A bag's first contents this session arrive whole. They're the baseline, not

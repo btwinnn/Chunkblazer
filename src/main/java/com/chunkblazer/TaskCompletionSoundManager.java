@@ -45,11 +45,9 @@ import net.runelite.client.audio.AudioPlayer;
 /**
  * Manages and plays region-specific sounds for task completion.
  *
- * <p>Playback goes through RuneLite's {@link AudioPlayer}. That opens a
- * {@code Clip} on the audio stream as-is and a Clip output line cannot open
- * compressed encodings, so the server-delivered µ-law jingles are expanded to
- * 16-bit PCM here first ({@link #toPcmWav}). The expansion is pure arithmetic
- * (no javax.sound), and bundled PCM seeds pass straight through.
+ * <p>RuneLite's {@link AudioPlayer} opens a {@code Clip} on the stream as-is, and a Clip
+ * line can't open compressed encodings, so server µ-law jingles are expanded to 16-bit
+ * PCM first ({@link #toPcmWav}, pure arithmetic, no javax.sound).
  */
 @Slf4j
 @Singleton

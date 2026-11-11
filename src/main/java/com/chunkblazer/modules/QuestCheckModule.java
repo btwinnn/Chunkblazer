@@ -43,23 +43,17 @@ import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.TaskConstraints;
 
 /**
- * Module for handling QUEST_CHECK completion type tasks — the "Global Tasks"
- * pool, which is region-independent and active for every account from load.
+ * Module for QUEST_CHECK completion type tasks, the region-independent "Global Tasks"
+ * pool.
  *
- * constraints.quest holds the net.runelite.api.Quest enum constant name (e.g.
- * "DRAGON_SLAYER_II"). Quest.getState() runs the QUEST_STATUS_GET script, which
- * resolves that quest's varp/varbit AND its per-quest "finished" threshold
- * internally and normalises the answer (2 == FINISHED for every quest). So
- * unlike VarbitCheckModule this module keeps no per-task varp id or expected
- * value — the enum name is the entire configuration.
+ * constraints.quest holds the net.runelite.api.Quest enum constant name. Quest.getState()
+ * runs the QUEST_STATUS_GET script, which resolves each quest's varp/varbit and
+ * "finished" threshold (2 == FINISHED for every quest), so the name is the entire
+ * configuration.
  *
- * SWEEP COST: getState() is a client script invocation, and the Global Tasks
- * pool is ~200 tasks. Checking every task on every VarbitChanged (which fires
- * many times per tick, especially on login and region change) would mean
- * thousands of runScript calls in a burst. Instead a VarbitChanged only marks
- * the pool dirty; the actual sweep happens on GameTick, at most once every
- * SWEEP_INTERVAL_TICKS. Quest completion is not latency-critical — a couple of
- * seconds between finishing a quest and the task ticking off is fine.
+ * SWEEP COST: getState() is a client script invocation, the pool is ~200 tasks, and
+ * VarbitChanged fires many times per tick. So VarbitChanged only marks the pool dirty;
+ * the sweep runs on GameTick, at most once every SWEEP_INTERVAL_TICKS.
  */
 @Slf4j
 @Singleton

@@ -206,17 +206,10 @@ public class ChunkBlazerMinimapOverlay extends Overlay
 	}
 
 	/**
-	 * Draw the region-boundary grid onto the minimap. For every tile edge in the loaded
-	 * scene that sits on a region boundary, convert both endpoints to minimap coordinates
-	 * via {@link Perspective#localToMinimap} (which rotates/scales with the minimap) and
-	 * stroke a segment. Points beyond the minimap radius come back null and are skipped,
-	 * which naturally clips the grid to what's visible.
-	 */
-	/**
-	 * Same look as the world map: chunks you own are left as the plain minimap,
-	 * everything else gets its faint tint (dark for locked, gold/teal/blue/purple for
-	 * the ways it can be unlocked), and there are no lines between two unlocked chunks,
-	 * so the area you can walk reads as one piece with its edge clearly marked.
+	 * Draw region boundaries with the world map's look: owned chunks stay plain, others
+	 * get a faint tint, and no lines run between two unlocked chunks. Points beyond the
+	 * minimap radius come back null from {@link Perspective#localToMinimap} and are
+	 * skipped.
 	 */
 	private void drawMinimapBorders(Graphics2D graphics, Rectangle minimapBounds, Set<Integer> neighborRegions)
 	{

@@ -107,6 +107,7 @@ import com.chunkblazer.api.PlayerLoginResponse;
 import com.chunkblazer.api.PlayerSyncRequest;
 import com.chunkblazer.api.ServerBackoff;
 import com.chunkblazer.modules.TaskModuleManager;
+import com.chunkblazer.modules.VarbitCheckModule;
 
 @Slf4j
 @PluginDescriptor(
@@ -251,15 +252,9 @@ public class ChunkBlazerPlugin extends Plugin
 	// missing", which otherwise both surface as region -1.
 	private final Set<String> globalTaskIds = new HashSet<>();
 
-	// taskId -> task, across every chunk plus the Global Tasks pool. Rebuilt by
-	// rebuildTaskIndex() whenever task data is (re)loaded.
-	//
-	// This exists because findTaskById() used to LINEAR SCAN allChunks — ~404
-	// chunks x ~12 tasks = ~5,000 string compares per lookup, with the cache
-	// checked only after the scan failed. getCompletedTasksWithInfo() calls it
-	// once per completed id and the panel calls that on every refresh, so the
-	// cost was completedCount x 5,000 per repaint. Survivable at 41 completed
-	// tasks; it hard-locked the client at ~200 (see backfillAndRegisterGlobalTasks).
+	// taskId -> task across every chunk plus the Global Tasks pool, rebuilt by
+	// rebuildTaskIndex(). Don't scan allChunks instead: the panel looks up every
+	// completed id on each refresh, which hard-locks the client at ~200 completed tasks.
 	private final Map<String, NuzlockeTask> tasksById = new HashMap<>();
 	// Region IDs listed in Free_Chunks.json: 0-cost, unlock-on-demand chunks that
 	// behave exactly like charter ports (yellow-unlockable, unlock by walking in /
@@ -345,8 +340,8 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 
 		// Task catalog: load synchronously (disk cache → bundled gzipped seed)
-		// BEFORE the loaders below read it, then refresh from the server async for
-		// next launch. Falls back to bundled raw JSON if the store has nothing.
+		// BEFORE the loaders below read it. Falls back to bundled raw JSON if the
+		// store has nothing.
 		if (catalogStore != null)
 		{
 			catalogStore.init(pluginDir);
@@ -355,16 +350,12 @@ public class ChunkBlazerPlugin extends Plugin
 		// Load task data — sourced from the catalog store (server/cache/seed),
 		// with a bundled-resource fallback during the migration transition.
 		loadChunkData();
+		// Then ask the server for anything newer; it applies at the login screen.
+		checkCatalog();
 
-		// The starting-chunk bootstrap deliberately does NOT run here.
-		//
-		// startUp() happens at client launch, long before anyone has logged in,
-		// so at this point RuneLite cannot say which account the write would
-		// belong to. Writing progress then is the root cause of the cross-account
-		// corruption this refactor exists to remove, and once the store moves to
-		// RSProfile the write would not land at all. It now runs from
-		// onRuneScapeProfileChanged(), which fires exactly when the account
-		// becomes known — and again on every account switch.
+		// The starting-chunk bootstrap must NOT run here: at client launch no account is
+		// known, so the write would corrupt across accounts or not land at all. It runs
+		// from onRuneScapeProfileChanged().
 
 		// Initialize task module manager
 		taskModuleManager.initialize();
@@ -382,14 +373,10 @@ public class ChunkBlazerPlugin extends Plugin
 					heldInArena.add(task);
 					return;
 				}
-				// Coalesce: enqueue and let flushPendingCompletions() (onGameTick) do
-				// the expensive settle-up ONCE for the whole batch. Completing tasks
-				// one-by-one here — two config writes + a disk flush + five panel
-				// rebuilds EACH (see completeTasks()) — froze the client when a
-				// boss-chunk grant settled a maxed account's whole stack of
-				// already-satisfied tasks at login (Mike, 2026-08-22). Animation and
-				// sound move into the flush too, capped, so a storm doesn't queue
-				// dozens of popups/clips.
+				// Coalesce: flushPendingCompletions() (onGameTick) settles the whole
+				// batch once. One at a time (see completeTasks()) freezes the client when
+				// a boss-chunk grant settles a maxed account's stack at login. Animation
+				// and sound move into the flush too, capped.
 				if (task != null)
 				{
 					synchronized (pendingCompletions)
@@ -569,12 +556,12 @@ public class ChunkBlazerPlugin extends Plugin
 	private volatile boolean countedWorld = true;
 
 	/**
-	 * Deadman, Leagues, beta, quest-speedrunning, PvP Arena, tournament and LMS worlds give
-	 * boosted or throwaway progress, so nothing done there may count. RuneLite gives the first
-	 * five their own profile type; tournament and LMS worlds are checked by world type.
+	 * Deadman, Leagues, beta, quest-speedrunning, PvP Arena, tournament and LMS worlds
+	 * give boosted or throwaway progress, so nothing there counts. The first five have
+	 * their own RuneLite profile type; tournament and LMS are checked by world type.
 	 */
-	// Tasks a module reported in LMS or the PvP tutorial. The module stopped tracking
-	// them, so they're handed back once the player leaves.
+	// Tasks a module reported in LMS or the PvP tutorial, handed back once the player
+	// leaves because the module stopped tracking them.
 	private final Set<NuzlockeTask> heldInArena = ConcurrentHashMap.newKeySet();
 
 	/**
@@ -702,21 +689,15 @@ public class ChunkBlazerPlugin extends Plugin
 			hcimDeathWatcher.reset();
 			syncChoiceNoticeShown = false;
 			modeChoiceNoticeShown = false;
-			// Last-chance sync before localPlayer becomes inaccessible. Build the
-			// request right here (still on the event-bus thread, client state
-			// still readable) and fire-and-forget the HTTP call.
+			// Last-chance sync before localPlayer becomes inaccessible: build the request
+			// here, then fire-and-forget the HTTP call.
 			//
-			// Skipped entirely if the server's record was never merged this
-			// session (login failed, or the player logged straight back out):
-			// local would then hold only the bootstrap, and this sync is
-			// destructive, so it would erase the account's real progress. Losing
-			// one session's unsynced play is recoverable; erasing the server copy
-			// is not.
-			// isAccountStateAvailable() guard is the logout-race fix: rsProfileKey can go
-			// null before this handler runs (AccountHashChanged/WorldChanged are unordered
-			// vs this), and with reads coming from RSProfile a null key makes buildSyncRequest
-			// read EMPTY and push it over the server record. Skipping a logout sync loses at
-			// most one unsynced session (re-synced next login); pushing empty is unrecoverable.
+			// Skipped if the server's record was never merged this session (local holds
+			// only the bootstrap) or rsProfileKey is already null
+			// (AccountHashChanged/WorldChanged are unordered vs this, and
+			// buildSyncRequest would read EMPTY). This sync is destructive: a skip loses
+			// at most one session, re-synced next login, but erasing the server copy is
+			// unrecoverable.
 			PlayerSyncRequest finalSync = (serverStateMerged && countedWorld && isAccountStateAvailable())
 				? buildSyncRequest() : null;
 			if (finalSync != null && config.apiEnabled())
@@ -767,6 +748,9 @@ public class ChunkBlazerPlugin extends Plugin
 			panel.hideVerificationPrompt();
 			// After the logout sync above has been built from the old task data.
 			reloadCatalogIfNewer();
+			// And check the server again, so a fix deployed since launch arrives with
+			// this relog instead of waiting for a RuneLite restart.
+			checkCatalog();
 			// Refresh the side panel into its logged-out state (gates the
 			// gameplay sections behind being in-game).
 			panel.updatePanel();
@@ -774,30 +758,19 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * A RuneLite config PROFILE switch swaps this plugin's entire local state —
-	 * unlocked chunks, completed tasks, points, the Progression baseline — with
-	 * no game login and no GameState change at all.
-	 *
-	 * <p>That makes it as significant as a login and it was being ignored. The
-	 * damage (observed 2026-07-21): {@code serverStateMerged} had been earned by
-	 * the PREVIOUS profile's login, so it stayed true across the switch, and the
-	 * 30-second sync then pushed the newly-swapped-in profile's state — a
-	 * bootstrap-only 1 chunk — straight over a server record holding 15.
-	 * Switching profiles to compare them silently destroyed the good one.
-	 *
-	 * <p>So a switch revokes the merge and re-runs the server login, which
-	 * re-merges for whatever profile is now active. Until that completes, sync
-	 * is blocked.
+	 * A RuneLite config PROFILE switch swaps all local state with no login or GameState
+	 * change. {@code serverStateMerged} still holds from the previous profile, so the
+	 * 30-second sync would push the new state over the server record. A switch therefore
+	 * revokes the merge and re-runs the server login; sync is blocked until that
+	 * completes.
 	 */
 	@Subscribe
 	public void onProfileChanged(ProfileChanged event)
 	{
-		// A world hop (and some no-op ProfilePanel actions) re-activate the config
-		// profile without changing the account, re-firing this event. Reacting
-		// again revokes sync authority and reloads/reseeds off config that reads
-		// null mid-switch — which re-seeded the start chunk for hopping players.
-		// Only do the work on a real account change; skip a null key
-		// (mid-transition / logout, handled by the LOGIN_SCREEN path).
+		// A world hop (and some no-op ProfilePanel actions) re-fire this event without
+		// changing the account. Reacting revokes sync authority and reseeds the start
+		// chunk off config that reads null mid-switch. Only act on a real account change;
+		// a null key is handled by the LOGIN_SCREEN path.
 		String key = configManager != null ? configManager.getRSProfileKey() : null;
 		if (key == null || key.equals(lastProfileSwitchKey))
 		{
@@ -815,21 +788,10 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * "We now know which account is playing" — and, on a switch, "we now know it
-	 * is a different one". Posted by ConfigManager whenever the RS profile key
-	 * changes, including the null → real transition at login and the real → null
-	 * transition at logout.
-	 *
-	 * <p>This replaces {@code startUp()} as the trigger for the starting-chunk
-	 * bootstrap. startUp() runs at client launch with no account available; this
-	 * runs at the first moment a per-account write is meaningful, which is the
-	 * whole point. It is also the switch signal, so the reload below rebuilds the
-	 * panel against the newly-active account rather than leaving the previous
-	 * one's tasks on screen.
-	 *
-	 * <p>Guards on {@code newProfile} rather than calling the bootstrap
-	 * unconditionally: the logout edge fires this too, and bootstrapping into a
-	 * null profile is exactly the account-less write being eliminated.
+	 * Fires whenever the RS profile key changes, including null to real at login and real
+	 * to null at logout. Triggers the starting-chunk bootstrap, since {@code startUp()}
+	 * has no account, and rebuilds the panel for the new account. Guarded because
+	 * bootstrapping on the logout edge would be an account-less write.
 	 */
 	@Subscribe
 	public void onRuneScapeProfileChanged(RuneScapeProfileChanged event)
@@ -981,12 +943,9 @@ public class ChunkBlazerPlugin extends Plugin
 		WorldPoint wp = player.getWorldLocation();
 		int currentRegionId = wp.getRegionID();
 
-		// Inside an instanced area (raid interiors like ToA/CoX) getWorldLocation()
-		// returns an instance TEMPLATE region that isn't a chunk — it would flip the
-		// panel to "Unknown (13454)" and could misfire the walk-into-a-neighbour unlock
-		// prompts (and spam "No chunk found for region N"). Freeze on the last overworld
-		// region so the panel keeps showing the chunk you ENTERED the instance from; the
-		// change is picked up again the moment you step back out.
+		// In an instance getWorldLocation() returns a TEMPLATE region that isn't a chunk,
+		// which would show "Unknown (13454)" and could misfire the walk-in unlock
+		// prompts. Freeze on the last overworld region until the player steps out.
 		if (!client.isInInstancedRegion() && currentRegionId != lastRegionId)
 		{
 			lastRegionId = currentRegionId;
@@ -1057,12 +1016,9 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * World-map unlock (Region Locker model): if the map-unlock key is held and
-	 * the player clicks a neighbour chunk on the open world map, unlock it. We act
-	 * here rather than via a right-click menu entry because the world map doesn't
-	 * reliably surface custom menu entries — the same reason Region Locker uses a
-	 * keybind+click. The hovered region comes from the world-map overlay, which
-	 * already hit-tests the cursor against each drawn chunk.
+	 * World-map unlock (Region Locker model): click a neighbour chunk with the map-unlock
+	 * key held. A keybind because the world map doesn't reliably surface custom menu
+	 * entries.
 	 */
 	private void unlockFromWorldMap(MenuOptionClicked event)
 	{
@@ -1315,15 +1271,9 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Ensure the default starting chunk is unlocked. Every new game begins with
-	 * one free chunk ({@link #DEFAULT_START_REGION}, Lumbridge); its neighbours
-	 * are visible on the world map but must be unlocked with points like any
-	 * other chunk. In casual mode players can also unlock the chunk they're
-	 * standing on. Idempotent — safe to call on every startup.
-	 *
-	 * <p>This also guarantees {@code unlockedChunks} EXISTS on disk, not merely
-	 * that it reads as containing the start region — see
-	 * {@link #isUnlockedChunksPersisted()} for why those differ and what breaks.
+	 * Ensure the default start chunk ({@link #DEFAULT_START_REGION}) is unlocked.
+	 * Idempotent. Also guarantees {@code unlockedChunks} EXISTS on disk, not merely that
+	 * it reads as containing the start region; see {@link #isUnlockedChunksPersisted()}.
 	 */
 	public void ensureStartingChunkUnlocked()
 	{
@@ -1362,18 +1312,12 @@ public class ChunkBlazerPlugin extends Plugin
 			setAccountState("unlockedChunks", newUnlocked.toString());
 		}
 
-		// Pre-roll tasks for the starting chunk so they're ready immediately.
-		// Other chunks get their tasks rolled lazily when unlocked.
+		// Pre-roll the starting chunk; others roll lazily on unlock.
 		//
-		// Gate this exactly like the reconstruction reroll in loadActiveTasks: with
-		// sync on and the server restore still pending, an empty start-region roll
-		// almost always means the server-persisted roll hasn't landed yet (e.g. right
-		// after a reset wiped local disk). Rolling now would seed a throwaway roll that
-		// races the restore — harmless when the reconcile lands and overwrites it, but a
-		// real reroll if the server is unreachable, and it also poisons the reveal-card
-		// set. Wait for the restore; loadActiveTasks then rolls any genuine gap once the
-		// roll-restore has resolved (server had none / is offline / truly new account).
-		// With sync off it also waits for the player to choose Play offline (canRollMissing).
+		// Gated like the reroll in loadActiveTasks: with the server restore pending, an
+		// empty roll usually means it hasn't landed, and rolling now races it and poisons
+		// the reveal-card set. loadActiveTasks rolls any genuine gap once it resolves.
+		// With sync off this waits for Play offline (canRollMissing).
 		if (canRollMissing() && getRolledTasksForRegion(DEFAULT_START_REGION).isEmpty())
 		{
 			NuzlockeChunk chunk = chunksByRegionId.get(DEFAULT_START_REGION);
@@ -1451,6 +1395,28 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		loadChunkData();
 		return true;
+	}
+
+	/** Check the server for a newer task catalog in the background; see applyCatalogIfLoggedOut(). */
+	private void checkCatalog()
+	{
+		if (catalogStore != null)
+		{
+			catalogStore.refresh(() -> clientThread.invokeLater(this::applyCatalogIfLoggedOut));
+		}
+	}
+
+	/**
+	 * Apply a catalog the background check just downloaded, if nobody is logged in.
+	 * A check that finishes after the player is back in game waits for the next
+	 * logout, so the task data is never swapped mid-session.
+	 */
+	void applyCatalogIfLoggedOut()
+	{
+		if (client.getGameState() == GameState.LOGIN_SCREEN)
+		{
+			reloadCatalogIfNewer();
+		}
 	}
 
 	private void loadChunkData()
@@ -1590,16 +1556,9 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Rebuild the taskId -> task index from allChunks + globalTasks.
-	 *
-	 * Call after ANY change to either collection. Both are only populated by
-	 * loadChunkData()/loadGlobalTasks(), which run once at startup, so this has
-	 * a single call site today — but a stale index silently returns the wrong
-	 * task, so keep them adjacent if that ever changes.
-	 *
-	 * Duplicate taskIDs across chunks are expected (e.g. cook_tuna exists in both
-	 * Mistrock and the Fishing Guild). First-wins here matches what the old
-	 * linear scan returned, so behaviour is unchanged.
+	 * Rebuild the taskId index from allChunks + globalTasks. Call after ANY change to
+	 * either: a stale index silently returns the wrong task. Duplicate taskIDs across
+	 * chunks are expected; first wins.
 	 */
 	private void rebuildTaskIndex()
 	{
@@ -1652,28 +1611,23 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Load the Global Tasks pool (Quest_Tasks.json): QUEST_CHECK tasks that are
-	 * free for every account and belong to no chunk.
+	 * Load the Global Tasks pool (Quest_Tasks.json): QUEST_CHECK tasks free for every
+	 * account, in no chunk.
 	 *
-	 * The file is deliberately wrapped in the same region-group shape the normal
-	 * task files use ({"Quest_Tasks":[{"region_id":[], "tasks":[...]}]}) with an
-	 * EMPTY region_id, so the Go server's catalog loader — which unmarshals every
-	 * data file as map[string][]regionGroup — can embed it with no server-side
-	 * change. A flat {"quest_tasks":[...]} array would parse there without error
-	 * and silently load zero tasks, which would make every quest award 0 points.
-	 *
-	 * Loaded into `globalTasks` only. These are NOT added to allChunks or
-	 * chunksByRegionId: they have no region, and registering them there would
-	 * make findRegionForTask/getTaskArea return garbage.
+	 * The file keeps the normal region-group shape with an EMPTY region_id because the Go
+	 * catalog loader unmarshals every file as map[string][]regionGroup; a flat array
+	 * would parse and silently load zero tasks. Kept out of allChunks and
+	 * chunksByRegionId: with no region, findRegionForTask/getTaskArea would return
+	 * garbage.
 	 */
 	private void loadGlobalTasks()
 	{
 		globalTasks.clear();
 
 		// Quest_Tasks = the quest pool; Progression_Tasks = the per-skill level
-		// ladder. Both are region-independent and both land in globalTasks; the
-		// only thing that distinguishes them downstream is completion_type.
-		for (String file : new String[]{ "Quest_Tasks.json", "Progression_Tasks.json" })
+		// ladder; Diary_Tasks = the achievement diaries. All are region-independent
+		// and land in globalTasks; only completion_type tells them apart downstream.
+		for (String file : new String[]{ "Quest_Tasks.json", "Progression_Tasks.json", "Diary_Tasks.json" })
 		{
 			loadGlobalTaskFile(file);
 		}
@@ -1734,16 +1688,10 @@ public class ChunkBlazerPlugin extends Plugin
 	/**
 	 * Register the Global Tasks pool with the module manager.
 	 *
-	 * MUST be called from loadActiveTasks(), after taskModuleManager.clearTask().
-	 * clearTask() wipes EVERY module's active list, and loadActiveTasks() runs on
-	 * login, chunk unlock, config change, reset and mode switch — so registering
-	 * the pool once at startup would leave it silently dead after the player's
-	 * first chunk unlock.
-	 *
-	 * Already-completed quest tasks are skipped here. Without that filter the
-	 * module would re-detect every finished quest on each reload and fire
-	 * completeTask() again, re-awarding base_points every login and appending a
-	 * duplicate id to the completedTasks config string each time.
+	 * MUST be called from loadActiveTasks(), after clearTask(), which wipes every
+	 * module's active list: registered once at startup, the pool dies on the first chunk
+	 * unlock. Completed quest tasks are skipped, or the module re-detects them on each
+	 * reload, re-awarding base_points and duplicating ids in completedTasks.
 	 */
 	private void registerGlobalTasks(Set<String> completedTaskIds)
 	{
@@ -1764,12 +1712,10 @@ public class ChunkBlazerPlugin extends Plugin
 				return false;
 			}
 
-			// LOGGED_IN is NOT enough, and neither is a single-skill probe: the
-			// table hydrates skill by skill over several ticks. The Progression
-			// baseline is read from it and then FROZEN, so reading it early
-			// doesn't merely delay a feature — it permanently records the
-			// not-yet-loaded skills as 0, which makes their rungs look earnable
-			// and pays out the ladder retroactively. Wait for the whole table.
+			// LOGGED_IN is NOT enough, nor is a single-skill probe: the table hydrates
+			// skill by skill over several ticks. The baseline read from it is FROZEN, so
+			// reading early records unloaded skills as 0 and pays out the ladder
+			// retroactively.
 			if (!isSkillDataSettled())
 			{
 				return false;
@@ -1788,24 +1734,11 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Split the Global Tasks pool into "already finished before we ever looked"
-	 * and "still to do", then settle the first group in ONE batch.
-	 *
-	 * WHY THE BATCH EXISTS (2026-07-19, froze the client): letting the module
-	 * detect these normally meant ~150 tasks firing completionCallback in a
-	 * single sweep, and each one runs the full single-task pipeline —
-	 * completeTask() does a config write for points, another for the completed
-	 * list, then panel.updateCompletedTasks(), which calls
-	 * getCompletedTasksWithInfo() and re-scans every completed id through
-	 * findTaskById + findRegionForTask, plus a full Swing rebuild of the active
-	 * task list. That is quadratic in the number of completions and it all runs
-	 * on the client thread, so a developed account hard-locked on login.
-	 *
-	 * A player who already did the quests also does not want 150 popups.
-	 * Backfilled quests are therefore silent: points are summed and written
-	 * once, the completed list is written once, and the panel refreshes once.
-	 * Only quests finished DURING play reach the module and get the normal
-	 * per-task celebration.
+	 * Split the Global Tasks pool into "already finished before we ever looked" and
+	 * "still to do", then settle the first group in ONE silent batch. Module detection
+	 * would run the full single-task pipeline per task, quadratic and on the client
+	 * thread, hard-locking a developed account on login. Only quests finished DURING play
+	 * reach the module and get the normal celebration.
 	 */
 	private void backfillAndRegisterGlobalTasks()
 	{
@@ -1843,11 +1776,11 @@ public class ChunkBlazerPlugin extends Plugin
 			task.setCurrentProgress(0);
 			task.setCompleted(false);
 
-			// Already-satisfied global tasks settle in one batch. For quests that
-			// means "finished before we looked"; for Progression it means a rung
-			// ABOVE the baseline that was crossed while the plugin was off — real
+			// Already-satisfied global tasks settle in one batch. For quests and
+			// diaries that means "finished before we looked"; for Progression it means
+			// a rung ABOVE the baseline that was crossed while the plugin was off — real
 			// forward progress we simply didn't witness, so it still pays.
-			if (isQuestFinished(task) || isProgressionRungReached(task))
+			if (isQuestFinished(task) || isProgressionRungReached(task) || VarbitCheckModule.isSatisfied(client, task))
 			{
 				task.setCurrentProgress(1);
 				task.setCompleted(true);
@@ -1900,20 +1833,12 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * This account's frozen baseline, or empty when there isn't one FOR THIS
-	 * ACCOUNT.
+	 * This account's frozen baseline, or empty when there isn't one FOR THIS ACCOUNT.
 	 *
-	 * <p>ChunkBlazer config lives on the RuneLite profile, so every account
-	 * signed in through the same profile reads the same string. Without an owner
-	 * tag a maxed main's baseline would be inherited by the next account to log
-	 * in — and since eligibility is {@code threshold > baseline}, a fresh level 3
-	 * would inherit 99s and be locked out of the ENTIRE ladder permanently. That
-	 * is the exact inverse of the original bug and just as silent. The existing
-	 * {@code accountModeHash} solves the same problem the same way.
-	 *
-	 * <p>A value with no owner tag predates this and is treated as belonging to
-	 * nobody, so it is re-captured for whoever is logged in — always the safe
-	 * direction, since a re-capture can only ever be more restrictive.
+	 * <p>Config is shared by every account on the RuneLite profile, so without an owner
+	 * tag a fresh level 3 would inherit a main's baseline and be locked out of the whole
+	 * ladder permanently. An untagged value belongs to nobody and is re-captured for
+	 * whoever is logged in, which can only be more restrictive.
 	 */
 	private Map<String, Integer> progressionBaselineForCurrentAccount()
 	{
@@ -1945,14 +1870,10 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * The Global Tasks the UI should show. Progression rungs at or below the
-	 * frozen baseline are omitted: the account cleared those levels before
-	 * ChunkBlazer ever saw it, so they can never be earned and listing ~200
-	 * permanently-unearnable entries would bury the ones that are live.
-	 *
-	 * <p>Only visibility — eligibility is decided in
-	 * {@link #backfillAndRegisterGlobalTasks()}, which is what actually stops
-	 * them scoring. Both read the same baseline, so they can't disagree.
+	 * The Global Tasks the UI should show, minus Progression rungs at or below the frozen
+	 * baseline, which can never be earned. Visibility only:
+	 * {@link #backfillAndRegisterGlobalTasks()} decides eligibility from the same
+	 * baseline.
 	 */
 	public List<NuzlockeTask> getVisibleGlobalTasks()
 	{
@@ -1978,27 +1899,15 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * The frozen per-skill levels this account had when ChunkBlazer first saw it.
-	 * Progression rungs at or below these never pay — that is the whole
-	 * "no retroactive points for an established account" rule.
+	 * The frozen per-skill levels this account had when ChunkBlazer first saw it. Rungs
+	 * at or below these never pay. Captured ONCE, never rewritten. If lost, the next
+	 * login re-captures at CURRENT levels, which can cost rungs but never pays unearned
+	 * points. The Hitpoints level-10 rung isn't in the task data.
 	 *
-	 * <p>Captured ONCE and then never rewritten. Two consequences worth knowing:
-	 * <ul>
-	 *   <li>A fresh account baselines at all 1s (Hitpoints 10), so the entire
-	 *       ladder is live for it. The Hitpoints level-10 rung isn't in the task
-	 *       data at all, since every account spawns having cleared it.</li>
-	 *   <li>If the stored baseline is ever lost, the next login re-captures at
-	 *       CURRENT levels. That is strictly more restrictive than the original —
-	 *       it can cost a player rungs they were working toward, but it can never
-	 *       hand out points that weren't earned. Failing in that direction is
-	 *       deliberate.</li>
-	 * </ul>
-	 *
-	 * <p>Client thread only — reads live skill data.
+	 * <p>Client thread only: reads live skill data.
 	 */
-	// How many consecutive identical readings of the skill table before we trust
-	// it. Completeness (below) is the real gate; this is the backstop for the one
-	// skill completeness can't assert on — see SAILING in isSkillDataComplete().
+	// Consecutive identical skill-table readings needed before we trust it. Completeness
+	// is the real gate; this is the backstop for SAILING (see isSkillDataComplete()).
 	private static final int REQUIRED_STABLE_SKILL_SAMPLES = 3;
 
 	private int[] lastSkillSample;
@@ -2007,28 +1916,13 @@ public class ChunkBlazerPlugin extends Plugin
 	/**
 	 * Whether the client's skill table holds this account's real levels.
 	 *
-	 * <p>The table hydrates INCREMENTALLY, in {@link Skill} enum order, over
-	 * several ticks after GameState.LOGGED_IN. Both halves of this were learned
-	 * the hard way on 2026-07-21:
-	 * <ol>
-	 *   <li>LOGGED_IN alone → the whole table read 0, baseline froze at all
-	 *       zeros, and a maxed account was handed the entire 671-point ladder.</li>
-	 *   <li>Hitpoints-only probe → Hitpoints is 4th in the enum, so it goes
-	 *       valid while everything from Fishing (11th) onward is still 0. The
-	 *       baseline froze half-real, and the late skills paid out retroactively.</li>
-	 * </ol>
+	 * <p>The table hydrates INCREMENTALLY, in {@link Skill} enum order, over several
+	 * ticks after LOGGED_IN, so neither LOGGED_IN nor a Hitpoints-only probe is enough.
+	 * No OSRS skill can be below 1, so a 0 anywhere means that entry hasn't loaded; no
+	 * timer needed.
 	 *
-	 * <p>The correct invariant is not a timer: <b>no OSRS skill can be below 1</b>,
-	 * so a 0 anywhere means that entry hasn't loaded. Checking EVERY skill is
-	 * therefore complete and deterministic — it waits exactly as long as the
-	 * client needs, which is what makes it safe on a slow machine or connection
-	 * where a fixed delay would be a guess.
-	 *
-	 * <p>Sailing is the one exception: if it isn't live in this client build it
-	 * reads 0 forever, and requiring it would stall capture permanently. It is
-	 * excluded from the completeness test but still covered by the stability
-	 * test, so a Sailing value that is merely LATE (it hydrates last) still
-	 * blocks capture until it settles.
+	 * <p>Sailing is excluded: if it isn't live in this client build it reads 0 forever.
+	 * The stability test still covers it, so a merely LATE Sailing value blocks capture.
 	 */
 	private boolean isSkillDataComplete()
 	{
@@ -2098,14 +1992,11 @@ public class ChunkBlazerPlugin extends Plugin
 
 		if (!isSkillDataComplete())
 		{
-			// Don't freeze a baseline off a half-loaded skill table — that
-			// mistake is permanent and pays out the ladder. Returning empty
-			// means every rung reads as ineligible for now; a later call
-			// captures for real. Belt to the caller's braces:
-			// registerGlobalTasks already reschedules until the table settles,
-			// so this should be unreachable — but this bug shipped twice, so
-			// one gate is not enough. Uses the stateless completeness check so
-			// calling it here can't disturb the caller's stability counter.
+			// Never freeze a baseline off a half-loaded skill table: that is permanent
+			// and pays out the ladder. Empty means every rung is ineligible until a later
+			// call captures. Should be unreachable since registerGlobalTasks reschedules,
+			// but keep this second gate. Stateless check, so it can't disturb the
+			// caller's stability counter.
 			return baseline;
 		}
 
@@ -2138,30 +2029,15 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Undo a baseline frozen from a half-loaded skill table (2026-07-21).
+	 * Undo a baseline frozen from a half-loaded skill table, where a 0 makes every rung
+	 * of that skill pay out.
 	 *
-	 * <p>Two builds got this wrong in two different ways, and this repairs both:
-	 * <ul>
-	 *   <li>Captured on LOGGED_IN → every skill 0.</li>
-	 *   <li>Captured on a Hitpoints-only probe → the first ten skills real, the
-	 *       rest still 0 (the table hydrates in enum order).</li>
-	 * </ul>
-	 * Either way a 0 makes every rung of that skill "above baseline", and the
-	 * already-reached check pays them all out — exactly what Progression exists
-	 * to prevent.
-	 *
-	 * <p>The tell is an impossible value, not a version marker: <b>no OSRS skill
-	 * can be below 1</b>, and no account below 10 Hitpoints. Sailing is exempt
-	 * because it legitimately reads 0 when not live. Any baseline containing
-	 * such a value is cleared, and every progression task is un-completed with
-	 * its points refunded, so the next capture redoes it honestly. Legitimately
-	 * earned rungs are lost with them — acceptable, because they were only
-	 * earnable in the minutes since this shipped and re-earning one just needs
-	 * the level-up to be seen again.
-	 *
-	 * <p>Self-healing rather than one-shot: keyed off the impossible value, so
-	 * it repairs any client that ran either bad build whenever it next loads,
-	 * then no-ops forever.
+	 * <p>The tell is an impossible value, not a version marker: no skill below 1, no
+	 * account below 10 Hitpoints (Sailing is exempt, it reads 0 when not live). Such a
+	 * baseline is cleared and every progression task un-completed with its points
+	 * refunded, so the next capture redoes it. Earned rungs go too, re-earned once the
+	 * level-up is seen again. Self-healing: repairs any client when it next loads, then
+	 * no-ops.
 	 */
 	public void migrateRepairBogusProgressionBaseline()
 	{
@@ -2472,12 +2348,9 @@ public class ChunkBlazerPlugin extends Plugin
 		String currentRsn = getPlayerName();
 		if (currentRsn == null)
 		{
-			// Player not loaded yet (the brief window right after a world hop's
-			// LOGGED_IN, noted in onGameStateChanged). We can't verify the account
-			// this instant, but reporting "unlocked" here is what flashed the mode
-			// picker on every hop. Trust the last verdict confirmed for this
-			// session; it is reset on real logout, so a genuine account change
-			// re-determines it once its player loads.
+			// Player not loaded yet (right after a world hop's LOGGED_IN). Reporting
+			// "unlocked" here flashes the mode picker on every hop, so trust the last
+			// verdict. It resets on real logout.
 			return modeLockConfirmed;
 		}
 
@@ -2655,12 +2528,10 @@ public class ChunkBlazerPlugin extends Plugin
 		String rsnHash = hashRsn(rsn);
 		String modeKey = rsnHash + ":" + mode.name();
 
-		// CASUAL can be persisted immediately — the server never refuses it.
-		// NUZLOCKE (Competitive) must be confirmed by the server FIRST: it
-		// re-validates fresh-L3 eligibility, and writing the local lock before
-		// that confirmation let a main the server rejects get stuck showing
-		// Competitive while every lock/sync was refused (Madame Lulu, 2026-08-22).
-		// So for NUZLOCKE we only persist inside the success branch below.
+		// CASUAL persists immediately: the server never refuses it. NUZLOCKE persists
+		// only in the success branch below: the server re-validates fresh-L3 eligibility,
+		// and an early local lock leaves a rejected main stuck showing Competitive with
+		// every lock/sync refused.
 		if (mode != GameMode.NUZLOCKE)
 		{
 			setAccountState("accountModeHash", modeKey);
@@ -2739,15 +2610,9 @@ public class ChunkBlazerPlugin extends Plugin
 	private static final String CHARTER_SEED_STRIPPED_KEY = "charterSeedStripped";
 
 	/**
-	 * One-time migration. Earlier builds SEEDED every charter port into the
-	 * player's unlocked set at startup. Charter ports are now unlock-on-demand
-	 * (free, 0-cost, shown with a yellow "unlockable" outline), so strip any
-	 * previously-seeded charter regions exactly once and let players re-unlock
-	 * them by sailing in or clicking. Guarded by a hidden config flag so a
-	 * charter port the player unlocks AFTER the migration is never stripped —
-	 * safe because, pre-migration, every charter region in the unlocked set got
-	 * there via seeding. Cheap no-op once the flag is set, so it's fine to keep
-	 * calling on every task (re)load.
+	 * One-time migration: strip charter regions earlier builds seeded into the unlocked
+	 * set, now that ports are unlock-on-demand. A hidden flag guards it so a port
+	 * unlocked AFTER the migration is never stripped. Cheap no-op once set.
 	 */
 	public void migrateStripSeededCharterChunks()
 	{
@@ -2781,15 +2646,10 @@ public class ChunkBlazerPlugin extends Plugin
 
 		if (removed > 0)
 		{
-			// Declares itself for the same reason the progression repair does: on
-			// the wire this is indistinguishable from a wipe, and there are 27
-			// charter regions to shed against a median account holding 5 chunks.
-			//
-			// This one fails WORSE than the others if refused, because the
-			// completion flag below is set unconditionally and the migration never
-			// re-runs: the server would keep the charter chunks, the next login's
-			// union would restore them locally, and the strip would silently undo
-			// itself permanently rather than retrying.
+			// Declares itself because on the wire this looks like a wipe (27 charter
+			// regions against a median account of 5 chunks). A refusal can't retry: the
+			// flag below is set unconditionally, so the server keeps the chunks, the next
+			// login's union restores them, and the strip undoes itself for good.
 			declareIntentionalReset("charter seed strip removed "
 				+ removed + " charter chunk(s)");
 			setAccountState("unlockedChunks", String.join(",", kept));
@@ -2801,13 +2661,10 @@ public class ChunkBlazerPlugin extends Plugin
 	private static final int OLD_DEFAULT_SOUND_VOLUME = 25;
 
 	/**
-	 * One-time migration. The task-completion sound volume default was {@value
-	 * #OLD_DEFAULT_SOUND_VOLUME}% in early builds and is now a deliberately quiet
-	 * 3%. Accounts created under the old default carry a STORED 25 that overrides
-	 * the new 3% code default — and RuneLite config sync can resurrect it across a
-	 * player's installs. Clear a stored 25 exactly once so it falls back to 3%.
-	 * Guarded by a hidden flag so a value the player deliberately sets AFTER the
-	 * migration (even 25) is never touched. Idempotent + cheap once the flag is set.
+	 * One-time migration: clear a STORED {@value #OLD_DEFAULT_SOUND_VOLUME}% sound volume
+	 * so it falls back to the quiet 3% default. RuneLite config sync can resurrect the
+	 * stored value across installs. A hidden flag guards it so a value set AFTER the
+	 * migration (even 25) is never touched.
 	 */
 	public void migrateResetStaleSoundVolume()
 	{
@@ -2891,12 +2748,9 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Turn server sync on from the panel's first-run prompt. Flips the config, then
-	 * logs in right away if we're already in-game (otherwise the next LOGGED_IN /
-	 * heartbeat picks it up). Accumulated offline progress uploads on the first sync
-	 * after login: the account's own RSProfile state is what gets pushed, and that
-	 * first push is pure growth, so the drop guard never fires. Enabling
-	 * mid-session also lets the catalog + sounds start fetching (both gate on this).
+	 * Turn server sync on from the panel's first-run prompt, logging in right away if
+	 * in-game. Offline progress uploads on the first sync after login; that push is pure
+	 * growth, so the drop guard never fires.
 	 */
 	public void enableServerSync()
 	{
@@ -3059,17 +2913,14 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Load the current account's ChunkBlazer API key into the api client before login.
-	 * The authoritative copy is the per-account RSProfile store, which survives a settings
-	 * Reset (Reset only clears declared config items, never RSProfile keys).
+	 * Load the current account's API key into the api client before login, from the
+	 * per-account RSProfile store (a settings Reset never clears it).
 	 *
-	 * <p>A key the player pasted into the "Sync recovery key" field is treated as a CANDIDATE,
-	 * not truth: it is used for this login attempt but is NOT written over the stored key here.
-	 * Only a login the server confirms was key-authenticated as this account (authed_by_key)
-	 * lets {@code onLoginResponse} persist it. That, plus rejecting anything that is not even a
-	 * valid key format, means a wrong, unknown, or mistyped paste can never overwrite a working
-	 * key and brick the account. If this account has no key at all, the api client's key is
-	 * explicitly cleared so a previously-logged-in account's key is never reused.
+	 * <p>A key pasted into "Sync recovery key" is only a CANDIDATE: used for this login,
+	 * and persisted by {@code onLoginResponse} only once the server confirms it
+	 * (authed_by_key), so a bad paste can't overwrite a working key and brick the
+	 * account. With no key the client's key is cleared so a previous account's is never
+	 * reused.
 	 */
 	private void loadPersistedApiKey()
 	{
@@ -3103,12 +2954,9 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		else
 		{
-			// No key for this account. The apiClient is a singleton reused across
-			// account switches, so we MUST clear any key a previously-logged-in
-			// account left on it — otherwise this account would authenticate as
-			// them. With no key we send none and the server name-authenticates (a
-			// first-ever login claims one; a returning account recovers its key from
-			// RuneLite's own config-sync, or a one-time paste).
+			// No key for this account. apiClient is a singleton reused across account
+			// switches, so clear any previous key or this account authenticates as them.
+			// The server then name-authenticates.
 			apiClient.setPlayerApiKey(null);
 		}
 	}
@@ -3140,11 +2988,9 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Persist the account's API key so it survives restarts without a re-fetch. The sole
-	 * store is the per-account RSProfile key (survives a settings Reset). It is deliberately
-	 * NOT mirrored into the shared config.apiKey() field: that global slot is the cross-
-	 * account leak — mirroring every account's key there is what let the next account inherit
-	 * it. The panel reveals the key straight from the per-account store (getSyncRecoveryKey).
+	 * Persist the account's API key in the per-account RSProfile store only. Never mirror
+	 * it into the shared config.apiKey() field: that global slot leaks it to the next
+	 * account.
 	 */
 	void persistApiKey(String key, String accountId)
 	{
@@ -3199,24 +3045,17 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Wipe every per-account ChunkBlazer value for the account logged in right now, so it
-	 * re-restores cleanly from the server on the next fresh start. This is the repair for a
-	 * contaminated local state — e.g. an account that authenticated with a neighbouring
-	 * account's key (the cross-account leak) and merged in that account's mode, tasks, and
-	 * points, and that a RuneLite profile switch cannot clear because the data lives in the
-	 * shared RSProfile store. It is RSProfile-scoped, so it only touches THIS account; others
-	 * on the same install are untouched, and the SERVER record is never changed. The api key
-	 * is cleared too: afterwards the account either name-authenticates (first claim / the
-	 * server key-mismatch heal) or the player pastes its own key into the recovery field.
-	 * In-memory state is only fully rebuilt on a fresh plugin start, so callers must tell the
-	 * player to restart the client and log back in. Sync is left with no key, so a stale
-	 * logout sync can never push the cleared data back to the server.
+	 * Wipe every per-account value for the logged-in account so it re-restores from the
+	 * server on the next fresh start. Repairs contaminated local state a RuneLite profile
+	 * switch can't clear. RSProfile-scoped: other accounts and the SERVER record are
+	 * untouched. The api key goes too, so a stale logout sync can't push the cleared data
+	 * back. In-memory state only rebuilds on a fresh plugin start, so callers must tell
+	 * the player to restart the client and log back in.
 	 */
 	/**
-	 * Why resetting this account's local data now would erase progress the server
-	 * doesn't have, or null when it's safe. A reset restores from the server, so it's
-	 * only safe while syncing works and has just succeeded (Blaze Locked lost two days
-	 * of progress resetting while sync was refused).
+	 * Why resetting this account's local data now would erase progress the server doesn't
+	 * have, or null when safe. A reset restores from the server, so syncing must work and
+	 * have just succeeded.
 	 */
 	String resetBlockedReason(long nowMs)
 	{
@@ -3290,15 +3129,11 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Boss NPC id -> boss key, for bosses whose completion is detected by the NPC's
-	 * DEATH rather than a kill-count chat line. Some (Bryophyta) print no kill-count
-	 * message at all, so the chat path never fires; the NPC always dies. Idempotent with
-	 * the chat path — recordBossCompletion is once-per-boss — so a boss with both signals
-	 * is never double-granted. Raids (ToA/CoX) stay chat-only (their bosses despawn).
-	 *
-	 * <p>Built from each boss chunk's authored {@code boss_npc_ids} (see
-	 * {@link #rebuildBossNpcKeys()}), so adding a new world boss is pure catalog data — no
-	 * plugin change.
+	 * Boss NPC id to boss key, for bosses detected by the NPC's DEATH rather than a
+	 * kill-count chat line; some (Bryophyta) print none. recordBossCompletion is
+	 * once-per-boss, so two signals never double-grant. Raids stay chat-only: their
+	 * bosses despawn. Built from the catalog's {@code boss_npc_ids} (see
+	 * {@link #rebuildBossNpcKeys()}), so a new world boss needs no plugin change.
 	 */
 	private volatile Map<Integer, String> bossNpcKeys = java.util.Collections.emptyMap();
 
@@ -3488,20 +3323,14 @@ public class ChunkBlazerPlugin extends Plugin
 	private String[][] bossPhrases;
 
 	/**
-	 * Watch for a boss/raid completion message and award the once-per-boss Boss
-	 * Token via {@link #recordBossCompletion} (which no-ops unless that boss chunk
-	 * is unlocked and not already recorded).
+	 * Watch for a boss/raid completion message and award the Boss Token via
+	 * {@link #recordBossCompletion}.
 	 *
-	 * <p>ToA bosses despawn rather than dying, so ActorDeath is unreliable — the
-	 * game's completion-count GAMEMESSAGE is the signal both RuneLite and the
-	 * official ToA plugin key off. The Normal / Entry Mode / Expert Mode variants
-	 * all contain "Tombs of Amascut" and "count is", so a substring match covers
-	 * every difficulty. See docs/BOSS-CHUNKS.md for the researched signals; the
-	 * per-raid-level "Defeat ToA (150+/300+)" TASKS (varbit 14380) are a separate,
-	 * still-to-be-verified module.
-	 *
-	 * <p>The phrases for every boss live in boss_kc_phrases.json, checked in order
-	 * (see {@link #bossKey}).
+	 * <p>ToA bosses despawn rather than die, so ActorDeath is unreliable; the
+	 * completion-count GAMEMESSAGE is the signal. Every difficulty contains "Tombs of
+	 * Amascut" and "count is", so a substring match covers them. Phrases live in
+	 * boss_kc_phrases.json, checked in order (see {@link #bossKey}). See
+	 * docs/BOSS-CHUNKS.md.
 	 */
 	private void handleBossCompletionChat(ChatMessage event)
 	{
@@ -3710,37 +3539,15 @@ public class ChunkBlazerPlugin extends Plugin
 		});
 	}
 
-	/**
-	 * Mirror server-side state into local RuneLite config when local is empty
-	 * (fresh install / new machine). Does not overwrite existing local state —
-	 * the active machine wins until the user explicitly resets.
-	 *
-	 * Mode lock: written if server says locked and local has no hash for this RSN.
-	 * Unlocked regions: written if server has any and local is empty.
-	 * Completed tasks: same rule.
-	 */
-	/**
-	 * Keys holding progress that belongs to ONE account. Cleared together when a
-	 * different account logs in on this RuneLite profile.
-	 *
-	 * <p>Everything here except {@code progressionBaseline} is mirrored on the
-	 * server and comes straight back via {@link #hydrateFromLoginResponse}. The
-	 * baseline is client-only, so a switch costs the departing account its frozen
-	 * baseline — it re-captures at whatever its levels are on return, which is
-	 * more restrictive than the original and therefore the safe direction.
-	 */
-	// False until the server's record for this session has been merged into local
-	// config. Sync is DESTRUCTIVE and client-authoritative, so pushing before the
-	// merge would overwrite the server with whatever half-bootstrapped state the
-	// client happens to hold — which is how a clean profile wiped 14 unlocked
-	// chunks on 2026-07-21. Reset on logout so every session must earn it again.
+	// False until the server's record for this session has been merged into local config.
+	// Sync is DESTRUCTIVE and client-authoritative, so pushing before the merge
+	// overwrites the server with half-bootstrapped state. Reset on logout.
 	private volatile boolean serverStateMerged;
 
-	// True once the server-roll restore for this login has RESOLVED — either the roll
-	// was restored (restoreRollStateFromServer) or the attempt gave up (offline / server
-	// has no roll). Until then, with sync on, loadActiveTasks must NOT reconstruct a roll
-	// for an empty region: doing so races the async restore and re-rolls the account (the
-	// reset-then-reroll bug). Reset on logout so every session waits for its own restore.
+	// True once this login's server-roll restore has RESOLVED: restored or given up
+	// (offline / server has no roll). Until then, with sync on, loadActiveTasks must NOT
+	// reconstruct a roll for an empty region, or it races the restore and re-rolls the
+	// account. Reset on logout.
 	private volatile boolean serverRollRestoreResolved;
 
 	// Profile-level, like the sync toggle: set when the player picks Play offline or turns sync off.
@@ -3755,11 +3562,10 @@ public class ChunkBlazerPlugin extends Plugin
 		+ "Competitive mode requires a new ironman account (Group included) with combat level 9 or lower and no skill above level 3.";
 
 	/**
-	 * Whether an unlocked region with no roll may be rolled now: only once we know the
-	 * server has nothing for it. That means sync is on and this login's restore resolved,
-	 * or the player chose to play offline. Rolling before then dealt a fresh Lumbridge on
-	 * a returning player's new device (ChunkDragoon, 2026-10-02). An account that
-	 * already has a roll has been playing offline, which counts as the choice.
+	 * Whether an unlocked region with no roll may be rolled now. Needs sync on with this
+	 * login's restore resolved, or the player choosing to play offline; earlier would
+	 * deal a returning player a fresh Lumbridge. An existing roll means they've been
+	 * playing offline, which counts as the choice.
 	 */
 	boolean canRollMissing()
 	{
@@ -3798,7 +3604,7 @@ public class ChunkBlazerPlugin extends Plugin
 	private static final String[] MIGRATION_KEYS = {
 		"unlockedChunks", "completedTasks", "assignedTasks", "regionRolledTasks",
 		"currentTaskId", "currentTaskQuantity", "currentTaskProgress",
-		"totalPoints", "pointsSpent", "bossTokens", "taskProgressData",
+		"totalPoints", "pointsSpent", "spendReset", "bossTokens", "taskProgressData",
 		"progressionBaseline", "bossCompletions",
 		"unrevealedTasks", "gameMode", "accountModeHash", "rollVersion",
 	};
@@ -3807,18 +3613,13 @@ public class ChunkBlazerPlugin extends Plugin
 
 	/**
 	 * Whether RuneLite can currently tell us WHICH account is playing.
+	 * {@code setRSProfileConfiguration} SILENTLY DISCARDS writes while
+	 * {@code getRSProfileKey()} is null.
 	 *
-	 * <p>Backed by {@code ConfigManager.getRSProfileKey()}, which is derived from
-	 * {@code client.getAccountHash()} and is null whenever no account is logged
-	 * in. This is the gate that makes per-account storage possible at all:
-	 * {@code setRSProfileConfiguration} SILENTLY DISCARDS writes issued while it
-	 * is null — no exception, no return value, the data simply never lands.
-	 *
-	 * <p>Note this goes null on LOGOUT too, not just before the first login, and
-	 * it is driven by {@code AccountHashChanged}/{@code WorldChanged}, which are
-	 * not ordered against our own {@code GameStateChanged} handling. Anything
-	 * that reads per-account state on the way out (notably the destructive
-	 * logout sync) must not assume it is still available.
+	 * <p>It goes null on LOGOUT too, driven by
+	 * {@code AccountHashChanged}/{@code WorldChanged}, unordered against our
+	 * {@code GameStateChanged} handling. Anything reading per-account state on the way
+	 * out (notably the destructive logout sync) must not assume it is available.
 	 */
 	private boolean isAccountStateAvailable()
 	{
@@ -3839,12 +3640,9 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Typed per-account reads over the RSProfile store. Every per-account read routes
-	 * through {@link #getAccountState} (now RSProfile-scoped, so multiple accounts on one
-	 * RuneLite profile keep fully independent progress) and applies the same default the
-	 * old typed accessor did. {@code getRSProfileConfiguration} returns null when no
-	 * account is active, which yields the default here — a read before login must never
-	 * be mistaken for real, empty data.
+	 * Typed per-account reads via {@link #getAccountState}. With no active account the
+	 * read is null and yields the default: a read before login must never be mistaken for
+	 * real, empty data.
 	 */
 	private String acStr(String key, String def)
 	{
@@ -3898,31 +3696,13 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Whether {@code unlockedChunks} actually EXISTS in stored config, as opposed
-	 * to being conjured by {@link ChunkBlazerConfig#unlockedChunks()}'s interface
-	 * default of {@code "12850"}.
+	 * Whether {@code unlockedChunks} actually EXISTS in stored config, rather than coming
+	 * from {@link ChunkBlazerConfig#unlockedChunks()}'s default of {@code "12850"}.
 	 *
-	 * <p>Those two states are indistinguishable through the typed accessor, and
-	 * that gap shipped a bug. The old account-switch wipe unset the key, and
-	 * {@link #mergeUnlockedRegionsFromServer} then returned early
-	 * for an account the server has no regions for (i.e. every brand-new one), so
-	 * nothing rewrote it. {@code ChunkBlazerConfig#unlockedChunks()} still answered
-	 * {@code "12850"} from the default, so {@link #ensureStartingChunkUnlocked}
-	 * concluded there was nothing to do and never persisted anything.
-	 *
-	 * <p>Inside this plugin that was invisible — the default is a faithful stand-in
-	 * for "only the start chunk". But the standalone ChunkBlazer GPU addon reads
-	 * the key RAW across the repo boundary
-	 * ({@code configManager.getConfiguration("chunkblazer", "unlockedChunks")}),
-	 * gets {@code null}, and greys the entire world including Lumbridge. Bruh
-	 * Blazer hit exactly this on 2026-07-27: cleared at 21:11:03, rendered fully
-	 * grey, and only corrected at 21:16:47 when his first real unlock finally
-	 * wrote a concrete value. A second account in the same session never saw it,
-	 * because the server had regions for it and the merge wrote them immediately.
-	 *
-	 * <p>So the invariant is stronger than "the start region reads as unlocked":
-	 * the key must be ON DISK for out-of-process readers. Anything that consumes
-	 * this value without our config defaults needs that.
+	 * <p>The key must be ON DISK: the standalone GPU addon reads it raw across the repo
+	 * boundary, gets {@code null} if absent, and greys the entire world including
+	 * Lumbridge. {@link #mergeUnlockedRegionsFromServer} writes nothing for an account
+	 * with no server regions, so {@link #ensureStartingChunkUnlocked} must.
 	 */
 	private boolean isUnlockedChunksPersisted()
 	{
@@ -3931,14 +3711,9 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Write one per-account value into the RSProfile store.
-	 *
-	 * <p>HARD REFUSAL when no account is active: {@code setRSProfileConfiguration}
-	 * silently drops writes issued with no RS profile (it logs "trying to create a
-	 * profile while not logged in" and returns). Writing anyway would vanish, so the
-	 * bootstrap must be gated on {@link #isAccountStateAvailable()} rather than relying
-	 * on this to land — every per-account writer runs from {@code onRuneScapeProfileChanged}
-	 * or later, once the profile is known.
+	 * Write one per-account value into the RSProfile store. Refused when no account is
+	 * active, since {@code setRSProfileConfiguration} would silently drop it. Gate the
+	 * bootstrap on {@link #isAccountStateAvailable()}.
 	 */
 	private void setAccountState(String key, Object value)
 	{
@@ -3959,17 +3734,14 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * One-time move of a legacy account's progress from the old profile-global store into
-	 * its own RSProfile store. Runs from {@link #onRuneScapeProfileChanged} when the profile
-	 * first becomes available. Follows docs/RSPROFILE-MIGRATION-PLAN.md section 4:
-	 * <ul>
-	 *   <li>The PRESENCE of the destination (RSProfile unlockedChunks/completedTasks) is the
-	 *       completion marker, never a boolean flag that could be set without the data moving.</li>
-	 *   <li>Only a blob this account OWNS is migrated (accountModeHash / accountStateOwner tag);
-	 *       a foreign blob is left untouched for its own account to migrate on its next login.</li>
-	 *   <li>Copy only: the global originals are KEPT this release as the sole rollback and are
-	 *       inert now that every read comes from RSProfile. Cleanup is a later release.</li>
-	 * </ul>
+	 * One-time move of a legacy account's progress from the profile-global store into its
+	 * RSProfile store, from {@link #onRuneScapeProfileChanged}. See
+	 * docs/RSPROFILE-MIGRATION-PLAN.md section 4.
+	 *
+	 * <p>The destination's PRESENCE is the completion marker, never a flag that could be
+	 * set without the data moving. Only a blob this account OWNS migrates
+	 * (accountModeHash / accountStateOwner tag). Copy only: the global originals stay as
+	 * the sole rollback.
 	 */
 	private void migrateLegacyGlobalStateToRSProfile()
 	{
@@ -4064,10 +3836,32 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Take the server's Boss Token balance at login. A new device or profile would
-	 * otherwise show the starting 2 until its first successful sync. Older servers
-	 * don't send it (null), so the local value stays.
+	 * Take the server's Boss Token balance at login, or a new device shows the starting 2
+	 * until its first sync. Older servers send null, so the local value stays.
 	 */
+	/**
+	 * Take the server's spend when higher: spend only grows, so the maximum is the right
+	 * merge. The exception is an admin correction bumping spend_reset: a computer that
+	 * hasn't seen this reset takes the server's number as it stands, since nothing else
+	 * can lower a spend.
+	 */
+	private void adoptServerSpend(PlayerLoginResponse.PlayerData pdata)
+	{
+		if (pdata == null)
+		{
+			return;
+		}
+		if (pdata.getSpendReset() > acInt("spendReset", 0))
+		{
+			setAccountState("spendReset", pdata.getSpendReset());
+			setAccountState("pointsSpent", pdata.getPointsSpent());
+		}
+		else if (pdata.getPointsSpent() > acInt("pointsSpent", 0))
+		{
+			setAccountState("pointsSpent", pdata.getPointsSpent());
+		}
+	}
+
 	private void adoptServerBossTokens(PlayerLoginResponse.PlayerData pdata)
 	{
 		if (pdata != null && pdata.getBossTokens() != null)
@@ -4079,6 +3873,12 @@ public class ChunkBlazerPlugin extends Plugin
 	/** Union the server's completed tasks into local config. */
 	private void mergeCompletedTasksFromServer(PlayerLoginResponse.PlayerData pdata)
 	{
+		// Before the union, deliberately. Derivation reads earned minus balance, and that
+		// only means anything while both come from this computer. After the union it took
+		// every task this computer never saw as points spent, leaving a player who moved
+		// to a new computer with just what they'd earned there.
+		deriveInitialPointsSpent();
+
 		if (pdata == null || pdata.getCompletedTasks() == null || pdata.getCompletedTasks().isEmpty())
 		{
 			return;
@@ -4106,23 +3906,11 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Restore the per-region task roll (and the face-down card state) from the
-	 * server, but ONLY when this profile has no roll of its own.
-	 *
-	 * <p>The roll is client-authoritative: a profile that has been playing this
-	 * account has the real, current roll in local config, and the server copy is
-	 * just the last thing it synced up — so we never overwrite a non-empty local
-	 * roll. An EMPTY local roll is the tell that this is a fresh load of the
-	 * account on this profile (account switch, reinstall, new machine), which is
-	 * exactly when {@link #loadActiveTasks} would otherwise regenerate a roll for
-	 * every unlocked region at once — the 572-card dump. Restoring the stored roll
-	 * first means loadActiveTasks finds it already present and leaves it alone, so
-	 * the account looks the same as it did on its home profile, down to which
-	 * cards are still face-down.
-	 *
-	 * <p>Accounts that have never synced a roll (everyone, on the first login after
-	 * this ships) get an empty string here and fall through to loadActiveTasks'
-	 * graceful bulk backfill, which settles finished tasks and cards only the rest.
+	 * Restore the per-region task roll and face-down card state from the server. On a
+	 * fresh load of the account on this profile (account switch, reinstall, new machine)
+	 * {@link #loadActiveTasks} would otherwise regenerate a roll for every unlocked
+	 * region at once. Accounts that never synced a roll fall through to its bulk
+	 * backfill.
 	 */
 	private void restoreRollStateFromServer(PlayerLoginResponse.PlayerData pdata)
 	{
@@ -4130,15 +3918,11 @@ public class ChunkBlazerPlugin extends Plugin
 		{
 			return;
 		}
-		// Server-authoritative reconcile. The server owns each region's committed roll
-		// (it merges per region and never lets a client overwrite one), so the region
-		// rolls it holds are the truth: adopt every one of them. KEEP any region only
-		// the client has — a roll for a chunk the server hasn't seen yet (a fresh
-		// unlock, or one unlocked offline): the next sync commits it and the server
-		// adds it. This replaces the old "restore only when local is empty" rule, which
-		// let a stale or re-rolled local win and push back over the server — the bug
-		// behind the reset reroll. Any region NEITHER side has is left for
-		// loadActiveTasks to roll (the gap), gated on the roll-restore being resolved.
+		// Server-authoritative reconcile: the server owns each region's committed roll,
+		// so adopt every one it holds. A stale or re-rolled local must not win and push
+		// back. KEEP a region only the client has (a fresh or offline unlock): the next
+		// sync commits it. A region NEITHER side has is left for loadActiveTasks to roll,
+		// gated on the roll-restore resolving.
 		String localRoll = acStr("regionRolledTasks", "");
 		String serverRoll = pdata.getRegionRolledTasks();
 
@@ -4153,13 +3937,9 @@ public class ChunkBlazerPlugin extends Plugin
 			setAccountState("regionRolledTasks", merged);
 		}
 
-		// The face-down card set is client-updatable (revealing a card is a live local
-		// change), so restore the server's copy only on a fresh load — an empty local
-		// set — and otherwise keep the live reveal state. Either way, drop cards whose
-		// task isn't in the reconciled roll: a new device that started with sync off
-		// rolled and carded Lumbridge before this restore replaced that roll, and
-		// flipping those cards activated tasks the account never rolled (ChunkDragoon,
-		// 2026-10-02).
+		// Cards are client-updatable, so restore the server's set only when the local set
+		// is empty. Either way, drop cards whose task isn't in the reconciled roll, or
+		// flipping them activates tasks the account never rolled.
 		String localCards = acStr("unrevealedTasks", "");
 		String cards = localCards;
 		if (cards.isEmpty())
@@ -4381,26 +4161,18 @@ public class ChunkBlazerPlugin extends Plugin
 				return;
 			}
 
-			// Account isolation is now structural: per-account state lives in the
-			// RSProfile store, so a different account simply reads a different store and
-			// there is nothing to reconcile or wipe. The old reconcileAccountState() call
-			// (and its accountStateOwner tag / clearAccountState wipe) is retired; the
-			// merge steps below union this account's RSProfile state with its server record.
+			// Account isolation is structural: a different account reads a different
+			// RSProfile store, so there is nothing to reconcile or wipe.
 
 			// 1. Mode lock reconciliation, both directions.
 			adoptServerModeLock(response, rsn);
 			if (isModeLocked() && !response.isModeLocked())
 			{
-				// Locked locally but the server isn't. Re-push so a genuine lock
-				// whose mirror was dropped can catch up. But Competitive (NUZLOCKE)
-				// is only ever real once the server confirms eligibility: if the
-				// re-push returns "eligibility_required", this local lock was never
-				// valid (an old build persisted it before the server accepted — e.g.
-				// a main that fails the fresh-L3 check), so clear it and fall back to
-				// Casual instead of 400-looping every login. Only the server's
-				// explicit ineligible verdict clears it, so a truly locked account
-				// (server returns ok / already_locked) is never demoted. Self-heals
-				// accounts stuck showing Competitive (Madame Lulu, 2026-08-22).
+				// Locked locally but not on the server: re-push so a dropped mirror can
+				// catch up. "eligibility_required" means this Competitive lock was never
+				// valid, so clear it and fall back to Casual instead of 400-looping every
+				// login. Only that explicit verdict clears it, so a truly locked account
+				// is never demoted.
 				GameMode localMode = getGameMode(); // authoritative locked mode, not the raw dropdown
 				if (localMode != null && config.apiEnabled() && apiClient != null)
 				{
@@ -4418,24 +4190,11 @@ public class ChunkBlazerPlugin extends Plugin
 				}
 			}
 
-			// 2 & 3. Unlocked regions and completed tasks — MERGED, not
-			// "overwrite only when local is empty".
-			//
-			// The old rule could never fire on a real reinstall, which is the
-			// case it existed for. By the time a login response arrives, the
-			// plugin has already bootstrapped local state: startUp() and every
-			// loadActiveTasks() call ensureStartingChunkUnlocked() (writing the
-			// Lumbridge region), and the Global Tasks backfill has written the
-			// already-finished quests. Local was therefore never empty, hydration
-			// always skipped, and the account was left holding ONLY the
-			// bootstrap — 1 chunk instead of 15 (observed 2026-07-21 moving
-			// SeaShantyBoy to a clean profile). The destructive sync then pushed
-			// that back over the server record.
-			//
-			// A union is immune to that ordering entirely: it doesn't care
-			// whether the bootstrap ran first, and it can't lose either side, so
-			// progress made offline (or before a failed sync) survives a login
-			// just as server-side progress survives a reinstall.
+			// 2 & 3. Unlocked regions and completed tasks: MERGED, never "overwrite only
+			// when local is empty". The bootstrap has already written local by login
+			// response time, so that rule would keep only the bootstrap and the
+			// destructive sync would push it over the server record. A union can't lose
+			// either side, whatever the ordering.
 			mergeUnlockedRegionsFromServer(pdata);
 			mergeCompletedTasksFromServer(pdata);
 			restoreRollStateFromServer(pdata);
@@ -4447,22 +4206,11 @@ public class ChunkBlazerPlugin extends Plugin
 
 			// 4. Points.
 			//
-			// The server's total_points is lifetime EARNED; the client's
-			// totalPoints is a spendable BALANCE. Writing one into the other is
-			// what handed a real player 939 phantom points on 2026-07-21 — it
-			// silently erased every chunk purchase they had made, and could
-			// never self-correct because the server holds no balance.
-			//
-			// So nothing is copied. Earned is recomputed from the task list we
-			// just merged, spend is reconciled by taking the higher of the two
-			// (it only ever grows — you cannot un-unlock a chunk — so the
-			// maximum is the correct merge and is safe across profiles), and
-			// the balance falls out of the two.
-			deriveInitialPointsSpent();
-			if (pdata != null && pdata.getPointsSpent() > acInt("pointsSpent", 0))
-			{
-				setAccountState("pointsSpent", pdata.getPointsSpent());
-			}
+			// Server total_points is lifetime EARNED; client totalPoints is a spendable
+			// BALANCE. Never copy one into the other: that erases chunk purchases and
+			// can't self-correct. Earned is recomputed from the merged tasks, spend takes
+			// the higher of the two (it only grows), and the balance falls out.
+			adoptServerSpend(pdata);
 			adoptServerBossTokens(pdata);
 			// AFTER the monotonic merge, deliberately. The corrupt figure this
 			// repairs is already stored server-side, so running it any earlier
@@ -4471,12 +4219,9 @@ public class ChunkBlazerPlugin extends Plugin
 			migrateRepairImpossiblePointsSpent();
 			recomputePointsBalance();
 
-			// Rebuild the in-memory active-task list from the just-hydrated config
-			// (unlocked regions / completed tasks). Without this, a fresh install or
-			// post-reset login shows an EMPTY task list until the plugin is toggled
-			// off/on — because the earlier LOGGED_IN loadActiveTasks() ran against
-			// the then-empty local config, and hydration only updated config, not
-			// the live task list. Idempotent + cheap.
+			// Rebuild the active-task list from the just-hydrated config: hydration only
+			// updates config, so a fresh install or post-reset login would show an EMPTY
+			// list until the plugin is toggled.
 			loadActiveTasks();
 
 			if (panel != null)
@@ -4645,12 +4390,9 @@ public class ChunkBlazerPlugin extends Plugin
 					{
 						pendingIntentionalReset = false;
 					}
-					// Adopt the server's authoritative Boss Token balance. The client
-					// mutates a local copy for immediate UX (spend on unlock, +1 on
-					// first clear); the server recomputes the truth from the monotonic
-					// completion + boss-unlock records, so adopting here recovers the
-					// balance after a reinstall / profile switch and self-heals any
-					// transient client/server divergence. Config write is thread-safe.
+					// Adopt the server's authoritative Boss Token balance, recomputed
+					// from its monotonic records. Recovers the balance after a reinstall
+					// or profile switch and heals client/server divergence.
 					if (resp != null && resp.isSuccess() && resp.getServerBossTokens() != null)
 					{
 						setAccountState("bossTokens", resp.getServerBossTokens());
@@ -4660,14 +4402,10 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Set when the player deliberately destroys their own progress, and carried
-	 * until a sync carrying it succeeds.
-	 *
-	 * <p>Sticky because the destruction and the sync are minutes apart: a reset
-	 * edits local config, and the next periodic sync (or the logout sync) is what
-	 * the server actually sees. Without this the server cannot tell a deliberate
-	 * reset from the client bugs its drop guard exists to stop — they are the same
-	 * shape on the wire.
+	 * Set when the player deliberately destroys their own progress, and carried until a
+	 * sync carrying it succeeds. Sticky because that sync comes minutes after the reset,
+	 * and without this the server can't tell a deliberate reset from the client bugs its
+	 * drop guard stops.
 	 */
 	private volatile boolean pendingIntentionalReset;
 
@@ -4839,19 +4577,11 @@ public class ChunkBlazerPlugin extends Plugin
 	 */
 	private void loadActiveTasks()
 	{
-		// Nothing may be loaded — and above all nothing may be WRITTEN — until
-		// RuneLite can say whose account this is. This method both bootstraps
-		// (ensureStartingChunkUnlocked, the two migrations) and rolls tasks, so
-		// running it account-less writes progress that belongs to nobody and
-		// then attributes it to whoever logs in next.
-		//
-		// The in-memory task state is cleared rather than left standing, so the
-		// previous account's tasks cannot linger in the panel across a logout or
-		// an account switch.
-		//
-		// The same goes for an account that hasn't picked a mode: no starting chunk,
-		// rolls, grants or tracking until it has. The tick that sees the mode locked
-		// calls this again.
+		// Nothing may be loaded, and above all WRITTEN, until RuneLite can say whose
+		// account this is, or progress gets attributed to whoever logs in next. In-memory
+		// state is cleared so the previous account's tasks can't linger in the panel.
+		// Same for an account with no mode: the tick that sees the mode locked calls this
+		// again.
 		if (!isAccountStateAvailable() || !isModeLocked())
 		{
 			activeTasks.clear();
@@ -4860,12 +4590,9 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
-		// The default starting chunk (Lumbridge / 12850) is unlocked with tasks
-		// rolled for EVERY account, no matter what — it's the universal starting
-		// point. Casual mode lets a player additionally unlock the chunk they're
-		// standing in (a one-time choice), but it never replaces this one. Enforcing
-		// it here — the single path every task (re)load goes through — guarantees the
-		// start chunk can never end up locked or task-less. Idempotent + cheap.
+		// Lumbridge (12850) is unlocked with tasks rolled for EVERY account; casual's
+		// chosen chunk never replaces it. Enforced on this single (re)load path so the
+		// start chunk can never be locked or task-less.
 		ensureStartingChunkUnlocked();
 		migrateStripSeededCharterChunks();
 		migrateRepairBogusProgressionBaseline();
@@ -4886,11 +4613,9 @@ public class ChunkBlazerPlugin extends Plugin
 
 		Set<String> unlockedRegions = getUnlockedRegionIds();
 
-		// Satisfied tasks the load settles, batched: writing completedTasks once at the
-		// end instead of once per task turns an O(n^2) pile of config rewrites (each
-		// markTaskCompleted rebuilds the whole CSV) into a single write. A bulk backfill
-		// on a maxed account can satisfy hundreds at once — that loop was the real load
-		// spike, not the overlay (which only ever draws one card plus a small deck).
+		// Satisfied tasks the load settles, batched into one completedTasks write: each
+		// markTaskCompleted rebuilds the whole CSV, and a bulk backfill on a maxed
+		// account can satisfy hundreds.
 		Set<String> settledIds = new LinkedHashSet<>();
 		int settledPoints = 0;
 
@@ -4901,25 +4626,13 @@ public class ChunkBlazerPlugin extends Plugin
 				int regionId = Integer.parseInt(regionIdStr);
 				Set<String> rolledTaskIds = getRolledTasksForRegion(regionId);
 
-				// Free-list chunks have no tasks BY DESIGN, so they never have a roll to
-				// find and would be re-attempted on every loadActiveTasks — which runs
-				// constantly. Skipping them keeps the "No chunk found for region N"
-				// warning meaning what it says: a chunk that should exist and doesn't.
+				// Free-list chunks have no tasks BY DESIGN; skipping them keeps the "No
+				// chunk found for region N" warning meaningful.
 				//
-				// A region with no roll here means RECONSTRUCTION: this account's roll is
-				// local-only and this profile has none — an account switch, a fresh
-				// install, a new machine (or the first load before the server-persisted
-				// roll restores). Roll it WITHOUT carding (parkBehindCards=false): reveal
-				// cards are for a LIVE chunk unlock, not for rebuilding an existing
-				// account. The loop below then settles already-satisfied tasks silently
-				// and puts the unfinished remainder straight into the list — no wall of
-				// cards to click through (the "572 cards on account switch" report).
-				// Hold off reconstructing a roll while a server restore is still pending:
-				// with sync on and the restore unresolved, an empty roll usually means the
-				// server-persisted roll simply hasn't landed yet. Rolling now would race it
-				// and permanently replace the account's real roll (the reset-then-reroll
-				// bug). Once the restore resolves — roll restored, or the server had none /
-				// is unreachable — this fires normally as the graceful reconstruction.
+				// A region with no roll here means RECONSTRUCTION (account switch, fresh
+				// install, new machine). Roll WITHOUT carding: reveal cards are for a
+				// LIVE chunk unlock. Hold off while a server restore is pending: rolling
+				// would race it and permanently replace the real roll.
 				boolean rerollAllowed = canRollMissing();
 				if (rolledTaskIds.isEmpty() && !isFreeUnlockableRegion(regionId) && rerollAllowed)
 				{
@@ -5033,13 +4746,11 @@ public class ChunkBlazerPlugin extends Plugin
 				}
 				else
 				{
-					// Multi-item (set) task: the saved target is the SUM across
-					// items, not any single item's quantity. Pinning the sum onto
-					// the first item inflated that slot's requirement (Splitbark
-					// helm became x5 for a 5-piece set), letting duplicate copies
-					// of one piece count toward the whole set. Per-item quantities
-					// here are deterministic (authored fixed values, default 1),
-					// so clear stale caches and let each item report its own.
+					// Multi-item (set) task: the saved target is the SUM across items.
+					// Pinning it on the first item inflates that slot (x5 for a 5-piece
+					// set), letting duplicates of one piece count. Per-item quantities
+					// are authored fixed values, so clear stale caches and let each
+					// report its own.
 					for (RequiredItem item : requiredItems)
 					{
 						item.clearRolledQuantity();
@@ -5056,19 +4767,11 @@ public class ChunkBlazerPlugin extends Plugin
 		}
 		else
 		{
-			// First time - roll the target quantity. Clear any stale cached
-			// rolledQuantity first: devResetAll / devResetTasks / rerollTask
-			// wipe the config but don't touch the in-memory cache on
-			// NuzlockeTask instances in allChunks, so a value pinned from a
-			// previous (possibly corrupted) saved target would survive the
-			// reset and be reused here as if it were a fresh roll. Without
-			// this, devResetAll was a no-op for any task whose saved target
-			// had been corrupted to 1 — the user pressed Reset, the config
-			// cleared, and the same 1 got rolled and re-saved.
-			//
-			// The roll then caches itself on the TargetNpc / RequiredItem /
-			// RequiredObject so module code that calls getRequiredQuantity()
-			// later in this session gets the same value.
+			// First time: roll the target quantity, clearing any cached rolledQuantity
+			// first. devResetAll / devResetTasks / rerollTask wipe the config but not the
+			// cache on NuzlockeTask instances, so a corrupted value would survive and be
+			// reused. The roll caches itself so later getRequiredQuantity() calls get the
+			// same value.
 			targetQty = rollTargetQuantity(task);
 			// Save the rolled target quantity
 			saveTaskProgress(task.getTaskId(), savedProgress, targetQty);
@@ -5188,20 +4891,12 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Roll tasks for a region. When {@code rollAll} is true (boss chunks), EVERY
-	 * eligible task is granted — no weighted subset — and the tasks are made
-	 * active immediately instead of being parked behind reveal cards, so a boss
-	 * chunk hands the player its whole task list at once.
+	 * Roll tasks for a region. With {@code rollAll} (boss chunks) EVERY eligible task is
+	 * granted and made active immediately, not parked behind reveal cards.
 	 *
-	 * <p>{@code parkBehindCards} decides whether freshly rolled tasks are hidden
-	 * behind face-down reveal cards. It is true for every ordinary roll (a live
-	 * chunk unlock, the start/current region). It is set FALSE only by the bulk
-	 * backfill inside {@link #loadActiveTasks}, which rolls every unlocked region
-	 * of an account whose local roll is absent (account switch, fresh install, new
-	 * machine). That path decides card-vs-settle per task itself — settling ones
-	 * already satisfied, carding only what's left — so it must not have every task
-	 * blanket-carded here, which is what dumped ~572 face-down cards on an account
-	 * switch.
+	 * <p>{@code parkBehindCards} hides fresh rolls behind face-down cards. FALSE only for
+	 * the bulk backfill in {@link #loadActiveTasks}, which handles each task itself;
+	 * carding there would dump hundreds of cards on an account switch.
 	 */
 	private Set<String> rollTasksForRegion(int regionId, boolean rollAll, boolean parkBehindCards)
 	{
@@ -5226,11 +4921,10 @@ public class ChunkBlazerPlugin extends Plugin
 		// Get tasks already rolled for this region
 		Set<String> alreadyRolledForThisRegion = getRolledTasksForRegion(regionId);
 
-		// Tasks already out in ANY region (active or still face-down) can't be rolled again.
-		// Many tasks share an id across chunks ("Mine some Coal"), and the old guard read
-		// assignedTasks, which only the legacy single-task system writes, so a second chunk
-		// could roll the same task: it merged into the existing one and left that chunk a
-		// task short forever (Blade Laser, 2026-10-04). Completed tasks are excluded below.
+		// Tasks already out in ANY region (active or face-down) can't be rolled again:
+		// many tasks share an id across chunks, and a second roll merges into the
+		// existing task, leaving that chunk a task short forever. Completed tasks are
+		// excluded below.
 		Set<String> globallyAssignedTasks = new HashSet<>(getAssignedTaskIds());
 		for (String tasks : parseRollBlob(acStr("regionRolledTasks", "")).values())
 		{
@@ -5293,13 +4987,9 @@ public class ChunkBlazerPlugin extends Plugin
 				rolledIds.add(selected.getTaskId());
 				remainingTasks.remove(selected);
 
-				// NOTE: do NOT mark rolled tasks as "assigned" here. In the current
-				// all-rolled-tasks-active model, "assigned" is what the panel treats as
-				// "done/unavailable" (greyed out, counted as 0 available). Marking at
-				// roll time made every freshly-rolled task render greyed with a "(0/N)"
-				// header — i.e. the player appears to get no initial tasks after a
-				// reset + mode select. Assignment is only meaningful for the legacy
-				// one-task-at-a-time flow (assignNewTask), which is no longer used.
+				// Do NOT mark rolled tasks "assigned" here: the panel treats assigned as
+				// done/unavailable, so fresh rolls would render greyed with a "(0/N)"
+				// header.
 			}
 		}
 
@@ -5318,15 +5008,11 @@ public class ChunkBlazerPlugin extends Plugin
 		return rolledIds;
 	}
 
-	/**
-	 * Select a random task using weighted probability based on assignment_weight.
-	 * Higher weight = higher chance of being selected.
-	 */
+	/** Pick a random task, weighted by assignment_weight. */
 	/**
 	 * Swap any retired task ("is_unlocked": false) the player never finished for another
-	 * task from the same chunk, so retiring a broken task doesn't leave their chunk a task
-	 * short. If the chunk has nothing left to give, the retired task is just dropped. The
-	 * server accepts exactly this swap into a committed roll (acceptRetiredSwap).
+	 * from the same chunk, or drop it if the chunk has nothing left. The server accepts
+	 * exactly this swap into a committed roll (acceptRetiredSwap).
 	 */
 	private void replaceRetiredTasks()
 	{
@@ -5470,19 +5156,14 @@ public class ChunkBlazerPlugin extends Plugin
 		return tasks.get(tasks.size() - 1);
 	}
 
-	/**
-	 * Get the rolled task IDs for a region from config.
-	 */
+	/** Get the rolled task IDs for a region from config. */
 	// --- Task reveal cards -------------------------------------------------------
 	//
-	// A rolled task waits behind a face-down card until the player flips it (see
-	// TaskCardOverlay). Until then its id sits in `unrevealedTasks` and loadActiveTasks
-	// skips it, so it is not in the active list and no module is tracking it.
+	// A rolled task waits behind a face-down card until flipped (see TaskCardOverlay);
+	// until then its id sits in `unrevealedTasks` and no module tracks it.
 	//
-	// The ROLL is still committed the moment it happens (regionRolledTasks, written by
-	// rollTasksForRegion). Only the reveal is deferred. That ordering is deliberate:
-	// if the pending set decided the task instead of merely hiding it, a player could
-	// leave bad cards unflipped and reroll them by relogging.
+	// The ROLL commits immediately (rollTasksForRegion) and only the reveal is deferred.
+	// Otherwise a player could leave bad cards unflipped and reroll them by relogging.
 
 	/** Task ids rolled but not yet flipped, in a stable order for a stable card layout. */
 	public List<String> getUnrevealedTaskIds()
@@ -5549,12 +5230,8 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Bring one rolled task into play without a full loadActiveTasks, which clears and
-	 * re-registers EVERY active task with its module and (through saveActiveTasks)
-	 * rewrites the whole progress blob once per active task. Bring in just this one task
-	 * exactly the way loadActiveTasks would: initialize it, then either settle an
-	 * already-satisfied one through the batched path or add it active and register it
-	 * (registerActiveTask runs the module's retroactive check).
+	 * Bring one rolled task into play without a full loadActiveTasks, which re-registers
+	 * EVERY active task and rewrites the whole progress blob once per task.
 	 */
 	private void activateTask(NuzlockeTask task)
 	{
@@ -5776,18 +5453,9 @@ public class ChunkBlazerPlugin extends Plugin
 
 
 	/**
-	 * Complete one or many tasks, doing the expensive settle-up work ONCE.
-	 *
-	 * The per-task work (cache, remove from active) scales linearly and is
-	 * cheap. The settle-up work does NOT: two config writes plus five panel
-	 * rebuilds, and updateCompletedTasks() re-resolves every completed id.
-	 * Looping completeTask() over a batch therefore costs 2N config writes and
-	 * 5N rebuilds — that is what froze the client when ~150 quest tasks
-	 * completed in one tick (2026-07-19).
-	 *
-	 * Any future task source that can satisfy many tasks at once — skill-level
-	 * thresholds, retroactive unlocks — must come through here rather than
-	 * looping the single-task version.
+	 * Complete one or many tasks, doing the expensive settle-up work ONCE: looping
+	 * completeTask() costs 2N config writes and 5N panel rebuilds and freezes the client.
+	 * Any source that can satisfy many tasks at once must come through here.
 	 */
 	private void completeTasks(Collection<NuzlockeTask> tasks)
 	{
@@ -5941,16 +5609,9 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 
-		// Fallback: locate the chunk that defines this task. Tasks completed outside
-		// the rolled-task flow (or after rolled data is cleared) still need a region
-		// so the popup shows the right name and the area-specific jingle plays.
-		//
-		// A taskId can be defined in several chunks (e.g. obtain_grimy_ranarr lives
-		// in 6 chunks, one of them the locked Chaos Druid Tower). Prefer a chunk the
-		// player has actually UNLOCKED so a shared task attributes to a region they
-		// own, instead of whichever chunk happens to appear first here. Fall back to
-		// the first defining chunk only when the player owns none of them, which
-		// preserves the previous first-wins behaviour for that case.
+		// Fallback: locate the chunk that defines this task, for the popup name and area
+		// jingle. A taskId can live in several chunks, so prefer one the player has
+		// UNLOCKED; the first defining chunk is used only if they own none.
 		int firstDefiningRegion = -1;
 		for (NuzlockeChunk chunk : allChunks)
 		{
@@ -6047,17 +5708,10 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Label for the completion popup's "Region Assigned" slot.
-	 *
-	 * Global Tasks belong to no chunk, so getTaskRegionName() is always null for
-	 * them and the popup fell back to "Unknown" — every quest and every skill
-	 * rung completed under the same meaningless label. They report their pool
-	 * instead ("Quest", "Progression"), which is the same wording the side panel
-	 * uses on the global task cards.
-	 *
-	 * Deliberately separate from getTaskRegionName(): that one feeds the chunk
-	 * filters, which must keep returning null for chunkless tasks or the filter
-	 * dropdowns would list "Quest" as a chunk.
+	 * Label for the completion popup's "Region Assigned" slot: a Global Task reports its
+	 * pool ("Quest", "Progression"). Separate from getTaskRegionName(), which must keep
+	 * returning null for chunkless tasks or the chunk filters would list "Quest" as a
+	 * chunk.
 	 */
 	public String getTaskCompletionLabel(NuzlockeTask task)
 	{
@@ -6163,11 +5817,9 @@ public class ChunkBlazerPlugin extends Plugin
 	 * Save task progress and target quantity.
 	 * Format: "taskId:progress:targetQty,taskId2:progress2:targetQty2"
 	 *
-	 * Callers MUST pass targetQty from the live activeTasks instance — looking
-	 * the task up via findTaskById is unsafe because taskIDs can appear in
-	 * multiple chunk JSONs (cook_tuna lives in Mistrock and Fishing Guild) and
-	 * the lookup returns whichever instance allChunks iterates first, often
-	 * with the default targetQuantity=1 that wipes the rolled value.
+	 * Callers MUST pass targetQty from the live activeTasks instance. findTaskById
+	 * returns the first chunk's instance of a shared taskID, often with the default
+	 * targetQuantity=1 that wipes the rolled value.
 	 */
 	public void saveTaskProgress(String taskId, int progress, int targetQty)
 	{
@@ -6195,13 +5847,9 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 
-		// Guard: if the caller is trying to write target=0 but we already have a
-		// real target persisted, keep the old one. Hits the case where a progress
-		// event fires with a task whose in-memory targetQuantity hasn't been set
-		// yet (e.g. findTaskById returns the singleton before initializeTask
-		// reaches it). Otherwise we corrupt the saved target and the next
-		// loadActiveTasks re-rolls a fresh random number — Mike's "Y changes
-		// after a chunk unlock" symptom.
+		// A target=0 write must not replace a real persisted target: a progress event can
+		// fire before initializeTask sets targetQuantity, and the next loadActiveTasks
+		// would re-roll a fresh random number.
 		if (targetQty <= 0 && progressMap.containsKey(taskId))
 		{
 			int existingTarget = progressMap.get(taskId)[1];
@@ -6224,12 +5872,9 @@ public class ChunkBlazerPlugin extends Plugin
 
 	private void saveActiveTasks()
 	{
-		// Save progress for all active tasks. Pass each task's live target
-		// directly — the 2-arg saveTaskProgress would re-look up via
-		// findTaskById, which returns whichever instance appears first in
-		// allChunks. For taskIDs defined in multiple chunks (cook_tuna lives in
-		// Mistrock with quantityRange and in Fishing Guild with a fixed qty=1)
-		// the wrong instance gets returned and overwrites the rolled target.
+		// Pass each task's live target: the 2-arg saveTaskProgress re-looks up via
+		// findTaskById, whose first-match instance can overwrite the rolled target for a
+		// taskID in several chunks.
 		for (NuzlockeTask task : activeTasks)
 		{
 			saveTaskProgress(task.getTaskId(), task.getCurrentProgress(), task.getTargetQuantity());
@@ -6245,39 +5890,17 @@ public class ChunkBlazerPlugin extends Plugin
 
 
 	/**
-	 * Force RuneLite to write config to DISK now, instead of whenever its timer
-	 * next fires.
-	 *
-	 * ConfigManager only persists on a schedule and on a clean shutdown:
-	 *
-	 *   scheduleWithFixedDelay(this::sendConfig,
-	 *       30 + (int)(5 * 60 * Math.random()),   // first flush: 30-330s
-	 *       5 * 60, TimeUnit.SECONDS);            // then every 5 minutes
-	 *   ... plus @Subscribe onClientShutdown -> sendConfig()
-	 *
-	 * So a setConfiguration() call lives in memory for up to five minutes. If the
-	 * client dies without a clean ClientShutdown — killed, crashed, force-closed —
-	 * that write is lost with no error anywhere. Cruk hit this: he unlocked East
-	 * Falador (12084, force-unlocked) and Air Altar (11827, walked into), closed
-	 * the client, and both were locked again on the next login. His session log
-	 * showed no unlockedChunks write at all, because the value never reached disk.
-	 *
-	 * Progress-losing state (unlocks, points, completed tasks) is therefore
-	 * flushed explicitly. These are infrequent, player-visible events, so the
-	 * extra disk write is cheap next to silently losing a chunk unlock.
+	 * Force RuneLite to write config to DISK now. ConfigManager only persists on a timer
+	 * (first flush at 30-330s, then every 5 minutes) and on a clean ClientShutdown, so a
+	 * killed or crashed client loses recent writes with no error. Flush progress-losing
+	 * state (unlocks, points, completed tasks) explicitly.
 	 */
 	/**
-	 * Make a just-happened chunk unlock durable in BOTH places, immediately.
-	 *
-	 * An unlock previously survived only if the player lived long enough for two
-	 * independent timers: RuneLite's config flush (up to 5 minutes) and our
-	 * server sync (every 30s). Cruk lost East Falador (12084) and Air Altar
-	 * (11827) in exactly that window — the DB showed neither region, and his
-	 * next sync then overwrote the server's copy with the truncated list, since
-	 * unlock sync is DELETE-then-INSERT with the client authoritative.
-	 *
-	 * syncToServer() self-guards on apiEnabled/LOGGED_IN and does its network I/O
-	 * asynchronously, so this is safe to call straight from an unlock handler.
+	 * Make a just-happened chunk unlock durable in BOTH places, immediately. Otherwise a
+	 * crash inside RuneLite's flush window and our 30s sync loses it, and the next sync
+	 * overwrites the server's copy, since unlock sync is DELETE-then-INSERT with the
+	 * client authoritative. syncToServer() self-guards and is async, so this is safe from
+	 * an unlock handler.
 	 */
 	private void persistUnlockNow()
 	{
@@ -6312,33 +5935,18 @@ public class ChunkBlazerPlugin extends Plugin
 
 	// --- Points: earned, spent, balance ------------------------------------
 	//
-	// `totalPoints` is the SPENDABLE BALANCE — unlocking a chunk decrements it,
-	// and it gates whether an unlock is affordable. The SERVER's total_points is
-	// a different quantity: lifetime EARNED, recomputed from the completed task
-	// list (tasks.Catalog#Recompute), with no notion of spending.
-	//
-	// Conflating them cost a real player 939 phantom points on 2026-07-21: login
-	// hydration wrote the server's EARNED total straight into the client's
-	// BALANCE, discarding every chunk purchase they had ever made. It could not
-	// self-correct, because the server has no balance to correct it from.
-	//
-	// So the balance is no longer a stored running total that drifts. It is
-	// DERIVED:
+	// `totalPoints` is the SPENDABLE BALANCE. The SERVER's total_points is lifetime EARNED,
+	// recomputed from completed tasks (tasks.Catalog#Recompute) with no notion of spending.
+	// Never write one into the other. The balance is derived:
 	//
 	//     balance = earned(completed tasks) - spent
 	//
-	// `earned` recomputes from the task list exactly as the server does, so the
-	// two agree by construction and any accumulated drift heals itself. `spent`
-	// is the only stored quantity, and it is monotonic — you cannot un-unlock a
-	// chunk — which is what makes it safe to reconcile across profiles by taking
-	// the maximum.
-	//
-	// Spend can NOT be derived from the unlocked-chunk list: the starting chunk
-	// and the Casual first-pick are granted free via unlockRegionFree() yet have
-	// a non-zero unlock_cost, and nothing records which chunks were paid for.
-	// That is why it has to be tracked as it happens.
+	// `spent` is the only stored quantity. It is monotonic, so profiles reconcile by taking
+	// the maximum. It can't be derived from the unlocked-chunk list: the starting chunk and
+	// Casual first-pick are free (unlockRegionFree()) yet have a non-zero unlock_cost, and
+	// nothing records which chunks were paid for.
 
-	/** Lifetime points earned, summed over completed tasks — mirrors the server. */
+	/** Lifetime points earned, summed over completed tasks. Mirrors the server. */
 	private int computeEarnedPoints()
 	{
 		int earned = 0;
@@ -6392,15 +6000,10 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * One-time derivation of the spend counter for accounts that predate it.
-	 *
-	 * <p>Their balance already reflects everything they ever spent, so
-	 * {@code spent = earned - balance} recovers it exactly — no guessing at which
-	 * chunks were free. Runs only when no spend has been recorded and the balance
-	 * is genuinely below what they earned; a balance at or above earned means
-	 * nothing was spent, or the balance was inflated by the hydration bug, and in
-	 * both cases 0 is the right starting point (the real value then arrives from
-	 * the server, which holds the higher, monotonic figure).
+	 * One-time derivation of the spend counter for accounts that predate it: their balance
+	 * reflects all spending, so {@code spent = earned - balance}. Runs only when no spend
+	 * is recorded. With the balance at or above earned, 0 is the right start and the real
+	 * value arrives from the server.
 	 */
 	private void deriveInitialPointsSpent()
 	{
@@ -6409,22 +6012,11 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
-		// The whole derivation rests on the local balance being a REAL record of
-		// past spending. When the key is absent that reading is not merely
-		// unreliable, it is inverted: acInt("totalPoints", 0) answers 0 from its
-		// default, and "balance 0" is then taken to mean SPENT EVERYTHING when it
-		// actually means NOTHING IS KNOWN.
-		//
-		// The old account-switch wipe unset totalPoints and pointsSpent together, so
-		// every account switch landed in exactly that state and charged the
-		// incoming account its entire lifetime earnings. Cruk, 2026-08-01
-		// 17:23:19 — cleared, then "earned 414 - balance 0 = 414" one line later.
-		// The value is monotonic and syncs upward, so each switch ratcheted it
-		// permanently higher and pinned the balance at zero. A fresh install
-		// hydrating from the server hits the same state for the same reason.
-		//
-		// A legacy account — the only case this was written for — has a genuine
-		// persisted balance, so it still derives correctly.
+		// The derivation needs the local balance to be a REAL record of past spending.
+		// With the key absent, acInt("totalPoints", 0) answers 0, which reads as SPENT
+		// EVERYTHING when it means NOTHING IS KNOWN (a fresh install hydrating from the
+		// server lands here). The counter is monotonic and syncs upward, so a wrong value
+		// permanently pins the balance at zero.
 		if (!isPointsBalancePersisted())
 		{
 			return;
@@ -6442,14 +6034,10 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Whether the spendable balance actually EXISTS in stored config, rather than
-	 * being {@link ChunkBlazerConfig#totalPoints()}'s default of 0.
-	 *
-	 * <p>Same shape as {@link #isUnlockedChunksPersisted()}: a config default makes
-	 * "absent" and "genuinely zero" indistinguishable through the typed accessor,
-	 * and every caller that treats those two as the same thing is wrong. Here it
-	 * decides whether a zero balance is evidence of spending or evidence of
-	 * nothing at all.
+	 * Whether the balance actually EXISTS in stored config, rather than being
+	 * {@link ChunkBlazerConfig#totalPoints()}'s default of 0. Same shape as
+	 * {@link #isUnlockedChunksPersisted()}. Decides whether a zero balance is evidence
+	 * of spending or of nothing at all.
 	 */
 	private boolean isPointsBalancePersisted()
 	{
@@ -6458,27 +6046,15 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Undo an impossible spend counter left behind by the derivation bug above.
+	 * Undo an impossible spend counter left by the derivation bug above. Fixing the
+	 * derivation can't clear it: the counter only moves up and the inflated figure is
+	 * already on the server.
 	 *
-	 * <p>{@code spent > earned} cannot happen in play — points must be earned
-	 * before they can be spent — so it is a reliable signature of the corruption
-	 * rather than a state any legitimate session can reach. Both of Cruk's
-	 * accounts were sitting in it on 2026-08-01: ChunkBlazer at earned 117 /
-	 * spent 121, Cruk at earned 414 / spent 453. Fixing the derivation stops new
-	 * damage but cannot clear this, because the counter only ever moves upward
-	 * and the inflated figure is already on the server.
-	 *
-	 * <p>The chunks a player owns ARE the spend ledger: every paid chunk cost
-	 * exactly its unlock cost, and free/charter chunks cost zero. Re-summing them
-	 * recovers the true figure. The starting chunk is subtracted because
-	 * {@link #ensureStartingChunkUnlocked()} grants it rather than selling it.
-	 *
-	 * <p>Deliberately one-directional — it only ever LOWERS the counter, and only
-	 * to a total derived from chunks actually owned. Other free grants (casual
-	 * mode's one-time standing-chunk pick) make the recomputed figure slightly
-	 * high, which errs toward the player keeping fewer points than they are owed.
-	 * Balance stays {@code earned - spent} and so can never exceed earned, which
-	 * is what the server's Tier-0 check compares against.
+	 * <p>Only ever LOWERS the counter, and only to a total derived from owned chunks.
+	 * Other free grants (casual mode's one-time pick) make that total slightly high, which
+	 * errs toward the player keeping fewer points than owed. Balance stays
+	 * {@code earned - spent}, so it can never exceed earned, which is what the server's
+	 * Tier-0 check compares against.
 	 */
 	private void migrateRepairImpossiblePointsSpent()
 	{
@@ -6488,23 +6064,14 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
-		// The chunks a player owns ARE the spend ledger. Under the scaling curve the
-		// k-th paid unlock cost at most legacyCurveLedgerTotal's k-th step (the first
-		// curve, which every later price is at or under), so the most anyone can have
-		// paid for n paid chunks is that running sum. Using the legacy curve, not the
-		// current one, is what makes the 2026-10 price cut no-refund: a player who paid
-		// the old prices is never "repaired" down to the new ones.
-		// countPayableUnlockedChunks() already excludes the granted starting chunk and
-		// every 0-cost (free/charter/boss) chunk. For accounts grandfathered off the old
-		// flat-1 economy this sum errs HIGH (they paid less), which only makes this
-		// lower-only repair more conservative: it never lowers spent below what a curve
-		// player would legitimately owe.
+		// The chunks a player owns ARE the spend ledger. legacyCurveLedgerTotal uses the
+		// first curve, which every later price is at or under, so it's the most n paid
+		// chunks can have cost. Not the current curve: a price cut must not "repair" anyone
+		// down to new prices. Flat-1 economy accounts paid less, so the sum errs HIGH,
+		// which only makes this lower-only repair more conservative.
 		//
-		// The ledger, NOT lifetime earned, is the ceiling. A spend counter can be
-		// corrupt while still sitting below earned: Bobby Blazer carried spent 22 with
-		// earned 23, yet the chunks he owns could only ever have cost 3. Gating on
-		// "spent > earned" let that through and left his balance stuck at 1. The
-		// comparison that matters is spent vs the ledger the owned chunks imply.
+		// The ledger, NOT lifetime earned, is the ceiling: a corrupt counter can sit below
+		// earned, so gating on "spent > earned" lets it through.
 		int ledger = legacyCurveLedgerTotal(countPayableUnlockedChunks());
 		if (ledger >= spent)
 		{
@@ -6687,11 +6254,10 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Record the first-ever completion of a boss/raid (by boss_key) AFTER its chunk
-	 * was unlocked, and grant +1 Boss Token. Non-retroactive and once-per-boss: a
-	 * completion for a boss whose chunk isn't unlocked, or one already recorded, is
-	 * ignored. The completion set is synced to the server, which recomputes the
-	 * authoritative token balance. Safe to call on every observed boss completion.
+	 * Record the first completion of a boss/raid (by boss_key) AFTER its chunk was
+	 * unlocked, granting +1 Boss Token. Non-retroactive and once per boss. The server
+	 * recomputes the authoritative balance from the synced set. Safe to call on every
+	 * observed completion.
 	 */
 	public void recordBossCompletion(String bossKey)
 	{
@@ -6718,19 +6284,13 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	/**
-	 * Self-heal for boss chunks that are unlocked but have no tasks rolled. This
-	 * covers a chunk unlocked while {@code Boss_Tasks.json} hadn't loaded yet — when
-	 * the region was momentarily treated as an ordinary chunk and bought with points
-	 * instead of a Boss Token, and no tasks were granted. Once the boss catalog is
-	 * present, grant every task. Idempotent: it only grants tasks not already rolled
-	 * or completed, so it no-ops once tasks exist.
+	 * Self-heal for unlocked boss chunks with no tasks rolled, such as one unlocked before
+	 * {@code Boss_Tasks.json} loaded. Idempotent: grants only tasks not already rolled or
+	 * completed.
 	 *
-	 * <p>This is RECONSTRUCTION, not a live unlock, so the granted tasks are NOT
-	 * carded — {@link #loadActiveTasks}, which calls this, then materializes them
-	 * straight into the list (already-satisfied ones settle silently). Reveal cards
-	 * are reserved for the moment a player actually spends a Boss Token on a chunk
-	 * (see {@link #unlockBossRegion}); rebuilding an existing account must never
-	 * produce a wall of cards to click through.
+	 * <p>This is RECONSTRUCTION, so the tasks are NOT carded: reveal cards are only for
+	 * spending a Boss Token ({@link #unlockBossRegion}). Rebuilding an account must never
+	 * produce a wall of cards. {@link #loadActiveTasks} calls this and lists them directly.
 	 */
 	private void ensureBossChunkTasksGranted()
 	{
@@ -6758,12 +6318,9 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 
 			int primary = chunk.getRegionIds().get(0);
-			// A boss chunk grants EVERY task. Find any catalog task not yet rolled
-			// (and not already completed) and grant it — repairs players who unlocked
-			// ToA before Boss_Tasks.json loaded (0 rolled) or got only a partial 4-5
-			// subset. The roll is committed here; loadActiveTasks materializes the
-			// tasks straight into the list (satisfied ones settle silently). NOT
-			// carded — this is reconstruction, not a live unlock (see the method doc).
+			// A boss chunk grants EVERY task, so grant any catalog task not yet
+			// rolled or completed. This also repairs partial subsets. The roll is
+			// committed here; not carded (see the method doc).
 			Set<String> rolled = new HashSet<>(getRolledTasksForRegion(primary));
 			Set<String> missing = new HashSet<>();
 			for (NuzlockeTask t : chunk.getTasks())
@@ -6819,13 +6376,10 @@ public class ChunkBlazerPlugin extends Plugin
 						}
 					}
 				}
-				// Free chunks have no task-chunk entry — their neighbours come
-				// from Free_Chunks.json. Without this, an unlocked free chunk
-				// offered nothing onward (connectivity dead end). INVARIANT: a
-				// free chunk ALWAYS opens its 4 cardinal neighbours — if the JSON
-				// entry has no neighbor_ids, derive them from the region grid
-				// (regionId ±1 = N/S, ±256 = E/W). Authored neighbor_ids act as
-				// a curation override.
+				// Free chunks have no task-chunk entry; their neighbours come from
+				// Free_Chunks.json. INVARIANT: a free chunk ALWAYS opens its 4 cardinal
+				// neighbours. With no neighbor_ids, derive them from the region grid
+				// (regionId ±1 = N/S, ±256 = E/W). Authored ones are a curation override.
 				List<Integer> freeNeighbors = freeUnlockableNeighbors.get(regionId);
 				if (freeNeighbors == null && freeUnlockableRegionIds.contains(regionId))
 				{
@@ -6867,12 +6421,9 @@ public class ChunkBlazerPlugin extends Plugin
 			}
 		}
 
-		// Boss-chunk bridge: a boss chunk (chunk_type BOSS) is unlocked with a Boss
-		// Token and sits off the normal task-area grid, so the ordinary chunks
-		// around it don't list it in their neighbor_ids. Expose it here once ANY of
-		// its OWN neighbor_ids is unlocked — the same reverse-adjacency trick as the
-		// Prifddinas bridge, but self-contained so no existing chunk data needs
-		// editing. The Boss-Token spend still gates the actual unlock (unlockRegion).
+		// Boss-chunk bridge: boss chunks sit off the task-area grid, so the chunks around
+		// them don't list them in neighbor_ids. Expose one once ANY of its OWN neighbor_ids
+		// is unlocked. The Boss-Token spend still gates the actual unlock (unlockRegion).
 		for (NuzlockeChunk chunk : new HashSet<>(chunksByRegionId.values()))
 		{
 			if (chunk == null || !chunk.isBoss()
@@ -6941,23 +6492,18 @@ public class ChunkBlazerPlugin extends Plugin
 	}
 
 	// ── Chunk unlock cost curve ─────────────────────────────────────────────
-	// The r-th PAID chunk unlock costs 1 + CURVE_B * r up to CURVE_KNEE, then climbs
-	// more gently at CURVE_LATE_B, rounded to a whole number (never below 1). Up to the
-	// knee (half of the 384 payable chunks; the furthest players were at 45% when 1.0.10
-	// shipped) every price is exactly 1.0.9's, so no current player feels the change;
-	// after it the price reaches 17 at the last chunk. The whole map then costs about
-	// 88% of the points the game deals (every chunk's TASKS_PER_CHUNK unlock deal plus
-	// the quest, progression and diary pools): a hard late game, but finishable. Boss
-	// tasks are left out, so the map is reachable without them. r is the account's
-	// current paid chunk count + 1, which means chunks already unlocked are
-	// GRANDFATHERED (pointsSpent is a stored, monotonic counter and is never recomputed
-	// here) and only new unlocks follow the curve. UnlockCostCurveTest checks the share
-	// against the shipped catalog, and the server's spend floor has its own copy
-	// (spendfloor.go): change both together. Do not nudge it casually, because it
-	// reprices every player's next unlock.
+	// The r-th PAID unlock costs 1 + CURVE_B * r up to CURVE_KNEE, then climbs faster at
+	// CURVE_LATE_B, rounded, never below 1. Up to the knee (half of the 384 payable chunks)
+	// prices are exactly 1.0.9's; the last chunk reaches 31. The whole map costs about 80%
+	// of every point the game deals, boss chunk tasks included, so a player who never
+	// bosses tops out around 93% of the map. r is the paid chunk count + 1, so unlocked
+	// chunks are GRANDFATHERED (pointsSpent is never recomputed here). UnlockCostCurveTest
+	// checks the share against the shipped catalog. spendfloor.go (server) and route.js
+	// (website) have their own copies: change them together. Any change reprices every
+	// player's next unlock.
 	static final double CURVE_B = 0.059;
 	static final int CURVE_KNEE = 192;
-	static final double CURVE_LATE_B = 0.0243;
+	static final double CURVE_LATE_B = 0.0998;
 	// The first curve (2026-09). It was sized against every task in a chunk while a
 	// chunk only dealt 4 or 5, so the whole map was out of reach. Chunks bought on it
 	// keep the price paid (no refund): the spend repair's ceiling is its ledger.
@@ -7074,17 +6620,12 @@ public class ChunkBlazerPlugin extends Plugin
 	private static final int SURFACE_MAX_REGION_Y = 64;
 
 	/**
-	 * @return true if this region is a free dungeon (always accessible, never part
-	 * of the chunk challenge). A region qualifies if it's outside the overworld
-	 * surface band (regionY 39..64) — a coordinate rule that auto-covers every
-	 * dungeon / off-map area including future content, with no dataset gaps.
-	 * (Free_Chunks.json regions are NOT always-free — they're 0-cost unlock-on-demand
-	 * chunks; see {@link #isFreeUnlockableRegion}.)
+	 * @return true if this region is a free dungeon (always accessible, never part of the
+	 * chunk challenge): outside the overworld surface band (regionY 39..64).
+	 * Free_Chunks.json regions are NOT always-free; see {@link #isFreeUnlockableRegion}.
 	 */
-	// Prifddinas: the city's REAL in-game regions sit far above the overworld
-	// surface band (regionY 94–95), so the free-dungeon coordinate rule would
-	// auto-free them the moment a player steps inside. It's a genuine surface
-	// city, not a dungeon — exempt it so the four city chunks start LOCKED.
+	// Prifddinas sits above the surface band (regionY 94-95) but is a surface city, not a
+	// dungeon: exempt it so the four city chunks start LOCKED.
 	private static final Set<Integer> PRIF_CITY_REGIONS = new HashSet<>(Arrays.asList(
 		12894, 12895, 13150, 13151));
 	// The Tirannwn surface chunks surrounding the city. The city regions aren't
@@ -7161,14 +6702,10 @@ public class ChunkBlazerPlugin extends Plugin
 			return;
 		}
 
-		// Adjacency gate: a points-purchased unlock must be a neighbor of an
-		// already-unlocked chunk. Without this, the side-panel "Unlock"
-		// button (and any future UI path that calls unlockRegion directly)
-		// lets a player pay points to unlock any locked chunk they happen to
-		// be standing in — even if they walked through other locked chunks
-		// to get there. The first-pick-anywhere path for new Casual Mode
-		// players goes through unlockRegionFree(...) which intentionally
-		// bypasses this gate.
+		// Adjacency gate: a points-purchased unlock must neighbor an unlocked chunk.
+		// Otherwise the side-panel "Unlock" button (or any direct unlockRegion
+		// caller) buys any locked chunk the player walked into. The Casual
+		// first-pick goes through unlockRegionFree(...), which bypasses this.
 		Set<Integer> neighbors = getNeighborRegionIds();
 		if (!neighbors.contains(regionId))
 		{

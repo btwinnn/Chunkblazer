@@ -89,35 +89,22 @@ import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.gameval.InventoryID;
 
 /**
- * Outlines every NPC and object in the scene that an active (unfinished) task
- * needs, and adds a "Tasks" right-click submenu on them listing those tasks.
+ * Outlines every NPC and object an active task needs, and adds a "Tasks" right-click
+ * submenu listing those tasks.
  *
  * Two kinds of match:
- *  - by id: NPCs via TargetNpc npc ids, objects via RequiredObject ids (kills,
- *    pickpocketing, agility, stalls, construction): the same ids the task
- *    modules use to credit progress.
- *  - by rule: tasks with no target id are matched by what the thing is CALLED and
- *    what it can DO (its right-click options). Stations (cook at a range, smith at
- *    an anvil), resource nodes (oak trees, iron rocks) and fishing spots work this
- *    way. Requiring the right option is what keeps decorative look-alikes out: an
- *    ornamental cooking pot has no "Cook" option, a tree stump has no "Chop down",
- *    and a fishing spot only counts for lobsters if it offers "Cage".
+ *  - by id: TargetNpc and RequiredObject ids, the same ids the task modules use to
+ *    credit progress.
+ *  - by rule: tasks with no target id match on what the thing is CALLED and what it can
+ *    DO (its right-click options). Requiring the option keeps decorative look-alikes
+ *    out: an ornamental cooking pot has no "Cook", a tree stump no "Chop down", and a
+ *    fishing spot only counts for lobsters if it offers "Cage".
  *
- * The outline is the normal colour if at least one of the target's tasks is
- * doable (level requirement met), and the "unavailable" colour if none are.
- * Archived tasks (see TaskArchive) are left out entirely: no outline, no menu entry.
+ * Outline Mode picks which targets get an outline; the Tasks menu always lists every
+ * task. Archived tasks (see TaskArchive) get no outline or menu entry.
  *
- * Which targets get an outline is the Outline Mode (task window cogwheel): all task
- * targets, only those of saved tasks, only those with a task you have the level
- * for, or none. The right-click Tasks menu always lists every task.
- *
- * Inventory tools get a Tasks menu too (knife: fletching, tinderbox: firemaking,
- * pestle and mortar: herblore...; see TaskTargetExtras.matchesItem).
- *
- * Auto-tracking (setting "Auto-Track Tasks"): using a task target (attack, talk,
- * chop, mine, cook on it...) tracks that target's lowest-points task in the task box.
- * It only ever replaces a task it tracked itself: a task you chose (right-click menu,
- * task window, tracker or side panel) stays until you change or clear it.
+ * Auto-tracking only ever replaces a task it tracked itself: a task you chose stays
+ * until you change or clear it.
  */
 @Singleton
 public class TaskTargetHighlighter extends Overlay
@@ -212,11 +199,10 @@ public class TaskTargetHighlighter extends Overlay
 	}
 
 	/**
-	 * Boss entrances: object id -> the boss chunk whose tasks it lists, so boss tasks
-	 * (mostly done inside instances) show on the thing you use to get in. Chunks with
-	 * more than one boss pass task id keywords so each entrance lists only its boss.
-	 * Loaded from target_tables.json. Entrances whose object id hasn't been found yet:
-	 * Royal Titans (11824), Moons of Peril (5680), Yama (5689).
+	 * Boss entrances: object id to the boss chunk whose tasks it lists. Chunks with more
+	 * than one boss pass task id keywords so each entrance lists only its boss. Loaded from
+	 * target_tables.json. Object ids not found yet: Royal Titans (11824), Moons of Peril
+	 * (5680), Yama (5689).
 	 */
 	private static final Map<Integer, Entrance> BOSS_ENTRANCES = new HashMap<>();
 	private static final Set<Integer> BOSS_REGIONS = new HashSet<>();
@@ -997,12 +983,10 @@ public class TaskTargetHighlighter extends Overlay
 	// --- Auto-tracking -------------------------------------------------------
 
 	/**
-	 * Attacking or talking to an NPC that has tasks tracks one straight away. Anything
-	 * else (a range, a fishing spot, a rock...) only remembers the click: the task is
-	 * tracked once that skill's XP goes up for something the task names, so a cooking
-	 * task is tracked when you cook its fish, not when you click a range (burns don't
-	 * count). Our own Tasks submenu entries are RUNELITE-type, so picking a task from
-	 * it (a manual choice) never lands here.
+	 * Attacking or talking to an NPC with tasks tracks one straight away. Anything else
+	 * only remembers the click: the task is tracked once that skill's XP goes up for
+	 * something it names, so burns don't count. Our own Tasks submenu entries are
+	 * RUNELITE-type, so a manual pick never lands here.
 	 */
 	@Subscribe
 	public void onMenuOptionClicked(MenuOptionClicked event)

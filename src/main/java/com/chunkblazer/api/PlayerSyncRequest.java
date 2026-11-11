@@ -124,15 +124,12 @@ public class PlayerSyncRequest
 	private List<String> bossCompletions;
 
 	/**
-	 * Declares that this sync is MEANT to destroy progress.
+	 * Declares that this sync is MEANT to destroy progress. The server refuses a sync that
+	 * drops a large share of a player's chunks or tasks, and a deliberate reset looks the
+	 * same by shape.
 	 *
-	 * <p>The server refuses a sync that drops a large share of a player's chunks
-	 * or tasks, because sync is a wholesale overwrite and every wipe so far has
-	 * been a client bug the server executed without question. A deliberate reset
-	 * is indistinguishable from that bug by shape alone — so it has to say so.
-	 *
-	 * <p>Only ever set by an operation the PLAYER asked for. Never set it to get
-	 * a rejected sync through: the rejection is the guard working.
+	 * <p>Only set by an operation the PLAYER asked for. Never set it to get a rejected sync
+	 * through: the rejection is the guard working.
 	 */
 	private boolean intentionalReset;
 

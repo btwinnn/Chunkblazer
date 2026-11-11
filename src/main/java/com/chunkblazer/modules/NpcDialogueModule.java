@@ -48,13 +48,9 @@ import com.chunkblazer.NuzlockeTask;
 import com.chunkblazer.TargetNpc;
 
 /**
- * Module for handling NPC_DIALOGUE completion type tasks.
- * Detects when the player talks to specific NPCs.
- *
- * Tasks have target_npc with npc_ids.
- * Detection: Player interacts with watched NPC and dialogue widget opens. When the game
- * starts the conversation itself (Death walks you over after you die), there is no
- * interaction to read, so the speaker's name in the dialogue box stands in for it.
+ * Module for NPC_DIALOGUE completion type tasks: the player interacts with a watched NPC
+ * and the dialogue widget opens. When the game starts the conversation itself (Death
+ * after you die), the speaker's name in the dialogue box stands in.
  */
 @Slf4j
 @Singleton

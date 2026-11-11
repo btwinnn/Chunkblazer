@@ -31,12 +31,9 @@ import java.util.Map;
 import lombok.Data;
 
 /**
- * The server's media manifest ({@code /assets/manifest.json}) — the single
- * mutable entry point into the asset system. The plugin may only fetch asset
- * paths that appear in a manifest it has already downloaded; it never builds an
- * asset url from game data. That rule bounds the set of fetchable urls to a
- * finite, known list and is the structural fix for the "plugin pulls unbounded
- * media and bricks itself" failure mode.
+ * The server's media manifest ({@code /assets/manifest.json}). The plugin may only
+ * fetch asset paths listed in a manifest it has already downloaded, never a url built
+ * from game data, which bounds the fetchable urls to a finite, known list.
  *
  * <p>Shape mirrors {@code build-audio-assets.ps1} output:
  * <pre>

@@ -42,21 +42,13 @@ import net.runelite.client.eventbus.Subscribe;
 import com.chunkblazer.NuzlockeTask;
 
 /**
- * Handles COMBAT_ACHIEVEMENT tasks: "complete all these Combat Achievements".
+ * Handles COMBAT_ACHIEVEMENT tasks: complete when every id in {@code ca_ids} (see
+ * CA_Struct_IDs.json) reads done.
  *
- * <p>A task carries {@code ca_ids} — the sparse in-game Combat Achievement task
- * ids (see CA_Struct_IDs.json) — and completes when EVERY listed id reads done.
- *
- * <p>Completion state is not a per-task varbit: the game packs every CA task's
- * done-flag into a block of 21 VarPlayers (varps), 32 bits each. For CA id N the
- * flag is bit {@code N % 32} of varp {@code CA_TASK_COMPLETED_VARPS[N / 32]}. The
- * varp numbers are non-contiguous (Jagex ran out of adjacent ids over the years),
- * so we index into an explicit ordered array rather than {@code base + n}.
- *
- * <p>Read with {@code getVarpValue} (NOT {@code getVarbitValue} — these are whole
- * 32-bit VarPlayers, not defined varbits). Values are populated from login, so no
- * need to open the CA interface. Confirmed against ehubbartt/combat-achievements-tracker
- * and osrs-reldo/tasks-tracker-plugin.
+ * <p>Done-flags are packed into 21 VarPlayers: CA id N is bit {@code N % 32} of varp
+ * {@code CA_TASK_COMPLETED_VARPS[N / 32]}. The varps are non-contiguous, so index the
+ * array, not {@code base + n}. Read with {@code getVarpValue}, NOT
+ * {@code getVarbitValue}. Populated from login, so the CA interface need not be opened.
  */
 @Slf4j
 @Singleton
@@ -173,13 +165,9 @@ public class CombatAchievementModule extends AbstractTaskModule
 		{
 			return;
 		}
-		// Only re-scan when a CA-completion varp actually changed. VarbitChanged
-		// fires for every varp/varbit, and a fresh login replays THOUSANDS in one
-		// burst on the client thread — re-scanning every active CA task on each of
-		// those was needless work stacked on the heaviest moment of the session
-		// (a maxed account with many active tasks). CA completion lives only in the
-		// packed varps below, and those change rarely, so filter to them. We still
-		// force a full re-scan on login via onGameStateChanged.
+		// Only re-scan when a CA-completion varp changed: VarbitChanged fires for every
+		// varp/varbit, and login replays thousands in one burst on the client thread.
+		// Login still forces a full re-scan via onGameStateChanged.
 		if (!isCaVarp(event.getVarpId()))
 		{
 			return;

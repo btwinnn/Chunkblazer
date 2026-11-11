@@ -39,20 +39,14 @@ import java.util.List;
 public class TaskConstraints
 {
 	// ── AUTHORING RULE for RESTRICTED kills (time_in_ticks / equipment) ──────
-	// These constraints are verified client-side from the local player's own
-	// combat tracking, which enforces "you SOLOED it fast / while restricted",
-	// not merely "you landed the killing blow". NPCKillModule requires the
-	// fight to be a fresh session (relog gate) AND to have no other-player
-	// damage (exclusive-damage gate). Therefore:
-	//   • Only put time/equipment constraints on SOLOABLE overworld monsters
-	//     a player can guarantee they fight alone.
-	//   • NEVER on raid/team bosses (Verzik, Olm, ToA, GWD, Nex, Corp, etc.):
-	//     the client can't see damage dealt on other players' clients, so the
-	//     "fight" it measures is only your slice — both a false-pass hole and
-	//     unfixable client-side. Author those as plain "defeat X" (KC-verified
-	//     for tracked bosses).
-	//   • Shared/multi-combat spawns are risky even solo (a passer-by's stray
-	//     hit voids the attempt) — prefer instanced or low-traffic targets.
+	// These are verified client-side and enforce "you SOLOED it": NPCKillModule requires a
+	// fresh session (relog gate) with no other-player damage (exclusive-damage gate). So:
+	//   • Only use them on SOLOABLE overworld monsters.
+	//   • NEVER on raid/team bosses (Verzik, Olm, ToA, GWD, Nex, Corp, etc.): the client
+	//     can't see damage on other clients, a false-pass hole unfixable client-side.
+	//     Author those as plain "defeat X" (KC-verified for tracked bosses).
+	//   • Shared/multi-combat spawns are risky even solo: a stray hit voids the attempt.
+	//     Prefer instanced or low-traffic targets.
 	@SerializedName("time_in_ticks")
 	private Integer timeInTicks;
 
@@ -80,12 +74,9 @@ public class TaskConstraints
 	@SerializedName("no_food")
 	private Boolean noFood;
 
-	// NOTE: there is deliberately no `solo_only` field. One existed here and was
-	// never read by any module, so authoring it bought no enforcement while
-	// reading like it did. Solo exclusivity is implied by a time or equipment
-	// constraint (see NPCKillModule's contested/startedFresh gates); the inverse
-	// — an encounter fought in a team — is the task-level `group_content` flag.
-
+	// No `solo_only` field: solo exclusivity is implied by a time or equipment constraint
+	// (see NPCKillModule's contested/startedFresh gates). The inverse, an encounter fought
+	// in a team, is the task-level `group_content` flag.
 
 	// Equipment constraints
 	@SerializedName("no_equipment")

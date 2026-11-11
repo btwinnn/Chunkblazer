@@ -36,14 +36,10 @@ import javax.inject.Singleton;
 import net.runelite.client.config.ConfigManager;
 
 /**
- * Tasks the player has archived: put aside, out of the way. Archived tasks still
- * exist and still make progress if done, but they're hidden from the task window's
- * Active and Saved tabs, they stop outlining NPCs and objects, and they drop out of
- * the right-click Tasks menu. Stored per account, like saved tasks.
- *
- * Shared by the task window, the task box and the highlighter, so all of them agree
- * on what's archived. Also keeps the saved (starred) list the same way, and draws the
- * book icon they use.
+ * Tasks the player has archived. They still make progress if done, but they're hidden
+ * from the Active and Saved tabs, outlines and the right-click Tasks menu. Stored per
+ * account. Shared so the task window, task box and highlighter agree; also keeps the
+ * saved (starred) list.
  */
 @Singleton
 public class TaskArchive

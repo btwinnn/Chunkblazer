@@ -180,20 +180,10 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 	/**
 	 * Handle the server verification response for the task the report was ABOUT.
 	 *
-	 * `reportedTask` is not optional. The old signature had no task parameter and
-	 * applied the ack to `activeTask` — the legacy single-task pointer, which
-	 * addActiveTask() sets to whichever task happened to register FIRST. So every
-	 * ack, for every kill, landed on one arbitrary task:
-	 *
-	 *   Cruk, session_2026-07-16_20-00-46 — he killed a SCORPION at 20:01:47, which
-	 *   sent three kill reports (one per matching task). Each came back with the
-	 *   hardcoded verifiedProgress=1 and each raised progress on the module's first
-	 *   registered task, 'Defeat a Highwayman in 24 Seconds'. It ticked itself off
-	 *   with no kill and no chat message (incrementTaskProgress was never called),
-	 *   and only ChunkBlazerPlugin's PROGRESS REGRESSION guard caught it at login.
-	 *
-	 * The raise-only rule below was the earlier half of this fix; it stopped an ack
-	 * LOWERING the wrong task but still let it raise one. Routing is the other half.
+	 * `reportedTask` is not optional: `activeTask` is the legacy single-task pointer, set
+	 * by addActiveTask() to whichever task registered FIRST, so acking it raises an
+	 * arbitrary task. The raise-only rule below stops an ack LOWERING a task; routing stops
+	 * it raising the wrong one.
 	 */
 	protected void handleVerificationResponse(TaskVerificationResponse response, NuzlockeTask reportedTask)
 	{
@@ -208,15 +198,10 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 			}
 			else
 			{
-				// The per-event ack is a RECEIPT, not a verification: the
-				// server's event endpoints hardcode verifiedProgress=1 (they
-				// record the event and answer OK). Treating that as
-				// authoritative stomped local progress back to 1 after every
-				// kill — Cruk's 25-pirate task ping-ponged 1<->2 forever
-				// (session_2026-07-15), and the save no-oped because the
-				// stored value never changed. Server-ahead catch-up is
-				// allowed; REGRESSION is not — locally observed progress wins
-				// until a real sync says otherwise.
+				// The per-event ack is a RECEIPT, not a verification: the server's
+				// event endpoints hardcode verifiedProgress=1. Server-ahead catch-up
+				// is allowed; REGRESSION is not. Locally observed progress wins until
+				// a real sync says otherwise.
 				int verified = response.getVerifiedProgress();
 				if (reportedTask != null && verified > reportedTask.getCurrentProgress())
 				{
@@ -297,10 +282,9 @@ public abstract class AbstractTaskModule implements TaskCompletionModule
 		void onProgressUpdated(NuzlockeTask task, int newProgress);
 	}
 
-	// chatMessageManager.add() does not return the MessageNode of the sent message
-	// We could try and add listeners or query the chatbox buffer but this introduces possible races and is not performant
-	// Calling client.addChatMessage() directly skips message formatting passes and would need a rewrite of the messages here
-	// Reimplement chatMessageManager.add in this class to capture the MessageNode
+	// chatMessageManager.add() doesn't return the sent MessageNode. Listeners or querying
+	// the chatbox buffer risk races and aren't performant, and client.addChatMessage()
+	// skips formatting passes, so reimplement add here to capture the node.
 	private MessageNode add(QueuedMessage message)
 	{
 		// Do not send message if the player is on tutorial island

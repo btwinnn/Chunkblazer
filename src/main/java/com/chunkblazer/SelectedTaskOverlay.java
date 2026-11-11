@@ -53,22 +53,15 @@ import net.runelite.client.ui.overlay.components.ProgressBarComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
 
 /**
- * On-screen box showing the task the player selected in the side panel, with a
- * progress bar that updates live. It re-reads the task every frame, so any
- * progress change made by the task modules shows up immediately.
- * Alt + drag to move it; click the X (or right-click, then Deselect) to stop tracking.
- * Click the book in the top-left corner to archive the task (see TaskArchive), which
- * also stops tracking it.
+ * On-screen box for the task selected in the side panel. It re-reads the task every
+ * frame, so module progress shows immediately. Alt + drag to move; the book in the
+ * top-left archives the task (see TaskArchive).
  *
- * Timed kill tasks ("Kill a Frog in 21 seconds") show a live countdown instead of a
- * progress bar, starting on your first hit (the same tick the kill tracker starts
- * timing): green, then yellow, orange and red, and "Too slow" once time runs out.
- * Multi-kill timed tasks also show "Kills x/y". Single-action tasks, including
- * 1-tick tasks, get no bar at all.
+ * Timed kill tasks show a countdown instead of a bar, starting on your first hit (the
+ * same tick the kill tracker starts timing). Single-action tasks get no bar.
  *
  * Three looks (the Task Box setting): Vani's full box, Vani's compact strip, and Net's
- * simple box, designed by NetworkAccessViolation (it was ChunkBlazerTaskOverlay). They
- * all track the same way: right-click Deselect, the Tasks menu on targets, Alt + drag.
+ * simple box, designed by NetworkAccessViolation.
  */
 @Singleton
 public class SelectedTaskOverlay extends OverlayPanel

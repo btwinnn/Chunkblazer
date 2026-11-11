@@ -50,18 +50,13 @@ import com.chunkblazer.RequiredObject;
 import com.chunkblazer.TargetNpc;
 
 /**
- * Module for handling THIEVING completion type tasks.
- *
- * Two detection paths run in parallel:
- *   1. NPC pickpockets — task has target_npc; we track a "Pickpocket" click on a watched NPC.
- *      Any other interaction (attack, talk, a stall, walking) cancels it, so clicking a
- *      guard and then stealing from a stall can't pass the stall's XP off as a pickpocket.
- *   2. GameObject thefts (stalls, chests) — task has required_object; we track MenuOptionClicked
- *      on watched object IDs.
- * Either path gates a credit on a Thieving XP gain inside CLICK_TIMEOUT_TICKS of the
- * recorded interaction. Tasks with neither requirement no longer auto-credit — the old
- * "credit any thieving XP to no-NPC tasks" fallback caused one stall theft to complete every
- * unrelated stall task simultaneously.
+ * Module for THIEVING completion type tasks. Two paths, each gating credit on a Thieving
+ * XP gain inside CLICK_TIMEOUT_TICKS of the recorded interaction:
+ *   1. NPC pickpockets (target_npc): a "Pickpocket" click on a watched NPC. Any other
+ *      interaction cancels it, so a stall's XP can't pass as a pickpocket.
+ *   2. GameObject thefts (required_object): MenuOptionClicked on watched object IDs.
+ * Tasks with neither never auto-credit, or one stall theft would complete every stall
+ * task.
  */
 @Slf4j
 @Singleton

@@ -50,20 +50,12 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
 
 /**
- * A see-through wall standing on every border between an unlocked chunk and a locked
- * one, so it's obvious in the game world where you can and can't go. It fades from
- * the configured colour at the ground to clear at the top.
+ * A see-through wall on every border between an unlocked and a locked chunk. Only
+ * border edges are drawn, not every tile: per-tile shading was too slow in Java2D.
  *
- * Only border edges are drawn (a few hundred short segments near the player), not
- * every tile, so it stays cheap; per-tile shading was too slow in Java2D.
- *
- * Unlocking a chunk opens its wall as a wave: starting nearest the player, each
- * section surges up and then drops away, the wave running outwards along the wall in
- * both directions until it's gone. If the unlock dealt reveal cards, the wall waits
- * until every card has been flipped and cleared off the screen, then opens.
- *
- * The top edge always ripples like flames, and the wall flares up taller and brighter
- * as the player walks up to it.
+ * Unlocking a chunk opens its wall as a wave running outwards from the player. If the
+ * unlock dealt reveal cards, the wall waits until every card has been flipped and
+ * cleared off the screen.
  */
 @Singleton
 public class ChunkWallOverlay extends Overlay
