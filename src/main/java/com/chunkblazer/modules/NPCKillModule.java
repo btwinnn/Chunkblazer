@@ -1482,7 +1482,7 @@ public class NPCKillModule extends AbstractTaskModule
 		if (completionCallback != null)
 		{
 			// Send task completion message to chatbox
-			sendTaskSuccess(task, "Task complete!");
+			sendTaskSuccess(task, "");
 
 			completionCallback.onTaskCompleted(task, task.getCurrentProgress());
 			activeTasks.remove(task);

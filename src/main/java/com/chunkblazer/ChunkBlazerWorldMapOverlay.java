@@ -41,6 +41,7 @@ import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.client.callback.ClientThread;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.api.Client;
 import net.runelite.api.Point;
@@ -77,6 +78,8 @@ public class ChunkBlazerWorldMapOverlay extends Overlay
 	private final ChunkBlazerConfig config;
 	private final ChatboxPanelManager chatboxPanelManager;
 	private final ClientThread clientThread;
+	private final CompanionPrompt addOns;
+	private final ConfigManager configManager;
 
 	private int hoveredRegionId = -1;
 	private boolean isHoveredUnlockable = false;
@@ -93,8 +96,10 @@ public class ChunkBlazerWorldMapOverlay extends Overlay
 
 	@Inject
 	private ChunkBlazerWorldMapOverlay(Client client, ChunkBlazerPlugin plugin, ChunkBlazerConfig config,
-		ChatboxPanelManager chatboxPanelManager, ClientThread clientThread)
+		ChatboxPanelManager chatboxPanelManager, ClientThread clientThread, CompanionPrompt addOns, ConfigManager configManager)
 	{
+		this.addOns = addOns;
+		this.configManager = configManager;
 		setPosition(OverlayPosition.DYNAMIC);
 		// Just above RuneLite's own map icons (its WorldMapOverlay is PRIORITY_HIGHEST, and on the
 		// map a higher priority draws later), so locked chunks' tint covers the icons inside them.
@@ -144,6 +149,11 @@ public class ChunkBlazerWorldMapOverlay extends Overlay
 		// The focus outline goes on top of the chunk tints.
 		Dimension size = renderChunks(graphics);
 		renderFocus(graphics);
+		// ChunkBlazer UI draws the hover tooltip on its top layer; without it, draw it here.
+		if (!addOns.uiOn())
+		{
+			drawTooltip(graphics);
+		}
 		return size;
 	}
 
@@ -801,14 +811,17 @@ public class ChunkBlazerWorldMapOverlay extends Overlay
 		}
 		String line1 = tooltipName(regionId);
 		String line2 = "Unlocked";
-		String line3 = "Hold " + config.worldMapTasksKey() + " + click to view tasks";
+		// ChunkBlazer UI's keys legend on the map says it already (unless it's been closed).
+		boolean keysShown = addOns.uiOn() && !"false".equals(configManager.getConfiguration("chunkblazerui", "showMapKeys"));
+		String line3 = keysShown ? "" : "Hold " + config.worldMapTasksKey() + " + click to view tasks";
+		int lines = keysShown ? 2 : 3;
 
 		graphics.setFont(FontManager.getRunescapeSmallFont());
 		FontMetrics fm = graphics.getFontMetrics();
 		int padding = 6;
 		int lineHeight = fm.getHeight();
 		int width = Math.max(fm.stringWidth(line1), Math.max(fm.stringWidth(line2), fm.stringWidth(line3))) + padding * 2;
-		int height = lineHeight * 3 + padding * 2;
+		int height = lineHeight * lines + padding * 2;
 		int x = mousePos.getX() + 15;
 		int y = mousePos.getY() - height - 5;
 

@@ -34,6 +34,9 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.SwingUtilities;
@@ -61,7 +64,7 @@ import net.runelite.client.util.LinkBrowser;
 
 /**
  * The tutorial's first step, and the only part of it in ChunkBlazer itself: a box saying
- * whether ChunkBlazer UI and ChunkBlazer GPU are installed and on. A plugin that's off can be
+ * whether ChunkBlazer UI and Region Locker GPU are installed and on. A plugin that's off can be
  * turned on from here; one that isn't installed opens its Plugin Hub page. It hides while
  * both are on, and goes for good on Skip. Nothing else in ChunkBlazer depends on it.
  *
@@ -80,10 +83,13 @@ class CompanionPrompt extends Overlay
 	// Tutorial Island's progress once the Gielinor Guide is done with you (the door opens).
 	private static final int GUIDE_DONE = 10;
 
-	/** One of the plugins it checks: its name as installed, what it adds, its Plugin Hub page. */
+	/**
+	 * One of the plugins it checks: its name as installed, what it adds, its Plugin Hub page,
+	 * and another plugin from the same download that has to be on with it (or none).
+	 */
 	private static final String[][] COMPANIONS = {
-		{"ChunkBlazer UI", "Task window, task cards, themes and the tutorial", "chunkblazer-ui"},
-		{"ChunkBlazer GPU", "Chunk walls, shading and the unlock sweep", "chunkblazer-gpu"},
+		{"ChunkBlazer UI", "Task window, task cards, themes and the tutorial", "chunkblazer-ui", null},
+		{"Region Locker GPU", "Greys out the chunks you haven't unlocked", "region-locker", "Region Locker"},
 	};
 
 	// Old School's colours (as in ChunkBlazer UI) and the stone frame and bevels from ui/.
@@ -98,6 +104,7 @@ class CompanionPrompt extends Overlay
 	private static final java.awt.image.BufferedImage RAISED = Skin.image("raised");
 	private static final java.awt.image.BufferedImage SUNK = Skin.image("sunk");
 	private static final int WIDTH = 340;
+	private static final int LINE = 12;
 	private static final int PAD = 12;
 
 	private final Client client;
@@ -173,7 +180,7 @@ class CompanionPrompt extends Overlay
 		// clear it if the box isn't needed now (ChunkBlazer UI's tutorial would wait forever).
 		showing = false;
 		configManager.setConfiguration(GROUP, PENDING, false);
-		found = null;
+		found.clear();
 		overlayManager.add(this);
 		mouseManager.registerMouseListener(mouse);
 		eventBus.register(this);
@@ -197,72 +204,107 @@ class CompanionPrompt extends Overlay
 		return event;
 	}
 
-	// Whether ChunkBlazer UI or GPU was on at the last look (for the ground borders' Auto).
+	// Whether ChunkBlazer UI or Region Locker GPU was on at the last look (for the ground borders' Auto).
 	private volatile boolean anyOn;
-	// The add-ons as installed (COMPANIONS order, null if not installed), looked up again only
-	// when RuneLite's plugin list changes; null until the first look.
-	private volatile Plugin[] found;
+
+	// Plugins looked up by name, looked up again only when RuneLite's plugin list changes.
+	private final Map<String, Optional<Plugin>> found = new ConcurrentHashMap<>();
 	// Per add-on that's installed but off: the plugins its Turn on would switch off, or null.
 	private volatile String[] turnsOff = new String[COMPANIONS.length];
 
-	/** Whether ChunkBlazer UI or ChunkBlazer GPU is on (as of the last game tick). */
+	/** Whether ChunkBlazer UI or Region Locker GPU is on (as of the last game tick). */
 	boolean anyOn()
 	{
 		return anyOn;
 	}
 
+	// Whether ChunkBlazer UI was on at the last look.
+	private volatile boolean uiOn;
+
+	/** Whether ChunkBlazer UI is on (as of the last game tick). */
+	boolean uiOn()
+	{
+		return uiOn;
+	}
+
 	/** Whether ChunkBlazer GPU is on right now (it draws the chunk walls into the scene itself). */
 	boolean gpuOn()
 	{
-		return isActive(1);
+		Plugin gpu = find("ChunkBlazer GPU");
+		return gpu != null && pluginManager.isPluginActive(gpu);
 	}
 
 	/** A plugin was installed, removed or updated: look the add-ons up again. */
 	@Subscribe
 	public void onPluginChanged(PluginChanged event)
 	{
-		found = null;
+		found.clear();
 	}
 
 	@Subscribe
 	public void onExternalPluginsChanged(ExternalPluginsChanged event)
 	{
-		found = null;
+		found.clear();
 	}
 
-	/** Each tick in game: show it unless both plugins are on or it's been skipped. */
+	// Opened on purpose (the Points orb without ChunkBlazer UI): shows even after a Skip.
+	private volatile boolean asked;
+
+	/** Show the box now, as the Points orb does without ChunkBlazer UI. Any thread. */
+	void open()
+	{
+		asked = true;
+		setShowing(true);
+	}
+
+	/**
+	 * Each tick in game: show it unless both plugins are on, or (unless asked for) it's been
+	 * skipped or the Gielinor Guide hasn't finished with you yet.
+	 */
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
 		boolean any = false;
 		boolean allOn = true;
-		for (int i = 0; i < COMPANIONS.length; i++)
+		for (String[] companion : COMPANIONS)
 		{
-			boolean on = isActive(i);
+			boolean on = isOn(companion);
 			any |= on;
 			allOn &= on;
 		}
 		anyOn = any;
-		if (Boolean.parseBoolean(configManager.getConfiguration(GROUP, DONE)))
+		uiOn = isOn(COMPANIONS[0]);
+		boolean wanted = asked || !Boolean.parseBoolean(configManager.getConfiguration(GROUP, DONE))
+			&& client.getVarpValue(net.runelite.api.gameval.VarPlayerID.TUTORIAL) >= GUIDE_DONE;
+		if (allOn)
 		{
-			setShowing(false);
-			return;
+			asked = false;
 		}
-		// Every player who hasn't skipped it and doesn't have both add-ons on: on Tutorial Island
-		// once the Gielinor Guide has sent you on your way, and anyone already off the island
-		// (TUTORIAL reads 1000 there).
-		setShowing(!allOn && client.getGameState() == GameState.LOGGED_IN
-			&& client.getVarpValue(net.runelite.api.gameval.VarPlayerID.TUTORIAL) >= GUIDE_DONE);
+		setShowing(!allOn && wanted && client.getGameState() == GameState.LOGGED_IN);
 		if (showing)
 		{
 			String[] off = new String[COMPANIONS.length];
 			for (int i = 0; i < COMPANIONS.length; i++)
 			{
-				Plugin plugin = companion(i);
+				Plugin plugin = find(COMPANIONS[i][0]);
 				off[i] = plugin == null || pluginManager.isPluginActive(plugin) ? null : activeConflicts(plugin);
 			}
 			turnsOff = off;
 		}
+	}
+
+	/** The running plugins that turning {@code plugin} on would switch off ("GPU, 117 HD"), or null. */
+	private String activeConflicts(Plugin plugin)
+	{
+		StringBuilder names = new StringBuilder();
+		for (Plugin conflict : pluginManager.conflictsForPlugin(plugin))
+		{
+			if (pluginManager.isPluginActive(conflict))
+			{
+				names.append(names.length() == 0 ? "" : ", ").append(conflict.getName());
+			}
+		}
+		return names.length() == 0 ? null : names.toString();
 	}
 
 	/** Whether the box is up (ChunkBlazer's own Lumbridge prompts wait for it). */
@@ -280,47 +322,36 @@ class CompanionPrompt extends Overlay
 		}
 	}
 
-	/** Add-on {@code i} (COMPANIONS order) as installed, or null. */
-	private Plugin companion(int i)
+	/** Whether a companion is on, with the plugin it needs from the same download. */
+	private boolean isOn(String[] companion)
 	{
-		Plugin[] plugins = found;
-		if (plugins == null)
+		Plugin plugin = find(companion[0]);
+		Plugin needs = companion[3] == null ? null : find(companion[3]);
+		return plugin != null && pluginManager.isPluginActive(plugin)
+			&& (companion[3] == null || needs != null && pluginManager.isPluginActive(needs));
+	}
+
+	/** Whether a plugin is installed, on or not (for the Region Locker sync). */
+	boolean isInstalled(String name)
+	{
+		return find(name) != null;
+	}
+
+	/** An installed plugin by its name, or null. */
+	private Plugin find(String name)
+	{
+		return found.computeIfAbsent(name, n ->
 		{
-			plugins = new Plugin[COMPANIONS.length];
 			for (Plugin plugin : pluginManager.getPlugins())
 			{
 				PluginDescriptor descriptor = plugin.getClass().getAnnotation(PluginDescriptor.class);
-				for (int c = 0; c < COMPANIONS.length; c++)
+				if (descriptor != null && n.equals(descriptor.name()))
 				{
-					if (descriptor != null && COMPANIONS[c][0].equals(descriptor.name()))
-					{
-						plugins[c] = plugin;
-					}
+					return Optional.of(plugin);
 				}
 			}
-			found = plugins;
-		}
-		return plugins[i];
-	}
-
-	private boolean isActive(int i)
-	{
-		Plugin plugin = companion(i);
-		return plugin != null && pluginManager.isPluginActive(plugin);
-	}
-
-	/** The running plugins that turning {@code plugin} on would switch off ("GPU, 117 HD"), or null. */
-	private String activeConflicts(Plugin plugin)
-	{
-		StringBuilder names = new StringBuilder();
-		for (Plugin conflict : pluginManager.conflictsForPlugin(plugin))
-		{
-			if (pluginManager.isPluginActive(conflict))
-			{
-				names.append(names.length() == 0 ? "" : ", ").append(conflict.getName());
-			}
-		}
-		return names.length() == 0 ? null : names.toString();
+			return Optional.empty();
+		}).orElse(null);
 	}
 
 	/** Turns a plugin on, as its switch in RuneLite's plugin list would (anything it conflicts with goes off first). */
@@ -353,8 +384,21 @@ class CompanionPrompt extends Overlay
 		List<Rectangle> frameSpots = new ArrayList<>();
 		List<Runnable> frameActions = new ArrayList<>();
 		int header = 26;
-		int rowHeight = 44;
-		int height = header + 40 + COMPANIONS.length * rowHeight + 20 + 34;
+		// Descriptions wrap beside the button, so each row is as tall as its text.
+		FontMetrics small = graphics.getFontMetrics(FontManager.getRunescapeSmallFont());
+		int descWidth = WIDTH - 16 - 88 - 16;
+		List<List<String>> descs = new ArrayList<>();
+		int rowsHeight = 0;
+		String[] off = turnsOff;
+		for (int i = 0; i < COMPANIONS.length; i++)
+		{
+			// Turn on switches off what it conflicts with, as RuneLite's own toggle does: say so first.
+			String note = off[i] != null ? "Turning it on turns off " + off[i] : COMPANIONS[i][1];
+			List<String> lines = TaskLists.wrap(small, note, descWidth);
+			descs.add(lines);
+			rowsHeight += rowHeight(lines);
+		}
+		int height = header + 40 + rowsHeight + 20 + 34;
 		int x = client.getViewportXOffset() + (client.getViewportWidth() - WIDTH) / 2;
 		int y = client.getViewportYOffset() + 30;
 		Rectangle b = new Rectangle(x, y, WIDTH, height);
@@ -368,12 +412,13 @@ class CompanionPrompt extends Overlay
 
 		net.runelite.api.Point m = client.getMouseCanvasPosition();
 		int rowY = b.y + header + 42;
-		String[] off = turnsOff;
 		for (int i = 0; i < COMPANIONS.length; i++)
 		{
 			String[] companion = COMPANIONS[i];
-			Plugin plugin = companion(i);
-			boolean active = plugin != null && pluginManager.isPluginActive(plugin);
+			List<String> lines = descs.get(i);
+			int rowHeight = rowHeight(lines);
+			Plugin plugin = find(companion[0]);
+			boolean active = isOn(companion);
 			// Each add-on on a sunk stone strip, like a row in the task window.
 			Rectangle row = new Rectangle(b.x + 8, rowY, WIDTH - 16, rowHeight - 6);
 			graphics.setColor(new Color(0, 0, 0, 60));
@@ -384,18 +429,26 @@ class CompanionPrompt extends Overlay
 			Skin.text(graphics, companion[0], row.x + 8, row.y + 16, Color.WHITE);
 			int nameEnd = row.x + 8 + graphics.getFontMetrics().stringWidth(companion[0]);
 			graphics.setFont(FontManager.getRunescapeSmallFont());
-			// Turn on switches off what it conflicts with, as RuneLite's own toggle does: say so first.
-			String conflicts = active ? null : off[i];
-			String note = conflicts != null ? "Turning it on turns off " + conflicts : companion[1];
-			Skin.text(graphics, Skin.fit(graphics.getFontMetrics(), note, button.x - 8 - (row.x + 8)), row.x + 8, row.y + 30,
-				conflicts != null ? TEXT : LABEL);
+			for (int l = 0; l < lines.size(); l++)
+			{
+				Skin.text(graphics, lines.get(l), row.x + 8, row.y + 30 + l * LINE, off[i] != null && !active ? TEXT : LABEL);
+			}
 			// How it is, beside its name.
 			String state = active ? "On" : plugin != null ? "Installed, off" : "Not installed";
 			Skin.text(graphics, state, nameEnd + 6, row.y + 16, active ? ON : RED);
 			if (!active)
 			{
 				String label = plugin != null ? "Turn on" : "Plugin Hub";
-				Runnable action = plugin != null ? () -> turnOn(plugin) : () -> LinkBrowser.browse(HUB + companion[2]);
+				Runnable action = plugin != null ? () ->
+				{
+					// What it needs from the same download first (Region Locker for its GPU).
+					Plugin needs = companion[3] == null ? null : find(companion[3]);
+					if (needs != null && !pluginManager.isPluginActive(needs))
+					{
+						turnOn(needs);
+					}
+					turnOn(plugin);
+				} : () -> LinkBrowser.browse(HUB + companion[2]);
 				button(graphics, button, label, m);
 				frameSpots.add(button);
 				frameActions.add(action);
@@ -404,11 +457,16 @@ class CompanionPrompt extends Overlay
 		}
 
 		graphics.setFont(FontManager.getRunescapeSmallFont());
-		Skin.text(graphics, "Or search \"chunkblazer\" in RuneLite's Plugin Hub.", b.x + PAD, rowY + 8, LABEL);
+		Skin.text(graphics, "Or search \"chunkblazer\" or \"region locker\" in the Plugin Hub.", b.x + PAD, rowY + 8, LABEL);
 		Rectangle skip = new Rectangle(b.x + (WIDTH - 100) / 2, b.y + height - 30, 100, 22);
 		button(graphics, skip, "Skip", m);
 		frameSpots.add(skip);
-		frameActions.add(() -> configManager.setConfiguration(GROUP, DONE, true));
+		frameActions.add(() ->
+		{
+			asked = false;
+			setShowing(false);
+			configManager.setConfiguration(GROUP, DONE, true);
+		});
 
 		synchronized (spots)
 		{
@@ -425,6 +483,11 @@ class CompanionPrompt extends Overlay
 	 * The box the way ChunkBlazer UI draws its Old School boxes: a drop shadow, stone, a darker
 	 * header band with a groove under it, the steel frame round it all and an orange line on top.
 	 */
+	private static int rowHeight(List<String> lines)
+	{
+		return 44 + Math.max(0, lines.size() - 1) * LINE;
+	}
+
 	private static void frame(Graphics2D graphics, Rectangle b, int header)
 	{
 		java.awt.Paint old = graphics.getPaint();

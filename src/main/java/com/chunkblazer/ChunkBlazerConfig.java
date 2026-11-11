@@ -463,8 +463,8 @@ public interface ChunkBlazerConfig extends Config
 	@ConfigItem(
 		keyName = "sceneChunkBorders",
 		name = "Chunk Borders",
-		description = "Chunk borders on the ground. Auto: on with ChunkBlazer alone, off while ChunkBlazer UI or GPU"
-			+ " is on (they draw their own walls)",
+		description = "Chunk borders on the ground. Auto: on with ChunkBlazer alone, off while ChunkBlazer UI or Region Locker GPU"
+			+ " is on (the walls and grey show where chunks end)",
 		section = inGameSection,
 		position = 0
 	)

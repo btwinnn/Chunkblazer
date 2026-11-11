@@ -28,7 +28,7 @@ package com.chunkblazer;
 
 /**
  * Chunk borders on the ground. Auto draws them with ChunkBlazer on its own, and leaves them
- * off while ChunkBlazer UI or ChunkBlazer GPU is on, since they draw their own walls.
+ * off while ChunkBlazer UI or Region Locker GPU is on (the walls and grey show where chunks end).
  */
 public enum SceneBorders
 {
